@@ -63,7 +63,7 @@ public class DynamicJadeGateway {
      * is called by the executor agent)
      *
      * @throws StaleProxyException if the method was not able to execute the Command
-     * @see AgentController#putO2AObject(Object, boolean)
+     *  see AgentController#putO2AObject(Object, boolean)
      **/
     public final void execute(Object command) throws ControllerException, InterruptedException {
         execute(command, 0);
@@ -80,7 +80,7 @@ public class DynamicJadeGateway {
      * @throws InterruptedException if the timeout expires or the Thread
      *                              executing this method is interrupted.
      * @throws StaleProxyException  if the method was not able to execute the Command
-     * @see AgentController#putO2AObject(Object, boolean)
+     *  see AgentController#putO2AObject(Object, boolean)
      **/
     public final void execute(Object command, long timeout) throws ControllerException, InterruptedException {
         Event e = null;

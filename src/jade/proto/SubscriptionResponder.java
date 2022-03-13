@@ -122,7 +122,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
      * Construct a SubscriptionResponder behaviour that handles subscription messages matching a given template and
      * notifies a given SubscriptionManager about subscription/un-subscription events.
      *
-     * @see #SubscriptionResponder(Agent, MessageTemplate, SubscriptionManager, HashMap)
+     *  see #SubscriptionResponder(Agent, MessageTemplate, SubscriptionManager, HashMap)
      **/
     public SubscriptionResponder(Agent a, MessageTemplate mt, SubscriptionManager sm) {
         this(a, mt, sm, new HashMap<>(), new HashMap<>());

@@ -92,7 +92,7 @@ public class JadeGateway {
      * is called by the executor agent)
      *
      * @throws StaleProxyException if the method was not able to execute the Command
-     * @see jade.wrapper.AgentController#putO2AObject(Object, boolean)
+     *  see jade.wrapper.AgentController#putO2AObject(Object, boolean)
      **/
     public final static void execute(Object command) throws ControllerException, InterruptedException {
         getGateway().execute(command);
@@ -109,7 +109,7 @@ public class JadeGateway {
      * @throws InterruptedException if the timeout expires or the Thread
      *                              executing this method is interrupted.
      * @throws StaleProxyException  if the method was not able to execute the Command
-     * @see jade.wrapper.AgentController#putO2AObject(Object, boolean)
+     *  see jade.wrapper.AgentController#putO2AObject(Object, boolean)
      **/
     public final static void execute(Object command, long timeout) throws ControllerException, InterruptedException {
         getGateway().execute(command, timeout);

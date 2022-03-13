@@ -161,6 +161,7 @@ public class DFService extends FIPAService {
         if (reply == null) {
             throw new FIPAException("Missing reply");
         }
+
         return decodeDone(reply.getContent());
     }
 
@@ -173,6 +174,17 @@ public class DFService extends FIPAService {
      **/
     public static DFAgentDescription register(Agent a, DFAgentDescription dfd) throws FIPAException {
         return register(a, a.getDefaultDF(), dfd);
+    }
+
+    /**
+     * Registers a <code>DFAgentDescription</code> with the default DF
+     *
+     * @throws FIPAException
+     * @see #register(Agent, AID, DFAgentDescription)
+     **/
+    public static DFAgentDescription register(Agent a, ServiceDescription service) throws FIPAException {
+        a.addService(service);
+        return register(a, a.getDefaultDF(), a.getServicesList());
     }
 
     /**

@@ -34,6 +34,26 @@ public final class AgentServicesTools {
         return model;
     }
 
+    /**
+     * add a description of service to an agent description tof a given agent<br>
+     * if the agent does'nt own a agent description, a new one is created
+     *
+     * @param a the agent taht request the addition of a service to its agent description
+     * @param typeService type of the service
+     * @param nameService name of the service (can  be null)
+     * @return the model of the service
+     */
+    public static DFAgentDescription getAgentDescription(final Agent a, final String typeService, final String nameService) {
+        var model = a.getServicesList();
+        if (model==null) model = new DFAgentDescription();
+        var service = new ServiceDescription();
+        service.setType(typeService);
+        service.setName(nameService);
+        model.addServices(service);
+        return model;
+    }
+
+
     /**@return the AID relative to the topic topicName for manage 'radio', broadcast message
      * @param agent the agent that create or retrieve the topic
      * @param topicName the topic name*/
@@ -65,18 +85,7 @@ public final class AgentServicesTools {
         }
     }
 
-    /**
-     * deregister an agent from a list of services with the Directory Facilitator
-     *
-     * @param myAgent     agent that have to be registered
-     * @param models      List of description of the service to deregister for this agent
-     */
-    public synchronized static void deregisterServices(final Agent myAgent, final Collection<DFAgentDescription> models) {
-            models.forEach(model-> {
-                try { DFService.deregister(myAgent, model);}
-                catch (FIPAException e) { e.printStackTrace();}
-            });
-    }
+
 
     /**
      * deregister an agent from all its services with the Directory Facilitator
@@ -97,9 +106,12 @@ public final class AgentServicesTools {
      *                    name (like the agent name)
      */
     public synchronized static DFAgentDescription register(final Agent myAgent, final String typeService, final String nameService) {
-        var model = createAgentDescription(typeService, nameService);
+        boolean first =  (myAgent.getServicesList()==null);
+        var model = getAgentDescription(myAgent, typeService, nameService);
+        myAgent.setServicesList(model);
         try {
-            DFService.register(myAgent, model);
+            if(first)  DFService.register(myAgent, model);
+            else  DFService.modify(myAgent, model);
         } catch (FIPAException fe) {
             fe.printStackTrace();
         }

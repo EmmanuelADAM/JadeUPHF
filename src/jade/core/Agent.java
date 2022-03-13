@@ -27,6 +27,7 @@ import jade.core.behaviours.Behaviour;
 import jade.core.mobility.AgentMobilityHelper;
 import jade.core.mobility.Movable;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.security.JADESecurityException;
@@ -200,7 +201,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
     private transient Set<TBPair> persistentPendingTimers = new HashSet<>();
     //#MIDP_EXCLUDE_END
     //E.ADAM map service name, service description
-    protected HashMap<String, DFAgentDescription> mapServices;
+    protected DFAgentDescription servicesList;
 
     /**
      * Default constructor.
@@ -2331,16 +2332,17 @@ public class Agent implements Runnable, Serializable, TimerListener {
     //#J2ME_EXCLUDE_END
 
     /**
-     * store a service description into the map
-     * @param name service name
-     * @param dfd description of the service
+     * add a service description into the agent description
+     * @param service description of the service
+     * @return the new agent description with this service
      * @author Emmanuel Adam
      * @since 2022
      * */
-    protected void addService(String name, DFAgentDescription dfd)
+    public DFAgentDescription addService(ServiceDescription service)
     {
-        if(mapServices==null) mapServices = new HashMap<>();
-        mapServices.put(name, dfd);
+        if(servicesList==null) servicesList = new DFAgentDescription();
+        servicesList.addServices(service);
+        return servicesList;
     }
 
     /**
@@ -2348,33 +2350,31 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * @author Emmanuel Adam
      * @since 2022
      * */
-    protected Collection<DFAgentDescription> getServices()
+    public List<ServiceDescription> getServices()
     {
-        if(mapServices==null) mapServices = new HashMap<>();
-        return mapServices.values();
+        var l = new ArrayList<ServiceDescription>();
+        servicesList.getAllServices().forEachRemaining(l::add);
+        return l;
     }
 
     /**
-     * @return the service description related to the name
+     * @return the agent description
      * @author Emmanuel Adam
      * @since 2022
      * */
-    protected DFAgentDescription getService(String name)
+    public void setServicesList(DFAgentDescription servicesList)
     {
-        if(mapServices==null) mapServices = new HashMap<>();
-        return mapServices.get(name);
+        this.servicesList = servicesList;
     }
 
     /**
-     * remove the service description related to the name
+     * @return the agent description
      * @author Emmanuel Adam
      * @since 2022
      * */
-    void removeService(String name)
+    public DFAgentDescription getServicesList()
     {
-        if(mapServices==null) mapServices = new HashMap<>();
-        mapServices.remove(name);
+        return servicesList;
     }
-
 
 }

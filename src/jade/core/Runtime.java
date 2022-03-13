@@ -288,7 +288,7 @@ public class Runtime {
             theContainer = null;
 
             //#MIDP_EXCLUDE_BEGIN
-            try {
+/*            try {
 //				criticalThreads.destroy();
                 criticalThreads.checkAccess();
             } catch (IllegalThreadStateException itse) {
@@ -296,7 +296,7 @@ public class Runtime {
                 criticalThreads.list();
             } finally {
                 criticalThreads = null;
-            }
+            }*/
             //#MIDP_EXCLUDE_END
             t.start();
         }
