@@ -7,6 +7,10 @@ Un très grand merci à ces développeurs pour leur important travail de qualit�
 
 En plus de bénéficier d'un traitement plus sain et plus rapide grâce à l'utilisation des dernières classes de Java pour la gestion de listes, et., des classes et fonctionnalités ont été ajoutées afin de simplifier la création d'agents et leurs communication.
 
+*Des exemples utilisant cette nouvelle version de Jade se trouvent [ici](https://emmanueladam.github.io/jade/).*
+
+*JADE is free software and is distributed by [Telecom Italia](https://www.gruppotim.it/it.html), the copyright holder, in open source under the terms and conditions of the LGPL ( Lesser General Public License Version 2) license.*
+
 
 ---
 # Java Agent Development Framework, UPHF Version.
@@ -18,3 +22,6 @@ This project is a fork of the [Jade framework v4.5](https://jade.tilab.com/), st
 
 A great thanks to the team that built Jade, and that have made a very nice and helpfull work that allow a lot of people to develop multiagent systems.
 
+*Examples using this new version of Jade can be found [here](https://emmanueladam.github.io/jade/).*
+
+*JADE is free software and is distributed by [Telecom Italia](https://www.gruppotim.it/it.html), the copyright holder, in open source under the terms and conditions of the LGPL ( Lesser General Public License Version 2) license.*
