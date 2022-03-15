@@ -203,8 +203,8 @@ public class ContractNetInitiator extends Initiator {
      *                        an array composed of that message only.
      * @param mapMessagesList The <code>HashMap</code> that will be used by this
      *                        <code>ContractNetInitiator</code>
-     * @deprecated
-     */
+     * deprecated
+
     public ContractNetInitiator(Agent a, ACLMessage cfp, HashMap<String, List<ACLMessage>> mapMessagesList) {
         super(a, cfp, mapMessagesList);
         // Register the FSM transitions specific to the ContractNet protocol
@@ -291,7 +291,7 @@ public class ContractNetInitiator extends Initiator {
         b.setMapMessages(getMapMessages());
         registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
     }
-
+*/
     /**
      * Constructs a <code>ContractNetInitiator</code> behaviour
      *
@@ -334,8 +334,8 @@ public class ContractNetInitiator extends Initiator {
                 handlePropose(propose, acceptances);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_PROPOSE);
 
         // HANDLE_REFUSE
@@ -347,8 +347,8 @@ public class ContractNetInitiator extends Initiator {
                 handleRefuse(getMapMessages().get(REPLY_K));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_REFUSE);
 
         // HANDLE_INFORM
@@ -360,8 +360,8 @@ public class ContractNetInitiator extends Initiator {
                 handleInform(getMapMessages().get(REPLY_K));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_INFORM);
 
         // HANDLE_ALL_RESPONSES
@@ -373,8 +373,8 @@ public class ContractNetInitiator extends Initiator {
                 handleAllResponses(responses, acceptances);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_ALL_RESPONSES);
 
         // HANDLE_ALL_RESULT_NOTIFICATIONS
@@ -388,8 +388,8 @@ public class ContractNetInitiator extends Initiator {
                 return moreAcceptancesToSend ? MORE_ACCEPTANCES : super.onEnd();
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
     }
 

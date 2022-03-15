@@ -123,13 +123,13 @@ public class TwoPh1Initiator extends Initiator {
      *                        If phase 1 ends with all confirm or inform than messages prepared are
      *                        <code>accept-proposal</code>, otherwise they are <code>reject-proposal</code>.
      * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPh1Initiator</code>.
-     * @deprecated
-     */
+     * deprecated
+
     public TwoPh1Initiator(Agent a, ACLMessage queryIf, String outputKey, HashMap<String, List<ACLMessage>> mapMessagesList) {
         super(a, queryIf, mapMessagesList);
         //this.inputKey = inputKey;
         this.outputKey = outputKey;
-        /* Register the FSM transitions specific to the Two-Phase1-Commit protocol */
+        //Register the FSM transitions specific to the Two-Phase1-Commit protocol
         registerTransition(CHECK_IN_SEQ, HANDLE_CONFIRM, ACLMessage.CONFIRM);
         registerTransition(CHECK_IN_SEQ, HANDLE_DISCONFIRM, ACLMessage.DISCONFIRM);
         registerTransition(CHECK_IN_SEQ, HANDLE_INFORM, ACLMessage.INFORM);
@@ -142,13 +142,12 @@ public class TwoPh1Initiator extends Initiator {
         registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, PH1_TIMEOUT_EXPIRED);
         registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, ALL_CONFIRM_OR_INFORM);
         registerDefaultTransition(HANDLE_ALL_RESPONSES, DUMMY_FINAL);
-        */
 
-        /* Create and register the states specific to the Two-Phase1-Commit protocol */
+
+        // Create and register the states specific to the Two-Phase1-Commit protocol
         Behaviour b;
 
-        /* HANDLE_CONFIRM state activated if arrived a confirm message compliant with
-        conversationId and a receiver of one of queryIf messages sent. */
+        // HANDLE_CONFIRM state activated if arrived a confirm message compliant with conversationId and a receiver of one of queryIf messages sent.
         b = new OneShotBehaviour(myAgent) {
             public void action() {
                 ACLMessage confirm = getMapMessages().get(REPLY_KEY);
@@ -158,9 +157,9 @@ public class TwoPh1Initiator extends Initiator {
         b.setMapMessagesList(getMapMessagesList());
         registerState(b, HANDLE_CONFIRM);
 
-        /* HANDLE_DISCONFIRM state activated if arrived a disconfirm message
-        compliant with conversationId and a receiver of one of queryIf messages
-        sent. */
+        // HANDLE_DISCONFIRM state activated if arrived a disconfirm message
+        //compliant with conversationId and a receiver of one of queryIf messages
+        //sent.
         b = new OneShotBehaviour(myAgent) {
             public void action() {
                 ACLMessage disconfirm = getMapMessages().get(REPLY_KEY);
@@ -170,9 +169,9 @@ public class TwoPh1Initiator extends Initiator {
         b.setMapMessagesList(getMapMessagesList());
         registerState(b, HANDLE_DISCONFIRM);
 
-        /* HANDLE_INFORM state activated if arrived an inform message
-        compliant with conversationId and a receiver of one of queryIf messages
-        sent. */
+        // HANDLE_INFORM state activated if arrived an inform message
+        //compliant with conversationId and a receiver of one of queryIf messages
+        //sent.
         b = new OneShotBehaviour(myAgent) {
             public void action() {
                 ACLMessage inform = getMapMessages().get(REPLY_KEY);
@@ -182,8 +181,8 @@ public class TwoPh1Initiator extends Initiator {
         b.setMapMessagesList(getMapMessagesList());
         registerState(b, HANDLE_INFORM);
 
-        /* HANDLE_ALL_RESPONSES state activated when timeout is expired or
-        all the answers have been received. */
+        // HANDLE_ALL_RESPONSES state activated when timeout is expired or
+        //all the answers have been received.
         b = new OneShotBehaviour(myAgent) {
             public void action() {
                 var responses = getMapMessagesList().get(ALL_RESPONSES_KEY);
@@ -199,7 +198,7 @@ public class TwoPh1Initiator extends Initiator {
         b.setMapMessagesList(getMapMessagesList());
         registerState(b, HANDLE_ALL_RESPONSES);
     }
-
+*/
     /**
      * Constructs a <code>TwoPh1Initiator</code> behaviour.
      *
@@ -242,7 +241,8 @@ public class TwoPh1Initiator extends Initiator {
                 handleConfirm(confirm);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_CONFIRM);
 
         /* HANDLE_DISCONFIRM state activated if arrived a disconfirm message
@@ -254,7 +254,8 @@ public class TwoPh1Initiator extends Initiator {
                 handleDisconfirm(disconfirm);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_DISCONFIRM);
 
         /* HANDLE_INFORM state activated if arrived an inform message
@@ -266,7 +267,8 @@ public class TwoPh1Initiator extends Initiator {
                 handleInform(inform);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_INFORM);
 
         /* HANDLE_ALL_RESPONSES state activated when timeout is expired or
@@ -283,7 +285,8 @@ public class TwoPh1Initiator extends Initiator {
                         pendings, nextPhMsgs);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_ALL_RESPONSES);
     }
 

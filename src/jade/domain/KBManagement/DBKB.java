@@ -221,6 +221,7 @@ public abstract class DBKB extends KB {
     }
 
 
+    @Override
     protected Object insert(Object name, Object fact) {
         try {
             return insertSingle(name, fact);
@@ -245,6 +246,7 @@ public abstract class DBKB extends KB {
 
     protected abstract Object insertSingle(Object name, Object fact) throws SQLException;
 
+    @Override
     protected Object remove(Object name) {
         try {
             return removeSingle(name);
@@ -269,7 +271,8 @@ public abstract class DBKB extends KB {
 
     protected abstract Object removeSingle(Object name) throws SQLException;
 
-    public List<DFAgentDescription> search(Object template, int maxResult) {
+    @Override
+    public List<DFAgentDescription> search(DFAgentDescription template, int maxResult) {
         try {
             return searchSingle(template, maxResult);
         } catch (SQLException sqle) {
@@ -291,8 +294,9 @@ public abstract class DBKB extends KB {
         return new ArrayList<>();
     }
 
-    protected abstract List<DFAgentDescription> searchSingle(Object template, int maxResult) throws SQLException;
+    protected abstract List<DFAgentDescription> searchSingle(DFAgentDescription template, int maxResult) throws SQLException;
 
+    @Override
     public KBIterator iterator(Object template) {
         try {
             return iteratorSingle(template);
@@ -317,6 +321,7 @@ public abstract class DBKB extends KB {
 
     protected abstract KBIterator iteratorSingle(Object template) throws SQLException;
 
+    @Override
     public void subscribe(Object template, SubscriptionResponder.Subscription s) throws NotUnderstoodException {
         try {
             subscribeSingle(template, s);
@@ -344,6 +349,7 @@ public abstract class DBKB extends KB {
     // The connection refresh process is useless in this case.
     public abstract Enumeration<?> getSubscriptions();
 
+    @Override
     public void unsubscribe(SubscriptionResponder.Subscription s) {
         try {
             unsubscribeSingle(s);

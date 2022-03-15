@@ -866,7 +866,7 @@ public class DFDBKB extends DBKB {
             }
 
             // Services
-            saveServices(descrId, dfd.getAllServices());
+            saveServices(descrId, dfd.getAllServices().iterator());
 
             regsCnt++;
             // clear outdated entries after a certain number of new registrations
@@ -910,7 +910,7 @@ public class DFDBKB extends DBKB {
     /**
      * Retrieve the DFDs matching the given template
      */
-    protected List<DFAgentDescription> searchSingle(Object template, int maxResult) throws SQLException {
+    protected List<DFAgentDescription> searchSingle(DFAgentDescription template, int maxResult) throws SQLException {
         List<String> matchingAIDs = new ArrayList<>();
 
         // Get the names of all DFDs matching the template
@@ -1480,7 +1480,7 @@ public class DFDBKB extends DBKB {
             i++;
         }
         // Services
-        Iterator<ServiceDescription> iter2 = dfdTemplate.getAllServices();
+        Iterator<ServiceDescription> iter2 = dfdTemplate.getAllServices().iterator();
         i = 0;
         while (iter.hasNext()) {
             ServiceDescription service = iter2.next();
@@ -1653,6 +1653,7 @@ public class DFDBKB extends DBKB {
 
     private final StringACLCodec codec = new StringACLCodec();
 
+    @Override
     protected void subscribeSingle(Object dfd, SubscriptionResponder.Subscription s) throws SQLException {
         ACLMessage aclM = s.getMessage();
         String msgStr = aclM.toString();
@@ -1697,6 +1698,7 @@ public class DFDBKB extends DBKB {
      * @return <code>Enumeration</code> with instances of the class
      * <code> jade.proto.SubscriptionResponder&Subscription</code>
      */
+    @Override
     public Enumeration<SubscriptionResponder.Subscription> getSubscriptions() {
         Vector<SubscriptionResponder.Subscription> subscriptions = new Vector<>();
         StringACLCodec codec = new StringACLCodec();
@@ -1722,6 +1724,7 @@ public class DFDBKB extends DBKB {
     }
 
 
+    @Override
     protected void unsubscribeSingle(SubscriptionResponder.Subscription sub) throws SQLException {
         ACLMessage aclM = sub.getMessage();
         String convID = aclM.getConversationId();
@@ -1882,6 +1885,7 @@ public class DFDBKB extends DBKB {
      * @param replaceWith new string
      */
     protected String replace(String str, String pattern, String replaceWith) {
+//TODO: a simplifier !!
         int s = 0;
         int e = 0;
         StringBuilder result = new StringBuilder();

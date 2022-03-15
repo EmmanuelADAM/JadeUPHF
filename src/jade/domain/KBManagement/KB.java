@@ -89,11 +89,11 @@ public abstract class KB {
 
     protected abstract Object remove(Object name);
 
-    public List<DFAgentDescription> search(Object template) {
+    public List<DFAgentDescription> search(DFAgentDescription template) {
         return search(template, maxResultLimit);
     }
 
-    public abstract List<DFAgentDescription> search(Object template, int maxResult);
+    public abstract List<DFAgentDescription> search(DFAgentDescription template, int maxResult);
 
     public abstract KBIterator iterator(Object template);
 

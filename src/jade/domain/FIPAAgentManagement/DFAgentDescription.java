@@ -26,10 +26,7 @@ package jade.domain.FIPAAgentManagement;
 import jade.content.Concept;
 import jade.core.AID;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -166,8 +163,8 @@ public class DFAgentDescription implements Concept {
      *
      * @return An iterator over the service descriptions collection.
      */
-    public Iterator<ServiceDescription> getAllServices() {
-        return services.iterator();
+    public List<ServiceDescription> getAllServices() {
+        return services;
     }
 
     /**
@@ -291,4 +288,21 @@ public class DFAgentDescription implements Concept {
         return language.iterator();
     }
 
-} 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DFAgentDescription that = (DFAgentDescription) o;
+
+        return services != null ? services.equals(that.services) : that.services == null;
+    }
+
+    @Override
+    public String toString() {
+        return "DFAgentDescription{" +
+                "services=" + Arrays.toString(services.toArray()) +
+                '}';
+    }
+}

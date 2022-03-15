@@ -250,7 +250,7 @@ public class DFAgentDscDlg extends JDialog implements ActionListener {
         // Services list
         JPanel pServices = new JPanel();
         pServices.setBorder(BorderFactory.createTitledBorder("Agent services"));
-        servicesListPanel = new VisualServicesList(dfdAgent.getAllServices(), dlgParent);
+        servicesListPanel = new VisualServicesList(dfdAgent.getAllServices().iterator(), dlgParent);
         servicesListPanel.setDimension(new Dimension(400, 45));
         servicesListPanel.setEnabled(editable);
         servicesListPanel.setCheckMandatorySlots(checkMandatorySlots);

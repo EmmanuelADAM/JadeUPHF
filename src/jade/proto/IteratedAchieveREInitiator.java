@@ -76,8 +76,8 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
      *                        <code>reply-with</code> is ignored and a different value is assigned
      *                        automatically by this class for each receiver.
      * @param mapMessagesList The <code>HashMap</code> that will be used by this <code>AchieveREInitiator</code>
-     * @deprecated use the constructor with 2 hashmap
-     */
+     * deprecated use the constructor with 2 hashmap
+
     public IteratedAchieveREInitiator(Agent a, ACLMessage msg, HashMap<String, List<ACLMessage>> mapMessagesList) {
         super(a, msg, mapMessagesList);
 
@@ -98,7 +98,7 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
         // Register the FSM transitions specific to the Iterated-Achieve-RE protocol
         registerDefaultTransition(HANDLE_ALL_RESULT_NOTIFICATIONS, REINIT);
         registerDefaultTransition(REINIT, SEND_INITIATIONS);
-    }
+    }*/
 
     /**
      * Construct an <code>IteratedAchieveREInitiator</code> with a given HashMap
@@ -118,7 +118,8 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
 
         // The HANDLE_ALL_RESULT_NOTIFICATIONS state must no longer be final
         Behaviour b = deregisterState(HANDLE_ALL_RESULT_NOTIFICATIONS);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
 
         // REINIT
@@ -127,7 +128,8 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
                 prepareForNextRound();
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, REINIT);
 
         // Register the FSM transitions specific to the Iterated-Achieve-RE protocol

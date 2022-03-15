@@ -9,7 +9,15 @@ En plus de bénéficier d'un traitement plus sain et plus rapide grâce à l'uti
 
 *Des exemples utilisant cette nouvelle version de Jade se trouvent [ici](https://emmanueladam.github.io/jade/).*
 
-*JADE is free software and is distributed by [Telecom Italia](https://www.gruppotim.it/it.html), the copyright holder, in open source under the terms and conditions of the LGPL ( Lesser General Public License Version 2) license.*
+**Adapter un code précédent.** Cette nouvelle version ne nécessite pas de modification de code, sauf pour la gestion des protocoles impliquant la réception/l'envoie de plusieurs messages (CFP, ...).
+Alors, il suffit de remplacer les notions de `Vector` par des `List<ACLMessage>`. 
+- Exemple, pour un `ContractNetInitiator`
+    - `protected void handleAllResponses(Vector responses, Vector acceptances)`
+  - devient
+  - `protected void handleAllResponses(List<ACLMessage> responses, List<ACLMessage> acceptances)`
+
+
+*(JADE is(was?) a free software and distributed by [Telecom Italia](https://www.gruppotim.it/it.html), the copyright holder, in open source under the terms and conditions of the LGPL ( Lesser General Public License Version 2) license.*
 
 
 ---
@@ -24,4 +32,4 @@ A great thanks to the team that built Jade, and that have made a very nice and h
 
 *Examples using this new version of Jade can be found [here](https://emmanueladam.github.io/jade/).*
 
-*JADE is free software and is distributed by [Telecom Italia](https://www.gruppotim.it/it.html), the copyright holder, in open source under the terms and conditions of the LGPL ( Lesser General Public License Version 2) license.*
+*(JADE is(was?) a free software and distributed by [Telecom Italia](https://www.gruppotim.it/it.html), the copyright holder, in open source under the terms and conditions of the LGPL ( Lesser General Public License Version 2) license.*

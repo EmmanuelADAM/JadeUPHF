@@ -1646,7 +1646,9 @@ public class df extends GuiAgent implements DFGUIAdapter {
 
     private boolean isADF(DFAgentDescription dfd) {
         try {
-            return (dfd.getAllServices().next()).getType().equalsIgnoreCase("fipa-df");
+            var l = dfd.getAllServices();
+            var sd = l.get(l.size()-1);
+            return sd.getType().equalsIgnoreCase("fipa-df");
         } catch (Exception e) {
             return false;
         }

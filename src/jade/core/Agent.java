@@ -2352,9 +2352,9 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * */
     public List<ServiceDescription> getServices()
     {
-        var l = new ArrayList<ServiceDescription>();
-        servicesList.getAllServices().forEachRemaining(l::add);
-        return l;
+//        var l = new ArrayList<ServiceDescription>();
+//        servicesList.getAllServices().forEachRemaining(l::add);
+        return servicesList.getAllServices();
     }
 
     /**

@@ -73,12 +73,12 @@ public abstract class MemKB extends KB {
     }
 
     // This abstract method has to perform pattern matching
-    protected abstract boolean match(Object template, Object fact);
+    protected abstract boolean match(DFAgentDescription template, DFAgentDescription fact);
 
 
     protected abstract void clean();
 
-    public List<DFAgentDescription> search(Object template, int maxResults) {
+    public List<DFAgentDescription> search(DFAgentDescription template, int maxResults) {
         List<DFAgentDescription> result = new ArrayList<>();
         Iterator<Object> it = facts.values().iterator();
         int found = 0;

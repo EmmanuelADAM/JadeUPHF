@@ -88,8 +88,8 @@ abstract class Initiator extends FSMBehaviour {
      * @param initiation      The message that must be used to initiate the protocol.
      * @param mapMessagesList The <code>HashMap</code> of list of messages that will be used by this
      *                        <code>Initiator</code>
-     * @deprecated
-     */
+     * deprecated
+
     protected Initiator(Agent a, ACLMessage initiation, HashMap<String, List<ACLMessage>> mapMessagesList) {
         super(a);
 
@@ -240,7 +240,7 @@ abstract class Initiator extends FSMBehaviour {
         };
         registerLastState(b, DUMMY_FINAL);
     }
-
+*/
     /**
      * Constructs an <code>Initiator</code> behaviour
      *

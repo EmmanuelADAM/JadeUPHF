@@ -80,34 +80,32 @@ public class DFMemKB extends MemKB {
     }
 
     // match
-    public final boolean match(Object template, Object fact) {
+    public final boolean match(DFAgentDescription template, DFAgentDescription fact) {
         return compare(template, fact);
     }
 
-    public static boolean compare(Object template, Object fact) {
+    public static boolean compare(DFAgentDescription template, DFAgentDescription fact) {
 
         try {
-            DFAgentDescription templateDesc = (DFAgentDescription) template;
-            DFAgentDescription factDesc = (DFAgentDescription) fact;
             // We must not return facts whose lease time has expired (no
             // matter if they match)
-            if (factDesc.checkLeaseTimeExpired())
+            if (fact.checkLeaseTimeExpired())
                 return false;
 
             // Match name
-            AID id1 = templateDesc.getName();
+            AID id1 = template.getName();
             if (id1 != null) {
-                AID id2 = factDesc.getName();
+                AID id2 = fact.getName();
                 if ((id2 == null) || (!matchAID(id1, id2)))
                     return false;
             }
 
             // Match protocol set
-            Iterator<String> itTemplate = templateDesc.getAllProtocols();
+            Iterator<String> itTemplate = template.getAllProtocols();
             while (itTemplate.hasNext()) {
                 String templateProto = itTemplate.next();
                 boolean found = false;
-                Iterator<String> itFact = factDesc.getAllProtocols();
+                Iterator<String> itFact = fact.getAllProtocols();
                 while (!found && itFact.hasNext()) {
                     String factProto = itFact.next();
                     found = templateProto.equalsIgnoreCase(factProto);
@@ -117,11 +115,11 @@ public class DFMemKB extends MemKB {
             }
 
             // Match ontologies set
-            itTemplate = templateDesc.getAllOntologies();
+            itTemplate = template.getAllOntologies();
             while (itTemplate.hasNext()) {
                 String templateOnto = itTemplate.next();
                 boolean found = false;
-                Iterator<String> itFact = factDesc.getAllOntologies();
+                Iterator<String> itFact = fact.getAllOntologies();
                 while (!found && itFact.hasNext()) {
                     String factOnto = itFact.next();
                     found = templateOnto.equalsIgnoreCase(factOnto);
@@ -131,11 +129,11 @@ public class DFMemKB extends MemKB {
             }
 
             // Match languages set
-            itTemplate = templateDesc.getAllLanguages();
+            itTemplate = template.getAllLanguages();
             while (itTemplate.hasNext()) {
                 String templateLang = itTemplate.next();
                 boolean found = false;
-                Iterator<String> itFact = factDesc.getAllLanguages();
+                Iterator<String> itFact = fact.getAllLanguages();
                 while (!found && itFact.hasNext()) {
                     String factLang = itFact.next();
                     found = templateLang.equalsIgnoreCase(factLang);
@@ -145,7 +143,9 @@ public class DFMemKB extends MemKB {
             }
 
             // Match services set
-            Iterator<ServiceDescription> itTemplate2 = templateDesc.getAllServices();
+            return fact.getAllServices().containsAll(template.getAllServices());
+
+/*            Iterator<ServiceDescription> itTemplate2 = templateDesc.getAllServices();
             while (itTemplate2.hasNext()) {
                 ServiceDescription templateSvc = itTemplate2.next();
                 boolean found = false;
@@ -158,7 +158,7 @@ public class DFMemKB extends MemKB {
                     return false;
             }
 
-            return true;
+            return true;*/
         } catch (ClassCastException cce) {
             return false;
         }

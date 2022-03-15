@@ -109,10 +109,9 @@ public class DFService extends FIPAService {
         }
 
         if (checkServices) {
-            Iterator<ServiceDescription> i = dfd.getAllServices();
-            ServiceDescription sd;
-            while (i.hasNext()) {
-                sd = i.next();
+//            Iterator<ServiceDescription> i = dfd.getAllServices();
+//            ServiceDescription sd;
+            for(ServiceDescription sd:dfd.getAllServices()) {
                 if (sd.getName() == null)
                     throw new MissingParameter(FIPAManagementVocabulary.SERVICEDESCRIPTION, FIPAManagementVocabulary.SERVICEDESCRIPTION_NAME);
                 if (sd.getType() == null)
@@ -979,7 +978,7 @@ public class DFService extends FIPAService {
         encodeAggregate(sb, dfd.getAllProtocols(), SL0Vocabulary.SET, FIPAManagementVocabulary.DFAGENTDESCRIPTION_PROTOCOLS);
         encodeAggregate(sb, dfd.getAllLanguages(), SL0Vocabulary.SET, FIPAManagementVocabulary.DFAGENTDESCRIPTION_LANGUAGES);
         encodeAggregate(sb, dfd.getAllOntologies(), SL0Vocabulary.SET, FIPAManagementVocabulary.DFAGENTDESCRIPTION_ONTOLOGIES);
-        encodeAggregate(sb, dfd.getAllServices(), SL0Vocabulary.SET, FIPAManagementVocabulary.DFAGENTDESCRIPTION_SERVICES);
+        encodeAggregate(sb, dfd.getAllServices().iterator(), SL0Vocabulary.SET, FIPAManagementVocabulary.DFAGENTDESCRIPTION_SERVICES);
         Date lease = dfd.getLeaseTime();
         if (lease != null) {
             sb.append(SPACE_COLON);

@@ -70,8 +70,8 @@ public class TwoPhInitiator extends FSMBehaviour {
      *                        Notice that the default implementation of the <code>prepareCfps</code> method
      *                        returns an array composed of that message only.
      * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPhInitiator</code>.
-     * @deprecated
-     */
+     * deprecated
+
     public TwoPhInitiator(Agent a, ACLMessage cfp, HashMap<String, List<ACLMessage>> mapMessagesList) {
         super(a);
         setMapMessagesList(mapMessagesList);
@@ -88,9 +88,9 @@ public class TwoPhInitiator extends FSMBehaviour {
         // Create and register the states specific to the Two-Phase-Commit protocol
         Behaviour b;
 
-        /* PH0_STATE activated for the first time. It sends cfps messages and wait
-        for a propose (operation completed), a failure (operation failed) or
-        expiration of timeout. */
+        // PH0_STATE activated for the first time. It sends cfps messages and wait
+        // for a propose (operation completed), a failure (operation failed) or
+        // expiration of timeout.
         b = new TwoPh0Initiator(myAgent, cfp, TEMP, mapMessagesList) {
 
             protected List<ACLMessage> prepareCfps(ACLMessage cfp) {
@@ -119,10 +119,10 @@ public class TwoPhInitiator extends FSMBehaviour {
         };
         registerFirstState(b, PH0_STATE);
 
-        /* PH1_STATE activated if phase 0 succeded (all propose in phase 0). It
-        sends queryIf messages and wait for a confirm (receiver prepared), a
-        disconfirm (receiver aborted), an inform (receiver not changed) or
-        expiration of timeout. */
+        // PH1_STATE activated if phase 0 succeded (all propose in phase 0). It
+        // sends queryIf messages and wait for a confirm (receiver prepared), a
+        // disconfirm (receiver aborted), an inform (receiver not changed) or
+        // expiration of timeout.
         b = new TwoPh1Initiator(myAgent, null, TEMP, mapMessagesList) {
             protected void initializeHashMap(ACLMessage msg) {
                 // Use the QUERY_IF messages prepared in previous phase
@@ -162,10 +162,10 @@ public class TwoPhInitiator extends FSMBehaviour {
         };
         registerState(b, PH1_STATE);
 
-        /* PH2_STATE activated when phase 0 fails (some failure or expiration
-        of timeout), phase 1 fails (some disconfirm or expiration of timeout) or
-        phase 1 succeds (no disconfirms). In the first and third case it sends
-        reject-proposal; in the second case it sends accept-proposal. */
+        // PH2_STATE activated when phase 0 fails (some failure or expiration
+        // of timeout), phase 1 fails (some disconfirm or expiration of timeout) or
+        // phase 1 succeds (no disconfirms). In the first and third case it sends
+        // reject-proposal; in the second case it sends accept-proposal.
         b = new TwoPh2Initiator(myAgent, null, mapMessagesList) {
             protected void initializeHashMap(ACLMessage msg) {
                 // Use the acceptance messages prepared in previous phase
@@ -200,7 +200,7 @@ public class TwoPhInitiator extends FSMBehaviour {
         };
         registerLastState(b, PH2_STATE);
 
-        /* DUMMY_FINAL */
+        // DUMMY_FINAL
         b = new OneShotBehaviour(myAgent) {
             public void action() {
             }
@@ -208,7 +208,7 @@ public class TwoPhInitiator extends FSMBehaviour {
         b.setMapMessagesList(getMapMessagesList());
         registerLastState(b, DUMMY_FINAL);
     }
-
+*/
     /**
      * Constructs a <code>TwoPhInitiator</code> behaviour.
      *
@@ -353,7 +353,8 @@ public class TwoPhInitiator extends FSMBehaviour {
             public void action() {
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerLastState(b, DUMMY_FINAL);
     }
 

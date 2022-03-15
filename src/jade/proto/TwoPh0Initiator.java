@@ -110,8 +110,8 @@ public class TwoPh0Initiator extends Initiator {
      * @param outputKey       Data store key where the behaviour will store the Vector
      *                        of messages to be sent to initiate the successive phase.
      * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPh0Initiator</code>.
-     * @deprecated
-     */
+     * deprecated
+
     public TwoPh0Initiator(Agent a, ACLMessage cfp, String outputKey, HashMap<String, List<ACLMessage>> mapMessagesList) {
         super(a, cfp, mapMessagesList);
         //this.conversationId = conversationId;
@@ -122,8 +122,8 @@ public class TwoPh0Initiator extends Initiator {
         registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, ALL_RESPONSES_RECEIVED); // update1
         registerDefaultTransition(HANDLE_ALL_RESPONSES, DUMMY_FINAL);
 
-        // Create and register the states specific to the Two-Phase0-Commit protocol */
-        Behaviour b;
+        // Create and register the states specific to the Two-Phase0-Commit protocol
+        //Behaviour b;
 
         // HANDLE_PROPOSE 
         // This state is activated when a propose message is received as a reply
@@ -150,7 +150,7 @@ public class TwoPh0Initiator extends Initiator {
         };
         b.setMapMessagesList(getMapMessagesList());
         registerState(b, HANDLE_ALL_RESPONSES);
-    }
+    }*/
 
     /**
      * Constructs a <code>TwoPh0Initiator</code> behaviour.
@@ -185,7 +185,8 @@ public class TwoPh0Initiator extends Initiator {
                 handlePropose(propose);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_PROPOSE);
 
         // HANDLE_ALL_RESPONSES
@@ -200,7 +201,8 @@ public class TwoPh0Initiator extends Initiator {
                 handleAllResponses(responses, proposes, pendings, nextPhMsgs);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_ALL_RESPONSES);
     }
 

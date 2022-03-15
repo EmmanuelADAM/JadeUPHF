@@ -125,7 +125,7 @@ public class MsgReceiver extends SimpleBehaviour {
         if (interrupted) {
             //TODO: here, verifier le code de la cle pour choisir la bonne hashmap !!
             if (receivedMsgKey != null) {
-                HashMap map = getMapMessagesList();
+                var map = getMapMessagesList();
                 map.put(receivedMsgKey, null);
             }
             ret = INTERRUPTED;

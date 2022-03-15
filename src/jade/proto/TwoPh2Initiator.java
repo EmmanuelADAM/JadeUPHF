@@ -101,11 +101,11 @@ public class TwoPh2Initiator extends Initiator {
      * @param a               The agent performing the protocol.
      * @param acceptance      msg
      * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPh2Initiator</code>.
-     * @deprecated
-     */
+     * deprecated
+
     public TwoPh2Initiator(Agent a, ACLMessage acceptance, HashMap<String, List<ACLMessage>> mapMessagesList) {
         super(a, acceptance, mapMessagesList);
-        /* Register the FSM transitions specific to the Two-Phase2-Commit protocol */
+        // Register the FSM transitions specific to the Two-Phase2-Commit protocol
         registerTransition(CHECK_IN_SEQ, HANDLE_INFORM, ACLMessage.INFORM);
         registerTransition(CHECK_IN_SEQ, HANDLE_OLD_RESPONSE, OLD_RESPONSE);
         registerDefaultTransition(HANDLE_INFORM, CHECK_SESSIONS);
@@ -113,7 +113,7 @@ public class TwoPh2Initiator extends Initiator {
         registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, ALL_RESPONSES_RECEIVED);
         registerDefaultTransition(HANDLE_ALL_RESPONSES, DUMMY_FINAL);
 
-        /* Create and register the states specific to the Two-Phase2-Commit protocol */
+        // Create and register the states specific to the Two-Phase2-Commit protocol
         Behaviour b;
 
         // CHECK_IN_SEQ 
@@ -147,8 +147,8 @@ public class TwoPh2Initiator extends Initiator {
         b.setMapMessagesList(getMapMessagesList());
         registerState(b, CHECK_IN_SEQ);
 
-        /* HANDLE_INFORM state activated if arrived an inform message compliant with
-        conversationId and a receiver of one of accept/reject-proposal messages sent. */
+        // HANDLE_INFORM state activated if arrived an inform message compliant with
+        //conversationId and a receiver of one of accept/reject-proposal messages sent.
         b = new OneShotBehaviour(myAgent) {
             final int ret = -1;
 
@@ -160,9 +160,9 @@ public class TwoPh2Initiator extends Initiator {
         b.setMapMessagesList(getMapMessagesList());
         registerState(b, HANDLE_INFORM);
 
-        /* HANDLE_OLD_RESPONSE state activate if arrived a failure message coming
-        from phase 0 (timeout expired), a disconfirm or inform message coming from phase 1
-        (timeout expired). */
+        // HANDLE_OLD_RESPONSE state activate if arrived a failure message coming
+        //from phase 0 (timeout expired), a disconfirm or inform message coming from phase 1
+        //(timeout expired).
         b = new OneShotBehaviour(myAgent) {
             public void action() {
                 ACLMessage old = (ACLMessage) (getMapMessagesList().get(REPLY_KEY));
@@ -172,7 +172,7 @@ public class TwoPh2Initiator extends Initiator {
         b.setMapMessagesList(getMapMessagesList());
         registerState(b, HANDLE_OLD_RESPONSE);
 
-        /* HANDLE_ALL_RESPONSES state activated when all the answers have been received. */
+        // HANDLE_ALL_RESPONSES state activated when all the answers have been received.
         b = new OneShotBehaviour(myAgent) {
             public void action() {
                 var responses = getMapMessagesList().get(ALL_RESPONSES_KEY);
@@ -183,6 +183,7 @@ public class TwoPh2Initiator extends Initiator {
         registerState(b, HANDLE_ALL_RESPONSES);
 
     }
+    */
 
     /**
      * Constructs a <code>TwoPh2Initiator</code> behaviour.
@@ -233,7 +234,8 @@ public class TwoPh2Initiator extends Initiator {
                 return ret;
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, CHECK_IN_SEQ);
 
         /* HANDLE_INFORM state activated if arrived an inform message compliant with
@@ -246,7 +248,8 @@ public class TwoPh2Initiator extends Initiator {
                 handleInform(inform);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_INFORM);
 
         /* HANDLE_OLD_RESPONSE state activate if arrived a failure message coming
@@ -258,7 +261,8 @@ public class TwoPh2Initiator extends Initiator {
                 handleOldResponse(old);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_OLD_RESPONSE);
 
         /* HANDLE_ALL_RESPONSES state activated when all the answers have been received. */
@@ -268,7 +272,8 @@ public class TwoPh2Initiator extends Initiator {
                 handleAllResponses(responses);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMapMessagesList(mapMessagesList);
+        b.setMapMessages(mapMessages);
         registerState(b, HANDLE_ALL_RESPONSES);
 
     }

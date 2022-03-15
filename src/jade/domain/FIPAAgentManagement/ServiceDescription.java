@@ -270,4 +270,19 @@ public class ServiceDescription implements Concept {
         return properties.iterator();
     }
 
-} 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ServiceDescription that = (ServiceDescription) o;
+
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        return type != null ? type.equals(that.type) : that.type == null;
+    }
+
+    @Override
+    public String toString() {
+        return "Service{" + name + '\''  + type + '}';
+    }
+}

@@ -153,10 +153,9 @@ public class AchieveREInitiator extends Initiator {
      *              automatically by this class for each receiver.
      * @param store The <code>HashMap</code> that will be used by this
      *              <code>AchieveREInitiator</code>
-     * @deprecated
-     */
-    public AchieveREInitiator(Agent a, ACLMessage msg, HashMap<String, List<ACLMessage>> store) {
-        super(a, msg, store);
+     * deprecated
+    public AchieveREInitiator(Agent a, ACLMessage msg, HashMap<String, List<ACLMessage>> msgList) {
+        super(a, msg, msgList);
 
         // Register the FSM transitions specific to the Achieve-RE protocol
         registerTransition(CHECK_IN_SEQ, HANDLE_AGREE, ACLMessage.AGREE);
@@ -247,7 +246,7 @@ public class AchieveREInitiator extends Initiator {
         b.setMapMessages(getMapMessages());
         registerState(b, CHECK_AGAIN);
     }
-
+*/
     //#APIDOC_EXCLUDE_BEGIN
 
     /**

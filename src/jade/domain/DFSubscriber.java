@@ -9,6 +9,7 @@ import jade.util.Logger;
 
 import java.io.Serial;
 import java.util.Iterator;
+import java.util.List;
 
 //#PJAVA_EXCLUDE_FILE
 //#MIDP_EXCLUDE_FILE
@@ -21,8 +22,11 @@ public abstract class DFSubscriber extends SubscriptionInitiator {
 
     private boolean firstNotificationReceived = false;
 
+    private  DFAgentDescription template;
+
     public DFSubscriber(Agent a, DFAgentDescription template) {
         super(a, DFService.createSubscriptionMessage(a, a.getDefaultDF(), template, null));
+        this.template = template;
     }
 
     public abstract void onRegister(DFAgentDescription dfad);
@@ -37,10 +41,9 @@ public abstract class DFSubscriber extends SubscriptionInitiator {
     protected void handleInform(ACLMessage inform) {
         try {
             DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
-
+            var l = template.getAllServices();
             for (DFAgentDescription dfad : dfds) {
-                Iterator<ServiceDescription> services = dfad.getAllServices();
-                if (services.hasNext()) {
+                if (dfad.getAllServices().containsAll(l)) {
                     onRegister(dfad);
                 } else {
                     onDeregister(dfad);
