@@ -10,7 +10,7 @@ En plus de bénéficier d'un traitement plus sain et plus rapide grâce à l'uti
 *Des exemples utilisant cette nouvelle version de Jade se trouvent [ici](https://emmanueladam.github.io/jade/).*
 
 **Adapter un code précédent.** Cette nouvelle version ne nécessite pas de modification de code, sauf pour la gestion des protocoles impliquant la réception/l'envoie de plusieurs messages (CFP, ...).
-Alors, il suffit de remplacer les notions de `Vector` par des `List<ACLMessage>`. 
+Alors, il suffit de remplacer les notions de `Vector` par des `List<ACLMessage>`.  
 - Exemple, pour un `ContractNetInitiator`
     - `protected void handleAllResponses(Vector responses, Vector acceptances)`
   - devient
