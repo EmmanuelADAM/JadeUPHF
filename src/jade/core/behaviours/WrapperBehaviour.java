@@ -1,8 +1,10 @@
 package jade.core.behaviours;
 
 import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * This behaviour allows modifying on the fly the way an existing behaviour object works
@@ -108,12 +110,12 @@ public class WrapperBehaviour extends Behaviour {
         wrappedBehaviour.setWrappedParent(parent);
     }
 
-    public void setMapMessagesList(HashMap ds) {
-        wrappedBehaviour.setMapMessagesList(ds);
+    public HashMap<String, List<ACLMessage>> getMapMessagesList() {
+        return wrappedBehaviour.getMapMessagesList();
     }
 
-    public HashMap getMapMessagesList() {
-        return wrappedBehaviour.getMapMessagesList();
+    public void setMapMessagesList(HashMap<String, List<ACLMessage>> ds) {
+        wrappedBehaviour.setMapMessagesList(ds);
     }
 
     public void reset() {

@@ -46,15 +46,6 @@ public class MobileAgentProfile implements Concept {
     }
 
     /**
-     * Set the <code>system</code> slot of this action.
-     *
-     * @param s The runtime system of the described agent.
-     */
-    public void setSystem(MobileAgentSystem s) {
-        system = s;
-    }
-
-    /**
      * Retrieve the value of the <code>system</code> slot of this
      * action, containing the runtime system of the described agent.
      *
@@ -66,12 +57,12 @@ public class MobileAgentProfile implements Concept {
     }
 
     /**
-     * Set the <code>language</code> slot of this action.
+     * Set the <code>system</code> slot of this action.
      *
-     * @param l The language of the described agent.
+     * @param s The runtime system of the described agent.
      */
-    public void setLanguage(MobileAgentLanguage l) {
-        language = l;
+    public void setSystem(MobileAgentSystem s) {
+        system = s;
     }
 
     /**
@@ -86,12 +77,12 @@ public class MobileAgentProfile implements Concept {
     }
 
     /**
-     * Set the <code>os</code> slot of this action.
+     * Set the <code>language</code> slot of this action.
      *
-     * @param o The OS of the described agent.
+     * @param l The language of the described agent.
      */
-    public void setOS(MobileAgentOS o) {
-        os = o;
+    public void setLanguage(MobileAgentLanguage l) {
+        language = l;
     }
 
     /**
@@ -103,6 +94,15 @@ public class MobileAgentProfile implements Concept {
      */
     public MobileAgentOS getOS() {
         return os;
+    }
+
+    /**
+     * Set the <code>os</code> slot of this action.
+     *
+     * @param o The OS of the described agent.
+     */
+    public void setOS(MobileAgentOS o) {
+        os = o;
     }
 
 }

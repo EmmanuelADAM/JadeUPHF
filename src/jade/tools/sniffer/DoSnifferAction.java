@@ -41,6 +41,7 @@ import java.util.List;
 
 /**
  * For sniff the Agent in the tree.
+ *
  * @see DoNotSnifferAction
  * @see ShowOnlyAction
  */
@@ -48,9 +49,9 @@ import java.util.List;
 public class DoSnifferAction extends AgentAction {
 
     private final MainPanel mainPanel;
-    private Agent agent;
     private final Sniffer mySniffer;
     private final List<Agent> sniffedAgents = new ArrayList<>();
+    private Agent agent;
 
     public DoSnifferAction(ActionProcessor actPro, MainPanel mainPanel, Sniffer mySniffer) {
         super("DoSnifferActionIcon", "Do sniff this agent(s)", actPro);
@@ -62,10 +63,12 @@ public class DoSnifferAction extends AgentAction {
         doSniff(node.getName());
     }
 
-    /** Given an agent name, sniff it.
+    /**
+     * Given an agent name, sniff it.
+     *
      * @param agentName - the String name of the agent.
-     * Note, this was originally buried in doAction, but we want the ability to
-     * sniff with just a name.
+     *                  Note, this was originally buried in doAction, but we want the ability to
+     *                  sniff with just a name.
      */
     public void doSniff(String agentName) {
         String realName = checkString(agentName);

@@ -22,6 +22,7 @@ import java.io.Serial;
  * see SSIteratedAchieveREtResponder
  */
 public abstract class SSResponderDispatcher extends CyclicBehaviour {
+    private static long cnt = 0;
     private final ConversationList activeConversations;
     private final MessageTemplate template;
 
@@ -31,6 +32,10 @@ public abstract class SSResponderDispatcher extends CyclicBehaviour {
         template = MessageTemplate.and(
                 tpl,
                 activeConversations.getMessageTemplate());
+    }
+
+    private synchronized static String createConversationId(String name) {
+        return "C-" + name + '-' + System.currentTimeMillis() + '-' + (cnt++);
     }
 
     public final void action() {
@@ -73,11 +78,5 @@ public abstract class SSResponderDispatcher extends CyclicBehaviour {
 
     protected void addBehaviour(Behaviour b) {
         myAgent.addBehaviour(b);
-    }
-
-    private static long cnt = 0;
-
-    private synchronized static String createConversationId(String name) {
-        return "C-" + name + '-' + System.currentTimeMillis() + '-' + (cnt++);
     }
 }

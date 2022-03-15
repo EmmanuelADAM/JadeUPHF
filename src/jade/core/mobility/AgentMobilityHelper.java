@@ -35,22 +35,10 @@ import jade.core.ServiceHelper;
  */
 public interface AgentMobilityHelper extends ServiceHelper {
 
-    void registerMovable(Movable m);
-
-    void move(Location destination);
-
-    void clone(Location destination, String newName);
-
-    //#J2ME_EXCLUDE_BEGIN
-    ClassLoader getContainerClassLoader(String containerName, ClassLoader parent) throws ServiceException;
-    //#J2ME_EXCLUDE_END
-
     /**
      * The name of this service.
      */
     String NAME = "jade.core.mobility.AgentMobility";
-
-
     /**
      * This command name represents the <code>move-agent</code>
      * action.
@@ -62,7 +50,6 @@ public interface AgentMobilityHelper extends ServiceHelper {
      * the agent migration has taken place.
      */
     String REQUEST_MOVE = "Request-Move";
-
     /**
      * This command name represents the <code>clone-agent</code>
      * action.
@@ -74,7 +61,6 @@ public interface AgentMobilityHelper extends ServiceHelper {
      * the agent clonation has taken place.
      */
     String REQUEST_CLONE = "Request-Clone";
-
     /**
      * This command is issued by an agent that has just migrated.
      * The agent migration can either be an autonomous move of the
@@ -84,7 +70,7 @@ public interface AgentMobilityHelper extends ServiceHelper {
      * agent migration process.
      */
     String INFORM_MOVED = "Inform-Moved";
-
+    //#J2ME_EXCLUDE_END
     /**
      * This command is issued by an agent that has just cloned itself.
      * The agent clonation can either be an autonomous move of the
@@ -94,6 +80,15 @@ public interface AgentMobilityHelper extends ServiceHelper {
      * agent clonation process.
      */
     String INFORM_CLONED = "Inform-Cloned";
+
+    void registerMovable(Movable m);
+
+    void move(Location destination);
+
+    void clone(Location destination, String newName);
+
+    //#J2ME_EXCLUDE_BEGIN
+    ClassLoader getContainerClassLoader(String containerName, ClassLoader parent) throws ServiceException;
 
 
     //void informCloned(AID agentID, Location where, String newName) throws ServiceException, JADESecurityException, IMTPException, NotFoundException, NameClashException;

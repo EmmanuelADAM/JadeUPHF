@@ -28,8 +28,8 @@ package jade.core;
 class FullResourceManager implements ResourceManager {
 
     public static final String DISABLE_THREAD_GROUP_INTERRUPT = "jade_core_FullResourceManager_disablethreadgroupinterrupt";
-    private static final boolean DEFAULT_DISABLE_THREAD_GROUP_INTERRUPT = false;
     public static final String THREAD_GROUP_INTERRUPT_TIMEOUT = "jade_core_FullResourceManager_threadgroupinterrupttimeout";
+    private static final boolean DEFAULT_DISABLE_THREAD_GROUP_INTERRUPT = false;
     private static final String DEFAULT_THREAD_GROUP_INTERRUPT_TIMEOUT = "5000";
 
     private static final String USER_AGENTS_GROUP_NAME = "JADE User Agents";

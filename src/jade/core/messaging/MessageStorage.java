@@ -33,14 +33,6 @@ import java.io.IOException;
 
 public interface MessageStorage {
 
-    interface LoadListener {
-        void loadStarted(String storeName);
-
-        void itemLoaded(String storeName, GenericMessage msg, AID receiver);
-
-        void loadEnded(String storeName);
-    }
-
     void init(Profile p);
 
     String store(GenericMessage msg, AID receiver) throws IOException;
@@ -48,5 +40,13 @@ public interface MessageStorage {
     void delete(String storeName, AID receiver) throws IOException;
 
     void loadAll(LoadListener ll) throws IOException;
+
+    interface LoadListener {
+        void loadStarted(String storeName);
+
+        void itemLoaded(String storeName, GenericMessage msg, AID receiver);
+
+        void loadEnded(String storeName);
+    }
 
 }

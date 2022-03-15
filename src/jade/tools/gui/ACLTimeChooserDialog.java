@@ -49,14 +49,36 @@ import java.util.GregorianCalendar;
 public class ACLTimeChooserDialog implements ActionListener {
 
     /**
+     * Description of the Field
+     */
+    public final static int ABSOLUTE = 0;
+    /**
+     * Description of the Field
+     */
+    public final static int RELATIVE = 1;
+    /**
+     * Description of the Field
+     */
+    public final static int OK = 1;
+    /**
+     * Description of the Field
+     */
+    public final static int CANCEL = 0;
+    JToggleButton absButton;
+    JToggleButton relButton;
+    private Date date;
+    private int mode;
+    private int retVal;
+    private JDialog dlg;
+    private JTextField year, month, day, hour, min, sec;
+
+    /**
      * Constructor for the TimeChooserDialog object
      */
     public ACLTimeChooserDialog() {
         retVal = CANCEL;
         date = null;
     }
-
-
     /**
      * Constructor for the TimeChooserDialog object
      *
@@ -67,7 +89,6 @@ public class ACLTimeChooserDialog implements ActionListener {
         date = d;
     }
 
-
     /**
      * @param args The command line arguments
      */
@@ -76,7 +97,6 @@ public class ACLTimeChooserDialog implements ActionListener {
         tc.setDate(new Date());
         tc.showViewTimeDlg(null);
     }
-
 
     /**
      * Gets the Date attribute of the TimeChooserDialog object
@@ -87,7 +107,6 @@ public class ACLTimeChooserDialog implements ActionListener {
         return (date);
     }
 
-
     /**
      * Sets the Date attribute of the TimeChooserDialog object
      *
@@ -96,7 +115,6 @@ public class ACLTimeChooserDialog implements ActionListener {
     public void setDate(Date d) {
         date = d;
     }
-
 
     /**
      * Description of the Method
@@ -200,7 +218,6 @@ public class ACLTimeChooserDialog implements ActionListener {
         return (retVal);
     }
 
-
     /**
      * Description of the Method
      *
@@ -257,7 +274,6 @@ public class ACLTimeChooserDialog implements ActionListener {
         dlg.setVisible(true);
     }
 
-
     /**
      * Description of the Method
      *
@@ -301,7 +317,6 @@ public class ACLTimeChooserDialog implements ActionListener {
         }
 
     }
-
 
     /**
      * Adds a feature to the TimeUnitLine attribute of the TimeChooserDialog
@@ -367,32 +382,6 @@ public class ACLTimeChooserDialog implements ActionListener {
         up.add(B2);
         tp.add(up);
     }
-
-
-    /**
-     * Description of the Field
-     */
-    public final static int ABSOLUTE = 0;
-    /**
-     * Description of the Field
-     */
-    public final static int RELATIVE = 1;
-
-    /**
-     * Description of the Field
-     */
-    public final static int OK = 1;
-    /**
-     * Description of the Field
-     */
-    public final static int CANCEL = 0;
-    JToggleButton absButton;
-    JToggleButton relButton;
-    private Date date;
-    private int mode;
-    private int retVal;
-    private JDialog dlg;
-    private JTextField year, month, day, hour, min, sec;
 
 }
 //  ***EOF***

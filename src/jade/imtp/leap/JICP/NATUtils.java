@@ -16,6 +16,47 @@ public class NATUtils {
         this.serverPort = serverPort;
     }
 
+    public static void main(String[] args) {
+//		TransportAddress ta = new JICPAddress(args[0], args[1], null, null);
+//		try {
+//			JICPConnection con = new JICPConnection(ta) {
+//				@Override
+//				protected void bindSocket(Socket sc) {
+//					try {
+//						sc.bind(new InetSocketAddress(3333));
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+// 			};
+//			JICPPacket pkt = new JICPPacket(JICPProtocol.GET_ADDRESS_TYPE, JICPProtocol.DEFAULT_INFO, new byte[]{0});
+//			con.writePacket(pkt);
+//			pkt = con.readPacket();
+//			byte[] data = pkt.getData();
+//			if (data != null) {
+//				System.out.println(new String(data));
+//			}
+//			else {
+//				System.out.println("NO DATA");
+//			}
+//			con.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+
+        NATUtils nat = new NATUtils(args[0], Integer.parseInt(args[1]));
+
+        try {
+            InetSocketAddress[] aa = nat.getNATMapping(null, 8888, 10000);
+            System.out.println("local =    " + aa[0]);
+            System.out.println("external = " + aa[1]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public InetSocketAddress[] getNATMapping(final String localAddress, final int localPort, int timeout) throws Exception {
         TransportAddress ta = new JICPAddress(serverAddr, String.valueOf(serverPort), null, null);
         JICPConnection con = null;
@@ -68,47 +109,6 @@ public class NATUtils {
                 con.close();
             } catch (Exception e) {
             }
-        }
-    }
-
-    public static void main(String[] args) {
-//		TransportAddress ta = new JICPAddress(args[0], args[1], null, null);
-//		try {
-//			JICPConnection con = new JICPConnection(ta) {
-//				@Override
-//				protected void bindSocket(Socket sc) {
-//					try {
-//						sc.bind(new InetSocketAddress(3333));
-//					} catch (IOException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-// 			};
-//			JICPPacket pkt = new JICPPacket(JICPProtocol.GET_ADDRESS_TYPE, JICPProtocol.DEFAULT_INFO, new byte[]{0});
-//			con.writePacket(pkt);
-//			pkt = con.readPacket();
-//			byte[] data = pkt.getData();
-//			if (data != null) {
-//				System.out.println(new String(data));
-//			}
-//			else {
-//				System.out.println("NO DATA");
-//			}
-//			con.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
-        NATUtils nat = new NATUtils(args[0], Integer.parseInt(args[1]));
-
-        try {
-            InetSocketAddress[] aa = nat.getNATMapping(null, 8888, 10000);
-            System.out.println("local =    " + aa[0]);
-            System.out.println("external = " + aa[1]);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

@@ -36,19 +36,16 @@ import java.util.Map;
  * polling time.
  */
 public class SAMInfo implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 84762938792387L;
-
     public static final String DEFAULT_AGGREGATION_SEPARATOR = "#";
     public static final char DEFAULT_AGGREGATION_SEPARATOR_CHAR = '#';
     public static final String SUM_AGGREGATION_SEPARATOR = "+";
     public static final char SUM_AGGREGATION_SEPARATOR_CHAR = '+';
     public static final String AVG_AGGREGATION_SEPARATOR = "@";
     public static final char AVG_AGGREGATION_SEPARATOR_CHAR = '@';
-
     public static final int AVG_AGGREGATION = 0;
     public static final int SUM_AGGREGATION = 1;
-
+    @Serial
+    private static final long serialVersionUID = 84762938792387L;
     private final Map<String, AverageMeasure> entityMeasures;
     private final Map<String, Long> counterValues;
 
@@ -60,67 +57,6 @@ public class SAMInfo implements Serializable {
     SAMInfo(Map<String, AverageMeasure> entityMeasures, Map<String, Long> counterValues) {
         this.entityMeasures = entityMeasures;
         this.counterValues = counterValues;
-    }
-
-    /**
-     * Provides the measures of all monitored entities in form of a Map.
-     *
-     * @return A Map mapping monitored entity names to their measures
-     */
-    public Map<String, AverageMeasure> getEntityMeasures() {
-        return entityMeasures;
-    }
-
-    /**
-     * Provides the differential values of all monitored counters in form of a Map.
-     *
-     * @return A Map mapping monitored counter names to their differential values
-     */
-    public Map<String, Long> getCounterValues() {
-        return counterValues;
-    }
-
-    void update(SAMInfo info) {
-        // Update entity measures
-        Map<String, AverageMeasure> mm = info.getEntityMeasures();
-        for (String entityName : mm.keySet()) {
-            AverageMeasure newM = mm.get(entityName);
-            // If this is a new entity --> add it. Otherwise update the measure we have internally
-            AverageMeasure m = entityMeasures.get(entityName);
-            if (m == null) {
-                entityMeasures.put(entityName, newM);
-            } else {
-                m.update(newM);
-            }
-        }
-
-        // Update counter values
-        Map<String, Long> vv = info.getCounterValues();
-        for (String counterName : vv.keySet()) {
-            long newV = vv.get(counterName);
-            // If this is a new counter --> add it. Otherwise sum to the value we have internally
-            counterValues.merge(counterName, newV, Long::sum);
-        }
-    }
-
-    /**
-     * If there are entities/counters of the form a#b, a#c... produce an aggregated entity a.
-     * Since a itself may have the form a1#a2, iterate until there are no more aggregations
-     */
-    void computeAggregatedValues() {
-        // Aggregate measures
-        Map<String, AverageMeasure> aggregatedMeasures = oneShotComputeAggregatedMeasures(entityMeasures);
-        while (aggregatedMeasures.size() > 0) {
-            addAllMeasures(aggregatedMeasures, entityMeasures);
-            aggregatedMeasures = oneShotComputeAggregatedMeasures(aggregatedMeasures);
-        }
-
-        // Aggregate counters
-        Map<String, Long> aggregatedCounters = oneShotComputeAggregatedCounters(counterValues);
-        while (aggregatedCounters.size() > 0) {
-            addAllCounters(aggregatedCounters, counterValues);
-            aggregatedCounters = oneShotComputeAggregatedCounters(aggregatedCounters);
-        }
     }
 
     private static Map<String, AverageMeasure> oneShotComputeAggregatedMeasures(Map<String, AverageMeasure> measures) {
@@ -189,7 +125,6 @@ public class SAMInfo implements Serializable {
         }
     }
 
-
     public static final AggregationInfo getAggregationInfo(String name, int defaultAggregation) {
         for (int i = name.length() - 1; i >= 0; --i) {
             AggregationInfo ai = null;
@@ -211,6 +146,66 @@ public class SAMInfo implements Serializable {
         return null;
     }
 
+    /**
+     * Provides the measures of all monitored entities in form of a Map.
+     *
+     * @return A Map mapping monitored entity names to their measures
+     */
+    public Map<String, AverageMeasure> getEntityMeasures() {
+        return entityMeasures;
+    }
+
+    /**
+     * Provides the differential values of all monitored counters in form of a Map.
+     *
+     * @return A Map mapping monitored counter names to their differential values
+     */
+    public Map<String, Long> getCounterValues() {
+        return counterValues;
+    }
+
+    void update(SAMInfo info) {
+        // Update entity measures
+        Map<String, AverageMeasure> mm = info.getEntityMeasures();
+        for (String entityName : mm.keySet()) {
+            AverageMeasure newM = mm.get(entityName);
+            // If this is a new entity --> add it. Otherwise update the measure we have internally
+            AverageMeasure m = entityMeasures.get(entityName);
+            if (m == null) {
+                entityMeasures.put(entityName, newM);
+            } else {
+                m.update(newM);
+            }
+        }
+
+        // Update counter values
+        Map<String, Long> vv = info.getCounterValues();
+        for (String counterName : vv.keySet()) {
+            long newV = vv.get(counterName);
+            // If this is a new counter --> add it. Otherwise sum to the value we have internally
+            counterValues.merge(counterName, newV, Long::sum);
+        }
+    }
+
+    /**
+     * If there are entities/counters of the form a#b, a#c... produce an aggregated entity a.
+     * Since a itself may have the form a1#a2, iterate until there are no more aggregations
+     */
+    void computeAggregatedValues() {
+        // Aggregate measures
+        Map<String, AverageMeasure> aggregatedMeasures = oneShotComputeAggregatedMeasures(entityMeasures);
+        while (aggregatedMeasures.size() > 0) {
+            addAllMeasures(aggregatedMeasures, entityMeasures);
+            aggregatedMeasures = oneShotComputeAggregatedMeasures(aggregatedMeasures);
+        }
+
+        // Aggregate counters
+        Map<String, Long> aggregatedCounters = oneShotComputeAggregatedCounters(counterValues);
+        while (aggregatedCounters.size() > 0) {
+            addAllCounters(aggregatedCounters, counterValues);
+            aggregatedCounters = oneShotComputeAggregatedCounters(aggregatedCounters);
+        }
+    }
 
     /**
      * Inner class AggregationInfo

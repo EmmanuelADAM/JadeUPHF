@@ -29,6 +29,7 @@ import jade.content.onto.Ontology;
 /**
  * Ontology containing schemas for the full SL language operators.
  * see jade.content.Ontology
+ *
  * @author Giovanni Caire - TILAB
  */
 public class SLOntology
@@ -46,10 +47,6 @@ public class SLOntology
     // The singleton instance of this ontology
     private static final Ontology theInstance = new SLOntology();
 
-    public static Ontology getInstance() {
-        return theInstance;
-    }
-
     /**
      * Constructor
      */
@@ -60,25 +57,25 @@ public class SLOntology
 
 		/*#MIDP_INCLUDE_BEGIN
   	super(ONTOLOGY_NAME, BasicOntology.getInstance(), null);
-  	
+
   	try {
 			// Schemas for the SL1 operators
   		add(new PredicateSchema(AND), AbsPredicate.getJavaClass());
   		add(new PredicateSchema(OR), AbsPredicate.getJavaClass());
 	  	add(new PredicateSchema(NOT), AbsPredicate.getJavaClass());
-  	
+
   		PredicateSchema ps = (PredicateSchema) getSchema(AND);
   		ps.add(AND_LEFT, (PredicateSchema) PredicateSchema.getBaseSchema());
 	  	ps.add(AND_RIGHT, (PredicateSchema) PredicateSchema.getBaseSchema());
-  	
+
   		ps = (PredicateSchema) getSchema(OR);
   		ps.add(OR_LEFT, (PredicateSchema) PredicateSchema.getBaseSchema());
 	  	ps.add(OR_RIGHT, (PredicateSchema) PredicateSchema.getBaseSchema());
-  		
+
   		ps = (PredicateSchema) getSchema(NOT);
 	  	ps.add(NOT_WHAT, (PredicateSchema) PredicateSchema.getBaseSchema());
-	  
-	  
+
+
 			// Schemas for the SL2 operators
     	add(VariableSchema.getBaseSchema());
   		add(new IRESchema(IOTA));
@@ -93,49 +90,53 @@ public class SLOntology
 	  	add(new PredicateSchema(FEASIBLE), AbsPredicate.getJavaClass());
 	  	add(new AgentActionSchema(ACTION_SEQUENCE), AbsAgentAction.getJavaClass());
 	  	add(new AgentActionSchema(ACTION_ALTERNATIVE), AbsAgentAction.getJavaClass());
-  	
+
   		ps = (PredicateSchema) getSchema(EXISTS);
   		ps.add(EXISTS_WHAT, (VariableSchema) VariableSchema.getBaseSchema());
 	  	ps.add(EXISTS_CONDITION, (PredicateSchema) PredicateSchema.getBaseSchema());
-  	
+
   		ps = (PredicateSchema) getSchema(FORALL);
   		ps.add(FORALL_WHAT, (VariableSchema) VariableSchema.getBaseSchema());
 	  	ps.add(FORALL_CONDITION, (PredicateSchema) PredicateSchema.getBaseSchema());
-  	
+
   		ps = (PredicateSchema) getSchema(BELIEF);
   		ps.add(BELIEF_AGENT, (ConceptSchema) getSchema(AID));
 	  	ps.add(BELIEF_CONDITION, (PredicateSchema) PredicateSchema.getBaseSchema());
-  	
+
   		ps = (PredicateSchema) getSchema(UNCERTAINTY);
   		ps.add(UNCERTAINTY_AGENT, (ConceptSchema) getSchema(AID));
 	  	ps.add(UNCERTAINTY_CONDITION, (PredicateSchema) PredicateSchema.getBaseSchema());
-  
+
   		ps = (PredicateSchema) getSchema(PERSISTENT_GOAL);
   		ps.add(PERSISTENT_GOAL_AGENT, (ConceptSchema) getSchema(AID));
 	  	ps.add(PERSISTENT_GOAL_CONDITION, (PredicateSchema) PredicateSchema.getBaseSchema());
-  	
+
   		ps = (PredicateSchema) getSchema(INTENTION);
   		ps.add(INTENTION_AGENT, (ConceptSchema) getSchema(AID));
 	  	ps.add(INTENTION_CONDITION, (PredicateSchema) PredicateSchema.getBaseSchema());
-  	
+
   		ps = (PredicateSchema) getSchema(FEASIBLE);
   		ps.add(FEASIBLE_ACTION, (VariableSchema) VariableSchema.getBaseSchema());
 	  	ps.add(FEASIBLE_CONDITION, (PredicateSchema) PredicateSchema.getBaseSchema(), ObjectSchema.OPTIONAL);
-  	
+
   		AgentActionSchema as = (AgentActionSchema) getSchema(ACTION_SEQUENCE);
   		as.add(ACTION_SEQUENCE_FIRST, (AgentActionSchema) AgentActionSchema.getBaseSchema());
   		as.add(ACTION_SEQUENCE_SECOND, (AgentActionSchema) AgentActionSchema.getBaseSchema());
   		as.setEncodingByOrder(true);
-  	
+
   		as = (AgentActionSchema) getSchema(ACTION_ALTERNATIVE);
   		as.add(ACTION_ALTERNATIVE_FIRST, (AgentActionSchema) AgentActionSchema.getBaseSchema());
   		as.add(ACTION_ALTERNATIVE_SECOND, (AgentActionSchema) AgentActionSchema.getBaseSchema());
   		as.setEncodingByOrder(true);
-    } 
+    }
     catch (OntologyException oe) {
       oe.printStackTrace();
-    } 
+    }
 		#MIDP_INCLUDE_END*/
+    }
+
+    public static Ontology getInstance() {
+        return theInstance;
     }
 
 }

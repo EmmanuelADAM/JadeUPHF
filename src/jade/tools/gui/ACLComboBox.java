@@ -43,6 +43,23 @@ import java.util.Observer;
 
 public class ACLComboBox extends JComboBox<Object> implements Observer {
 
+    private static final String[] fipaProtocols = {
+            "",
+            FIPANames.InteractionProtocol.FIPA_REQUEST,
+            FIPANames.InteractionProtocol.FIPA_QUERY,
+            FIPANames.InteractionProtocol.FIPA_REQUEST_WHEN,
+            FIPANames.InteractionProtocol.FIPA_ENGLISH_AUCTION,
+            FIPANames.InteractionProtocol.FIPA_DUTCH_AUCTION,
+            FIPANames.InteractionProtocol.FIPA_BROKERING,
+            FIPANames.InteractionProtocol.FIPA_RECRUITING,
+            FIPANames.InteractionProtocol.FIPA_PROPOSE,
+            FIPANames.InteractionProtocol.FIPA_CONTRACT_NET,
+            FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET
+    };
+    private final DefaultComboBoxModel<Object> comboBoxModel = new DefaultComboBoxModel<>();
+    private ACLMessage msg;
+    private String fieldName;
+
     /**
      * Sets the Editable attribute of the ACLComboBox object
      *
@@ -52,7 +69,6 @@ public class ACLComboBox extends JComboBox<Object> implements Observer {
         super.setEditable(theBool);
         this.setEnabled(theBool);
     }
-
 
     /**
      * register performatives in the comboBoxModel
@@ -84,7 +100,6 @@ public class ACLComboBox extends JComboBox<Object> implements Observer {
         updateUI();
     }
 
-
     /**
      * Register protocols from ACLMessage
      *
@@ -115,7 +130,6 @@ public class ACLComboBox extends JComboBox<Object> implements Observer {
         updateUI();
     }
 
-
     /**
      * part of observer interface
      *
@@ -127,7 +141,6 @@ public class ACLComboBox extends JComboBox<Object> implements Observer {
     public void update(Observable ob, Object arg) {
     }
 
-
     /**
      * triggered when focus lost
      *
@@ -135,7 +148,6 @@ public class ACLComboBox extends JComboBox<Object> implements Observer {
      */
     public void focusLost(FocusEvent e) {
     }
-
 
     /**
      * Description of the Method
@@ -154,7 +166,6 @@ public class ACLComboBox extends JComboBox<Object> implements Observer {
 
     }
 
-
     /**
      * Description of the Method
      */
@@ -167,25 +178,5 @@ public class ACLComboBox extends JComboBox<Object> implements Observer {
             msg.setProtocol(value);
         }
     }
-
-
-    private static final String[] fipaProtocols = {
-            "",
-            FIPANames.InteractionProtocol.FIPA_REQUEST,
-            FIPANames.InteractionProtocol.FIPA_QUERY,
-            FIPANames.InteractionProtocol.FIPA_REQUEST_WHEN,
-            FIPANames.InteractionProtocol.FIPA_ENGLISH_AUCTION,
-            FIPANames.InteractionProtocol.FIPA_DUTCH_AUCTION,
-            FIPANames.InteractionProtocol.FIPA_BROKERING,
-            FIPANames.InteractionProtocol.FIPA_RECRUITING,
-            FIPANames.InteractionProtocol.FIPA_PROPOSE,
-            FIPANames.InteractionProtocol.FIPA_CONTRACT_NET,
-            FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET
-    };
-
-    private final DefaultComboBoxModel<Object> comboBoxModel = new DefaultComboBoxModel<>();
-
-    private ACLMessage msg;
-    private String fieldName;
 }
 //  ***EOF***

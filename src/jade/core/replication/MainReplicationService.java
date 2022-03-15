@@ -63,6 +63,17 @@ public class MainReplicationService extends BaseService {
     private static final boolean INCLUDE_MYSELF = true;
 
     private static final String[] OWNED_COMMANDS = new String[]{MainReplicationSlice.LEADERSHIP_ACQUIRED};
+    private final List<MainReplicationSlice> replicas = new LinkedList<>();
+    private final Map<String, Method> cachedServiceMethods = new HashMap<>();
+    private AgentContainer myContainer;
+    private ServiceComponent localSlice;
+    private Filter outFilter;
+    private Filter inFilter;
+    private int myLabel = -1;
+    private boolean snapshotOnFailure = false;
+    // Owned copies of Main Container and Service Manager
+    private MainContainerImpl myMain;
+    private PlatformManagerImpl myPlatformManager;
 
     public void init(AgentContainer ac, Profile p) throws ProfileException {
         super.init(ac, p);
@@ -173,6 +184,57 @@ public class MainReplicationService extends BaseService {
         return REMOVE_NODE;
     }
 
+    void broadcastToReplicas(HorizontalCommand cmd, boolean includeSelf) throws IMTPException, ServiceException {
+        Object[] slices = replicas.toArray();
+
+        String localNodeName = getLocalNode().getName();
+        for (Object o : slices) {
+            MainReplicationSlice slice = (MainReplicationSlice) o;
+
+            String sliceName = slice.getNode().getName();
+            if (includeSelf || !sliceName.equals(localNodeName)) {
+                slice.serve(cmd);
+                Object ret = cmd.getReturnValue();
+                if (ret instanceof Throwable) {
+                    // FIXME: This may happen due to the fact that the replica is terminating. E.g. a tool running on
+                    // the terminating replica that deregisters from the AMS: the DeadTool event may be processed
+                    // when the replica is already dead. In these cases we should find a way to hide the exception
+                    myLogger.log(Logger.SEVERE, "Error propagating H-command " + cmd.getName() + " to slice " + sliceName, (Throwable) ret);
+                }
+            }
+        }
+    }
+
+    public String dump(String key) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("- Replicas:\n");
+        try {
+            Object[] slices = replicas.toArray();
+            String localNodeName = getLocalNode().getName();
+            for (Object o : slices) {
+                MainReplicationSlice slice = (MainReplicationSlice) o;
+                String sliceName = slice.getNode().getName();
+                if (!sliceName.equals(localNodeName)) {
+                    sb.append("  - ").append(sliceName).append("\n");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            sb.append(e);
+        }
+        sb.append("- Label = ").append(myLabel).append("\n");
+        sb.append("- Monitored Label = ").append(localSlice.monitoredLabel).append("\n");
+        sb.append("- Monitored PlatformManager replica = ").append(localSlice.monitoredSvcMgr).append("\n");
+        String monitoredNodeStr = "UNKNOWN(Monitor null)";
+        if (localSlice.nodeMonitor != null) {
+            Node n = localSlice.nodeMonitor.getNode();
+            monitoredNodeStr = (n != null ? n.getName() : "null");
+        }
+        sb.append("- Monitored Node = ").append(monitoredNodeStr).append("\n");
+        sb.append(super.dump(key));
+        return (sb.toString());
+    }
+
     /**
      * Inner class CommandOutgoingFilter
      * Keep tool agents information in synch among replicas
@@ -226,7 +288,6 @@ public class MainReplicationService extends BaseService {
         }
     } // End of CommandOutgoingFilter class
 
-
     /**
      * Inner class CommandIncomingFilter
      * Keep agents and MTPs information in synch among replicas
@@ -252,7 +313,7 @@ public class MainReplicationService extends BaseService {
         private void handleInformCreated(VerticalCommand cmd) throws IMTPException, NotFoundException, NameClashException, JADESecurityException, ServiceException {
             Object ret = cmd.getReturnValue();
             // Avoid propagating to other slices in case the agent creation failed due to a name-clash
-            if (!(ret != null && ret instanceof NameClashException)) {
+            if (!(ret instanceof NameClashException)) {
                 Object[] params = cmd.getParams();
 
                 AID agentID = (AID) params[0];
@@ -322,11 +383,20 @@ public class MainReplicationService extends BaseService {
         }
     } // End of CommandIncomingFilter class
 
-
     /**
      * Inner class ServiceComponent
      */
     private class ServiceComponent implements Slice, NodeEventListener {
+
+        // The active object monitoring the remote node
+        NodeFailureMonitor nodeMonitor;
+        // The integer label of the monitored slice
+        int monitoredLabel;
+        String monitoredSvcMgr;
+
+        // Implementation of the Service.Slice interface
+        private Node toBeMonitored;
+        private boolean monitoredNodeUnreachable = false;
 
         public ServiceComponent() {
             myMain = (MainContainerImpl) myContainer.getMain();
@@ -360,8 +430,6 @@ public class MainReplicationService extends BaseService {
             nodeMonitor = NodeFailureMonitor.getFailureMonitor();
             nodeMonitor.start(slice.getNode(), this);
         }
-
-        // Implementation of the Service.Slice interface
 
         public Service getService() {
             return MainReplicationService.this;
@@ -519,8 +587,8 @@ public class MainReplicationService extends BaseService {
                 amsd.setState(AMSAgentDescription.SUSPENDED);
                 List<AMSAgentDescription> suspendedAgents = myMain.amsSearch(amsd, -1); // '-1' means 'all the results'
 
-                for (Object suspendedAgent : suspendedAgents) {
-                    AMSAgentDescription desc = (AMSAgentDescription) suspendedAgent;
+                for (AMSAgentDescription suspendedAgent : suspendedAgents) {
+                    AMSAgentDescription desc = suspendedAgent;
                     try {
                         slice.suspendedAgent(desc.getName());
                     } catch (NotFoundException nfe) {
@@ -641,6 +709,8 @@ public class MainReplicationService extends BaseService {
             myMain.newMTP(mtp, cid);
         }
 
+        // Implementation of the NodeEventListener interface
+
         private void deadMTP(MTPDescriptor mtp, ContainerID cid) throws IMTPException {
             myMain.deadMTP(mtp, cid);
         }
@@ -677,8 +747,6 @@ public class MainReplicationService extends BaseService {
             }
             System.out.println("------------------");
         }
-
-        // Implementation of the NodeEventListener interface
 
         public void nodeAdded(Node n) {
             myLogger.log(Logger.INFO, "Start monitoring main node <" + n.getName() + ">");
@@ -783,83 +851,5 @@ public class MainReplicationService extends BaseService {
             }
         }
 
-        // The active object monitoring the remote node
-        NodeFailureMonitor nodeMonitor;
-
-        // The integer label of the monitored slice
-        int monitoredLabel;
-
-        String monitoredSvcMgr;
-        private Node toBeMonitored;
-        private boolean monitoredNodeUnreachable = false;
-
     } // End of ServiceComponent class
-
-    private AgentContainer myContainer;
-
-    private ServiceComponent localSlice;
-
-    private Filter outFilter;
-    private Filter inFilter;
-
-    private int myLabel = -1;
-    private final List<MainReplicationSlice> replicas = new LinkedList<>();
-    private boolean snapshotOnFailure = false;
-
-    // Owned copies of Main Container and Service Manager
-    private MainContainerImpl myMain;
-    private PlatformManagerImpl myPlatformManager;
-
-    private final Map<String, Method> cachedServiceMethods = new HashMap<>();
-
-    void broadcastToReplicas(HorizontalCommand cmd, boolean includeSelf) throws IMTPException, ServiceException {
-        Object[] slices = replicas.toArray();
-
-        String localNodeName = getLocalNode().getName();
-        for (Object o : slices) {
-            MainReplicationSlice slice = (MainReplicationSlice) o;
-
-            String sliceName = slice.getNode().getName();
-            if (includeSelf || !sliceName.equals(localNodeName)) {
-                slice.serve(cmd);
-                Object ret = cmd.getReturnValue();
-                if (ret instanceof Throwable) {
-                    // FIXME: This may happen due to the fact that the replica is terminating. E.g. a tool running on
-                    // the terminating replica that deregisters from the AMS: the DeadTool event may be processed
-                    // when the replica is already dead. In these cases we should find a way to hide the exception
-                    myLogger.log(Logger.SEVERE, "Error propagating H-command " + cmd.getName() + " to slice " + sliceName, (Throwable) ret);
-                }
-            }
-        }
-    }
-
-    public String dump(String key) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("- Replicas:\n");
-        try {
-            Object[] slices = replicas.toArray();
-            String localNodeName = getLocalNode().getName();
-            for (Object o : slices) {
-                MainReplicationSlice slice = (MainReplicationSlice) o;
-                String sliceName = slice.getNode().getName();
-                if (!sliceName.equals(localNodeName)) {
-                    sb.append("  - ").append(sliceName).append("\n");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            sb.append(e);
-        }
-        sb.append("- Label = ").append(myLabel).append("\n");
-        sb.append("- Monitored Label = ").append(localSlice.monitoredLabel).append("\n");
-        sb.append("- Monitored PlatformManager replica = ").append(localSlice.monitoredSvcMgr).append("\n");
-        String monitoredNodeStr = "UNKNOWN(Monitor null)";
-        if (localSlice.nodeMonitor != null) {
-            Node n = localSlice.nodeMonitor.getNode();
-            monitoredNodeStr = (n != null ? n.getName() : "null");
-        }
-        sb.append("- Monitored Node = ").append(monitoredNodeStr).append("\n");
-        sb.append(super.dump(key));
-        return (sb.toString());
-    }
 }

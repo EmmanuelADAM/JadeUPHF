@@ -19,10 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IntrospectionServer extends CyclicBehaviour {
-    private Codec codec;
-    private Ontology onto;
-    private MessageTemplate template;
-
     private static Class<Serializable> serializableClass;
 
     static {
@@ -31,6 +27,10 @@ public class IntrospectionServer extends CyclicBehaviour {
         } catch (Exception ignored) {
         }
     }
+
+    private Codec codec;
+    private Ontology onto;
+    private MessageTemplate template;
 
     public IntrospectionServer(Agent a) {
         super(a);

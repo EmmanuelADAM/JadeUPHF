@@ -51,23 +51,12 @@ public class PersistenceOntology extends Ontology implements PersistenceVocabula
     // The singleton instance of this ontology
     private static final Ontology theInstance = new PersistenceOntology();
 
-    /**
-     * This method returns the unique instance (according to the singleton
-     * pattern) of the JADE-Persistence ontology.
-     *
-     * @return The singleton <code>Ontology</code> object, containing the
-     * schemas for the elements of the JADE-Persistence ontology.
-     */
-    public static Ontology getInstance() {
-        return theInstance;
-    }
-
     private PersistenceOntology() {
         //#MIDP_EXCLUDE_BEGIN
         super(NAME, ExceptionOntology.getInstance(), new BCReflectiveIntrospector());
         //#MIDP_EXCLUDE_END
-    	
-	/*#MIDP_INCLUDE_BEGIN    	
+
+	/*#MIDP_INCLUDE_BEGIN
 	  super(NAME, BasicOntology.getInstance(), null);
 	  #MIDP_INCLUDE_END*/
 
@@ -96,8 +85,8 @@ public class PersistenceOntology extends Ontology implements PersistenceVocabula
             // Predicates definitions
 
             //#MIDP_EXCLUDE_END
-    	
-	    /*#MIDP_INCLUDE_BEGIN    	
+
+	    /*#MIDP_INCLUDE_BEGIN
 	    // Concepts definitions
 	    add(new ConceptSchema(AGENTGROUP));
 	    add(new ConceptSchema(CONTAINERID));
@@ -192,5 +181,16 @@ public class PersistenceOntology extends Ontology implements PersistenceVocabula
         } catch (OntologyException oe) {
             oe.printStackTrace();
         }
+    }
+
+    /**
+     * This method returns the unique instance (according to the singleton
+     * pattern) of the JADE-Persistence ontology.
+     *
+     * @return The singleton <code>Ontology</code> object, containing the
+     * schemas for the elements of the JADE-Persistence ontology.
+     */
+    public static Ontology getInstance() {
+        return theInstance;
     }
 }

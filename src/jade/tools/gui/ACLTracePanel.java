@@ -58,7 +58,52 @@ public class ACLTracePanel extends JPanel {
 
     //logging
 
+    public final static String DIRECTION_IN = "in";
+    public final static String DIRECTION_OUT = "out";
+    private static final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
     private final Logger logger = Logger.getMyLogger(this.getClass().getName());
+    private final JMenuItem deleteMenuItem = new JMenuItem();
+    private final DefaultMutableTreeNode aclRoot = new DefaultMutableTreeNode("messagetrace");
+    private final DefaultTreeModel aclModel = new DefaultTreeModel(aclRoot);
+    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final GridBagLayout gridBagLayout2 = new GridBagLayout();
+    private final JScrollPane aclTreeScrollPane = new JScrollPane();
+    private final JTree aclTree = new JTree();
+    private final ACLTreeRenderer aclTreeRenderer = new ACLTreeRenderer();
+    private final JPopupMenu thePopupMenu = new JPopupMenu();
+    private final JMenuItem systemMenuItem = new JMenuItem();
+    private final JMenuItem zoomMenuItem = new JMenuItem();
+    private final int currentSelection = 0;
+    private final JMenuItem saveMenuItem = new JMenuItem();
+    private final JMenuItem stasticsMenuItem = new JMenuItem();
+    private final JMenuItem aboutMenuItem = new JMenuItem();
+    private final ImageIcon sortIcon =
+            new ImageIcon(this.getClass().getResource("images/sort.gif"));
+    private final DefaultComboBoxModel<String> sortComboBoxModel = new DefaultComboBoxModel<>();
+    private final Agent agent;
+    JLabel jLabel1 = new JLabel();
+    ButtonGroup sortingButtonGroup = new ButtonGroup();
+    JComboBox<String> sortComboBox = new JComboBox<>();
+    JRadioButton ascRadioButton = new JRadioButton();
+    JRadioButton descRadioButton = new JRadioButton();
+    JButton sortButton = new JButton();
+    JMenuItem saveQMenuItem = new JMenuItem();
+    JMenuItem openQMenuItem = new JMenuItem();
+    JMenuItem clearQMenuItem = new JMenuItem();
+    Border border2;
+    Border border3;
+    private boolean sorting = false;
+    private int inMsgCount = 0, outMsgCount = 0;
+    private int aclIndex;
+    private File currentDir;
+    private int x, y;
+
+
+//  ***EOF***
+    private ACLMessage currentACL;
+    private Border border1;
+    private TitledBorder titledBorder1;
+
 
     /**
      * Constructor for the ACLTreePanel object
@@ -84,11 +129,9 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-
     public ACLMessage getCurrentACL() {
         return currentACL;
     }
-
 
     public void doSystemOut() {
         if (currentACL == null) {
@@ -98,7 +141,6 @@ public class ACLTracePanel extends JPanel {
             logger.log(Logger.CONFIG, "\n" + currentACL.toString() + "\n");
     }
 
-
     /**
      * Adds a ACLMessageNode to the List
      *
@@ -107,7 +149,6 @@ public class ACLTracePanel extends JPanel {
     public void addMessageNode(ACLMessageNode theNode) {
         addMessageNode(theNode.getDirection(), theNode.getTime(), theNode.getMessage());
     }
-
 
     /**
      * Adds a ACLMessage to the List
@@ -119,7 +160,10 @@ public class ACLTracePanel extends JPanel {
         String theTime = getTimeStamp();
         addMessageNode(direction, theTime, theACL);
     }
+//  ***EOF***
 
+
+//  ***EOF***
 
     /**
      * Adds a ACLMessage to the List
@@ -259,7 +303,7 @@ public class ACLTracePanel extends JPanel {
         }
         aclTree.expandPath(new TreePath(aclRoot.getPath()));
     }
-
+//  ***EOF***
 
     /**
      * delete the current selected ACLMessage from the list
@@ -277,14 +321,12 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-
     /**
      * show about screen
      */
     public void doShowAbout() {
         new AboutFrame().setVisible(true);
     }
-
 
     /**
      * save the current selected ACLMessage to a textfile
@@ -324,17 +366,19 @@ public class ACLTracePanel extends JPanel {
         }
 
     }
-
+//  ***EOF***
 
     public void doShowCurrentACL() {
         showCurrentACL(x, y);
     }
 
+//  ***EOF***
 
     public void showStastistics() {
         ACLStatisticsFrame.show(this.aclModel);
     }
 
+//  ***EOF***
 
     public void saveQueue() {
 
@@ -389,7 +433,6 @@ public class ACLTracePanel extends JPanel {
             }
         }
     }
-
 
     public void loadQueue() {
 
@@ -448,7 +491,6 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-
     public void clearACLModel() {
 
         int size = aclModel.getChildCount(this.aclRoot);
@@ -461,7 +503,6 @@ public class ACLTracePanel extends JPanel {
         aclTree.validate();
         aclTree.repaint();
     }
-
 
     public void doSort() {
 
@@ -493,7 +534,6 @@ public class ACLTracePanel extends JPanel {
 
     }
 
-
     /**
      * Gets the TimeStamp attribute of the ACLTreePanel object
      *
@@ -504,7 +544,6 @@ public class ACLTracePanel extends JPanel {
         return dateFormat.format(new Date());
     }
 
-
     /**
      * refresh the List
      */
@@ -512,7 +551,6 @@ public class ACLTracePanel extends JPanel {
         aclTree.validate();
         aclTree.updateUI();
     }
-
 
     /**
      * triggered when mousePressed
@@ -550,7 +588,6 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-
     /**
      * triggered when systemMenuItem
      *
@@ -562,7 +599,6 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-
     /**
      * showCurrentACL
      *
@@ -571,7 +607,6 @@ public class ACLTracePanel extends JPanel {
     void zoomMenuItem_actionPerformed(ActionEvent e) {
         doShowCurrentACL();
     }
-
 
     /**
      * saveACL
@@ -582,7 +617,6 @@ public class ACLTracePanel extends JPanel {
         saveACL();
     }
 
-
     /**
      * show ACLStatisticsFrame
      *
@@ -591,7 +625,6 @@ public class ACLTracePanel extends JPanel {
     void stasticsMenuItem_actionPerformed(ActionEvent e) {
         showStastistics();
     }
-
 
     /**
      * listener for keyTyped
@@ -605,7 +638,6 @@ public class ACLTracePanel extends JPanel {
 
     }
 
-
     /**
      * deleteMenuItem
      *
@@ -615,51 +647,41 @@ public class ACLTracePanel extends JPanel {
         this.deleteCurrent();
     }
 
-
     void sortButton_actionPerformed(ActionEvent e) {
         this.doSort();
     }
-
 
     void sortComboBox_itemStateChanged(ItemEvent e) {
         doSort();
     }
 
-
     void ascRadioButton_itemStateChanged(ItemEvent e) {
         doSort();
     }
-
 
     void descRadioButton_itemStateChanged(ItemEvent e) {
         doSort();
     }
 
-
     void aboutMenuItem_mouseClicked(MouseEvent e) {
         this.doShowAbout();
     }
-
 
     void saveQMenuItem_actionPerformed(ActionEvent e) {
         this.saveQueue();
     }
 
-
     void clearQMenuItem_actionPerformed(ActionEvent e) {
         this.clearACLModel();
     }
-
 
     void openQMenuItem_actionPerformed(ActionEvent e) {
         this.loadQueue();
     }
 
-
     void aboutMenuItem_actionPerformed(ActionEvent e) {
         this.doShowAbout();
     }
-
 
     private void fillSortComboBoxModel() {
         sortComboBoxModel.addElement("date");
@@ -669,7 +691,6 @@ public class ACLTracePanel extends JPanel {
         sortComboBoxModel.addElement("performative");
         sortComboBoxModel.addElement("ontology");
     }
-
 
     /**
      * show the Current ACLMessage
@@ -683,7 +704,6 @@ public class ACLTracePanel extends JPanel {
         }
         ACLFrame.show(currentACL, agent);
     }
-
 
     /**
      * build up TreePanel
@@ -809,14 +829,22 @@ public class ACLTracePanel extends JPanel {
         sortingButtonGroup.add(descRadioButton);
     }
 
-
     private class ACLMessageNodeComparator implements Comparator<Object> {
 
+        final static int DATE = 0;
+        final static int DIRECTION = 1;
+        final static int SENDER = 2;
+        final static int RECEIVER = 3;
+        final static int PERFORMATIVE = 4;
+        final static int ONTOLOGY = 5;
+        final static int SORT_ASCENDING = 1;
+        final static int SORT_DESCENDING = -1;
+        private final int sorting;
+        private final int mode;
         public ACLMessageNodeComparator(int mode, int sorting) {
             this.mode = mode;
             this.sorting = sorting;
         }
-
 
         public int compare(Object o1, Object o2) {
             ACLMessageNode node1 = (ACLMessageNode) o1;
@@ -856,95 +884,68 @@ public class ACLTracePanel extends JPanel {
             return sorting * comp1.compareTo(comp2);
         }
 
-
         public boolean equals(Object obj) {
 
             throw new UnsupportedOperationException("Method equals() not yet implemented.");
         }
 
-
-        final static int DATE = 0;
-        final static int DIRECTION = 1;
-        final static int SENDER = 2;
-        final static int RECEIVER = 3;
-        final static int PERFORMATIVE = 4;
-        final static int ONTOLOGY = 5;
-
-        final static int SORT_ASCENDING = 1;
-        final static int SORT_DESCENDING = -1;
-
-        private final int sorting;
-        private final int mode;
-
     }
 
-
-//  ***EOF***
-
-
     private class ACLTracePanel_sortComboBox_itemAdapter implements ItemListener {
+
+        ACLTracePanel adaptee;
+
 
         ACLTracePanel_sortComboBox_itemAdapter(ACLTracePanel adaptee) {
             this.adaptee = adaptee;
         }
 
-
         public void itemStateChanged(ItemEvent e) {
             adaptee.sortComboBox_itemStateChanged(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
 
-
     private class ACLTracePanel_ascRadioButton_itemAdapter implements ItemListener {
+
+        ACLTracePanel adaptee;
+
 
         ACLTracePanel_ascRadioButton_itemAdapter(ACLTracePanel adaptee) {
             this.adaptee = adaptee;
         }
 
-
         public void itemStateChanged(ItemEvent e) {
             adaptee.ascRadioButton_itemStateChanged(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
 
-
     private class ACLTracePanel_descRadioButton_itemAdapter implements ItemListener {
+
+        ACLTracePanel adaptee;
+
 
         ACLTracePanel_descRadioButton_itemAdapter(ACLTracePanel adaptee) {
             this.adaptee = adaptee;
         }
 
-
         public void itemStateChanged(ItemEvent e) {
             adaptee.descRadioButton_itemStateChanged(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
 
-
     private class ACLTracePanel_sortButton_actionAdapter implements ActionListener {
+
+        ACLTracePanel adaptee;
+
 
         ACLTracePanel_sortButton_actionAdapter(ACLTracePanel adaptee) {
             this.adaptee = adaptee;
         }
 
-
         public void actionPerformed(ActionEvent e) {
             adaptee.sortButton_actionPerformed(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
-
 
     private class ACLFileFilter extends javax.swing.filechooser.FileFilter {
 
@@ -971,12 +972,13 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-
     private class TraceFileFilter extends javax.swing.filechooser.FileFilter {
+
+        private final String[] extensions = {".trc"};
+
 
         public TraceFileFilter() {
         }
-
 
         /**
          * The description of this filter. For example: "JPG and GIF Images"
@@ -988,20 +990,25 @@ public class ACLTracePanel extends JPanel {
             return "ACLMessageTrace files (*.trc)";
         }
 
-
         public boolean accept(File pathName) {
             if (pathName.isDirectory()) {
                 return true;
             } else return pathName.isFile() &&
                     (pathName.getName().endsWith(".trc"));
         }
-
-
-        private final String[] extensions = {".trc"};
     }
 
-
     private class AboutFrame extends JWindow {
+
+        GridBagLayout gridBagLayout1 = new GridBagLayout();
+        JPanel contentPanel = new JPanel();
+        GridBagLayout gridBagLayout2 = new GridBagLayout();
+        JLabel jLabel1 = new JLabel();
+        JLabel jLabel2 = new JLabel();
+        JLabel logoLabel3 = new JLabel();
+        JLabel jLabel4 = new JLabel();
+        Border border1;
+
 
         public AboutFrame() {
             try {
@@ -1016,116 +1023,93 @@ public class ACLTracePanel extends JPanel {
             }
         }
 
-
         void logoLabel_mouseClicked(MouseEvent e) {
             this.setVisible(false);
         }
-
 
         void logoLabel3_mousePressed(MouseEvent e) {
             this.setVisible(false);
         }
 
-
         void jLabel2_mouseClicked(MouseEvent e) {
             this.setVisible(false);
         }
-
 
         void logoLabel3_mouseClicked(MouseEvent e) {
             this.setVisible(false);
         }
 
-
         void logoLabel_mouseEntered(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
-
 
         void logoLabel_mouseExited(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
 
-
         void logoLabel3_mouseEntered(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
-
 
         void logoLabel3_mouseExited(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
 
-
         void jLabel2_mouseEntered(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
-
 
         void jLabel2_mouseExited(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
 
-
         void logoLabel_mousePressed(MouseEvent e) {
             this.setVisible(false);
         }
-
 
         void logoLabel_mouseReleased(MouseEvent e) {
             this.setVisible(false);
         }
 
-
         void jLabel2_mousePressed(MouseEvent e) {
             this.setVisible(false);
         }
-
 
         void jLabel2_mouseReleased(MouseEvent e) {
             this.setVisible(false);
         }
 
-
         void jLabel4_mouseClicked(MouseEvent e) {
             this.setVisible(false);
         }
-
 
         void contentPanel_mouseClicked(MouseEvent e) {
             this.setVisible(false);
         }
 
-
         void jLabel1_mouseClicked(MouseEvent e) {
             this.setVisible(false);
         }
-
 
         void jLabel4_mouseEntered(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
 
-
         void jLabel1_mouseEntered(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
-
 
         void contentPanel_mouseEntered(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
 
-
         void jLabel4_mouseExited(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
 
-
         void contentPanel_mouseExited(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
-
 
         private void jbInit() throws Exception {
             // this.setClosable(true);
@@ -1233,21 +1217,12 @@ public class ACLTracePanel extends JPanel {
                     , GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 20, 0), 0, 0));
         }
 
-
-        GridBagLayout gridBagLayout1 = new GridBagLayout();
-
-        JPanel contentPanel = new JPanel();
-        GridBagLayout gridBagLayout2 = new GridBagLayout();
-        JLabel jLabel1 = new JLabel();
-        JLabel jLabel2 = new JLabel();
-        JLabel logoLabel3 = new JLabel();
-        JLabel jLabel4 = new JLabel();
-        Border border1;
-
     }
 
-
     private class ACLTreePanel_stasticsMenuItem_actionAdapter implements ActionListener {
+
+        ACLTracePanel adaptee;
+
 
         /**
          * Constructor for the ACLTreePanel_stasticsMenuItem_actionAdapter object
@@ -1258,7 +1233,6 @@ public class ACLTracePanel extends JPanel {
             this.adaptee = adaptee;
         }
 
-
         /**
          * Description of the Method
          *
@@ -1267,16 +1241,12 @@ public class ACLTracePanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             adaptee.stasticsMenuItem_actionPerformed(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
-//  ***EOF***
-
-
-//  ***EOF***
 
     private class ACLTreePanel_this_mouseAdapter extends MouseAdapter {
+
+        ACLTracePanel adaptee;
+
 
         /**
          * Constructor for the ACLTreePanel_this_mouseAdapter object
@@ -1287,7 +1257,6 @@ public class ACLTracePanel extends JPanel {
             this.adaptee = adaptee;
         }
 
-
         /**
          * Description of the Method
          *
@@ -1297,13 +1266,12 @@ public class ACLTracePanel extends JPanel {
 
         }
 
+    }
+
+    private class ACLTreePanel_aclTree_mouseAdapter extends MouseAdapter {
 
         ACLTracePanel adaptee;
 
-    }
-//  ***EOF***
-
-    private class ACLTreePanel_aclTree_mouseAdapter extends MouseAdapter {
 
         /**
          * Constructor for the ACLTreePanel_aclTree_mouseAdapter object
@@ -1314,7 +1282,6 @@ public class ACLTracePanel extends JPanel {
             this.adaptee = adaptee;
         }
 
-
         /**
          * Description of the Method
          *
@@ -1323,13 +1290,12 @@ public class ACLTracePanel extends JPanel {
         public void mouseClicked(MouseEvent e) {
             adaptee.aclTree_mouseClicked(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
 
-
     private class ACLTreePanel_systemMenuItem_actionAdapter implements ActionListener {
+
+        ACLTracePanel adaptee;
+
 
         /**
          * Constructor for the ACLTreePanel_systemMenuItem_actionAdapter object
@@ -1340,7 +1306,6 @@ public class ACLTracePanel extends JPanel {
             this.adaptee = adaptee;
         }
 
-
         /**
          * Description of the Method
          *
@@ -1349,13 +1314,12 @@ public class ACLTracePanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             adaptee.systemMenuItem_actionPerformed(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
 
-
     private class ACLTreePanel_zoomMenuItem_actionAdapter implements ActionListener {
+
+        ACLTracePanel adaptee;
+
 
         /**
          * Constructor for the ACLTreePanel_zoomMenuItem_actionAdapter object
@@ -1366,7 +1330,6 @@ public class ACLTracePanel extends JPanel {
             this.adaptee = adaptee;
         }
 
-
         /**
          * Description of the Method
          *
@@ -1375,13 +1338,12 @@ public class ACLTracePanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             adaptee.zoomMenuItem_actionPerformed(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
-//  ***EOF***
 
     private class ACLTreePanel_saveMenuItem_actionAdapter implements ActionListener {
+
+        ACLTracePanel adaptee;
+
 
         /**
          * Constructor for the ACLTreePanel_saveMenuItem_actionAdapter object
@@ -1392,7 +1354,6 @@ public class ACLTracePanel extends JPanel {
             this.adaptee = adaptee;
         }
 
-
         /**
          * Description of the Method
          *
@@ -1401,14 +1362,12 @@ public class ACLTracePanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             adaptee.saveMenuItem_actionPerformed(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
 
-//  ***EOF***
-
     private class ACLTreePanel_aclTree_keyAdapter extends KeyAdapter {
+
+        ACLTracePanel adaptee;
+
 
         /**
          * Constructor for the ACLTreePanel_aclTree_keyAdapter object
@@ -1419,7 +1378,6 @@ public class ACLTracePanel extends JPanel {
             this.adaptee = adaptee;
         }
 
-
         /**
          * Description of the Method
          *
@@ -1428,14 +1386,12 @@ public class ACLTracePanel extends JPanel {
         public void keyTyped(KeyEvent e) {
             adaptee.aclTree_keyTyped(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
 
-//  ***EOF***
-
     private class ACLTreePanel_deleteMenuItem_actionAdapter implements ActionListener {
+
+        ACLTracePanel adaptee;
+
 
         /**
          * Constructor for the ACLTreePanel_deleteMenuItem_actionAdapter object
@@ -1446,7 +1402,6 @@ public class ACLTracePanel extends JPanel {
             this.adaptee = adaptee;
         }
 
-
         /**
          * Description of the Method
          *
@@ -1455,11 +1410,7 @@ public class ACLTracePanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             adaptee.deleteMenuItem_actionPerformed(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
-
 
     /**
      * This class renderes the ACLTreePanel
@@ -1470,6 +1421,13 @@ public class ACLTracePanel extends JPanel {
 
     private class ACLTreeRenderer extends JLabel implements TreeCellRenderer {
 
+        public ImageIcon rootIcon = new ImageIcon(this.getClass().getResource("images/inbox.gif"));
+        public ImageIcon nodeIcon = new ImageIcon(this.getClass().getResource("images/service.gif"));
+        public ImageIcon smallAgentIcon = new ImageIcon(this.getClass().getResource("images/smallagent.gif"));
+        public ImageIcon messageTypeIcon = new ImageIcon(this.getClass().getResource("images/messagetype.gif"));
+        public ImageIcon detailsIcon = new ImageIcon(this.getClass().getResource("images/details.gif"));
+        public ImageIcon incomingIcon = new ImageIcon(this.getClass().getResource("images/incoming.gif"));
+        public ImageIcon outgoingIcon = new ImageIcon(this.getClass().getResource("images/outgoing.gif"));
         /**
          * Constructor for the ACLTreeRenderer object
          */
@@ -1480,7 +1438,6 @@ public class ACLTracePanel extends JPanel {
                 e.printStackTrace();
             }
         }
-
 
         /**
          * Gets the TreeCellRendererComponent attribute of the ACLTreeRenderer
@@ -1549,7 +1506,6 @@ public class ACLTracePanel extends JPanel {
             return this;
         }
 
-
         /**
          * build up renderer
          *
@@ -1559,17 +1515,7 @@ public class ACLTracePanel extends JPanel {
             this.setFont(new Font("SansSerif", Font.PLAIN, 11));
             this.setOpaque(true);
         }
-
-
-        public ImageIcon rootIcon = new ImageIcon(this.getClass().getResource("images/inbox.gif"));
-        public ImageIcon nodeIcon = new ImageIcon(this.getClass().getResource("images/service.gif"));
-        public ImageIcon smallAgentIcon = new ImageIcon(this.getClass().getResource("images/smallagent.gif"));
-        public ImageIcon messageTypeIcon = new ImageIcon(this.getClass().getResource("images/messagetype.gif"));
-        public ImageIcon detailsIcon = new ImageIcon(this.getClass().getResource("images/details.gif"));
-        public ImageIcon incomingIcon = new ImageIcon(this.getClass().getResource("images/incoming.gif"));
-        public ImageIcon outgoingIcon = new ImageIcon(this.getClass().getResource("images/outgoing.gif"));
     }
-
 
     private class SortRenderer extends JLabel implements ListCellRenderer<Object> {
 
@@ -1605,119 +1551,60 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-
     private class ACLTracePanel_aboutMenuItem_mouseAdapter extends MouseAdapter {
+
+        ACLTracePanel adaptee;
+
 
         ACLTracePanel_aboutMenuItem_mouseAdapter(ACLTracePanel adaptee) {
             this.adaptee = adaptee;
         }
 
-
         public void mouseClicked(MouseEvent e) {
             adaptee.aboutMenuItem_mouseClicked(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
 
-
     private class ACLTracePanel_clearQMenuItem_actionAdapter implements ActionListener {
+
+        ACLTracePanel adaptee;
+
 
         ACLTracePanel_clearQMenuItem_actionAdapter(ACLTracePanel adaptee) {
             this.adaptee = adaptee;
         }
 
-
         public void actionPerformed(ActionEvent e) {
             adaptee.clearQMenuItem_actionPerformed(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
 
-
     private class ACLTracePanel_openQMenuItem_actionAdapter implements ActionListener {
+
+        ACLTracePanel adaptee;
+
 
         ACLTracePanel_openQMenuItem_actionAdapter(ACLTracePanel adaptee) {
             this.adaptee = adaptee;
         }
 
-
         public void actionPerformed(ActionEvent e) {
             adaptee.openQMenuItem_actionPerformed(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
 
-
     private class ACLTracePanel_aboutMenuItem_actionAdapter implements ActionListener {
+
+        ACLTracePanel adaptee;
+
 
         ACLTracePanel_aboutMenuItem_actionAdapter(ACLTracePanel adaptee) {
             this.adaptee = adaptee;
         }
 
-
         public void actionPerformed(ActionEvent e) {
             adaptee.aboutMenuItem_actionPerformed(e);
         }
-
-
-        ACLTracePanel adaptee;
     }
-
-
-    public final static String DIRECTION_IN = "in";
-    public final static String DIRECTION_OUT = "out";
-
-    private static final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
-    JLabel jLabel1 = new JLabel();
-    ButtonGroup sortingButtonGroup = new ButtonGroup();
-    JComboBox<String> sortComboBox = new JComboBox<>();
-    JRadioButton ascRadioButton = new JRadioButton();
-    JRadioButton descRadioButton = new JRadioButton();
-    JButton sortButton = new JButton();
-    JMenuItem saveQMenuItem = new JMenuItem();
-    JMenuItem openQMenuItem = new JMenuItem();
-    JMenuItem clearQMenuItem = new JMenuItem();
-    Border border2;
-    Border border3;
-    private boolean sorting = false;
-    private final JMenuItem deleteMenuItem = new JMenuItem();
-
-    private int inMsgCount = 0, outMsgCount = 0;
-
-    private int aclIndex;
-    private final DefaultMutableTreeNode aclRoot = new DefaultMutableTreeNode("messagetrace");
-    private final DefaultTreeModel aclModel = new DefaultTreeModel(aclRoot);
-    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
-    private final GridBagLayout gridBagLayout2 = new GridBagLayout();
-    private final JScrollPane aclTreeScrollPane = new JScrollPane();
-    private final JTree aclTree = new JTree();
-    private final ACLTreeRenderer aclTreeRenderer = new ACLTreeRenderer();
-    private final JPopupMenu thePopupMenu = new JPopupMenu();
-    private final JMenuItem systemMenuItem = new JMenuItem();
-    private final JMenuItem zoomMenuItem = new JMenuItem();
-
-    private final int currentSelection = 0;
-    private final JMenuItem saveMenuItem = new JMenuItem();
-    private final JMenuItem stasticsMenuItem = new JMenuItem();
-    private final JMenuItem aboutMenuItem = new JMenuItem();
-
-    private final ImageIcon sortIcon =
-            new ImageIcon(this.getClass().getResource("images/sort.gif"));
-
-    private final DefaultComboBoxModel<String> sortComboBoxModel = new DefaultComboBoxModel<>();
-    private final Agent agent;
-
-    private File currentDir;
-
-    private int x, y;
-    private ACLMessage currentACL;
-    private Border border1;
-    private TitledBorder titledBorder1;
 }
 //  ***EOF***

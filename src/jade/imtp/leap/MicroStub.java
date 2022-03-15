@@ -37,13 +37,12 @@ import java.util.Vector;
  */
 public class MicroStub {
     public static final long MINIMUM_TIMEOUT = 3000; // 3 sec
-
+    private final Vector<Thread> dispatchingThreads = new Vector<>();
     protected Dispatcher myDispatcher;
     protected Vector<PostponedCommand> pendingCommands = new Vector<>();
+    protected Logger logger;
     private boolean flushing = false;
     private Thread flushingThread;
-    private final Vector<Thread> dispatchingThreads = new Vector<>();
-    protected Logger logger;
 
     public MicroStub(Dispatcher d) {
         myDispatcher = d;
@@ -303,8 +302,8 @@ public class MicroStub {
 
     protected class PostponedCommand {
         private final Command command;
-        private int sessionId;
         private final ICPException icpe;
+        private int sessionId;
         private Timer timer;
 
         public PostponedCommand(Command c, int sessionId, ICPException icpe) {

@@ -37,6 +37,12 @@ import java.rmi.server.UnicastRemoteObject;
  */
 class NodeRMIImpl extends UnicastRemoteObject implements NodeRMI {
 
+    // This monitor is used to hang a remote ping() call in order to
+    // detect node failures.
+    private final Object terminationLock = new Object();
+    private final NodeAdapter myNode;
+    private boolean terminating = false;
+
     public NodeRMIImpl(NodeAdapter impl, int port, RMIIMTPManager mgr) throws RemoteException {
         super(port, mgr.getClientSocketFactory(), mgr.getServerSocketFactory());
         myNode = impl;
@@ -94,13 +100,5 @@ class NodeRMIImpl extends UnicastRemoteObject implements NodeRMI {
             terminationLock.notifyAll();
         }
     }
-
-
-    // This monitor is used to hang a remote ping() call in order to
-    // detect node failures.
-    private final Object terminationLock = new Object();
-    private boolean terminating = false;
-
-    private final NodeAdapter myNode;
 
 }

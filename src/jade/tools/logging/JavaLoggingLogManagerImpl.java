@@ -41,6 +41,7 @@ public class JavaLoggingLogManagerImpl implements LogManager {
     public static final String JAVA_LOGGING_LOG_MANAGER_CLASS = "jade.tools.logging.JavaLoggingLogManagerImpl";
     private static final String DEFAULT_ROOT_LOGGER_NAME = "__ROOT_LOGGER";
     private static final List<LevelInfo> levels = new ArrayList<>();
+    private static final String LOGGER_FRIENDLY_NAME = "Java Util Logging";
 
     static {
         levels.add(new LevelInfo(Level.ALL.getName(), Level.ALL.intValue()));
@@ -54,9 +55,7 @@ public class JavaLoggingLogManagerImpl implements LogManager {
         levels.add(new LevelInfo(Level.OFF.getName(), Level.OFF.intValue()));
     }
 
-
     private final java.util.logging.LogManager logManager = java.util.logging.LogManager.getLogManager();
-    private static final String LOGGER_FRIENDLY_NAME = "Java Util Logging";
     private List<LoggerInfo> loggers = null;
     private ArrayList<String> rootHandlers = null; //root handlers specified in configuration file.
 

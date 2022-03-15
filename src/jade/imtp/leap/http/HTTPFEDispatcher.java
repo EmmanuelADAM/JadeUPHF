@@ -47,9 +47,12 @@ import java.util.Vector;
  */
 public class HTTPFEDispatcher implements FEConnectionManager, Dispatcher, TimerListener {
 
+    private final Object connectorLock = new Object();
+    private final int verbosity = 1;
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    protected String myMediatorClass = "jade.imtp.leap.http.HTTPBEDispatcher";
     private MicroSkeleton mySkel;
     private BackEndStub myStub;
-
     private Thread terminator;
     private DisconnectionManager myDisconnectionManager;
     private KeepAliveManager myKeepAliveManager;
@@ -59,28 +62,27 @@ public class HTTPFEDispatcher implements FEConnectionManager, Dispatcher, TimerL
     private long maxDisconnectionTime;
     private long keepAliveTime;
     private Properties props;
-
     private TransportAddress mediatorTA;
     private String myMediatorID;
-
     private String owner;
-
     private String beAddrsText;
     private String[] backEndAddresses;
-
     private ConnectionListener myConnectionListener;
-
-    private final Object connectorLock = new Object();
     private boolean locked = false;
-
-    private final int verbosity = 1;
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
-
-    protected String myMediatorClass = "jade.imtp.leap.http.HTTPBEDispatcher";
 
     ////////////////////////////////////////////////
     // FEConnectionManager interface implementation
     ////////////////////////////////////////////////
+    // These variables are only used within the InputManager class,
+    // but are declared externally since they must "survive" when
+    // an InputManager is replaced
+    private JICPPacket lastResponse = null;
+    private byte lastSid = 0x10;
+    private int cnt = 0;
+
+    //////////////////////////////////////////////
+    // Dispatcher interface implementation
+    //////////////////////////////////////////////
 
     /**
      * Create a BackEnd in the fixed network and return a stub to
@@ -258,10 +260,6 @@ public class HTTPFEDispatcher implements FEConnectionManager, Dispatcher, TimerL
         throw new IMTPException("Error creating the BackEnd.");
     }
 
-    //////////////////////////////////////////////
-    // Dispatcher interface implementation
-    //////////////////////////////////////////////
-
     /**
      * Dispatch a serialized command to the BackEnd and get back a serialized response.
      * Mutual exclusion with itself to preserve dispatching order
@@ -310,12 +308,154 @@ public class HTTPFEDispatcher implements FEConnectionManager, Dispatcher, TimerL
         }
     }
 
-    // These variables are only used within the InputManager class,
-    // but are declared externally since they must "survive" when
-    // an InputManager is replaced
-    private JICPPacket lastResponse = null;
-    private byte lastSid = 0x10;
-    private int cnt = 0;
+    protected Connection getConnection(TransportAddress ta) {
+        return new HTTPClientConnection(ta);
+    }
+
+    /**
+     * Deliver a packet to the BackEnd and get back a response using a fresh one-shot connection
+     */
+    private JICPPacket deliver(JICPPacket pkt) throws IOException {
+        Connection c = getConnection(mediatorTA);
+        try {
+            return deliver(pkt, c);
+        } finally {
+            try {
+                c.close();
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    /**
+     * Deliver a packet over a given connection and get back a response
+     */
+    private JICPPacket deliver(JICPPacket pkt, Connection c) throws IOException {
+        boolean lastPacket = false;
+        if (Thread.currentThread() == terminator) {
+            pkt.setTerminatedInfo(true);
+            lastPacket = true;
+        }
+        pkt.setRecipientID(mediatorTA.getFile());
+        byte type = pkt.getType();
+
+        int status = 0;
+        try {
+            c.writePacket(pkt);
+            status = 1;
+			/*#MIDP_INCLUDE_BEGIN
+			lock();
+			if (type == JICPProtocol.RESPONSE_TYPE) {
+				TimerDispatcher.getTimerDispatcher().add(new Timer(System.currentTimeMillis()+5000, this));
+			}
+			#MIDP_INCLUDE_END*/
+            pkt = c.readPacket();
+
+            status = 2;
+            if (lastPacket && (pkt.getInfo() & JICPProtocol.TERMINATED_INFO) != 0) {
+                // When we send a packet marked with the terminated-info, the back-end may either close
+                // the connection (in this case we would have got an Exception) or reply with another
+                // packet marked with the terminated-info --> throws an Exception to expose a uniform behaviour
+                myLogger.log(Logger.INFO, "Termination notification ACK received");
+                throw new IOException("Terminated-info");
+            }
+            return pkt;
+        } catch (IOException ioe) {
+            // Re-throw the exception adding the status
+            throw new IOException(ioe.getMessage() + '[' + status + ']');
+        } finally {
+			/*#MIDP_INCLUDE_BEGIN
+			if (type != JICPProtocol.RESPONSE_TYPE) {
+				// If we delivered a RESPONSE unlock() is already called by the TimerDispatcher
+				unlock();
+			}
+			#MIDP_INCLUDE_END*/
+        }
+    }
+
+    public void doTimeOut(Timer t) {
+        unlock();
+    }
+
+    private void lock() {
+        synchronized (connectorLock) {
+            while (locked) {
+                try {
+                    connectorLock.wait();
+                } catch (Exception e) {
+                }
+            }
+            locked = true;
+        }
+    }
+
+    private void unlock() {
+        synchronized (connectorLock) {
+            locked = false;
+            connectorLock.notifyAll();
+        }
+    }
+
+    /**
+     * Send a CONNECT_MEDIATOR packet to the BackEnd to check if it is reachable
+     */
+    private boolean ping(int cnt) throws ICPException {
+        // Try first with the current transport address, then with the various backup addresses
+        for (int i = -1; i < backEndAddresses.length; i++) {
+            if (i >= 0) {
+                // Set the mediator address to a new address..
+                String addr = backEndAddresses[i];
+                int colonPos = addr.indexOf(':');
+                String host = addr.substring(0, colonPos);
+                String port = addr.substring(colonPos + 1);
+                mediatorTA = new JICPAddress(host, port, myMediatorID, "");
+            }
+
+            try {
+                myLogger.log(Logger.FINE, "Ping " + mediatorTA.getHost() + ":" + mediatorTA.getPort() + "(" + cnt + ")...");
+                JICPPacket pkt = new JICPPacket(JICPProtocol.CONNECT_MEDIATOR_TYPE, JICPProtocol.DEFAULT_INFO, null);
+                pkt = deliver(pkt);
+                if (pkt.getType() == JICPProtocol.ERROR_TYPE) {
+                    // Communication OK, but there was a JICP error.
+                    String errorMsg = new String(pkt.getData());
+                    if (errorMsg.equals(JICPProtocol.NOT_FOUND_ERROR)) {
+                        // Back-end not found: either the max disconnection time expired server side or there was a fault and restart
+                        // --> Try to recreate the Back-end
+                        myLogger.log(Logger.WARNING, "Communication OK, but Back-end no longer present. Try to recreate it");
+                        if (myConnectionListener != null) {
+                            myConnectionListener.handleConnectionEvent(ConnectionListener.BE_NOT_FOUND, null);
+                        }
+                        try {
+                            createBackEnd();
+                        } catch (IMTPException imtpe) {
+                            myLogger.log(Logger.WARNING, "Error re-creating the Back-end.");
+                            return false;
+                        }
+                    } else {
+                        // Generic JICP error. No need to go on
+                        throw new ICPException("JICP error. " + errorMsg);
+                    }
+                }
+                return true;
+            } catch (IOException ioe) {
+                // Ignore it, and try the next address...
+                myLogger.log(Logger.FINE, "Ping KO", ioe);
+            }
+        }
+
+        // No address succeeded.
+        return false;
+    }
+
+    private String[] parseBackEndAddresses(String addressesText) {
+        Vector<Object> addrs = Specifier.parseList(addressesText, ';');
+        // Convert the list into an array of strings
+        String[] result = new String[addrs.size()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = (String) addrs.elementAt(i);
+        }
+        return result;
+    }
 
     /**
      * Inner class InputManager
@@ -413,104 +553,16 @@ public class HTTPFEDispatcher implements FEConnectionManager, Dispatcher, TimerL
         }
     } // END of inner class InputManager
 
-    protected Connection getConnection(TransportAddress ta) {
-        return new HTTPClientConnection(ta);
-    }
-
-    /**
-     * Deliver a packet to the BackEnd and get back a response using a fresh one-shot connection
-     */
-    private JICPPacket deliver(JICPPacket pkt) throws IOException {
-        Connection c = getConnection(mediatorTA);
-        try {
-            return deliver(pkt, c);
-        } finally {
-            try {
-                c.close();
-            } catch (Exception e) {
-            }
-        }
-    }
-
-    /**
-     * Deliver a packet over a given connection and get back a response
-     */
-    private JICPPacket deliver(JICPPacket pkt, Connection c) throws IOException {
-        boolean lastPacket = false;
-        if (Thread.currentThread() == terminator) {
-            pkt.setTerminatedInfo(true);
-            lastPacket = true;
-        }
-        pkt.setRecipientID(mediatorTA.getFile());
-        byte type = pkt.getType();
-
-        int status = 0;
-        try {
-            c.writePacket(pkt);
-            status = 1;
-			/*#MIDP_INCLUDE_BEGIN
-			lock();
-			if (type == JICPProtocol.RESPONSE_TYPE) {
-				TimerDispatcher.getTimerDispatcher().add(new Timer(System.currentTimeMillis()+5000, this));
-			}
-			#MIDP_INCLUDE_END*/
-            pkt = c.readPacket();
-
-            status = 2;
-            if (lastPacket && (pkt.getInfo() & JICPProtocol.TERMINATED_INFO) != 0) {
-                // When we send a packet marked with the terminated-info, the back-end may either close
-                // the connection (in this case we would have got an Exception) or reply with another
-                // packet marked with the terminated-info --> throws an Exception to expose a uniform behaviour
-                myLogger.log(Logger.INFO, "Termination notification ACK received");
-                throw new IOException("Terminated-info");
-            }
-            return pkt;
-        } catch (IOException ioe) {
-            // Re-throw the exception adding the status
-            throw new IOException(ioe.getMessage() + '[' + status + ']');
-        } finally {
-			/*#MIDP_INCLUDE_BEGIN
-			if (type != JICPProtocol.RESPONSE_TYPE) {
-				// If we delivered a RESPONSE unlock() is already called by the TimerDispatcher
-				unlock();
-			}
-			#MIDP_INCLUDE_END*/
-        }
-    }
-
-    public void doTimeOut(Timer t) {
-        unlock();
-    }
-
-    private void lock() {
-        synchronized (connectorLock) {
-            while (locked) {
-                try {
-                    connectorLock.wait();
-                } catch (Exception e) {
-                }
-            }
-            locked = true;
-        }
-    }
-
-    private void unlock() {
-        synchronized (connectorLock) {
-            locked = false;
-            connectorLock.notifyAll();
-        }
-    }
-
     /**
      * Inner class DisconnectionManager.
      * Manages issues related to disconnection of the device.
      */
     class DisconnectionManager implements Runnable {
+        private final long retryTime;
+        private final long maxDisconnectionTime;
         private boolean reachable = false;
         private boolean pingOK = false;
         private Thread myThread;
-        private final long retryTime;
-        private final long maxDisconnectionTime;
 
         private DisconnectionManager(long retryTime, long maxDisconnectionTime) {
             this.retryTime = retryTime;
@@ -619,7 +671,6 @@ public class HTTPFEDispatcher implements FEConnectionManager, Dispatcher, TimerL
         }
     }  // END of Inner class DisconnectionManager
 
-
     /**
      * Inner class KeepAliveManager
      * This class is responsible for taking track of keep-alive packets
@@ -653,68 +704,6 @@ public class HTTPFEDispatcher implements FEConnectionManager, Dispatcher, TimerL
             }
         }
     } // END of inner class KeepAliveManager
-
-
-    /**
-     * Send a CONNECT_MEDIATOR packet to the BackEnd to check if it is reachable
-     */
-    private boolean ping(int cnt) throws ICPException {
-        // Try first with the current transport address, then with the various backup addresses
-        for (int i = -1; i < backEndAddresses.length; i++) {
-            if (i >= 0) {
-                // Set the mediator address to a new address..
-                String addr = backEndAddresses[i];
-                int colonPos = addr.indexOf(':');
-                String host = addr.substring(0, colonPos);
-                String port = addr.substring(colonPos + 1);
-                mediatorTA = new JICPAddress(host, port, myMediatorID, "");
-            }
-
-            try {
-                myLogger.log(Logger.FINE, "Ping " + mediatorTA.getHost() + ":" + mediatorTA.getPort() + "(" + cnt + ")...");
-                JICPPacket pkt = new JICPPacket(JICPProtocol.CONNECT_MEDIATOR_TYPE, JICPProtocol.DEFAULT_INFO, null);
-                pkt = deliver(pkt);
-                if (pkt.getType() == JICPProtocol.ERROR_TYPE) {
-                    // Communication OK, but there was a JICP error.
-                    String errorMsg = new String(pkt.getData());
-                    if (errorMsg.equals(JICPProtocol.NOT_FOUND_ERROR)) {
-                        // Back-end not found: either the max disconnection time expired server side or there was a fault and restart
-                        // --> Try to recreate the Back-end
-                        myLogger.log(Logger.WARNING, "Communication OK, but Back-end no longer present. Try to recreate it");
-                        if (myConnectionListener != null) {
-                            myConnectionListener.handleConnectionEvent(ConnectionListener.BE_NOT_FOUND, null);
-                        }
-                        try {
-                            createBackEnd();
-                        } catch (IMTPException imtpe) {
-                            myLogger.log(Logger.WARNING, "Error re-creating the Back-end.");
-                            return false;
-                        }
-                    } else {
-                        // Generic JICP error. No need to go on
-                        throw new ICPException("JICP error. " + errorMsg);
-                    }
-                }
-                return true;
-            } catch (IOException ioe) {
-                // Ignore it, and try the next address...
-                myLogger.log(Logger.FINE, "Ping KO", ioe);
-            }
-        }
-
-        // No address succeeded.
-        return false;
-    }
-
-    private String[] parseBackEndAddresses(String addressesText) {
-        Vector<Object> addrs = Specifier.parseList(addressesText, ';');
-        // Convert the list into an array of strings
-        String[] result = new String[addrs.size()];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = (String) addrs.elementAt(i);
-        }
-        return result;
-    }
 	
 
 	/*private String[] parseBackEndAddresses(String addressesText) {

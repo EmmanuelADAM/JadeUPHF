@@ -46,12 +46,9 @@ public class PhoneBasedSMSManager extends SMSManager {
     private static final int IDLE = 0;
     private static final int CONNECTED = 1;
     private static final int TERMINATED = 2;
-
-    private int status = IDLE;
-
-    private Connection myConnection;
-
     private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    private int status = IDLE;
+    private Connection myConnection;
 
     protected void init(Properties pp) throws ICPException {
         super.init(pp);

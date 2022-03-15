@@ -46,14 +46,6 @@ public class Command {
      * Unspecified object id
      */
     public static final int DUMMY_ID = -1;
-
-    /**
-     * Command identifier code for response command.
-     */
-
-    // Lower limit for service and node management related commands
-    static final int SERVICE_BASE = 0;
-
     // Service and node management related command IDs
     public static final int GET_PLATFORM_NAME = 1;
     public static final int ADD_NODE = 2;
@@ -71,11 +63,15 @@ public class Command {
     public static final int SERVICE_MANAGER_ADD_REPLICA = 14;
     public static final int SERVICE_MANAGER_UPDATE_COUNTERS = 15;
     public static final int PLATFORM_MANAGER_DEAD = 16;
-
     public static final int OK = 1;
     public static final int ERROR = 2;
     public static final int FORWARD = 37;
+    /**
+     * Command identifier code for response command.
+     */
 
+    // Lower limit for service and node management related commands
+    static final int SERVICE_BASE = 0;
     /**
      * Code defining the type of command.
      */

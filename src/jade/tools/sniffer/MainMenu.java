@@ -54,29 +54,15 @@ public class MainMenu extends JMenuBar
 public class MainMenuSniffer extends MainMenu
 #DOTNET_INCLUDE_END*/ {
 
-    //#DOTNET_EXCLUDE_BEGIN
-    private JMenuItem tmp;
-    private JMenu menu;
     //#DOTNET_EXCLUDE_END
  /*#DOTNET_INCLUDE_BEGIN
  private MenuItem menu;
  private MenuItem tmp;
  #DOTNET_INCLUDE_END*/
     private final ActionProcessor actPro;
-
-    void paintM(boolean enable, SnifferAction obj) {
-        //#DOTNET_EXCLUDE_BEGIN
-        tmp = menu.add(obj);
-        tmp.setEnabled(enable);
-        //#DOTNET_EXCLUDE_END
-    /*#DOTNET_INCLUDE_BEGIN
-    tmp = new MenuItem();
-	tmp.set_Text( obj.getActionName() );
-	tmp.add_Click( new System.EventHandler(obj.OnClick) );
-	tmp.set_Enabled( enable );
-	menu.get_MenuItems().Add( tmp );
-	#DOTNET_INCLUDE_END*/
-    }
+    //#DOTNET_EXCLUDE_BEGIN
+    private JMenuItem tmp;
+    private JMenu menu;
 
     //#DOTNET_EXCLUDE_BEGIN
     public MainMenu(MainWindow mainWnd, ActionProcessor actPro) {
@@ -145,6 +131,20 @@ public class MainMenuSniffer extends MainMenu
    menu.set_Text( "About" );
    this.get_MenuItems().Add( menu );
    #DOTNET_INCLUDE_END*/
+    }
+
+    void paintM(boolean enable, SnifferAction obj) {
+        //#DOTNET_EXCLUDE_BEGIN
+        tmp = menu.add(obj);
+        tmp.setEnabled(enable);
+        //#DOTNET_EXCLUDE_END
+    /*#DOTNET_INCLUDE_BEGIN
+    tmp = new MenuItem();
+	tmp.set_Text( obj.getActionName() );
+	tmp.add_Click( new System.EventHandler(obj.OnClick) );
+	tmp.set_Enabled( enable );
+	menu.get_MenuItems().Add( tmp );
+	#DOTNET_INCLUDE_END*/
     }
 
 } 

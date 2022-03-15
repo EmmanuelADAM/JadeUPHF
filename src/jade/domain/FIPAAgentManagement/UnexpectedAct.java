@@ -34,6 +34,11 @@ import jade.content.Predicate;
 
 public class UnexpectedAct extends NotUnderstoodException implements Predicate {
 
+    /**
+     * @serial
+     */
+    String s;
+
     public UnexpectedAct() {
         super("(Unexpected-act unknwon");
     }
@@ -43,18 +48,13 @@ public class UnexpectedAct extends NotUnderstoodException implements Predicate {
         s = act;
     }
 
-    /**
-     * @serial
-     */
-    String s;
+    public String getAct() {
+        return s;
+    }
 
     public void setAct(String a) {
         s = a;
         setMessage("(Unexpected-act " + a + ")");
-    }
-
-    public String getAct() {
-        return s;
     }
 
 }

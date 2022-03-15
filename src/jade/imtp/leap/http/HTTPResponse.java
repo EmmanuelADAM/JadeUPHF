@@ -84,6 +84,7 @@ public class HTTPResponse extends HTTPPacket {
 
     /**
      * Method declaration
+     *
      * @see
      */
     public void writeTo(OutputStream os) throws IOException {
@@ -93,6 +94,7 @@ public class HTTPResponse extends HTTPPacket {
 
     /**
      * Method declaration
+     *
      * @see
      */
     public String toString() {

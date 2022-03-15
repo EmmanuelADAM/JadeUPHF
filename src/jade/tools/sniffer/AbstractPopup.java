@@ -37,16 +37,17 @@ import javax.swing.*;
 /**
  * AbstractPopup is the superclass of the actions
  * performed by PopupMenu on the Canvas.
- *
+ * <p>
  * This class is abstract because it does not define the
  * ActionPerformed(ActionEvent evt) method. In every subClass of
  * AbstractPopup this method performs a specific action.
- *
+ * <p>
  * Subclasses of AbstractPopup are:
- * @see  PopSniffAgent
- * @see  PopNoSniffAgent
- * @see  PopShowAgent
- * @see  ViewMessage
+ *
+ * @see PopSniffAgent
+ * @see PopNoSniffAgent
+ * @see PopShowAgent
+ * @see ViewMessage
  */
 
 

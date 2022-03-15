@@ -38,13 +38,12 @@ import java.util.Hashtable;
  * @author Giovanni Caire - TILAB
  */
 class CommandProcessor {
-    private Filter firstDownFilter;
-    private Filter firstUpFilter;
-
     private final Hashtable<String, Sink> downSinks;
     private final Hashtable<String, Sink> upSinks;
     private final SinksFilter lastDownFilter;
     private final SinksFilter lastUpFilter;
+    private Filter firstDownFilter;
+    private Filter firstUpFilter;
 
 
     public CommandProcessor() {

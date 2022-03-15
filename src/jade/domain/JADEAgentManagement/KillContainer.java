@@ -50,16 +50,6 @@ public class KillContainer implements AgentAction {
     }
 
     /**
-     * Set the <code>container</code> slot of this action.
-     *
-     * @param cid The container identifier of the container to
-     *            terminate.
-     */
-    public void setContainer(ContainerID cid) {
-        container = cid;
-    }
-
-    /**
      * Retrieve the value of the <code>container</code> slot of this
      * event, containing the container identifier of the container to
      * terminate.
@@ -72,13 +62,13 @@ public class KillContainer implements AgentAction {
     }
 
     /**
-     * Set the <code>password</code> slot of this action.
+     * Set the <code>container</code> slot of this action.
      *
-     * @param p The password to authenticate the principal requesting
-     *          the container termination.
+     * @param cid The container identifier of the container to
+     *            terminate.
      */
-    public void setPassword(String p) {
-        password = p;
+    public void setContainer(ContainerID cid) {
+        container = cid;
     }
 
     /**
@@ -91,6 +81,16 @@ public class KillContainer implements AgentAction {
      */
     public String getPassword() {
         return password;
+    }
+
+    /**
+     * Set the <code>password</code> slot of this action.
+     *
+     * @param p The password to authenticate the principal requesting
+     *          the container termination.
+     */
+    public void setPassword(String p) {
+        password = p;
     }
 
 }

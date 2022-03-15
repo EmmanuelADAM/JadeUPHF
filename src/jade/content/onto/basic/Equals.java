@@ -29,8 +29,9 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 
 /**
- This class implements the <code>=</code> operator of the FIPA SL0 language.
- @author Giovanni Caire - TILAB
+ * This class implements the <code>=</code> operator of the FIPA SL0 language.
+ *
+ * @author Giovanni Caire - TILAB
  */
 public class Equals implements Predicate {
     private Object left;

@@ -60,16 +60,6 @@ public class PlatformDescription implements Event {
     }
 
     /**
-     * Set the <code>platform</code> slot of this event.
-     *
-     * @param p The <code>ap-description</code> this notification
-     *          refers to.
-     */
-    public void setPlatform(APDescription p) {
-        platform = p;
-    }
-
-    /**
      * Retrieve the value of the <code>platform</code> slot of this
      * event, containing the <code>ap-description</code> this
      * notification refers to.
@@ -79,6 +69,16 @@ public class PlatformDescription implements Event {
      */
     public APDescription getPlatform() {
         return platform;
+    }
+
+    /**
+     * Set the <code>platform</code> slot of this event.
+     *
+     * @param p The <code>ap-description</code> this notification
+     *          refers to.
+     */
+    public void setPlatform(APDescription p) {
+        platform = p;
     }
 
 

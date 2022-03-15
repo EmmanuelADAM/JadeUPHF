@@ -84,18 +84,6 @@ public class SimpleAchieveREResponder extends SimpleBehaviour implements FIPANam
     private boolean finished;
 
     /**
-     * This static method can be used
-     * to set the proper message Template (based on the interaction protocol
-     * and the performative)
-     * into the constructor of this behaviour.
-     *
-     * @see FIPANames.InteractionProtocol
-     **/
-    public static MessageTemplate createMessageTemplate(String iprotocol) {
-        return AchieveREResponder.createMessageTemplate(iprotocol);
-    }
-
-    /**
      * Constructor of the behaviour that creates a new empty HashMap
      **/
     public SimpleAchieveREResponder(Agent a, MessageTemplate mt) {
@@ -135,6 +123,18 @@ public class SimpleAchieveREResponder extends SimpleBehaviour implements FIPANam
         setMapMessages(mapMessages);
         template = mt;
         finished = false;
+    }
+
+    /**
+     * This static method can be used
+     * to set the proper message Template (based on the interaction protocol
+     * and the performative)
+     * into the constructor of this behaviour.
+     *
+     * @see FIPANames.InteractionProtocol
+     **/
+    public static MessageTemplate createMessageTemplate(String iprotocol) {
+        return AchieveREResponder.createMessageTemplate(iprotocol);
     }
     //#APIDOC_EXCLUDE_BEGIN
 

@@ -27,17 +27,19 @@ package jade.content.frame;
 import java.util.Hashtable;
 
 /**
- Generic class representing all frames (such as concepts and
- predicates) whose composing elements can be retrieved by a
- unique name.
- @author Giovanni Caire - TILAB
+ * Generic class representing all frames (such as concepts and
+ * predicates) whose composing elements can be retrieved by a
+ * unique name.
+ *
+ * @author Giovanni Caire - TILAB
  */
 public class QualifiedFrame extends Hashtable<Object, Object> implements Frame {
     private final String typeName;
 
     /**
-     Create a QualifiedFrame with a given type-name.
-     @param typeName The type-name of the QualifiedFrame to be created.
+     * Create a QualifiedFrame with a given type-name.
+     *
+     * @param typeName The type-name of the QualifiedFrame to be created.
      */
     public QualifiedFrame(String typeName) {
         super();
@@ -45,18 +47,20 @@ public class QualifiedFrame extends Hashtable<Object, Object> implements Frame {
     }
 
     /**
-     Retrieve the type-name of this QualifiedFrame.
-     @return the type-name of this QualifiedFrame
+     * Retrieve the type-name of this QualifiedFrame.
+     *
+     * @return the type-name of this QualifiedFrame
      */
     public String getTypeName() {
         return typeName;
     }
 
     /**
-     Redefine the put() method so that keys must be String and
-     setting a null value for a given key is interpreted as
-     removing the entry.
-     @exception ClassCastException if <code>key</code> is not a String
+     * Redefine the put() method so that keys must be String and
+     * setting a null value for a given key is interpreted as
+     * removing the entry.
+     *
+     * @throws ClassCastException if <code>key</code> is not a String
      */
     public Object put(Object key, Object val) {
         if (val != null) {
@@ -67,32 +71,32 @@ public class QualifiedFrame extends Hashtable<Object, Object> implements Frame {
     }
 
     /**
-     Utility method to put a value of type <code>int</code> in this
-     Frame.
+     * Utility method to put a value of type <code>int</code> in this
+     * Frame.
      */
     public Object putInteger(Object key, int val) {
         return put(key, (long) val);
     }
 
     /**
-     Utility method to retrieve a value of type <code>int</code> from this
-     Frame.
+     * Utility method to retrieve a value of type <code>int</code> from this
+     * Frame.
      */
     public int getInteger(Object key) {
         return (int) (((Long) get(key)).longValue());
     }
 
     /**
-     Utility method to put a value of type <code>boolean</code> in this
-     Frame.
+     * Utility method to put a value of type <code>boolean</code> in this
+     * Frame.
      */
     public Object putBoolean(Object key, boolean val) {
         return put(key, val);
     }
 
     /**
-     Utility method to retrieve a value of type <code>boolean</code> from this
-     Frame.
+     * Utility method to retrieve a value of type <code>boolean</code> from this
+     * Frame.
      */
     public boolean getBoolean(Object key) {
         return (Boolean) get(key);

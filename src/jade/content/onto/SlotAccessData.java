@@ -75,10 +75,6 @@ class SlotAccessData implements Serializable {
         setterName = setter.getName();
     }
 
-    boolean isTypized() {
-        return type != null && type != Object.class && type != Term.class;
-    }
-
     static boolean isAggregate(Class<?> clazz) {
         return (clazz.isArray() && clazz != byte[].class) || Collection.class.isAssignableFrom(clazz) || Collection.class.isAssignableFrom(clazz);
     }
@@ -89,6 +85,10 @@ class SlotAccessData implements Serializable {
 
     static boolean isSet(Class<?> clazz) {
         return Set.class.isAssignableFrom(clazz) || Set.class.isAssignableFrom(clazz);
+    }
+
+    boolean isTypized() {
+        return type != null && type != Object.class && type != Term.class;
     }
 
     @Override

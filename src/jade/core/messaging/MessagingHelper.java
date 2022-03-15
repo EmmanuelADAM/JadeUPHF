@@ -11,16 +11,6 @@ import jade.core.ServiceHelper;
  */
 public interface MessagingHelper extends ServiceHelper {
     /**
-     * The interface to be implemented by classes that need to be notified about
-     * aliases creation/deletion
-     */
-    interface AliasListener {
-        void handleNewAlias(AID alias, AID agent);
-
-        void handleDeadAlias(AID alias, AID agent);
-    }
-
-    /**
      * Create a new alias of the agent associated to this helper
      *
      * @param alias The alias to be created
@@ -51,4 +41,14 @@ public interface MessagingHelper extends ServiceHelper {
      * @param l The listener to be de-registered
      */
     void deregisterAliasListener(AliasListener l) throws ServiceException;
+
+    /**
+     * The interface to be implemented by classes that need to be notified about
+     * aliases creation/deletion
+     */
+    interface AliasListener {
+        void handleNewAlias(AID alias, AID agent);
+
+        void handleDeadAlias(AID alias, AID agent);
+    }
 }

@@ -101,14 +101,15 @@ import java.util.*;
 public class BEManagementService extends BaseService {
 
     public static final String NAME = "BEManagement";
-
+    public static final String ADDITIONAL_SERVICES = "additional-services";
+    public static final String INCOMING_CONNECTION = "Incoming-Connection";
+    /**
+     * this property can be used to set how many bytes will be used when nio buffer need to be increased
+     */
+    public static final String BUFFERINCREASE = "bufferincrease";
     private static final String PREFIX = "jade_imtp_leap_nio_BEManagementService_";
-
     public static final String ACCEPT = PREFIX + "accept";
     public static final String SERVERS = PREFIX + "servers";
-
-    public static final String ADDITIONAL_SERVICES = "additional-services";
-
     private static final int DEFAULT_PORT = 2099;
     private static final int DEFAULT_POOL_SIZE = 5;
     private static final int INIT_STATE = 0;
@@ -116,21 +117,12 @@ public class BEManagementService extends BaseService {
     private static final int TERMINATING_STATE = 2;
     private static final int TERMINATED_STATE = 3;
     private static final int ERROR_STATE = -1;
-
-    public static final String INCOMING_CONNECTION = "Incoming-Connection";
-
-    // since this is the only service dealing with NIO it is ok to set the size used for enlarging buffers here
-    private static int bufferIncreaseSize = 1024;
-    /**
-     * this property can be used to set how many bytes will be used when nio buffer need to be increased
-     */
-    public static final String BUFFERINCREASE = "bufferincrease";
-
     private static final String[] OWNED_COMMANDS = new String[]{
             INCOMING_CONNECTION
     };
-
     private static final Map<String, Class<?>> protocolManagers = new HashMap<>();
+    // since this is the only service dealing with NIO it is ok to set the size used for enlarging buffers here
+    private static int bufferIncreaseSize = 1024;
 
     static {
         protocolManagers.put(MicroRuntime.SOCKET_PROTOCOL, NIOJICPPeer.class);
@@ -139,20 +131,18 @@ public class BEManagementService extends BaseService {
         protocolManagers.put(MicroRuntime.HTTPS_PROTOCOL, NIOHTTPSPeer.class);
     }
 
-    private final Hashtable<String, IOEventServer> servers = new Hashtable<String, IOEventServer>(2);
-    private Ticker myTicker;
-    private ServiceHelper myHelper;
-    private String platformName;
+    private final Hashtable<String, IOEventServer> servers = new Hashtable<>(2);
     // The list of addresses considered malicious. Connections from
     // these addresses will be rejected.
     // FIXME: The mechanism for filling/clearing this list is not yet
     // defined/implemented
-    private final Vector<Object> maliciousAddresses = new Vector<Object>();
-
+    private final Vector<Object> maliciousAddresses = new Vector<>();
     private final String configOptionsFileName = "feOptions.properties";
-
+    private final Logger myLogger = Logger.getJADELogger(getClass().getName());
+    private Ticker myTicker;
+    private ServiceHelper myHelper;
+    private String platformName;
     private AgentContainer myContainer;
-
     // SAM related variables
     private long createMediatorCounter = 0;
     private long connectMediatorCounter = 0;
@@ -167,7 +157,9 @@ public class BEManagementService extends BaseService {
     private AverageMeasureProviderImpl dataProcessingTimeProvider = null;
     private AverageMeasureProviderImpl waitForDataTimeProvider = null;
 
-    private final Logger myLogger = Logger.getJADELogger(getClass().getName());
+    public static final int getBufferIncreaseSize() {
+        return bufferIncreaseSize;
+    }
 
     /**
      * @return The name of this service.
@@ -175,10 +167,6 @@ public class BEManagementService extends BaseService {
     public String getName() {
         String className = getClass().getName();
         return className.substring(0, className.indexOf("Service"));
-    }
-
-    public static final int getBufferIncreaseSize() {
-        return bufferIncreaseSize;
     }
 
     public String[] getOwnedCommands() {
@@ -352,8 +340,8 @@ public class BEManagementService extends BaseService {
                 // Number of active BackEnds
                 samHelper.addEntityMeasureProvider("BackEnd_Number", () -> {
                     int cnt = 0;
-                    for (Object o : servers.values()) {
-                        cnt += ((IOEventServer) o).mediators.values().size();
+                    for (IOEventServer o : servers.values()) {
+                        cnt += o.mediators.values().size();
                     }
                     return cnt;
                 });
@@ -361,8 +349,8 @@ public class BEManagementService extends BaseService {
                 // Number of opened socket
                 samHelper.addEntityMeasureProvider("Socket_Number", () -> {
                     int cnt = 0;
-                    for (Object o : servers.values()) {
-                        cnt += ((IOEventServer) o).getSocketCnt();
+                    for (IOEventServer o : servers.values()) {
+                        cnt += o.getSocketCnt();
                     }
                     return cnt;
                 });
@@ -486,6 +474,40 @@ public class BEManagementService extends BaseService {
         return FrontEndStub.encodeProperties(pp);
     }
 
+    ///////////////////////////////////////
+    // Utility methods
+    ///////////////////////////////////////
+    private void mergeProperties(Properties p1, Properties p2) {
+        Enumeration<String> e = (Enumeration<String>) p2.propertyNames();
+        while (e.hasMoreElements()) {
+            String key = e.nextElement();
+            p1.setProperty(key, p2.getProperty(key));
+        }
+    }
+
+    private void waitABit(long t) {
+        try {
+            Thread.sleep(t);
+        } catch (InterruptedException ie) {
+        }
+    }
+
+    /**
+     * Check that the address of the initiator of a new connection
+     * is not in the list of addresses considered as malicious.
+     */
+    private void checkAddress(SocketChannel sc) throws JADESecurityException {
+        Socket s = sc.socket();
+        InetAddress address = s.getInetAddress();
+        if (maliciousAddresses.contains(address)) {
+            try {
+                sc.close();
+            } catch (Exception e) {
+            }
+            throw new JADESecurityException(address.toString());
+        }
+    }
+
     /**
      * Inner class IOEventServer.
      * This class asynchronously manages a server socket and all IO Events
@@ -494,16 +516,16 @@ public class BEManagementService extends BaseService {
      */
     private class IOEventServer implements PDPContextManager, PDPContextManager.Listener, JICPMediatorManager {
 
-        private String myID;
-        private String myLogPrefix;
         private final int state = INIT_STATE;
-        private ServerSocketChannel mySSChannel;
-        private long mediatorCnt = 1;
         private final Hashtable<String, NIOMediator> mediators = new Hashtable<>();
         private final Vector<String> deregisteredMediators = new Vector<>();
+        private final Properties leapProps = new Properties();
+        private String myID;
+        private String myLogPrefix;
+        private ServerSocketChannel mySSChannel;
+        private long mediatorCnt = 1;
         private String host;
         private int port;
-        private final Properties leapProps = new Properties();
         private PDPContextManager myPDPContextManager;
         private TransportProtocol myProtocol;
         private ConnectionFactory myConnectionFactory;
@@ -800,7 +822,6 @@ public class BEManagementService extends BaseService {
                         // Respond sending back the current time encoded as a String
                         myLogger.log(Logger.INFO, myLogPrefix + "GET_SERVER_TIME request received from " + address + ":" + port);
                         reply = new JICPPacket(JICPProtocol.RESPONSE_TYPE, JICPProtocol.DEFAULT_INFO, String.valueOf(System.currentTimeMillis()).getBytes());
-                        break;
                     }
                     case JICPProtocol.GET_ADDRESS_TYPE -> {
                         // Respond sending back the caller address and (if requested) port
@@ -810,14 +831,12 @@ public class BEManagementService extends BaseService {
                             addressStr += ":" + port;
                         }
                         reply = new JICPPacket(JICPProtocol.RESPONSE_TYPE, JICPProtocol.DEFAULT_INFO, addressStr.getBytes());
-                        break;
                     }
                     case JICPProtocol.GET_CONFIG_OPTIONS_TYPE -> {
                         // Respond sending back the configuration options
                         myLogger.log(Logger.INFO, myLogPrefix + "GET_CONFIGURATION_OPTIONS request received from " + address + ":" + port);
                         String replyMsg = encodeConfigOptionsResponse();
                         reply = new JICPPacket(JICPProtocol.RESPONSE_TYPE, JICPProtocol.DEFAULT_INFO, replyMsg.getBytes());
-                        break;
                     }
                     case JICPProtocol.CREATE_MEDIATOR_TYPE -> {
                         createMediatorCounter++;
@@ -912,7 +931,6 @@ public class BEManagementService extends BaseService {
                             myLogger.log(Logger.WARNING, myLogPrefix + "CREATE_MEDIATOR request received on a connection already linked to an existing mediator");
                             reply = new JICPPacket("Unexpected packet type", null);
                         }
-                        break;
                     }
                     case JICPProtocol.CONNECT_MEDIATOR_TYPE -> {
                         connectMediatorCounter++;
@@ -960,7 +978,6 @@ public class BEManagementService extends BaseService {
                             myLogger.log(Logger.WARNING, myLogPrefix + "CONNECT_MEDIATOR request received on a connection already linked to an existing mediator");
                             reply = new JICPPacket("Unexpected packet type", null);
                         }
-                        break;
                     }
                     default -> {
                         // Pass all other JICP packets (commands, responses, keep-alives ...) to the proper mediator.
@@ -1262,7 +1279,6 @@ public class BEManagementService extends BaseService {
         }
     } // END of inner class IOEventServer
 
-
     /**
      * Inner class KeyManager
      * Keep a SelectionKey together with the information associated to it
@@ -1273,8 +1289,8 @@ public class BEManagementService extends BaseService {
 
         private final SelectionKey key;
         private final NIOJICPConnectionWrapper connection;
-        private NIOMediator mediator;
         private final IOEventServer server;
+        private NIOMediator mediator;
 
         public KeyManager(SelectionKey k, NIOJICPConnectionWrapper c, IOEventServer s) {
             key = k;
@@ -1328,11 +1344,11 @@ public class BEManagementService extends BaseService {
 
         private final int myIndex;
         private final String displayId;
-        private int state = INIT_STATE;
         private final int replaceCnt;
+        private final IOEventServer myServer;
+        private int state = INIT_STATE;
         private Selector mySelector;
         private Thread myThread;
-        private final IOEventServer myServer;
         private boolean pendingChannelPresent = false;
         private List<SocketChannel> pendingChannels = new ArrayList<>();
 
@@ -1675,39 +1691,5 @@ public class BEManagementService extends BaseService {
             return null;
         }
     } // END of inner class BEManagementHelperImpl
-
-    ///////////////////////////////////////
-    // Utility methods
-    ///////////////////////////////////////
-    private void mergeProperties(Properties p1, Properties p2) {
-        Enumeration<String> e = (Enumeration<String>) p2.propertyNames();
-        while (e.hasMoreElements()) {
-            String key = e.nextElement();
-            p1.setProperty(key, p2.getProperty(key));
-        }
-    }
-
-    private void waitABit(long t) {
-        try {
-            Thread.sleep(t);
-        } catch (InterruptedException ie) {
-        }
-    }
-
-    /**
-     * Check that the address of the initiator of a new connection
-     * is not in the list of addresses considered as malicious.
-     */
-    private void checkAddress(SocketChannel sc) throws JADESecurityException {
-        Socket s = sc.socket();
-        InetAddress address = s.getInetAddress();
-        if (maliciousAddresses.contains(address)) {
-            try {
-                sc.close();
-            } catch (Exception e) {
-            }
-            throw new JADESecurityException(address.toString());
-        }
-    }
 }
 

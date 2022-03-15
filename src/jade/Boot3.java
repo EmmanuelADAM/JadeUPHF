@@ -26,6 +26,13 @@
  * java jade.Boot -host fbellif.cselt.it -port 1200
  * java jade.Boot -help
  * java jade.Boot -gui
+ * Tests:
+ * java jade.Boot (with/without rmiregistry started): run a main-container
+ * java jade.Boot -host pippo.cselt.it
+ * java jade.Boot -host fbellif.cselt.it
+ * java jade.Boot -host fbellif.cselt.it -port 1200
+ * java jade.Boot -help
+ * java jade.Boot -gui
  **/
 
 /** Tests:
@@ -64,15 +71,6 @@ public class Boot3 {
     private static final String NAME2CLASS_SEPARATOR = ":";
     private final ExtendedProperties properties;
     private BootProfileImpl profile = null;
-
-    /**
-     * Main entry point for invocation.
-     * @param args The command line arguments. These use the form key:value
-     * or -key (shorthand for key:true).
-     */
-    public static void main(String[] args) {
-        new Boot3(args);
-    }
 
     /**
      * Constructor. Starts Jade with provided arguments.
@@ -148,6 +146,15 @@ public class Boot3 {
         } catch (BootException be) {
             System.err.println(be);
         }
+    }
+
+    /**
+     * Main entry point for invocation.
+     * @param args The command line arguments. These use the form key:value
+     * or -key (shorthand for key:true).
+     */
+    public static void main(String[] args) {
+        new Boot3(args);
     }
 
     /**

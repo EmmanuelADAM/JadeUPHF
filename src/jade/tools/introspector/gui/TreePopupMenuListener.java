@@ -35,8 +35,8 @@ import java.awt.event.ActionListener;
  * @author Andrea Squeri,Corti Denis,Ballestracci Paolo -  Universita` di Parma
  */
 public class TreePopupMenuListener implements ActionListener {
-    private boolean addBehaviour;
     private final JTree myTree;
+    private boolean addBehaviour;
 
     public TreePopupMenuListener(JTree tree) {
         myTree = tree;

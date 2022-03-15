@@ -30,16 +30,17 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 
 /**
- * The class to be used to define schemas of agent actions in 
+ * The class to be used to define schemas of agent actions in
  * an ontology.
  * Note that an AgentActionSchema should also be a ConceptSchema, but
  * this inheritance relation is cut as Java does not support
- * multiple inheritance. As a consequence in practice it will 
- * not be possible to define e.g. a ConceptSchema with a slot 
- * whose value must be instances of a certain type of agent-action 
+ * multiple inheritance. As a consequence in practice it will
+ * not be possible to define e.g. a ConceptSchema with a slot
+ * whose value must be instances of a certain type of agent-action
  * even if in theory this should be
- * possible as a ConceptSchema can have slots of type term and 
+ * possible as a ConceptSchema can have slots of type term and
  * an agent-action is a concept and therefore a term.
+ *
  * @author Federico Bergenti - Universita` di Parma
  */
 public class AgentActionSchema extends ConceptSchema {
@@ -57,6 +58,7 @@ public class AgentActionSchema extends ConceptSchema {
 
     /**
      * Creates an <code>AgentActionSchema</code> with a given type-name.
+     *
      * @param typeName The name of this <code>AgentActionSchema</code>.
      */
     public AgentActionSchema(String typeName) {
@@ -65,6 +67,7 @@ public class AgentActionSchema extends ConceptSchema {
 
     /**
      * Retrieve the generic base schema for all agent actions.
+     *
      * @return the generic base schema for all agent actions.
      */
     public static ObjectSchema getBaseSchema() {
@@ -72,8 +75,9 @@ public class AgentActionSchema extends ConceptSchema {
     }
 
     /**
-     * Add a mandatory slot of type PredicateSchema to this schema. 
-     * @param name The name of the slot.
+     * Add a mandatory slot of type PredicateSchema to this schema.
+     *
+     * @param name       The name of the slot.
      * @param slotSchema The schema of the slot.
      */
     public void add(String name, PredicateSchema slotSchema) {
@@ -81,11 +85,12 @@ public class AgentActionSchema extends ConceptSchema {
     }
 
     /**
-     * Add a slot of type PredicateSchema to this schema. 
-     * @param name The name of the slot.
-     * @param slotSchema The schema of the slot.
-     * @param optionality The optionality, i.e. <code>OPTIONAL</code> 
-     * or <code>MANDATORY</code>
+     * Add a slot of type PredicateSchema to this schema.
+     *
+     * @param name        The name of the slot.
+     * @param slotSchema  The schema of the slot.
+     * @param optionality The optionality, i.e. <code>OPTIONAL</code>
+     *                    or <code>MANDATORY</code>
      */
     public void add(String name, PredicateSchema slotSchema, int optionality) {
         super.add(name, slotSchema, optionality);
@@ -100,11 +105,12 @@ public class AgentActionSchema extends ConceptSchema {
     }
 
     /**
-     Check whether a given abstract descriptor complies with this
-     schema.
-     @param abs The abstract descriptor to be checked
-     @throws OntologyException If the abstract descriptor does not
-     complies with this schema
+     * Check whether a given abstract descriptor complies with this
+     * schema.
+     *
+     * @param abs The abstract descriptor to be checked
+     * @throws OntologyException If the abstract descriptor does not
+     *                           complies with this schema
      */
     public void validate(AbsObject abs, Ontology onto) throws OntologyException {
         // Check the type of the abstract descriptor
@@ -117,19 +123,19 @@ public class AgentActionSchema extends ConceptSchema {
     }
 
     /**
-     Return true if
-     - s is the base schema for the XXXSchema class this schema is
-     an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
-     schema is an instance of ConceptSchema)
-     - s is the base schema for a super-class of the XXXSchema class
-     this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
-     and this schema is an instance of ConceptSchema.
-     Moreover, as AgentActionSchema extends GenericActionSchema, but should
-     also extend ConceptSchema (this is not possible in practice as
-     Java does not support multiple inheritance), this method
-     returns true also in the case that s is equals to, or is an
-     ancestor of, ConceptSchema.getBaseSchema() (i.e. TermSchema.getBaseSchema()
-     descends from s)
+     * Return true if
+     * - s is the base schema for the XXXSchema class this schema is
+     * an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
+     * schema is an instance of ConceptSchema)
+     * - s is the base schema for a super-class of the XXXSchema class
+     * this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
+     * and this schema is an instance of ConceptSchema.
+     * Moreover, as AgentActionSchema extends GenericActionSchema, but should
+     * also extend ConceptSchema (this is not possible in practice as
+     * Java does not support multiple inheritance), this method
+     * returns true also in the case that s is equals to, or is an
+     * ancestor of, ConceptSchema.getBaseSchema() (i.e. TermSchema.getBaseSchema()
+     * descends from s)
      */
     protected boolean descendsFrom(ObjectSchema s) {
         if (s != null) {
@@ -148,6 +154,7 @@ public class AgentActionSchema extends ConceptSchema {
     /**
      * Define that the result produced by the execution of an action described by this
      * schema has a structure conforming to a given term schema.
+     *
      * @param resultSchema the schema of the result
      */
     public void setResult(TermSchema resultSchema) {
@@ -159,9 +166,10 @@ public class AgentActionSchema extends ConceptSchema {
      * Define that the result produced by the execution of an action described by this
      * schema is an aggregate of n (with n between cardMin and cardMax) elements each one having
      * a structure conforming to a given term schema.
+     *
      * @param elementsSchema the schema of the elements in the result aggregate
-     * @param cardMin the result must include at least <code>cardMin</code> elements
-     * @param cardMax the result must include at most <code>cardMax</code> elements
+     * @param cardMin        the result must include at least <code>cardMin</code> elements
+     * @param cardMax        the result must include at most <code>cardMax</code> elements
      */
     public void setResult(TermSchema elementsSchema, int cardMin, int cardMax) {
         add(RESULT_SLOT_NAME, elementsSchema, cardMin, cardMax);

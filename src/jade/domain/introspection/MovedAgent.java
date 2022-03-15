@@ -64,15 +64,6 @@ public class MovedAgent implements Event {
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
-     *
-     * @param id The agent identifier of the newly moved agent.
-     */
-    public void setAgent(AID id) {
-        agent = id;
-    }
-
-    /**
      * Retrieve the value of the <code>agent</code> slot of this
      * event, containing the agent identifier of the newly moved agent.
      *
@@ -83,15 +74,13 @@ public class MovedAgent implements Event {
         return agent;
     }
 
-
     /**
-     * Set the <code>from</code> slot of this event.
+     * Set the <code>agent</code> slot of this event.
      *
-     * @param id The container identifier of the container from where
-     *           the agent migrated.
+     * @param id The agent identifier of the newly moved agent.
      */
-    public void setFrom(ContainerID id) {
-        from = id;
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     /**
@@ -107,13 +96,13 @@ public class MovedAgent implements Event {
     }
 
     /**
-     * Set the <code>to</code> slot of this event.
+     * Set the <code>from</code> slot of this event.
      *
-     * @param id The container identifier of the container where the
-     *           agent migrated.
+     * @param id The container identifier of the container from where
+     *           the agent migrated.
      */
-    public void setTo(ContainerID id) {
-        to = id;
+    public void setFrom(ContainerID id) {
+        from = id;
     }
 
     /**
@@ -126,6 +115,16 @@ public class MovedAgent implements Event {
      */
     public ContainerID getTo() {
         return to;
+    }
+
+    /**
+     * Set the <code>to</code> slot of this event.
+     *
+     * @param id The container identifier of the container where the
+     *           agent migrated.
+     */
+    public void setTo(ContainerID id) {
+        to = id;
     }
 
 

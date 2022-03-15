@@ -39,36 +39,35 @@ import jade.core.ContainerID;
  */
 public class DeleteContainer implements AgentAction {
 
-    public DeleteContainer() {
-    }
+    private ContainerID container;
+    private ContainerID where;
+    private String repository;
 
-    public void setContainer(ContainerID id) {
-        container = id;
+    public DeleteContainer() {
     }
 
     public ContainerID getContainer() {
         return container;
     }
 
-    public void setWhere(ContainerID id) {
-        where = id;
+    public void setContainer(ContainerID id) {
+        container = id;
     }
 
     public ContainerID getWhere() {
         return where;
     }
 
-    public void setRepository(String r) {
-        repository = r;
+    public void setWhere(ContainerID id) {
+        where = id;
     }
 
     public String getRepository() {
         return repository;
     }
 
-
-    private ContainerID container;
-    private ContainerID where;
-    private String repository;
+    public void setRepository(String r) {
+        repository = r;
+    }
 
 }

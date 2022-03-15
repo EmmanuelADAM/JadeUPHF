@@ -42,8 +42,14 @@ import java.util.Vector;
 
 public class ClassSelectionDialog extends JDialog implements WindowListener, ActionListener, ListSelectionListener {
 
+    public final static int DLG_OK = 1;
+    public final static int DLG_CANCEL = 0;
+    public static final int ACC_INTERFACE = 0x0200;
+    public static final int ACC_ABSTRACT = 0x0400;
     @Serial
     private static final long serialVersionUID = 1L;
+    private final String classname;
+    private final ClassFinderFilter classfilter;
     private JPanel jContentPane = null;
     private JPanel jPanel = null;
     private JButton jButtonOk = null;
@@ -54,121 +60,21 @@ public class ClassSelectionDialog extends JDialog implements WindowListener, Act
     private ClassesTableModel jTableModel;
     private int result;
     private String selectedClassname;
-    public final static int DLG_OK = 1;
-    public final static int DLG_CANCEL = 0;
     private boolean classesLoaded;
-    private final String classname;
-    private final ClassFinderFilter classfilter;
 
-    public static final int ACC_INTERFACE = 0x0200;
-    public static final int ACC_ABSTRACT = 0x0400;
-
-    private class ClassFilter implements ClassFinderFilter {
-        public boolean include(Class<?> superClazz, Class<?> clazz) {
-            int modifiers = clazz.getModifiers();
-            boolean doInclude = ((modifiers & (ACC_ABSTRACT | ACC_INTERFACE)) == 0);
-            if (doInclude) {
-                doInclude = !clazz.getName().equals(classname);
-            }
-            return doInclude;
-        }
+    /**
+     * @param owner
+     */
+    public ClassSelectionDialog(Dialog owner, String title, String classname, ClassFinderFilter classfilter) {
+        super(owner, title, true);
+        initialize();
+        classesLoaded = false;
+        this.classname = classname;
+        this.classfilter = classfilter;
     }
 
-    private class ClassUpdater implements Runnable, ClassFinderListener {
-
-        private final static int UPDATE_EVERY = 1;
-
-        private int numberOfClasses;
-        private List<String> classNamesCache;
-        private final String classname;
-        private final ClassFinderFilter classfilter;
-
-        public ClassUpdater(String classname, ClassFinderFilter classfilter) {
-            this.classname = classname;
-            this.classfilter = classfilter;
-        }
-
-        public void add(Class<?> clazz, URL location) {
-            numberOfClasses++;
-            classNamesCache.add(clazz.getName());
-            if ((numberOfClasses % UPDATE_EVERY) == 0) {
-                appendToList(classNamesCache);
-                classNamesCache.clear();
-            }
-        }
-
-        public void run() {
-            classNamesCache = new ArrayList<>(UPDATE_EVERY);
-            numberOfClasses = 0;
-            ClassFinder cf = new ClassFinder();
-            cf.findSubclasses(classname, this, classfilter);
-            if (classNamesCache.size() > 0) {
-                appendToList(classNamesCache);
-                classNamesCache.clear();
-            }
-            // last call, with empty list, to update status message
-            appendToList(classNamesCache);
-            classNamesCache = null;
-            classesLoaded = true;
-        }
-    }
-
-    public static class ClassesTableModel extends AbstractTableModel {
-        @Serial
-        private static final long serialVersionUID = 1L;
-
-        private final Vector<Object> dynamicRowData;
-        private final Vector<String> staticRowData;
-
-        public ClassesTableModel() {
-            dynamicRowData = new Vector<>();
-            staticRowData = new Vector<>();
-        }
-
-        public String getColumnName(int col) {
-            return "Classname";
-        }
-
-        public int getRowCount() {
-            return dynamicRowData.size() + staticRowData.size();
-        }
-
-        public int getColumnCount() {
-            return 1;
-        }
-
-        public Object getValueAt(int row, int col) {
-            return getRowValue(row);
-        }
-
-        public boolean isCellEditable(int row, int col) {
-            return false;
-        }
-
-        public void appendStaticRows(Collection<String> newRows) {
-            if (newRows.size() > 0) {
-                int firstRow = staticRowData.size();
-                staticRowData.addAll(newRows);
-                fireTableRowsInserted(firstRow, staticRowData.size() - 1);
-            }
-        }
-
-        public void setDynamicRows(Collection<Object> rows) {
-            dynamicRowData.clear();
-            fireTableRowsDeleted(0, dynamicRowData.size());
-            if (rows.size() > 0) {
-                dynamicRowData.addAll(rows);
-                fireTableRowsInserted(0, dynamicRowData.size() - 1);
-            }
-        }
-
-        public String getRowValue(int index) {
-            if (index < dynamicRowData.size()) {
-                return (String) dynamicRowData.get(index);
-            } else {
-                return staticRowData.get(index - dynamicRowData.size());
-            }
-        }
+    public ClassSelectionDialog(Dialog owner, String title, String classname) {
+        this(owner, title, classname, null);
     }
 
     private void appendToList(List<String> list) {
@@ -192,21 +98,6 @@ public class ClassSelectionDialog extends JDialog implements WindowListener, Act
 
     public String getSelectedClassname() {
         return selectedClassname;
-    }
-
-    /**
-     * @param owner
-     */
-    public ClassSelectionDialog(Dialog owner, String title, String classname, ClassFinderFilter classfilter) {
-        super(owner, title, true);
-        initialize();
-        classesLoaded = false;
-        this.classname = classname;
-        this.classfilter = classfilter;
-    }
-
-    public ClassSelectionDialog(Dialog owner, String title, String classname) {
-        this(owner, title, classname, null);
     }
 
     public int doShow(Collection<Object> firstRows) {
@@ -403,6 +294,113 @@ public class ClassSelectionDialog extends JDialog implements WindowListener, Act
     public void valueChanged(ListSelectionEvent e) {
         if (!e.getValueIsAdjusting()) {
             jButtonOk.setEnabled(true);
+        }
+    }
+
+    public static class ClassesTableModel extends AbstractTableModel {
+        @Serial
+        private static final long serialVersionUID = 1L;
+
+        private final Vector<Object> dynamicRowData;
+        private final Vector<String> staticRowData;
+
+        public ClassesTableModel() {
+            dynamicRowData = new Vector<>();
+            staticRowData = new Vector<>();
+        }
+
+        public String getColumnName(int col) {
+            return "Classname";
+        }
+
+        public int getRowCount() {
+            return dynamicRowData.size() + staticRowData.size();
+        }
+
+        public int getColumnCount() {
+            return 1;
+        }
+
+        public Object getValueAt(int row, int col) {
+            return getRowValue(row);
+        }
+
+        public boolean isCellEditable(int row, int col) {
+            return false;
+        }
+
+        public void appendStaticRows(Collection<String> newRows) {
+            if (newRows.size() > 0) {
+                int firstRow = staticRowData.size();
+                staticRowData.addAll(newRows);
+                fireTableRowsInserted(firstRow, staticRowData.size() - 1);
+            }
+        }
+
+        public void setDynamicRows(Collection<Object> rows) {
+            dynamicRowData.clear();
+            fireTableRowsDeleted(0, dynamicRowData.size());
+            if (rows.size() > 0) {
+                dynamicRowData.addAll(rows);
+                fireTableRowsInserted(0, dynamicRowData.size() - 1);
+            }
+        }
+
+        public String getRowValue(int index) {
+            if (index < dynamicRowData.size()) {
+                return (String) dynamicRowData.get(index);
+            } else {
+                return staticRowData.get(index - dynamicRowData.size());
+            }
+        }
+    }
+
+    private class ClassFilter implements ClassFinderFilter {
+        public boolean include(Class<?> superClazz, Class<?> clazz) {
+            int modifiers = clazz.getModifiers();
+            boolean doInclude = ((modifiers & (ACC_ABSTRACT | ACC_INTERFACE)) == 0);
+            if (doInclude) {
+                doInclude = !clazz.getName().equals(classname);
+            }
+            return doInclude;
+        }
+    }
+
+    private class ClassUpdater implements Runnable, ClassFinderListener {
+
+        private final static int UPDATE_EVERY = 1;
+        private final String classname;
+        private final ClassFinderFilter classfilter;
+        private int numberOfClasses;
+        private List<String> classNamesCache;
+
+        public ClassUpdater(String classname, ClassFinderFilter classfilter) {
+            this.classname = classname;
+            this.classfilter = classfilter;
+        }
+
+        public void add(Class<?> clazz, URL location) {
+            numberOfClasses++;
+            classNamesCache.add(clazz.getName());
+            if ((numberOfClasses % UPDATE_EVERY) == 0) {
+                appendToList(classNamesCache);
+                classNamesCache.clear();
+            }
+        }
+
+        public void run() {
+            classNamesCache = new ArrayList<>(UPDATE_EVERY);
+            numberOfClasses = 0;
+            ClassFinder cf = new ClassFinder();
+            cf.findSubclasses(classname, this, classfilter);
+            if (classNamesCache.size() > 0) {
+                appendToList(classNamesCache);
+                classNamesCache.clear();
+            }
+            // last call, with empty list, to update status message
+            appendToList(classNamesCache);
+            classNamesCache = null;
+            classesLoaded = true;
         }
     }
 }

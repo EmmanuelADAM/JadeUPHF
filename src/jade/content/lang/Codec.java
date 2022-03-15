@@ -31,41 +31,15 @@ import java.io.Serializable;
 
 /**
  * Generic base class for al content language codecs
+ *
  * @author Federico Bergenti - Universita` di Parma
  */
 public abstract class Codec implements Serializable {
 
     /**
-     * Class CodecException.
-     *
-     * @author Federico Bergenti
-     */
-    public static class CodecException extends ContentException {
-
-        /**
-         * Constructor
-         *
-         * @param message the message.
-         *
-         */
-        public CodecException(String message) {
-            super(message);
-        }
-
-        /**
-         Construct a new <code>CodecException</code>
-         @param msg The message for this exception.
-         @param t The exception wrapped by this object.
-         */
-        public CodecException(String msg, Throwable t) {
-            super(msg, t);
-        }
-
-    }
-
-    /** This string is the prefix of all the unnamed slots of a Frame **/
+     * This string is the prefix of all the unnamed slots of a Frame
+     **/
     public static String UNNAMEDPREFIX = "_JADE.UNNAMED";
-
     private String name = null;
 
     /**
@@ -77,6 +51,7 @@ public abstract class Codec implements Serializable {
 
     /**
      * Gets the name of this codec.
+     *
      * @return the name of this codec.
      */
     public String getName() {
@@ -89,6 +64,34 @@ public abstract class Codec implements Serializable {
      */
     public Ontology getInnerOntology() {
         return null;
+    }
+
+    /**
+     * Class CodecException.
+     *
+     * @author Federico Bergenti
+     */
+    public static class CodecException extends ContentException {
+
+        /**
+         * Constructor
+         *
+         * @param message the message.
+         */
+        public CodecException(String message) {
+            super(message);
+        }
+
+        /**
+         * Construct a new <code>CodecException</code>
+         *
+         * @param msg The message for this exception.
+         * @param t   The exception wrapped by this object.
+         */
+        public CodecException(String msg, Throwable t) {
+            super(msg, t);
+        }
+
     }
 }
 

@@ -57,15 +57,6 @@ public class KillContainerRequested implements Event {
     }
 
     /**
-     * Set the <code>container</code> of this event.
-     *
-     * @param id The container identifier of the container that is requested to be killed.
-     */
-    public void setContainer(ContainerID id) {
-        container = id;
-    }
-
-    /**
      * Retrieve the value of the <code>container</code> slot of this
      * event, containing the identifier of the container that is requested
      * to be killed.
@@ -75,5 +66,14 @@ public class KillContainerRequested implements Event {
      */
     public ContainerID getContainer() {
         return container;
+    }
+
+    /**
+     * Set the <code>container</code> of this event.
+     *
+     * @param id The container identifier of the container that is requested to be killed.
+     */
+    public void setContainer(ContainerID id) {
+        container = id;
     }
 }

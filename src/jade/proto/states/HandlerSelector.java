@@ -44,15 +44,6 @@ import java.util.Map;
  * @version $Date: 2005-09-16 15:54:46 +0200 (ven, 16 set 2005) $ $Revision: 5780 $
  **/
 public abstract class HandlerSelector extends FSMBehaviour {
-    private final Map<Object, Behaviour> handlers = new HashMap<>();
-    private final Object accesKey;
-
-    // FSM states names
-    private static final String SELECT = "Select";
-    private static final String HANDLE = "Handle";
-    private static final String DUMMY = "Dummy";
-
-    // States exit values
     /**
      * Value returned by <code>onEnd</code> method if
      * an handler was found mapped to the key
@@ -63,6 +54,14 @@ public abstract class HandlerSelector extends FSMBehaviour {
      * no handler was found mapped to the key
      **/
     public static final int SELECTION_NOK = 0;
+    // FSM states names
+    private static final String SELECT = "Select";
+    private static final String HANDLE = "Handle";
+    private static final String DUMMY = "Dummy";
+
+    // States exit values
+    private final Map<Object, Behaviour> handlers = new HashMap<>();
+    private final Object accesKey;
 
 
     /**

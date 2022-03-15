@@ -131,10 +131,12 @@ public class Agent implements Runnable, Serializable, TimerListener {
     @Serial
     private static final long serialVersionUID = 3487495895819000L;
     private final Logger log = Logger.getJADELogger(this.getClass().getName());
-    private transient AgentToolkit myToolkit;
+    //#MIDP_EXCLUDE_END
+    //E.ADAM map service name, service description
+    protected DFAgentDescription servicesList;
 
     //#MIDP_EXCLUDE_BEGIN
-
+    private transient AgentToolkit myToolkit;
     /**
      * These constants represent the various Domain Life Cycle states
      */
@@ -199,9 +201,6 @@ public class Agent implements Runnable, Serializable, TimerListener {
     private transient Hashtable<String, ServiceHelper> helpersTable;
     // For persistence service -- Hibernate needs java.util collections
     private transient Set<TBPair> persistentPendingTimers = new HashSet<>();
-    //#MIDP_EXCLUDE_END
-    //E.ADAM map service name, service description
-    protected DFAgentDescription servicesList;
 
     /**
      * Default constructor.
@@ -1170,7 +1169,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
 
             // If some thread issued a blocking putO2AObject() call with this
             // object, wake it up. cond.set is synchronized on CondVar object
-            cond =  o2aLocks.remove(result);
+            cond = o2aLocks.remove(result);
         }
 
         if (cond != null) {
@@ -1983,6 +1982,49 @@ public class Agent implements Runnable, Serializable, TimerListener {
     //#MIDP_EXCLUDE_END
 
     /**
+     * add a service description into the agent description
+     *
+     * @param service description of the service
+     * @return the new agent description with this service
+     * @author Emmanuel Adam
+     * @since 2022
+     */
+    public DFAgentDescription addService(ServiceDescription service) {
+        if (servicesList == null) servicesList = new DFAgentDescription();
+        servicesList.addServices(service);
+        return servicesList;
+    }
+
+    /**
+     * @return collection of the service descriptions of the agent
+     * @author Emmanuel Adam
+     * @since 2022
+     */
+    public List<ServiceDescription> getServices() {
+//        var l = new ArrayList<ServiceDescription>();
+//        servicesList.getAllServices().forEachRemaining(l::add);
+        return servicesList.getAllServices();
+    }
+
+    /**
+     * @return the agent description
+     * @author Emmanuel Adam
+     * @since 2022
+     */
+    public DFAgentDescription getServicesList() {
+        return servicesList;
+    }
+
+    /**
+     * @return the agent description
+     * @author Emmanuel Adam
+     * @since 2022
+     */
+    public void setServicesList(DFAgentDescription servicesList) {
+        this.servicesList = servicesList;
+    }
+
+    /**
      * Inner class Interrupted.
      * This class is used to handle change state requests that occur
      * in particular situations such as when the agent thread is
@@ -2080,6 +2122,8 @@ public class Agent implements Runnable, Serializable, TimerListener {
         }
 
     } // End of inner class CondVar
+
+    //#J2ME_EXCLUDE_END
 
     /**
      * Inner class AssociationTB.
@@ -2328,53 +2372,5 @@ public class Agent implements Runnable, Serializable, TimerListener {
             return (to.getState() == AP_ACTIVE || to.getState() == AP_DELETED);
         }
     } // END of inner class SuspendedLifeCycle
-
-    //#J2ME_EXCLUDE_END
-
-    /**
-     * add a service description into the agent description
-     * @param service description of the service
-     * @return the new agent description with this service
-     * @author Emmanuel Adam
-     * @since 2022
-     * */
-    public DFAgentDescription addService(ServiceDescription service)
-    {
-        if(servicesList==null) servicesList = new DFAgentDescription();
-        servicesList.addServices(service);
-        return servicesList;
-    }
-
-    /**
-     * @return collection of the service descriptions of the agent
-     * @author Emmanuel Adam
-     * @since 2022
-     * */
-    public List<ServiceDescription> getServices()
-    {
-//        var l = new ArrayList<ServiceDescription>();
-//        servicesList.getAllServices().forEachRemaining(l::add);
-        return servicesList.getAllServices();
-    }
-
-    /**
-     * @return the agent description
-     * @author Emmanuel Adam
-     * @since 2022
-     * */
-    public void setServicesList(DFAgentDescription servicesList)
-    {
-        this.servicesList = servicesList;
-    }
-
-    /**
-     * @return the agent description
-     * @author Emmanuel Adam
-     * @since 2022
-     * */
-    public DFAgentDescription getServicesList()
-    {
-        return servicesList;
-    }
 
 }

@@ -102,24 +102,6 @@ public class APDescriptionPanel extends JPanel {
     }
 
     /**
-     * To set the field with the valued of a given APDescription.
-     */
-    public void setAPDescription(APDescription desc) {
-
-        try {
-            platformName_Field.setText(desc.getName());
-
-            //#DOTNET_EXCLUDE_BEGIN
-            MTPs_List.resetContent(desc.getAllAPServices());
-            //#DOTNET_EXCLUDE_END
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
      * To show an APDescription in a JDialog
      */
 
@@ -152,6 +134,24 @@ public class APDescriptionPanel extends JPanel {
             tempDlg.setLocation(locx, locy);
         }
         tempDlg.setVisible(true);
+    }
+
+    /**
+     * To set the field with the valued of a given APDescription.
+     */
+    public void setAPDescription(APDescription desc) {
+
+        try {
+            platformName_Field.setText(desc.getName());
+
+            //#DOTNET_EXCLUDE_BEGIN
+            MTPs_List.resetContent(desc.getAllAPServices());
+            //#DOTNET_EXCLUDE_END
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

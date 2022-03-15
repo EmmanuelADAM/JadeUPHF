@@ -39,11 +39,11 @@ import java.util.Iterator;
  */
 public class BehaviourID implements Concept {
 
+    private final ArrayList<BehaviourID> children = new ArrayList<>();
     private int code;
     private String name;
     private String className;
     private String kind;
-    private final ArrayList<BehaviourID> children = new ArrayList<>();
 
     /**
      * Default constructor. Builds an unspecified behaviour ID.
@@ -67,10 +67,9 @@ public class BehaviourID implements Concept {
 
         // If we have a composite behaviour, add the
         // children to this behaviour id.
-        if (b instanceof CompositeBehaviour) {
-            CompositeBehaviour c = (CompositeBehaviour) b;
-            for (Object o : c.getChildren()) {
-                addChildren(new BehaviourID((Behaviour) o));
+        if (b instanceof CompositeBehaviour c) {
+            for (Behaviour o : c.getChildren()) {
+                addChildren(new BehaviourID(o));
             }
         }
     }
@@ -98,15 +97,6 @@ public class BehaviourID implements Concept {
     }
 
     /**
-     * Set the name of this behaviour ID
-     *
-     * @param n The name to give to this behaviour ID.
-     */
-    public void setName(String n) {
-        name = n;
-    }
-
-    /**
      * Retrieve the name of this behaviour ID.
      *
      * @return The given name, or <code>null</code> if no name was set.
@@ -116,12 +106,12 @@ public class BehaviourID implements Concept {
     }
 
     /**
-     * Set the code of this behaviour ID
+     * Set the name of this behaviour ID
      *
-     * @param code The code to give to this behaviour ID.
+     * @param n The name to give to this behaviour ID.
      */
-    public void setCode(int code) {
-        this.code = code;
+    public void setName(String n) {
+        name = n;
     }
 
     /**
@@ -132,13 +122,12 @@ public class BehaviourID implements Concept {
     }
 
     /**
-     * Set the class name for this behaviour ID. This is the name of
-     * the Java class implementing the described agent behaviour.
+     * Set the code of this behaviour ID
      *
-     * @param n The class name of the described behaviour.
+     * @param code The code to give to this behaviour ID.
      */
-    public void setClassName(String n) {
-        className = n;
+    public void setCode(int code) {
+        this.code = code;
     }
 
     /**
@@ -153,13 +142,13 @@ public class BehaviourID implements Concept {
     }
 
     /**
-     * Set the kind of behaviour described by this behaviour ID.
+     * Set the class name for this behaviour ID. This is the name of
+     * the Java class implementing the described agent behaviour.
      *
-     * @param k A string specifying the kind of the described
-     *          behaviour.
+     * @param n The class name of the described behaviour.
      */
-    public void setKind(String k) {
-        kind = k;
+    public void setClassName(String n) {
+        className = n;
     }
 
     /**
@@ -170,6 +159,16 @@ public class BehaviourID implements Concept {
      */
     public String getKind() {
         return kind;
+    }
+
+    /**
+     * Set the kind of behaviour described by this behaviour ID.
+     *
+     * @param k A string specifying the kind of the described
+     *          behaviour.
+     */
+    public void setKind(String k) {
+        kind = k;
     }
 
     /**
@@ -216,8 +215,7 @@ public class BehaviourID implements Concept {
      * <code>true</code>. Otherwise, <code>false</code> is returned.
      */
     public boolean equals(Object o) {
-        if (o != null && o instanceof BehaviourID) {
-            BehaviourID b = (BehaviourID) o;
+        if (o instanceof BehaviourID b) {
             return (checkEquals(name, b.name) && checkEquals(className, b.className) && checkEquals(kind, b.kind));
         } else {
             return false;

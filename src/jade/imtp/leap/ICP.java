@@ -47,25 +47,6 @@ import jade.mtp.TransportAddress;
 public interface ICP {
 
     /**
-     * Callback interface to be notified of command arrivals over this
-     * ICP.
-     */
-    interface Listener {
-
-        /**
-         * Handle a received (still serialized) command object, i.e. deserialize it
-         * and launch processing of the command.
-         *
-         * @param cmdPayload the command to be deserialized and processed
-         * @return a byte array containing the serialized response command
-         * exception LEAPSerializationException if an error occurs during the
-         * LEAP surrogate serialization mechanism
-         */
-        byte[] handleCommand(byte[] cmdPayload) throws LEAPSerializationException;
-    }    // End of Listener interface
-
-
-    /**
      * Start listening for platform management commands
      */
     TransportAddress activate(Listener l, String peerID, Profile p) throws ICPException;
@@ -84,5 +65,23 @@ public interface ICP {
      * Returns the protocol supported by this ICP
      */
     TransportProtocol getProtocol();
+
+    /**
+     * Callback interface to be notified of command arrivals over this
+     * ICP.
+     */
+    interface Listener {
+
+        /**
+         * Handle a received (still serialized) command object, i.e. deserialize it
+         * and launch processing of the command.
+         *
+         * @param cmdPayload the command to be deserialized and processed
+         * @return a byte array containing the serialized response command
+         * exception LEAPSerializationException if an error occurs during the
+         * LEAP surrogate serialization mechanism
+         */
+        byte[] handleCommand(byte[] cmdPayload) throws LEAPSerializationException;
+    }    // End of Listener interface
 }
 

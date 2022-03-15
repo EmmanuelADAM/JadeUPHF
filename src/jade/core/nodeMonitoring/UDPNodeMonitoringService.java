@@ -33,13 +33,32 @@ import java.util.Hashtable;
  * UDP based implementation of the NodeMonitoringService.
  */
 public class UDPNodeMonitoringService extends NodeMonitoringService {
-    private static final String PREFIX = "jade_core_nodeMonitoring_UDPNodeMonitoringService_";
-
     /**
      * The name of this service
      */
     public static final String NAME = "jade.core.nodeMonitoring.UDPNodeMonitoring";
-
+    /**
+     * Default port on which the server is waiting for ping messages
+     */
+    public static final int DEFAULT_PORT = 28000;
+    /**
+     * Default time between two outgoing pings
+     */
+    public static final int DEFAULT_PING_DELAY = 1000;
+    /**
+     * Default maximum time the server waits for a ping
+     */
+    public static final int DEFAULT_PING_DELAY_LIMIT = 3000;
+    /**
+     * Default maximum time a node can stay unreachable
+     */
+    public static final int DEFAULT_UNREACHABLE_LIMIT = 10000;
+    /**
+     * Vertical command issued on the Main Container
+     * when a given number of ping packets are received from an unknown node
+     */
+    public static final String ORPHAN_NODE = "Orphan-Node";
+    private static final String PREFIX = "jade_core_nodeMonitoring_UDPNodeMonitoringService_";
     /**
      * This constant is the name of the property whose value contains
      * the hostname where the Main Container is listening for UDP pings.
@@ -47,21 +66,18 @@ public class UDPNodeMonitoringService extends NodeMonitoringService {
      * If this is null too the default network name is used.
      */
     public static final String HOST = PREFIX + "host";
-
     /**
      * This constant is the name of the property whose value contains
      * a boolean indication that specifies whether or not UDP pings must be accepted
      * on the indicated local-host only (default = false).
      */
     public static final String ACCEPT_LOCAL_HOST_ONLY = PREFIX + "acceptlocalhostonly";
-
     /**
      * This constant is the name of the property whose value contains an
      * integer representing the port number where the Main Container is
      * listening for UDP pings.
      */
     public static final String PORT = PREFIX + "port";
-
     /**
      * This constant is the name of the property whose value contains an
      * integer representing the time interval (in milliseconds) in which a peripheral
@@ -69,7 +85,6 @@ public class UDPNodeMonitoringService extends NodeMonitoringService {
      * This property is only meaningful on a peripheral container.
      */
     public static final String PING_DELAY = PREFIX + "pingdelay";
-
     /**
      * This constant is the name of the property whose value contains an
      * integer representing the maximum time (in milliseconds) the main container
@@ -78,7 +93,6 @@ public class UDPNodeMonitoringService extends NodeMonitoringService {
      * This property is only meaningful on a main container.
      */
     public static final String PING_DELAY_LIMIT = PREFIX + "pingdelaylimit";
-
     /**
      * This constant is the name of the property whose value contains an
      * integer representing the maximum time a node can stay unreachable after it gets removed
@@ -86,7 +100,6 @@ public class UDPNodeMonitoringService extends NodeMonitoringService {
      * This property is only meaningful on a main container.
      */
     public static final String UNREACHABLE_LIMIT = PREFIX + "unreachablelimit";
-
     /**
      * This constant is the name of the property whose value contains an
      * integer representing the number of UDP ping packets that must be received from an un-monitored node
@@ -95,7 +108,6 @@ public class UDPNodeMonitoringService extends NodeMonitoringService {
      * This property is only meaningful on a main container.
      */
     public static final String ORPHAN_NODE_PINGS_CNT = PREFIX + "orphannodepingscnt";
-
     /**
      * This constant is the name of the property whose value contains an
      * integer representing the maximum number of UDP ping packets received from an un-monitored node that are traced.
@@ -104,7 +116,6 @@ public class UDPNodeMonitoringService extends NodeMonitoringService {
      * This property is only meaningful on a main container.
      */
     public static final String MAX_TRACED_UNKNOWN_PINGS = PREFIX + "maxtracedunknownpings";
-
     /**
      * This constants is the name of the property whose value contains the fully qualified
      * class name of a concrete implementation of the <code>NetworkChecker</code> interface.
@@ -118,48 +129,34 @@ public class UDPNodeMonitoringService extends NodeMonitoringService {
      * @see NetworkChecker
      */
     public static final String NETWORK_CHECKER = PREFIX + "networkchecker";
-
-    /**
-     * Default port on which the server is waiting for ping messages
-     */
-    public static final int DEFAULT_PORT = 28000;
-
-    /**
-     * Default time between two outgoing pings
-     */
-    public static final int DEFAULT_PING_DELAY = 1000;
-
-    /**
-     * Default maximum time the server waits for a ping
-     */
-    public static final int DEFAULT_PING_DELAY_LIMIT = 3000;
-
-    /**
-     * Default maximum time a node can stay unreachable
-     */
-    public static final int DEFAULT_UNREACHABLE_LIMIT = 10000;
-
-    /**
-     * Vertical command issued on the Main Container
-     * when a given number of ping packets are received from an unknown node
-     */
-    public static final String ORPHAN_NODE = "Orphan-Node";
-
     private static final String[] OWNED_COMMANDS = new String[]{
             NODE_UNREACHABLE,
             NODE_REACHABLE,
             ORPHAN_NODE
     };
-
-
-    private UDPMonitorServer myServer;
     private final Hashtable<String, UDPMonitorClient> myClients = new Hashtable<>(2);
-
+    private final ServiceComponent localSlice = new ServiceComponent();
+    private final Filter incFilter = new UDPMonitorIncomingFilter();
+    private UDPMonitorServer myServer;
     private ServiceManager myServiceManager;
     private MainContainer mainContainer;
 
-    private final ServiceComponent localSlice = new ServiceComponent();
-    private final Filter incFilter = new UDPMonitorIncomingFilter();
+    /**
+     * Extracts an integer value from a given profile. If the value
+     * is less than zero it returns the specified default value
+     *
+     * @param p            profile
+     * @param paramName    name of the parameter in the profile
+     * @param defaultValue default value
+     */
+    private static int getPosIntValue(Profile p, String paramName, int defaultValue) {
+        int value = Integer.parseInt(p.getParameter(paramName, "-1"));
+        if (value >= 0) {
+            return value;
+        } else {
+            return defaultValue;
+        }
+    }
 
     public String getName() {
         return NAME;
@@ -264,23 +261,6 @@ public class UDPNodeMonitoringService extends NodeMonitoringService {
                 UDPMonitorClient client = en.nextElement();
                 client.setPingDelay(delay);
             }
-        }
-    }
-
-    /**
-     * Extracts an integer value from a given profile. If the value
-     * is less than zero it returns the specified default value
-     *
-     * @param p            profile
-     * @param paramName    name of the parameter in the profile
-     * @param defaultValue default value
-     */
-    private static int getPosIntValue(Profile p, String paramName, int defaultValue) {
-        int value = Integer.parseInt(p.getParameter(paramName, "-1"));
-        if (value >= 0) {
-            return value;
-        } else {
-            return defaultValue;
         }
     }
 

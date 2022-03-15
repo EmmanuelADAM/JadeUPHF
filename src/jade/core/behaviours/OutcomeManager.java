@@ -36,18 +36,14 @@ import java.io.Serializable;
  * @author Giovanni Caire
  */
 public class OutcomeManager implements Serializable {
-    @Serial
-    private static final long serialVersionUID = -87842234567654L;
-
     public static final int OK = 1;
     public static final int KO = 0;
-
+    @Serial
+    private static final long serialVersionUID = -87842234567654L;
     private final Behaviour bh;
-
+    private final Logger myLogger = Logger.getJADELogger(getClass().getName());
     private int exitCode = OK;
     private String errorMsg;
-
-    private final Logger myLogger = Logger.getJADELogger(getClass().getName());
 
     public OutcomeManager(Behaviour bh) {
         this.bh = bh;

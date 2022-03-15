@@ -46,7 +46,7 @@ public class NotificationProxy extends SliceProxy implements NotificationSlice {
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else {
@@ -67,7 +67,7 @@ public class NotificationProxy extends SliceProxy implements NotificationSlice {
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else {
@@ -88,7 +88,7 @@ public class NotificationProxy extends SliceProxy implements NotificationSlice {
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else {
@@ -109,7 +109,7 @@ public class NotificationProxy extends SliceProxy implements NotificationSlice {
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else {

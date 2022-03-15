@@ -8,6 +8,8 @@
 package FIPA;
 
 public class AgentIDHelper {
+    private static org.omg.CORBA.TypeCode _tc;
+
     // It is useless to have instances of this class
     private AgentIDHelper() {
     }
@@ -71,8 +73,6 @@ public class AgentIDHelper {
         write(out, that);
         a.read_value(out.create_input_stream(), type());
     }
-
-    private static org.omg.CORBA.TypeCode _tc;
 
     synchronized public static org.omg.CORBA.TypeCode type() {
         int _memberCount = 4;

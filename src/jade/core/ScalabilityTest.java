@@ -73,7 +73,7 @@ public class ScalabilityTest {
     private static final Object terminatedLock = new Object();
     private static final Object readyLock = new Object();
     private static final Object semaphore = new Object();
-
+    private static final Random random = new Random();
     private static byte[] content;
     private static long timeInterval;
     private static int nIterations;
@@ -84,13 +84,9 @@ public class ScalabilityTest {
     private static int measure;
     private static int readyCnt = 0;
     private static int terminatedCnt = 0;
-
     private static long totalTime = 0;
     private static long totalTime2 = 0;
-
     private static BufferedReader inputReader;
-
-    private static final Random random = new Random();
 
     public static void main(String[] args) {
         ExtendedProperties pp = parseArguments(args);

@@ -40,10 +40,10 @@ import javax.microedition.rms.RecordStore;
 
 /**
  * This class provides a uniform API to produce logs
- * over a set of different and device-dependent logging mechanisms. 
+ * over a set of different and device-dependent logging mechanisms.
  * Different implementations of this class are
- * provided according to the target environment (Java Standard Edition, PersonalJava or CDC, MIDP and Android), 
- * but all of them offer the same API. 
+ * provided according to the target environment (Java Standard Edition, PersonalJava or CDC, MIDP and Android),
+ * but all of them offer the same API.
  * <br>
  * See also this
  * <a href="../../../tutorials/logging/JADELoggingService.html"> tutorial </a>
@@ -59,7 +59,7 @@ import javax.microedition.rms.RecordStore;
  * FINE <br>
  * FINER <br>
  * FINEST (lowest value)
- * <p> In addition, there is a level OFF that can be used to turn off logging, 
+ * <p> In addition, there is a level OFF that can be used to turn off logging,
  * and a level ALL that can be used to enable logging of all messages.
  * <p>
  * Notice that re-definition of logging levels was necessary in order to allow
@@ -85,31 +85,31 @@ import javax.microedition.rms.RecordStore;
  * <code>java -Djava.util.logging.config.file=mylogging.properties jade.Boot ...</code>
  *
  * <p><b>PersonaJava</b><br>
- * In the PJava implementation of the <code>Logger</code> class calls to the 
+ * In the PJava implementation of the <code>Logger</code> class calls to the
  * <code>log()</code> method result in calls to <code>System.out.println()</code>.
- * Alternatively it is possible to redirect logging printouts to a text file 
- * by setting the <code>-jade_util_Logger_logfile</code> option. Note that, 
- * in order to face resource limitations, it is not possible to redirect 
+ * Alternatively it is possible to redirect logging printouts to a text file
+ * by setting the <code>-jade_util_Logger_logfile</code> option. Note that,
+ * in order to face resource limitations, it is not possible to redirect
  * logging printouts produced by different Logger objects to different files.
  *
  * <p><b>MIDP</b><br>
- * In the MIDP implementation of the <code>Logger</code> class logging printouts 
+ * In the MIDP implementation of the <code>Logger</code> class logging printouts
  * are redirected to a MIDP RecordStore so that they can be later viewed
  * by means of the <code>jade.util.leap.OutputViewer</code> MIDlet included
  * in the LEAP add-on.<br>
  *
  * <p><b>Android</b><br>
- * In the Android implementation of the <code>Logger</code> class logging printouts 
+ * In the Android implementation of the <code>Logger</code> class logging printouts
  * are redirected to the Android logging system implemented by the <code>android.util.Log</code>
  * class. <br>
  *
  * <p>
- * The default level for logging is set to INFO, all messages of higher level 
+ * The default level for logging is set to INFO, all messages of higher level
  * will be logged by default.
- * In MIDP, PJava and Android environments, the logging level for a Logger object 
+ * In MIDP, PJava and Android environments, the logging level for a Logger object
  * registered with name x.y.z can be configured by setting the configuration option
  * <code>x_y_z_loglevel</code> to one of <code>severe, warning, info, config,
- * fine, finer, finest, all</code>. See the LEAP user guide for details about 
+ * fine, finer, finest, all</code>. See the LEAP user guide for details about
  * how to set JADE configuration options in MIDP and PJava.
  *
  * @author Rosalba Bochicchio - TILAB
@@ -153,7 +153,7 @@ public class Logger
      **/
     public static final Level FINEST = Level.FINEST;
     /**
-     *ALL indicates that all messages should be logged.
+     * ALL indicates that all messages should be logged.
      **/
     public static final Level ALL = Level.ALL;
     /**
@@ -164,16 +164,90 @@ public class Logger
 
     //#ANDROID_EXCLUDE_BEGIN
     private static final Map<String, Logger> wrappers = new HashMap<>();
+    private static final PrintStream logStream = System.out;
+    //#ANDROID_EXCLUDE_END
 
     /**
      * Private method to construct a logger for a named subsystem.
-     * @param name A name for the logger
-     * @param resourceBundleName  Name of ResourceBundle to be used for localizing messages for this logger. May be null if none of the messages require localization.
+     *
+     * @param name               A name for the logger
+     * @param resourceBundleName Name of ResourceBundle to be used for localizing messages for this logger. May be null if none of the messages require localization.
      */
     private Logger(String name, String resourceBundleName) {
         super(name, resourceBundleName);
     }
+
+    /**
+     * Find or create a logger for a named subsystem.
+     *
+     * @param name The name of the logger.
+     * @return the instance of the Logger.
+     */
+    public synchronized static Logger getJADELogger(String name) {
+        java.util.logging.LogManager mng = java.util.logging.LogManager.getLogManager();
+        java.util.logging.Logger lg = mng.getLogger(name);
+        if (lg == null) {
+            lg = new Logger(name, null);
+            mng.addLogger(lg);
+            lg = mng.getLogger(name);
+        } else if (!(lg instanceof Logger)) {
+            // Someone created a java logger for the named subsystem before this method is invoked
+            lg = getWrapper(lg);
+        }
+
+        return (Logger) lg;
+    }
+    //////////////////////////////////////////////
+
+    //#ANDROID_EXCLUDE_BEGIN
+
+    private static Logger getWrapper(java.util.logging.Logger lg) {
+        Logger jadeLogger = wrappers.get(lg.getName());
+        if (jadeLogger == null) {
+            jadeLogger = new LoggerWrapper(lg);
+            wrappers.put(lg.getName(), jadeLogger);
+        }
+        return jadeLogger;
+    }
+
+    /**
+     * Initialize the logging mechanism.
+     * This method makes sense only in a PJAVA or MIDP environment,
+     * but is available in J2SE too (where it does nothing) to provide
+     * a uniform interface over the different Java environments.
+     */
+    public static void initialize(Properties pp) {
+    }
+
+    public static Logger getMyLogger(String name) {
+        return getJADELogger(name);
+    }
+
+    public static void println(String log) {
+        logStream.println(log);
+		/*#MIDP_INCLUDE_BEGIN
+		try {
+			write(log);
+		}
+		catch (Throwable t){
+			// Maybe the record-store has been closed from the outside. Retry.
+			theRecordStore = null;
+			try {
+				write(log);
+			}
+			catch (Throwable t1) {
+				t.printStackTrace();
+				theRecordStore = null;
+			}
+		}
+		#MIDP_INCLUDE_END*/
+
+		/*#ANDROID_INCLUDE_BEGIN
+		android.util.Log.i("", log);
+		#ANDROID_INCLUDE_END*/
+    }
     //#ANDROID_EXCLUDE_END
+    //#J2ME_EXCLUDE_END
 
     //////////////////////////////////////////////
     // This section is for serialization purposes
@@ -195,39 +269,6 @@ public class Logger
             return getJADELogger(name);
         }
     }
-    //////////////////////////////////////////////
-
-    //#ANDROID_EXCLUDE_BEGIN
-
-    /**
-     Find or create a logger for a named subsystem.
-     @param name The name of the logger.
-     @return the instance of the Logger.
-     */
-    public synchronized static Logger getJADELogger(String name) {
-        java.util.logging.LogManager mng = java.util.logging.LogManager.getLogManager();
-        java.util.logging.Logger lg = mng.getLogger(name);
-        if (lg == null) {
-            lg = new Logger(name, null);
-            mng.addLogger(lg);
-            lg = mng.getLogger(name);
-        } else if (!(lg instanceof Logger)) {
-            // Someone created a java logger for the named subsystem before this method is invoked
-            lg = getWrapper(lg);
-        }
-
-        return (Logger) lg;
-    }
-
-    private static Logger getWrapper(java.util.logging.Logger lg) {
-        Logger jadeLogger = wrappers.get(lg.getName());
-        if (jadeLogger == null) {
-            jadeLogger = new LoggerWrapper(lg);
-            wrappers.put(lg.getName(), jadeLogger);
-        }
-        return jadeLogger;
-    }
-
 
     /**
      * Inner class LoggerWrapper
@@ -243,47 +284,6 @@ public class Logger
         public void log(LogRecord r) {
             realLogger.log(r);
         }
-    }
-
-    /**
-     Initialize the logging mechanism.
-     This method makes sense only in a PJAVA or MIDP environment,
-     but is available in J2SE too (where it does nothing) to provide
-     a uniform interface over the different Java environments.
-     */
-    public static void initialize(Properties pp) {
-    }
-    //#ANDROID_EXCLUDE_END
-    //#J2ME_EXCLUDE_END
-
-    public static Logger getMyLogger(String name) {
-        return getJADELogger(name);
-    }
-
-    private static final PrintStream logStream = System.out;
-
-    public static void println(String log) {
-        logStream.println(log);
-		/*#MIDP_INCLUDE_BEGIN
-		try {
-			write(log);
-		}
-		catch (Throwable t){
-			// Maybe the record-store has been closed from the outside. Retry.
-			theRecordStore = null;
-			try {
-				write(log);
-			}
-			catch (Throwable t1) {
-				t.printStackTrace();
-				theRecordStore = null;
-			}
-		}		
-		#MIDP_INCLUDE_END*/
-		
-		/*#ANDROID_INCLUDE_BEGIN
-		android.util.Log.i("", log);
-		#ANDROID_INCLUDE_END*/
     }
 		
 

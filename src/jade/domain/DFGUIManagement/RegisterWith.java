@@ -43,19 +43,19 @@ public class RegisterWith implements AgentAction {
     private AID df;
     private DFAgentDescription description;
 
-    public void setDf(AID parent) {
-        df = parent;
-    }
-
     public AID getDf() {
         return df;
     }
 
-    public void setDescription(DFAgentDescription desc) {
-        description = desc;
+    public void setDf(AID parent) {
+        df = parent;
     }
 
     public DFAgentDescription getDescription() {
         return description;
+    }
+
+    public void setDescription(DFAgentDescription desc) {
+        description = desc;
     }
 }

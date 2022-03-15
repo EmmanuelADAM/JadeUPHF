@@ -50,15 +50,6 @@ public class InstallMTP implements AgentAction {
     }
 
     /**
-     * Set the <code>address</code> slot of this action.
-     *
-     * @param a The address URL of the MTP endpoint to install.
-     */
-    public void setAddress(String a) {
-        address = a;
-    }
-
-    /**
      * Retrieve the value of the <code>address</code> slot of this
      * action, containing the address URL of the MTP to install.
      *
@@ -70,13 +61,12 @@ public class InstallMTP implements AgentAction {
     }
 
     /**
-     * Set the <code>container</code> slot of this action.
+     * Set the <code>address</code> slot of this action.
      *
-     * @param cid The container identifier of the container where the
-     *            new MTP is to be deployed.
+     * @param a The address URL of the MTP endpoint to install.
      */
-    public void setContainer(ContainerID cid) {
-        container = cid;
+    public void setAddress(String a) {
+        address = a;
     }
 
     /**
@@ -92,13 +82,13 @@ public class InstallMTP implements AgentAction {
     }
 
     /**
-     * Set the <code>class-name</code> slot of this action.
+     * Set the <code>container</code> slot of this action.
      *
-     * @param a The name of the Java class implementing the MTP
-     *          endpoint to install.
+     * @param cid The container identifier of the container where the
+     *            new MTP is to be deployed.
      */
-    public void setClassName(String a) {
-        className = a;
+    public void setContainer(ContainerID cid) {
+        container = cid;
     }
 
     /**
@@ -111,6 +101,16 @@ public class InstallMTP implements AgentAction {
      */
     public String getClassName() {
         return className;
+    }
+
+    /**
+     * Set the <code>class-name</code> slot of this action.
+     *
+     * @param a The name of the Java class implementing the MTP
+     *          endpoint to install.
+     */
+    public void setClassName(String a) {
+        className = a;
     }
 
 }

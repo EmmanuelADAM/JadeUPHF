@@ -36,9 +36,9 @@ import javax.swing.*;
  */
 
 public class GuiProperties {
+    public static final String ImagePath = "";
     protected static UIDefaults MyDefaults;
     protected static GuiProperties foo = new GuiProperties();
-    public static final String ImagePath = "";
 
     static {
         Object[] icons = {

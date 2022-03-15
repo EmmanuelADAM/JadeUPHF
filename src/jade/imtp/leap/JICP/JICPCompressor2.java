@@ -40,6 +40,7 @@ import java.io.ByteArrayOutputStream;
 
 /**
  * Class declaration
+ *
  * @author Dmitri Toropov - Siemens AG
  */
 
@@ -49,7 +50,6 @@ class JICPCompressor2 {
      *
      * @param sym - byte to check
      * @return true if sym is separator, false otherwise
-     *
      */
     public static boolean is_separator(byte sym) {
         return (sym <= 32) || (sym == '(') || (sym == ')') || (sym == '@') || (sym == ':') || (sym == '/') || (sym == '!');
@@ -88,7 +88,6 @@ class JICPCompressor2 {
      *
      * @param data the data to compress
      * @return compressed data
-     *
      */
     public static byte[] compress(byte[] data) {
         if (data == null) return null;
@@ -208,7 +207,6 @@ class JICPCompressor2 {
      *
      * @param data the data to compress
      * @return compressed data
-     *
      */
     public static byte[] decompress(byte[] data) {
         if (data == null) return null;

@@ -28,8 +28,9 @@ import jade.content.abs.AbsContentElement;
 import jade.content.onto.Ontology;
 
 /**
- * Base class for content language codecs that transform 
+ * Base class for content language codecs that transform
  * AbsContentElements to/from sequences of strings
+ *
  * @author Giovanni Caire - TILAB
  */
 public abstract class StringCodec extends Codec {
@@ -43,6 +44,7 @@ public abstract class StringCodec extends Codec {
 
     /**
      * Encodes a content into a string.
+     *
      * @param content the content as an abstract descriptor.
      * @return the content as a string.
      * @throws CodecException
@@ -52,8 +54,9 @@ public abstract class StringCodec extends Codec {
 
     /**
      * Encodes a content into a string using a given ontology.
-     * @param ontology the ontology 
-     * @param content the content as an abstract descriptor.
+     *
+     * @param ontology the ontology
+     * @param content  the content as an abstract descriptor.
      * @return the content as a string.
      * @throws CodecException
      */
@@ -62,6 +65,7 @@ public abstract class StringCodec extends Codec {
 
     /**
      * Decodes the content to an abstract description.
+     *
      * @param content the content as a string.
      * @return the content as an abstract description.
      * @throws CodecException
@@ -70,10 +74,11 @@ public abstract class StringCodec extends Codec {
             throws CodecException;
 
     /**
-     * Decodes the content to an abstract description using a 
+     * Decodes the content to an abstract description using a
      * given ontology.
+     *
      * @param ontology the ontology.
-     * @param content the content as a string.
+     * @param content  the content as a string.
      * @return the content as an abstract description.
      * @throws CodecException
      */

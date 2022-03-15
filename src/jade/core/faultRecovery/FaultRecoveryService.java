@@ -285,86 +285,6 @@ public class FaultRecoveryService extends BaseService {
         }
     }
 
-
-    /**
-     * Inner class MainCommandIncomingFilter.
-     * This filter is installed on a Main Container and intercepts
-     * the NEW_NODE and DEAD_NODE V-Commands
-     */
-    private class MainCommandIncomingFilter extends Filter {
-        public boolean accept(VerticalCommand cmd) {
-            String name = cmd.getName();
-            try {
-                if (name.equals(Service.NEW_NODE)) {
-                    handleNewNode((NodeDescriptor) cmd.getParams()[0]);
-                }
-                if (name.equals(Service.ADOPTED_NODE)) {
-                    // An adopted node is treated exactly as a new node
-                    handleNewNode((NodeDescriptor) cmd.getParams()[0]);
-                } else if (name.equals(Service.DEAD_NODE)) {
-                    handleDeadNode((NodeDescriptor) cmd.getParams()[0]);
-                }
-            } catch (Exception e) {
-                myLogger.log(Logger.WARNING, "Error processing command " + name + ". ", e);
-            }
-
-            // Never veto a command
-            return true;
-        }
-    } // END of inner class MainCommandIncomingFilter
-
-
-    /**
-     * Inner class MainCommandOutgoingFilter.
-     * This filter is installed on a Main Container and intercepts the
-     * NODE_UNREACHABLE and NODE_REACHABLE VCommands of the NodeMonitoringService
-     * and the ORPHAN_NODE VCommand of the UDPNodeMonitoringService.
-     */
-    private class MainCommandOutgoingFilter extends Filter {
-        public boolean accept(VerticalCommand cmd) {
-            String name = cmd.getName();
-            try {
-                switch (name) {
-                    case NodeMonitoringService.NODE_UNREACHABLE -> handleNodeUnreachable((Node) cmd.getParams()[0]);
-                    case NodeMonitoringService.NODE_REACHABLE -> handleNodeReachable((Node) cmd.getParams()[0]);
-                    case UDPNodeMonitoringService.ORPHAN_NODE -> handleOrphanNode((String) cmd.getParams()[0]);
-                }
-            } catch (Exception e) {
-                myLogger.log(Logger.WARNING, "Error processing command " + name + ". ", e);
-            }
-
-            // Never veto a command
-            return true;
-        }
-    } // END of inner class MainCommandOutgoingFilter
-
-
-    /**
-     * Inner class ContainerCommandIncomingFilter.
-     * This filter is installed on a peripheral Container and intercepts
-     * the REATTACHED V-Commands
-     */
-    private class ContainerCommandIncomingFilter extends Filter {
-        public boolean accept(VerticalCommand cmd) {
-            String name = cmd.getName();
-            try {
-                if (name.equals(Service.REATTACHED)) {
-                    handleReattached();
-                }
-            } catch (Exception e) {
-                myLogger.log(Logger.WARNING, "Error processing command " + name + ". ", e);
-            }
-
-            // Never veto a command
-            return true;
-        }
-    } // END of inner class ContainerCommandIncomingFilter
-
-
-    ////////////////////////////////////////////
-    // Methods called by the filters
-    ////////////////////////////////////////////
-
     /**
      * Add a newly born node to the persistent storage
      */
@@ -397,6 +317,11 @@ public class FaultRecoveryService extends BaseService {
             myLogger.log(Logger.FINE, "Node " + node.getName() + " marked as unreachable.");
         }
     }
+
+
+    ////////////////////////////////////////////
+    // Methods called by the filters
+    ////////////////////////////////////////////
 
     /**
      * Remove the unreachable mark from a node in the persistent storage
@@ -479,6 +404,77 @@ public class FaultRecoveryService extends BaseService {
         t.start();
     }
 
+    /**
+     * Inner class MainCommandIncomingFilter.
+     * This filter is installed on a Main Container and intercepts
+     * the NEW_NODE and DEAD_NODE V-Commands
+     */
+    private class MainCommandIncomingFilter extends Filter {
+        public boolean accept(VerticalCommand cmd) {
+            String name = cmd.getName();
+            try {
+                if (name.equals(Service.NEW_NODE)) {
+                    handleNewNode((NodeDescriptor) cmd.getParams()[0]);
+                }
+                if (name.equals(Service.ADOPTED_NODE)) {
+                    // An adopted node is treated exactly as a new node
+                    handleNewNode((NodeDescriptor) cmd.getParams()[0]);
+                } else if (name.equals(Service.DEAD_NODE)) {
+                    handleDeadNode((NodeDescriptor) cmd.getParams()[0]);
+                }
+            } catch (Exception e) {
+                myLogger.log(Logger.WARNING, "Error processing command " + name + ". ", e);
+            }
+
+            // Never veto a command
+            return true;
+        }
+    } // END of inner class MainCommandIncomingFilter
+
+    /**
+     * Inner class MainCommandOutgoingFilter.
+     * This filter is installed on a Main Container and intercepts the
+     * NODE_UNREACHABLE and NODE_REACHABLE VCommands of the NodeMonitoringService
+     * and the ORPHAN_NODE VCommand of the UDPNodeMonitoringService.
+     */
+    private class MainCommandOutgoingFilter extends Filter {
+        public boolean accept(VerticalCommand cmd) {
+            String name = cmd.getName();
+            try {
+                switch (name) {
+                    case NodeMonitoringService.NODE_UNREACHABLE -> handleNodeUnreachable((Node) cmd.getParams()[0]);
+                    case NodeMonitoringService.NODE_REACHABLE -> handleNodeReachable((Node) cmd.getParams()[0]);
+                    case UDPNodeMonitoringService.ORPHAN_NODE -> handleOrphanNode((String) cmd.getParams()[0]);
+                }
+            } catch (Exception e) {
+                myLogger.log(Logger.WARNING, "Error processing command " + name + ". ", e);
+            }
+
+            // Never veto a command
+            return true;
+        }
+    } // END of inner class MainCommandOutgoingFilter
+
+    /**
+     * Inner class ContainerCommandIncomingFilter.
+     * This filter is installed on a peripheral Container and intercepts
+     * the REATTACHED V-Commands
+     */
+    private class ContainerCommandIncomingFilter extends Filter {
+        public boolean accept(VerticalCommand cmd) {
+            String name = cmd.getName();
+            try {
+                if (name.equals(Service.REATTACHED)) {
+                    handleReattached();
+                }
+            } catch (Exception e) {
+                myLogger.log(Logger.WARNING, "Error processing command " + name + ". ", e);
+            }
+
+            // Never veto a command
+            return true;
+        }
+    } // END of inner class ContainerCommandIncomingFilter
 
     /**
      * Inner class NodeSerializer

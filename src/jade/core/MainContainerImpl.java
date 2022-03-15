@@ -93,20 +93,15 @@ public class MainContainerImpl implements MainContainer, AgentManager {
     private final Vector<Object> replicatedAgentClasses;
     private final boolean ignoreChildNodesOnShutdown;
     private final boolean verboseShutdown;
-
-    private ContainerID localContainerID;
     private final PlatformManagerImpl myPlatformManager;
-
     private final CommandProcessor myCommandProcessor;
-
     private final List<Listener> platformListeners = new LinkedList<>();
     private final List<String> platformAddresses = new LinkedList<>();
     private final List<AID> agentTools = new LinkedList<>();
-
     private final ContainerTable containers = new ContainerTable();
     private final GADT platformAgents = new GADT();
-
     private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    private ContainerID localContainerID;
 
     public MainContainerImpl(Profile p, PlatformManagerImpl pm) throws ProfileException {
         myCommandProcessor = p.getCommandProcessor();

@@ -41,6 +41,7 @@ import System.Windows.Forms.*;
 /**
  * This is the PopupMenu that will appear if the user click
  * on the canvas of messages.
+ *
  * @see PopupAgent
  */
 
@@ -55,12 +56,12 @@ public class PopupMessage
 
     //#DOTNET_EXCLUDE_BEGIN
     private final JMenuItem tmp;
+    private final ViewMessage viewMessage;
     //#DOTNET_EXCLUDE_END
  /*#DOTNET_INCLUDE_BEGIN
  private MenuItem tmp;
  #DOTNET_INCLUDE_END*/
     private MainWindow mWnd;
-    private final ViewMessage viewMessage;
 
     public PopupMessage(MainWindow mWnd) {
         super();

@@ -38,17 +38,67 @@ import javax.swing.text.Segment;
 
 public class ACLSLTokenMarker {
 
+    // public members
+    public final static byte S_ONE = ACLToken.INTERNAL_FIRST;
+    public final static byte S_TWO = (byte) (ACLToken.INTERNAL_FIRST + 1);
+    public final static byte S_END = (byte) (ACLToken.INTERNAL_FIRST + 2);
+    private static KeywordMap aclSLKeywords;
+    // private members
+    private final KeywordMap keywords;
+    /**
+     * The first token in the list. This should be used as the return value
+     * from <code>markTokens()</code>.
+     */
+    protected ACLToken firstToken;
+    /**
+     * The last token in the list. New tokens are added here. This should be
+     * set to null before a new line is to be tokenized.
+     */
+    protected ACLToken lastToken;
+    /**
+     * An array for storing information about lines. It is enlarged and shrunk
+     * automatically by the <code>insertLines()</code> and <code>deleteLines()</code>
+     * methods.
+     */
+    protected LineInfo[] lineInfo;
+    /**
+     * The length of the <code>lineInfo</code> array.
+     */
+    protected int length;
+
+
+    /**
+     *  Creates a new <code>TokenMarker</code>. This DOES NOT create a lineInfo
+     *  array; an initial call to <code>insertLines()</code> does that.
+     *
+     * @param  index  Description of Parameter
+     */
+    /**
+     * The last tokenized line.
+     */
+    protected int lastLine;
+    /**
+     * True if the next line should be painted.
+     */
+    protected boolean nextLineRequested;
+    private byte token;
+    private int lastOffset;
+    private int lastKeyword;
+    private char matchChar;
+    private boolean matchCharBracket;
+    private boolean matchSpacesAllowed;
+
     public ACLSLTokenMarker() {
         this(getKeywords());
         lastLine = -1;
     }
 
+    // protected members
 
     public ACLSLTokenMarker(KeywordMap keywords) {
         lastLine = -1;
         this.keywords = keywords;
     }
-
 
     private static KeywordMap getKeywords() {
         if (aclSLKeywords == null) {
@@ -98,7 +148,6 @@ public class ACLSLTokenMarker {
         return aclSLKeywords;
     }
 
-
     /**
      * Returns true if the next line should be repainted. This will return true
      * after a line has been tokenized that starts a multiline token that
@@ -109,7 +158,6 @@ public class ACLSLTokenMarker {
     public boolean isNextLineRequested() {
         return nextLineRequested;
     }
-
 
     public ACLToken markTokens(Segment line, int lineIndex) {
         if (lineIndex >= length) {
@@ -174,7 +222,6 @@ public class ACLSLTokenMarker {
         return firstToken;
     }
 
-
     /**
      * Returns if the token marker supports tokens that span multiple lines. If
      * this is true, the object using this token marker is required to pass all
@@ -189,7 +236,6 @@ public class ACLSLTokenMarker {
     public boolean supportsMultilineTokens() {
         return true;
     }
-
 
     /**
      * Informs the token marker that lines have been inserted into the
@@ -214,7 +260,6 @@ public class ACLSLTokenMarker {
 
     }
 
-
     /**
      * Informs the token marker that line have been deleted from the document.
      * This removes the lines in question from the <code>lineInfo</code> array.
@@ -231,7 +276,6 @@ public class ACLSLTokenMarker {
         System.arraycopy(lineInfo, len, lineInfo,
                 index, lineInfo.length - len);
     }
-
 
     public byte markTokensImpl(byte _token, Segment line, int lineIndex) {
         char[] array = line.array;
@@ -679,14 +723,6 @@ public class ACLSLTokenMarker {
         return token;
     }
 
-
-    /**
-     *  Creates a new <code>TokenMarker</code>. This DOES NOT create a lineInfo
-     *  array; an initial call to <code>insertLines()</code> does that.
-     *
-     * @param  index  Description of Parameter
-     */
-
     /**
      * Creates a new <code>TokenMarker</code>. This DOES NOT create a lineInfo
      * array; an initial call to <code>insertLines()</code> does that.
@@ -731,7 +767,6 @@ public class ACLSLTokenMarker {
         }
     }
 
-
     /**
      * Adds a token to the token list.
      *
@@ -763,7 +798,6 @@ public class ACLSLTokenMarker {
             lastToken.id = id;
         }
     }
-
 
     private boolean doKeyword(Segment line, int i, char c) {
         int i1 = i + 1;
@@ -807,9 +841,14 @@ public class ACLSLTokenMarker {
         return false;
     }
 
-
     //  ***EOF***
     private static class KeywordMap {
+        private final Keyword[] map;
+        // protected members
+        protected int mapLength;
+        private boolean ignoreCase;
+
+
         /**
          * Creates a new <code>KeywordMap</code>.
          *
@@ -834,7 +873,6 @@ public class ACLSLTokenMarker {
             map = new Keyword[mapLength];
         }
 
-
         /**
          * Returns true if the keyword map is set to be case insensitive, false
          * otherwise.
@@ -845,7 +883,6 @@ public class ACLSLTokenMarker {
             return ignoreCase;
         }
 
-
         /**
          * Sets if the keyword map should be case insensitive.
          *
@@ -855,7 +892,6 @@ public class ACLSLTokenMarker {
         public void setIgnoreCase(boolean ignoreCase) {
             this.ignoreCase = ignoreCase;
         }
-
 
         /**
          * Looks up a key.
@@ -884,7 +920,6 @@ public class ACLSLTokenMarker {
             return ACLToken.NULL;
         }
 
-
         /**
          * Adds a key-value mapping.
          *
@@ -896,13 +931,11 @@ public class ACLSLTokenMarker {
             map[key] = new Keyword(keyword.toCharArray(), id, map[key]);
         }
 
-
         protected int getStringMapKey(String s) {
             return (Character.toUpperCase(s.charAt(0)) +
                     Character.toUpperCase(s.charAt(s.length() - 1)))
                     % mapLength;
         }
-
 
         protected int getSegmentMapKey(Segment s, int off, int len) {
             return (Character.toUpperCase(s.array[off]) +
@@ -912,25 +945,16 @@ public class ACLSLTokenMarker {
 
         // private members
         class Keyword {
+            public char[] keyword;
+            public byte id;
+            public Keyword next;
             public Keyword(char[] keyword, byte id, Keyword next) {
                 this.keyword = keyword;
                 this.id = id;
                 this.next = next;
             }
-
-
-            public char[] keyword;
-            public byte id;
-            public Keyword next;
         }
-
-        // protected members
-        protected int mapLength;
-
-        private final Keyword[] map;
-        private boolean ignoreCase;
     }
-
 
     /**
      * Inner class for storing information about tokenized lines.
@@ -940,11 +964,22 @@ public class ACLSLTokenMarker {
      */
     public class LineInfo {
         /**
+         * The id of the last token of the line.
+         */
+        public byte token;
+        /**
+         * This is for use by the token marker implementations themselves. It can
+         * be used to store anything that is an object and that needs to exist on
+         * a per-line basis.
+         */
+        public Object obj;
+
+
+        /**
          * Creates a new LineInfo object with token = Token.NULL and obj = null.
          */
         public LineInfo() {
         }
-
 
         /**
          * Creates a new LineInfo object with the specified parameters.
@@ -956,73 +991,7 @@ public class ACLSLTokenMarker {
             this.token = token;
             this.obj = obj;
         }
-
-
-        /**
-         * The id of the last token of the line.
-         */
-        public byte token;
-
-        /**
-         * This is for use by the token marker implementations themselves. It can
-         * be used to store anything that is an object and that needs to exist on
-         * a per-line basis.
-         */
-        public Object obj;
     }
-
-
-    // public members
-    public final static byte S_ONE = ACLToken.INTERNAL_FIRST;
-    public final static byte S_TWO = (byte) (ACLToken.INTERNAL_FIRST + 1);
-    public final static byte S_END = (byte) (ACLToken.INTERNAL_FIRST + 2);
-
-    private static KeywordMap aclSLKeywords;
-
-    // protected members
-
-    /**
-     * The first token in the list. This should be used as the return value
-     * from <code>markTokens()</code>.
-     */
-    protected ACLToken firstToken;
-
-    /**
-     * The last token in the list. New tokens are added here. This should be
-     * set to null before a new line is to be tokenized.
-     */
-    protected ACLToken lastToken;
-
-    /**
-     * An array for storing information about lines. It is enlarged and shrunk
-     * automatically by the <code>insertLines()</code> and <code>deleteLines()</code>
-     * methods.
-     */
-    protected LineInfo[] lineInfo;
-
-    /**
-     * The length of the <code>lineInfo</code> array.
-     */
-    protected int length;
-
-    /**
-     * The last tokenized line.
-     */
-    protected int lastLine;
-
-    /**
-     * True if the next line should be painted.
-     */
-    protected boolean nextLineRequested;
-
-    // private members
-    private final KeywordMap keywords;
-    private byte token;
-    private int lastOffset;
-    private int lastKeyword;
-    private char matchChar;
-    private boolean matchCharBracket;
-    private boolean matchSpacesAllowed;
 
 }
 //  ***EOF***

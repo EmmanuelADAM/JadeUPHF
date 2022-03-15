@@ -37,25 +37,13 @@ import java.util.Map;
 public class BackEndManager {
     // The singleton BackEndManager
     private static BackEndManager theInstance;
-
-
-    // The IMTP manager, used to access IMTP-dependent functionalities
-    protected IMTPManager myIMTPManager;
-
     // The node acting as parent
     private final Node myNode;
-
     // The child nodes
     private final Map<String, NodeDescriptor> children = new HashMap<>();
-
     private final Logger myLogger = Logger.getMyLogger(getClass().getName());
-
-    public static BackEndManager getInstance(Profile p) throws ProfileException {
-        if (theInstance == null) {
-            theInstance = new BackEndManager(p);
-        }
-        return theInstance;
-    }
+    // The IMTP manager, used to access IMTP-dependent functionalities
+    protected IMTPManager myIMTPManager;
 
     private BackEndManager(Profile p) throws ProfileException {
         if (p != null) {
@@ -70,6 +58,12 @@ public class BackEndManager {
         }
     }
 
+    public static BackEndManager getInstance(Profile p) throws ProfileException {
+        if (theInstance == null) {
+            theInstance = new BackEndManager(p);
+        }
+        return theInstance;
+    }
 
     public Node getNode() {
         return myNode;

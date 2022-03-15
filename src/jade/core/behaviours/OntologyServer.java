@@ -80,18 +80,15 @@ public class OntologyServer extends CyclicBehaviour {
 
     private final Object serverDelegate;
     private final Ontology onto;
-    private Codec codec;
     private final int[] servedPerformatives;
-
+    private final Set<Integer> performativesRequiringReply = new HashSet<>();
+    protected Logger myLogger = Logger.getMyLogger(getClass().getName());
+    private Codec codec;
     private ConversationList ignoredConversations;
     private boolean printFullUnexpectedMessages = true;
     private MessageTemplate template;
-    private final Set<Integer> performativesRequiringReply = new HashSet<>();
-
     private transient Map<String, Method> cachedMethods = new HashMap<>();
     private ContentElement receivedContentElement;
-
-    protected Logger myLogger = Logger.getMyLogger(getClass().getName());
 
     public OntologyServer(Agent a, Ontology onto, int performative) {
         this(a, onto, new int[]{performative}, null);
@@ -144,6 +141,10 @@ public class OntologyServer extends CyclicBehaviour {
         this.template = template;
     }
 
+    public ConversationList getIgnoredConversations() {
+        return ignoredConversations;
+    }
+
     /**
      * Set the <code>ConversationList</code> used by this OntologyServer
      * to determine which conversations to ignore (if any).
@@ -154,10 +155,6 @@ public class OntologyServer extends CyclicBehaviour {
         if (ignoredConversations == null) {
             ignoredConversations = l;
         }
-    }
-
-    public ConversationList getIgnoredConversations() {
-        return ignoredConversations;
     }
 
     /**

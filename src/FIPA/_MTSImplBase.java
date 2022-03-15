@@ -12,25 +12,24 @@ import org.omg.CORBA.*;
 import java.util.Hashtable;
 
 public abstract class _MTSImplBase extends org.omg.CORBA.DynamicImplementation implements MTS {
+    // Type strings for this class and its superclases
+    private static final String[] _type_ids = {
+            "IDL:FIPA/MTS:1.0"
+    };
+    private static final java.util.Dictionary<String, Integer> _methods = new Hashtable<>();
+
+    static {
+        _methods.put("message", 0);
+    }
+
     // Constructor
     public _MTSImplBase() {
         super();
     }
 
-    // Type strings for this class and its superclases
-    private static final String[] _type_ids = {
-            "IDL:FIPA/MTS:1.0"
-    };
-
     @Deprecated
     public String[] _ids() {
         return _type_ids.clone();
-    }
-
-    private static final java.util.Dictionary<String, Integer> _methods = new Hashtable<>();
-
-    static {
-        _methods.put("message", 0);
     }
 
     // DSI Dispatch call

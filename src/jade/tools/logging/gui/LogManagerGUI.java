@@ -193,7 +193,7 @@ public class LogManagerGUI extends JFrame {
     /////////////////////////////////////////////////////
     void startManagingLog() {
         AgentTree.Node node = agentTree.getSelectedNode();
-        if (node != null && node instanceof AgentTree.ContainerNode) {
+        if (node instanceof AgentTree.ContainerNode) {
             String containerName = node.getName();
             System.out.println("Container name = " + containerName);
             ContainerLogWindow window = managedContainers.get(containerName);
@@ -231,7 +231,7 @@ public class LogManagerGUI extends JFrame {
 
     void stopManagingLog() {
         AgentTree.Node node = agentTree.getSelectedNode();
-        if (node != null && node instanceof AgentTree.ContainerNode) {
+        if (node instanceof AgentTree.ContainerNode) {
             String containerName = node.getName();
             final ContainerLogWindow window = managedContainers.remove(containerName);
             if (window != null) {

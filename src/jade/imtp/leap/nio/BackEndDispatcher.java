@@ -20,6 +20,12 @@ import java.util.Properties;
  */
 public class BackEndDispatcher implements NIOMediator, BEConnectionManager, Dispatcher {
 
+    private final Object writeLock = new Object();
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    // Local variable only used in the kill() method
+    private final Object shutdownLock = new Object();
+    protected InputManager inpManager;
+    protected OutputManager outManager;
     private long responseTimeoutOffset;
     private double responseTimeoutMultiplicativeFactor;
     private long keepAliveTime;
@@ -30,18 +36,11 @@ public class BackEndDispatcher implements NIOMediator, BEConnectionManager, Disp
     private boolean peerActive = true;
     private boolean connectionDropped = false;
     private long dropTimeStamp = -1;
-
     private JICPMediatorManager myMediatorManager;
     private String myID;
     private Properties myProperties;
     private BackEndContainer myContainer = null;
-
     private Connection myConnection = null;
-    private final Object writeLock = new Object();
-    protected InputManager inpManager;
-    protected OutputManager outManager;
-
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
 
     /**
      * Retrieve the ID of this mediator. Returns null if this mediator
@@ -108,7 +107,7 @@ public class BackEndDispatcher implements NIOMediator, BEConnectionManager, Disp
             // Keep default
         }
         myLogger.log(Logger.CONFIG, "Next command for FE will have sessionID " + inpCnt);
-		
+
 		/* lastSid
 		int lastSid = 0x0f;
 		try {
@@ -150,9 +149,6 @@ public class BackEndDispatcher implements NIOMediator, BEConnectionManager, Disp
             throw new ICPException("Error creating profile");
         }
     }
-
-    // Local variable only used in the kill() method
-    private final Object shutdownLock = new Object();
 
     /**
      * Kill the above container.
@@ -502,18 +498,42 @@ public class BackEndDispatcher implements NIOMediator, BEConnectionManager, Disp
         myProperties.put(BEManagementHelper.CONNECTED, (isConnected() ? "true" : "false"));
     }
 
+    private synchronized void setExpirationDeadline() {
+        expirationDeadline = System.currentTimeMillis() + maxDisconnectionTime;
+    }
+
+    private synchronized boolean checkMaxDisconnectionTime(long currentTime) {
+        return (!isConnected()) && (currentTime > expirationDeadline);
+    }
+
+    private boolean checkTerminatedInfo(JICPPacket pkt) {
+        if ((pkt.getInfo() & JICPProtocol.TERMINATED_INFO) != 0) {
+            // In some mysterious cases we receive dirty data from the network
+            // If the second byte has bit 7 = 1, we may confuse such dirty data with a
+            // termination packet --> Check that the packet is valid
+            int type = pkt.getType();
+            if (type == JICPProtocol.COMMAND_TYPE || type == JICPProtocol.RESPONSE_TYPE || type == JICPProtocol.CONNECT_MEDIATOR_TYPE) {
+                peerActive = false;
+                myLogger.log(Logger.INFO, myID + ": Peer termination notification received");
+                if (pkt.getType() == JICPProtocol.COMMAND_TYPE) {
+                    // Spontaneous FE termination. Unblock any Thread waiting for a response. It will behave as if the response timeout was expired
+                    inpManager.notifyIncomingResponseReceived(null);
+                }
+            }
+        }
+        return peerActive;
+    }
 
     /**
      * Inner class InputManager.
      * This class manages the delivery of commands to the FrontEnd
      */
     protected class InputManager {
+        private final FrontEndStub myStub;
         private boolean dispatching = false;
         private boolean waitingForFlush;
         private JICPPacket lastIncomingResponse;
-
         private int inpCnt;
-        private final FrontEndStub myStub;
 
         InputManager(int c, FrontEndStub s) {
             inpCnt = c;
@@ -637,16 +657,15 @@ public class BackEndDispatcher implements NIOMediator, BEConnectionManager, Disp
         }
     } // END of inner class InputManager
 
-
     /**
      * Inner class OutputManager
      * This class manages the reception of commands and keep-alive
      * packets from the FrontEnd.
      */
     protected class OutputManager {
+        private final BackEndSkel mySkel;
         private JICPPacket lastResponse;
         private int lastSid;
-        private final BackEndSkel mySkel;
 
         OutputManager(int n, BackEndSkel s) {
             lastSid = n;
@@ -687,32 +706,5 @@ public class BackEndDispatcher implements NIOMediator, BEConnectionManager, Disp
             return new JICPPacket(JICPProtocol.RESPONSE_TYPE, JICPProtocol.DEFAULT_INFO, null);
         }
     } // END of inner class OutputManager
-
-
-    private synchronized void setExpirationDeadline() {
-        expirationDeadline = System.currentTimeMillis() + maxDisconnectionTime;
-    }
-
-    private synchronized boolean checkMaxDisconnectionTime(long currentTime) {
-        return (!isConnected()) && (currentTime > expirationDeadline);
-    }
-
-    private boolean checkTerminatedInfo(JICPPacket pkt) {
-        if ((pkt.getInfo() & JICPProtocol.TERMINATED_INFO) != 0) {
-            // In some mysterious cases we receive dirty data from the network
-            // If the second byte has bit 7 = 1, we may confuse such dirty data with a
-            // termination packet --> Check that the packet is valid
-            int type = pkt.getType();
-            if (type == JICPProtocol.COMMAND_TYPE || type == JICPProtocol.RESPONSE_TYPE || type == JICPProtocol.CONNECT_MEDIATOR_TYPE) {
-                peerActive = false;
-                myLogger.log(Logger.INFO, myID + ": Peer termination notification received");
-                if (pkt.getType() == JICPProtocol.COMMAND_TYPE) {
-                    // Spontaneous FE termination. Unblock any Thread waiting for a response. It will behave as if the response timeout was expired
-                    inpManager.notifyIncomingResponseReceived(null);
-                }
-            }
-        }
-        return peerActive;
-    }
 }
 

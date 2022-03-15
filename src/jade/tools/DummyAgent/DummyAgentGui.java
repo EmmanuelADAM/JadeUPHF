@@ -48,6 +48,8 @@ import java.util.Date;
  * @version $Date: 2011-06-06 09:19:06 +0200(lun, 06 giu 2011) $ $Revision: 6415 $
  */
 class DummyAgentGui extends JFrame {
+    //logging
+    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
     DummyAgent myAgent;
     AID agentName;
     AclGui currentMsgGui;
@@ -56,9 +58,6 @@ class DummyAgentGui extends JFrame {
     File currentDir;
     String logoDummy = "images/dummyagent.gif";
     DummyAgentGui thisGUI;
-
-    //logging
-    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
 
     // Constructor
     DummyAgentGui(DummyAgent a) {

@@ -46,11 +46,6 @@ import java.util.*;
  * @author Giovanni Caire - TILab
  **/
 abstract class Initiator extends FSMBehaviour {
-    //#APIDOC_EXCLUDE_BEGIN
-    protected final String INITIATION_K = "__initiation" + hashCode();
-    protected final String ALL_INITIATIONS_K = "__all-initiations" + hashCode();
-    protected final String REPLY_K = "__reply" + hashCode();
-
     // FSM states names
     protected static final String PREPARE_INITIATIONS = "Prepare-initiations";
     protected static final String SEND_INITIATIONS = "Send-initiations";
@@ -61,7 +56,11 @@ abstract class Initiator extends FSMBehaviour {
     protected static final String HANDLE_OUT_OF_SEQ = "Handle-out-of-seq";
     protected static final String CHECK_SESSIONS = "Check-sessions";
     protected static final String DUMMY_FINAL = "Dummy-final";
-
+    private static int cnt = 0;
+    //#APIDOC_EXCLUDE_BEGIN
+    protected final String INITIATION_K = "__initiation" + hashCode();
+    protected final String ALL_INITIATIONS_K = "__all-initiations" + hashCode();
+    protected final String REPLY_K = "__reply" + hashCode();
     // This maps the AID of each responder to a Session object
     // holding the status of the protocol as far as that responder
     // is concerned. Sessions are protocol-specific
@@ -70,16 +69,7 @@ abstract class Initiator extends FSMBehaviour {
     protected MsgReceiver replyReceiver;
     // The MessageTemplate used by the replyReceiver
     protected MessageTemplate replyTemplate = null;
-
     private ACLMessage initiation;
-
-    /**
-     * Constructs an <code>Initiator</code> behaviour
-     * see #AchieveREInitiator(Agent, ACLMessage, HashMap)
-     **/
-    protected Initiator(Agent a, ACLMessage initiation) {
-        this(a, initiation, new HashMap<>(), new HashMap<>());
-    }
 
     /**
      * Constructs an <code>Initiator</code> behaviour
@@ -91,156 +81,156 @@ abstract class Initiator extends FSMBehaviour {
      * deprecated
 
     protected Initiator(Agent a, ACLMessage initiation, HashMap<String, List<ACLMessage>> mapMessagesList) {
-        super(a);
+    super(a);
 
-        setMapMessagesList(mapMessagesList);
-        this.initiation = initiation;
+    setMapMessagesList(mapMessagesList);
+    this.initiation = initiation;
 
-        // Register the FSM transitions
-        registerDefaultTransition(PREPARE_INITIATIONS, SEND_INITIATIONS);
-        registerTransition(SEND_INITIATIONS, DUMMY_FINAL, 0); // Exit the protocol if no initiation message is sent
-        registerDefaultTransition(SEND_INITIATIONS, RECEIVE_REPLY);
-        registerTransition(RECEIVE_REPLY, CHECK_SESSIONS, MsgReceiver.TIMEOUT_EXPIRED);
-        registerTransition(RECEIVE_REPLY, CHECK_SESSIONS, MsgReceiver.INTERRUPTED);
-        registerDefaultTransition(RECEIVE_REPLY, CHECK_IN_SEQ);
-        registerTransition(CHECK_IN_SEQ, HANDLE_NOT_UNDERSTOOD, ACLMessage.NOT_UNDERSTOOD);
-        registerTransition(CHECK_IN_SEQ, HANDLE_FAILURE, ACLMessage.FAILURE);
-        registerDefaultTransition(CHECK_IN_SEQ, HANDLE_OUT_OF_SEQ);
-        registerDefaultTransition(HANDLE_NOT_UNDERSTOOD, CHECK_SESSIONS);
-        registerDefaultTransition(HANDLE_FAILURE, CHECK_SESSIONS);
-        registerDefaultTransition(HANDLE_OUT_OF_SEQ, RECEIVE_REPLY);
-        registerDefaultTransition(CHECK_SESSIONS, RECEIVE_REPLY, getToBeReset());
+    // Register the FSM transitions
+    registerDefaultTransition(PREPARE_INITIATIONS, SEND_INITIATIONS);
+    registerTransition(SEND_INITIATIONS, DUMMY_FINAL, 0); // Exit the protocol if no initiation message is sent
+    registerDefaultTransition(SEND_INITIATIONS, RECEIVE_REPLY);
+    registerTransition(RECEIVE_REPLY, CHECK_SESSIONS, MsgReceiver.TIMEOUT_EXPIRED);
+    registerTransition(RECEIVE_REPLY, CHECK_SESSIONS, MsgReceiver.INTERRUPTED);
+    registerDefaultTransition(RECEIVE_REPLY, CHECK_IN_SEQ);
+    registerTransition(CHECK_IN_SEQ, HANDLE_NOT_UNDERSTOOD, ACLMessage.NOT_UNDERSTOOD);
+    registerTransition(CHECK_IN_SEQ, HANDLE_FAILURE, ACLMessage.FAILURE);
+    registerDefaultTransition(CHECK_IN_SEQ, HANDLE_OUT_OF_SEQ);
+    registerDefaultTransition(HANDLE_NOT_UNDERSTOOD, CHECK_SESSIONS);
+    registerDefaultTransition(HANDLE_FAILURE, CHECK_SESSIONS);
+    registerDefaultTransition(HANDLE_OUT_OF_SEQ, RECEIVE_REPLY);
+    registerDefaultTransition(CHECK_SESSIONS, RECEIVE_REPLY, getToBeReset());
 
-        // Create and register the states that make up the FSM
-        Behaviour b;
-        // PREPARE_INITIATIONS
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895818000L;
+    // Create and register the states that make up the FSM
+    Behaviour b;
+    // PREPARE_INITIATIONS
+    b = new OneShotBehaviour(myAgent) {
+    @Serial private static final long serialVersionUID = 3487495895818000L;
 
-            public void action() {
-                var mapMessages = getMapMessagesList();
-                var allInitiations = mapMessages.get(ALL_INITIATIONS_K);
-                if (allInitiations == null || allInitiations.size() == 0) {
-                    allInitiations = prepareInitiations(getMapMessages().get(INITIATION_K));
-                    mapMessages.put(ALL_INITIATIONS_K, allInitiations);
-                }
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerFirstState(b, PREPARE_INITIATIONS);
-
-        // SEND_INITIATIONS
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895818001L;
-
-            public void action() {
-                var allInitiations = getMapMessagesList().get(ALL_INITIATIONS_K);
-                if (allInitiations != null) {
-                    sendInitiations(allInitiations);
-                }
-            }
-
-            public int onEnd() {
-                return mapSessions.size();
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, SEND_INITIATIONS);
-
-        // RECEIVE_REPLY
-        //TODO: THE BUG IS HERE !!!!! 2022-02-28
-        replyReceiver = new MsgReceiver(myAgent, null, MsgReceiver.INFINITE, getMapMessagesList(), REPLY_K);
-        registerState(replyReceiver, RECEIVE_REPLY);
-
-        // CHECK_IN_SEQ
-        b = new OneShotBehaviour(myAgent) {
-            int ret;
-            @Serial
-            private static final long serialVersionUID = 3487495895818002L;
-
-            public void action() {
-                ACLMessage reply = getMapMessages().get(REPLY_K);
-                if (checkInSequence(reply)) {
-                    ret = reply.getPerformative();
-                } else {
-                    ret = -1;
-                }
-            }
-
-            public int onEnd() {
-                return ret;
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, CHECK_IN_SEQ);
-
-        // HANDLE_NOT_UNDERSTOOD
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895818005L;
-
-            public void action() {
-                handleNotUnderstood(getMapMessages().get(REPLY_K));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_NOT_UNDERSTOOD);
-
-        // HANDLE_FAILURE
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895818007L;
-
-            public void action() {
-                handleFailure(getMapMessages().get(REPLY_K));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_FAILURE);
-
-        // HANDLE_OUT_OF_SEQ
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895818008L;
-
-            public void action() {
-                handleOutOfSequence(getMapMessages().get(REPLY_K));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_OUT_OF_SEQ);
-
-        // CHECK_SESSIONS
-        b = new OneShotBehaviour(myAgent) {
-            int ret;
-            @Serial
-            private static final long serialVersionUID = 3487495895818009L;
-
-            public void action() {
-                ACLMessage reply = getMapMessages().get(REPLY_K);
-                ret = checkSessions(reply);
-            }
-
-            public int onEnd() {
-                return ret;
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, CHECK_SESSIONS);
-
-        // DUMMY_FINAL
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895818010L;
-
-            public void action() {
-            }
-        };
-        registerLastState(b, DUMMY_FINAL);
+    public void action() {
+    var mapMessages = getMapMessagesList();
+    var allInitiations = mapMessages.get(ALL_INITIATIONS_K);
+    if (allInitiations == null || allInitiations.size() == 0) {
+    allInitiations = prepareInitiations(getMapMessages().get(INITIATION_K));
+    mapMessages.put(ALL_INITIATIONS_K, allInitiations);
     }
-*/
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerFirstState(b, PREPARE_INITIATIONS);
+
+    // SEND_INITIATIONS
+    b = new OneShotBehaviour(myAgent) {
+    @Serial private static final long serialVersionUID = 3487495895818001L;
+
+    public void action() {
+    var allInitiations = getMapMessagesList().get(ALL_INITIATIONS_K);
+    if (allInitiations != null) {
+    sendInitiations(allInitiations);
+    }
+    }
+
+    public int onEnd() {
+    return mapSessions.size();
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, SEND_INITIATIONS);
+
+    // RECEIVE_REPLY
+    //TODO: THE BUG IS HERE !!!!! 2022-02-28
+    replyReceiver = new MsgReceiver(myAgent, null, MsgReceiver.INFINITE, getMapMessagesList(), REPLY_K);
+    registerState(replyReceiver, RECEIVE_REPLY);
+
+    // CHECK_IN_SEQ
+    b = new OneShotBehaviour(myAgent) {
+    int ret;
+     @Serial private static final long serialVersionUID = 3487495895818002L;
+
+     public void action() {
+     ACLMessage reply = getMapMessages().get(REPLY_K);
+     if (checkInSequence(reply)) {
+     ret = reply.getPerformative();
+     } else {
+     ret = -1;
+     }
+     }
+
+     public int onEnd() {
+     return ret;
+     }
+     };
+     b.setMapMessagesList(getMapMessagesList());
+     registerState(b, CHECK_IN_SEQ);
+
+     // HANDLE_NOT_UNDERSTOOD
+     b = new OneShotBehaviour(myAgent) {
+     @Serial private static final long serialVersionUID = 3487495895818005L;
+
+     public void action() {
+     handleNotUnderstood(getMapMessages().get(REPLY_K));
+     }
+     };
+     b.setMapMessagesList(getMapMessagesList());
+     registerState(b, HANDLE_NOT_UNDERSTOOD);
+
+     // HANDLE_FAILURE
+     b = new OneShotBehaviour(myAgent) {
+     @Serial private static final long serialVersionUID = 3487495895818007L;
+
+     public void action() {
+     handleFailure(getMapMessages().get(REPLY_K));
+     }
+     };
+     b.setMapMessagesList(getMapMessagesList());
+     registerState(b, HANDLE_FAILURE);
+
+     // HANDLE_OUT_OF_SEQ
+     b = new OneShotBehaviour(myAgent) {
+     @Serial private static final long serialVersionUID = 3487495895818008L;
+
+     public void action() {
+     handleOutOfSequence(getMapMessages().get(REPLY_K));
+     }
+     };
+     b.setMapMessagesList(getMapMessagesList());
+     registerState(b, HANDLE_OUT_OF_SEQ);
+
+     // CHECK_SESSIONS
+     b = new OneShotBehaviour(myAgent) {
+     int ret;
+     @Serial private static final long serialVersionUID = 3487495895818009L;
+
+     public void action() {
+     ACLMessage reply = getMapMessages().get(REPLY_K);
+     ret = checkSessions(reply);
+     }
+
+     public int onEnd() {
+     return ret;
+     }
+     };
+     b.setMapMessagesList(getMapMessagesList());
+     registerState(b, CHECK_SESSIONS);
+
+     // DUMMY_FINAL
+     b = new OneShotBehaviour(myAgent) {
+     @Serial private static final long serialVersionUID = 3487495895818010L;
+
+     public void action() {
+     }
+     };
+     registerLastState(b, DUMMY_FINAL);
+     }
+     */
+    /**
+     * Constructs an <code>Initiator</code> behaviour
+     * see #AchieveREInitiator(Agent, ACLMessage, HashMap)
+     **/
+    protected Initiator(Agent a, ACLMessage initiation) {
+        this(a, initiation, new HashMap<>(), new HashMap<>());
+    }
+
     /**
      * Constructs an <code>Initiator</code> behaviour
      *
@@ -318,9 +308,9 @@ abstract class Initiator extends FSMBehaviour {
 
         // CHECK_IN_SEQ
         b = new OneShotBehaviour(myAgent) {
-            int ret;
             @Serial
             private static final long serialVersionUID = 3487495895818002L;
+            int ret;
 
             public void action() {
                 ACLMessage reply = getMapMessages().get(REPLY_K);
@@ -380,9 +370,9 @@ abstract class Initiator extends FSMBehaviour {
 
         // CHECK_SESSIONS
         b = new OneShotBehaviour(myAgent) {
-            int ret;
             @Serial
             private static final long serialVersionUID = 3487495895818009L;
+            int ret;
 
             public void action() {
                 ACLMessage reply = getMapMessages().get(REPLY_K);
@@ -406,6 +396,12 @@ abstract class Initiator extends FSMBehaviour {
             }
         };
         registerLastState(b, DUMMY_FINAL);
+    }
+
+    private synchronized static int getCnt() {
+        int k = cnt;
+        cnt++;
+        return k;
     }
 
     /**
@@ -432,6 +428,7 @@ abstract class Initiator extends FSMBehaviour {
      * - The state has an "internal memory"
      */
     protected abstract String[] getToBeReset();
+    //#APIDOC_EXCLUDE_END
 
     /**
      * Return a ProtocolSession object to manage replies to a given
@@ -498,7 +495,6 @@ abstract class Initiator extends FSMBehaviour {
         replyReceiver.setTemplate(replyTemplate);
         replyReceiver.setDeadline(deadline);
     }
-    //#APIDOC_EXCLUDE_END
 
     /**
      * This method is called every time a <code>not-understood</code>
@@ -512,6 +508,8 @@ abstract class Initiator extends FSMBehaviour {
     protected void handleNotUnderstood(ACLMessage notUnderstood) {
     }
 
+    //#APIDOC_EXCLUDE_BEGIN
+
     /**
      * This method is called every time a <code>failure</code>
      * message is received, which is not out-of-sequence according
@@ -523,6 +521,7 @@ abstract class Initiator extends FSMBehaviour {
      **/
     protected void handleFailure(ACLMessage failure) {
     }
+    //#APIDOC_EXCLUDE_END
 
     /**
      * This method is called every time a
@@ -536,8 +535,6 @@ abstract class Initiator extends FSMBehaviour {
     protected void handleOutOfSequence(ACLMessage msg) {
     }
 
-    //#APIDOC_EXCLUDE_BEGIN
-
     /**
      * Attach a behaviour to the <code>Prepare-initiations</code>
      * protocol state.
@@ -549,7 +546,6 @@ abstract class Initiator extends FSMBehaviour {
         registerState(b, PREPARE_INITIATIONS);
         b.setMapMessagesList(getMapMessagesList());
     }
-    //#APIDOC_EXCLUDE_END
 
     /**
      * This method allows to register a user defined <code>Behaviour</code>
@@ -640,6 +636,8 @@ abstract class Initiator extends FSMBehaviour {
         map.remove(REPLY_K);
     }
 
+    //#APIDOC_EXCLUDE_BEGIN
+
     /**
      * Override the onStart() method to initialize the lists that
      * will keep all the replies in the map store.
@@ -647,6 +645,7 @@ abstract class Initiator extends FSMBehaviour {
     public void onStart() {
         initializeHashMap(initiation);
     }
+    //#APIDOC_EXCLUDE_END
 
     /**
      * Override the setHashMap() method to propagate this
@@ -657,8 +656,6 @@ abstract class Initiator extends FSMBehaviour {
         getChildren().forEach(child -> child.setMapMessagesList(ds));
     }
 
-    //#APIDOC_EXCLUDE_BEGIN
-
     /**
      * Initialize the data store.
      **/
@@ -666,7 +663,6 @@ abstract class Initiator extends FSMBehaviour {
         var map = getMapMessages();
         map.put(INITIATION_K, initiation);
     }
-    //#APIDOC_EXCLUDE_END
 
     /**
      * Create a new conversation identifier to begin a new
@@ -689,14 +685,6 @@ abstract class Initiator extends FSMBehaviour {
             }
         }
         return convId;
-    }
-
-    private static int cnt = 0;
-
-    private synchronized static int getCnt() {
-        int k = cnt;
-        cnt++;
-        return k;
     }
 
     //#APIDOC_EXCLUDE_BEGIN

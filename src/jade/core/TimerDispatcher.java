@@ -41,21 +41,29 @@ import java.util.TreeSet;
 public class TimerDispatcher implements Runnable {
     // The singleton TimerDispatcher
     private static TimerDispatcher theDispatcher;
-
-    private Thread myThread = null;
-
     // In J2ME we use a Vector to keep timers to minimize the number of classes.
     // In J2SE, where we can have thousands of timers, using a Vector can be highly inefficient -->
     // We use a TreeSet wrapped into a class that mimic the methods of a Vector.
     //#J2ME_EXCLUDE_BEGIN
     private final TimersList timers = new TimersList();
+    protected Logger myLogger = Logger.getJADELogger(getClass().getName());
+    private Thread myThread = null;
     //#J2ME_EXCLUDE_END
 	/*#J2ME_INCLUDE_BEGIN
 	private Vector timers = new Vector();
 	#J2ME_INCLUDE_END*/
     private boolean active;
 
-    protected Logger myLogger = Logger.getJADELogger(getClass().getName());
+    public static TimerDispatcher getTimerDispatcher() {
+        if (theDispatcher == null) {
+            theDispatcher = new TimerDispatcher();
+        }
+        return theDispatcher;
+    }
+
+    public static void setTimerDispatcher(TimerDispatcher td) {
+        theDispatcher = td;
+    }
 
     void setThread(Thread t) {
         if (myThread == null) {
@@ -152,17 +160,6 @@ public class TimerDispatcher implements Runnable {
                 myThread = null;
             }
         }
-    }
-
-    public static TimerDispatcher getTimerDispatcher() {
-        if (theDispatcher == null) {
-            theDispatcher = new TimerDispatcher();
-        }
-        return theDispatcher;
-    }
-
-    public static void setTimerDispatcher(TimerDispatcher td) {
-        theDispatcher = td;
     }
 
     private boolean addTimer(Timer t) {

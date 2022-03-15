@@ -53,15 +53,6 @@ public class Modify implements AgentAction {
     }
 
     /**
-     * Set the <code>description</code> slot of this object.
-     *
-     * @param desc An AMS or DF description for this action.
-     */
-    public void setDescription(Object desc) {
-        description = desc;
-    }
-
-    /**
      * Retrieve the <code>description</code> slot of this object.
      *
      * @return The value of the <code>description</code> slot of
@@ -69,6 +60,15 @@ public class Modify implements AgentAction {
      */
     public Object getDescription() {
         return description;
+    }
+
+    /**
+     * Set the <code>description</code> slot of this object.
+     *
+     * @param desc An AMS or DF description for this action.
+     */
+    public void setDescription(Object desc) {
+        description = desc;
     }
 
 }

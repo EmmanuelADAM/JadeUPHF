@@ -55,16 +55,68 @@ import java.lang.reflect.Method;
 public class BrowserLauncher {
 
     /**
+     * JVM constant for MRJ 2.0
+     */
+    private static final int MRJ_2_0 = 0;
+    /**
+     * JVM constant for MRJ 2.1 or later
+     */
+    private static final int MRJ_2_1 = 1;
+    /**
+     * JVM constant for any Windows NT JVM
+     */
+    private static final int WINDOWS_NT = 2;
+    /**
+     * JVM constant for any Windows 9x JVM
+     */
+    private static final int WINDOWS_9x = 3;
+    private static final int WINDOWS_2000 = 4;
+    /**
+     * JVM constant for any other platform
+     */
+    private static final int OTHER = -1;
+    /**
+     * The file type of the Finder on a Macintosh.  Hardcoding "Finder" would keep non-U.S. English
+     * systems from working properly.
+     */
+    private static final String FINDER_TYPE = "FNDR";
+    /**
+     * The creator code of the Finder on a Macintosh, which is needed to send AppleEvents to the
+     * application.
+     */
+    private static final String FINDER_CREATOR = "MACS";
+    /**
+     * The name for the AppleEvent type corresponding to a GetURL event.
+     */
+    private static final String GURL_EVENT = "GURL";
+    /**
+     * The first parameter that needs to be passed into Runtime.exec() to open the default web
+     * browser on Windows.
+     */
+    private static final String FIRST_WINDOWS_PARAMETER = "/c";
+    /**
+     * The second parameter for Runtime.exec() on Windows.
+     */
+    private static final String SECOND_WINDOWS_PARAMETER = "start";
+    /**
+     * The shell parameters for Netscape that opens a given URL in an already-open copy of Netscape
+     * on many command-line systems.
+     */
+    private static final String NETSCAPE_OPEN_PARAMETER_START = " -remote 'openURL(";
+    private static final String NETSCAPE_OPEN_PARAMETER_END = ")'";
+    /**
+     * The URL for the official JADE Home Page.
+     */
+    public static String jadeURL = "http://jade.tilab.com/";
+    /**
      * The Java virtual machine that we are running on.  Actually, in most cases we only care
      * about the operating system, but some operating systems require us to switch on the VM.
      */
     private static int jvm;
-
     /**
      * The browser for the system
      */
     private static Object browser;
-
     /**
      * Caches whether any classes, methods, and fields that are not part of the JDK and need to
      * be dynamically loaded at runtime loaded successfully.
@@ -73,159 +125,74 @@ public class BrowserLauncher {
      * IOException.
      */
     private static boolean loadedWithoutErrors;
-
     /**
      * The com.apple.mrj.MRJFileUtils class
      */
     private static Class<?> mrjFileUtilsClass;
-
     /**
      * The com.apple.mrj.MRJOSType class
      */
     private static Class<?> mrjOSTypeClass;
-
     /**
      * The com.apple.MacOS.MacOSError class
      */
     private static Class<?> macOSErrorClass;
-
     /**
      * The com.apple.MacOS.AEDesc class
      */
     private static Class<?> aeDescClass;
-
     /**
      * The <init>(int) method of com.apple.MacOS.AETarget
      */
     private static Constructor<?> aeTargetConstructor;
-
     /**
      * The <init>(int, int, int) method of com.apple.MacOS.AppleEvent
      */
     private static Constructor<?> appleEventConstructor;
-
     /**
      * The <init>(String) method of com.apple.MacOS.AEDesc
      */
     private static Constructor<?> aeDescConstructor;
-
     /**
      * The findFolder method of com.apple.mrj.MRJFileUtils
      */
     private static Method findFolder;
-
     /**
      * The getFileType method of com.apple.mrj.MRJOSType
      */
     private static Method getFileType;
-
     /**
      * The makeOSType method of com.apple.MacOS.OSUtils
      */
     private static Method makeOSType;
-
     /**
      * The putParameter method of com.apple.MacOS.AppleEvent
      */
     private static Method putParameter;
-
     /**
      * The sendNoReply method of com.apple.MacOS.AppleEvent
      */
     private static Method sendNoReply;
-
     /**
      * Actually an MRJOSType pointing to the System Folder on a Macintosh
      */
     private static Object kSystemFolderType;
-
     /**
      * The keyDirectObject AppleEvent parameter type
      */
     private static Integer keyDirectObject;
-
     /**
      * The kAutoGenerateReturnID AppleEvent code
      */
     private static Integer kAutoGenerateReturnID;
-
     /**
      * The kAnyTransactionID AppleEvent code
      */
     private static Integer kAnyTransactionID;
-
-    /**
-     * JVM constant for MRJ 2.0
-     */
-    private static final int MRJ_2_0 = 0;
-
-    /**
-     * JVM constant for MRJ 2.1 or later
-     */
-    private static final int MRJ_2_1 = 1;
-
-    /**
-     * JVM constant for any Windows NT JVM
-     */
-    private static final int WINDOWS_NT = 2;
-
-    /**
-     * JVM constant for any Windows 9x JVM
-     */
-    private static final int WINDOWS_9x = 3;
-
-
-    private static final int WINDOWS_2000 = 4;
-
-    /**
-     * JVM constant for any other platform
-     */
-    private static final int OTHER = -1;
-
-    /**
-     * The file type of the Finder on a Macintosh.  Hardcoding "Finder" would keep non-U.S. English
-     * systems from working properly.
-     */
-    private static final String FINDER_TYPE = "FNDR";
-
-    /**
-     * The creator code of the Finder on a Macintosh, which is needed to send AppleEvents to the
-     * application.
-     */
-    private static final String FINDER_CREATOR = "MACS";
-
-    /**
-     * The name for the AppleEvent type corresponding to a GetURL event.
-     */
-    private static final String GURL_EVENT = "GURL";
-
-    /**
-     * The first parameter that needs to be passed into Runtime.exec() to open the default web
-     * browser on Windows.
-     */
-    private static final String FIRST_WINDOWS_PARAMETER = "/c";
-
-    /**
-     * The second parameter for Runtime.exec() on Windows.
-     */
-    private static final String SECOND_WINDOWS_PARAMETER = "start";
-
-    /**
-     * The shell parameters for Netscape that opens a given URL in an already-open copy of Netscape
-     * on many command-line systems.
-     */
-    private static final String NETSCAPE_OPEN_PARAMETER_START = " -remote 'openURL(";
-    private static final String NETSCAPE_OPEN_PARAMETER_END = ")'";
-
     /**
      * The message from any exception thrown throughout the initialization process.
      */
     private static String errorMessage;
-
-    /**
-     * The URL for the official JADE Home Page.
-     */
-    public static String jadeURL = "http://jade.tilab.com/";
 
     /**
      * An initialization block that determines the operating system and loads the necessary

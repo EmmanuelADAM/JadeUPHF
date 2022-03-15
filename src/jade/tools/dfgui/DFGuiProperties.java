@@ -35,9 +35,9 @@ import javax.swing.*;
  * This class encapsulates some informations used by the program
  */
 class DFGuiProperties {
+    public static final String ImagePath = "";
     protected static UIDefaults MyDefaults;
     protected static DFGuiProperties foo = new DFGuiProperties();
-    public static final String ImagePath = "";
 
     static {
         Object[] icons =

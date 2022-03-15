@@ -42,6 +42,10 @@ public class ModifyOn implements AgentAction {
     private AID df;
     private DFAgentDescription description;
 
+    public AID getDf() {
+        return df;
+    }
+
     /**
      * The df on which the modify action will be perfomed.
      */
@@ -50,16 +54,12 @@ public class ModifyOn implements AgentAction {
         df = parent;
     }
 
-    public AID getDf() {
-        return df;
+    public DFAgentDescription getDescription() {
+        return description;
     }
 
     public void setDescription(DFAgentDescription desc) {
         description = desc;
-    }
-
-    public DFAgentDescription getDescription() {
-        return description;
     }
 
 

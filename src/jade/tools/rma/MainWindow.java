@@ -221,11 +221,7 @@ class MainWindow extends JFrame {
 
     public void addAddress(final String address, final String where) {
         Runnable addIt = () -> {
-            List<String> addrs = addresses.get(where);
-            if (addrs == null) {
-                addrs = new LinkedList<>();
-                addresses.put(where, addrs);
-            }
+            List<String> addrs = addresses.computeIfAbsent(where, k -> new LinkedList<>());
             addrs.add(address);
             manageDlg.setData(containerNames, addresses);
         };

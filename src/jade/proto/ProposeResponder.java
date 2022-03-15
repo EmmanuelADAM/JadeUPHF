@@ -84,6 +84,10 @@ import java.util.List;
 
 public class ProposeResponder extends FSMBehaviour implements FIPANames.InteractionProtocol {
 
+    // FSM states names
+    protected static final String RECEIVE_PROPOSE = "Receive-propose";
+    protected static final String PREPARE_RESPONSE = "Prepare-response";
+    protected static final String SEND_RESPONSE = "Send-response";
     /**
      * key to retrieve from the HashMap of the behaviour the ACLMessage
      * object sent by the initiator.
@@ -94,58 +98,9 @@ public class ProposeResponder extends FSMBehaviour implements FIPANames.Interact
      * object sent as a response to the initiator.
      **/
     public final String RESPONSE_KEY = "__response" + hashCode();
-
-    // FSM states names
-    protected static final String RECEIVE_PROPOSE = "Receive-propose";
-    protected static final String PREPARE_RESPONSE = "Prepare-response";
-    protected static final String SEND_RESPONSE = "Send-response";
-
-    // Private inner classes for the FSM states
-    private static class PrepareResponse extends OneShotBehaviour {
-
-        public PrepareResponse(Agent a) {
-            super(a);
-        }
-
-        // For persistence service
-        private PrepareResponse() {
-        }
-
-        public void action() {
-            ProposeResponder fsm = (ProposeResponder) getParent();
-            var ds = getMapMessages();
-            ACLMessage propose = ds.get(fsm.PROPOSE_KEY);
-
-            ACLMessage response;
-            try {
-                response = fsm.prepareResponse(propose);
-            } catch (NotUnderstoodException | RefuseException nue) {
-                response = nue.getACLMessage();
-            }
-            ds.put(fsm.RESPONSE_KEY, response);
-        }
-
-    } // End of PrepareResponse class
-
-
     // The MsgReceiver behaviour used to receive propose messages
     MsgReceiver rec = null;
 
-    /**
-     * This static method can be used
-     * to set the proper message template (based on the interaction protocol
-     * and the performative)
-     * into the constructor of this behaviour.
-     *
-     * @see FIPANames.InteractionProtocol
-     **/
-    public static MessageTemplate createMessageTemplate(String iprotocol) {
-
-        if (CaseInsensitiveString.equalsIgnoreCase(FIPA_PROPOSE, iprotocol))
-            return MessageTemplate.and(MessageTemplate.MatchProtocol(FIPA_PROPOSE), MessageTemplate.MatchPerformative(ACLMessage.PROPOSE));
-        else
-            return MessageTemplate.MatchProtocol(iprotocol);
-    }
 
     /**
      * Constructor of the behaviour that creates a new empty HashMap
@@ -155,45 +110,6 @@ public class ProposeResponder extends FSMBehaviour implements FIPANames.Interact
     public ProposeResponder(Agent a, MessageTemplate mt) {
         this(a, mt, new HashMap<>(), new HashMap<>());
     }
-
-    /**
-     * Constructor.
-     *
-     * @param a               is the reference to the Agent object
-     * @param mt              is the MessageTemplate that must be used to match
-     *                        the initiator message. Take care that
-     *                        if mt is null every message is consumed by this protocol.
-     * @param mapMessagesList the HashMap for this protocol
-     * @deprecated
-
-    public ProposeResponder(Agent a, MessageTemplate mt, HashMap<String, List<ACLMessage>> mapMessagesList) {
-        super(a);
-
-        setMapMessagesList(mapMessagesList);
-
-        // Register the FSM transitions
-        registerDefaultTransition(RECEIVE_PROPOSE, PREPARE_RESPONSE);
-        registerDefaultTransition(PREPARE_RESPONSE, SEND_RESPONSE);
-        registerDefaultTransition(SEND_RESPONSE, RECEIVE_PROPOSE);
-
-        // Create and register the states that make up the FSM
-        Behaviour b;
-
-        // RECEIVE_PROPOSE
-        rec = new MsgReceiver(myAgent, mt, -1, getMapMessagesList(), PROPOSE_KEY);
-        registerFirstState(rec, RECEIVE_PROPOSE);
-
-        // PREPARE_RESPONSE
-        b = new PrepareResponse(myAgent);
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, PREPARE_RESPONSE);
-
-        // SEND_RESPONSE
-        b = new ReplySender(myAgent, RESPONSE_KEY, PROPOSE_KEY);
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, SEND_RESPONSE);
-    }
-    */
 
     /**
      * Constructor.
@@ -233,6 +149,63 @@ public class ProposeResponder extends FSMBehaviour implements FIPANames.Interact
         b = new ReplySender(myAgent, RESPONSE_KEY, PROPOSE_KEY, mapMessagesList, mapMessages);
         b.setMapMessagesList(getMapMessagesList());
         registerState(b, SEND_RESPONSE);
+    }
+
+    // For persistence service
+    private ProposeResponder() {
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param a               is the reference to the Agent object
+     * @param mt              is the MessageTemplate that must be used to match
+     *                        the initiator message. Take care that
+     *                        if mt is null every message is consumed by this protocol.
+     * @param mapMessagesList the HashMap for this protocol
+     * @deprecated public ProposeResponder(Agent a, MessageTemplate mt, HashMap<String, List<ACLMessage>> mapMessagesList) {
+    super(a);
+
+    setMapMessagesList(mapMessagesList);
+
+    // Register the FSM transitions
+    registerDefaultTransition(RECEIVE_PROPOSE, PREPARE_RESPONSE);
+    registerDefaultTransition(PREPARE_RESPONSE, SEND_RESPONSE);
+    registerDefaultTransition(SEND_RESPONSE, RECEIVE_PROPOSE);
+
+    // Create and register the states that make up the FSM
+    Behaviour b;
+
+    // RECEIVE_PROPOSE
+    rec = new MsgReceiver(myAgent, mt, -1, getMapMessagesList(), PROPOSE_KEY);
+    registerFirstState(rec, RECEIVE_PROPOSE);
+
+    // PREPARE_RESPONSE
+    b = new PrepareResponse(myAgent);
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, PREPARE_RESPONSE);
+
+    // SEND_RESPONSE
+    b = new ReplySender(myAgent, RESPONSE_KEY, PROPOSE_KEY);
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, SEND_RESPONSE);
+    }
+     */
+
+    /**
+     * This static method can be used
+     * to set the proper message template (based on the interaction protocol
+     * and the performative)
+     * into the constructor of this behaviour.
+     *
+     * @see FIPANames.InteractionProtocol
+     **/
+    public static MessageTemplate createMessageTemplate(String iprotocol) {
+
+        if (CaseInsensitiveString.equalsIgnoreCase(FIPA_PROPOSE, iprotocol))
+            return MessageTemplate.and(MessageTemplate.MatchProtocol(FIPA_PROPOSE), MessageTemplate.MatchPerformative(ACLMessage.PROPOSE));
+        else
+            return MessageTemplate.MatchProtocol(iprotocol);
     }
 
     /**
@@ -295,9 +268,32 @@ public class ProposeResponder extends FSMBehaviour implements FIPANames.Interact
 
     //#MIDP_EXCLUDE_BEGIN
 
-    // For persistence service
-    private ProposeResponder() {
-    }
+    // Private inner classes for the FSM states
+    private static class PrepareResponse extends OneShotBehaviour {
+
+        public PrepareResponse(Agent a) {
+            super(a);
+        }
+
+        // For persistence service
+        private PrepareResponse() {
+        }
+
+        public void action() {
+            ProposeResponder fsm = (ProposeResponder) getParent();
+            var ds = getMapMessages();
+            ACLMessage propose = ds.get(fsm.PROPOSE_KEY);
+
+            ACLMessage response;
+            try {
+                response = fsm.prepareResponse(propose);
+            } catch (NotUnderstoodException | RefuseException nue) {
+                response = nue.getACLMessage();
+            }
+            ds.put(fsm.RESPONSE_KEY, response);
+        }
+
+    } // End of PrepareResponse class
     //#MIDP_EXCLUDE_END
 
 }

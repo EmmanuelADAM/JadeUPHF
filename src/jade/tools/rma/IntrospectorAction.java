@@ -35,12 +35,11 @@ import jade.gui.AgentTree;
 
 class IntrospectorAction extends ContainerAction {
 
+    private final rma myRMA;
     /**
      * Progressive Number to give always a new name to IntrospectoAgent
      */
     private int progressiveNumber = 0;
-
-    private final rma myRMA;
 
     public IntrospectorAction(rma anRMA, ActionProcessor actPro) {
         super("IntrospectorActionIcon", "Start IntrospectorAgent", actPro);

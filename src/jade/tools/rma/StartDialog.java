@@ -45,6 +45,15 @@ import java.util.List;
 
 public class StartDialog extends JDialog implements ActionListener {
 
+    public final static int OK_BUTTON = 0;
+    public final static int CANCEL_BUTTON = 1;
+    private final static String ttAgentName = "Name of the Agent to start";
+    private final static String ttClassname = "Class Name of the Agent to start";
+    private final static String ttArguments = "Arguments passed to the agent constructor";
+    private final static String ttOwner = "The user under which the agent has to be started";
+    private final static String ttContainer = "Container on which the Agent will start";
+    private final static String ttSelectClassname = "Search in classpath for classes extending Agent";
+    private static final StartDialog dialog;
     protected static ExtTextField extTextFieldAgentName;
     protected static Panel panelClassname;
     protected static JButton jButtonSelectClassname;
@@ -53,97 +62,16 @@ public class StartDialog extends JDialog implements ActionListener {
     protected static JTextField jTextFieldContainer;
     protected static JTextField jTextFieldArguments;
     protected static JTextField jTextFieldAgentUser;
-
     protected static JLabel jLabelAgentName = new JLabel("Agent Name");
     protected static JLabel jLabelClassname = new JLabel("Class Name");
     protected static JLabel jLabelArguments = new JLabel("Arguments");
     protected static JLabel jLabelOwner = new JLabel("Owner");
     protected static JLabel jLabelContainer = new JLabel("Container");
-
     protected static JButton jButtonOk = new JButton("OK");
     protected static JButton jButtonCancel = new JButton("Cancel");
-
-    private final static String ttAgentName = "Name of the Agent to start";
-    private final static String ttClassname = "Class Name of the Agent to start";
-    private final static String ttArguments = "Arguments passed to the agent constructor";
-    private final static String ttOwner = "The user under which the agent has to be started";
-    private final static String ttContainer = "Container on which the Agent will start";
-    private final static String ttSelectClassname = "Search in classpath for classes extending Agent";
-
-    public final static int OK_BUTTON = 0;
-    public final static int CANCEL_BUTTON = 1;
-
-    private static final StartDialog dialog;
-
     private static int choice = CANCEL_BUTTON;
     private static String classname;
     private static String agentname;
-
-    private ClassSelectionDialog csd;
-
-    private static class AgentClassFilter implements ClassFinderFilter {
-        private final static String[] excluded = new String[]{
-                "jade.domain.ams",
-                "jade.tools.ToolNotifier",
-                "jade.tools.logging.LogHelperAgent"
-        };
-
-        // Exclude all classes that are
-        // - Not concrete (abstract or interfaces)
-        // - Contained in the jade.core package (a part from the jade.core.Agent class itself)
-        // - Explicitly mentioned in the "exclude" array
-        public boolean include(Class<?> superClazz, Class<?> clazz) {
-            String clazzName = clazz.getName();
-            int modifiers = clazz.getModifiers();
-            boolean doInclude = ((modifiers & (ClassSelectionDialog.ACC_ABSTRACT | ClassSelectionDialog.ACC_INTERFACE)) == 0);
-            if (doInclude) {
-                if (clazzName.startsWith("jade.core")) {
-                    doInclude = Agent.class.getName().equals(clazzName);
-                }
-            }
-            if (doInclude) {
-                for (int i = 0; i < excluded.length; i++) {
-                    if (excluded[i].equals(clazzName)) {
-                        doInclude = false;
-                        break;
-                    }
-                }
-            }
-            return doInclude;
-        }
-    }
-
-    private static class ExtTextField extends JTextField implements ActionListener, DocumentListener {
-
-        private StartDialog startDialog;
-
-        public ExtTextField() {
-            super(0);
-            addActionListener(this);
-            Document doc = this.getDocument();
-            doc.addDocumentListener(this);
-        }
-
-        public void setStartDialog(StartDialog startDialog) {
-            this.startDialog = startDialog;
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            // nothing to do
-        }
-
-        public void insertUpdate(DocumentEvent e) {
-            startDialog.updateOkButtonEnabled();
-        }
-
-        public void removeUpdate(DocumentEvent e) {
-            startDialog.updateOkButtonEnabled();
-        }
-
-        public void changedUpdate(DocumentEvent e) {
-            // nothing to do
-        }
-    }
 
     static {
         classname = "";
@@ -214,6 +142,8 @@ public class StartDialog extends JDialog implements ActionListener {
         dialog = new StartDialog();
     }
 
+    private ClassSelectionDialog csd;
+
     protected StartDialog() {
         super((Frame) null, "Insert Start Parameters", true);
 
@@ -243,6 +173,50 @@ public class StartDialog extends JDialog implements ActionListener {
 
         getContentPane().add(jButtonOk);
         getContentPane().add(jButtonCancel);
+    }
+
+    public static int showStartNewDialog(String containerName, Frame owner) {
+        choice = CANCEL_BUTTON;
+
+        extTextFieldAgentName.setEditable(true);
+        jTextFieldContainer.setEditable(false);
+
+        setContainer(containerName);
+        dialog.doShow("");
+
+        return choice;
+    }
+
+    public static String getAgentName() {
+        return agentname;
+    }
+
+    public static void setAgentName(String agentNameP) {
+        extTextFieldAgentName.setText(agentNameP);
+    }
+
+    public static String getClassName() {
+        return classname;
+    }
+
+    public static void setClassName(String classNameP) {
+        jComboBoxClassnameCombo.setSelectedItem(classNameP);
+    }
+
+    public static String getArguments() {
+        return jTextFieldArguments.getText().trim();
+    }
+
+    public static String getAgentUser() {
+        return jTextFieldAgentUser.getText().trim();
+    }
+
+    public static String getContainer() {
+        return jTextFieldContainer.getText();
+    }
+
+    public static void setContainer(String containerP) {
+        jTextFieldContainer.setText(containerP);
     }
 
     public void doShow(String agentNameP) {
@@ -306,48 +280,68 @@ public class StartDialog extends JDialog implements ActionListener {
         }
     }
 
-    public static int showStartNewDialog(String containerName, Frame owner) {
-        choice = CANCEL_BUTTON;
+    private static class AgentClassFilter implements ClassFinderFilter {
+        private final static String[] excluded = new String[]{
+                "jade.domain.ams",
+                "jade.tools.ToolNotifier",
+                "jade.tools.logging.LogHelperAgent"
+        };
 
-        extTextFieldAgentName.setEditable(true);
-        jTextFieldContainer.setEditable(false);
-
-        setContainer(containerName);
-        dialog.doShow("");
-
-        return choice;
+        // Exclude all classes that are
+        // - Not concrete (abstract or interfaces)
+        // - Contained in the jade.core package (a part from the jade.core.Agent class itself)
+        // - Explicitly mentioned in the "exclude" array
+        public boolean include(Class<?> superClazz, Class<?> clazz) {
+            String clazzName = clazz.getName();
+            int modifiers = clazz.getModifiers();
+            boolean doInclude = ((modifiers & (ClassSelectionDialog.ACC_ABSTRACT | ClassSelectionDialog.ACC_INTERFACE)) == 0);
+            if (doInclude) {
+                if (clazzName.startsWith("jade.core")) {
+                    doInclude = Agent.class.getName().equals(clazzName);
+                }
+            }
+            if (doInclude) {
+                for (String s : excluded) {
+                    if (s.equals(clazzName)) {
+                        doInclude = false;
+                        break;
+                    }
+                }
+            }
+            return doInclude;
+        }
     }
 
-    public static String getAgentName() {
-        return agentname;
-    }
+    private static class ExtTextField extends JTextField implements ActionListener, DocumentListener {
 
-    public static String getClassName() {
-        return classname;
-    }
+        private StartDialog startDialog;
 
-    public static String getArguments() {
-        return jTextFieldArguments.getText().trim();
-    }
+        public ExtTextField() {
+            super(0);
+            addActionListener(this);
+            Document doc = this.getDocument();
+            doc.addDocumentListener(this);
+        }
 
-    public static String getAgentUser() {
-        return jTextFieldAgentUser.getText().trim();
-    }
+        public void setStartDialog(StartDialog startDialog) {
+            this.startDialog = startDialog;
+        }
 
-    public static String getContainer() {
-        return jTextFieldContainer.getText();
-    }
+        public void actionPerformed(ActionEvent e) {
+            // nothing to do
+        }
 
-    public static void setAgentName(String agentNameP) {
-        extTextFieldAgentName.setText(agentNameP);
-    }
+        public void insertUpdate(DocumentEvent e) {
+            startDialog.updateOkButtonEnabled();
+        }
 
-    public static void setClassName(String classNameP) {
-        jComboBoxClassnameCombo.setSelectedItem(classNameP);
-    }
+        public void removeUpdate(DocumentEvent e) {
+            startDialog.updateOkButtonEnabled();
+        }
 
-    public static void setContainer(String containerP) {
-        jTextFieldContainer.setText(containerP);
+        public void changedUpdate(DocumentEvent e) {
+            // nothing to do
+        }
     }
 
 }

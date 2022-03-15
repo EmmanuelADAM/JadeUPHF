@@ -44,144 +44,34 @@ import java.io.Serializable;
 public final class ReceiverBehaviour extends Behaviour {
 
     /**
-     * Exception class for timeouts. This exception is thrown when trying
-     * to obtain an <code>ACLMessage</code> object from an
-     * <code>Handle</code>, but no message was received within a specified
-     * timeout.
-     *
-     * @see Handle#getMessage()
+     * @serial
      */
-    public static class TimedOut extends Exception {
-        TimedOut() {
-            super("No message was received before time limit.");
-        }
-    }
-
+    private final MessageTemplate template;
     /**
-     * Exception class for timeouts. This exception is thrown when trying
-     * to obtain an <code>ACLMessage</code> from an <code>Handle</code>
-     * and no message was received so far, but the time limit is not yet
-     * reached.
-     *
-     * @see Handle#getMessage()
+     * @serial
      */
-    public static class NotYetReady extends Exception {
-        NotYetReady() {
-            super("Requested message is not ready yet.");
-        }
-    }
-
+    private final MessageFuture future;
     /**
-     * An interface representing ACL messages due to arrive within a time
-     * limit. This interface is used to create a
-     * <code>ReceiverBehaviour</code> object to receive an ACL message
-     * within a user specified time limit. When the user tries to read the
-     * message represented by the handle, either gets it or gets an
-     * exception.
-     *
-     * @see ReceiverBehaviour#newHandle()
-     * @see ReceiverBehaviour#ReceiverBehaviour(Agent
-     * a, Handle h, long millis)
+     * @serial
      */
-    public interface Handle {
-
-        /**
-         * Tries to retrieve the <code>ACLMessage</code> object represented
-         * by this handle.
-         *
-         * @return The ACL message, received by the associated
-         * <code>ReceiverBehaviour</code>, if any.
-         * @throws TimedOut    If the associated
-         *                     <code>ReceiverBehaviour</code> did not receive a suitable ACL
-         *                     message within the time limit.
-         * @throws NotYetReady If the associated
-         *                     <code>ReceiverBehaviour</code> is still waiting for a suitable
-         *                     ACL message to arrive.
-         * @see ReceiverBehaviour#ReceiverBehaviour(Agent
-         * a, Handle h, long millis)
-         */
-        ACLMessage getMessage() throws TimedOut, NotYetReady;
-
-    }
-
-    private static class MessageFuture implements Handle, Serializable {
-
-        private static final int OK = 0;
-        private static final int NOT_YET = 1;
-        private static final int TIMED_OUT = 2;
-
-        private int state = NOT_YET;
-        private ACLMessage message;
-
-        public void reset() {
-            message = null;
-            state = NOT_YET;
-        }
-
-        public void setMessage(ACLMessage msg) {
-            message = msg;
-            if (message != null)
-                state = OK;
-            else
-                state = TIMED_OUT;
-        }
-
-        public ACLMessage getMessage() throws TimedOut, NotYetReady {
-            return switch (state) {
-                case NOT_YET -> throw new NotYetReady();
-                case TIMED_OUT -> throw new TimedOut();
-                default -> message;
-            };
-        }
-    }
-
+    private final long timeOut;
     /**
-     * Factory method for message handles. This method returns a new
-     * <code>Handle</code> object, which can be used to retrieve an ACL
-     * message out of a <code>ReceiverBehaviour</code> object.
-     *
-     * @return A new <code>Handle</code> object.
-     * @see Handle
+     * @serial
      */
-    public static Handle newHandle() {
-        return new MessageFuture();
-    }
+    private long timeToWait;
+    /**
+     * @serial
+     */
+    private long blockingTime = 0;
 
 
     // The pattern to match incoming messages against
     /**
      * @serial
      */
-    private final MessageTemplate template;
-
-    // A future for the ACL message, used when a timeout was specified
-    /**
-     * @serial
-     */
-    private final MessageFuture future;
-
-    // A time out value, when present
-    /**
-     * @serial
-     */
-    private final long timeOut;
-
-    // A running counter for calling block(millis) until 'timeOut' milliseconds pass.
-    /**
-     * @serial
-     */
-    private long timeToWait;
-
-    // Timestamp holder, used when calling block(millis) many times.
-    /**
-     * @serial
-     */
-    private long blockingTime = 0;
-    /**
-     * @serial
-     */
     private boolean finished;
 
+    // A future for the ACL message, used when a timeout was specified
     /**
      * This constructor creates a
      * <code>ReceiverBehaviour</code> object that ends as soon as an ACL
@@ -201,7 +91,7 @@ public final class ReceiverBehaviour extends Behaviour {
         this(a, newHandle(), millis, mt);
     }
 
-
+    // A time out value, when present
     /**
      * Receive any ACL message, waiting at most <code>millis</code>
      * milliseconds (infinite time if <code>millis < 1</code>).
@@ -243,6 +133,7 @@ public final class ReceiverBehaviour extends Behaviour {
         this(a, h, millis, null);
     }
 
+    // A running counter for calling block(millis) until 'timeOut' milliseconds pass.
     /**
      * Receive any ACL message matching the given template, witing at
      * most <code>millis</code> milliseconds (infinite time if
@@ -263,6 +154,20 @@ public final class ReceiverBehaviour extends Behaviour {
         timeOut = millis;
         timeToWait = timeOut;
         template = mt;
+    }
+
+    // Timestamp holder, used when calling block(millis) many times.
+
+    /**
+     * Factory method for message handles. This method returns a new
+     * <code>Handle</code> object, which can be used to retrieve an ACL
+     * message out of a <code>ReceiverBehaviour</code> object.
+     *
+     * @return A new <code>Handle</code> object.
+     * @see Handle
+     */
+    public static Handle newHandle() {
+        return new MessageFuture();
     }
 
     /**
@@ -324,7 +229,6 @@ public final class ReceiverBehaviour extends Behaviour {
         super.reset();
     }
 
-
     /**
      * This method allows the caller to get the received message.
      *
@@ -337,5 +241,97 @@ public final class ReceiverBehaviour extends Behaviour {
      **/
     public ACLMessage getMessage() throws TimedOut, NotYetReady {
         return future.getMessage();
+    }
+
+    /**
+     * An interface representing ACL messages due to arrive within a time
+     * limit. This interface is used to create a
+     * <code>ReceiverBehaviour</code> object to receive an ACL message
+     * within a user specified time limit. When the user tries to read the
+     * message represented by the handle, either gets it or gets an
+     * exception.
+     *
+     * @see ReceiverBehaviour#newHandle()
+     * @see ReceiverBehaviour#ReceiverBehaviour(Agent
+     * a, Handle h, long millis)
+     */
+    public interface Handle {
+
+        /**
+         * Tries to retrieve the <code>ACLMessage</code> object represented
+         * by this handle.
+         *
+         * @return The ACL message, received by the associated
+         * <code>ReceiverBehaviour</code>, if any.
+         * @throws TimedOut    If the associated
+         *                     <code>ReceiverBehaviour</code> did not receive a suitable ACL
+         *                     message within the time limit.
+         * @throws NotYetReady If the associated
+         *                     <code>ReceiverBehaviour</code> is still waiting for a suitable
+         *                     ACL message to arrive.
+         * @see ReceiverBehaviour#ReceiverBehaviour(Agent
+         * a, Handle h, long millis)
+         */
+        ACLMessage getMessage() throws TimedOut, NotYetReady;
+
+    }
+
+    /**
+     * Exception class for timeouts. This exception is thrown when trying
+     * to obtain an <code>ACLMessage</code> object from an
+     * <code>Handle</code>, but no message was received within a specified
+     * timeout.
+     *
+     * @see Handle#getMessage()
+     */
+    public static class TimedOut extends Exception {
+        TimedOut() {
+            super("No message was received before time limit.");
+        }
+    }
+
+    /**
+     * Exception class for timeouts. This exception is thrown when trying
+     * to obtain an <code>ACLMessage</code> from an <code>Handle</code>
+     * and no message was received so far, but the time limit is not yet
+     * reached.
+     *
+     * @see Handle#getMessage()
+     */
+    public static class NotYetReady extends Exception {
+        NotYetReady() {
+            super("Requested message is not ready yet.");
+        }
+    }
+
+    private static class MessageFuture implements Handle, Serializable {
+
+        private static final int OK = 0;
+        private static final int NOT_YET = 1;
+        private static final int TIMED_OUT = 2;
+
+        private int state = NOT_YET;
+        private ACLMessage message;
+
+        public void reset() {
+            message = null;
+            state = NOT_YET;
+        }
+
+        public ACLMessage getMessage() throws TimedOut, NotYetReady {
+            return switch (state) {
+                case NOT_YET -> throw new NotYetReady();
+                case TIMED_OUT -> throw new TimedOut();
+                default -> message;
+            };
+        }
+
+        public void setMessage(ACLMessage msg) {
+            message = msg;
+            if (message != null)
+                state = OK;
+            else
+                state = TIMED_OUT;
+        }
     }
 } 

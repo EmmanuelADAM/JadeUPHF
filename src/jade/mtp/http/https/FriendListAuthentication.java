@@ -53,6 +53,8 @@ import java.security.cert.X509Certificate;
  */
 public class FriendListAuthentication implements HTTPSTrustManager {
 
+    private X509TrustManager _tm;
+
     public X509Certificate[] getAcceptedIssuers() {
         return _tm.getAcceptedIssuers();
     }
@@ -77,7 +79,5 @@ public class FriendListAuthentication implements HTTPSTrustManager {
         tmf.init(ks);
         _tm = (X509TrustManager) tmf.getTrustManagers()[0];
     }
-
-    private X509TrustManager _tm;
 
 }

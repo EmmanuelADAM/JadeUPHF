@@ -56,17 +56,17 @@ class SingleProperty {
     }
 
     /**
-     * Returns th value.
-     */
-    String getValue() {
-        return this.value;
-    }
-
-    /**
      * To set the key.
      */
     void setKey(String k) {
         this.key = k;
+    }
+
+    /**
+     * Returns th value.
+     */
+    String getValue() {
+        return this.value;
     }
 
     /**

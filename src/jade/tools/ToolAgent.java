@@ -48,24 +48,9 @@ public abstract class ToolAgent extends Agent {
 
     private final ACLMessage AMSSubscription = new ACLMessage(ACLMessage.SUBSCRIBE);
     private final ACLMessage AMSCancellation = new ACLMessage(ACLMessage.CANCEL);
-
-    private transient ContainerListener myContainerListener = null;
     protected transient Logger logger;
+    private transient ContainerListener myContainerListener = null;
 
-
-    // This is left here for backward compatibility
-    public interface EventHandler extends AMSSubscriber.EventHandler {
-    }
-
-    /**
-     * This abstract behaviour is used to receive notifications from
-     * the AMS.
-     */
-    protected abstract class AMSListenerBehaviour extends AMSSubscriber {
-        // Redefine the onStart() method not to automatically subscribe.
-        public void onStart() {
-        }
-    } // End of AMSListenerBehaviour class
 
     /**
      * Default constructor.
@@ -235,4 +220,18 @@ public abstract class ToolAgent extends Agent {
             }
         }
     }
+
+    // This is left here for backward compatibility
+    public interface EventHandler extends AMSSubscriber.EventHandler {
+    }
+
+    /**
+     * This abstract behaviour is used to receive notifications from
+     * the AMS.
+     */
+    protected abstract class AMSListenerBehaviour extends AMSSubscriber {
+        // Redefine the onStart() method not to automatically subscribe.
+        public void onStart() {
+        }
+    } // End of AMSListenerBehaviour class
 }

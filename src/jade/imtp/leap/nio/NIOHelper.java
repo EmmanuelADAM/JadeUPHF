@@ -17,11 +17,10 @@ import java.util.logging.Logger;
  */
 public class NIOHelper {
     public static final ByteBuffer EMPTY_BUFFER = ByteBuffer.allocateDirect(0);
+    private static final Logger log = Logger.getLogger(NIOHelper.class.getName());
 
     private NIOHelper() {
     }
-
-    private static final Logger log = Logger.getLogger(NIOHelper.class.getName());
 
     /**
      * logs info on a bytebuffer at level FINE with name "unknown"

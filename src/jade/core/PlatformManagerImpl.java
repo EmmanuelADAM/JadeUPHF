@@ -52,9 +52,9 @@ public class PlatformManagerImpl implements PlatformManager {
     private final Map<String, ServiceEntry> services;
     private final Map<TransportAddressWrapper, PlatformManager> replicas;
     private final Map<String, NodeFailureMonitor> monitors;
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
     private String localAddr;
     private String platformID;
-
     // These variables hold progressive numbers just used to name new nodes.
     // By convention, nodes hosting containers with a local copy of the Platform Manager are called
     // Main-Container-<N>, hosting containers whereas nodes without their own Platform Manager are
@@ -63,121 +63,6 @@ public class PlatformManagerImpl implements PlatformManager {
     private int containerNo = 1;
     private int mainContainerNo = 0;
     private int nodeNo = 1;
-
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
-
-    /**
-     * Inner class ServiceEntry (package scoped for debugging purpose)
-     */
-    class ServiceEntry {
-
-        public ServiceEntry(Service s) {
-            myService = s;
-            slices = new HashMap<>();
-        }
-
-        public void addSlice(String name, Slice s, Node n, boolean childNode) {
-            SliceEntry e = new SliceEntry(s, n, childNode);
-            slices.put(name, e);
-        }
-
-        public Slice removeSlice(String name) {
-            SliceEntry e = slices.remove(name);
-            if (e == null) {
-                return null;
-            } else {
-                return e.getSlice();
-            }
-        }
-
-        public Vector<Slice> getSlices() {
-            Iterator<SliceEntry> sliceEntries = slices.values().iterator();
-            Vector<Slice> result = new Vector<>();
-
-            while (sliceEntries.hasNext()) {
-                SliceEntry e = sliceEntries.next();
-                result.addElement(e.getSlice());
-            }
-
-            return result;
-        }
-
-        public Slice getSlice(String name) {
-            SliceEntry e = slices.get(name);
-            if (e == null) {
-                return null;
-            } else {
-                return e.getSlice();
-            }
-        }
-
-        public Node[] getNodes() {
-            Object[] sliceEntries = slices.values().toArray();
-            Node[] result = new Node[sliceEntries.length];
-
-            for (int i = 0; i < result.length; i++) {
-                SliceEntry e = (SliceEntry) sliceEntries[i];
-                result[i] = e.getNode();
-            }
-
-            return result;
-        }
-
-        public Node getNode(String name) {
-            SliceEntry e = slices.get(name);
-            if (e == null) {
-                return null;
-            } else {
-                return e.getNode();
-            }
-        }
-
-        public void setService(Service svc) {
-            myService = svc;
-        }
-
-        public Service getService() {
-            return myService;
-        }
-
-        // For debugging purpose only
-        Map<String, SliceEntry> getSlicesMap() {
-            return slices;
-        }
-
-        private Service myService;
-        private final Map<String, SliceEntry> slices;
-
-    } // End of inner class ServiceEntry class
-
-    /**
-     * Inner class SliceEntry (package-scoped for debugging purpose)
-     */
-    class SliceEntry {
-
-        public SliceEntry(Slice s, Node n, boolean c) {
-            mySlice = s;
-            myNode = n;
-            childNode = c;
-        }
-
-        public Slice getSlice() {
-            return mySlice;
-        }
-
-        public Node getNode() {
-            return myNode;
-        }
-
-        public boolean isInChildNode() {
-            return childNode;
-        }
-
-        private final Slice mySlice;
-        private final Node myNode;
-        private final boolean childNode;
-
-    } // End of inner class SliceEntry class
 
     /**
      * Constructs a new Service Manager implementation complying with
@@ -215,19 +100,19 @@ public class PlatformManagerImpl implements PlatformManager {
         return myMain;
     }
 
-    public void setPlatformName(String name) throws IMTPException {
-        platformID = name;
-    }
-
-    // Implementation of the PlatformManager interface
-
     public String getPlatformName() throws IMTPException {
         return platformID;
+    }
+
+    public void setPlatformName(String name) throws IMTPException {
+        platformID = name;
     }
 
     public String getLocalAddress() {
         return localAddr;
     }
+
+    // Implementation of the PlatformManager interface
 
     public void setLocalAddress(String addr) {
         localAddr = addr;
@@ -521,7 +406,6 @@ public class PlatformManagerImpl implements PlatformManager {
         replicas.put(TransportAddressWrapper.getWrapper(newReplica.getLocalAddress(), myIMTPManager), newReplica);
     }
 
-
     // This may throw IMTPException since the new replica must be informed about the platform status
     private void localAddReplica(PlatformManager newReplica, boolean propagated) throws IMTPException, ServiceException {
         if (myLogger.isLoggable(Logger.INFO)) {
@@ -802,11 +686,7 @@ public class PlatformManagerImpl implements PlatformManager {
             for (Node serviceNode : serviceNodes) {
                 String nodeName = serviceNode.getName();
 
-                Vector<ServiceDescriptor> v = nodeServices.get(nodeName);
-                if (v == null) {
-                    v = new Vector<>();
-                    nodeServices.put(nodeName, v);
-                }
+                Vector<ServiceDescriptor> v = nodeServices.computeIfAbsent(nodeName, k -> new Vector<>());
                 Service svc = e.getService();
                 v.addElement(new ServiceDescriptor(svc.getName(), svc));
             }
@@ -996,6 +876,136 @@ public class PlatformManagerImpl implements PlatformManager {
 
     }
 
+    // For debugging purpose only
+    Map<String, ServiceEntry> getServicesMap() {
+        return services;
+    }
+
+    Map<TransportAddressWrapper, PlatformManager> getReplicasMap() {
+        return replicas;
+    }
+
+    Map<String, NodeDescriptor> getNodesMap() {
+        return nodes;
+    }
+
+    Map<String, NodeFailureMonitor> getMonitorsMap() {
+        return monitors;
+    }
+
+    /**
+     * Inner class ServiceEntry (package scoped for debugging purpose)
+     */
+    class ServiceEntry {
+
+        private final Map<String, SliceEntry> slices;
+        private Service myService;
+
+        public ServiceEntry(Service s) {
+            myService = s;
+            slices = new HashMap<>();
+        }
+
+        public void addSlice(String name, Slice s, Node n, boolean childNode) {
+            SliceEntry e = new SliceEntry(s, n, childNode);
+            slices.put(name, e);
+        }
+
+        public Slice removeSlice(String name) {
+            SliceEntry e = slices.remove(name);
+            if (e == null) {
+                return null;
+            } else {
+                return e.getSlice();
+            }
+        }
+
+        public Vector<Slice> getSlices() {
+            Iterator<SliceEntry> sliceEntries = slices.values().iterator();
+            Vector<Slice> result = new Vector<>();
+
+            while (sliceEntries.hasNext()) {
+                SliceEntry e = sliceEntries.next();
+                result.addElement(e.getSlice());
+            }
+
+            return result;
+        }
+
+        public Slice getSlice(String name) {
+            SliceEntry e = slices.get(name);
+            if (e == null) {
+                return null;
+            } else {
+                return e.getSlice();
+            }
+        }
+
+        public Node[] getNodes() {
+            Object[] sliceEntries = slices.values().toArray();
+            Node[] result = new Node[sliceEntries.length];
+
+            for (int i = 0; i < result.length; i++) {
+                SliceEntry e = (SliceEntry) sliceEntries[i];
+                result[i] = e.getNode();
+            }
+
+            return result;
+        }
+
+        public Node getNode(String name) {
+            SliceEntry e = slices.get(name);
+            if (e == null) {
+                return null;
+            } else {
+                return e.getNode();
+            }
+        }
+
+        public Service getService() {
+            return myService;
+        }
+
+        public void setService(Service svc) {
+            myService = svc;
+        }
+
+        // For debugging purpose only
+        Map<String, SliceEntry> getSlicesMap() {
+            return slices;
+        }
+
+    } // End of inner class ServiceEntry class
+
+    /**
+     * Inner class SliceEntry (package-scoped for debugging purpose)
+     */
+    class SliceEntry {
+
+        private final Slice mySlice;
+        private final Node myNode;
+        private final boolean childNode;
+
+        public SliceEntry(Slice s, Node n, boolean c) {
+            mySlice = s;
+            myNode = n;
+            childNode = c;
+        }
+
+        public Slice getSlice() {
+            return mySlice;
+        }
+
+        public Node getNode() {
+            return myNode;
+        }
+
+        public boolean isInChildNode() {
+            return childNode;
+        }
+
+    } // End of inner class SliceEntry class
+
     /**
      * Inner class NodeInfo.
      * Embeds the node descriptor and the services currently installed
@@ -1022,22 +1032,4 @@ public class PlatformManagerImpl implements PlatformManager {
             services = ss;
         }
     } // END of inner class NodeInfo
-
-
-    // For debugging purpose only
-    Map<String, ServiceEntry> getServicesMap() {
-        return services;
-    }
-
-    Map<TransportAddressWrapper, PlatformManager> getReplicasMap() {
-        return replicas;
-    }
-
-    Map<String, NodeDescriptor> getNodesMap() {
-        return nodes;
-    }
-
-    Map<String, NodeFailureMonitor> getMonitorsMap() {
-        return monitors;
-    }
 }

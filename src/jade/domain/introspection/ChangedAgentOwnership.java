@@ -57,16 +57,6 @@ public class ChangedAgentOwnership implements Event {
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
-     *
-     * @param id The container identifier of the container where the
-     *           agent is deployed.
-     */
-    public void setWhere(ContainerID id) {
-        where = id;
-    }
-
-    /**
      * Retrieve the value of the <code>where</code> slot of this
      * event, containing the container identifier of the container
      * where the agent is deployed.
@@ -79,13 +69,13 @@ public class ChangedAgentOwnership implements Event {
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
+     * Set the <code>where</code> slot of this event.
      *
-     * @param id The agent identifier of the agent whose ownership
-     *           changed.
+     * @param id The container identifier of the container where the
+     *           agent is deployed.
      */
-    public void setAgent(AID id) {
-        agent = id;
+    public void setWhere(ContainerID id) {
+        where = id;
     }
 
     /**
@@ -101,13 +91,13 @@ public class ChangedAgentOwnership implements Event {
     }
 
     /**
-     * Set the <code>from</code> slot of this event.
+     * Set the <code>agent</code> slot of this event.
      *
-     * @param o The name of the entity that owned the agent before
-     *          this event occurred.
+     * @param id The agent identifier of the agent whose ownership
+     *           changed.
      */
-    public void setFrom(String o) {
-        from = o;
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     /**
@@ -123,13 +113,13 @@ public class ChangedAgentOwnership implements Event {
     }
 
     /**
-     * Set the <code>to</code> slot of this event.
+     * Set the <code>from</code> slot of this event.
      *
-     * @param o The name of the entity owning the agent after this
-     *          event occurred.
+     * @param o The name of the entity that owned the agent before
+     *          this event occurred.
      */
-    public void setTo(String o) {
-        to = o;
+    public void setFrom(String o) {
+        from = o;
     }
 
     /**
@@ -142,6 +132,16 @@ public class ChangedAgentOwnership implements Event {
      */
     public String getTo() {
         return to;
+    }
+
+    /**
+     * Set the <code>to</code> slot of this event.
+     *
+     * @param o The name of the entity owning the agent after this
+     *          event occurred.
+     */
+    public void setTo(String o) {
+        to = o;
     }
 
     /**

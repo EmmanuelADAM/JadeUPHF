@@ -34,9 +34,8 @@ public class ThreadGroupHttpAuthenticator extends Authenticator {
 
     private static final String PROXY_KEY = "PROXY";
     private static final String SERVER_DEFAULT_KEY = "SERVER_DEAFULT";
-
-    private static ThreadGroupHttpAuthenticator theInstance;
     private static final Map<String, PasswordAuthentication> passwordAuthentications = new HashMap<>();
+    private static ThreadGroupHttpAuthenticator theInstance;
 
     private ThreadGroupHttpAuthenticator() {
     }

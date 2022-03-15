@@ -70,19 +70,17 @@ public class Runtime {
         theInstance = new Runtime();
     }
 
+    private final LinkedList<Runnable> terminators = new LinkedList<>();
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
     //#MIDP_EXCLUDE_BEGIN
     private ThreadGroup criticalThreads;
     //#MIDP_EXCLUDE_END
     private String version = "UNKNOWN";
     private String revision = "UNKNOWN";
     private String date = "UNKNOWN";
-
     private int activeContainers = 0;
-    private final LinkedList<Runnable> terminators = new LinkedList<>();
     private AgentContainerImpl theContainer = null;
     private int mode = UNKNOWN_MODE;
-
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
 
     // Private constructor to forbid instantiation outside the class.
     private Runtime() {
@@ -105,6 +103,33 @@ public class Runtime {
     }
 
     //#MIDP_EXCLUDE_BEGIN
+
+    /**
+     * Return a String with copyright Notice, Name and Version of this version of JADE
+     */
+    public static String getCopyrightNotice() {
+        return ("    This is " + getVersionInfo() + "\n    downloaded in Open Source, under LGPL restrictions,\n    at http://jade.tilab.com/\n");
+    }
+
+    /**
+     * Return the version number and date of this JADE Runtime.
+     */
+    public static String getVersionInfo() {
+        return "JADE " + getVersion() + " - revision " + getRevision() + " of " + getDate();
+    }
+
+    public static String getVersion() {
+        return theInstance.version;
+    }
+    //#MIDP_EXCLUDE_END
+
+    public static String getRevision() {
+        return theInstance.revision;
+    }
+
+    public static String getDate() {
+        return theInstance.date;
+    }
 
     /**
      * Creates a new agent container in the current JVM, providing
@@ -137,6 +162,8 @@ public class Runtime {
         }
     }
 
+    //#APIDOC_EXCLUDE_BEGIN
+
     /**
      * Creates a new main container in the current JVM, providing
      * access through a proxy object.
@@ -167,6 +194,7 @@ public class Runtime {
             throw new IllegalStateException("Single-container modality already activated");
         }
     }
+    //#APIDOC_EXCLUDE_END
 
     /**
      * Causes the local JVM to be closed when the last container in this
@@ -185,8 +213,6 @@ public class Runtime {
             });
         }
     }
-    //#MIDP_EXCLUDE_END
-
 
     /**
      * Starts a JADE container in the Single-container modality.
@@ -218,6 +244,10 @@ public class Runtime {
             theContainer.shutDown();
         }
     }
+    //#APIDOC_EXCLUDE_END
+
+
+    //#APIDOC_EXCLUDE_BEGIN
 
     /**
      * Allows setting a <code>Runnable</code> that is executed when
@@ -226,8 +256,7 @@ public class Runtime {
     public void invokeOnTermination(Runnable r) {
         terminators.addFirst(r);
     }
-
-    //#APIDOC_EXCLUDE_BEGIN
+    //#APIDOC_EXCLUDE_END
 
     /**
      * Reset the list of <code>Runnable</code> objects to be executed on JADE termination
@@ -236,7 +265,6 @@ public class Runtime {
     public void resetTerminators() {
         terminators.clear();
     }
-    //#APIDOC_EXCLUDE_END
 
     // Called by a starting up container.
     void beginContainer() {
@@ -305,37 +333,6 @@ public class Runtime {
     //#APIDOC_EXCLUDE_BEGIN
     public TimerDispatcher getTimerDispatcher() {
         return TimerDispatcher.getTimerDispatcher();
-    }
-    //#APIDOC_EXCLUDE_END
-
-
-    //#APIDOC_EXCLUDE_BEGIN
-
-    /**
-     * Return a String with copyright Notice, Name and Version of this version of JADE
-     */
-    public static String getCopyrightNotice() {
-        return ("    This is " + getVersionInfo() + "\n    downloaded in Open Source, under LGPL restrictions,\n    at http://jade.tilab.com/\n");
-    }
-    //#APIDOC_EXCLUDE_END
-
-    /**
-     * Return the version number and date of this JADE Runtime.
-     */
-    public static String getVersionInfo() {
-        return "JADE " + getVersion() + " - revision " + getRevision() + " of " + getDate();
-    }
-
-    public static String getVersion() {
-        return theInstance.version;
-    }
-
-    public static String getRevision() {
-        return theInstance.revision;
-    }
-
-    public static String getDate() {
-        return theInstance.date;
     }
 }
 

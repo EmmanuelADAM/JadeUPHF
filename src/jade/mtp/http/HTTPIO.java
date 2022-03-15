@@ -57,6 +57,8 @@ public class HTTPIO {
 
     // Response codes
     public static final String OK = "200 OK";
+    public static final String CLOSE = "close";
+    public static final String KA = "Keep-Alive";
     private static final String ERROR = "406 Not Acceptable";
     //private static final String UNAV  = "503 Service Unavailable";
     // HTTP constants
@@ -78,8 +80,6 @@ public class HTTPIO {
     private static final byte[] APPLI = {(byte) 'a', (byte) 'p', (byte) 'p', (byte) 'l', (byte) 'i', (byte) 'c', (byte) 'a', (byte) 't', (byte) 'i', (byte) 'o', (byte) 'n', (byte) '/'};
     private static final byte[] CONN = {(byte) 'C', (byte) 'o', (byte) 'n', (byte) 'n', (byte) 'e', (byte) 'c', (byte) 't', (byte) 'i', (byte) 'o', (byte) 'n', (byte) ':', (byte) ' '};
     private static final String CONN_STR = "Connection: ";
-    public static final String CLOSE = "close";
-    public static final String KA = "Keep-Alive";
     private static final byte[] HTTP = {(byte) 'H', (byte) 'T', (byte) 'T', (byte) 'P', (byte) '/', (byte) '1', (byte) '.', (byte) '1'};
     private static final byte[] CACHE =
             {(byte) 'C', (byte) 'a', (byte) 'c', (byte) 'h', (byte) 'e', (byte) '-', (byte) 'C', (byte) 'o', (byte) 'n', (byte) 't', (byte) 'r', (byte) 'o', (byte) 'l', (byte) ':', (byte) ' ', (byte) 'n', (byte) 'o', (byte) '-', (byte) 'c', (byte) 'a', (byte) 'c', (byte) 'h', (byte) 'e'};
@@ -276,6 +276,7 @@ public class HTTPIO {
 
     /**
      * Parse the input message, this message is received from the master server
+     *
      * @param type return type of connection: close or Keep-Alive
      */
     public static String readAll(InputStream input, StringBuffer xml, OutputStream acl, StringBuffer type)
@@ -490,11 +491,11 @@ public class HTTPIO {
      * with pattern. If the specified pattern was not found until the input stream reaches at end, output
      * all byte sequence up to end of input stream and returns false.
      *
-     * @param input specified input stream.
-     * @param output specified output stream.
+     * @param input   specified input stream.
+     * @param output  specified output stream.
      * @param pattern specified pattern byte seqence.
      * @return Whether the specified pattern was found or not.
-     * @throws IOException  If an I/O error occurs.
+     * @throws IOException              If an I/O error occurs.
      * @throws IllegalArgumentException If pattern is null or pattern is empty.
      * @author mminagawa
      */
@@ -537,8 +538,8 @@ public class HTTPIO {
      *
      * @param input specified input stream to read from.
      * @return A String containing the contents of the line, not including any line-termination
-     *          characters, or null if the end of the stream has been reached.
-     * @throws IOException  If an I/O error occurs.
+     * characters, or null if the end of the stream has been reached.
+     * @throws IOException If an I/O error occurs.
      * @author mminagawa
      */
     private static String readLineFromInputStream(InputStream input) throws IOException {
@@ -588,7 +589,7 @@ public class HTTPIO {
      *
      * @param output specified output stream.
      * @param string specified string to output.
-     * @throws IOException  If an I/O error occurs.
+     * @throws IOException If an I/O error occurs.
      * @author mminagawa
      */
     private static void writeLowBytes(OutputStream output, String string) throws IOException {

@@ -77,9 +77,10 @@ public class StringACLCodec implements ACLCodec {
     private static final String REPLY_BY = " :reply-by ";
     private static final String PROTOCOL = " :protocol ";
     private static final String CONVERSATION_ID = " :conversation-id ";
-
+    private static final String illegalFirstChar = "#0123456789-";
     ACLParser parser = null;
     Writer out = null;
+
 
     /**
      * constructor for the codec.
@@ -106,86 +107,6 @@ public class StringACLCodec implements ACLCodec {
         parser = new ACLParser(r);
         out = w;
     }
-
-
-    /**
-     * if there was an automatical Base64 encoding, then it performs
-     * automatic decoding.
-     **/
-    private void checkBase64Encoding(ACLMessage msg) {
-        String encoding = msg.getUserDefinedParameter(BASE64ENCODING_KEY);
-        if (CaseInsensitiveString.equalsIgnoreCase(BASE64ENCODING_VALUE, encoding)) {
-            try { // decode Base64
-                String content = msg.getContent();
-                if ((content != null) && (content.length() > 0)) {
-                    msg.setByteSequenceContent(Base64.decodeBase64(content.getBytes(StandardCharsets.US_ASCII)));
-                    msg.removeUserDefinedParameter(BASE64ENCODING_KEY); // reset the slot value for encoding
-                }
-            } catch (StringIndexOutOfBoundsException | NullPointerException e) {
-                e.printStackTrace();
-            } catch (NoClassDefFoundError jlncdfe) {
-                System.err.println("\t\t===== E R R O R !!! =======\n");
-                System.err.println("Missing support for Base64 conversions");
-                System.err.println("Please refer to the documentation for details.");
-                System.err.println("=============================================\n\n");
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException ignored) {
-                }
-            }
-        } //end of if CaseInsensitiveString
-    }
-
-    /**
-     * decode and parses the next message from the Reader passed in the
-     * constructor.
-     *
-     * @return the ACLMessage
-     * @throws CodecException if any Exception occurs during the
-     *                        parsing/reading operation
-     */
-    public ACLMessage decode() throws CodecException {
-        try {
-            ACLMessage msg = parser.Message();
-            checkBase64Encoding(msg);
-            return msg;
-        } catch (TokenMgrError e1) {
-            throw new CodecException(getName() + " ACLMessage decoding token exception", e1);
-        } catch (Exception e) {
-            throw new CodecException(getName() + " ACLMessage decoding exception", e);
-        }
-    }
-
-    /**
-     * Parse an agent identifier, without it being included within an
-     * ACL message.
-     */
-    public AID decodeAID() throws CodecException {
-        try {
-            return parser.parseAID(null);
-        } catch (TokenMgrError e1) {
-            throw new CodecException(getName() + " AID decoding token exception", e1);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CodecException(getName() + " AID decoding exception", e);
-        }
-    }
-
-    /**
-     * encodes the message and writes it into the Writer passed in the
-     * constructor.
-     * Notice that this method does not call <code>flush</code> on the writer.
-     *
-     * @ param msg is the ACLMessage to encode and write into
-     */
-    public void write(ACLMessage msg) {
-        try {
-            out.write(toString(msg));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
     static private String escape(String s) {
         // Make the stringBuffer a little larger than strictly
@@ -299,44 +220,6 @@ public class StringACLCodec implements ACLCodec {
     }
 
     /**
-     * If the content of the message is a byteSequence, then this
-     * method encodes the content in Base64 and automatically sets the value
-     * of the encoding slot.
-     * see ACLCodec#encode(ACLMessage msg)
-     */
-    public byte[] encode(ACLMessage msg, String charset) {
-        try {
-            return toString(msg).getBytes(charset);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-            return new byte[0];
-        }
-    }
-
-
-    /**
-     * see ACLCodec#decode(byte[] data)
-     */
-    public ACLMessage decode(byte[] data, String charset) throws CodecException {
-        try {
-            ACLMessage msg = ACLParser.create().parse(new InputStreamReader(new ByteArrayInputStream(data), charset));
-            checkBase64Encoding(msg);
-            return msg;
-        } catch (TokenMgrError e1) {
-            throw new CodecException(getName() + " ACLMessage decoding token exception", e1);
-        } catch (Exception e2) {
-            throw new CodecException(getName() + " ACLMessage decoding exception", e2);
-        }
-    }
-
-    /**
-     * @return the name of this encoding according to the FIPA specifications
-     */
-    public String getName() {
-        return NAME;
-    }
-
-    /**
      * append to the passed StringBuffer the slot name and value separated
      * by a blank char and followed by a newline.
      * If the value contains a blank, then it is quoted.
@@ -358,9 +241,6 @@ public class StringACLCodec implements ACLCodec {
         }
     }
 
-
-    private static final String illegalFirstChar = "#0123456789-";
-
     /**
      * Test if the given string is a legal word using the FIPA ACL spec.
      * In addition to FIPA's restrictions, place the additional restriction
@@ -381,6 +261,121 @@ public class StringACLCodec implements ACLCodec {
                 return false;
         }
         return true;
+    }
+
+    /**
+     * if there was an automatical Base64 encoding, then it performs
+     * automatic decoding.
+     **/
+    private void checkBase64Encoding(ACLMessage msg) {
+        String encoding = msg.getUserDefinedParameter(BASE64ENCODING_KEY);
+        if (CaseInsensitiveString.equalsIgnoreCase(BASE64ENCODING_VALUE, encoding)) {
+            try { // decode Base64
+                String content = msg.getContent();
+                if ((content != null) && (content.length() > 0)) {
+                    msg.setByteSequenceContent(Base64.decodeBase64(content.getBytes(StandardCharsets.US_ASCII)));
+                    msg.removeUserDefinedParameter(BASE64ENCODING_KEY); // reset the slot value for encoding
+                }
+            } catch (StringIndexOutOfBoundsException | NullPointerException e) {
+                e.printStackTrace();
+            } catch (NoClassDefFoundError jlncdfe) {
+                System.err.println("\t\t===== E R R O R !!! =======\n");
+                System.err.println("Missing support for Base64 conversions");
+                System.err.println("Please refer to the documentation for details.");
+                System.err.println("=============================================\n\n");
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ignored) {
+                }
+            }
+        } //end of if CaseInsensitiveString
+    }
+
+    /**
+     * decode and parses the next message from the Reader passed in the
+     * constructor.
+     *
+     * @return the ACLMessage
+     * @throws CodecException if any Exception occurs during the
+     *                        parsing/reading operation
+     */
+    public ACLMessage decode() throws CodecException {
+        try {
+            ACLMessage msg = parser.Message();
+            checkBase64Encoding(msg);
+            return msg;
+        } catch (TokenMgrError e1) {
+            throw new CodecException(getName() + " ACLMessage decoding token exception", e1);
+        } catch (Exception e) {
+            throw new CodecException(getName() + " ACLMessage decoding exception", e);
+        }
+    }
+
+    /**
+     * Parse an agent identifier, without it being included within an
+     * ACL message.
+     */
+    public AID decodeAID() throws CodecException {
+        try {
+            return parser.parseAID(null);
+        } catch (TokenMgrError e1) {
+            throw new CodecException(getName() + " AID decoding token exception", e1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CodecException(getName() + " AID decoding exception", e);
+        }
+    }
+
+    /**
+     * encodes the message and writes it into the Writer passed in the
+     * constructor.
+     * Notice that this method does not call <code>flush</code> on the writer.
+     *
+     * @ param msg is the ACLMessage to encode and write into
+     */
+    public void write(ACLMessage msg) {
+        try {
+            out.write(toString(msg));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * If the content of the message is a byteSequence, then this
+     * method encodes the content in Base64 and automatically sets the value
+     * of the encoding slot.
+     * see ACLCodec#encode(ACLMessage msg)
+     */
+    public byte[] encode(ACLMessage msg, String charset) {
+        try {
+            return toString(msg).getBytes(charset);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return new byte[0];
+        }
+    }
+
+    /**
+     * see ACLCodec#decode(byte[] data)
+     */
+    public ACLMessage decode(byte[] data, String charset) throws CodecException {
+        try {
+            ACLMessage msg = ACLParser.create().parse(new InputStreamReader(new ByteArrayInputStream(data), charset));
+            checkBase64Encoding(msg);
+            return msg;
+        } catch (TokenMgrError e1) {
+            throw new CodecException(getName() + " ACLMessage decoding token exception", e1);
+        } catch (Exception e2) {
+            throw new CodecException(getName() + " ACLMessage decoding exception", e2);
+        }
+    }
+
+    /**
+     * @return the name of this encoding according to the FIPA specifications
+     */
+    public String getName() {
+        return NAME;
     }
 
 }

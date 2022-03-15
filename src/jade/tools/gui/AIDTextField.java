@@ -42,6 +42,9 @@ import java.util.Observer;
 
 public class AIDTextField extends JTextField implements Observer {
 
+    private AID itsAid;
+    private String fieldName;
+
     /**
      * Description of the Method
      *
@@ -61,7 +64,6 @@ public class AIDTextField extends JTextField implements Observer {
         }
     }
 
-
     /**
      * Description of the Method
      *
@@ -71,7 +73,6 @@ public class AIDTextField extends JTextField implements Observer {
     public void unregister(Object arg, String str) {
 //    itsAid.deleteObserver(this);
     }
-
 
     /**
      * Description of the Method
@@ -93,7 +94,6 @@ public class AIDTextField extends JTextField implements Observer {
         }
     }
 
-
     /**
      * Description of the Method
      *
@@ -111,7 +111,6 @@ public class AIDTextField extends JTextField implements Observer {
         }
     }
 
-
     /**
      * Description of the Method
      *
@@ -124,9 +123,5 @@ public class AIDTextField extends JTextField implements Observer {
         }
 
     }
-
-
-    private AID itsAid;
-    private String fieldName;
 }
 //  ***EOF***

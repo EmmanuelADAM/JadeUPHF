@@ -66,7 +66,17 @@ public class AgentManagementService extends BaseService {
             AgentManagementSlice.ADD_TOOL,
             AgentManagementSlice.REMOVE_TOOL
     };
-
+    // The local slice for this service
+    private final ServiceComponent localSlice = new ServiceComponent();
+    // The command sink, source side
+    private final CommandSourceSink senderSink = new CommandSourceSink();
+    // The command sink, target side
+    private final CommandTargetSink receiverSink = new CommandTargetSink();
+    // The concrete agent container, providing access to LADT, etc.
+    private AgentContainer myContainer;
+    //#J2ME_EXCLUDE_BEGIN
+    private String agentsPath = null;
+    private CodeLocator codeLocator;
 
     public void init(AgentContainer ac, Profile p) throws ProfileException {
         super.init(ac, p);
@@ -104,7 +114,6 @@ public class AgentManagementService extends BaseService {
         //#J2ME_EXCLUDE_END
     }
 
-
     public String getName() {
         return AgentManagementSlice.NAME;
     }
@@ -116,6 +125,7 @@ public class AgentManagementService extends BaseService {
             return null;
         }
     }
+    //#J2ME_EXCLUDE_END
 
     public Slice getLocalSlice() {
         return localSlice;
@@ -124,7 +134,6 @@ public class AgentManagementService extends BaseService {
     public Filter getCommandFilter(boolean direction) {
         return null;
     }
-
 
     public Sink getCommandSink(boolean side) {
         if (side == Sink.COMMAND_SOURCE) {
@@ -141,12 +150,81 @@ public class AgentManagementService extends BaseService {
     public void removeLocalAgent(AID target) {
         myContainer.removeLocalAgent(target);
     }
+    //#J2ME_EXCLUDE_END
 
     //#J2ME_EXCLUDE_BEGIN
     public CodeLocator getCodeLocator() {
         return codeLocator;
     }
-    //#J2ME_EXCLUDE_END
+
+    private void initAgent(AID target, Agent instance, VerticalCommand vCmd) throws IMTPException, JADESecurityException, NameClashException, NotFoundException, ServiceException {
+        //#J2ME_EXCLUDE_BEGIN
+        // If the agent was loaded from a separate space, register it to the codeLocator
+        if (isLoadedFromSeparateSpace(instance)) {
+            try {
+                codeLocator.registerAgent(target, instance.getClass().getClassLoader());
+            } catch (Exception e) {
+                // Should never happen
+                e.printStackTrace();
+            }
+        }
+        //#J2ME_EXCLUDE_END
+
+        // Connect the new instance to the local container
+        Agent old = myContainer.addLocalAgent(target, instance);
+        if (instance == old) {
+            // This is a re-addition of an existing agent to a recovered main container (FaultRecoveryService)
+            old = null;
+        }
+
+        try {
+            // Notify the main container through its slice
+            AgentManagementSlice mainSlice = (AgentManagementSlice) getSlice(MAIN_SLICE);
+
+            // We propagate the class-name to the main, but we don't want to keep it in the actual agent AID.
+            AID cloned = (AID) target.clone();
+            cloned.addUserDefinedSlot(AID.AGENT_CLASSNAME, instance.getClass().getName());
+            try {
+                mainSlice.bornAgent(cloned, myContainer.getID(), vCmd);
+            } catch (IMTPException imtpe) {
+                // Try to get a newer slice and repeat...
+                mainSlice = (AgentManagementSlice) getFreshSlice(MAIN_SLICE);
+                mainSlice.bornAgent(cloned, myContainer.getID(), vCmd);
+            }
+            customize(instance);
+        } catch (NameClashException nce) {
+            removeLocalAgent(target);
+            if (old != null) {
+                myContainer.addLocalAgent(target, old);
+            }
+            throw nce;
+        } catch (IMTPException | JADESecurityException | NotFoundException imtpe) {
+            removeLocalAgent(target);
+            throw imtpe;
+        }
+    }
+
+    //#J2ME_EXCLUDE_BEGIN
+    private boolean isLoadedFromSeparateSpace(Object obj) {
+        try {
+            Class<?> c = obj.getClass();
+            Class<?> reloadedClass = Class.forName(c.getName(), true, getClass().getClassLoader());
+            if (c == reloadedClass) {
+                return false;
+            }
+        } catch (Throwable t) {
+            // Just do nothing
+        }
+        return true;
+    }
+
+    private void customize(Agent agent) {
+    }
+
+    // Work-around for PJAVA compilation
+    protected Slice getFreshSlice(String name) throws ServiceException {
+        return super.getFreshSlice(name);
+    }
 
     // This inner class handles the messaging commands on the command
     // issuer side, turning them into horizontal commands and
@@ -399,7 +477,6 @@ public class AgentManagementService extends BaseService {
 
     } // End of CommandSourceSink class
 
-
     private class CommandTargetSink implements Sink {
 
         public void consume(VerticalCommand cmd) {
@@ -625,10 +702,10 @@ public class AgentManagementService extends BaseService {
                 }
             }
         }
-		
+
 		/*#CUSTOMJ2SE_INCLUDE_BEGIN
 		 private java.util.List dyingAgents = new java.util.ArrayList();
-		 
+
 		 private void waitUntilDead(AID id) {
 		 synchronized (dyingAgents) {
 		 while (dyingAgents.contains(id)) {
@@ -639,7 +716,7 @@ public class AgentManagementService extends BaseService {
 		 }
 		 }
 		 }
-		 
+
 		 private void notifyDead(AID id) {
 		 synchronized (dyingAgents) {
 		 dyingAgents.remove(id);
@@ -678,7 +755,7 @@ public class AgentManagementService extends BaseService {
 
 
     } // End of CommandTargetSink class
-
+    //#J2ME_EXCLUDE_END
 
     /**
      * Inner mix-in class for this service: this class receives
@@ -725,7 +802,6 @@ public class AgentManagementService extends BaseService {
                         gCmd.addParam(startIt);
 
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_KILLAGENT -> {
                         GenericCommand gCmd = new GenericCommand(AgentManagementSlice.REQUEST_KILL, AgentManagementSlice.NAME, null);
@@ -733,7 +809,6 @@ public class AgentManagementService extends BaseService {
                         gCmd.addParam(agentID);
 
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_CHANGEAGENTSTATE -> {
                         GenericCommand gCmd = new GenericCommand(AgentManagementSlice.REQUEST_STATE_CHANGE, AgentManagementSlice.NAME, null);
@@ -743,7 +818,6 @@ public class AgentManagementService extends BaseService {
                         gCmd.addParam(newState);
 
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_BORNAGENT -> {
                         GenericCommand gCmd = new GenericCommand(AgentManagementSlice.INFORM_CREATED, AgentManagementSlice.NAME, null);
@@ -759,7 +833,6 @@ public class AgentManagementService extends BaseService {
                         }
 
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_DEADAGENT -> {
                         GenericCommand gCmd = new GenericCommand(AgentManagementSlice.INFORM_KILLED, AgentManagementSlice.NAME, null);
@@ -767,7 +840,6 @@ public class AgentManagementService extends BaseService {
                         gCmd.addParam(agentID);
 
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_SUSPENDEDAGENT -> {
                         GenericCommand gCmd = new GenericCommand(AgentManagementSlice.INFORM_STATE_CHANGED, AgentManagementSlice.NAME, null);
@@ -777,7 +849,6 @@ public class AgentManagementService extends BaseService {
                         gCmd.addParam("*");
 
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_RESUMEDAGENT -> {
                         GenericCommand gCmd = new GenericCommand(AgentManagementSlice.INFORM_STATE_CHANGED, AgentManagementSlice.NAME, null);
@@ -787,7 +858,6 @@ public class AgentManagementService extends BaseService {
                         gCmd.addParam(jade.domain.FIPAAgentManagement.AMSAgentDescription.SUSPENDED);
 
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_EXITCONTAINER -> result = new GenericCommand(AgentManagementSlice.KILL_CONTAINER, AgentManagementSlice.NAME, null);
                 }
@@ -799,93 +869,4 @@ public class AgentManagementService extends BaseService {
         }
 
     } // End of AgentManagementSlice class
-
-
-    private void initAgent(AID target, Agent instance, VerticalCommand vCmd) throws IMTPException, JADESecurityException, NameClashException, NotFoundException, ServiceException {
-        //#J2ME_EXCLUDE_BEGIN
-        // If the agent was loaded from a separate space, register it to the codeLocator
-        if (isLoadedFromSeparateSpace(instance)) {
-            try {
-                codeLocator.registerAgent(target, instance.getClass().getClassLoader());
-            } catch (Exception e) {
-                // Should never happen
-                e.printStackTrace();
-            }
-        }
-        //#J2ME_EXCLUDE_END
-
-        // Connect the new instance to the local container
-        Agent old = myContainer.addLocalAgent(target, instance);
-        if (instance == old) {
-            // This is a re-addition of an existing agent to a recovered main container (FaultRecoveryService)
-            old = null;
-        }
-
-        try {
-            // Notify the main container through its slice
-            AgentManagementSlice mainSlice = (AgentManagementSlice) getSlice(MAIN_SLICE);
-
-            // We propagate the class-name to the main, but we don't want to keep it in the actual agent AID.
-            AID cloned = (AID) target.clone();
-            cloned.addUserDefinedSlot(AID.AGENT_CLASSNAME, instance.getClass().getName());
-            try {
-                mainSlice.bornAgent(cloned, myContainer.getID(), vCmd);
-            } catch (IMTPException imtpe) {
-                // Try to get a newer slice and repeat...
-                mainSlice = (AgentManagementSlice) getFreshSlice(MAIN_SLICE);
-                mainSlice.bornAgent(cloned, myContainer.getID(), vCmd);
-            }
-            customize(instance);
-        } catch (NameClashException nce) {
-            removeLocalAgent(target);
-            if (old != null) {
-                myContainer.addLocalAgent(target, old);
-            }
-            throw nce;
-        } catch (IMTPException | JADESecurityException | NotFoundException imtpe) {
-            removeLocalAgent(target);
-            throw imtpe;
-        }
-    }
-
-    //#J2ME_EXCLUDE_BEGIN
-    private boolean isLoadedFromSeparateSpace(Object obj) {
-        try {
-            Class<?> c = obj.getClass();
-            Class<?> reloadedClass = Class.forName(c.getName(), true, getClass().getClassLoader());
-            if (c == reloadedClass) {
-                return false;
-            }
-        } catch (Throwable t) {
-            // Just do nothing
-        }
-        return true;
-    }
-    //#J2ME_EXCLUDE_END
-
-    private void customize(Agent agent) {
-    }
-
-
-    // The concrete agent container, providing access to LADT, etc.
-    private AgentContainer myContainer;
-
-    // The local slice for this service
-    private final ServiceComponent localSlice = new ServiceComponent();
-
-    // The command sink, source side
-    private final CommandSourceSink senderSink = new CommandSourceSink();
-
-    // The command sink, target side
-    private final CommandTargetSink receiverSink = new CommandTargetSink();
-
-    //#J2ME_EXCLUDE_BEGIN
-    private String agentsPath = null;
-    private CodeLocator codeLocator;
-    //#J2ME_EXCLUDE_END
-
-    // Work-around for PJAVA compilation
-    protected Slice getFreshSlice(String name) throws ServiceException {
-        return super.getFreshSlice(name);
-    }
 }

@@ -43,11 +43,9 @@ public class AgentDescriptor {
 
     public static final boolean NATIVE_AGENT = false;
     public static final boolean FOREIGN_AGENT = true;
-
-
-    private AMSAgentDescription description;
     //  private AgentProxy proxy;
     private final boolean foreign;
+    private AMSAgentDescription description;
     private ContainerID containerID;
     private JADEPrincipal principal;
     private Credentials amsDelegation;
@@ -61,13 +59,13 @@ public class AgentDescriptor {
         foreign = isForeign;
     }
 
+    public AMSAgentDescription getDescription() {
+        return description;
+    }
+
     // AMS description
     public void setDescription(AMSAgentDescription dsc) {
         description = dsc;
-    }
-
-    public AMSAgentDescription getDescription() {
-        return description;
     }
 
     // Is this agent a foreign agent?
@@ -81,13 +79,17 @@ public class AgentDescriptor {
         return !foreign;
     }
 
+    public ContainerID getContainerID() {
+        return containerID;
+    }
+
     // Container ID
     public void setContainerID(ContainerID cid) {
         containerID = cid;
     }
 
-    public ContainerID getContainerID() {
-        return containerID;
+    public JADEPrincipal getPrincipal() {
+        return principal;
     }
 
     // Agent principal
@@ -95,17 +97,13 @@ public class AgentDescriptor {
         principal = p;
     }
 
-    public JADEPrincipal getPrincipal() {
-        return principal;
+    public Credentials getAMSDelegation() {
+        return amsDelegation;
     }
 
     // AMS delegation
     public void setAMSDelegation(Credentials cf) {
         amsDelegation = cf;
-    }
-
-    public Credentials getAMSDelegation() {
-        return amsDelegation;
     }
 
 }

@@ -31,26 +31,28 @@ import jade.content.abs.AbsObject;
 import jade.content.schema.ObjectSchema;
 
 /**
- This introspector does nothing but "asking objects to convert
- themselves into/from abstract descriptors". It could be used
- when working in Java environments where the reflection is not
- supported (MIDP). All classes in an ontology using this introspector
- must implement the <code>Introspectable</code> interface.
- @author Giovanni Caire - TILAB
+ * This introspector does nothing but "asking objects to convert
+ * themselves into/from abstract descriptors". It could be used
+ * when working in Java environments where the reflection is not
+ * supported (MIDP). All classes in an ontology using this introspector
+ * must implement the <code>Introspectable</code> interface.
+ *
+ * @author Giovanni Caire - TILAB
  */
 public class MicroIntrospector implements Introspector {
 
     /**
-     Check the structure of a java class associated to an ontological element
-     to ensure that translations to/from abstract descriptors and java objects
-     (instances of that class) can be accomplished by this introspector.
-     This is the case if <code>javaClass</code> implements the
-     <code>Introspectable</code>
-     @param schema The schema of the ontological element
-     @param javaClass The java class associated to the ontologcal element
-     @param onto The Ontology that uses this Introspector
-     @throws OntologyException if the java class does not have the correct
-     structure
+     * Check the structure of a java class associated to an ontological element
+     * to ensure that translations to/from abstract descriptors and java objects
+     * (instances of that class) can be accomplished by this introspector.
+     * This is the case if <code>javaClass</code> implements the
+     * <code>Introspectable</code>
+     *
+     * @param schema    The schema of the ontological element
+     * @param javaClass The java class associated to the ontologcal element
+     * @param onto      The Ontology that uses this Introspector
+     * @throws OntologyException if the java class does not have the correct
+     *                           structure
      */
     public void checkClass(ObjectSchema schema, Class<?> javaClass, Ontology onto) throws OntologyException {
         // FIXME: Not yet implemented

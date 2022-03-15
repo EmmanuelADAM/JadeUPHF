@@ -45,6 +45,7 @@ import System.Drawing.*;
 
 /**
  * Sets the tree and the two canvas inside the MainWindow
+ *
  * @see PanelCanvas
  */
 
@@ -55,13 +56,12 @@ public class MainPanel
 /*#DOTNET_INCLUDE_BEGIN
     extends Panel
 #DOTNET_INCLUDE_END*/ {
+    private final JSplitPane pane;
+    private final Font font = new Font("Helvetica", Font.ITALIC, 12);
+    public JTextArea textArea;
     protected AgentTree treeAgent;
     //#DOTNET_EXCLUDE_BEGIN
     protected PanelCanvas panelcan;
-    private final JSplitPane pane;
-    private PopupMouser popM;
-    public JTextArea textArea;
-    private final Font font = new Font("Helvetica", Font.ITALIC, 12);
     //#DOTNET_EXCLUDE_END
  /*#DOTNET_INCLUDE_BEGIN
  private System.Drawing.Font font = new System.Drawing.Font("Helvetica",12, FontStyle.Italic);
@@ -70,6 +70,7 @@ public class MainPanel
  private Panel myPanel;
  #DOTNET_INCLUDE_END*/
     int pos;
+    private PopupMouser popM;
 
     public MainPanel(Sniffer mySniffer, MainWindow mwnd) {
         //#DOTNET_EXCLUDE_BEGIN

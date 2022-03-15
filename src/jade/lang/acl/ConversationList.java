@@ -14,13 +14,12 @@ import java.util.HashSet;
  */
 public class ConversationList implements Serializable {
     private final HashSet<String> conversations = new HashSet<>();
-    protected Agent myAgent = null;
-    protected int cnt = 0;
-
     private final MessageTemplate myTemplate = new MessageTemplate((MessageTemplate.MatchExpression) msg -> {
         String convId = msg.getConversationId();
         return (convId == null || (!conversations.contains(convId)));
     });
+    protected Agent myAgent = null;
+    protected int cnt = 0;
 
     /**
      * Construct a ConversationList to be used inside a given agent.

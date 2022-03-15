@@ -66,40 +66,33 @@ public class RMIIMTPManager implements IMTPManager {
     public static final String ENABLE_RMI_LOG = "jade_imtp_rmi_RMIIMTPManager_enablermilog";
 
     private static final int DEFAULT_RMI_PORT = 1099;
-
-
+    private static final char SLASH = '/';
+    private static final char COLON = ':';
+    private static final char DIESIS = '#';
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
     private Profile myProfile;
-
     // Host and port where the original RMI Registry is listening
     private String mainHost;
     private int mainPort;
-
     // Host and port where the local RMI Registry (if any) is listening
     private String localHost;
     private int localPort;
-
     // Port where the local Service Manager (if any) is listening
     private int localSvcMgrPort;
-
     // Port where the local RMI Node is listening
     private int localNodePort;
-
     // The RMI URL where the Service Manager is to be. If there is a
     // locally installed one, this string points to it, otherwise it
     // points to the Service Manager of the original one.
     //private String baseRMI;
     private String localAddr;
-
-
     // The RMI URL where the original (i.e. the first replica) Service
     // Manager is to be found.
     //private String originalRMI;
     private String originalPMAddr;
-
     private NodeAdapter localNode;
     private ServiceManagerRMIImpl myRMIServiceManager;
 
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
 
     public RMIIMTPManager() {
     }
@@ -187,7 +180,6 @@ public class RMIIMTPManager implements IMTPManager {
         }
     }
 
-
     /**
      * Get the RMIRegistry. If a registry is already active on this host
      * and the given portNumber, then that registry is returned,
@@ -212,7 +204,6 @@ public class RMIIMTPManager implements IMTPManager {
         return rmiRegistry;
 
     } // END getRmiRegistry()
-
 
     public void exportPlatformManager(PlatformManager mgr) throws IMTPException {
         try {
@@ -243,7 +234,7 @@ public class RMIIMTPManager implements IMTPManager {
                     throw new IMTPException("Cannot attach to the original PlatformManager.", se);
                 } catch (IMTPException imtpe) {
                     Throwable t = imtpe.getNested();
-                    if ((t != null) && (t instanceof ConnectException)) {
+                    if ((t instanceof ConnectException)) {
                         // The master main container does not exist. Become the leader
                         myLogger.log(Logger.INFO, "No master Main Container found at address " + originalPMAddr + ". Take the leadership");
                         originalPMAddr = null;
@@ -275,7 +266,6 @@ public class RMIIMTPManager implements IMTPManager {
         }
     }
 
-
     public void unexportPlatformManager(PlatformManager mgr) throws IMTPException {
         if (myRMIServiceManager != null && myRMIServiceManager.getPlatformManager().equals(mgr)) {
             // Unexport the PlatformManager we are currently exporting
@@ -292,7 +282,6 @@ public class RMIIMTPManager implements IMTPManager {
             // We are not exporting this PlatformManager --> Do Nothing...
         }
     }
-
 
     public PlatformManager getPlatformManagerProxy() throws IMTPException {
         return getPlatformManagerProxy("rmi://" + mainHost + ":" + mainPort + "/");
@@ -366,7 +355,6 @@ public class RMIIMTPManager implements IMTPManager {
         return addr1.equalsIgnoreCase(addr2);
     }
 
-
     /**
      * Creates the client socket factory, which will be used
      * to instantiate a <code>UnicastRemoteObject</code>.
@@ -386,10 +374,6 @@ public class RMIIMTPManager implements IMTPManager {
     public RMIServerSocketFactory getServerSocketFactory() {
         return null;
     }
-
-    private static final char SLASH = '/';
-    private static final char COLON = ':';
-    private static final char DIESIS = '#';
 
     public TransportAddress stringToAddr(String url) throws IMTPException {
         // FIXME: Refactor this code with jade.imtp.leap.TrasportProtocol.parseURL()

@@ -61,14 +61,6 @@ import java.util.*;
  */
 //#MIDP_EXCLUDE_BEGIN 
 public class ACLMessage implements Cloneable, Serializable {
-    //#MIDP_EXCLUDE_END
-/*#MIDP_INCLUDE_BEGIN 
-public class ACLMessage implements Serializable {
-#MIDP_INCLUDE_END*/
-    // Explicitly set for compatibility between standard and micro version
-    @Serial
-    private static final long serialVersionUID = 3945353187608998130L;
-
     /**
      * constant identifying the FIPA performative
      **/
@@ -161,15 +153,74 @@ public class ACLMessage implements Serializable {
      * constant identifying an unknown performative
      **/
     public static final int UNKNOWN = -1;
-
     /**
-     * @serial
+     * User defined parameter key specifying, when set to "true", that if the delivery of a
+     * message fails, no failure handling action must be performed.
      */
-    private int performative; // keeps the performative type of this object
+    public static final String IGNORE_FAILURE = "JADE-ignore-failure";
+    /**
+     * User defined parameter key specifying, when set to "true", that if the delivery of a
+     * message fails, no FAILURE notification has to be sent back to the sender.
+     * This differs from IGNORE_FAILURE since it does not inhibit the delivery failure
+     * handling mechanism (based on the NOTIFY_FAILURE VCommand) at all, but just the
+     * delivery of the automatic AMS FAILURE reply.
+     */
+    public static final String DONT_NOTIFY_FAILURE = "JADE-dont-notify-failure";
+    /**
+     * User defined parameter key specifying that the JADE tracing mechanism should be activated for this message.
+     */
+    public static final String TRACE = "JADE-trace";
+    /**
+     * User defined parameter key specifying that this message does not need to be cloned by the message delivery service.
+     * This should be used ONLY when the message object will not be modified after being sent
+     */
+    public static final String NO_CLONE = "JADE-no-clone";
+    /**
+     * User defined parameter key specifying that this message must be delivered synchronously. It should
+     * be noticed that when using synchronous delivery message order is not guaranteed.
+     */
+    public static final String SYNCH_DELIVERY = "JADE-synch-delivery";
+    /**
+     * User defined parameter key specifying the AID of the real sender of a message. This is automatically
+     * set by the MessagingService when posting a message where the sender field is different than the real
+     * sender.
+     */
+    public static final String REAL_SENDER = "JADE-real-sender";
+    /**
+     * User defined parameter key specifying that this message must be stored for a
+     * given timeout (in ms) in case it is sent to/from a temporarily disconnected split
+     * container. After that timeout a FAILURE message will be sent back to the sender.<br>
+     * 0 means store and forward disabled
+     * -1 means infinite timeout
+     */
+    public static final String SF_TIMEOUT = "JADE-SF-timeout";
+    /**
+     * AMS failure reasons
+     */
+    public static final String AMS_FAILURE_AGENT_NOT_FOUND = "Agent not found";
+    public static final String AMS_FAILURE_AGENT_UNREACHABLE = "Agent unreachable";
+    public static final String AMS_FAILURE_SERVICE_ERROR = "Service error";
+    public static final String AMS_FAILURE_UNAUTHORIZED = "Not authorized";
+    public static final String AMS_FAILURE_FOREIGN_AGENT_UNREACHABLE = "Foreign agent unreachable";
+    public static final String AMS_FAILURE_FOREIGN_AGENT_NO_ADDRESS = "Foreign agent with no address";
+    public static final String AMS_FAILURE_UNEXPECTED_ERROR = "Unexpected error";
+    //#MIDP_EXCLUDE_END
+/*#MIDP_INCLUDE_BEGIN
+public class ACLMessage implements Serializable {
+#MIDP_INCLUDE_END*/
+    // Explicitly set for compatibility between standard and micro version
+    @Serial
+    private static final long serialVersionUID = 3945353187608998130L;
     /**
      * This array of Strings keeps the names of the performatives
      **/
     private static final String[] performatives = new String[22];
+    /**
+     * These constants represent the expected size of the 2 array lists
+     * used by this class
+     **/
+    private static final int RECEIVERS_EXPECTED_SIZE = 1;
+    private static final int REPLYTO_EXPECTED_SIZE = 1;
 
     static { // initialization of the Vector of performatives
         performatives[ACCEPT_PROPOSAL] = "ACCEPT-PROPOSAL";
@@ -197,77 +248,13 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * User defined parameter key specifying, when set to "true", that if the delivery of a
-     * message fails, no failure handling action must be performed.
+     * @serial
      */
-    public static final String IGNORE_FAILURE = "JADE-ignore-failure";
-
-    /**
-     * User defined parameter key specifying, when set to "true", that if the delivery of a
-     * message fails, no FAILURE notification has to be sent back to the sender.
-     * This differs from IGNORE_FAILURE since it does not inhibit the delivery failure
-     * handling mechanism (based on the NOTIFY_FAILURE VCommand) at all, but just the
-     * delivery of the automatic AMS FAILURE reply.
-     */
-    public static final String DONT_NOTIFY_FAILURE = "JADE-dont-notify-failure";
-
-    /**
-     * User defined parameter key specifying that the JADE tracing mechanism should be activated for this message.
-     */
-    public static final String TRACE = "JADE-trace";
-
-    /**
-     * User defined parameter key specifying that this message does not need to be cloned by the message delivery service.
-     * This should be used ONLY when the message object will not be modified after being sent
-     */
-    public static final String NO_CLONE = "JADE-no-clone";
-
-    /**
-     * User defined parameter key specifying that this message must be delivered synchronously. It should
-     * be noticed that when using synchronous delivery message order is not guaranteed.
-     */
-    public static final String SYNCH_DELIVERY = "JADE-synch-delivery";
-
-    /**
-     * User defined parameter key specifying the AID of the real sender of a message. This is automatically
-     * set by the MessagingService when posting a message where the sender field is different than the real
-     * sender.
-     */
-    public static final String REAL_SENDER = "JADE-real-sender";
-
-    /**
-     * User defined parameter key specifying that this message must be stored for a
-     * given timeout (in ms) in case it is sent to/from a temporarily disconnected split
-     * container. After that timeout a FAILURE message will be sent back to the sender.<br>
-     * 0 means store and forward disabled
-     * -1 means infinite timeout
-     */
-    public static final String SF_TIMEOUT = "JADE-SF-timeout";
-
-    /**
-     * AMS failure reasons
-     */
-    public static final String AMS_FAILURE_AGENT_NOT_FOUND = "Agent not found";
-    public static final String AMS_FAILURE_AGENT_UNREACHABLE = "Agent unreachable";
-    public static final String AMS_FAILURE_SERVICE_ERROR = "Service error";
-    public static final String AMS_FAILURE_UNAUTHORIZED = "Not authorized";
-    public static final String AMS_FAILURE_FOREIGN_AGENT_UNREACHABLE = "Foreign agent unreachable";
-    public static final String AMS_FAILURE_FOREIGN_AGENT_NO_ADDRESS = "Foreign agent with no address";
-    public static final String AMS_FAILURE_UNEXPECTED_ERROR = "Unexpected error";
-
-
+    private int performative; // keeps the performative type of this object
     /**
      * @serial
      */
     private AID source = null;
-
-    /**
-     * These constants represent the expected size of the 2 array lists
-     * used by this class
-     **/
-    private static final int RECEIVERS_EXPECTED_SIZE = 1;
-    private static final int REPLYTO_EXPECTED_SIZE = 1;
-
     //#MIDP_EXCLUDE_BEGIN
     private ArrayList<AID> dests = new ArrayList<>(RECEIVERS_EXPECTED_SIZE);
     private ArrayList<AID> reply_to = null;
@@ -333,13 +320,8 @@ public class ACLMessage implements Serializable {
     //#CUSTOM_EXCLUDE_BEGIN
     private Envelope messageEnvelope;
     //#CUSTOM_EXCLUDE_END
-
-    /**
-     * Returns the list of the communicative acts as an array of <code>String</code>.
-     */
-    public static String[] getAllPerformativeNames() {
-        return performatives;
-    }
+    // For persistence service
+    private Long persistentID;
 
     /**
      * @see ACLMessage#ACLMessage(int)
@@ -364,14 +346,37 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Writes the <code>:sender</code> slot. <em><b>Warning:</b> no
-     * checks are made to validate the slot value.</em>
-     *
-     * @param s The new value for the slot.
-     * @see ACLMessage#getSender()
+     * Returns the list of the communicative acts as an array of <code>String</code>.
      */
-    public void setSender(AID s) {
-        source = s;
+    public static String[] getAllPerformativeNames() {
+        return performatives;
+    }
+
+    /**
+     * Returns the string corresponding to the integer for the performative
+     *
+     * @return the string corresponding to the integer for the performative;
+     * "NOT-UNDERSTOOD" if the integer is out of range.
+     */
+    public static String getPerformative(int perf) {
+        try {
+            return performatives[perf];
+        } catch (Exception e) {
+            return performatives[NOT_UNDERSTOOD];
+        }
+    }
+
+    /**
+     * Returns the integer corresponding to the performative
+     *
+     * @return the integer corresponding to the performative; -1 otherwise
+     */
+    public static int getInteger(String perf) {
+        String tmp = perf.toUpperCase();
+        for (int i = 0; i < performatives.length; i++)
+            if (performatives[i].equals(tmp))
+                return i;
+        return -1;
     }
 
     /**
@@ -391,25 +396,35 @@ public class ACLMessage implements Serializable {
         }
     }
 
-    /**add a receiver
-     * @param localName the local name of the receiver*/
+    /**
+     * add a receiver
+     *
+     * @param localName the local name of the receiver
+     */
     public void addReceiver(String localName) {
         if (localName != null) {
             dests.add(new AID(localName, false));
         }
     }
 
-    /**add some receivers
-     * @param localNames the local names of the receivers*/
-    public void addReceivers(String ... localNames) {
+    /**
+     * add some receivers
+     *
+     * @param localNames the local names of the receivers
+     */
+    public void addReceivers(String... localNames) {
         if (localNames != null) {
-            for(String localName:localNames)
+            for (String localName : localNames)
                 dests.add(new AID(localName, false));
         }
     }
-    /**add some receivers
-     * @param aids the aid of the receivers*/
-    public void addReceivers(AID ... aids) {
+
+    /**
+     * add some receivers
+     *
+     * @param aids the aid of the receivers
+     */
+    public void addReceivers(AID... aids) {
         if (aids != null) {
             Collections.addAll(dests, aids);
         }
@@ -449,7 +464,6 @@ public class ACLMessage implements Serializable {
 		 dests.removeAllElements();
 		 #MIDP_INCLUDE_END*/
     }
-
 
     /**
      * Adds a value to <code>:reply-to</code> slot. <em><b>Warning:</b>
@@ -508,57 +522,32 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * set the performative of this ACL message object to the passed constant.
-     * Remind to
-     * use the set of constants (i.e. <code> INFORM, REQUEST, ... </code>)
-     * defined in this class
-     */
-    public void setPerformative(int perf) {
-        performative = perf;
-    }
-
-    /**
-     * Writes the <code>:content</code> slot. <em><b>Warning:</b> no
-     * checks are made to validate the slot value.</em> <p>
-     * <p>Notice that, in general, setting a String content and getting
-     * back a byte sequence content - or viceversa - does not return
-     * the same value, i.e. the following relation does not hold
-     * <code>
-     * getByteSequenceContent(setByteSequenceContent(getContent().getBytes()))
-     * is equal to getByteSequenceContent()
-     * </code>
+     * This method returns the content of this ACLMessage when they have
+     * been written via the method <code>setContentObject</code>.
+     * It is not FIPA compliant so its usage is not encouraged.
+     * For example to read Java objects from the content
+     * <PRE>
+     * ACLMessage msg = blockingReceive();
+     * try{
+     * Date d = (Date)msg.getContentObject();
+     * }catch(UnreadableException e){}
+     * </PRE>
      *
-     * @param content The new value for the slot.
-     * @see ACLMessage#getContent()
-     * @see ACLMessage#setByteSequenceContent(byte[])
+     * @return the object read from the content of this ACLMessage
+     * exception UnreadableException when an error occurs during the decoding.
      */
-    public void setContent(String content) {
-        byteSequenceContent = null;
-        if (content != null) {
-            this.content = new StringBuffer(content);
-        } else {
-            this.content = null;
+    public Serializable getContentObject() throws UnreadableException {
+
+        try {
+            byte[] data = getByteSequenceContent();
+            if (data == null)
+                return null;
+            ObjectInputStream oin = new ObjectInputStream(new ByteArrayInputStream(data));
+            return (Serializable) oin.readObject();
+        } catch (Error | IOException | ClassNotFoundException e) {
+            throw new UnreadableException(e.getMessage());
         }
-    }
 
-    /**
-     * Writes the <code>:content</code> slot. <em><b>Warning:</b> no
-     * checks are made to validate the slot value.</em> <p>
-     * <p>Notice that, in general, setting a String content and getting
-     * back a byte sequence content - or viceversa - does not return
-     * the same value, i.e. the following relation does not hold
-     * <code>
-     * getByteSequenceContent(setByteSequenceContent(getContent().getBytes()))
-     * is equal to getByteSequenceContent()
-     * </code>
-     *
-     * @param byteSequenceContent The new value for the slot.
-     * @see ACLMessage#setContent(String s)
-     * @see ACLMessage#getByteSequenceContent()
-     */
-    public void setByteSequenceContent(byte[] byteSequenceContent) {
-        content = null;
-        this.byteSequenceContent = byteSequenceContent;
     }
 
 
@@ -587,127 +576,6 @@ public class ACLMessage implements Serializable {
         setByteSequenceContent(c.toByteArray());
     }
 
-
-    /**
-     * This method returns the content of this ACLMessage when they have
-     * been written via the method <code>setContentObject</code>.
-     * It is not FIPA compliant so its usage is not encouraged.
-     * For example to read Java objects from the content
-     * <PRE>
-     * ACLMessage msg = blockingReceive();
-     * try{
-     * Date d = (Date)msg.getContentObject();
-     * }catch(UnreadableException e){}
-     * </PRE>
-     *
-     * @return the object read from the content of this ACLMessage
-     * exception UnreadableException when an error occurs during the decoding.
-     */
-    public Serializable getContentObject() throws UnreadableException {
-
-        try {
-            byte[] data = getByteSequenceContent();
-            if (data == null)
-                return null;
-            ObjectInputStream oin = new ObjectInputStream(new ByteArrayInputStream(data));
-            return (Serializable) oin.readObject();
-        } catch (Error | IOException | ClassNotFoundException e) {
-            throw new UnreadableException(e.getMessage());
-        }
-
-    }
-    //#MIDP_EXCLUDE_END
-
-    /**
-     * Writes the <code>:reply-with</code> slot. <em><b>Warning:</b> no
-     * checks are made to validate the slot value.</em>
-     *
-     * @param reply The new value for the slot.
-     * @see ACLMessage#getReplyWith()
-     */
-    public void setReplyWith(String reply) {
-        reply_with = reply;
-    }
-
-    /**
-     * Writes the <code>:in-reply-to</code> slot. <em><b>Warning:</b> no
-     * checks are made to validate the slot value.</em>
-     *
-     * @param reply The new value for the slot.
-     * @see ACLMessage#getInReplyTo()
-     */
-    public void setInReplyTo(String reply) {
-        in_reply_to = reply;
-    }
-
-    /**
-     * Writes the <code>:encoding</code> slot. <em><b>Warning:</b> no
-     * checks are made to validate the slot value.</em>
-     *
-     * @param str The new value for the slot.
-     * @see ACLMessage#getEncoding()
-     */
-    public void setEncoding(String str) {
-        encoding = str;
-    }
-
-    /**
-     * Writes the <code>:language</code> slot. <em><b>Warning:</b> no
-     * checks are made to validate the slot value.</em>
-     *
-     * @param str The new value for the slot.
-     * @see ACLMessage#getLanguage()
-     */
-    public void setLanguage(String str) {
-        language = str;
-    }
-
-    /**
-     * Writes the <code>:ontology</code> slot. <em><b>Warning:</b> no
-     * checks are made to validate the slot value.</em>
-     *
-     * @param str The new value for the slot.
-     * @see ACLMessage#getOntology()
-     */
-    public void setOntology(String str) {
-        ontology = str;
-    }
-
-
-    /**
-     * Writes the <code>:reply-by</code> slot. <em><b>Warning:</b> no
-     * checks are made to validate the slot value.</em>
-     *
-     * @param date The new value for the slot.
-     * @see ACLMessage#getReplyByDate()
-     */
-    public void setReplyByDate(Date date) {
-        reply_byInMillisec = (date == null ? 0 : date.getTime());
-    }
-
-    /**
-     * Writes the <code>:protocol</code> slot. <em><b>Warning:</b> no
-     * checks are made to validate the slot value.</em>
-     *
-     * @param str The new value for the slot.
-     * @see ACLMessage#getProtocol()
-     */
-    public void setProtocol(String str) {
-        protocol = str;
-    }
-
-    /**
-     * Writes the <code>:conversation-id</code> slot. <em><b>Warning:</b> no
-     * checks are made to validate the slot value.</em>
-     *
-     * @param str The new value for the slot.
-     * @see ACLMessage#getConversationId()
-     */
-    public void setConversationId(String str) {
-        conversation_id = str;
-    }
-
-
     /**
      * Reads <code>:receiver</code> slot.
      *
@@ -722,6 +590,7 @@ public class ACLMessage implements Serializable {
 		 return new EnumIterator(dests.elements());
 		 #MIDP_INCLUDE_END*/
     }
+    //#MIDP_EXCLUDE_END
 
     /**
      * Reads <code>:reply_to</code> slot.
@@ -763,32 +632,15 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Returns the string corresponding to the integer for the performative
+     * Writes the <code>:sender</code> slot. <em><b>Warning:</b> no
+     * checks are made to validate the slot value.</em>
      *
-     * @return the string corresponding to the integer for the performative;
-     * "NOT-UNDERSTOOD" if the integer is out of range.
+     * @param s The new value for the slot.
+     * @see ACLMessage#getSender()
      */
-    public static String getPerformative(int perf) {
-        try {
-            return performatives[perf];
-        } catch (Exception e) {
-            return performatives[NOT_UNDERSTOOD];
-        }
+    public void setSender(AID s) {
+        source = s;
     }
-
-    /**
-     * Returns the integer corresponding to the performative
-     *
-     * @return the integer corresponding to the performative; -1 otherwise
-     */
-    public static int getInteger(String perf) {
-        String tmp = perf.toUpperCase();
-        for (int i = 0; i < performatives.length; i++)
-            if (performatives[i].equals(tmp))
-                return i;
-        return -1;
-    }
-
 
     /**
      * return the integer representing the performative of this object
@@ -797,6 +649,16 @@ public class ACLMessage implements Serializable {
      */
     public int getPerformative() {
         return performative;
+    }
+
+    /**
+     * set the performative of this ACL message object to the passed constant.
+     * Remind to
+     * use the set of constants (i.e. <code> INFORM, REQUEST, ... </code>)
+     * defined in this class
+     */
+    public void setPerformative(int perf) {
+        performative = perf;
     }
 
     /**
@@ -833,6 +695,30 @@ public class ACLMessage implements Serializable {
     }
 
     /**
+     * Writes the <code>:content</code> slot. <em><b>Warning:</b> no
+     * checks are made to validate the slot value.</em> <p>
+     * <p>Notice that, in general, setting a String content and getting
+     * back a byte sequence content - or viceversa - does not return
+     * the same value, i.e. the following relation does not hold
+     * <code>
+     * getByteSequenceContent(setByteSequenceContent(getContent().getBytes()))
+     * is equal to getByteSequenceContent()
+     * </code>
+     *
+     * @param content The new value for the slot.
+     * @see ACLMessage#getContent()
+     * @see ACLMessage#setByteSequenceContent(byte[])
+     */
+    public void setContent(String content) {
+        byteSequenceContent = null;
+        if (content != null) {
+            this.content = new StringBuffer(content);
+        } else {
+            this.content = null;
+        }
+    }
+
+    /**
      * Reads <code>:content</code> slot. <p>
      * <p>Notice that, in general, setting a String content and getting
      * back a byte sequence content - or viceversa - does not return
@@ -856,6 +742,26 @@ public class ACLMessage implements Serializable {
     }
 
     /**
+     * Writes the <code>:content</code> slot. <em><b>Warning:</b> no
+     * checks are made to validate the slot value.</em> <p>
+     * <p>Notice that, in general, setting a String content and getting
+     * back a byte sequence content - or viceversa - does not return
+     * the same value, i.e. the following relation does not hold
+     * <code>
+     * getByteSequenceContent(setByteSequenceContent(getContent().getBytes()))
+     * is equal to getByteSequenceContent()
+     * </code>
+     *
+     * @param byteSequenceContent The new value for the slot.
+     * @see ACLMessage#setContent(String s)
+     * @see ACLMessage#getByteSequenceContent()
+     */
+    public void setByteSequenceContent(byte[] byteSequenceContent) {
+        content = null;
+        this.byteSequenceContent = byteSequenceContent;
+    }
+
+    /**
      * Reads <code>:reply-with</code> slot.
      *
      * @return The value of <code>:reply-with</code>slot.
@@ -863,6 +769,17 @@ public class ACLMessage implements Serializable {
      */
     public String getReplyWith() {
         return reply_with;
+    }
+
+    /**
+     * Writes the <code>:reply-with</code> slot. <em><b>Warning:</b> no
+     * checks are made to validate the slot value.</em>
+     *
+     * @param reply The new value for the slot.
+     * @see ACLMessage#getReplyWith()
+     */
+    public void setReplyWith(String reply) {
+        reply_with = reply;
     }
 
     /**
@@ -875,6 +792,16 @@ public class ACLMessage implements Serializable {
         return in_reply_to;
     }
 
+    /**
+     * Writes the <code>:in-reply-to</code> slot. <em><b>Warning:</b> no
+     * checks are made to validate the slot value.</em>
+     *
+     * @param reply The new value for the slot.
+     * @see ACLMessage#getInReplyTo()
+     */
+    public void setInReplyTo(String reply) {
+        in_reply_to = reply;
+    }
 
     /**
      * Reads <code>:encoding</code> slot.
@@ -884,6 +811,17 @@ public class ACLMessage implements Serializable {
      */
     public String getEncoding() {
         return encoding;
+    }
+
+    /**
+     * Writes the <code>:encoding</code> slot. <em><b>Warning:</b> no
+     * checks are made to validate the slot value.</em>
+     *
+     * @param str The new value for the slot.
+     * @see ACLMessage#getEncoding()
+     */
+    public void setEncoding(String str) {
+        encoding = str;
     }
 
     /**
@@ -897,6 +835,17 @@ public class ACLMessage implements Serializable {
     }
 
     /**
+     * Writes the <code>:language</code> slot. <em><b>Warning:</b> no
+     * checks are made to validate the slot value.</em>
+     *
+     * @param str The new value for the slot.
+     * @see ACLMessage#getLanguage()
+     */
+    public void setLanguage(String str) {
+        language = str;
+    }
+
+    /**
      * Reads <code>:ontology</code> slot.
      *
      * @return The value of <code>:ontology</code>slot.
@@ -906,7 +855,16 @@ public class ACLMessage implements Serializable {
         return ontology;
     }
 
-    //#MIDP_EXCLUDE_BEGIN
+    /**
+     * Writes the <code>:ontology</code> slot. <em><b>Warning:</b> no
+     * checks are made to validate the slot value.</em>
+     *
+     * @param str The new value for the slot.
+     * @see ACLMessage#getOntology()
+     */
+    public void setOntology(String str) {
+        ontology = str;
+    }
 
     /**
      * Reads <code>:reply-by</code> slot.
@@ -922,7 +880,6 @@ public class ACLMessage implements Serializable {
         else
             return null;
     }
-    //#MIDP_EXCLUDE_END
 
     /**
      * Reads <code>:reply-by</code> slot.
@@ -938,6 +895,20 @@ public class ACLMessage implements Serializable {
             return null;
     }
 
+    //#MIDP_EXCLUDE_BEGIN
+
+    /**
+     * Writes the <code>:reply-by</code> slot. <em><b>Warning:</b> no
+     * checks are made to validate the slot value.</em>
+     *
+     * @param date The new value for the slot.
+     * @see ACLMessage#getReplyByDate()
+     */
+    public void setReplyByDate(Date date) {
+        reply_byInMillisec = (date == null ? 0 : date.getTime());
+    }
+    //#MIDP_EXCLUDE_END
+
     /**
      * Reads <code>:protocol</code> slot.
      *
@@ -946,6 +917,17 @@ public class ACLMessage implements Serializable {
      */
     public String getProtocol() {
         return protocol;
+    }
+
+    /**
+     * Writes the <code>:protocol</code> slot. <em><b>Warning:</b> no
+     * checks are made to validate the slot value.</em>
+     *
+     * @param str The new value for the slot.
+     * @see ACLMessage#getProtocol()
+     */
+    public void setProtocol(String str) {
+        protocol = str;
     }
 
     /**
@@ -958,6 +940,16 @@ public class ACLMessage implements Serializable {
         return conversation_id;
     }
 
+    /**
+     * Writes the <code>:conversation-id</code> slot. <em><b>Warning:</b> no
+     * checks are made to validate the slot value.</em>
+     *
+     * @param str The new value for the slot.
+     * @see ACLMessage#getConversationId()
+     */
+    public void setConversationId(String str) {
+        conversation_id = str;
+    }
 
     /**
      * Add a new user defined parameter to this ACLMessage.
@@ -1029,27 +1021,15 @@ public class ACLMessage implements Serializable {
             return userDefProps.remove(key);
     }
 
-    public void setPostTimeStamp(long time) {
-        postTimeStamp = time;
-    }
-
     public long getPostTimeStamp() {
         return postTimeStamp;
     }
 
 //	#CUSTOM_EXCLUDE_BEGIN
 
-    /**
-     * Attaches an envelope to this message. The envelope is used by the
-     * <b><it>ACC</it></b> for inter-platform messaging.
-     *
-     * @param e The <code>Envelope</code> object to attach to this
-     *          message.
-     */
-    public void setEnvelope(Envelope e) {
-        messageEnvelope = e;
+    public void setPostTimeStamp(long time) {
+        postTimeStamp = time;
     }
-
 
     /**
      * Writes the message envelope for this message, using the
@@ -1084,6 +1064,18 @@ public class ACLMessage implements Serializable {
     //#MIDP_EXCLUDE_BEGIN
 
     /**
+     * Attaches an envelope to this message. The envelope is used by the
+     * <b><it>ACC</it></b> for inter-platform messaging.
+     *
+     * @param e The <code>Envelope</code> object to attach to this
+     *          message.
+     */
+    public void setEnvelope(Envelope e) {
+        messageEnvelope = e;
+    }
+    //#MIDP_EXCLUDE_END
+
+    /**
      * Convert an ACL message to its string representation. This method
      * writes a representation of this <code>ACLMessage</code> into a
      * character string.
@@ -1096,6 +1088,38 @@ public class ACLMessage implements Serializable {
         return StringACLCodec.toString(this);
     }
     //#MIDP_EXCLUDE_END
+	/*#MIDP_INCLUDE_BEGIN
+	 public synchronized Object clone() {
+	 ACLMessage result = new ACLMessage(NOT_UNDERSTOOD);
+	 result.performative = performative;
+	 result.source = source;
+	 result.content = content;
+	 result.byteSequenceContent = byteSequenceContent;
+	 result.reply_with = reply_with;
+	 result.in_reply_to = in_reply_to;
+	 result.encoding = encoding;
+	 result.language = language;
+	 result.ontology = ontology;
+	 result.reply_byInMillisec = reply_byInMillisec;
+	 result.protocol = protocol;
+	 result.conversation_id = conversation_id;
+	 result.userDefProps = userDefProps;
+	 //#CUSTOM_EXCLUDE_BEGIN
+	  if(messageEnvelope != null) {
+	  result.messageEnvelope = (Envelope)messageEnvelope.clone(); 
+	  }
+	  //#CUSTOM_EXCLUDE_END
+	   result.dests = new Vector(dests.size());
+	   for (int i=0; i<dests.size(); i++)
+	   result.dests.addElement(dests.elementAt(i));
+	   if (reply_to != null) {
+	   result.reply_to = new Vector(reply_to.size());
+	   for (int i=0; i<reply_to.size(); i++)
+	   result.reply_to.addElement(reply_to.elementAt(i));
+	   }
+	   return result;
+	   } 
+	   #MIDP_INCLUDE_END*/
 
     /**
      * Clone an <code>ACLMessage</code> object.
@@ -1144,39 +1168,6 @@ public class ACLMessage implements Serializable {
 
         return result;
     }
-    //#MIDP_EXCLUDE_END
-	/*#MIDP_INCLUDE_BEGIN
-	 public synchronized Object clone() {
-	 ACLMessage result = new ACLMessage(NOT_UNDERSTOOD);
-	 result.performative = performative;
-	 result.source = source;
-	 result.content = content;
-	 result.byteSequenceContent = byteSequenceContent;
-	 result.reply_with = reply_with;
-	 result.in_reply_to = in_reply_to;
-	 result.encoding = encoding;
-	 result.language = language;
-	 result.ontology = ontology;
-	 result.reply_byInMillisec = reply_byInMillisec;
-	 result.protocol = protocol;
-	 result.conversation_id = conversation_id;
-	 result.userDefProps = userDefProps;
-	 //#CUSTOM_EXCLUDE_BEGIN
-	  if(messageEnvelope != null) {
-	  result.messageEnvelope = (Envelope)messageEnvelope.clone(); 
-	  }
-	  //#CUSTOM_EXCLUDE_END
-	   result.dests = new Vector(dests.size());
-	   for (int i=0; i<dests.size(); i++)
-	   result.dests.addElement(dests.elementAt(i));
-	   if (reply_to != null) {
-	   result.reply_to = new Vector(reply_to.size());
-	   for (int i=0; i<reply_to.size(); i++)
-	   result.reply_to.addElement(reply_to.elementAt(i));
-	   }
-	   return result;
-	   } 
-	   #MIDP_INCLUDE_END*/
 
     /**
      * Normal clone() method actually perform a deep-clone of the ACLMessage object.
@@ -1288,6 +1279,8 @@ public class ACLMessage implements Serializable {
         return m;
     }
 
+    //#MIDP_EXCLUDE_BEGIN
+
     /**
      * retrieve the whole list of intended receivers for this message.
      *
@@ -1316,12 +1309,6 @@ public class ACLMessage implements Serializable {
         return it;
     }
 
-    //#MIDP_EXCLUDE_BEGIN
-
-
-    // For persistence service
-    private Long persistentID;
-
     // For persistence service
     private Long getPersistentID() {
         return persistentID;
@@ -1332,20 +1319,14 @@ public class ACLMessage implements Serializable {
         persistentID = l;
     }
 
-
-    // For persistence service
-    private void setReceivers(ArrayList<AID> al) {
-        dests = al;
-    }
-
     // For persistence service
     private ArrayList<AID> getReceivers() {
         return dests;
     }
 
     // For persistence service
-    private void setReplyTo(ArrayList<AID> al) {
-        reply_to = al;
+    private void setReceivers(ArrayList<AID> al) {
+        dests = al;
     }
 
     // For persistence service
@@ -1354,13 +1335,18 @@ public class ACLMessage implements Serializable {
     }
 
     // For persistence service
-    private void setUserDefinedProperties(Serializable p) {
-        userDefProps = (Properties) p;
+    private void setReplyTo(ArrayList<AID> al) {
+        reply_to = al;
     }
 
     // For persistence service
     private Serializable getUserDefinedProperties() {
         return userDefProps;
+    }
+
+    // For persistence service
+    private void setUserDefinedProperties(Serializable p) {
+        userDefProps = (Properties) p;
     }
 
 

@@ -31,22 +31,22 @@ import jade.content.onto.OntologyException;
 
 /**
  * This class represents the schema of an Identifying Referential
- * Expression (IRE) in an ontology. 
+ * Expression (IRE) in an ontology.
  * Note that an IRESchema should also be a TermSchema, but
  * this inheritance relation is cut as Java does not support
- * multiple inheritance. As a consequence in practice it will 
- * not be possible to define e.g. a ConceptSchema with a slot 
- * whose value must be instances of a certain type of IRE even if in theory 
- * this should be possible as a ConceptSchema can have slots 
+ * multiple inheritance. As a consequence in practice it will
+ * not be possible to define e.g. a ConceptSchema with a slot
+ * whose value must be instances of a certain type of IRE even if in theory
+ * this should be possible as a ConceptSchema can have slots
  * of type term and an IRE is a term.
+ *
  * @author Federico Bergenti - Universita` di Parma
  */
 public class IRESchema extends TermSchema {
     public static final String BASE_NAME = "IRE";
-    private static final IRESchema baseSchema = new IRESchema();
-
     public static final String VARIABLE = "Variable";
     public static final String PROPOSITION = "Proposition";
+    private static final IRESchema baseSchema = new IRESchema();
 
     /**
      * Construct a schema that vinculates an entity to be a generic
@@ -59,8 +59,9 @@ public class IRESchema extends TermSchema {
     /**
      * Creates a <code>IRESchema</code> with a given type-name.
      * All ire-s have a variable and a proposition.
-     * @param typeName The name of this <code>IRESchema</code> 
-     * (e.g. IOTA, ANY, ALL).
+     *
+     * @param typeName The name of this <code>IRESchema</code>
+     *                 (e.g. IOTA, ANY, ALL).
      */
     public IRESchema(String typeName) {
         super(typeName);
@@ -71,6 +72,7 @@ public class IRESchema extends TermSchema {
 
     /**
      * Retrieve the generic base schema for all ire-s.
+     *
      * @return the generic base schema for all ire-s.
      */
     public static ObjectSchema getBaseSchema() {
@@ -86,11 +88,12 @@ public class IRESchema extends TermSchema {
     }
 
     /**
-     Check whether a given abstract descriptor complies with this
-     schema.
-     @param abs The abstract descriptor to be checked
-     @throws OntologyException If the abstract descriptor does not
-     complies with this schema
+     * Check whether a given abstract descriptor complies with this
+     * schema.
+     *
+     * @param abs The abstract descriptor to be checked
+     * @throws OntologyException If the abstract descriptor does not
+     *                           complies with this schema
      */
     public void validate(AbsObject abs, Ontology onto) throws OntologyException {
         // Check the type of the abstract descriptor
@@ -103,9 +106,9 @@ public class IRESchema extends TermSchema {
     }
 
     /**
-     An IRE can be put whereever a term of whatever type is
-     required --> An IRESchema is
-     compatible with s if s descends from TermSchema.getBaseSchema()
+     * An IRE can be put whereever a term of whatever type is
+     * required --> An IRESchema is
+     * compatible with s if s descends from TermSchema.getBaseSchema()
      */
     public boolean isCompatibleWith(ObjectSchema s) {
         if (s != null) {
@@ -116,19 +119,19 @@ public class IRESchema extends TermSchema {
     }
 
     /**
-     Return true if
-     - s is the base schema for the XXXSchema class this schema is
-     an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
-     schema is an instance of ConceptSchema)
-     - s is the base schema for a super-class of the XXXSchema class
-     this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
-     and this schema is an instance of ConceptSchema.
-     Moreover, as IRESchema extends ContentElementSchema, but should
-     also extend TermSchema (this is not possible in practice as
-     Java does not support multiple inheritance), this method
-     returns true also in the case that s is equals to, or is an
-     ancestor of, TermSchema.getBaseSchema() (i.e. TermSchema.getBaseSchema()
-     descends from s)
+     * Return true if
+     * - s is the base schema for the XXXSchema class this schema is
+     * an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
+     * schema is an instance of ConceptSchema)
+     * - s is the base schema for a super-class of the XXXSchema class
+     * this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
+     * and this schema is an instance of ConceptSchema.
+     * Moreover, as IRESchema extends ContentElementSchema, but should
+     * also extend TermSchema (this is not possible in practice as
+     * Java does not support multiple inheritance), this method
+     * returns true also in the case that s is equals to, or is an
+     * ancestor of, TermSchema.getBaseSchema() (i.e. TermSchema.getBaseSchema()
+     * descends from s)
      */
     protected boolean descendsFrom(ObjectSchema s) {
         if (s != null) {

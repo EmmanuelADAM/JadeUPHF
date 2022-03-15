@@ -46,9 +46,15 @@ import java.util.Map;
  */
 public class StatePanel extends JPanel {
 
-    private int state;
-
     private final ButtonGroup leds;
+    private final Icon ledOff = new ImageIcon(getClass().getResource("images/rbs.gif"));
+    private final Icon ledOn = new ImageIcon(getClass().getResource("images/rbrs.gif"));
+    private final Icon button = new ImageIcon(getClass().getResource("images/rb.gif"));
+    private final Icon pressedButton = new ImageIcon(getClass().getResource("images/rbp.gif"));
+    private final Font myFont = new Font("Monospaced", Font.BOLD, 10);
+    private final MainBarListener listener;
+    private final Map<AgentState, JRadioButton> ledMap = new HashMap<>();
+    private int state;
     private JRadioButton waitingLed;
     private JRadioButton activeLed;
     private JRadioButton suspendedLed;
@@ -59,16 +65,6 @@ public class StatePanel extends JPanel {
     private JButton waitAction;
     private JButton wakeUpAction;
     private JButton killAction;
-
-    private final Icon ledOff = new ImageIcon(getClass().getResource("images/rbs.gif"));
-    private final Icon ledOn = new ImageIcon(getClass().getResource("images/rbrs.gif"));
-    private final Icon button = new ImageIcon(getClass().getResource("images/rb.gif"));
-    private final Icon pressedButton = new ImageIcon(getClass().getResource("images/rbp.gif"));
-    private final Font myFont = new Font("Monospaced", Font.BOLD, 10);
-
-    private final MainBarListener listener;
-
-    private final Map<AgentState, JRadioButton> ledMap = new HashMap<>();
 
     public StatePanel(MainBarListener list) {
         super();

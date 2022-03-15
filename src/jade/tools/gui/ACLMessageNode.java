@@ -42,6 +42,13 @@ import java.util.Date;
 
 public class ACLMessageNode extends DefaultMutableTreeNode {
 
+    private static final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
+    private Date theDate = new Date();
+    private ACLMessage theMessage;
+    private String direction;
+    private String time;
+
+
     /**
      * Constructor for the MessageNode object
      *
@@ -50,7 +57,6 @@ public class ACLMessageNode extends DefaultMutableTreeNode {
     ACLMessageNode(String str) {
         super(str);
     }
-
 
     /**
      * Gets the Message attribute of the MessageNode object
@@ -61,6 +67,14 @@ public class ACLMessageNode extends DefaultMutableTreeNode {
         return theMessage;
     }
 
+    /**
+     * Sets the Message attribute of the MessageNode object
+     *
+     * @param msg The new Message value
+     */
+    public void setMessage(ACLMessage msg) {
+        theMessage = (ACLMessage) msg.clone();
+    }
 
     /**
      * Gets the Performative attribute of the MessageNode object
@@ -70,7 +84,6 @@ public class ACLMessageNode extends DefaultMutableTreeNode {
     public String getPerformative() {
         return ACLMessage.getPerformative(theMessage.getPerformative());
     }
-
 
     /**
      * Gets the SendTo attribute of the MessageNode object
@@ -85,7 +98,6 @@ public class ACLMessageNode extends DefaultMutableTreeNode {
         return "<unknown>";
     }
 
-
     /**
      * Gets the Ontology attribute of the MessageNode object
      *
@@ -99,7 +111,6 @@ public class ACLMessageNode extends DefaultMutableTreeNode {
         return "<unknown>";
     }
 
-
     /**
      * Gets the Direction attribute of the MessageNode object
      *
@@ -108,27 +119,6 @@ public class ACLMessageNode extends DefaultMutableTreeNode {
     public String getDirection() {
         return direction;
     }
-
-
-    public String getTime() {
-        return time;
-    }
-
-
-    public Date getTheDate() {
-        return theDate;
-    }
-
-
-    /**
-     * Sets the Message attribute of the MessageNode object
-     *
-     * @param msg The new Message value
-     */
-    public void setMessage(ACLMessage msg) {
-        theMessage = (ACLMessage) msg.clone();
-    }
-
 
     /**
      * Sets the Direction attribute of the MessageNode object
@@ -139,6 +129,9 @@ public class ACLMessageNode extends DefaultMutableTreeNode {
         direction = theDirection;
     }
 
+    public String getTime() {
+        return time;
+    }
 
     public void setTime(String theTime) {
         time = theTime;
@@ -149,11 +142,13 @@ public class ACLMessageNode extends DefaultMutableTreeNode {
         }
     }
 
+    public Date getTheDate() {
+        return theDate;
+    }
 
     public void setTheDate(Date theTheDate) {
         theDate = theTheDate;
     }
-
 
     public String receivedFrom() {
         if (theMessage.getSender() != null) {
@@ -162,12 +157,5 @@ public class ACLMessageNode extends DefaultMutableTreeNode {
         }
         return "<unknown>";
     }
-
-
-    private static final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
-    private Date theDate = new Date();
-    private ACLMessage theMessage;
-    private String direction;
-    private String time;
 }
 //  ***EOF***

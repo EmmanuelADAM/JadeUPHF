@@ -126,134 +126,19 @@ public class Sniffer extends ToolAgent {
 
     public static final boolean SNIFF_ON = true;
     public static final boolean SNIFF_OFF = false;
-
+    private final ArrayList<Agent> agentsUnderSniff = new ArrayList<>();
+    private final SequentialBehaviour AMSSubscribe = new SequentialBehaviour();
     private Set<AID> allAgents = null;
     private Hashtable<String, boolean[]> preload = null;
     private ExtendedProperties properties = null;
-
-    private final ArrayList<Agent> agentsUnderSniff = new ArrayList<>();
-
-
-    // Sends requests to the AMS
-    private class AMSClientBehaviour extends SimpleAchieveREInitiator {
-
-        private final String actionName;
-
-        public AMSClientBehaviour(String an, ACLMessage request) {
-            super(Sniffer.this, request);
-            actionName = an;
-        }
-
-        protected void handleNotUnderstood(ACLMessage reply) {
-            myGUI.showError("NOT-UNDERSTOOD received during " + actionName);
-        }
-
-        protected void handleRefuse(ACLMessage reply) {
-            myGUI.showError("REFUSE received during " + actionName);
-        }
-
-        protected void handleAgree(ACLMessage reply) {
-            if (logger.isLoggable(Logger.FINE))
-                logger.log(Logger.FINE, "AGREE received");
-        }
-
-        protected void handleFailure(ACLMessage reply) {
-            myGUI.showError("FAILURE received during " + actionName);
-        }
-
-        protected void handleInform(ACLMessage reply) {
-            if (logger.isLoggable(Logger.FINE))
-                logger.log(Logger.FINE, "INFORM received");
-        }
-
-    } // End of AMSClientBehaviour class
-
-
-    private class SniffListenerBehaviour extends CyclicBehaviour {
-
-        private final MessageTemplate listenSniffTemplate;
-
-        SniffListenerBehaviour() {
-            listenSniffTemplate = MessageTemplate.MatchConversationId(getName() + "-event");
-        }
-
-        public void action() {
-
-            ACLMessage current = receive(listenSniffTemplate);
-            if (current != null) {
-
-                try {
-                    Occurred o = (Occurred) getContentManager().extractContent(current);
-                    EventRecord er = o.getWhat();
-                    Event ev = er.getWhat();
-                    String content = null;
-                    Envelope env = null;
-                    AID unicastReceiver = null;
-                    if (ev instanceof SentMessage) {
-                        content = ((SentMessage) ev).getMessage().getPayload();
-                        env = ((SentMessage) ev).getMessage().getEnvelope();
-                        unicastReceiver = ((SentMessage) ev).getReceiver();
-                    } else if (ev instanceof PostedMessage) {
-                        content = ((PostedMessage) ev).getMessage().getPayload();
-                        env = ((PostedMessage) ev).getMessage().getEnvelope();
-                        unicastReceiver = ((PostedMessage) ev).getReceiver();
-                        AID sender = ((PostedMessage) ev).getSender();
-                        // If the sender is currently under sniff, then the message was already
-                        // displayed when the 'sent-message' event occurred --> just skip this message.
-                        if (agentsUnderSniff.contains(new Agent(sender))) {
-                            return;
-                        }
-                    } else {
-                        return;
-                    }
-
-                    ACLCodec codec = new StringACLCodec();
-                    String charset = null;
-                    if ((env == null) || ((charset = env.getPayloadEncoding()) == null)) {
-                        charset = ACLCodec.DEFAULT_CHARSET;
-                    }
-                    ACLMessage tmp = codec.decode(content.getBytes(charset), charset);
-                    tmp.setEnvelope(env);
-                    Message msg = new Message(tmp, unicastReceiver);
-
-					/* If this is a 'posted-message' event and the sender is
-					// currently under sniff, then the message was already
-					// displayed when the 'sent-message' event occurred. In that
-					// case, we simply skip this message.
-					if(ev instanceof PostedMessage) {
-						Agent a = new Agent(msg.getSender());
-						if(agentsUnderSniff.contains(a))
-							return;
-					}*/
-
-
-                    // If the message that we just got is one that should be filtered out
-                    // then drop it.  WARNING - this means that the log file
-                    // that the sniffer might dump does not include the message!!!!
-                    boolean[] filters;
-                    String agentName = msg.getSender().getName();
-                    String key = preloadContains(agentName);
-                    if (key != null) {
-                        filters = preload.get(key);
-                        if ((msg.getPerformative() >= 0) && filters[msg.getPerformative()]) {
-                            myGUI.mainPanel.panelcan.canvMess.recMessage(msg);
-                        }
-                    } else {
-                        myGUI.mainPanel.panelcan.canvMess.recMessage(msg);
-                    }
-                } catch (Throwable e) {
-                    //System.out.println("Serious problem Occurred");
-                    myGUI.showError("An error occurred parsing the incoming message.\n" +
-                            "          The message was lost.");
-                    if (logger.isLoggable(Logger.WARNING))
-                        logger.log(Logger.WARNING, "The sniffer lost the following message because of a parsing error:" + current);
-                    e.printStackTrace();
-                }
-            } else
-                block();
-        }
-
-    } // End of SniffListenerBehaviour
+    /**
+     * @serial
+     */
+    private MainWindow myGUI;
+    /**
+     * @serial
+     */
+    private String myContainerName;
 
     //
     //
@@ -305,95 +190,6 @@ public class Sniffer extends ToolAgent {
         }
         return (expressionLength == aString.length());
     }
-
-    private final SequentialBehaviour AMSSubscribe = new SequentialBehaviour();
-
-    /**
-     * @serial
-     */
-    private MainWindow myGUI;
-
-    /**
-     * @serial
-     */
-    private String myContainerName;
-
-    class SnifferAMSListenerBehaviour extends AMSListenerBehaviour {
-
-        protected void installHandlers(Map<String, EventHandler> handlersTable) {
-
-
-            // Fill the event handler table.
-
-            handlersTable.put(IntrospectionVocabulary.META_RESETEVENTS, (EventHandler) ev -> {
-                ResetEvents re = (ResetEvents) ev;
-                myGUI.resetTree();
-                allAgents.clear();
-            });
-
-            handlersTable.put(IntrospectionVocabulary.ADDEDCONTAINER, (EventHandler) ev -> {
-                AddedContainer ac = (AddedContainer) ev;
-                ContainerID cid = ac.getContainer();
-                String name = cid.getName();
-                String address = cid.getAddress();
-                try {
-                    InetAddress addr = InetAddress.getByName(address);
-                    myGUI.addContainer(name, addr);
-                } catch (UnknownHostException uhe) {
-                    myGUI.addContainer(name, null);
-                }
-            });
-
-            handlersTable.put(IntrospectionVocabulary.REMOVEDCONTAINER, (EventHandler) ev -> {
-                RemovedContainer rc = (RemovedContainer) ev;
-                ContainerID cid = rc.getContainer();
-                String name = cid.getName();
-                myGUI.removeContainer(name);
-            });
-
-            handlersTable.put(IntrospectionVocabulary.BORNAGENT, (EventHandler) ev -> {
-                BornAgent ba = (BornAgent) ev;
-                ContainerID cid = ba.getWhere();
-                String container = cid.getName();
-                AID agent = ba.getAgent();
-                myGUI.addAgent(container, agent);
-                allAgents.add(agent);
-                if (agent.equals(getAID()))
-                    myContainerName = container;
-                // Here we check to see if the agent is one that we automatically will
-                // start sniffing.  If so, we invoke DoSnifferAction's doSniff and start
-                // the sniffing process.
-                // Avoid sniffing myself to avoid infinite recursion
-                if (!agent.equals(getAID())) {
-                    if (preloadContains(agent.getName()) != null) {
-                        ActionProcessor ap = myGUI.actPro;
-                        DoSnifferAction sa = (DoSnifferAction) ap.actions.get(ActionProcessor.DO_SNIFFER_ACTION);
-                        sa.doSniff(agent.getName());
-                    }
-                }
-            });
-
-            handlersTable.put(IntrospectionVocabulary.DEADAGENT, (EventHandler) ev -> {
-                DeadAgent da = (DeadAgent) ev;
-                ContainerID cid = da.getWhere();
-                String container = cid.getName();
-                AID agent = da.getAgent();
-                myGUI.removeAgent(container, agent);
-                allAgents.remove(agent);
-
-            });
-
-            handlersTable.put(IntrospectionVocabulary.MOVEDAGENT, (EventHandler) ev -> {
-                MovedAgent ma = (MovedAgent) ev;
-                AID agent = ma.getAgent();
-                ContainerID from = ma.getFrom();
-                myGUI.removeAgent(from.getName(), agent);
-                ContainerID to = ma.getTo();
-                myGUI.addAgent(to.getName(), agent);
-            });
-
-        }
-    }    // END of inner class SnifferAMSListenerBehaviour
 
     /**
      * ACLMessages for subscription and unsubscription as <em>rma</em> are created and
@@ -471,33 +267,6 @@ public class Sniffer extends ToolAgent {
 	#DOTNET_INCLUDE_END*/
     }
 
-	/*#DOTNET_INCLUDE_BEGIN
-  	private void createUI()
-	{
-		// Show Graphical User Interface
-		myGUI = new MainWindow(this, properties);
-		myGUI.ShowCorrect();
-		System.Windows.Forms.Application.Run();
-	}
-
-	protected void startBehaviours()
-	{
-		// Send 'subscribe' message to the AMS
-		AMSSubscribe.addSubBehaviour(new SenderBehaviour(this, getSubscribe()));
-
-		// Handle incoming 'inform' messages
-		AMSSubscribe.addSubBehaviour(new SnifferAMSListenerBehaviour());
-
-		// Handle incoming REQUEST to start/stop sniffing agents
-		addBehaviour(new RequestListenerBehaviour());
-
-		// Schedule Behaviours for execution
-		addBehaviour(AMSSubscribe);
-		addBehaviour(new SniffListenerBehaviour());
-	}
-  #DOTNET_INCLUDE_END*/
-
-
     private void addAgent(AID id) {
         ActionProcessor ap = myGUI.actPro;
         DoSnifferAction sa = (DoSnifferAction) ap.actions.get(ActionProcessor.DO_SNIFFER_ACTION);
@@ -509,7 +278,6 @@ public class Sniffer extends ToolAgent {
         DoNotSnifferAction nsa = (DoNotSnifferAction) ap.actions.get(ActionProcessor.DO_NOT_SNIFFER_ACTION);
         nsa.doNotSniff(id.getName());
     }
-
 
     /**
      * Private function to read configuration file containing names of agents to be
@@ -553,6 +321,32 @@ public class Sniffer extends ToolAgent {
         }
     }
 
+	/*#DOTNET_INCLUDE_BEGIN
+  	private void createUI()
+	{
+		// Show Graphical User Interface
+		myGUI = new MainWindow(this, properties);
+		myGUI.ShowCorrect();
+		System.Windows.Forms.Application.Run();
+	}
+
+	protected void startBehaviours()
+	{
+		// Send 'subscribe' message to the AMS
+		AMSSubscribe.addSubBehaviour(new SenderBehaviour(this, getSubscribe()));
+
+		// Handle incoming 'inform' messages
+		AMSSubscribe.addSubBehaviour(new SnifferAMSListenerBehaviour());
+
+		// Handle incoming REQUEST to start/stop sniffing agents
+		addBehaviour(new RequestListenerBehaviour());
+
+		// Schedule Behaviours for execution
+		addBehaviour(AMSSubscribe);
+		addBehaviour(new SniffListenerBehaviour());
+	}
+  #DOTNET_INCLUDE_END*/
+
     private String locateFile(String aFileName) {
         try {
             String path = (new File(".")).getAbsolutePath();
@@ -578,7 +372,6 @@ public class Sniffer extends ToolAgent {
         }
         return null;
     }
-
 
     private void parsePreloadDescription(String aDescription) {
         StringTokenizer st = new StringTokenizer(aDescription);
@@ -722,6 +515,202 @@ public class Sniffer extends ToolAgent {
         return null;
     }
 
+    // Sends requests to the AMS
+    private class AMSClientBehaviour extends SimpleAchieveREInitiator {
+
+        private final String actionName;
+
+        public AMSClientBehaviour(String an, ACLMessage request) {
+            super(Sniffer.this, request);
+            actionName = an;
+        }
+
+        protected void handleNotUnderstood(ACLMessage reply) {
+            myGUI.showError("NOT-UNDERSTOOD received during " + actionName);
+        }
+
+        protected void handleRefuse(ACLMessage reply) {
+            myGUI.showError("REFUSE received during " + actionName);
+        }
+
+        protected void handleAgree(ACLMessage reply) {
+            if (logger.isLoggable(Logger.FINE))
+                logger.log(Logger.FINE, "AGREE received");
+        }
+
+        protected void handleFailure(ACLMessage reply) {
+            myGUI.showError("FAILURE received during " + actionName);
+        }
+
+        protected void handleInform(ACLMessage reply) {
+            if (logger.isLoggable(Logger.FINE))
+                logger.log(Logger.FINE, "INFORM received");
+        }
+
+    } // End of AMSClientBehaviour class
+
+    private class SniffListenerBehaviour extends CyclicBehaviour {
+
+        private final MessageTemplate listenSniffTemplate;
+
+        SniffListenerBehaviour() {
+            listenSniffTemplate = MessageTemplate.MatchConversationId(getName() + "-event");
+        }
+
+        public void action() {
+
+            ACLMessage current = receive(listenSniffTemplate);
+            if (current != null) {
+
+                try {
+                    Occurred o = (Occurred) getContentManager().extractContent(current);
+                    EventRecord er = o.getWhat();
+                    Event ev = er.getWhat();
+                    String content = null;
+                    Envelope env = null;
+                    AID unicastReceiver = null;
+                    if (ev instanceof SentMessage) {
+                        content = ((SentMessage) ev).getMessage().getPayload();
+                        env = ((SentMessage) ev).getMessage().getEnvelope();
+                        unicastReceiver = ((SentMessage) ev).getReceiver();
+                    } else if (ev instanceof PostedMessage) {
+                        content = ((PostedMessage) ev).getMessage().getPayload();
+                        env = ((PostedMessage) ev).getMessage().getEnvelope();
+                        unicastReceiver = ((PostedMessage) ev).getReceiver();
+                        AID sender = ((PostedMessage) ev).getSender();
+                        // If the sender is currently under sniff, then the message was already
+                        // displayed when the 'sent-message' event occurred --> just skip this message.
+                        if (agentsUnderSniff.contains(new Agent(sender))) {
+                            return;
+                        }
+                    } else {
+                        return;
+                    }
+
+                    ACLCodec codec = new StringACLCodec();
+                    String charset = null;
+                    if ((env == null) || ((charset = env.getPayloadEncoding()) == null)) {
+                        charset = ACLCodec.DEFAULT_CHARSET;
+                    }
+                    ACLMessage tmp = codec.decode(content.getBytes(charset), charset);
+                    tmp.setEnvelope(env);
+                    Message msg = new Message(tmp, unicastReceiver);
+
+					/* If this is a 'posted-message' event and the sender is
+					// currently under sniff, then the message was already
+					// displayed when the 'sent-message' event occurred. In that
+					// case, we simply skip this message.
+					if(ev instanceof PostedMessage) {
+						Agent a = new Agent(msg.getSender());
+						if(agentsUnderSniff.contains(a))
+							return;
+					}*/
+
+
+                    // If the message that we just got is one that should be filtered out
+                    // then drop it.  WARNING - this means that the log file
+                    // that the sniffer might dump does not include the message!!!!
+                    boolean[] filters;
+                    String agentName = msg.getSender().getName();
+                    String key = preloadContains(agentName);
+                    if (key != null) {
+                        filters = preload.get(key);
+                        if ((msg.getPerformative() >= 0) && filters[msg.getPerformative()]) {
+                            myGUI.mainPanel.panelcan.canvMess.recMessage(msg);
+                        }
+                    } else {
+                        myGUI.mainPanel.panelcan.canvMess.recMessage(msg);
+                    }
+                } catch (Throwable e) {
+                    //System.out.println("Serious problem Occurred");
+                    myGUI.showError("An error occurred parsing the incoming message.\n" +
+                            "          The message was lost.");
+                    if (logger.isLoggable(Logger.WARNING))
+                        logger.log(Logger.WARNING, "The sniffer lost the following message because of a parsing error:" + current);
+                    e.printStackTrace();
+                }
+            } else
+                block();
+        }
+
+    } // End of SniffListenerBehaviour
+
+    class SnifferAMSListenerBehaviour extends AMSListenerBehaviour {
+
+        protected void installHandlers(Map<String, EventHandler> handlersTable) {
+
+
+            // Fill the event handler table.
+
+            handlersTable.put(IntrospectionVocabulary.META_RESETEVENTS, (EventHandler) ev -> {
+                ResetEvents re = (ResetEvents) ev;
+                myGUI.resetTree();
+                allAgents.clear();
+            });
+
+            handlersTable.put(IntrospectionVocabulary.ADDEDCONTAINER, (EventHandler) ev -> {
+                AddedContainer ac = (AddedContainer) ev;
+                ContainerID cid = ac.getContainer();
+                String name = cid.getName();
+                String address = cid.getAddress();
+                try {
+                    InetAddress addr = InetAddress.getByName(address);
+                    myGUI.addContainer(name, addr);
+                } catch (UnknownHostException uhe) {
+                    myGUI.addContainer(name, null);
+                }
+            });
+
+            handlersTable.put(IntrospectionVocabulary.REMOVEDCONTAINER, (EventHandler) ev -> {
+                RemovedContainer rc = (RemovedContainer) ev;
+                ContainerID cid = rc.getContainer();
+                String name = cid.getName();
+                myGUI.removeContainer(name);
+            });
+
+            handlersTable.put(IntrospectionVocabulary.BORNAGENT, (EventHandler) ev -> {
+                BornAgent ba = (BornAgent) ev;
+                ContainerID cid = ba.getWhere();
+                String container = cid.getName();
+                AID agent = ba.getAgent();
+                myGUI.addAgent(container, agent);
+                allAgents.add(agent);
+                if (agent.equals(getAID()))
+                    myContainerName = container;
+                // Here we check to see if the agent is one that we automatically will
+                // start sniffing.  If so, we invoke DoSnifferAction's doSniff and start
+                // the sniffing process.
+                // Avoid sniffing myself to avoid infinite recursion
+                if (!agent.equals(getAID())) {
+                    if (preloadContains(agent.getName()) != null) {
+                        ActionProcessor ap = myGUI.actPro;
+                        DoSnifferAction sa = (DoSnifferAction) ap.actions.get(ActionProcessor.DO_SNIFFER_ACTION);
+                        sa.doSniff(agent.getName());
+                    }
+                }
+            });
+
+            handlersTable.put(IntrospectionVocabulary.DEADAGENT, (EventHandler) ev -> {
+                DeadAgent da = (DeadAgent) ev;
+                ContainerID cid = da.getWhere();
+                String container = cid.getName();
+                AID agent = da.getAgent();
+                myGUI.removeAgent(container, agent);
+                allAgents.remove(agent);
+
+            });
+
+            handlersTable.put(IntrospectionVocabulary.MOVEDAGENT, (EventHandler) ev -> {
+                MovedAgent ma = (MovedAgent) ev;
+                AID agent = ma.getAgent();
+                ContainerID from = ma.getFrom();
+                myGUI.removeAgent(from.getName(), agent);
+                ContainerID to = ma.getTo();
+                myGUI.addAgent(to.getName(), agent);
+            });
+
+        }
+    }    // END of inner class SnifferAMSListenerBehaviour
 
     /**
      * Inner class RequestListenerBehaviour.

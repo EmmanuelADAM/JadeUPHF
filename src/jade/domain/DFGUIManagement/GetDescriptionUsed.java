@@ -40,12 +40,12 @@ public class GetDescriptionUsed implements AgentAction {
 
     private AID parentDF;
 
-    public void setParentDF(AID parent) {
-        parentDF = parent;
-    }
-
     public AID getParentDF() {
         return parentDF;
+    }
+
+    public void setParentDF(AID parent) {
+        parentDF = parent;
     }
 
 }

@@ -43,10 +43,10 @@ import java.util.Properties;
  */
 public class SMSBEDispatcher extends NIOBEDispatcher {
 
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
     private SMSManager theSMSManager;
     private int smsPort;
     private String msisdn;
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
 
     public void init(JICPMediatorManager mgr, String id, Properties props) throws ICPException {
         // Get the msisdn

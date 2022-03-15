@@ -73,7 +73,7 @@ public class PersistentDeliveryProxy extends SliceProxy implements PersistentDel
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else {

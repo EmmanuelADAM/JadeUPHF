@@ -37,9 +37,9 @@ import java.io.Serializable;
  */
 public interface Node extends Serializable {
 
-    void setName(String name);
-
     String getName();
+
+    void setName(String name);
 
     boolean hasPlatformManager();
 

@@ -150,19 +150,6 @@ import java.util.*;
  */
 public class Ontology implements Serializable {
     private static final String DEFAULT_INTROSPECTOR_CLASS = "jade.content.onto.ReflectiveIntrospector";
-    private final Ontology[] base;
-    private final String name;
-    private Introspector introspector;
-
-    private final Hashtable<String, ObjectSchema> elements = new Hashtable<>(); // Maps type-names to schemas
-    private final Hashtable<String, Class<?>> classes = new Hashtable<>(); // Maps type-names to java classes
-    private final Hashtable<Class<?>, ObjectSchema> schemas = new Hashtable<>(); // Maps java classes to schemas
-
-    // We use an Hashtable as if it was a Set
-    private Hashtable<String, String> conceptSlots;
-
-    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
-
     // This is required for compatibility with CLDC MIDP where XXX.class
     // is not supported
     private static Class<?> absObjectClass = null;
@@ -175,6 +162,16 @@ public class Ontology implements Serializable {
             e.printStackTrace();
         }
     }
+
+    private final Ontology[] base;
+    private final String name;
+    private final Hashtable<String, ObjectSchema> elements = new Hashtable<>(); // Maps type-names to schemas
+    private final Hashtable<String, Class<?>> classes = new Hashtable<>(); // Maps type-names to java classes
+    private final Hashtable<Class<?>, ObjectSchema> schemas = new Hashtable<>(); // Maps java classes to schemas
+    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
+    private Introspector introspector;
+    // We use an Hashtable as if it was a Set
+    private Hashtable<String, String> conceptSlots;
 
     /**
      * Construct an Ontology object with a given <code>name</code>
@@ -235,6 +232,101 @@ public class Ontology implements Serializable {
     }
 
     /**
+     * Check whether a given object is a valid term.
+     * If it is an Aggregate (i.e. a <code>List</code>) it also check
+     * the elements.
+     *
+     * @throws OntologyException if the given object is not a valid term
+     */
+    public static void checkIsTerm(Object obj) throws OntologyException {
+        // FIXME: This method is likely to be removed as it does not add any value and creates problems
+        // when using the Serializable Ontology
+		/*if (obj instanceof String ||
+    		  obj instanceof Boolean ||
+    		  obj instanceof Integer ||
+    		  obj instanceof Long ||
+    		  //#MIDP_EXCLUDE_BEGIN
+    		  obj instanceof Float ||
+    		  obj instanceof Double ||
+    		  //#MIDP_EXCLUDE_END
+    		  obj instanceof Date ||
+    		  obj instanceof Term) {
+    		return;
+    	}
+    	if (obj instanceof List) {
+    		Iterator it = ((List) obj).iterator();
+    		while (it.hasNext()) {
+    			checkIsTerm(it.next());
+    		}
+    		return;
+    	}
+
+    	// If we reach this point the object is not a term
+    	throw new OntologyException("Object "+obj+" of class "+obj.getClass().getName()+" is not a term");
+		 */
+    }
+
+    public static AbsObject externalizeSlotValue(Object obj, Introspector introspector, Ontology referenceOnto) throws OntologyException {
+        try {
+            return introspector.externalizeAggregate(null, obj, null, referenceOnto);
+        } catch (NotAnAggregate nan) {
+
+            return referenceOnto.fromObject(obj);
+        }
+    }
+
+    public static Object internalizeSlotValue(AbsObject abs, Introspector introspector, Ontology referenceOnto) throws OntologyException {
+        if (abs.getAbsType() == AbsObject.ABS_AGGREGATE) {
+            return introspector.internalizeAggregate(null, (AbsAggregate) abs, null, referenceOnto);
+        }
+
+        return referenceOnto.toObject(abs);
+    }
+
+    //#J2ME_EXCLUDE_BEGIN
+    private static void addReferencedSchemas(ObjectSchema schema, List<ObjectSchema> schemas) throws OntologyException {
+        ObjectSchema[] superSchemas = schema.getSuperSchemas();
+        for (ObjectSchema superSchema : superSchemas) {
+            addReferencedSchemas(superSchema, schemas);
+        }
+
+        if (schema instanceof AggregateSchema) {
+            ObjectSchema elementsSchema = ((AggregateSchema) schema).getElementsSchema();
+            if (elementsSchema != null) {
+                addReferencedSchemas(elementsSchema, schemas);
+            }
+        } else if (schema instanceof ConceptSchema) {
+            if (!schemas.contains(schema)) {
+                schemas.add(schema);
+            }
+
+            for (String slotName : schema.getNames()) {
+                ObjectSchema slotSchema = schema.getSchema(slotName);
+                addReferencedSchemas(slotSchema, schemas);
+            }
+        }
+    }
+
+    public static List<ObjectSchema> getReferencedSchemas(ObjectSchema rootSchema) throws OntologyException {
+        List<ObjectSchema> schemas = new ArrayList<>();
+        addReferencedSchemas(rootSchema, schemas);
+        return schemas;
+    }
+
+    public static boolean isBaseOntology(Ontology[] oo, String name) {
+        if (oo != null) {
+            for (Ontology o : oo) {
+                if (o.getName().equals(name)) {
+                    return true;
+                } else if (isBaseOntology(o.base, name)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Retrieves the name of this ontology.
      *
      * @return the name of this ontology.
@@ -255,7 +347,6 @@ public class Ontology implements Serializable {
     public void add(ObjectSchema schema) throws OntologyException {
         add(schema, null);
     }
-
 
     /**
      * Adds a schema to the ontology and associates it to the class
@@ -288,6 +379,8 @@ public class Ontology implements Serializable {
             }
         }
     }
+
+    //#APIDOC_EXCLUDE_BEGIN
 
     /**
      * Retrieves the schema of element <code>name</code> in this ontology.
@@ -469,8 +562,6 @@ public class Ontology implements Serializable {
         return definingOntology;
     }
 
-    //#APIDOC_EXCLUDE_BEGIN
-
     /**
      * Converts an abstract descriptor to a Java object of the proper class.
      *
@@ -640,6 +731,12 @@ public class Ontology implements Serializable {
 
         throw new UnknownSchemaException();
     }
+    //#APIDOC_EXCLUDE_END
+
+
+    /////////////////////////
+    // Utility static methods
+    /////////////////////////
 
     private AbsObject externalizeSpecialType(Object obj, ObjectSchema schema, Class<?> javaClass, Ontology globalOnto) throws OntologyException {
         if (introspector == null) {
@@ -683,6 +780,9 @@ public class Ontology implements Serializable {
             }
         }
     }
+
+
+    //#J2ME_EXCLUDE_BEGIN
 
     /**
      * Set the value of slot <code>slotName</code> as <code>slotValue</code> to object <code>obj</code>
@@ -768,54 +868,10 @@ public class Ontology implements Serializable {
         }
         throw new UnknownSlotException(slotName);
     }
-    //#APIDOC_EXCLUDE_END
-
-
-    /////////////////////////
-    // Utility static methods
-    /////////////////////////
-
-    /**
-     * Check whether a given object is a valid term.
-     * If it is an Aggregate (i.e. a <code>List</code>) it also check
-     * the elements.
-     *
-     * @throws OntologyException if the given object is not a valid term
-     */
-    public static void checkIsTerm(Object obj) throws OntologyException {
-        // FIXME: This method is likely to be removed as it does not add any value and creates problems
-        // when using the Serializable Ontology
-		/*if (obj instanceof String ||
-    		  obj instanceof Boolean ||
-    		  obj instanceof Integer ||
-    		  obj instanceof Long ||
-    		  //#MIDP_EXCLUDE_BEGIN
-    		  obj instanceof Float ||
-    		  obj instanceof Double ||
-    		  //#MIDP_EXCLUDE_END
-    		  obj instanceof Date ||
-    		  obj instanceof Term) {
-    		return;
-    	}
-    	if (obj instanceof List) {
-    		Iterator it = ((List) obj).iterator();
-    		while (it.hasNext()) {
-    			checkIsTerm(it.next());
-    		}
-    		return;
-    	}
-
-    	// If we reach this point the object is not a term
-    	throw new OntologyException("Object "+obj+" of class "+obj.getClass().getName()+" is not a term");
-		 */
-    }
 
     public String toString() {
         return getClass().getName() + "-" + name;
     }
-
-
-    //#J2ME_EXCLUDE_BEGIN
 
     /**
      * Retrieve the names of the concepts defined in this ontology only (excluding extended ontologies).
@@ -857,6 +913,9 @@ public class Ontology implements Serializable {
     public List<String> getOwnActionNames() {
         return getOwnElementNames(AgentActionSchema.class);
     }
+    //#J2ME_EXCLUDE_END
+
+    //#MIDP_EXCLUDE_BEGIN
 
     /**
      * Retrieve the names of all agent actions defined in this ontology (including extended ontologies).
@@ -882,6 +941,7 @@ public class Ontology implements Serializable {
     public List<String> getOwnPredicateNames() {
         return getOwnElementNames(PredicateSchema.class);
     }
+    //#MIDP_EXCLUDE_END
 
     /**
      * Retrieve the names of all predicatess defined in this ontology (including extended ontologies).
@@ -919,9 +979,6 @@ public class Ontology implements Serializable {
         }
         return names;
     }
-    //#J2ME_EXCLUDE_END
-
-    //#MIDP_EXCLUDE_BEGIN
 
     /**
      * Create a ConceptSlotFunction for a given slot of a given Concept.
@@ -987,67 +1044,6 @@ public class Ontology implements Serializable {
                 conceptSlots.put(slotName, slotName);
             }
         }
-    }
-    //#MIDP_EXCLUDE_END
-
-    public static AbsObject externalizeSlotValue(Object obj, Introspector introspector, Ontology referenceOnto) throws OntologyException {
-        try {
-            return introspector.externalizeAggregate(null, obj, null, referenceOnto);
-        } catch (NotAnAggregate nan) {
-
-            return referenceOnto.fromObject(obj);
-        }
-    }
-
-    public static Object internalizeSlotValue(AbsObject abs, Introspector introspector, Ontology referenceOnto) throws OntologyException {
-        if (abs.getAbsType() == AbsObject.ABS_AGGREGATE) {
-            return introspector.internalizeAggregate(null, (AbsAggregate) abs, null, referenceOnto);
-        }
-
-        return referenceOnto.toObject(abs);
-    }
-
-    //#J2ME_EXCLUDE_BEGIN
-    private static void addReferencedSchemas(ObjectSchema schema, List<ObjectSchema> schemas) throws OntologyException {
-        ObjectSchema[] superSchemas = schema.getSuperSchemas();
-        for (ObjectSchema superSchema : superSchemas) {
-            addReferencedSchemas(superSchema, schemas);
-        }
-
-        if (schema instanceof AggregateSchema) {
-            ObjectSchema elementsSchema = ((AggregateSchema) schema).getElementsSchema();
-            if (elementsSchema != null) {
-                addReferencedSchemas(elementsSchema, schemas);
-            }
-        } else if (schema instanceof ConceptSchema) {
-            if (!schemas.contains(schema)) {
-                schemas.add(schema);
-            }
-
-            for (String slotName : schema.getNames()) {
-                ObjectSchema slotSchema = schema.getSchema(slotName);
-                addReferencedSchemas(slotSchema, schemas);
-            }
-        }
-    }
-
-    public static List<ObjectSchema> getReferencedSchemas(ObjectSchema rootSchema) throws OntologyException {
-        List<ObjectSchema> schemas = new ArrayList<>();
-        addReferencedSchemas(rootSchema, schemas);
-        return schemas;
-    }
-
-    public static boolean isBaseOntology(Ontology[] oo, String name) {
-        if (oo != null) {
-            for (Ontology o : oo) {
-                if (o.getName().equals(name)) {
-                    return true;
-                } else if (isBaseOntology(o.base, name)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     /**

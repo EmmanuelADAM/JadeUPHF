@@ -40,10 +40,9 @@ import java.awt.event.ActionListener;
  * @version $Date: 2004-07-19 17:54:06 +0200 (lun, 19 lug 2004) $ $Revision: 5217 $
  */
 public class MainBarListener implements ActionListener {
+    private static final Logger logger = Logger.getMyLogger(MainBarListener.class.getName());
     private final MainWindow mainWnd;
     private final Sensor introspectorSensor;
-
-    private static final Logger logger = Logger.getMyLogger(MainBarListener.class.getName());
 
     public MainBarListener(MainWindow main, Sensor s) {
         mainWnd = main;

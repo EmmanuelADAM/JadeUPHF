@@ -44,28 +44,23 @@ public class AboutJadeAction extends AbstractAction {
      * @serial
      */
     private final JFrame gui;
-
-    /**
-     * @serial
-     */
-    private JLabel label;
-
     /**
      * @serial
      */
     Color dark_blue = new Color(0, 0, 160);
-
     /**
      * @serial
      */
     String logojade = "images/jadelogo.jpg";
-
     String check = "images/tick_blue.gif";
-
     /**
      * @serial
      */
     String logocselt = "images/logotelecomlab.jpg";
+    /**
+     * @serial
+     */
+    private JLabel label;
 
     public AboutJadeAction(JFrame gui) {
         super("About JADE");

@@ -16,10 +16,14 @@ import java.util.logging.Logger;
  */
 public class NIOHTTPHelper extends HTTPHelper implements BufferTransformer {
 
+    private static final Logger log = Logger.getLogger(NIOHTTPHelper.class.getName());
     //private boolean needToRead = false;
     NIOJICPConnection connection;
-    private static final Logger log = Logger.getLogger(NIOHTTPHelper.class.getName());
 
+
+    public NIOHTTPHelper(NIOJICPConnection connection) {
+        this.connection = connection;
+    }
 
     public static ByteBuffer readByteBufferFromHttp(InputStream is) throws IOException {
         HTTPRequest request = new HTTPRequest();
@@ -48,10 +52,6 @@ public class NIOHTTPHelper extends HTTPHelper implements BufferTransformer {
             b.flip();
             return b;
         }
-    }
-
-    public NIOHTTPHelper(NIOJICPConnection connection) {
-        this.connection = connection;
     }
 
     private static ByteBuffer wrapInHttpResponse(ByteBuffer pkt) throws IOException {

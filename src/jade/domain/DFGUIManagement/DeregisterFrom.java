@@ -42,27 +42,20 @@ public class DeregisterFrom implements AgentAction {
     private AID df;
     private DFAgentDescription description;
 
-    public void setDf(AID df) {
-        this.df = df;
-    }
-
     public AID getDf() {
         return df;
     }
 
-    public void setDescription(DFAgentDescription description) {
-        this.description = description;
+    public void setDf(AID df) {
+        this.df = df;
     }
 
     public DFAgentDescription getDescription() {
         return description;
     }
 
-    /**
-     * @deprecated Use setDf() instead.
-     */
-    public void setParentDF(Object df) {
-        setDf((AID) df);
+    public void setDescription(DFAgentDescription description) {
+        this.description = description;
     }
 
     /**
@@ -70,6 +63,13 @@ public class DeregisterFrom implements AgentAction {
      */
     public Object getParentDF() {
         return getDf();
+    }
+
+    /**
+     * @deprecated Use setDf() instead.
+     */
+    public void setParentDF(Object df) {
+        setDf((AID) df);
     }
 
     /**

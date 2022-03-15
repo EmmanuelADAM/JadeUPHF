@@ -34,6 +34,11 @@ import jade.content.Predicate;
 
 public class UnrecognisedValue extends NotUnderstoodException implements Predicate {
 
+    /**
+     * @serial
+     */
+    String s;
+
     public UnrecognisedValue() {
         this("unknown-value");
     }
@@ -43,18 +48,13 @@ public class UnrecognisedValue extends NotUnderstoodException implements Predica
         s = value;
     }
 
-    /**
-     * @serial
-     */
-    String s;
+    public String getValue() {
+        return s;
+    }
 
     public void setValue(String a) {
         s = a;
         setMessage("(unrecognised-value \"" + s + "\")");
-    }
-
-    public String getValue() {
-        return s;
     }
 
 }

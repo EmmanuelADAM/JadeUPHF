@@ -59,16 +59,6 @@ public class AddedContainer implements Event {
     }
 
     /**
-     * Set the <code>container</code> of this event.
-     *
-     * @param id The container identifier of the newly added
-     *           container.
-     */
-    public void setContainer(ContainerID id) {
-        container = id;
-    }
-
-    /**
      * Retrieve the value of the <code>container</code> slot of this
      * event, containing the container identifier of the newly added
      * container.
@@ -81,13 +71,13 @@ public class AddedContainer implements Event {
     }
 
     /**
-     * Set the <code>ownership</code> of this event.
+     * Set the <code>container</code> of this event.
      *
-     * @param o The name of the entity owning the newly added
-     *          container.
+     * @param id The container identifier of the newly added
+     *           container.
      */
-    public void setOwnership(String o) {
-        ownership = o;
+    public void setContainer(ContainerID id) {
+        container = id;
     }
 
     /**
@@ -100,6 +90,16 @@ public class AddedContainer implements Event {
      */
     public String getOwnership() {
         return ownership;
+    }
+
+    /**
+     * Set the <code>ownership</code> of this event.
+     *
+     * @param o The name of the entity owning the newly added
+     *          container.
+     */
+    public void setOwnership(String o) {
+        ownership = o;
     }
 
 }

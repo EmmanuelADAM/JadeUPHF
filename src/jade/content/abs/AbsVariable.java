@@ -29,9 +29,13 @@ import jade.content.schema.VariableSchema;
 /**
  * An abstract descriptor that can hold a variable expression, i.e. an
  * entity that is not known yet.
+ *
  * @author Federico Bergenti - Universita` di Parma
  */
 public class AbsVariable extends AbsObjectImpl implements AbsTerm {
+    // Easy way to access the Java class representing AbsVariable.
+    // Useful in MIDP where XXX.class is not available
+    private static Class<AbsVariable> absVariableClass = null;
     private boolean isMeta = false;
 
     /**
@@ -43,10 +47,10 @@ public class AbsVariable extends AbsObjectImpl implements AbsTerm {
 
     /**
      * Construct an AbsVariable with the given name and value type
-     * @param name The name of the variable.
-     * @param valueType The type of values that can be assigned to
-     * this variable.
      *
+     * @param name      The name of the variable.
+     * @param valueType The type of values that can be assigned to
+     *                  this variable.
      */
     public AbsVariable(String name, String valueType) {
         super(VariableSchema.BASE_NAME);
@@ -54,62 +58,6 @@ public class AbsVariable extends AbsObjectImpl implements AbsTerm {
         setName(name);
         setType(valueType);
     }
-
-    /**
-     * Sets the name of this variable.
-     * @param name The new name of this variable.
-     */
-    public void setName(String name) {
-        set(VariableSchema.NAME, AbsPrimitive.wrap(name));
-    }
-
-    /**
-     * Sets the value type of this variable.
-     * @param valueType The type of values that can be assigned to
-     * this variable.
-     */
-    public void setType(String valueType) {
-        set(VariableSchema.VALUE_TYPE, AbsPrimitive.wrap(valueType));
-    }
-
-    /**
-     * Gets the name of this variable.
-     * @return The name of this variable.
-     */
-    public String getName() {
-        AbsPrimitive abs = (AbsPrimitive) getAbsObject(VariableSchema.NAME);
-        if (abs != null) {
-            return abs.getString();
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Gets the value type of this variable.
-     * @return The type of values that can be assigned to
-     * this variable.
-     */
-    public String getType() {
-        AbsPrimitive abs = (AbsPrimitive) getAbsObject(VariableSchema.VALUE_TYPE);
-        if (abs != null) {
-            return abs.getString();
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Redefine the <code>isGrounded()</code> method in order to
-     * always return <code>false</code>.
-     */
-    public boolean isGrounded() {
-        return false;
-    }
-
-    // Easy way to access the Java class representing AbsVariable.
-    // Useful in MIDP where XXX.class is not available
-    private static Class<AbsVariable> absVariableClass = null;
 
     public static Class<AbsVariable> getJavaClass() {
         if (absVariableClass == null) {
@@ -123,8 +71,66 @@ public class AbsVariable extends AbsObjectImpl implements AbsTerm {
         return absVariableClass;
     }
 
-    /** Return true if this object represents a meta term (i.e. symbol ??x) rather than a concrete variable.
+    /**
+     * Gets the name of this variable.
+     *
+     * @return The name of this variable.
+     */
+    public String getName() {
+        AbsPrimitive abs = (AbsPrimitive) getAbsObject(VariableSchema.NAME);
+        if (abs != null) {
+            return abs.getString();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Sets the name of this variable.
+     *
+     * @param name The new name of this variable.
+     */
+    public void setName(String name) {
+        set(VariableSchema.NAME, AbsPrimitive.wrap(name));
+    }
+
+    /**
+     * Gets the value type of this variable.
+     *
+     * @return The type of values that can be assigned to
+     * this variable.
+     */
+    public String getType() {
+        AbsPrimitive abs = (AbsPrimitive) getAbsObject(VariableSchema.VALUE_TYPE);
+        if (abs != null) {
+            return abs.getString();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Sets the value type of this variable.
+     *
+     * @param valueType The type of values that can be assigned to
+     *                  this variable.
+     */
+    public void setType(String valueType) {
+        set(VariableSchema.VALUE_TYPE, AbsPrimitive.wrap(valueType));
+    }
+
+    /**
+     * Redefine the <code>isGrounded()</code> method in order to
+     * always return <code>false</code>.
+     */
+    public boolean isGrounded() {
+        return false;
+    }
+
+    /**
+     * Return true if this object represents a meta term (i.e. symbol ??x) rather than a concrete variable.
      * This method is currently used only by the semantics framework.
+     *
      * @return true if this object represents a meta term
      * @since JADE3.4
      **/
@@ -132,8 +138,10 @@ public class AbsVariable extends AbsObjectImpl implements AbsTerm {
         return isMeta;
     }
 
-    /** Sets the value of isMetaTerm, where the default is false.
+    /**
+     * Sets the value of isMetaTerm, where the default is false.
      * This method is currently used only by the semantics framework.
+     *
      * @since JADE3.4
      **/
     public final void setIsMetaTerm(boolean isMeta) {

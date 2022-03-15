@@ -43,23 +43,21 @@ import java.awt.*;
 class TablePanel extends JPanel {
 
 
-    JTable tableView;
-    JScrollPane scrollpane;
-    JScrollPane tableAggregate;
-    Dimension origin = new Dimension(0, 0);
-
-    JComponent selectionModeButtons;
-    JComponent resizeModeButtons;
-
-    JPanel mainPanel;
-    JPanel controlPanel;
-    TableModel dataModel;
-
-    // final
     /**
      * @clientCardinality
      **/
     final String[] names = {"name", "addresses", "state", "owner"};
+    JTable tableView;
+    JScrollPane scrollpane;
+    JScrollPane tableAggregate;
+    Dimension origin = new Dimension(0, 0);
+    JComponent selectionModeButtons;
+    JComponent resizeModeButtons;
+    JPanel mainPanel;
+    JPanel controlPanel;
+
+    // final
+    TableModel dataModel;
     // Create the dummy data (a few rows of names)
     /**
      * @clientCardinality

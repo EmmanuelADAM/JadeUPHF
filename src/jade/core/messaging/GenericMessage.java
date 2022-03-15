@@ -92,20 +92,20 @@ public class GenericMessage implements Serializable {
         this.payload = payload;
     }
 
-    final void setSenderPrincipal(JADEPrincipal senderPrincipal) {
-        this.senderPrincipal = senderPrincipal;
-    }
-
     final JADEPrincipal getSenderPrincipal() {
         return senderPrincipal;
     }
 
-    final void setSenderCredentials(Credentials senderCredentials) {
-        this.senderCredentials = senderCredentials;
+    final void setSenderPrincipal(JADEPrincipal senderPrincipal) {
+        this.senderPrincipal = senderPrincipal;
     }
 
     final Credentials getSenderCredentials() {
         return senderCredentials;
+    }
+
+    final void setSenderCredentials(Credentials senderCredentials) {
+        this.senderCredentials = senderCredentials;
     }
 
     public final boolean isAMSFailure() {
@@ -164,10 +164,6 @@ public class GenericMessage implements Serializable {
     }
     //#MIDP_EXCLUDE_END
 
-    public final void setSender(AID sender) {
-        this.sender = sender;
-    }
-
     public final AID getSender() {
         if (sender != null) {
             return sender;
@@ -178,6 +174,10 @@ public class GenericMessage implements Serializable {
         } else {
             return null;
         }
+    }
+
+    public final void setSender(AID sender) {
+        this.sender = sender;
     }
 
     // DEBUG

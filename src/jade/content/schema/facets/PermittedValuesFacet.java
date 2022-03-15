@@ -40,22 +40,22 @@ public class PermittedValuesFacet implements Facet {
     private final Object[] permittedValues;
 
     /**
-     Construct a <code>PermittedValuesFacet</code> that
-     forces an AbsPrimitive to contain a specific set of values
+     * Construct a <code>PermittedValuesFacet</code> that
+     * forces an AbsPrimitive to contain a specific set of values
      */
     public PermittedValuesFacet(Object[] permittedValues) {
         this.permittedValues = permittedValues;
     }
 
     /**
-     Get the permitted values associated to this facet
+     * Get the permitted values associated to this facet
      */
     public Object[] getPermittedValues() {
         return permittedValues;
     }
 
     /**
-     Get the permitted values as string associated to this facet
+     * Get the permitted values as string associated to this facet
      */
     public String getPermittedValuesAsString() {
         StringBuilder sb = new StringBuilder();
@@ -71,10 +71,11 @@ public class PermittedValuesFacet implements Facet {
     }
 
     /**
-     Check whether a given value for the slot this Facet applies
-     to is valid.
-     @param value The value to be checked
-     @throws OntologyException If the value is not valid
+     * Check whether a given value for the slot this Facet applies
+     * to is valid.
+     *
+     * @param value The value to be checked
+     * @throws OntologyException If the value is not valid
      */
     public void validate(AbsObject value, Ontology onto) throws OntologyException {
         if (!(value instanceof AbsPrimitive absPrimitive)) {

@@ -65,17 +65,10 @@ public class MMCanvas
     private static final int H_TOL = 4;
     private static final int timeUnitWidth = 20;
     private static final int xOffset = 38;
-    private int positionAgent = 0;
-
-
-    private int x1, x2, y;
     private final MainWindow mWnd;
     private final PanelCanvas panCan; /* To resize and modify the scroll bars */
     private final MainPanel mPan;
-    private int horDim = 400;
-    private int vertDim = 200;
     private final boolean typeCanv;
-    private boolean nameShown = false;
     private final List<Agent> noSniffAgents = new ArrayList<>();
     //#DOTNET_EXCLUDE_BEGIN
     private final Font font1 = new Font("Helvetica", Font.ITALIC, 12);
@@ -94,9 +87,6 @@ public class MMCanvas
   private Panel myPanel;
   #DOTNET_INCLUDE_END*/
     private final MMCanvas otherCanv;
-    public AgentList al;
-    public MessageList ml;
-
     // These vars are used to make messages grouped by conversationID appear as the
     // same color.  It makes it easier to pick out various conversations.
     private final HashMap<Object, Integer> mapToColor = new HashMap<>();
@@ -105,6 +95,13 @@ public class MMCanvas
     private final Color[] colorTable = {new Color(200, 0, 150), Color.blue, new Color(230, 230, 0), Color.red, Color.black, Color.magenta, Color.cyan,
             Color.pink, new Color(0, 200, 150), Color.green};
     private final Color noConversationColor = Color.gray;
+    public AgentList al;
+    public MessageList ml;
+    private int positionAgent = 0;
+    private int x1, x2, y;
+    private int horDim = 400;
+    private int vertDim = 200;
+    private boolean nameShown = false;
     //#DOTNET_EXCLUDE_END
   /*#DOTNET_INCLUDE_BEGIN
   	private Color colorTable[] = 
@@ -991,16 +988,6 @@ public class MMCanvas
     }
 
     /**
-     * Returns an handler to the message list. The message list contains all
-     * sniffed messages displayed on the Message Canavs as blue arrows
-     *
-     * @return handler to the message list
-     */
-    public MessageList getMessageList() {
-        return ml;
-    }
-
-    /**
      * Set the agent list handler as the parameter passed then repaints the canvas
      *
      * @param savedList new list of agents
@@ -1009,6 +996,16 @@ public class MMCanvas
     public void setAgentList(AgentList savedList) {
         al = savedList;
         repaintBothCanvas();
+    }
+
+    /**
+     * Returns an handler to the message list. The message list contains all
+     * sniffed messages displayed on the Message Canavs as blue arrows
+     *
+     * @return handler to the message list
+     */
+    public MessageList getMessageList() {
+        return ml;
     }
 
     /**

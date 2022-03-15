@@ -49,24 +49,21 @@ import java.net.SocketException;
 
 /**
  * Class declaration
+ *
  * @author Giovanni Caire - TILAB
  * @author Jamie Lawrence - Broadcom Eireann Research
  * @author Ronnie Taib - Motorola
  * @author Nicolas Lhuillier - Motorola
  */
 public class JICPPeer implements ICP, ProtocolManager {
+    public static final String CONNECTION_TIMEOUT = "jade_imtp_leap_JICP_JICPPeer_connectiontimeout";
+    public static final String READ_TIMEOUT = "jade_imtp_leap_JICP_JICPPeer_readtimeout";
     private static final int POOL_SIZE = 50;
-
     private JICPClient client;
     private JICPServer server;
     private Ticker ticker;
-
     private String myID;
-
     private int connectionTimeout;
-
-    public static final String CONNECTION_TIMEOUT = "jade_imtp_leap_JICP_JICPPeer_connectiontimeout";
-    public static final String READ_TIMEOUT = "jade_imtp_leap_JICP_JICPPeer_readtimeout";
 
     /**
      * Start listening for internal platform messages on the specified port
@@ -121,11 +118,11 @@ public class JICPPeer implements ICP, ProtocolManager {
     /**
      * Pings the specified transport address in order to obtain
      * the local hostname or IP address.
+     *
      * @param pingURL The <code>URL</code> to ping (usually the
-     * main container).
+     *                main container).
      * @return The local IP address of the local container as a
      * <code>String</code>.
-     *
      * @throws ICPException
      */
     String getAddress(String pingURL) throws ICPException {
@@ -144,16 +141,16 @@ public class JICPPeer implements ICP, ProtocolManager {
     }
 
     /**
-     Subclasses may re-define this method to return their own
-     protocol
+     * Subclasses may re-define this method to return their own
+     * protocol
      */
     public TransportProtocol getProtocol() {
         return JICPProtocol.getInstance();
     }
 
     /**
-     Subclasses may re-define this method to return their own
-     ConnectionFactory
+     * Subclasses may re-define this method to return their own
+     * ConnectionFactory
      */
     public ConnectionFactory getConnectionFactory() {
         return new ConnectionFactory() {
@@ -190,7 +187,7 @@ public class JICPPeer implements ICP, ProtocolManager {
     }
 
     /**
-     Inner class Ticker
+     * Inner class Ticker
      */
     private class Ticker extends Thread {
         private final long period;

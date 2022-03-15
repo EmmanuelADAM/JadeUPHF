@@ -40,24 +40,14 @@ import java.util.List;
  */
 public class StartNotify implements AgentAction {
 
-    private AID observed;
     private final List<String> events = new ArrayList<>();
+    private AID observed;
 
     /**
      * Default constructor. A default constructor is necessary for
      * ontological classes.
      */
     public StartNotify() {
-    }
-
-    /**
-     * Set the <code>observed</code> slot of this action.
-     *
-     * @param id The agent identifier of the agent whose events will
-     *           be notified from now on.
-     */
-    public void setObserved(AID id) {
-        observed = id;
     }
 
     /**
@@ -70,6 +60,16 @@ public class StartNotify implements AgentAction {
      */
     public AID getObserved() {
         return observed;
+    }
+
+    /**
+     * Set the <code>observed</code> slot of this action.
+     *
+     * @param id The agent identifier of the agent whose events will
+     *           be notified from now on.
+     */
+    public void setObserved(AID id) {
+        observed = id;
     }
 
     /**

@@ -38,32 +38,34 @@ import java.util.Iterator;
 /**
  * This facet forces the elements in an AbsAggregate
  * to be compliant to a given schema.
+ *
  * @author Giovanni Caire - TILAB
  */
 public class TypedAggregateFacet implements Facet {
     private final ObjectSchema type;
 
     /**
-     Construct a <code>TypedAggregateFacet</code> that forces
-     the elements in an AbsAggregate to be instances of a given
-     schema
+     * Construct a <code>TypedAggregateFacet</code> that forces
+     * the elements in an AbsAggregate to be instances of a given
+     * schema
      */
     public TypedAggregateFacet(ObjectSchema s) {
         type = s;
     }
 
     /**
-     Get the schema associated to this facet
+     * Get the schema associated to this facet
      */
     public ObjectSchema getType() {
         return type;
     }
 
     /**
-     Check whether a given value for the slot this Facet applies
-     to is valid.
-     @param value The value to be checked
-     @throws OntologyException If the value is not valid
+     * Check whether a given value for the slot this Facet applies
+     * to is valid.
+     *
+     * @param value The value to be checked
+     * @throws OntologyException If the value is not valid
      */
     public void validate(AbsObject value, Ontology onto) throws OntologyException {
         if (value instanceof AbsVariable) {

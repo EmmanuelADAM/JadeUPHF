@@ -39,26 +39,26 @@ import jade.core.ContainerID;
  */
 public class LoadContainer implements AgentAction {
 
-    public LoadContainer() {
-    }
+    private ContainerID container;
+    private String repository;
 
-    public void setContainer(ContainerID id) {
-        container = id;
+    public LoadContainer() {
     }
 
     public ContainerID getContainer() {
         return container;
     }
 
-    public void setRepository(String r) {
-        repository = r;
+    public void setContainer(ContainerID id) {
+        container = id;
     }
 
     public String getRepository() {
         return repository;
     }
 
-    private ContainerID container;
-    private String repository;
+    public void setRepository(String r) {
+        repository = r;
+    }
 
 }

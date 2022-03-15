@@ -60,16 +60,6 @@ public class RemovedContainer implements Event {
     }
 
     /**
-     * Set the <code>container</code> slot of this event.
-     *
-     * @param id The container identifier of the newly removed
-     *           container.
-     */
-    public void setContainer(ContainerID id) {
-        container = id;
-    }
-
-    /**
      * Retrieve the value of the <code>container</code> slot of this
      * event, containing the container identifier of the newly removed
      * container.
@@ -79,6 +69,16 @@ public class RemovedContainer implements Event {
      */
     public ContainerID getContainer() {
         return container;
+    }
+
+    /**
+     * Set the <code>container</code> slot of this event.
+     *
+     * @param id The container identifier of the newly removed
+     *           container.
+     */
+    public void setContainer(ContainerID id) {
+        container = id;
     }
 
 }

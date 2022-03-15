@@ -64,15 +64,6 @@ public class EventRecord implements Concept {
     }
 
     /**
-     * Set the <code>what</code> slot of this event.
-     *
-     * @param evt The occurred event.
-     */
-    public void setWhat(Event evt) {
-        what = evt;
-    }
-
-    /**
      * Retrieve the value of the <code>what</code> slot of this
      * event, containing the occurred event.
      *
@@ -84,12 +75,12 @@ public class EventRecord implements Concept {
     }
 
     /**
-     * Set the <code>when</code> slot of this event.
+     * Set the <code>what</code> slot of this event.
      *
-     * @param d The time instant when the event occurred.
+     * @param evt The occurred event.
      */
-    public void setWhen(Date d) {
-        when = d;
+    public void setWhat(Event evt) {
+        what = evt;
     }
 
     /**
@@ -104,12 +95,12 @@ public class EventRecord implements Concept {
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
+     * Set the <code>when</code> slot of this event.
      *
-     * @param l The location where the event occurred.
+     * @param d The time instant when the event occurred.
      */
-    public void setWhere(Location l) {
-        where = l;
+    public void setWhen(Date d) {
+        when = d;
     }
 
     /**
@@ -121,6 +112,15 @@ public class EventRecord implements Concept {
      */
     public Location getWhere() {
         return where;
+    }
+
+    /**
+     * Set the <code>where</code> slot of this event.
+     *
+     * @param l The location where the event occurred.
+     */
+    public void setWhere(Location l) {
+        where = l;
     }
 
 }

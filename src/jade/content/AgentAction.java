@@ -26,8 +26,9 @@ package jade.content;
 
 /**
  * Generic interface to be implemented by classes associated to agent actions
- * in an ontology. Agent actions are expressions describing actions that can 
- * be performed by agents. 
+ * in an ontology. Agent actions are expressions describing actions that can
+ * be performed by agents.
+ *
  * @author Federico Bergenti - Universita` di Parma
  */
 public interface AgentAction extends ContentElement, Concept {

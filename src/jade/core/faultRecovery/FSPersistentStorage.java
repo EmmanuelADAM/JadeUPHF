@@ -45,11 +45,9 @@ class FSPersistentStorage implements PersistentStorage {
     private static final String UNREACHABLE_EXTENSION = ".unreachable";
     private static final String PLATFORM_FILE_NAME = "platform";
     private static final String NODE_POSTFIX = "-node";
-
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
     private String fileSeparator;
     private File locationDir;
-
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
 
     public void init(Profile p) throws Exception {
         fileSeparator = System.getProperty("file.separator");

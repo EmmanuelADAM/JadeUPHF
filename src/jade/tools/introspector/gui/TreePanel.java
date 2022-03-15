@@ -40,12 +40,12 @@ import java.awt.*;
  */
 class TreePanel extends JPanel implements TreeSelectionListener {
 
+    private final JSplitPane pane;
+    private final IntrospectorGUI mainWnd;
     public JTextArea selArea;
     AgentTree treeAgent; // FIXME: It should be private
     private JScrollPane scroll;
     private JSplitPane pan;
-    private final JSplitPane pane;
-    private final IntrospectorGUI mainWnd;
     private PopUpMouser popM;
 
     public TreePanel(IntrospectorGUI mainWnd) {

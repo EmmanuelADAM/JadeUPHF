@@ -25,23 +25,18 @@ public class NIOJICPConnection extends Connection {
     public static final int MAX_HEADER_SIZE = 263;
     // TODO 1k, why? configurable?
     public static final int INITIAL_BUFFER_SIZE = 1024;
-
+    private static final Logger log = Logger.getLogger(NIOJICPConnection.class.getName());
     private SocketChannel myChannel;
     private ByteBuffer socketData;
     private ByteBuffer payloadBuf;
     private ByteBuffer unmanagedJicpData = null;
-
     private byte type;
     private byte info;
     private byte sessionID;
     private String recipientID;
-
     private boolean headerReceived = false;
     private boolean closed = false;
-
     private List<BufferTransformerInfo> transformers;
-
-    private static final Logger log = Logger.getLogger(NIOJICPConnection.class.getName());
 
     public NIOJICPConnection() {
         socketData = ByteBuffer.allocateDirect(INITIAL_BUFFER_SIZE);

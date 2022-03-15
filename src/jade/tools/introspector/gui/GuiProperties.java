@@ -37,16 +37,17 @@ import javax.swing.*;
 
 /**
  * This class loads the icons used.
+ *
  * @see jade.gui.GuiProperties
  */
 
 public class GuiProperties {
 
-    protected static UIDefaults MyDefaults;
-    protected static GuiProperties foo = new GuiProperties();
     public static final String ImagePath = "";
     //loging
     private static final Logger logger = Logger.getMyLogger(GuiProperties.class.getName());
+    protected static UIDefaults MyDefaults;
+    protected static GuiProperties foo = new GuiProperties();
 
     static {
         Object[] icons = {

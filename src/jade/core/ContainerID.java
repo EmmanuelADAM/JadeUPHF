@@ -72,6 +72,16 @@ public class ContainerID implements Location {
     }
 
     /**
+     * Retrieve the name of the described container.
+     *
+     * @return The container name if one is set, or <code>null</code>
+     * otherwise.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * Set the name of the described container.
      *
      * @param n The name to give to the described container.
@@ -81,13 +91,12 @@ public class ContainerID implements Location {
     }
 
     /**
-     * Retrieve the name of the described container.
+     * Retrieves the IMTP protocol used to reach the described container.
      *
-     * @return The container name if one is set, or <code>null</code>
-     * otherwise.
+     * @return The name of the IMTP protocol used in the described container.
      */
-    public String getName() {
-        return name;
+    public String getProtocol() {
+        return protocol;
     }
 
     /**
@@ -101,12 +110,12 @@ public class ContainerID implements Location {
     }
 
     /**
-     * Retrieves the IMTP protocol used to reach the described container.
+     * Retrieve the IP address of the host, the described container is running on.
      *
-     * @return The name of the IMTP protocol used in the described container.
+     * @return The string representation of the IP address of the host, the described container is running on.
      */
-    public String getProtocol() {
-        return protocol;
+    public String getAddress() {
+        return address;
     }
 
     /**
@@ -116,15 +125,6 @@ public class ContainerID implements Location {
      */
     public void setAddress(String a) {
         address = a;
-    }
-
-    /**
-     * Retrieve the IP address of the host, the described container is running on.
-     *
-     * @return The string representation of the IP address of the host, the described container is running on.
-     */
-    public String getAddress() {
-        return address;
     }
 
     public String getPort() {
@@ -188,13 +188,13 @@ public class ContainerID implements Location {
         return name.toLowerCase().hashCode();
     }
 
+    public Boolean getMain() {
+        return main;
+    }
+
     public void setMain(Boolean main) {
         this.main = main;
 
-    }
-
-    public Boolean getMain() {
-        return main;
     }
 
 }

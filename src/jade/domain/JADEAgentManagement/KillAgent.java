@@ -50,15 +50,6 @@ public class KillAgent implements AgentAction {
     }
 
     /**
-     * Set the <code>agent</code> slot of this action.
-     *
-     * @param id The agent identifier of the agent to terminate.
-     */
-    public void setAgent(AID id) {
-        agent = id;
-    }
-
-    /**
      * Retrieve the value of the <code>agent</code> slot of this
      * event, containing the agent identifier of the agent to
      * terminate.
@@ -71,13 +62,12 @@ public class KillAgent implements AgentAction {
     }
 
     /**
-     * Set the <code>password</code> slot of this action.
+     * Set the <code>agent</code> slot of this action.
      *
-     * @param p The password to authenticate the principal requesting
-     *          the agent termination.
+     * @param id The agent identifier of the agent to terminate.
      */
-    public void setPassword(String p) {
-        password = p;
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     /**
@@ -90,6 +80,16 @@ public class KillAgent implements AgentAction {
      */
     public String getPassword() {
         return password;
+    }
+
+    /**
+     * Set the <code>password</code> slot of this action.
+     *
+     * @param p The password to authenticate the principal requesting
+     *          the agent termination.
+     */
+    public void setPassword(String p) {
+        password = p;
     }
 
 }

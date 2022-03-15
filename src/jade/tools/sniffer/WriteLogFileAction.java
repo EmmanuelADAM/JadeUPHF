@@ -42,16 +42,17 @@ import java.io.Serializable;
 /**
  * Creates a serialized snapshot of the agents and sniffed messages in both canvases for
  * later recall.
- *
+ * <p>
  * see FixedAction
+ *
  * @see AgentList
  * @see MessageList
  */
 
 public class WriteLogFileAction extends FixedAction implements Serializable {
 
-    private final MainPanel mainPanel;
     private static final Logger logger = Logger.getMyLogger(WriteLogFileAction.class.getName());
+    private final MainPanel mainPanel;
 
     public WriteLogFileAction(ActionProcessor actPro, MainPanel mainPanel) {
         super("WriteLogFileActionIcon", "Save Snapshot File", actPro);

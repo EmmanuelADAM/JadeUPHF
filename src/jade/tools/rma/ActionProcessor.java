@@ -36,9 +36,6 @@ import java.util.Map;
  */
 class ActionProcessor {
 
-    private final MainPanel panel;
-    private RMAAction action;
-
     public static final String START_ACTION = "Start new Agent";
     public static final String MANAGE_MTPS_ACTION = "Manage Installed MTPs";
     public static final String INSTALL_MTP_ACTION = "Install a new MTP";
@@ -71,8 +68,9 @@ class ActionProcessor {
     public static final String REMOVEREMOTEAMS_ACTION = "Remove Remote Platform";
     public static final String REFRESHAMSAGENT_ACTION = "Refresh Agent List";
     public static final String REGISTERREMOTEAGENTWITHAMS_ACTION = "Register Remote Agent with local AMS";
-
     public static final Map<String, RMAAction> actions = new HashMap<>();
+    private final MainPanel panel;
+    private RMAAction action;
 
     public ActionProcessor(rma anRma, MainWindow mWnd, MainPanel panel) {
         this.panel = panel;

@@ -45,15 +45,16 @@ import java.util.Iterator;
  * Writes a text file with all sniffed messages showed on the Message Canvas. A dialog box
  * asks the user the name of the file.
  * see FixedAction
+ *
  * @see AgentList
  * @see MessageList
  */
 
 public class WriteMessageListAction extends FixedAction implements Serializable {
 
-    private PrintWriter out;
-    private final MainPanel mainPanel;
     private static final Logger logger = Logger.getMyLogger(WriteMessageListAction.class.getName());
+    private final MainPanel mainPanel;
+    private PrintWriter out;
 
 
     public WriteMessageListAction(ActionProcessor actPro, MainPanel mainPanel) {

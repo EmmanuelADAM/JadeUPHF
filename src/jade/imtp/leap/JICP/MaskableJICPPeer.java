@@ -48,6 +48,7 @@ import java.util.Vector;
 
 /**
  * Class declaration
+ *
  * @author Giovanni Caire - TILAB
  */
 public class MaskableJICPPeer extends JICPPeer {
@@ -81,8 +82,8 @@ public class MaskableJICPPeer extends JICPPeer {
             sb.append(JICPProtocol.UNREACHABLE_KEY);
             List<Specifier> ls = p.getSpecifiers(sb.toString());
             if (ls != null) {
-                for (Object o : ls) {
-                    Specifier s = (Specifier) o;
+                for (Specifier o : ls) {
+                    Specifier s = o;
                     // Note that in this case the className field of a specifier does
                     // not have anything to do with a class.
                     updateMask(s.getClassName());
@@ -110,9 +111,7 @@ public class MaskableJICPPeer extends JICPPeer {
      * Method declaration
      *
      * @param m
-     *
      * @throws ICPException
-     *
      * @see
      */
     private void updateMask(String m) throws ICPException {
@@ -124,9 +123,7 @@ public class MaskableJICPPeer extends JICPPeer {
      * Method declaration
      *
      * @param host
-     *
      * @return
-     *
      * @see
      */
     private boolean isMasked(String host) {
@@ -163,11 +160,8 @@ public class MaskableJICPPeer extends JICPPeer {
      * Method declaration
      *
      * @param addr
-     *
      * @return
-     *
      * @throws ICPException
-     *
      * @see
      */
     private int[] parseIP(String addr) throws ICPException {

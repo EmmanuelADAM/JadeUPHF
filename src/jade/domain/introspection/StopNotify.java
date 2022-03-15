@@ -40,8 +40,8 @@ import java.util.List;
  */
 public class StopNotify implements AgentAction {
 
-    private AID observed;
     private final List<String> events = new ArrayList<>();
+    private AID observed;
 
 
     /**
@@ -49,16 +49,6 @@ public class StopNotify implements AgentAction {
      * ontological classes.
      */
     public StopNotify() {
-    }
-
-    /**
-     * Set the <code>observed</code> slot of this action.
-     *
-     * @param id The agent identifier of the agent whose events were
-     *           being notified so far.
-     */
-    public void setObserved(AID id) {
-        observed = id;
     }
 
     /**
@@ -71,6 +61,16 @@ public class StopNotify implements AgentAction {
      */
     public AID getObserved() {
         return observed;
+    }
+
+    /**
+     * Set the <code>observed</code> slot of this action.
+     *
+     * @param id The agent identifier of the agent whose events were
+     *           being notified so far.
+     */
+    public void setObserved(AID id) {
+        observed = id;
     }
 
     /**

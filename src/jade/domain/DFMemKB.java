@@ -51,39 +51,6 @@ public class DFMemKB extends MemKB {
         clean();
     }
 
-
-    protected Object insert(Object name, Object fact) {
-        DFAgentDescription desc = (DFAgentDescription) fact;
-        if (desc.getLeaseTime() != null) {
-            entriesToDelete = true;
-        }
-        return super.insert(name, fact);
-    }
-
-    /**
-     * Scan the facts and remove those whose lease time has expired.
-     */
-    protected void clean() {
-
-        if (entriesToDelete) {
-            ArrayList<AID> toBeRemoved = new ArrayList<>();
-            for (Object o : facts.values()) {
-                DFAgentDescription dfd = (DFAgentDescription) o;
-                if (dfd.checkLeaseTimeExpired()) {
-                    toBeRemoved.add(dfd.getName());
-                }
-            }
-            for (AID aid : toBeRemoved) {
-                facts.remove(aid);
-            }
-        }
-    }
-
-    // match
-    public final boolean match(DFAgentDescription template, DFAgentDescription fact) {
-        return compare(template, fact);
-    }
-
     public static boolean compare(DFAgentDescription template, DFAgentDescription fact) {
 
         try {
@@ -248,5 +215,37 @@ public class DFMemKB extends MemKB {
         }
 
         return true;
+    }
+
+    protected Object insert(Object name, Object fact) {
+        DFAgentDescription desc = (DFAgentDescription) fact;
+        if (desc.getLeaseTime() != null) {
+            entriesToDelete = true;
+        }
+        return super.insert(name, fact);
+    }
+
+    /**
+     * Scan the facts and remove those whose lease time has expired.
+     */
+    protected void clean() {
+
+        if (entriesToDelete) {
+            ArrayList<AID> toBeRemoved = new ArrayList<>();
+            for (Object o : facts.values()) {
+                DFAgentDescription dfd = (DFAgentDescription) o;
+                if (dfd.checkLeaseTimeExpired()) {
+                    toBeRemoved.add(dfd.getName());
+                }
+            }
+            for (AID aid : toBeRemoved) {
+                facts.remove(aid);
+            }
+        }
+    }
+
+    // match
+    public final boolean match(DFAgentDescription template, DFAgentDescription fact) {
+        return compare(template, fact);
     }
 }

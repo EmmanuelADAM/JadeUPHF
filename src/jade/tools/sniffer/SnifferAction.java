@@ -46,8 +46,8 @@ import java.awt.event.ActionEvent;
 public abstract class SnifferAction extends AbstractAction {
 
     private final ActionProcessor actPro;
-    private Icon img;
     private final String ActionName;
+    private Icon img;
 
     public SnifferAction(String IconKey, String ActionName, ActionProcessor actPro) {
         //#DOTNET_EXCLUDE_BEGIN

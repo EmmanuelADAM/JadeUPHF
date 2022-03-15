@@ -38,6 +38,12 @@ import jade.util.Logger;
  */
 public class AddressNotificationService extends BaseService {
 
+    // The command sink, source side
+    private final IncomingFilter incomingFilter = new IncomingFilter();
+    private AgentContainer myContainer;
+    private ServiceComponent localSlice;
+    private ServiceManager myServiceManager;
+
     public void init(AgentContainer ac, Profile p) throws ProfileException {
         super.init(ac, p);
 
@@ -98,6 +104,23 @@ public class AddressNotificationService extends BaseService {
         }
     }
 
+    private void broadcastToSlices(HorizontalCommand cmd) throws IMTPException, ServiceException {
+
+        Object[] slices = getAllSlices();
+        for (Object o : slices) {
+            AddressNotificationSlice slice = (AddressNotificationSlice) o;
+            if (!slice.getNode().hasPlatformManager()) {
+                slice.serve(cmd);
+            }
+        }
+
+    }
+
+    private void addAddress(String addr) throws IMTPException {
+        if (myLogger.isLoggable(Logger.CONFIG))
+            myLogger.log(Logger.CONFIG, "Adding PlatformManager address " + addr);
+        myServiceManager.addAddress(addr);
+    }
 
     private class IncomingFilter extends Filter {
 
@@ -128,7 +151,6 @@ public class AddressNotificationService extends BaseService {
         }
 
     } // End of IncomingFilter class
-
 
     private class ServiceComponent implements Slice {
 
@@ -190,35 +212,6 @@ public class AddressNotificationService extends BaseService {
         }
 
     } // End of ServiceComponent class
-
-
-    private AgentContainer myContainer;
-
-    private ServiceComponent localSlice;
-
-    // The command sink, source side
-    private final IncomingFilter incomingFilter = new IncomingFilter();
-
-    private ServiceManager myServiceManager;
-
-    private void broadcastToSlices(HorizontalCommand cmd) throws IMTPException, ServiceException {
-
-        Object[] slices = getAllSlices();
-        for (Object o : slices) {
-            AddressNotificationSlice slice = (AddressNotificationSlice) o;
-            if (!slice.getNode().hasPlatformManager()) {
-                slice.serve(cmd);
-            }
-        }
-
-    }
-
-
-    private void addAddress(String addr) throws IMTPException {
-        if (myLogger.isLoggable(Logger.CONFIG))
-            myLogger.log(Logger.CONFIG, "Adding PlatformManager address " + addr);
-        myServiceManager.addAddress(addr);
-    }
 
 
 }

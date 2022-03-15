@@ -34,6 +34,13 @@
  * @version 0.1
  * @author Nicolas Lhuillier (Motorola Labs)
  * @version 1.0
+ * <p>
+ * KeepAlive.java
+ * @author Jose Antonio Exposito
+ * @author MARISM-A Development group ( marisma-info@ccd.uab.es )
+ * @version 0.1
+ * @author Nicolas Lhuillier (Motorola Labs)
+ * @version 1.0
  */
 
 /**
@@ -65,16 +72,194 @@ import java.util.Vector;
 public class KeepAlive {
 
     private static final Logger logger = Logger.getMyLogger(KeepAlive.class.getName());
+    private final Vector<KAConnection> connections;
+    private final int dim;
+    private final int outPort;
+    private final boolean agressive;
+    private final HashMap<String, Object> locks = new HashMap<>();
+    /** Constructor */
+    public KeepAlive(int dim, int outPort, boolean agressive) {
+        connections = new Vector<>(dim);
+        this.dim = dim;
+        this.outPort = outPort;
+        this.agressive = agressive;
+    }
+
+    /** add a new connection */
+    public synchronized void add(KAConnection c) {
+        try {
+            //The vectors are full.
+            if (connections.size() == dim) {
+                remove(0); //Remove the first element of vectors, is the older element
+            }
+            connections.addElement(c);
+            //System.out.println("DEBUG: Added Ka conn: "+connections.size()+"/"+dim+" with "+c.getAddress().getPortNo());
+        } catch (Exception ioe) {
+            if (logger.isLoggable(Logger.WARNING))
+                logger.log(Logger.WARNING, ioe.getMessage());
+        }
+    }
+
+    /** delete an exisiting connection, based on position */
+    private void remove(int pos) {
+        try {
+            KAConnection old = getConnection(pos);
+            connections.removeElementAt(pos);
+            old.close();
+        } catch (Exception ioe) {
+            if (logger.isLoggable(Logger.WARNING))
+                logger.log(Logger.WARNING, ioe.getMessage());
+        }
+    }
+
+    /** delete an exisiting connection, based on its address */
+    public synchronized void remove(HTTPAddress addr) {
+        connections.removeElement(search(addr));
+    }
+
+    /** delete an exisiting connection*/
+    public synchronized void remove(KAConnection ka) {
+        connections.removeElement(ka);
+    }
+
+    /** get the socket of the connection when addr make matching */
+    private KAConnection getConnection(int pos) {
+        return connections.elementAt(pos);
+    }
+
+    private KAConnection search(HTTPAddress addr) {
+        if (addr != null) {
+            KAConnection c;
+            for (int i = (connections.size() - 1); i >= 0; i--) {
+                if ((c = getConnection(i)).equals(addr)) {
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
+
+    /** get the socket of the connection when addr make matching */
+    public KAConnection getConnection(HTTPAddress addr) {
+        return search(addr);
+    }
+
+    private KAConnection createConnection(final HTTPAddress url) throws MTPException {
+        KAConnection kac = null;
+        try {
+            kac = new KAConnection(url, outPort);
+            kac.open();
+            return kac;
+        } catch (IOException e) {
+            //Remove the inputs of KA object for the current address
+            if (kac != null) {
+                kac.close();
+            }
+            throw new MTPException(e.getMessage(), e);
+        }
+    }
+
+    /** get the dimension of Vectors */
+    public int getDim() {
+        return dim;
+    }
+
+    /** get the capacity of Vectors */
+    public int capacity() {
+        //System.out.println("DIMENSION: "+dim+"  "+"TAMVECT: "+addresses.size());
+        return (dim - connections.size());
+    }
+
+    public synchronized void swap(KAConnection c) {
+        try {
+            //if only have 1 socket isn't necessary make swap function
+            if ((dim > 1) && (!(connections.indexOf(c) == (connections.size() - 1)))) {
+                //remove the elements at former position
+                connections.removeElement(c);
+                //put the elements at the end
+                connections.addElement(c);
+            }
+        } catch (Exception ioe) {
+            if (logger.isLoggable(Logger.WARNING))
+                logger.log(Logger.WARNING, ioe.getMessage());
+        }
+    }
+
+    public void send(HTTPAddress url, byte[] request) throws MTPException {
+        Object lock = getLock(url);
+        synchronized (lock) {
+            KAConnection kac = null;
+            // Try to re-use an existing socket
+            if (dim > 0) {
+                //Search the address in Keep-Alive object
+                kac = getConnection(url);
+                if (kac != null) {
+                    try {
+                        if (logger.isLoggable(Logger.FINER))
+                            logger.log(Logger.FINER, "Reusing keepAlive for " + url);
+                        kac.send(request);
+                        if (kac.isOpen()) {
+                            //change the priority of socket & another components of keep-alive object
+                            //Only the policy == AGGRESSIVE
+                            //HTTPAddress is cached;
+                            if (agressive) {
+                                swap(kac);
+                            }
+                        } else {
+                            if (logger.isLoggable(Logger.FINER))
+                                logger.log(Logger.FINER, "Removing keepAlive for " + url);
+                            remove(kac);
+                        }
+                    } catch (MTPException e) {
+                        if (logger.isLoggable(Logger.FINER))
+                            logger.log(Logger.FINER, "Removing keepAlive for " + url);
+                        remove(kac);
+                        // retry with new connection
+                        kac = null;
+                    }
+                }
+            }
+            if (kac == null) {
+                if (logger.isLoggable(Logger.FINER))
+                    logger.log(Logger.FINER, "Creating connection to " + url);
+                kac = createConnection(url);
+                // Send out and check response code
+                kac.send(request);
+                if (kac.isOpen()) {
+                    if (dim > 0) {
+                        // Store the new connection
+                        if (logger.isLoggable(Logger.FINER))
+                            logger.log(Logger.FINER, "Adding keepAlive for " + url);
+                        add(kac);
+                    } else {
+                        if (logger.isLoggable(Logger.FINER))
+                            logger.log(Logger.FINER, "Closing open connection for " + url);
+                        kac.close();
+                    }
+                }
+            }
+        }
+    }
+
+    private Object getLock(final HTTPAddress url) {
+        Object lock = locks.get(url.getHost());
+        if (lock == null) {
+            synchronized (this) {
+                lock = locks.computeIfAbsent(url.getHost(), k -> new Object());
+            }
+        }
+        return lock;
+    }
 
     /*
      * Inner structure to contain all connection information
      */
     public static class KAConnection {
+        private final HTTPAddress address;
+        private final int outPort;
         private OutputStream out;
         private InputStream in;
-        private final HTTPAddress address;
         private Vector<?> connections;
-        private final int outPort;
 
         KAConnection(HTTPAddress a, int outPort) {
             address = a;
@@ -171,191 +356,5 @@ public class KeepAlive {
 
 
     } // End of KAConnection inner class
-
-    private final Vector<KAConnection> connections;
-    private final int dim;
-    private final int outPort;
-    private final boolean agressive;
-    private final HashMap<String, Object> locks = new HashMap<>();
-
-    /** Constructor */
-    public KeepAlive(int dim, int outPort, boolean agressive) {
-        connections = new Vector<>(dim);
-        this.dim = dim;
-        this.outPort = outPort;
-        this.agressive = agressive;
-    }
-
-    /** add a new connection */
-    public synchronized void add(KAConnection c) {
-        try {
-            //The vectors are full.
-            if (connections.size() == dim) {
-                remove(0); //Remove the first element of vectors, is the older element
-            }
-            connections.addElement(c);
-            //System.out.println("DEBUG: Added Ka conn: "+connections.size()+"/"+dim+" with "+c.getAddress().getPortNo());
-        } catch (Exception ioe) {
-            if (logger.isLoggable(Logger.WARNING))
-                logger.log(Logger.WARNING, ioe.getMessage());
-        }
-    }
-
-    /** delete an exisiting connection, based on position */
-    private void remove(int pos) {
-        try {
-            KAConnection old = getConnection(pos);
-            connections.removeElementAt(pos);
-            old.close();
-        } catch (Exception ioe) {
-            if (logger.isLoggable(Logger.WARNING))
-                logger.log(Logger.WARNING, ioe.getMessage());
-        }
-    }
-
-    /** delete an exisiting connection, based on its address */
-    public synchronized void remove(HTTPAddress addr) {
-        connections.removeElement(search(addr));
-    }
-
-    /** delete an exisiting connection*/
-    public synchronized void remove(KAConnection ka) {
-        connections.removeElement(ka);
-    }
-
-
-    /** get the socket of the connection when addr make matching */
-    private KAConnection getConnection(int pos) {
-        return connections.elementAt(pos);
-    }
-
-    private KAConnection search(HTTPAddress addr) {
-        if (addr != null) {
-            KAConnection c;
-            for (int i = (connections.size() - 1); i >= 0; i--) {
-                if ((c = getConnection(i)).equals(addr)) {
-                    return c;
-                }
-            }
-        }
-        return null;
-    }
-
-    /** get the socket of the connection when addr make matching */
-    public KAConnection getConnection(HTTPAddress addr) {
-        return search(addr);
-    }
-
-    private KAConnection createConnection(final HTTPAddress url) throws MTPException {
-        KAConnection kac = null;
-        try {
-            kac = new KAConnection(url, outPort);
-            kac.open();
-            return kac;
-        } catch (IOException e) {
-            //Remove the inputs of KA object for the current address
-            if (kac != null) {
-                kac.close();
-            }
-            throw new MTPException(e.getMessage(), e);
-        }
-    }
-
-    /** get the dimension of Vectors */
-    public int getDim() {
-        return dim;
-    }
-
-    /** get the capacity of Vectors */
-    public int capacity() {
-        //System.out.println("DIMENSION: "+dim+"  "+"TAMVECT: "+addresses.size());
-        return (dim - connections.size());
-    }
-
-    public synchronized void swap(KAConnection c) {
-        try {
-            //if only have 1 socket isn't necessary make swap function
-            if ((dim > 1) && (!(connections.indexOf(c) == (connections.size() - 1)))) {
-                //remove the elements at former position
-                connections.removeElement(c);
-                //put the elements at the end
-                connections.addElement(c);
-            }
-        } catch (Exception ioe) {
-            if (logger.isLoggable(Logger.WARNING))
-                logger.log(Logger.WARNING, ioe.getMessage());
-        }
-    }
-
-
-    public void send(HTTPAddress url, byte[] request) throws MTPException {
-        Object lock = getLock(url);
-        synchronized (lock) {
-            KAConnection kac = null;
-            // Try to re-use an existing socket
-            if (dim > 0) {
-                //Search the address in Keep-Alive object
-                kac = getConnection(url);
-                if (kac != null) {
-                    try {
-                        if (logger.isLoggable(Logger.FINER))
-                            logger.log(Logger.FINER, "Reusing keepAlive for " + url);
-                        kac.send(request);
-                        if (kac.isOpen()) {
-                            //change the priority of socket & another components of keep-alive object
-                            //Only the policy == AGGRESSIVE
-                            //HTTPAddress is cached;
-                            if (agressive) {
-                                swap(kac);
-                            }
-                        } else {
-                            if (logger.isLoggable(Logger.FINER))
-                                logger.log(Logger.FINER, "Removing keepAlive for " + url);
-                            remove(kac);
-                        }
-                    } catch (MTPException e) {
-                        if (logger.isLoggable(Logger.FINER))
-                            logger.log(Logger.FINER, "Removing keepAlive for " + url);
-                        remove(kac);
-                        // retry with new connection
-                        kac = null;
-                    }
-                }
-            }
-            if (kac == null) {
-                if (logger.isLoggable(Logger.FINER))
-                    logger.log(Logger.FINER, "Creating connection to " + url);
-                kac = createConnection(url);
-                // Send out and check response code
-                kac.send(request);
-                if (kac.isOpen()) {
-                    if (dim > 0) {
-                        // Store the new connection
-                        if (logger.isLoggable(Logger.FINER))
-                            logger.log(Logger.FINER, "Adding keepAlive for " + url);
-                        add(kac);
-                    } else {
-                        if (logger.isLoggable(Logger.FINER))
-                            logger.log(Logger.FINER, "Closing open connection for " + url);
-                        kac.close();
-                    }
-                }
-            }
-        }
-    }
-
-    private Object getLock(final HTTPAddress url) {
-        Object lock = locks.get(url.getHost());
-        if (lock == null) {
-            synchronized (this) {
-                lock = locks.get(url.getHost());
-                if (lock == null) {
-                    lock = new Object();
-                    locks.put(url.getHost(), lock);
-                }
-            }
-        }
-        return lock;
-    }
 
 } //End of class KeepAlive

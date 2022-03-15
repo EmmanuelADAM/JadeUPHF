@@ -16,8 +16,8 @@ import java.util.logging.Logger;
  * @author eduard
  */
 public class NIOHTTPSConnection extends NIOHTTPConnection {
-    private SSLEngineHelper helper = null;
     private static final Logger log = Logger.getLogger(NIOHTTPSConnection.class.getName());
+    private SSLEngineHelper helper = null;
 
     @Override
     public void close() throws IOException {

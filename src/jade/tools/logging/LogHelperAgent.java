@@ -53,9 +53,9 @@ import java.util.Map;
  */
 public class LogHelperAgent extends Agent {
 
+    private final Codec codec = new SLCodec();
     private String logManagerClass = JavaLoggingLogManagerImpl.JAVA_LOGGING_LOG_MANAGER_CLASS; //default logManagerClass if not specified.
     private Logger logger;
-    private final Codec codec = new SLCodec();
     private LogManager logManager = null;
     private AMSSubscriber myAMSSubscriber = null;
 
@@ -85,6 +85,21 @@ public class LogHelperAgent extends Agent {
         }
     }
 
+    private void amsSubscribe(final AID owner) {
+        myAMSSubscriber = new AMSSubscriber() {
+            protected void installHandlers(Map<String, EventHandler> handlersTable) {
+                handlersTable.put(IntrospectionVocabulary.DEADAGENT, (EventHandler) ev -> {
+                    DeadAgent da = (DeadAgent) ev;
+                    if (da.getAgent().equals(owner)) {
+                        // My Owner is dead --> suicide
+                        doDelete();
+                    }
+                });
+            }
+        };
+
+        addBehaviour(myAMSSubscriber);
+    }
 
     /**
      * Inner class LogHelperAgentBehaviour
@@ -165,21 +180,4 @@ public class LogHelperAgent extends Agent {
             reply.setPerformative(ACLMessage.INFORM);
         }
     } // END of inner class LogHelperAgentBehaviour
-
-
-    private void amsSubscribe(final AID owner) {
-        myAMSSubscriber = new AMSSubscriber() {
-            protected void installHandlers(Map<String, EventHandler> handlersTable) {
-                handlersTable.put(IntrospectionVocabulary.DEADAGENT, (EventHandler) ev -> {
-                    DeadAgent da = (DeadAgent) ev;
-                    if (da.getAgent().equals(owner)) {
-                        // My Owner is dead --> suicide
-                        doDelete();
-                    }
-                });
-            }
-        };
-
-        addBehaviour(myAMSSubscriber);
-    }
 }

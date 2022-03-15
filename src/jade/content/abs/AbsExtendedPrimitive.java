@@ -25,15 +25,14 @@
 package jade.content.abs;
 
 /**
- * An extended abstract descriptor that can hold a generic primitive types 
+ * An extended abstract descriptor that can hold a generic primitive types
  * (eg. java.math.BigDecimal) not supported by <code>AbsPrimitive</code>.
  */
 public class AbsExtendedPrimitive implements AbsTerm {
 
     public static final int ABS_EXTENDED_PRIMITIVE = 10;
-
-    private Object value;
     private final String typeName;
+    private Object value;
 
     /**
      * Construct an extended abstract descriptor to hold a primitive of
@@ -49,7 +48,7 @@ public class AbsExtendedPrimitive implements AbsTerm {
      * the proper type (e.g. java.math.BigInteger...).
      *
      * @param typeName The name of the type of the extended-primitive held by
-     * this descriptor.
+     *                 this descriptor.
      */
     public AbsExtendedPrimitive(String typeName) {
         this(typeName, null);
@@ -72,7 +71,7 @@ public class AbsExtendedPrimitive implements AbsTerm {
      *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsExtendedPrimitive
-     * is not correct.
+     *                                  is not correct.
      */
     public void set(Object value) {
         if (!getTypeName().equals(value.getClass().getName()))
@@ -96,16 +95,16 @@ public class AbsExtendedPrimitive implements AbsTerm {
     }
 
     /**
-     Makes no sense in the case of an AbsExtendedPrimitive that has no attribute
-     --> Just return null
+     * Makes no sense in the case of an AbsExtendedPrimitive that has no attribute
+     * --> Just return null
      */
     public AbsObject getAbsObject(String name) {
         return null;
     }
 
     /**
-     Makes no sense in the case of an AbsExtendedPrimitive that has no attribute
-     --> Just return null
+     * Makes no sense in the case of an AbsExtendedPrimitive that has no attribute
+     * --> Just return null
      */
     public String[] getNames() {
         return null;
@@ -119,8 +118,8 @@ public class AbsExtendedPrimitive implements AbsTerm {
     }
 
     /**
-     Makes no sense in the case of an AbsExtendedPrimitive that has no attribute
-     --> Just return 0
+     * Makes no sense in the case of an AbsExtendedPrimitive that has no attribute
+     * --> Just return 0
      */
     public int getCount() {
         return 0;

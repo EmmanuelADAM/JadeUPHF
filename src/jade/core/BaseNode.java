@@ -41,6 +41,16 @@ import java.util.Map;
 public abstract class BaseNode implements Node, Serializable {
 
     private final transient Logger myLogger;
+    // A map, indexed by service name, of all the local slices of this
+    // node. This map is used to dispatch incoming commands to the
+    // service they belong to.
+    private final transient Map<String, Slice> localSlices;
+    protected transient ServiceManager myServiceManager;
+    private transient CommandProcessor processor;
+    // The name of this node
+    private String myName;
+    // True if a local copy of the Platform Manager is deployed at this Node
+    private boolean hasLocalPM = false;
 
     public BaseNode(String name, boolean hasPM) {
         myName = name;
@@ -49,12 +59,12 @@ public abstract class BaseNode implements Node, Serializable {
         myLogger = Logger.getMyLogger(getClass().getName());
     }
 
-    public void setName(String name) {
-        myName = name;
-    }
-
     public String getName() {
         return myName;
+    }
+
+    public void setName(String name) {
+        myName = name;
     }
 
     public boolean hasPlatformManager() {
@@ -72,7 +82,6 @@ public abstract class BaseNode implements Node, Serializable {
     protected Slice getSlice(String serviceName) {
         return localSlices.get(serviceName);
     }
-
 
     /**
      * Provides an IMTP independent implementation for the
@@ -161,20 +170,6 @@ public abstract class BaseNode implements Node, Serializable {
 
         return processor.processIncoming(cmd);
     }
-
-    protected transient ServiceManager myServiceManager;
-    private transient CommandProcessor processor;
-
-    // The name of this node
-    private String myName;
-
-    // True if a local copy of the Platform Manager is deployed at this Node
-    private boolean hasLocalPM = false;
-
-    // A map, indexed by service name, of all the local slices of this
-    // node. This map is used to dispatch incoming commands to the
-    // service they belong to.
-    private final transient Map<String, Slice> localSlices;
 
     public String toString() {
         return myName;

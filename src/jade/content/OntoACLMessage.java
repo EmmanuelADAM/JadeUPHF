@@ -32,6 +32,7 @@ import java.util.Iterator;
 /**
  * Utility class that allow using an <code>ACLMessage</code> object
  * as an ontological agent action.
+ *
  * @author Giovanni Caire - TILAB
  */
 public class OntoACLMessage extends ACLMessage implements AgentAction {
@@ -47,6 +48,7 @@ public class OntoACLMessage extends ACLMessage implements AgentAction {
     /**
      * Construct an ontological ACL message with a given
      * performative
+     *
      * @param performative the performative of this ACL message.
      * @see ACLMessage#ACLMessage(int)
      */
@@ -57,11 +59,12 @@ public class OntoACLMessage extends ACLMessage implements AgentAction {
     /**
      * Create an ontological ACL message that wraps an existing
      * <code>ACLMessage</code>.
+     *
      * @param msg the <code>ACLMessage</code>to be wrapped. If
-     * <code>msg</code>
-     * is already an ontological ACL message no new object is
-     * created and <code>msg</code> is returned with the sender
-     * and receivers properly wrapped if necessary.
+     *            <code>msg</code>
+     *            is already an ontological ACL message no new object is
+     *            created and <code>msg</code> is returned with the sender
+     *            and receivers properly wrapped if necessary.
      */
     public static OntoACLMessage wrap(ACLMessage msg) {
         OntoACLMessage wrapper = null;

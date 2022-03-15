@@ -62,6 +62,7 @@ public class BasicFipaDateTime {
 
     /**
      * Get the value of year.
+     *
      * @return Value of year.
      */
     public short getYear() {
@@ -70,7 +71,8 @@ public class BasicFipaDateTime {
 
     /**
      * Set the value of year.
-     * @param v  Value to assign to year.
+     *
+     * @param v Value to assign to year.
      */
     public void setYear(short v) {
         cal.set(Calendar.YEAR, v);
@@ -78,6 +80,7 @@ public class BasicFipaDateTime {
 
     /**
      * Get the value of month.
+     *
      * @return Value of month.
      */
     public short getMonth() {
@@ -86,7 +89,8 @@ public class BasicFipaDateTime {
 
     /**
      * Set the value of month.
-     * @param v  Value to assign to month.
+     *
+     * @param v Value to assign to month.
      */
     public void setMonth(short v) {
         cal.set(Calendar.MONTH, v - 1);
@@ -94,6 +98,7 @@ public class BasicFipaDateTime {
 
     /**
      * Get the value of day.
+     *
      * @return Value of day.
      */
     public short getDay() {
@@ -102,7 +107,8 @@ public class BasicFipaDateTime {
 
     /**
      * Set the value of day.
-     * @param v  Value to assign to day.
+     *
+     * @param v Value to assign to day.
      */
     public void setDay(short v) {
         cal.set(Calendar.DAY_OF_MONTH, v);
@@ -110,6 +116,7 @@ public class BasicFipaDateTime {
 
     /**
      * Get the value of hour.
+     *
      * @return Value of hour.
      */
     public short getHour() {
@@ -118,7 +125,8 @@ public class BasicFipaDateTime {
 
     /**
      * Set the value of hour.
-     * @param v  Value to assign to hour.
+     *
+     * @param v Value to assign to hour.
      */
     public void setHour(short v) {
         cal.set(Calendar.HOUR_OF_DAY, v);
@@ -126,6 +134,7 @@ public class BasicFipaDateTime {
 
     /**
      * Get the value of minutes.
+     *
      * @return Value of minutes.
      */
     public short getMinutes() {
@@ -134,7 +143,8 @@ public class BasicFipaDateTime {
 
     /**
      * Set the value of minutes.
-     * @param v  Value to assign to minutes.
+     *
+     * @param v Value to assign to minutes.
      */
     public void setMinutes(short v) {
         cal.set(Calendar.MINUTE, v);
@@ -142,6 +152,7 @@ public class BasicFipaDateTime {
 
     /**
      * Get the value of seconds.
+     *
      * @return Value of seconds.
      */
     public short getSeconds() {
@@ -150,7 +161,8 @@ public class BasicFipaDateTime {
 
     /**
      * Set the value of seconds.
-     * @param v  Value to assign to seconds.
+     *
+     * @param v Value to assign to seconds.
      */
     public void setSeconds(short v) {
         cal.set(Calendar.SECOND, v);
@@ -158,6 +170,7 @@ public class BasicFipaDateTime {
 
     /**
      * Get the value of milliseconds.
+     *
      * @return Value of milliseconds.
      */
     public short getMilliseconds() {
@@ -166,7 +179,8 @@ public class BasicFipaDateTime {
 
     /**
      * Set the value of milliseconds.
-     * @param v  Value to assign to milliseconds.
+     *
+     * @param v Value to assign to milliseconds.
      */
     public void setMilliseconds(short v) {
         cal.set(Calendar.MILLISECOND, v);
@@ -174,6 +188,7 @@ public class BasicFipaDateTime {
 
     /**
      * Get the value of typeDesignator.
+     *
      * @return Value of typeDesignator.
      */
     public char getTypeDesignator() {
@@ -182,7 +197,8 @@ public class BasicFipaDateTime {
 
     /**
      * Set the value of typeDesignator.
-     * @param v  Value to assign to typeDesignator.
+     *
+     * @param v Value to assign to typeDesignator.
      */
     public void setTypeDesignator(char v) {
         this.typeDesignator = v;

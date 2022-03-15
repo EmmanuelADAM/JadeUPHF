@@ -40,13 +40,11 @@ import java.util.*;
  */
 public class DFAgentDescription implements Concept {
 
-    private AID name;
     private final List<ServiceDescription> services = new ArrayList<>();
     private final List<String> interactionProtocols = new ArrayList<>();
     private final List<String> ontology = new ArrayList<>();
     private final List<String> language = new ArrayList<>();
-
-
+    private AID name;
     // Added lease default value -1
     //private Date leaseTime = new Date(-1);
     private Date leaseTime;
@@ -59,15 +57,6 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Set the identifier of the agent
-     *
-     * @param n the identifier of the agent
-     */
-    public void setName(AID n) {
-        name = n;
-    }
-
-    /**
      * Retrieve the agent identifier for the described agent.
      *
      * @return The identifier of the agent
@@ -77,15 +66,12 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Set the lease time for the registration of this DFAgentDescription
-     * as an absolute time.
+     * Set the identifier of the agent
      *
-     * @param absoluteTime The lease time for the registration of this
-     *                     DFAgentDescription as an absolute time. Use <code>null</code>
-     *                     (default) to indicate an infinite lease time
+     * @param n the identifier of the agent
      */
-    public void setLeaseTime(Date absoluteTime) {
-        leaseTime = absoluteTime;
+    public void setName(AID n) {
+        name = n;
     }
 
     /**
@@ -99,6 +85,18 @@ public class DFAgentDescription implements Concept {
      */
     public Date getLeaseTime() {
         return leaseTime;
+    }
+
+    /**
+     * Set the lease time for the registration of this DFAgentDescription
+     * as an absolute time.
+     *
+     * @param absoluteTime The lease time for the registration of this
+     *                     DFAgentDescription as an absolute time. Use <code>null</code>
+     *                     (default) to indicate an infinite lease time
+     */
+    public void setLeaseTime(Date absoluteTime) {
+        leaseTime = absoluteTime;
     }
 
     /**

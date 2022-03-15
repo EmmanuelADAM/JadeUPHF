@@ -32,23 +32,24 @@ import java.io.Serializable;
 
 /**
  * The common ancestor of all ontological schemas.
+ *
  * @author Federico Bergenti - Universita` di Parma
  * @author Giovanni Caire - TILAB
  */
 public abstract class ObjectSchema implements Serializable {
     /**
-     Canstant value indicating that a slot in a schema is mandatory,
-     i.e. its value must not be null
+     * Canstant value indicating that a slot in a schema is mandatory,
+     * i.e. its value must not be null
      */
     public static final int MANDATORY = 0;
     /**
-     Canstant value indicating that a slot in a schema is optional,
-     i.e. its value can be null
+     * Canstant value indicating that a slot in a schema is optional,
+     * i.e. its value can be null
      */
     public static final int OPTIONAL = 1;
     /**
-     Canstant value indicating that a slot in a schema has an
-     infinite maximum cardinality
+     * Canstant value indicating that a slot in a schema has an
+     * infinite maximum cardinality
      */
     public static final int UNLIMITED = -1;
 
@@ -59,6 +60,7 @@ public abstract class ObjectSchema implements Serializable {
 
     /**
      * Retrieve the generic base schema for all objects.
+     *
      * @return the generic base schema for all objects.
      */
     public static ObjectSchema getBaseSchema() {
@@ -67,16 +69,18 @@ public abstract class ObjectSchema implements Serializable {
 
     /**
      * Add a slot to the schema.
-     * @param name The name of the slot.
-     * @param slotSchema The schema defining the type of the slot.
+     *
+     * @param name        The name of the slot.
+     * @param slotSchema  The schema defining the type of the slot.
      * @param optionality The optionality, i.e., <code>OPTIONAL</code>
-     * or <code>MANDATORY</code>
+     *                    or <code>MANDATORY</code>
      */
     protected abstract void add(String name, ObjectSchema slotSchema, int optionality);
 
     /**
      * Add a mandatory slot to the schema.
-     * @param name name of the slot.
+     *
+     * @param name       name of the slot.
      * @param slotSchema schema of the slot.
      */
     protected abstract void add(String name, ObjectSchema slotSchema);
@@ -91,12 +95,13 @@ public abstract class ObjectSchema implements Serializable {
      * aggregate contains at least <code>cardMin</code> elements and
      * at most <code>cardMax</code> elements. By default the Aggregate
      * is of type <code>BasicOntology.SEQUENCE</code>.
-     * @param name The name of the slot.
+     *
+     * @param name           The name of the slot.
      * @param elementsSchema The schema for the elements of this slot.
-     * @param cardMin This slot must get at least <code>cardMin</code>
-     * values
-     * @param cardMax This slot can get at most <code>cardMax</code>
-     * values
+     * @param cardMin        This slot must get at least <code>cardMin</code>
+     *                       values
+     * @param cardMax        This slot can get at most <code>cardMax</code>
+     *                       values
      */
     protected abstract void add(String name, ObjectSchema elementsSchema, int cardMin, int cardMax);
 
@@ -104,13 +109,14 @@ public abstract class ObjectSchema implements Serializable {
      * Add a slot with cardinality between <code>cardMin</code>
      * and <code>cardMax</code> to this schema and allow specifying the type
      * of Aggregate to be used for this slot.
-     * @param name The name of the slot.
+     *
+     * @param name           The name of the slot.
      * @param elementsSchema The schema for the elements of this slot.
-     * @param cardMin This slot must get at least <code>cardMin</code>
-     * values
-     * @param cardMax This slot can get at most <code>cardMax</code>
-     * values
-     * @param aggType The type of Aggregate to be used
+     * @param cardMin        This slot must get at least <code>cardMin</code>
+     *                       values
+     * @param cardMax        This slot can get at most <code>cardMax</code>
+     *                       values
+     * @param aggType        The type of Aggregate to be used
      * @see #add(String, ObjectSchema, int, int)
      */
     protected abstract void add(String name, ObjectSchema elementsSchema, int cardMin, int cardMax, String aggType);
@@ -118,19 +124,29 @@ public abstract class ObjectSchema implements Serializable {
     /**
      * Add a super schema tho this schema, i.e. this schema will
      * inherit all characteristics from the super schema
+     *
      * @param superSchema the super schema.
      */
     protected abstract void addSuperSchema(ObjectSchema superSchema);
 
     /**
-     Add a <code>Facet</code> on a slot of this schema
-     @param slotName the name of the slot the <code>Facet</code>
-     must be added to.
-     @param f the <code>Facet</code> to be added.
-     @throws OntologyException if slotName does not identify
-     a valid slot in this schema
+     * Add a <code>Facet</code> on a slot of this schema
+     *
+     * @param slotName the name of the slot the <code>Facet</code>
+     *                 must be added to.
+     * @param f        the <code>Facet</code> to be added.
+     * @throws OntologyException if slotName does not identify
+     *                           a valid slot in this schema
      */
     protected abstract void addFacet(String slotName, Facet f) throws OntologyException;
+
+    /**
+     * Get the indication whether the preferred encoding for the slots
+     * of concepts compliant to this schema is by order or by name.
+     */
+    public boolean getEncodingByOrder() {
+        return encodingByOrder;
+    }
 
     /**
      * Sets an indication about whether the preferred encoding for the
@@ -144,15 +160,8 @@ public abstract class ObjectSchema implements Serializable {
     }
 
     /**
-     * Get the indication whether the preferred encoding for the slots
-     * of concepts compliant to this schema is by order or by name.
-     */
-    public boolean getEncodingByOrder() {
-        return encodingByOrder;
-    }
-
-    /**
      * Retrieves the name of the type of this schema.
+     *
      * @return the name of the type of this schema.
      */
     public abstract String getTypeName();
@@ -179,7 +188,7 @@ public abstract class ObjectSchema implements Serializable {
      * @param name The name of the slot.
      * @return the <code>Schema</code> of slot <code>name</code>
      * @throws OntologyException If no slot with this name is present
-     * in this schema.
+     *                           in this schema.
      */
     public abstract ObjectSchema getSchema(String name) throws OntologyException;
 
@@ -209,7 +218,7 @@ public abstract class ObjectSchema implements Serializable {
      * @param name The name of the slot.
      * @return <code>true</code> if the slot is mandatory.
      * @throws OntologyException If no slot with this name is present
-     * in this schema.
+     *                           in this schema.
      */
     public abstract boolean isMandatory(String name) throws OntologyException;
 
@@ -220,38 +229,39 @@ public abstract class ObjectSchema implements Serializable {
     public abstract AbsObject newInstance() throws OntologyException;
 
     /**
-     Check whether a given abstract descriptor complies with this
-     schema.
-     @param abs The abstract descriptor to be checked
-     @throws OntologyException If the abstract descriptor does not
-     complies with this schema
+     * Check whether a given abstract descriptor complies with this
+     * schema.
+     *
+     * @param abs The abstract descriptor to be checked
+     * @throws OntologyException If the abstract descriptor does not
+     *                           complies with this schema
      */
     public abstract void validate(AbsObject abs, Ontology onto) throws OntologyException;
 
 
     /**
-     Check if this schema is compatible with a given schema s.
-     This is the case if
-     1) This schema is equals to s
-     2) s is one of the super-schemas of this schema
-     3) This schema descends from s i.e.
-     - s is the base schema for the XXXSchema class this schema is
-     an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
-     schema is an instance of ConceptSchema)
-     - s is the base schema for a super-class of the XXXSchema class
-     this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
-     and this schema is an instance of ConceptSchema)
+     * Check if this schema is compatible with a given schema s.
+     * This is the case if
+     * 1) This schema is equals to s
+     * 2) s is one of the super-schemas of this schema
+     * 3) This schema descends from s i.e.
+     * - s is the base schema for the XXXSchema class this schema is
+     * an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
+     * schema is an instance of ConceptSchema)
+     * - s is the base schema for a super-class of the XXXSchema class
+     * this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
+     * and this schema is an instance of ConceptSchema)
      */
     public abstract boolean isCompatibleWith(ObjectSchema s);
 
     /**
-     Return true if
-     - s is the base schema for the XXXSchema class this schema is
-     an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
-     schema is an instance of ConceptSchema)
-     - s is the base schema for a super-class of the XXXSchema class
-     this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
-     and this schema is an instance of ConceptSchema)
+     * Return true if
+     * - s is the base schema for the XXXSchema class this schema is
+     * an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
+     * schema is an instance of ConceptSchema)
+     * - s is the base schema for a super-class of the XXXSchema class
+     * this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
+     * and this schema is an instance of ConceptSchema)
      */
     protected abstract boolean descendsFrom(ObjectSchema s);
 
@@ -269,6 +279,7 @@ public abstract class ObjectSchema implements Serializable {
     /**
      * Retrieves an array containing the direct super-schemas of this schema.
      * If this schema has no super-schema an empty array is returned
+     *
      * @return an array containing the direct super-schemas of this schema.
      * @since JADE 3.7
      */
@@ -278,6 +289,7 @@ public abstract class ObjectSchema implements Serializable {
      * Retrieves the facets defined upon a slot. More in details this method returns
      * all facets defined in this schema plus all facets defined in super-schemas
      * up to the schema actually declaring the given slot.
+     *
      * @param slotName the name of the slot
      * @return the facets defined upon a slot or null if the specified slot is not found.
      */

@@ -34,11 +34,28 @@ import java.util.Iterator;
 import java.util.Vector;
 
 /**
- @author Giovanni Caire - TILAB
+ * @author Giovanni Caire - TILAB
  */
 public class LEAPFrameCodec implements Serializable {
     public static final String NAME = "LEAP";
-
+    // Primitive types
+    private static final byte STRING = 6;
+    private static final byte BOOLEAN = 7;
+    private static final byte INTEGER = 8;
+    private static final byte FLOAT = 9;
+    //#MIDP_EXCLUDE_END
+    private static final byte DATE = 10;
+    private static final byte BYTE_SEQUENCE = 11;
+    // Structured types
+    private static final byte AGGREGATE = 1;
+    private static final byte CONTENT_ELEMENT_LIST = 2;
+    private static final byte OBJECT = 3;
+    // Markers for structured types
+    private static final byte ELEMENT = 4;
+    private static final byte END = 5;
+    // Modifiers for string encoding
+    private static final byte MODIFIER = (byte) 0x10; // Only bit five set to 1
+    private static final byte UNMODIFIER = (byte) 0xEF; // Only bit five cleared to 1
     private transient ByteArrayOutputStream outBuffer = new ByteArrayOutputStream();
     private transient DataOutputStream outStream = new DataOutputStream(outBuffer);
     private transient Vector<String> stringReferences = new Vector<>();
@@ -51,34 +68,13 @@ public class LEAPFrameCodec implements Serializable {
         outStream = new DataOutputStream(outBuffer);
         stringReferences = new Vector<>();
     }
-    //#MIDP_EXCLUDE_END
-
-    // Primitive types
-    private static final byte STRING = 6;
-    private static final byte BOOLEAN = 7;
-    private static final byte INTEGER = 8;
-    private static final byte FLOAT = 9;
-    private static final byte DATE = 10;
-    private static final byte BYTE_SEQUENCE = 11;
-
-    // Structured types
-    private static final byte AGGREGATE = 1;
-    private static final byte CONTENT_ELEMENT_LIST = 2;
-    private static final byte OBJECT = 3;
-
-    // Markers for structured types
-    private static final byte ELEMENT = 4;
-    private static final byte END = 5;
-
-    // Modifiers for string encoding
-    private static final byte MODIFIER = (byte) 0x10; // Only bit five set to 1
-    private static final byte UNMODIFIER = (byte) 0xEF; // Only bit five cleared to 1
 
     /**
-     Transform a Frame into a sequence of bytes encoded according to the
-     LEAP language
-     @param content The Frame to be transformed
-     @throws FrameException
+     * Transform a Frame into a sequence of bytes encoded according to the
+     * LEAP language
+     *
+     * @param content The Frame to be transformed
+     * @throws FrameException
      */
     public synchronized byte[] encode(Frame content) throws FrameException {
         if (content == null) {
@@ -98,10 +94,11 @@ public class LEAPFrameCodec implements Serializable {
     }
 
     /**
-     Transform a sequence of bytes encoded according to the LEAP 
-     language into a Frame 
-     @param content The sequence of bytes to be transformed.
-     @throws FrameException
+     * Transform a sequence of bytes encoded according to the LEAP
+     * language into a Frame
+     *
+     * @param content The sequence of bytes to be transformed.
+     * @throws FrameException
      */
     public synchronized Frame decode(byte[] content) throws FrameException {
         if (content == null || content.length == 0) {
@@ -132,6 +129,7 @@ public class LEAPFrameCodec implements Serializable {
     }
 
     /**
+     *
      */
     private void write(DataOutputStream stream, Object obj) throws Throwable {
         // PRIMITIVES
@@ -200,6 +198,7 @@ public class LEAPFrameCodec implements Serializable {
     }
 
     /**
+     *
      */
     private Object read(DataInputStream stream) throws Throwable {
         Object obj;

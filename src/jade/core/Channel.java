@@ -45,28 +45,28 @@ public class Channel {
         address = a;
     }
 
-    public void setName(String n) {
-        name = n;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setProtocol(String p) {
-        protocol = p;
+    public void setName(String n) {
+        name = n;
     }
 
     public String getProtocol() {
         return protocol;
     }
 
-    public void setAddress(String a) {
-        address = a;
+    public void setProtocol(String p) {
+        protocol = p;
     }
 
     public String getAddress() {
         return address;
+    }
+
+    public void setAddress(String a) {
+        address = a;
     }
 
 }

@@ -21,29 +21,24 @@ import java.util.Map;
 
 class OutBox {
     private static final int PENDING_MSG_PER_RECEIVER_THR = -1;
-
-    private int size = 0; // Approximated size in bytes
-    private int pendingCnt = 0;
     private final int warningSize;
     private final int maxSize;
     private final int sleepTimeFactor;
     private final boolean enableMultipleDelivery;
-    private boolean overWarningSize = false;
-
     private final MessageManager manager;
-
-    private long lastDiscardedLogTime = -1;
-    private long discardedSinceLastLogCnt = 0;
-    private long servedCnt = 0;
-
     // The messages to be delivered organized as an hashtable that maps
     // a receiver AID into the Box of messages to be delivered to that receiver
     private final Map<AID, Box> messagesByReceiver = new HashMap<>();
     // The messages to be delivered organized as a round list of the Boxes of
     // messages for the currently addressed receivers
     private final RoundList messagesByOrder = new RoundList();
-
     private final Logger myLogger;
+    private int size = 0; // Approximated size in bytes
+    private int pendingCnt = 0;
+    private boolean overWarningSize = false;
+    private long lastDiscardedLogTime = -1;
+    private long discardedSinceLastLogCnt = 0;
+    private long servedCnt = 0;
 
     OutBox(int warningSize, int maxSize, int sleepTimeFactor, boolean enableMultipleDelivery, MessageManager manager) {
         this.warningSize = warningSize;
@@ -290,15 +285,34 @@ class OutBox {
         }
     }
 
+    // For debugging purpose
+    synchronized String[] getStatus() {
+        Object[] boxes = messagesByOrder.toArray();
+        String[] status = new String[boxes.length];
+        for (int i = 0; i < boxes.length; ++i) {
+            status[i] = boxes[i].toString();
+        }
+        return status;
+    }
+
+    // For debugging purpose
+    int getSize() {
+        return size;
+    }
+
+    int getPendingCnt() {
+        return pendingCnt;
+    }
+
     /**
      * This class represents a Box of messages to be delivered to
      * a single receiver
      */
     private class Box {
         private final AID receiver;
+        private final List<PendingMsg> messages;
         private boolean busy;
         private String owner;
-        private final List<PendingMsg> messages;
 
         public Box(AID r) {
             receiver = r;
@@ -310,15 +324,15 @@ class OutBox {
             return receiver;
         }
 
+        private boolean isBusy() {
+            return busy;
+        }
+
         private void setBusy(boolean b) {
             busy = b;
             //#J2ME_EXCLUDE_BEGIN
             owner = (busy ? Thread.currentThread().getName() : null);
             //#J2ME_EXCLUDE_END
-        }
-
-        private boolean isBusy() {
-            return busy;
         }
 
         private String getOwner() {
@@ -346,24 +360,4 @@ class OutBox {
             return "(" + receiver.getName() + " :busy " + busy + (owner != null ? " :owner " + owner : "") + " :message-cnt " + messages.size() + ")";
         }
     } // END of inner class Box
-
-
-    // For debugging purpose
-    synchronized String[] getStatus() {
-        Object[] boxes = messagesByOrder.toArray();
-        String[] status = new String[boxes.length];
-        for (int i = 0; i < boxes.length; ++i) {
-            status[i] = boxes[i].toString();
-        }
-        return status;
-    }
-
-    // For debugging purpose
-    int getSize() {
-        return size;
-    }
-
-    int getPendingCnt() {
-        return pendingCnt;
-    }
 }

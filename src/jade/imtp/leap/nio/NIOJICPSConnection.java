@@ -25,8 +25,8 @@ import java.util.logging.Logger;
  */
 public class NIOJICPSConnection extends NIOJICPConnection {
 
-    private SSLEngineHelper helper = null;
     private static final Logger log = Logger.getLogger(NIOJICPSConnection.class.getName());
+    private SSLEngineHelper helper = null;
 
     public NIOJICPSConnection() {
     }

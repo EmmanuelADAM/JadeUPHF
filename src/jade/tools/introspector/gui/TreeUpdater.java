@@ -45,15 +45,14 @@ import java.util.Iterator;
  */
 public class TreeUpdater implements Runnable {
 
+    private static final int ADD_NODE = 0;
+    private static final int REMOVE_NODE = 1;
+    private static final int CHANGE_NODE = 2;
     private final BehaviourID behaviour;
     private final BehaviourPanel gui;
     private final int action;
     //private boolean blocked;
     private final String state;
-
-    private static final int ADD_NODE = 0;
-    private static final int REMOVE_NODE = 1;
-    private static final int CHANGE_NODE = 2;
 
     public TreeUpdater(AddedBehaviour b, BehaviourPanel bp) {
         behaviour = b.getBehaviour();
@@ -82,6 +81,10 @@ public class TreeUpdater implements Runnable {
             blocked = false;
         }*/
         state = b.getTo();
+    }
+
+    public static void description(JTextArea t, BehaviourID b) {
+        t.setText("Name:\t" + b.getName() + "\nClass:\t" + b.getClassName() + "\nKind:\t" + b.getKind());
     }
 
     public void createTree(DefaultMutableTreeNode r, Iterator<BehaviourID> v) {
@@ -138,7 +141,7 @@ public class TreeUpdater implements Runnable {
                     break;
                 }
             }
-            
+
             /* If we didn't find the node in the tree, add it now.
             if (!bFound)
                 action = ADD_NODE;
@@ -168,9 +171,5 @@ public class TreeUpdater implements Runnable {
                 }
             }
         }
-    }
-
-    public static void description(JTextArea t, BehaviourID b) {
-        t.setText("Name:\t" + b.getName() + "\nClass:\t" + b.getClassName() + "\nKind:\t" + b.getKind());
     }
 }

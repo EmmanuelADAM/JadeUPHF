@@ -30,9 +30,10 @@ import jade.core.ProfileImpl;
 import jade.core.Runtime;
 
 /**
- Utility class that boots the JADE runtime system and automatically
- starts the SMSManager.
- @author Giovanni Caire - TILAB
+ * Utility class that boots the JADE runtime system and automatically
+ * starts the SMSManager.
+ *
+ * @author Giovanni Caire - TILAB
  */
 public class Boot extends jade.Boot {
     public static void main(String[] args) {

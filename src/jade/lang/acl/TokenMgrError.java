@@ -32,12 +32,28 @@ public class TokenMgrError extends Error {
      */
     int errorCode;
 
+    public TokenMgrError() {
+    }
+
+    public TokenMgrError(String message, int reason) {
+        super(message);
+        errorCode = reason;
+    }
+
+    public TokenMgrError(boolean EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, char curChar, int reason) {
+        this(LexicalError(EOFSeen, lexState, errorLine, errorColumn, errorAfter, curChar), reason);
+    }
+
+    /*
+     * Constructors of various flavors follow.
+     */
+
     /**
      * Replaces unprintable characters by their espaced (or unicode escaped)
      * equivalents in the given string
      */
     protected static final String addEscapes(String str) {
-        StringBuffer retval = new StringBuffer();
+        StringBuilder retval = new StringBuilder();
         char ch;
         for (int i = 0; i < str.length(); i++) {
             switch (str.charAt(i)) {
@@ -111,21 +127,5 @@ public class TokenMgrError extends Error {
      */
     public String getMessage() {
         return super.getMessage();
-    }
-
-    /*
-     * Constructors of various flavors follow.
-     */
-
-    public TokenMgrError() {
-    }
-
-    public TokenMgrError(String message, int reason) {
-        super(message);
-        errorCode = reason;
-    }
-
-    public TokenMgrError(boolean EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, char curChar, int reason) {
-        this(LexicalError(EOFSeen, lexState, errorLine, errorColumn, errorAfter, curChar), reason);
     }
 }

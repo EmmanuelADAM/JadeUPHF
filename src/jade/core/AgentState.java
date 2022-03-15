@@ -33,6 +33,45 @@ package jade.core;
  */
 public class AgentState {
 
+    private static final AgentState[] STATES = new AgentState[]{
+            new AgentState("Illegal MIN state", Agent.AP_MIN),
+            new AgentState("Initiated", Agent.AP_INITIATED),
+            new AgentState("Active", Agent.AP_ACTIVE),
+            new AgentState("Idle", Agent.AP_IDLE),
+            new AgentState("Suspended", Agent.AP_SUSPENDED),
+            new AgentState("Waiting", Agent.AP_WAITING),
+            new AgentState("Deleted", Agent.AP_DELETED),
+            //#MIDP_EXCLUDE_BEGIN
+            new AgentState("Transit", jade.core.mobility.AgentMobilityService.AP_TRANSIT),
+            new AgentState("Copy", jade.core.mobility.AgentMobilityService.AP_COPY),
+            new AgentState("Gone", jade.core.mobility.AgentMobilityService.AP_GONE),
+            // FIXME: We can't use the constants since they are defined in the Persistence add-on
+            new AgentState("Saving", 10),
+            new AgentState("Loading", 11),
+            new AgentState("Frozen", 12),
+            //#MIDP_EXCLUDE_END
+            new AgentState("Illegal MAX state", Agent.AP_MAX)
+    };
+    // For persistence service
+    private Long persistentID;
+    private String name;
+    private int value;
+
+    /**
+     * Default constructor. A default constructor is necessary for
+     * this class because it is used in the
+     * <code>jade-introspection</code> ontology. Application code
+     * should use the static access method <code>getInstance()</code>,
+     * however.
+     */
+    public AgentState() {
+    }
+
+    private AgentState(String n, int v) {
+        name = n;
+        value = v;
+    }
+
     /**
      * Static access method to retrieve a prototype object for an
      * agent life-cycle state.
@@ -62,19 +101,12 @@ public class AgentState {
     }
 
     /**
-     * Default constructor. A default constructor is necessary for
-     * this class because it is used in the
-     * <code>jade-introspection</code> ontology. Application code
-     * should use the static access method <code>getInstance()</code>,
-     * however.
+     * Retrieve the name of this state.
+     *
+     * @return The state name.
      */
-    public AgentState() {
-    }
-
-
-    private AgentState(String n, int v) {
-        name = n;
-        value = v;
+    public String getName() {
+        return name;
     }
 
     /**
@@ -87,12 +119,14 @@ public class AgentState {
     }
 
     /**
-     * Retrieve the name of this state.
+     * Retrieve the numeric value of this state, in agreement with the
+     * <code>AP_XXX</code> constants defined in the <code>Agent</code>
+     * class.
      *
-     * @return The state name.
+     * @return The numeric value set for this state.
      */
-    public String getName() {
-        return name;
+    public int getValue() {
+        return value;
     }
 
     /**
@@ -104,17 +138,6 @@ public class AgentState {
      */
     public void setValue(int v) {
         value = v;
-    }
-
-    /**
-     * Retrieve the numeric value of this state, in agreement with the
-     * <code>AP_XXX</code> constants defined in the <code>Agent</code>
-     * class.
-     *
-     * @return The numeric value set for this state.
-     */
-    public int getValue() {
-        return value;
     }
 
     /**
@@ -176,29 +199,6 @@ public class AgentState {
         return name.toLowerCase().hashCode();
     }
 
-    private static final AgentState[] STATES = new AgentState[]{
-            new AgentState("Illegal MIN state", Agent.AP_MIN),
-            new AgentState("Initiated", Agent.AP_INITIATED),
-            new AgentState("Active", Agent.AP_ACTIVE),
-            new AgentState("Idle", Agent.AP_IDLE),
-            new AgentState("Suspended", Agent.AP_SUSPENDED),
-            new AgentState("Waiting", Agent.AP_WAITING),
-            new AgentState("Deleted", Agent.AP_DELETED),
-            //#MIDP_EXCLUDE_BEGIN
-            new AgentState("Transit", jade.core.mobility.AgentMobilityService.AP_TRANSIT),
-            new AgentState("Copy", jade.core.mobility.AgentMobilityService.AP_COPY),
-            new AgentState("Gone", jade.core.mobility.AgentMobilityService.AP_GONE),
-            // FIXME: We can't use the constants since they are defined in the Persistence add-on
-            new AgentState("Saving", 10),
-            new AgentState("Loading", 11),
-            new AgentState("Frozen", 12),
-            //#MIDP_EXCLUDE_END
-            new AgentState("Illegal MAX state", Agent.AP_MAX)
-    };
-
-    // For persistence service
-    private Long persistentID;
-
     // For persistence service
     private Long getPersistentID() {
         return persistentID;
@@ -208,9 +208,6 @@ public class AgentState {
     private void setPersistentID(Long l) {
         persistentID = l;
     }
-
-    private String name;
-    private int value;
 
 
 }

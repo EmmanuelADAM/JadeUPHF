@@ -46,100 +46,6 @@ public class Specifier {
     private Object[] args = null;
 
     /**
-     * Set the name for this specifier object.
-     *
-     * @param n The name to give to this specifier.
-     */
-    public void setName(String n) {
-        name = n;
-    }
-
-    /**
-     * Retrieve the name for this specifier object.
-     *
-     * @return The name of the specifier, if one was set, or
-     * <code>null</code> otherwise.
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Set the name of the class of this specifier.
-     *
-     * @param cn The class name to assign to the specifier object.
-     */
-    public void setClassName(String cn) {
-        className = cn;
-    }
-
-    /**
-     * Retrieve the class name of this specifier.
-     *
-     * @return The class name of the specifier, if one was set, or
-     * <code>null</code> otherwise.
-     */
-    public String getClassName() {
-        return className;
-    }
-
-    /**
-     * Set the argument list for this specifier object.
-     *
-     * @param a An object array containing the argument list for this
-     *          specifier.
-     */
-    public void setArgs(Object[] a) {
-        args = a;
-    }
-
-    /**
-     * Retrieve the argument list for this specifier.
-     *
-     * @return An object array containing the argument list, if one
-     * was set, or <code>null</code> otherwise.
-     */
-    public Object[] getArgs() {
-        return args;
-    }
-
-    /**
-     * This method is used by Boot, ProfileImpl, and RMA in order
-     * to have a String representation of this Specifier according to the
-     * format <code>name:className(arg1 arg2 argn)</code>
-     *
-     * @return A string representation of this specifier, according to
-     * the format above.
-     **/
-    public String toString() {
-        // TAKE CARE: do not change this method otherwise Boot might fail
-        StringBuilder tmp = new StringBuilder();
-        if (name != null) {
-            tmp.append(name);
-            tmp.append(":");
-        }
-        if (className != null) {
-            tmp.append(className);
-        }
-        if (args != null) {
-            tmp.append("(");
-            for (int i = 0; i < args.length; i++) {
-                tmp.append(args[i]);
-                if (i < args.length - 1) {
-                    //#ALL_EXCLUDE_BEGIN
-                    tmp.append(" ");
-                    //#ALL_EXCLUDE_END
-					/*#ALL_INCLUDE_BEGIN
-					tmp.append(",");
-					//#ALL_INCLUDE_END*/
-                }
-            }
-            tmp.append(")");
-        }
-        return tmp.toString();
-    }
-
-    /**
      * This static utility method can parse the string representation of
      * a list of specifiers. The general format of a specifier is used,
      * with a comma as argument separator, i.e.:
@@ -307,6 +213,100 @@ public class Specifier {
         for (Enumeration<String> e = argList.elements(); e.hasMoreElements(); arguments[i++] = e.nextElement()) ;
 
         return arguments;
+    }
+
+    /**
+     * Retrieve the name for this specifier object.
+     *
+     * @return The name of the specifier, if one was set, or
+     * <code>null</code> otherwise.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Set the name for this specifier object.
+     *
+     * @param n The name to give to this specifier.
+     */
+    public void setName(String n) {
+        name = n;
+    }
+
+    /**
+     * Retrieve the class name of this specifier.
+     *
+     * @return The class name of the specifier, if one was set, or
+     * <code>null</code> otherwise.
+     */
+    public String getClassName() {
+        return className;
+    }
+
+    /**
+     * Set the name of the class of this specifier.
+     *
+     * @param cn The class name to assign to the specifier object.
+     */
+    public void setClassName(String cn) {
+        className = cn;
+    }
+
+    /**
+     * Retrieve the argument list for this specifier.
+     *
+     * @return An object array containing the argument list, if one
+     * was set, or <code>null</code> otherwise.
+     */
+    public Object[] getArgs() {
+        return args;
+    }
+
+    /**
+     * Set the argument list for this specifier object.
+     *
+     * @param a An object array containing the argument list for this
+     *          specifier.
+     */
+    public void setArgs(Object[] a) {
+        args = a;
+    }
+
+    /**
+     * This method is used by Boot, ProfileImpl, and RMA in order
+     * to have a String representation of this Specifier according to the
+     * format <code>name:className(arg1 arg2 argn)</code>
+     *
+     * @return A string representation of this specifier, according to
+     * the format above.
+     **/
+    public String toString() {
+        // TAKE CARE: do not change this method otherwise Boot might fail
+        StringBuilder tmp = new StringBuilder();
+        if (name != null) {
+            tmp.append(name);
+            tmp.append(":");
+        }
+        if (className != null) {
+            tmp.append(className);
+        }
+        if (args != null) {
+            tmp.append("(");
+            for (int i = 0; i < args.length; i++) {
+                tmp.append(args[i]);
+                if (i < args.length - 1) {
+                    //#ALL_EXCLUDE_BEGIN
+                    tmp.append(" ");
+                    //#ALL_EXCLUDE_END
+					/*#ALL_INCLUDE_BEGIN
+					tmp.append(",");
+					//#ALL_INCLUDE_END*/
+                }
+            }
+            tmp.append(")");
+        }
+        return tmp.toString();
     }
 
 

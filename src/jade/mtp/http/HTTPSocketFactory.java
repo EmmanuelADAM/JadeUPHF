@@ -55,6 +55,18 @@ import java.net.Socket;
  */
 public class HTTPSocketFactory {
 
+    private static final String PREFIX = "jade_mtp_http_https_";
+    private static final String MTP_HTTP_PREFIX = "jade_mtp_http_";
+    private static final int DEFAULT_CONNECT_TIMEOUT = -1;
+    private static HTTPSocketFactory _instance;
+    private SocketFactory _socketFactory;
+    private ServerSocketFactory _serverSocketFactory;
+    private boolean _needClientAuth = false;
+    private boolean _usingHttps = false;
+    private int connectTimeout;
+    private HTTPSocketFactory() {
+    }
+
     public static HTTPSocketFactory getInstance() {
         if (_instance == null)
             _instance = new HTTPSocketFactory();
@@ -166,17 +178,4 @@ public class HTTPSocketFactory {
         //#DOTNET_EXCLUDE_END
         return ss;
     }
-
-    private HTTPSocketFactory() {
-    }
-
-    private static HTTPSocketFactory _instance;
-    private static final String PREFIX = "jade_mtp_http_https_";
-    private static final String MTP_HTTP_PREFIX = "jade_mtp_http_";
-    private static final int DEFAULT_CONNECT_TIMEOUT = -1;
-    private SocketFactory _socketFactory;
-    private ServerSocketFactory _serverSocketFactory;
-    private boolean _needClientAuth = false;
-    private boolean _usingHttps = false;
-    private int connectTimeout;
 }

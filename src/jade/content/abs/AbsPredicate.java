@@ -28,47 +28,27 @@ import jade.content.Predicate;
 
 /**
  * An abstract descriptor that can hold a predicate expression.
+ *
  * @author Paola Turci, Federico Bergenti - Universita` di Parma
  */
 public class AbsPredicate extends AbsPrimitiveSlotsHolder implements AbsContentElement, Predicate {
 
+    // Easy way to access the Java class representing AbsPredicate.
+    // Useful in MIDP where XXX.class is not available
+    private static Class<AbsPredicate> absPredicateClass = null;
     private boolean isAContentExpression = false;
     private boolean isMeta = false;
 
     /**
      * Construct an Abstract descriptor to hold a predicate of
      * the proper type (e.g. FATHER_OF, WORKS_FOR...).
+     *
      * @param typeName The name of the type of the predicate held by
-     * this abstract descriptor.
+     *                 this abstract descriptor.
      */
     public AbsPredicate(String typeName) {
         super(typeName);
     }
-
-    /**
-     * Sets an attribute of the predicate held by this
-     * abstract descriptor.
-     * @param name The name of the attribute to be set.
-     * @param value The new value of the attribute.
-     */
-    public void set(String name, AbsObject value) {
-        super.set(name, value);
-    }
-
-    /**
-     * Gets the value (casted as an AbsTerm) of an attribute of
-     * the predicate held by this abstract descriptor.
-     * This method is here mainly for backward compatibility.
-     * @param name The name of the attribute.
-     * @return value The value of the attribute.
-     */
-    public AbsTerm getAbsTerm(String name) {
-        return (AbsTerm) getAbsObject(name);
-    }
-
-    // Easy way to access the Java class representing AbsPredicate.
-    // Useful in MIDP where XXX.class is not available
-    private static Class<AbsPredicate> absPredicateClass = null;
 
     public static Class<AbsPredicate> getJavaClass() {
         if (absPredicateClass == null) {
@@ -80,6 +60,29 @@ public class AbsPredicate extends AbsPrimitiveSlotsHolder implements AbsContentE
             }
         }
         return absPredicateClass;
+    }
+
+    /**
+     * Sets an attribute of the predicate held by this
+     * abstract descriptor.
+     *
+     * @param name  The name of the attribute to be set.
+     * @param value The new value of the attribute.
+     */
+    public void set(String name, AbsObject value) {
+        super.set(name, value);
+    }
+
+    /**
+     * Gets the value (casted as an AbsTerm) of an attribute of
+     * the predicate held by this abstract descriptor.
+     * This method is here mainly for backward compatibility.
+     *
+     * @param name The name of the attribute.
+     * @return value The value of the attribute.
+     */
+    public AbsTerm getAbsTerm(String name) {
+        return (AbsTerm) getAbsObject(name);
     }
 
     /**
@@ -97,8 +100,10 @@ public class AbsPredicate extends AbsPrimitiveSlotsHolder implements AbsContentE
     }
 
 
-    /** Return true if this object represents a meta formula (symbol ??x) rather than a concrete formula.
+    /**
+     * Return true if this object represents a meta formula (symbol ??x) rather than a concrete formula.
      * This method is currently used only by the semantics framework.
+     *
      * @return true if this object represents a meta formula
      * @since JADE3.4
      **/
@@ -106,8 +111,10 @@ public class AbsPredicate extends AbsPrimitiveSlotsHolder implements AbsContentE
         return isMeta;
     }
 
-    /** Sets the value of isMetaFormula, where the default is false.
+    /**
+     * Sets the value of isMetaFormula, where the default is false.
      * This method is currently used only by the semantics framework.
+     *
      * @since JADE3.4
      **/
     public final void setIsMetaFormula(boolean isMeta) {

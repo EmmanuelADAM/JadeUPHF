@@ -53,18 +53,17 @@ import java.util.List;
  */
 class MainPanel extends JPanel implements DropTargetListener, TreeSelectionListener {
 
-    private APDescriptionPanel APDescription_panel;
-    private final AgentTree treeAgent;       // FIXME: It should be private
-    private final TablePanel table;
-    private JScrollPane scroll;
-    private final JSplitPane pan;
-    private JSplitPane pane;
-    private final MainWindow mainWnd;
-    private PopupMouser popM;
-    private rma myRma = null;
-
     //logging
     private static final Logger logger = Logger.getMyLogger(MainPanel.class.getName());
+    private final AgentTree treeAgent;       // FIXME: It should be private
+    private final TablePanel table;
+    private final JSplitPane pan;
+    private final MainWindow mainWnd;
+    private APDescriptionPanel APDescription_panel;
+    private JScrollPane scroll;
+    private JSplitPane pane;
+    private PopupMouser popM;
+    private rma myRma = null;
 
 
     public MainPanel(rma anRMA, MainWindow mainWnd) {
@@ -180,26 +179,6 @@ class MainPanel extends JPanel implements DropTargetListener, TreeSelectionListe
                     } //~ for(int i=0;i<numPaths;i++)
 
                     myRma.send(msg);
-                } catch (IOException exc) {
-                    // FIXME: This output should probably be put in a message dialog
-                    // or something.
-                    if (logger.isLoggable(Logger.WARNING))
-                        logger.log(Logger.WARNING, "Unable to send message: " + exc);
-                } catch (ParseException exc) {
-                    // FIXME: This output should probably be put in a message dialog
-                    // or something.
-                    if (logger.isLoggable(Logger.WARNING))
-                        logger.log(Logger.WARNING, "Unable to send message: " + exc);
-                } catch (Exception exc) {
-                    // FIXME: This output should probably be put in a message dialog
-                    // or something.
-                    if (logger.isLoggable(Logger.WARNING))
-                        logger.log(Logger.WARNING, "Unable to send message: " + exc);
-                } catch (Error exc) {
-                    // FIXME: This output should probably be put in a message dialog
-                    // or something.
-                    if (logger.isLoggable(Logger.WARNING))
-                        logger.log(Logger.WARNING, "Unable to send message: " + exc);
                 } catch (Throwable exc) {
                     // FIXME: This output should probably be put in a message dialog
                     // or something.

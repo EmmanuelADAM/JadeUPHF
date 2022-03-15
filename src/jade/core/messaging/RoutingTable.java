@@ -38,144 +38,14 @@ import java.util.*;
 
 class RoutingTable {
 
-    public interface OutPort {
-        void route(Envelope env, byte[] payload, AID receiver, String address) throws MTPException;
-    }
-
-
-    // This class wraps an MTP installed on a remote container, using
-    // RMI to forward the deliver() operation
-    private static class OutViaSlice implements OutPort {
-
-        private final String sliceName;
-        private final MessagingSlice slice;
-
-        public OutViaSlice(String sn, MessagingSlice ms) {
-            sliceName = sn;
-            slice = ms;
-        }
-
-        public void route(Envelope env, byte[] payload, AID receiver, String address) throws MTPException {
-            try {
-                slice.routeOut(env, payload, receiver, address);
-            } catch (IMTPException imtpe) {
-                throw new MTPException("Container unreachable during routing", imtpe);
-            }
-        }
-
-        public boolean equals(Object o) {
-            try {
-                OutViaSlice rhs = (OutViaSlice) o;
-                return sliceName.equals(rhs.sliceName);
-            } catch (ClassCastException cce) {
-                return false;
-            }
-        }
-
-    } // End of OutViaContainer class
-
-
-    // This class wraps an MTP installed locally, using the ACC to encode
-    // the message into an MTP payload.
-    private static class OutViaMTP implements OutPort {
-
-        private final OutChannel myChannel;
-        private final String platformInfo;
-
-        public OutViaMTP(OutChannel proto, String platformInfo) {
-            myChannel = proto;
-            this.platformInfo = platformInfo;
-        }
-
-        public void route(Envelope env, byte[] payload, AID receiver, String address) throws MTPException {
-            if (platformInfo != null) {
-                env.addProperties(new Property(MessagingService.PLATFORM_IDENTIFIER, platformInfo));
-                env.addProperties(new Property(MessagingService.MTP_IDENTIFIER, myChannel.getClass().getName()));
-            }
-            myChannel.deliver(address, env, payload);
-        }
-
-        public boolean equals(Object o) {
-            try {
-                OutViaMTP rhs = (OutViaMTP) o;
-                return myChannel.equals(rhs.myChannel);
-            } catch (ClassCastException cce) {
-                return false;
-            }
-        }
-    }
-
     private static final boolean LOCAL = true;
     private static final boolean REMOTE = false;
-
-    private static class OutPortList {
-
-        private final List<OutPort> local = new ArrayList<>(1);
-        private final List<OutPort> remote = new ArrayList<>(1);
-
-        public void add(OutPort port, boolean location) {
-            if (location == LOCAL) {
-                local.add(port);
-            } else {
-                remote.add(port);
-            }
-        }
-
-        public void remove(OutPort port) {
-            local.remove(port);
-            remote.remove(port);
-        }
-
-        public OutPort get() {
-            // Look first in the local list
-            if (!local.isEmpty())
-                return local.get(0);
-                // Then look in the remote list
-            else if (!remote.isEmpty())
-                return remote.get(0);
-            return null;
-        }
-
-        public boolean isEmpty() {
-            return local.isEmpty() && remote.isEmpty();
-        }
-
-        public String size() {
-            return "[ local: " + local.size() + "  remote: " + remote.size() + " ]";
-        }
-    } // End of OutPortList class
-
-
-    /**
-     * Inner class MTPInfo
-     * This class just provides the association between a local MTP and its descriptor
-     */
-    static class MTPInfo {
-        private final MTP mtp;
-        private final MTPDescriptor dsc;
-
-        public MTPInfo(MTP mtp, MTPDescriptor dsc) {
-            this.mtp = mtp;
-            this.dsc = dsc;
-        }
-
-        public MTP getMTP() {
-            return mtp;
-        }
-
-        public MTPDescriptor getDescriptor() {
-            return dsc;
-        }
-    } // END of inner class MTPInfo
-
-
+    private static final int EXPECTED_PLATFORMADDRESSES_SIZE = 2;
     private final Map<CaseInsensitiveString, MTPInfo> inPorts = new HashMap<>(2);
     private final Map<CaseInsensitiveString, OutPortList> outPorts = new HashMap<>(2);
     private final List<MTPDescriptor> remoteMTPs = new ArrayList<>();
-    private static final int EXPECTED_PLATFORMADDRESSES_SIZE = 2;
     private final List<String> platformAddresses = new ArrayList<>(EXPECTED_PLATFORMADDRESSES_SIZE);
     private String platformInfo = null;
-
     public RoutingTable(boolean attachPlatformInfo) {
         if (attachPlatformInfo) {
             platformInfo = Runtime.getVersionInfo() + " (" + System.getProperty("java.version") + ", " + System.getProperty("os.name") + " " + System.getProperty("os.version") + ")";
@@ -223,7 +93,7 @@ class RoutingTable {
 
         // The MTP address is not a platform address anymore
         platformAddresses.remove(url);
-		
+
 		/*
 		 java.util.Iterator it = outPorts.keySet().iterator();
 		 while(it.hasNext()) {
@@ -325,5 +195,129 @@ class RoutingTable {
             return null;
         return address.substring(0, colonPos);
     }
+
+    public interface OutPort {
+        void route(Envelope env, byte[] payload, AID receiver, String address) throws MTPException;
+    }
+
+    // This class wraps an MTP installed on a remote container, using
+    // RMI to forward the deliver() operation
+    private static class OutViaSlice implements OutPort {
+
+        private final String sliceName;
+        private final MessagingSlice slice;
+
+        public OutViaSlice(String sn, MessagingSlice ms) {
+            sliceName = sn;
+            slice = ms;
+        }
+
+        public void route(Envelope env, byte[] payload, AID receiver, String address) throws MTPException {
+            try {
+                slice.routeOut(env, payload, receiver, address);
+            } catch (IMTPException imtpe) {
+                throw new MTPException("Container unreachable during routing", imtpe);
+            }
+        }
+
+        public boolean equals(Object o) {
+            try {
+                OutViaSlice rhs = (OutViaSlice) o;
+                return sliceName.equals(rhs.sliceName);
+            } catch (ClassCastException cce) {
+                return false;
+            }
+        }
+
+    } // End of OutViaContainer class
+
+    // This class wraps an MTP installed locally, using the ACC to encode
+    // the message into an MTP payload.
+    private static class OutViaMTP implements OutPort {
+
+        private final OutChannel myChannel;
+        private final String platformInfo;
+
+        public OutViaMTP(OutChannel proto, String platformInfo) {
+            myChannel = proto;
+            this.platformInfo = platformInfo;
+        }
+
+        public void route(Envelope env, byte[] payload, AID receiver, String address) throws MTPException {
+            if (platformInfo != null) {
+                env.addProperties(new Property(MessagingService.PLATFORM_IDENTIFIER, platformInfo));
+                env.addProperties(new Property(MessagingService.MTP_IDENTIFIER, myChannel.getClass().getName()));
+            }
+            myChannel.deliver(address, env, payload);
+        }
+
+        public boolean equals(Object o) {
+            try {
+                OutViaMTP rhs = (OutViaMTP) o;
+                return myChannel.equals(rhs.myChannel);
+            } catch (ClassCastException cce) {
+                return false;
+            }
+        }
+    }
+
+    private static class OutPortList {
+
+        private final List<OutPort> local = new ArrayList<>(1);
+        private final List<OutPort> remote = new ArrayList<>(1);
+
+        public void add(OutPort port, boolean location) {
+            if (location == LOCAL) {
+                local.add(port);
+            } else {
+                remote.add(port);
+            }
+        }
+
+        public void remove(OutPort port) {
+            local.remove(port);
+            remote.remove(port);
+        }
+
+        public OutPort get() {
+            // Look first in the local list
+            if (!local.isEmpty())
+                return local.get(0);
+                // Then look in the remote list
+            else if (!remote.isEmpty())
+                return remote.get(0);
+            return null;
+        }
+
+        public boolean isEmpty() {
+            return local.isEmpty() && remote.isEmpty();
+        }
+
+        public String size() {
+            return "[ local: " + local.size() + "  remote: " + remote.size() + " ]";
+        }
+    } // End of OutPortList class
+
+    /**
+     * Inner class MTPInfo
+     * This class just provides the association between a local MTP and its descriptor
+     */
+    static class MTPInfo {
+        private final MTP mtp;
+        private final MTPDescriptor dsc;
+
+        public MTPInfo(MTP mtp, MTPDescriptor dsc) {
+            this.mtp = mtp;
+            this.dsc = dsc;
+        }
+
+        public MTP getMTP() {
+            return mtp;
+        }
+
+        public MTPDescriptor getDescriptor() {
+            return dsc;
+        }
+    } // END of inner class MTPInfo
 }
 

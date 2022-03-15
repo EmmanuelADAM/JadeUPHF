@@ -147,6 +147,19 @@ public class BeanOntology extends Ontology {
         bob = new BeanOntologyBuilder(this);
     }
 
+    private static Ontology[] ensureBasicOntology(Ontology[] base) {
+        if (base == null) {
+            return new Ontology[]{BasicOntology.getInstance()};
+        } else if (!Ontology.isBaseOntology(base, BasicOntology.getInstance().getName())) {
+            Ontology[] newBase = new Ontology[base.length + 1];
+            System.arraycopy(base, 0, newBase, 0, base.length);
+            newBase[base.length] = BasicOntology.getInstance();
+            return newBase;
+        } else {
+            return base;
+        }
+    }
+
     /**
      * Adds to the ontology the schema built from the class <code>clazz</code>.
      * The class must implement either <code>Concept</code>
@@ -207,18 +220,5 @@ public class BeanOntology extends Ontology {
 
         // Create a new instance of BOB
         bob = new BeanOntologyBuilder(this);
-    }
-
-    private static Ontology[] ensureBasicOntology(Ontology[] base) {
-        if (base == null) {
-            return new Ontology[]{BasicOntology.getInstance()};
-        } else if (!Ontology.isBaseOntology(base, BasicOntology.getInstance().getName())) {
-            Ontology[] newBase = new Ontology[base.length + 1];
-            System.arraycopy(base, 0, newBase, 0, base.length);
-            newBase[base.length] = BasicOntology.getInstance();
-            return newBase;
-        } else {
-            return base;
-        }
     }
 }

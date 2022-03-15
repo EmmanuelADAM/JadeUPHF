@@ -2,14 +2,11 @@ package jade.domain;
 
 import jade.core.Agent;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.proto.SubscriptionInitiator;
 import jade.util.Logger;
 
 import java.io.Serial;
-import java.util.Iterator;
-import java.util.List;
 
 //#PJAVA_EXCLUDE_FILE
 //#MIDP_EXCLUDE_FILE
@@ -22,7 +19,7 @@ public abstract class DFSubscriber extends SubscriptionInitiator {
 
     private boolean firstNotificationReceived = false;
 
-    private  DFAgentDescription template;
+    private final DFAgentDescription template;
 
     public DFSubscriber(Agent a, DFAgentDescription template) {
         super(a, DFService.createSubscriptionMessage(a, a.getDefaultDF(), template, null));

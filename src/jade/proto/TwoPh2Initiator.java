@@ -43,6 +43,13 @@ public class TwoPh2Initiator extends Initiator {
     // Data store keys
     // Private data store keys (can't be static since if we register another instance of this class as state of the FSM
     // using the same data store the new values overrides the old one.
+    /* FSM states names */
+    private static final String HANDLE_INFORM = "Handle-Inform";
+    private static final String HANDLE_OLD_RESPONSE = "Handle-old-response";
+    private static final String HANDLE_ALL_RESPONSES = "Handle-all-responses";
+    /* Possible TwoPh2Initiator's returned values */
+    private static final int OLD_RESPONSE = 1000;
+    private static final int ALL_RESPONSES_RECEIVED = 1;
     /**
      * key to retrieve from the HashMap of the behaviour the ACLMessage
      * object passed in the constructor of the class.
@@ -75,15 +82,97 @@ public class TwoPh2Initiator extends Initiator {
      * has not been received yet.
      */
     public final String ALL_PENDINGS_KEY = "__all-pendings" + hashCode();
+    private String[] toBeReset = null;
 
-    /* FSM states names */
-    private static final String HANDLE_INFORM = "Handle-Inform";
-    private static final String HANDLE_OLD_RESPONSE = "Handle-old-response";
-    private static final String HANDLE_ALL_RESPONSES = "Handle-all-responses";
-    /* Possible TwoPh2Initiator's returned values */
-    private static final int OLD_RESPONSE = 1000;
-    private static final int ALL_RESPONSES_RECEIVED = 1;
+    /**
+     * Constructs a <code>TwoPh2Initiator</code> behaviour.
+     *
+     * @param a               The agent performing the protocol.
+     * @param acceptance      msg
+     * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPh2Initiator</code>.
+     * deprecated
 
+    public TwoPh2Initiator(Agent a, ACLMessage acceptance, HashMap<String, List<ACLMessage>> mapMessagesList) {
+    super(a, acceptance, mapMessagesList);
+    // Register the FSM transitions specific to the Two-Phase2-Commit protocol
+    registerTransition(CHECK_IN_SEQ, HANDLE_INFORM, ACLMessage.INFORM);
+    registerTransition(CHECK_IN_SEQ, HANDLE_OLD_RESPONSE, OLD_RESPONSE);
+    registerDefaultTransition(HANDLE_INFORM, CHECK_SESSIONS);
+    registerDefaultTransition(HANDLE_OLD_RESPONSE, CHECK_SESSIONS);
+    registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, ALL_RESPONSES_RECEIVED);
+    registerDefaultTransition(HANDLE_ALL_RESPONSES, DUMMY_FINAL);
+
+    // Create and register the states specific to the Two-Phase2-Commit protocol
+    Behaviour b;
+
+    // CHECK_IN_SEQ
+    // We must override this state to distinguish the case in which
+    // a response belonging to a previous phase is received (e.g. due
+    // to network delay).
+    b = new OneShotBehaviour(myAgent) {
+    int ret;
+
+    public void action() {
+    ACLMessage reply = (ACLMessage) getMapMessagesList().get(REPLY_K);
+    String inReplyTo = reply.getInReplyTo();
+    String phase = inReplyTo.substring(inReplyTo.length() - 3);
+    if (phase.equals(TwoPhConstants.PH0) || phase.equals(TwoPhConstants.PH1)) {
+    // The reply belongs to a previous phase
+    oldResponse(reply);
+    ret = OLD_RESPONSE;
+    } else {
+    if (checkInSequence(reply)) {
+    ret = reply.getPerformative();
+    } else {
+    ret = -1;
+    }
+    }
+    }
+
+    public int onEnd() {
+    return ret;
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, CHECK_IN_SEQ);
+
+    // HANDLE_INFORM state activated if arrived an inform message compliant with
+    //conversationId and a receiver of one of accept/reject-proposal messages sent.
+    b = new OneShotBehaviour(myAgent) {
+    final int ret = -1;
+
+    public void action() {
+    ACLMessage inform = (ACLMessage) (getMapMessagesList().get(REPLY_KEY));
+    handleInform(inform);
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, HANDLE_INFORM);
+
+    // HANDLE_OLD_RESPONSE state activate if arrived a failure message coming
+    //from phase 0 (timeout expired), a disconfirm or inform message coming from phase 1
+    //(timeout expired).
+    b = new OneShotBehaviour(myAgent) {
+    public void action() {
+    ACLMessage old = (ACLMessage) (getMapMessagesList().get(REPLY_KEY));
+    handleOldResponse(old);
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, HANDLE_OLD_RESPONSE);
+
+    // HANDLE_ALL_RESPONSES state activated when all the answers have been received.
+    b = new OneShotBehaviour(myAgent) {
+    public void action() {
+    var responses = getMapMessagesList().get(ALL_RESPONSES_KEY);
+    handleAllResponses(responses);
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, HANDLE_ALL_RESPONSES);
+
+    }
+     */
 
     /**
      * Constructs a <code>TwoPh2Initiator</code> behaviour.
@@ -95,95 +184,7 @@ public class TwoPh2Initiator extends Initiator {
         this(a, acceptance, new HashMap<>(), new HashMap<>());
     }
 
-    /**
-     * Constructs a <code>TwoPh2Initiator</code> behaviour.
-     *
-     * @param a               The agent performing the protocol.
-     * @param acceptance      msg
-     * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPh2Initiator</code>.
-     * deprecated
-
-    public TwoPh2Initiator(Agent a, ACLMessage acceptance, HashMap<String, List<ACLMessage>> mapMessagesList) {
-        super(a, acceptance, mapMessagesList);
-        // Register the FSM transitions specific to the Two-Phase2-Commit protocol
-        registerTransition(CHECK_IN_SEQ, HANDLE_INFORM, ACLMessage.INFORM);
-        registerTransition(CHECK_IN_SEQ, HANDLE_OLD_RESPONSE, OLD_RESPONSE);
-        registerDefaultTransition(HANDLE_INFORM, CHECK_SESSIONS);
-        registerDefaultTransition(HANDLE_OLD_RESPONSE, CHECK_SESSIONS);
-        registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, ALL_RESPONSES_RECEIVED);
-        registerDefaultTransition(HANDLE_ALL_RESPONSES, DUMMY_FINAL);
-
-        // Create and register the states specific to the Two-Phase2-Commit protocol
-        Behaviour b;
-
-        // CHECK_IN_SEQ 
-        // We must override this state to distinguish the case in which
-        // a response belonging to a previous phase is received (e.g. due
-        // to network delay). 
-        b = new OneShotBehaviour(myAgent) {
-            int ret;
-
-            public void action() {
-                ACLMessage reply = (ACLMessage) getMapMessagesList().get(REPLY_K);
-                String inReplyTo = reply.getInReplyTo();
-                String phase = inReplyTo.substring(inReplyTo.length() - 3);
-                if (phase.equals(TwoPhConstants.PH0) || phase.equals(TwoPhConstants.PH1)) {
-                    // The reply belongs to a previous phase
-                    oldResponse(reply);
-                    ret = OLD_RESPONSE;
-                } else {
-                    if (checkInSequence(reply)) {
-                        ret = reply.getPerformative();
-                    } else {
-                        ret = -1;
-                    }
-                }
-            }
-
-            public int onEnd() {
-                return ret;
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, CHECK_IN_SEQ);
-
-        // HANDLE_INFORM state activated if arrived an inform message compliant with
-        //conversationId and a receiver of one of accept/reject-proposal messages sent.
-        b = new OneShotBehaviour(myAgent) {
-            final int ret = -1;
-
-            public void action() {
-                ACLMessage inform = (ACLMessage) (getMapMessagesList().get(REPLY_KEY));
-                handleInform(inform);
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_INFORM);
-
-        // HANDLE_OLD_RESPONSE state activate if arrived a failure message coming
-        //from phase 0 (timeout expired), a disconfirm or inform message coming from phase 1
-        //(timeout expired).
-        b = new OneShotBehaviour(myAgent) {
-            public void action() {
-                ACLMessage old = (ACLMessage) (getMapMessagesList().get(REPLY_KEY));
-                handleOldResponse(old);
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_OLD_RESPONSE);
-
-        // HANDLE_ALL_RESPONSES state activated when all the answers have been received.
-        b = new OneShotBehaviour(myAgent) {
-            public void action() {
-                var responses = getMapMessagesList().get(ALL_RESPONSES_KEY);
-                handleAllResponses(responses);
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_ALL_RESPONSES);
-
-    }
-    */
+    /* User can override these methods */
 
     /**
      * Constructs a <code>TwoPh2Initiator</code> behaviour.
@@ -277,8 +278,6 @@ public class TwoPh2Initiator extends Initiator {
         registerState(b, HANDLE_ALL_RESPONSES);
 
     }
-
-    /* User can override these methods */
 
     /**
      * This method must return the vector of ACLMessage objects to be sent.
@@ -381,6 +380,9 @@ public class TwoPh2Initiator extends Initiator {
         b.setMapMessagesList(getMapMessagesList());
     }
 
+    /* User CAN'T override these methods */
+    //#APIDOC_EXCLUDE_BEGIN
+
     /**
      * This method allows to register a user defined <code>Behaviour</code> in the
      * HANDLE_ALL_RESPONSES state. This behaviour would override the homonymous method.
@@ -395,11 +397,6 @@ public class TwoPh2Initiator extends Initiator {
         registerState(b, HANDLE_ALL_RESPONSES);
         b.setMapMessagesList(getMapMessagesList());
     }
-
-    /* User CAN'T override these methods */
-    //#APIDOC_EXCLUDE_BEGIN
-
-    private String[] toBeReset = null;
 
     /**
      *
@@ -535,9 +532,8 @@ public class TwoPh2Initiator extends Initiator {
         // Possible Session states 
         static final int INIT = 0;
         static final int REPLY_RECEIVED = 1;
-
-        private int state = INIT;
         private final String myId;
+        private int state = INIT;
 
         public Session(String id) {
             myId = id;

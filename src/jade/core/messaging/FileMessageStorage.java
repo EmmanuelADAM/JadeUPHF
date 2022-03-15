@@ -40,6 +40,7 @@ class FileMessageStorage implements MessageStorage {
     private static final String FOREVER = "FOREVER";
 
     private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    private File baseDir;
 
     public void init(Profile p) {
         // Retrieve the base directory from the profile
@@ -268,8 +269,5 @@ class FileMessageStorage implements MessageStorage {
             }
         }
     }
-
-
-    private File baseDir;
 
 }

@@ -8,6 +8,8 @@
 package FIPA;
 
 public class PayloadHelper {
+    private static org.omg.CORBA.TypeCode _tc;
+
     // It is useless to have instances of this class
     private PayloadHelper() {
     }
@@ -40,8 +42,6 @@ public class PayloadHelper {
         write(out, that);
         a.read_value(out.create_input_stream(), type());
     }
-
-    private static org.omg.CORBA.TypeCode _tc;
 
     synchronized public static org.omg.CORBA.TypeCode type() {
         if (_tc == null)

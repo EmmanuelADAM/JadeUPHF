@@ -130,6 +130,16 @@ public class ContractNetInitiator extends Initiator {
 
     // Private data store keys (can't be static since if we register another instance of this class as state of the FSM
     // using the same data store the new values overrides the old one.
+    // FSM states names
+    private static final String HANDLE_PROPOSE = "Handle-propose";
+    private static final String HANDLE_REFUSE = "Handle-refuse";
+    private static final String HANDLE_INFORM = "Handle-inform";
+    private static final String HANDLE_ALL_RESPONSES = "Handle-all-responses";
+    private static final String HANDLE_ALL_RESULT_NOTIFICATIONS = "Handle-all-result-notifications";
+    // States exit values
+    private static final int ALL_RESPONSES_RECEIVED = 1;
+    private static final int ALL_RESULT_NOTIFICATIONS_RECEIVED = 2;
+    private static final int MORE_ACCEPTANCES = 3;
     /**
      * key to retrieve from the HashMap of the behaviour the ACLMessage
      * object passed in the constructor of the class.
@@ -161,19 +171,6 @@ public class ContractNetInitiator extends Initiator {
      * ACLMessage objects that have been received as result notifications.
      **/
     public final String ALL_RESULT_NOTIFICATIONS_KEY = "__all-result-notifications" + hashCode();
-
-    // FSM states names
-    private static final String HANDLE_PROPOSE = "Handle-propose";
-    private static final String HANDLE_REFUSE = "Handle-refuse";
-    private static final String HANDLE_INFORM = "Handle-inform";
-    private static final String HANDLE_ALL_RESPONSES = "Handle-all-responses";
-    private static final String HANDLE_ALL_RESULT_NOTIFICATIONS = "Handle-all-result-notifications";
-
-    // States exit values
-    private static final int ALL_RESPONSES_RECEIVED = 1;
-    private static final int ALL_RESULT_NOTIFICATIONS_RECEIVED = 2;
-    private static final int MORE_ACCEPTANCES = 3;
-
     // When step == 1 we deal with CFP and responses
     // When step == 2 we deal with ACCEPT/REJECT_PROPOSAL and result notifications
     private int step = 1;
@@ -182,15 +179,7 @@ public class ContractNetInitiator extends Initiator {
     // Indicates that a new tranche of acceptances must be sent after all result notifications
     // have been received
     private boolean moreAcceptancesToSend = false;
-
-    /**
-     * Constructor for the class that creates a new empty HashMap
-     *
-     * @see #ContractNetInitiator(Agent, ACLMessage, HashMap)
-     **/
-    public ContractNetInitiator(Agent a, ACLMessage cfp) {
-        this(a, cfp, new HashMap<>(), new HashMap<>());
-    }
+    private String[] toBeReset = null;
 
     /**
      * Constructs a <code>ContractNetInitiator</code> behaviour
@@ -206,92 +195,100 @@ public class ContractNetInitiator extends Initiator {
      * deprecated
 
     public ContractNetInitiator(Agent a, ACLMessage cfp, HashMap<String, List<ACLMessage>> mapMessagesList) {
-        super(a, cfp, mapMessagesList);
-        // Register the FSM transitions specific to the ContractNet protocol
-        registerTransition(CHECK_IN_SEQ, HANDLE_PROPOSE, ACLMessage.PROPOSE);
-        registerTransition(CHECK_IN_SEQ, HANDLE_REFUSE, ACLMessage.REFUSE);
-        registerTransition(CHECK_IN_SEQ, HANDLE_INFORM, ACLMessage.INFORM);
-        registerDefaultTransition(HANDLE_PROPOSE, CHECK_SESSIONS);
-        registerDefaultTransition(HANDLE_REFUSE, CHECK_SESSIONS);
-        registerDefaultTransition(HANDLE_INFORM, CHECK_SESSIONS);
-        registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, ALL_RESPONSES_RECEIVED);
-        registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESULT_NOTIFICATIONS, ALL_RESULT_NOTIFICATIONS_RECEIVED);
-        registerDefaultTransition(HANDLE_ALL_RESPONSES, SEND_INITIATIONS, getToBeReset());
-        registerTransition(HANDLE_ALL_RESULT_NOTIFICATIONS, SEND_INITIATIONS, MORE_ACCEPTANCES, getToBeReset());
-        registerDefaultTransition(HANDLE_ALL_RESULT_NOTIFICATIONS, DUMMY_FINAL);
+    super(a, cfp, mapMessagesList);
+    // Register the FSM transitions specific to the ContractNet protocol
+    registerTransition(CHECK_IN_SEQ, HANDLE_PROPOSE, ACLMessage.PROPOSE);
+    registerTransition(CHECK_IN_SEQ, HANDLE_REFUSE, ACLMessage.REFUSE);
+    registerTransition(CHECK_IN_SEQ, HANDLE_INFORM, ACLMessage.INFORM);
+    registerDefaultTransition(HANDLE_PROPOSE, CHECK_SESSIONS);
+    registerDefaultTransition(HANDLE_REFUSE, CHECK_SESSIONS);
+    registerDefaultTransition(HANDLE_INFORM, CHECK_SESSIONS);
+    registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, ALL_RESPONSES_RECEIVED);
+    registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESULT_NOTIFICATIONS, ALL_RESULT_NOTIFICATIONS_RECEIVED);
+    registerDefaultTransition(HANDLE_ALL_RESPONSES, SEND_INITIATIONS, getToBeReset());
+    registerTransition(HANDLE_ALL_RESULT_NOTIFICATIONS, SEND_INITIATIONS, MORE_ACCEPTANCES, getToBeReset());
+    registerDefaultTransition(HANDLE_ALL_RESULT_NOTIFICATIONS, DUMMY_FINAL);
 
-        // Create and register the states specific to the ContractNet protocol
-        Behaviour b;
-        // HANDLE_PROPOSE
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895819003L;
+    // Create and register the states specific to the ContractNet protocol
+    Behaviour b;
+    // HANDLE_PROPOSE
+    b = new OneShotBehaviour(myAgent) {
+    @Serial private static final long serialVersionUID = 3487495895819003L;
 
-            public void action() {
-                var acceptances = getMapMessagesList().get(ALL_ACCEPTANCES_KEY);
-                ACLMessage propose = getMapMessages().get(REPLY_K);
-                handlePropose(propose, acceptances);
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
-        registerState(b, HANDLE_PROPOSE);
-
-        // HANDLE_REFUSE
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895819004L;
-
-            public void action() {
-                handleRefuse(getMapMessages().get(REPLY_K));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
-        registerState(b, HANDLE_REFUSE);
-
-        // HANDLE_INFORM
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895818006L;
-
-            public void action() {
-                handleInform(getMapMessages().get(REPLY_K));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
-        registerState(b, HANDLE_INFORM);
-
-        // HANDLE_ALL_RESPONSES
-        b = new OneShotBehaviour(myAgent) {
-
-            public void action() {
-                var responses = getMapMessagesList().get(ALL_RESPONSES_KEY);
-                var acceptances = getMapMessagesList().get(ALL_ACCEPTANCES_KEY);
-                handleAllResponses(responses, acceptances);
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
-        registerState(b, HANDLE_ALL_RESPONSES);
-
-        // HANDLE_ALL_RESULT_NOTIFICATIONS
-        b = new OneShotBehaviour(myAgent) {
-
-            public void action() {
-                handleAllResultNotifications(getMapMessagesList().get(ALL_RESULT_NOTIFICATIONS_KEY));
-            }
-
-            public int onEnd() {
-                return moreAcceptancesToSend ? MORE_ACCEPTANCES : super.onEnd();
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
-        registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
+    public void action() {
+    var acceptances = getMapMessagesList().get(ALL_ACCEPTANCES_KEY);
+    ACLMessage propose = getMapMessages().get(REPLY_K);
+    handlePropose(propose, acceptances);
     }
-*/
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    b.setMapMessages(getMapMessages());
+    registerState(b, HANDLE_PROPOSE);
+
+    // HANDLE_REFUSE
+    b = new OneShotBehaviour(myAgent) {
+    @Serial private static final long serialVersionUID = 3487495895819004L;
+
+    public void action() {
+    handleRefuse(getMapMessages().get(REPLY_K));
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    b.setMapMessages(getMapMessages());
+    registerState(b, HANDLE_REFUSE);
+
+    // HANDLE_INFORM
+    b = new OneShotBehaviour(myAgent) {
+    @Serial private static final long serialVersionUID = 3487495895818006L;
+
+    public void action() {
+    handleInform(getMapMessages().get(REPLY_K));
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    b.setMapMessages(getMapMessages());
+    registerState(b, HANDLE_INFORM);
+
+    // HANDLE_ALL_RESPONSES
+    b = new OneShotBehaviour(myAgent) {
+
+    public void action() {
+    var responses = getMapMessagesList().get(ALL_RESPONSES_KEY);
+    var acceptances = getMapMessagesList().get(ALL_ACCEPTANCES_KEY);
+    handleAllResponses(responses, acceptances);
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    b.setMapMessages(getMapMessages());
+    registerState(b, HANDLE_ALL_RESPONSES);
+
+    // HANDLE_ALL_RESULT_NOTIFICATIONS
+    b = new OneShotBehaviour(myAgent) {
+
+    public void action() {
+    handleAllResultNotifications(getMapMessagesList().get(ALL_RESULT_NOTIFICATIONS_KEY));
+    }
+
+    public int onEnd() {
+    return moreAcceptancesToSend ? MORE_ACCEPTANCES : super.onEnd();
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    b.setMapMessages(getMapMessages());
+    registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
+    }
+     */
+    /**
+     * Constructor for the class that creates a new empty HashMap
+     *
+     * @see #ContractNetInitiator(Agent, ACLMessage, HashMap, HashMap)
+     **/
+    public ContractNetInitiator(Agent a, ACLMessage cfp) {
+        this(a, cfp, new HashMap<>(), new HashMap<>());
+    }
+
+    //#APIDOC_EXCLUDE_BEGIN
+
     /**
      * Constructs a <code>ContractNetInitiator</code> behaviour
      *
@@ -393,8 +390,6 @@ public class ContractNetInitiator extends Initiator {
         registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
     }
 
-    //#APIDOC_EXCLUDE_BEGIN
-
     /**
      *
      */
@@ -466,8 +461,6 @@ public class ContractNetInitiator extends Initiator {
         }
         return ret;
     }
-
-    private String[] toBeReset = null;
 
     /**
      *
@@ -788,9 +781,8 @@ public class ContractNetInitiator extends Initiator {
         // Session states
         static final int INIT = 0;
         static final int REPLY_RECEIVED = 1;
-
-        private int state = INIT;
         private final int sessionStep;
+        private int state = INIT;
 
         public Session(int s) {
             this.sessionStep = s;

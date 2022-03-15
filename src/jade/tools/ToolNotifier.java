@@ -60,39 +60,9 @@ public class ToolNotifier extends ToolAgent implements MessageListener, AgentLis
 
     private Logger myLogger;
 
-    /**
-     * Inner class NotifierAMSListenerBehaviour
-     */
-
-    class NotifierAMSListenerBehaviour extends AMSListenerBehaviour {
-        protected void installHandlers(Map<String, EventHandler> handlersTable) {
-            // Fill the event handler table.
-            handlersTable.put(IntrospectionOntology.DEADAGENT, (EventHandler) ev -> {
-                DeadAgent da = (DeadAgent) ev;
-                AID dead = da.getAgent();
-                removeObservedAgent(dead);
-                if (dead.equals(observerAgent)) {
-                    suicide();
-                }
-            });
-
-            handlersTable.put(IntrospectionOntology.MOVEDAGENT, (EventHandler) ev -> {
-                MovedAgent ma = (MovedAgent) ev;
-                AID moved = ma.getAgent();
-                if (!here().equals(ma.getTo())) {
-                    removeObservedAgent(moved);
-                }
-            });
-
-        } // END of installHandlers() method
-
-    } // END of inner class NotifierAMSListenerBehaviour
-
-
     public ToolNotifier(AID id) {
         observerAgent = id;
     }
-
 
     protected void toolSetup() {
         state = ACTIVE_STATE;
@@ -317,11 +287,9 @@ public class ToolNotifier extends ToolAgent implements MessageListener, AgentLis
         }
     }
 
-
     public void changedAgentPrincipal(AgentEvent ev) {
         // No tool is interested in this type of event --> Do nothing
     }
-
 
     private ACLMessage createObserverMessage() {
         ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
@@ -381,6 +349,81 @@ public class ToolNotifier extends ToolAgent implements MessageListener, AgentLis
         }
     }
 
+    //////////////////////////////////////////////
+    // Utility methods dealing with pending events
+    private void addPendingEvent(JADEEvent ev, AID id) {
+        synchronized (pendingEvents) {
+            List<JADEEvent> l = pendingEvents.computeIfAbsent(id, k -> new ArrayList<>());
+            l.add(ev);
+        }
+    }
+
+    private void removePendingEvent(JADEEvent ev) {
+        synchronized (pendingEvents) {
+            AID id = null;
+            if (ev instanceof AgentEvent) {
+                id = ((AgentEvent) ev).getAgent();
+            } else if (ev instanceof MessageEvent) {
+                id = ((MessageEvent) ev).getAgent();
+            }
+            List<JADEEvent> l = pendingEvents.get(id);
+            if (l != null) {
+                l.remove(ev);
+                if (l.isEmpty()) {
+                    pendingEvents.remove(id);
+                }
+            }
+        }
+    }
+
+    private void notifyPendingEvents(AID id) {
+        synchronized (pendingEvents) {
+            List<JADEEvent> l = pendingEvents.remove(id);
+            if (l != null) {
+                for (JADEEvent ev : l) {
+                    ev.notifyProcessed(null);
+                }
+            }
+        }
+    }
+
+    private void notifyAllPendingEvents() {
+        synchronized (pendingEvents) {
+            for (List<JADEEvent> jadeEvents : pendingEvents.values()) {
+                for (JADEEvent ev : jadeEvents) {
+                    ev.notifyProcessed(null);
+                }
+            }
+        }
+    }
+
+    /**
+     * Inner class NotifierAMSListenerBehaviour
+     */
+
+    class NotifierAMSListenerBehaviour extends AMSListenerBehaviour {
+        protected void installHandlers(Map<String, EventHandler> handlersTable) {
+            // Fill the event handler table.
+            handlersTable.put(IntrospectionOntology.DEADAGENT, (EventHandler) ev -> {
+                DeadAgent da = (DeadAgent) ev;
+                AID dead = da.getAgent();
+                removeObservedAgent(dead);
+                if (dead.equals(observerAgent)) {
+                    suicide();
+                }
+            });
+
+            handlersTable.put(IntrospectionOntology.MOVEDAGENT, (EventHandler) ev -> {
+                MovedAgent ma = (MovedAgent) ev;
+                AID moved = ma.getAgent();
+                if (!here().equals(ma.getTo())) {
+                    removeObservedAgent(moved);
+                }
+            });
+
+        } // END of installHandlers() method
+
+    } // END of inner class NotifierAMSListenerBehaviour
 
     /**
      * Inner class SynchEventInformer.
@@ -422,59 +465,6 @@ public class ToolNotifier extends ToolAgent implements MessageListener, AgentLis
 
         public boolean done() {
             return finished;
-        }
-    }
-
-
-    //////////////////////////////////////////////
-    // Utility methods dealing with pending events
-    private void addPendingEvent(JADEEvent ev, AID id) {
-        synchronized (pendingEvents) {
-            List<JADEEvent> l = pendingEvents.get(id);
-            if (l == null) {
-                l = new ArrayList<>();
-                pendingEvents.put(id, l);
-            }
-            l.add(ev);
-        }
-    }
-
-    private void removePendingEvent(JADEEvent ev) {
-        synchronized (pendingEvents) {
-            AID id = null;
-            if (ev instanceof AgentEvent) {
-                id = ((AgentEvent) ev).getAgent();
-            } else if (ev instanceof MessageEvent) {
-                id = ((MessageEvent) ev).getAgent();
-            }
-            List<JADEEvent> l = pendingEvents.get(id);
-            if (l != null) {
-                l.remove(ev);
-                if (l.isEmpty()) {
-                    pendingEvents.remove(id);
-                }
-            }
-        }
-    }
-
-    private void notifyPendingEvents(AID id) {
-        synchronized (pendingEvents) {
-            List<JADEEvent> l = pendingEvents.remove(id);
-            if (l != null) {
-                for (JADEEvent ev : l) {
-                    ev.notifyProcessed(null);
-                }
-            }
-        }
-    }
-
-    private void notifyAllPendingEvents() {
-        synchronized (pendingEvents) {
-            for (List<JADEEvent> jadeEvents : pendingEvents.values()) {
-                for (JADEEvent ev : jadeEvents) {
-                    ev.notifyProcessed(null);
-                }
-            }
         }
     }
 }

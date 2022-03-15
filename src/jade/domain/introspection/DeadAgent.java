@@ -65,16 +65,6 @@ public class DeadAgent implements Event {
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
-     *
-     * @param id The container identifier of the container where the
-     *           newly dead agent was deployed.
-     */
-    public void setWhere(ContainerID id) {
-        where = id;
-    }
-
-    /**
      * Retrieve the value of the <code>where</code> slot of this
      * event, containing the container identifier of the container
      * where the newly dead agent was deployed.
@@ -87,12 +77,13 @@ public class DeadAgent implements Event {
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
+     * Set the <code>where</code> slot of this event.
      *
-     * @param id The agent identifier of the newly dead agent.
+     * @param id The container identifier of the container where the
+     *           newly dead agent was deployed.
      */
-    public void setAgent(AID id) {
-        agent = id;
+    public void setWhere(ContainerID id) {
+        where = id;
     }
 
     /**
@@ -104,6 +95,15 @@ public class DeadAgent implements Event {
      */
     public AID getAgent() {
         return agent;
+    }
+
+    /**
+     * Set the <code>agent</code> slot of this event.
+     *
+     * @param id The agent identifier of the newly dead agent.
+     */
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     public Boolean getContainerRemoved() {

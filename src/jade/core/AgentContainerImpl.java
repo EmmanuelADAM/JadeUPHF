@@ -84,33 +84,24 @@ class AgentContainerImpl implements AgentContainer, AgentToolkit {
     // The agent platform this container belongs to
     protected MainContainerImpl myMainContainer; // FIXME: It should go away
     //#MIDP_EXCLUDE_END
-
-    //#J2ME_EXCLUDE_BEGIN
-    // The listener for multicast main detecton
-    private MulticastMainDetectionListener mainDetectionListener;
-    //#J2ME_EXCLUDE_END
-
     // The IMTP manager, used to access IMTP-dependent functionalities
     protected IMTPManager myIMTPManager;
-
-    // The platform Service Manager
-    private ServiceManager myServiceManager;
-
-    // The platform Service Finder
-    private ServiceFinder myServiceFinder;
-
-    // The Object managing Thread resources in this container
-    private ResourceManager myResourceManager;
-
+    //#J2ME_EXCLUDE_END
     protected ContainerID myID;
-
     protected NodeDescriptor myNodeDescriptor;
-
     // These are only used at bootstrap-time to initialize the local
     // NodeDescriptor. Further modifications take no effect
     protected JADEPrincipal ownerPrincipal;
     protected Credentials ownerCredentials;
-
+    //#J2ME_EXCLUDE_BEGIN
+    // The listener for multicast main detecton
+    private MulticastMainDetectionListener mainDetectionListener;
+    // The platform Service Manager
+    private ServiceManager myServiceManager;
+    // The platform Service Finder
+    private ServiceFinder myServiceFinder;
+    // The Object managing Thread resources in this container
+    private ResourceManager myResourceManager;
     private AID theAMS;
     private AID theDefaultDF;
 

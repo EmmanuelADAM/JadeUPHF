@@ -35,6 +35,7 @@ import jade.core.CaseInsensitiveString;
 /**
  * Ontology containing schemas for the SL2 language operators.
  * see jade.content.Ontology
+ *
  * @author Giovanni Caire - TILAB
  */
 class SL2Ontology extends SL1Ontology implements SL2Vocabulary {
@@ -43,10 +44,6 @@ class SL2Ontology extends SL1Ontology implements SL2Vocabulary {
 
     // The singleton instance of this ontology
     private static final Ontology theInstance = new SL2Ontology(ONTOLOGY_NAME, SL1Ontology.getInstance(), null);
-
-    public static Ontology getInstance() {
-        return theInstance;
-    }
 
     /**
      * Constructor
@@ -119,6 +116,10 @@ class SL2Ontology extends SL1Ontology implements SL2Vocabulary {
         } catch (OntologyException oe) {
             oe.printStackTrace();
         }
+    }
+
+    public static Ontology getInstance() {
+        return theInstance;
     }
 
     boolean isQuantifier(String symbol) {

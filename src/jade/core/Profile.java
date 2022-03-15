@@ -283,145 +283,6 @@ public abstract class Profile {
     public static final String MIDP = "midp";
     public static final String ANDROID = "android";
 
-
-    /**
-     * Obtain a reference to the platform <i>Service Manager</i>, with
-     * which kernel-level services can be added and removed.
-     *
-     * @return A <code>ServiceManager</code> object, representing the
-     * platform service manager.
-     */
-    protected abstract ServiceManager getServiceManager() throws ProfileException;
-
-    /**
-     * Obtain a reference to the platform <i>Service Finder</i>, with
-     * which kernel-level services can be looked up.
-     *
-     * @return A <code>ServiceFinder</code> object, representing the
-     * platform service manager.
-     */
-    protected abstract ServiceFinder getServiceFinder() throws ProfileException;
-
-    /**
-     * Obtain a reference to the container <i>Command Processor</i>,
-     * which manages kernel-level commands dispatching them to the
-     * proper platform services.
-     *
-     * @return A <code>ServiceManager</code> object, representing the
-     * platform service manager.
-     */
-    protected abstract CommandProcessor getCommandProcessor() throws ProfileException;
-
-    //#MIDP_EXCLUDE_BEGIN
-    protected abstract MainContainerImpl getMain() throws ProfileException;
-    //#MIDP_EXCLUDE_END
-
-    /**
-     *
-     */
-    protected abstract IMTPManager getIMTPManager() throws ProfileException;
-
-    /**
-     *
-     */
-    public abstract ResourceManager getResourceManager() throws ProfileException;
-
-    //#APIDOC_EXCLUDE_END
-
-
-    //#MIDP_EXCLUDE_BEGIN
-
-    /**
-     * Retrieve the configuration properties as they were passed to this Profile object, i.e. without
-     * internal initializations automatically performed by the Profile class.
-     */
-    public abstract Properties getBootProperties();
-    //#MIDP_EXCLUDE_END
-
-    /**
-     * Retrieve a String value from the configuration properties.
-     * If no parameter corresponding to the specified key is found,
-     * return the provided default.
-     *
-     * @param key      The key identifying the parameter to be retrieved
-     *                 among the configuration properties.
-     * @param aDefault The value to return when there is no property
-     *                 set for the given key.
-     */
-    public abstract String getParameter(String key, String aDefault);
-
-    /**
-     * Retrieve a boolean value for a configuration property.  If no
-     * corresponding property is found or if its string value cannot
-     * be converted to a boolean one, a default value is returned.
-     *
-     * @param key      The key identifying the parameter to be retrieved
-     *                 among the configuration properties.
-     * @param aDefault The value to return when there is no property
-     *                 set for the given key, or its value cannot be converted to a
-     *                 boolean value.
-     */
-    public abstract boolean getBooleanProperty(String key, boolean aDefault);
-
-    /**
-     * Retrieve a list of Specifiers from the configuration properties.
-     * Agents, MTPs and other items are specified among the configuration
-     * properties in this way.
-     * If no list of Specifiers corresponding to the specified key is found,
-     * an empty list is returned.
-     *
-     * @param key The key identifying the list of Specifires to be retrieved
-     *            among the configuration properties.
-     */
-    public abstract List<Specifier> getSpecifiers(String key) throws ProfileException;
-
-    /**
-     * Assign the given value to the given property name.
-     *
-     * @param key   is the property name
-     * @param value is the property value
-     */
-    public abstract void setParameter(String key, String value);
-
-    /**
-     * Assign the given value to the given property name.
-     *
-     * @param key   is the property name
-     * @param value is the property value
-     */
-    public abstract void setSpecifiers(String key, List<Specifier> value);
-
-
-    /**
-     * Provides a boolean indication about whether or not the container using this Profile
-     * is a Main Container.
-     *
-     * @return <code>true</code> if the container using this Profile is a Main Container. <code>false</code> otherwise
-     */
-    public boolean isMain() {
-        return getBooleanProperty(MAIN, false);
-    }
-
-    /**
-     * Provides a boolean indication about whether or not the container using this Profile
-     * is the Master Main Container.
-     *
-     * @return <code>true</code> if the container using this Profile is the Master Main Container. <code>false</code> otherwise
-     */
-    public boolean isMasterMain() {
-        return isMain() && !getBooleanProperty(LOCAL_SERVICE_MANAGER, false);
-    }
-
-    /**
-     * Provides a boolean indication about whether or not the container using this Profile
-     * is a Backup Main Container.
-     *
-     * @return <code>true</code> if the container using this Profile is a Backup Main Container. <code>false</code> otherwise
-     */
-    public boolean isBackupMain() {
-        return isMain() && getBooleanProperty(LOCAL_SERVICE_MANAGER, false);
-    }
-
     public static String getDefaultNetworkName() {
         return getDefaultNetworkName(false);
     }
@@ -472,8 +333,6 @@ public abstract class Profile {
         return host;
     }
 
-    //#MIDP_EXCLUDE_BEGIN
-
     /**
      * Check whether or not a given host name or address corresponds to a local network interface
      */
@@ -503,7 +362,7 @@ public abstract class Profile {
                 }
             }
             //#DOTNET_EXCLUDE_END
-			
+
 			/*#DOTNET_INCLUDE_BEGIN
 			return localHostAddr.equals(InetAddress.getLocalHost());
 			#DOTNET_INCLUDE_END*/
@@ -571,6 +430,7 @@ public abstract class Profile {
             return false;
         }
     }
+    //#MIDP_EXCLUDE_END
 
     /**
      * Compares two stringified transport addresses.
@@ -601,6 +461,144 @@ public abstract class Profile {
             }
         }
         return false;
+    }
+
+    //#APIDOC_EXCLUDE_END
+
+
+    //#MIDP_EXCLUDE_BEGIN
+
+    /**
+     * Obtain a reference to the platform <i>Service Manager</i>, with
+     * which kernel-level services can be added and removed.
+     *
+     * @return A <code>ServiceManager</code> object, representing the
+     * platform service manager.
+     */
+    protected abstract ServiceManager getServiceManager() throws ProfileException;
+    //#MIDP_EXCLUDE_END
+
+    /**
+     * Obtain a reference to the platform <i>Service Finder</i>, with
+     * which kernel-level services can be looked up.
+     *
+     * @return A <code>ServiceFinder</code> object, representing the
+     * platform service manager.
+     */
+    protected abstract ServiceFinder getServiceFinder() throws ProfileException;
+
+    /**
+     * Obtain a reference to the container <i>Command Processor</i>,
+     * which manages kernel-level commands dispatching them to the
+     * proper platform services.
+     *
+     * @return A <code>ServiceManager</code> object, representing the
+     * platform service manager.
+     */
+    protected abstract CommandProcessor getCommandProcessor() throws ProfileException;
+
+    //#MIDP_EXCLUDE_BEGIN
+    protected abstract MainContainerImpl getMain() throws ProfileException;
+
+    /**
+     *
+     */
+    protected abstract IMTPManager getIMTPManager() throws ProfileException;
+
+    /**
+     *
+     */
+    public abstract ResourceManager getResourceManager() throws ProfileException;
+
+    /**
+     * Retrieve the configuration properties as they were passed to this Profile object, i.e. without
+     * internal initializations automatically performed by the Profile class.
+     */
+    public abstract Properties getBootProperties();
+
+    /**
+     * Retrieve a String value from the configuration properties.
+     * If no parameter corresponding to the specified key is found,
+     * return the provided default.
+     *
+     * @param key      The key identifying the parameter to be retrieved
+     *                 among the configuration properties.
+     * @param aDefault The value to return when there is no property
+     *                 set for the given key.
+     */
+    public abstract String getParameter(String key, String aDefault);
+
+    /**
+     * Retrieve a boolean value for a configuration property.  If no
+     * corresponding property is found or if its string value cannot
+     * be converted to a boolean one, a default value is returned.
+     *
+     * @param key      The key identifying the parameter to be retrieved
+     *                 among the configuration properties.
+     * @param aDefault The value to return when there is no property
+     *                 set for the given key, or its value cannot be converted to a
+     *                 boolean value.
+     */
+    public abstract boolean getBooleanProperty(String key, boolean aDefault);
+
+    /**
+     * Retrieve a list of Specifiers from the configuration properties.
+     * Agents, MTPs and other items are specified among the configuration
+     * properties in this way.
+     * If no list of Specifiers corresponding to the specified key is found,
+     * an empty list is returned.
+     *
+     * @param key The key identifying the list of Specifires to be retrieved
+     *            among the configuration properties.
+     */
+    public abstract List<Specifier> getSpecifiers(String key) throws ProfileException;
+
+    /**
+     * Assign the given value to the given property name.
+     *
+     * @param key   is the property name
+     * @param value is the property value
+     */
+    public abstract void setParameter(String key, String value);
+
+    //#MIDP_EXCLUDE_BEGIN
+
+    /**
+     * Assign the given value to the given property name.
+     *
+     * @param key   is the property name
+     * @param value is the property value
+     */
+    public abstract void setSpecifiers(String key, List<Specifier> value);
+
+    /**
+     * Provides a boolean indication about whether or not the container using this Profile
+     * is a Main Container.
+     *
+     * @return <code>true</code> if the container using this Profile is a Main Container. <code>false</code> otherwise
+     */
+    public boolean isMain() {
+        return getBooleanProperty(MAIN, false);
+    }
+
+    /**
+     * Provides a boolean indication about whether or not the container using this Profile
+     * is the Master Main Container.
+     *
+     * @return <code>true</code> if the container using this Profile is the Master Main Container. <code>false</code> otherwise
+     */
+    public boolean isMasterMain() {
+        return isMain() && !getBooleanProperty(LOCAL_SERVICE_MANAGER, false);
+    }
+
+    /**
+     * Provides a boolean indication about whether or not the container using this Profile
+     * is a Backup Main Container.
+     *
+     * @return <code>true</code> if the container using this Profile is a Backup Main Container. <code>false</code> otherwise
+     */
+    public boolean isBackupMain() {
+        return isMain() && getBooleanProperty(LOCAL_SERVICE_MANAGER, false);
     }
     //#MIDP_EXCLUDE_END
 

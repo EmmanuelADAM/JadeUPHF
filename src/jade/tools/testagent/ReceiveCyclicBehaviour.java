@@ -34,6 +34,9 @@ import jade.core.behaviours.CyclicBehaviour;
  * @created May 21, 2002
  */
 public class ReceiveCyclicBehaviour extends CyclicBehaviour {
+    private final TestAgent agent;
+
+
     /**
      * Constructor for the ReceiveCyclicBehaviour object
      *
@@ -43,15 +46,11 @@ public class ReceiveCyclicBehaviour extends CyclicBehaviour {
         this.agent = agent;
     }
 
-
     /**
      * Description of the Method
      */
     public void action() {
         agent.processIncomingMessage(agent.blockingReceive());
     }
-
-
-    private final TestAgent agent;
 }
 //  ***EOF***

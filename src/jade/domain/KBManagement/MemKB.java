@@ -43,119 +43,18 @@ import java.util.*;
  */
 public abstract class MemKB extends KB {
 
+    protected final static int MAX_REGISTER_WITHOUT_CLEAN = 100;
+    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
     protected Map<Object, Object> facts = new HashMap<>();
     protected Hashtable<DFAgentDescription, SubscriptionResponder.Subscription> subscriptions = new Hashtable<>();
     protected LeaseManager lm;
     protected int currentReg = 0;
     protected SubscriptionResponder sr;
-
-    protected final static int MAX_REGISTER_WITHOUT_CLEAN = 100;
-
-    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
-
+    int offSetForSubscriptionToReturn = 0;
 
     public MemKB(int maxResultLimit) {
         super(maxResultLimit);
     }
-
-    protected Object insert(Object name, Object fact) {
-        currentReg++;
-        if (currentReg > MAX_REGISTER_WITHOUT_CLEAN) {
-            clean();
-            currentReg = 0;
-        }
-
-        return facts.put(name, fact);
-    }
-
-    protected Object remove(Object name) {
-        return facts.remove(name);
-    }
-
-    // This abstract method has to perform pattern matching
-    protected abstract boolean match(DFAgentDescription template, DFAgentDescription fact);
-
-
-    protected abstract void clean();
-
-    public List<DFAgentDescription> search(DFAgentDescription template, int maxResults) {
-        List<DFAgentDescription> result = new ArrayList<>();
-        Iterator<Object> it = facts.values().iterator();
-        int found = 0;
-        while (it.hasNext() && ((maxResults < 0) || (found < maxResults))) {
-            DFAgentDescription fact = (DFAgentDescription) it.next();
-            if (match(template, fact)) {
-                result.add(fact);
-                found++;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Iterated search is only supported in a DB-based KB.
-     * Throw a RuntimeException. The requester will get back a FAILURE
-     */
-    public KBIterator iterator(Object template) {
-        throw new RuntimeException("Iterated search non supported");
-    }
-
-    //
-    public void subscribe(Object dfd, SubscriptionResponder.Subscription s) throws NotUnderstoodException {
-        try {
-            DFAgentDescription dfdTemplate = (DFAgentDescription) dfd;
-            ACLMessage aclSub = s.getMessage();
-            subscriptions.put(dfdTemplate, s);
-        } catch (Exception e) {
-            if (logger.isLoggable(Logger.SEVERE))
-                logger.log(Logger.SEVERE, "Subscribe error: " + e.getMessage());
-            throw new NotUnderstoodException(e.getMessage());
-        }
-    }
-
-
-    public Enumeration<DFAgentDescription> getSubscriptionDfAgentDescriptions() {
-        return subscriptions.keys();
-    }
-
-
-    private SubscriptionResponder.Subscription getSubscription(Object key) {
-        return subscriptions.get(key);
-    }
-
-
-    // RITORNA Lista delle sottoscrizioni
-    public Enumeration<SubscriptionResponder.Subscription> getSubscriptions() {
-        return subscriptions.elements();
-    }
-
-    int offSetForSubscriptionToReturn = 0;
-
-    // RITORNA Lista delle sottoscrizioni
-    public Enumeration<SubscriptionResponder.Subscription> getSubscriptions(int offset) {
-        // FIXME to do if this operation return a lot of subscriptions
-        return null;
-    }
-
-
-    public void unsubscribe(SubscriptionResponder.Subscription sub) {
-
-        ACLMessage aclSub = sub.getMessage();
-        String convID = aclSub.getConversationId();
-        Enumeration<DFAgentDescription> e = getSubscriptionDfAgentDescriptions();
-
-        if (e != null) {
-            while (e.hasMoreElements()) {
-                DFAgentDescription dfd = e.nextElement();
-                SubscriptionResponder.Subscription s = getSubscription(dfd);
-                if ((s.getMessage().getConversationId()).equals(convID)) {
-                    subscriptions.remove(dfd);
-                    break;
-                }
-            }
-        }
-    }
-
 
     // Helper method to match two Agent Identifiers
     public static boolean matchAID(AID template, AID fact) {
@@ -207,6 +106,97 @@ public abstract class MemKB extends KB {
         }
 
         return true;
+    }
+
+    protected Object insert(Object name, Object fact) {
+        currentReg++;
+        if (currentReg > MAX_REGISTER_WITHOUT_CLEAN) {
+            clean();
+            currentReg = 0;
+        }
+
+        return facts.put(name, fact);
+    }
+
+    protected Object remove(Object name) {
+        return facts.remove(name);
+    }
+
+    // This abstract method has to perform pattern matching
+    protected abstract boolean match(DFAgentDescription template, DFAgentDescription fact);
+
+    protected abstract void clean();
+
+    public List<DFAgentDescription> search(DFAgentDescription template, int maxResults) {
+        List<DFAgentDescription> result = new ArrayList<>();
+        Iterator<Object> it = facts.values().iterator();
+        int found = 0;
+        while (it.hasNext() && ((maxResults < 0) || (found < maxResults))) {
+            DFAgentDescription fact = (DFAgentDescription) it.next();
+            if (match(template, fact)) {
+                result.add(fact);
+                found++;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Iterated search is only supported in a DB-based KB.
+     * Throw a RuntimeException. The requester will get back a FAILURE
+     */
+    public KBIterator iterator(Object template) {
+        throw new RuntimeException("Iterated search non supported");
+    }
+
+    //
+    public void subscribe(Object dfd, SubscriptionResponder.Subscription s) throws NotUnderstoodException {
+        try {
+            DFAgentDescription dfdTemplate = (DFAgentDescription) dfd;
+            ACLMessage aclSub = s.getMessage();
+            subscriptions.put(dfdTemplate, s);
+        } catch (Exception e) {
+            if (logger.isLoggable(Logger.SEVERE))
+                logger.log(Logger.SEVERE, "Subscribe error: " + e.getMessage());
+            throw new NotUnderstoodException(e.getMessage());
+        }
+    }
+
+    public Enumeration<DFAgentDescription> getSubscriptionDfAgentDescriptions() {
+        return subscriptions.keys();
+    }
+
+    private SubscriptionResponder.Subscription getSubscription(Object key) {
+        return subscriptions.get(key);
+    }
+
+    // RITORNA Lista delle sottoscrizioni
+    public Enumeration<SubscriptionResponder.Subscription> getSubscriptions() {
+        return subscriptions.elements();
+    }
+
+    // RITORNA Lista delle sottoscrizioni
+    public Enumeration<SubscriptionResponder.Subscription> getSubscriptions(int offset) {
+        // FIXME to do if this operation return a lot of subscriptions
+        return null;
+    }
+
+    public void unsubscribe(SubscriptionResponder.Subscription sub) {
+
+        ACLMessage aclSub = sub.getMessage();
+        String convID = aclSub.getConversationId();
+        Enumeration<DFAgentDescription> e = getSubscriptionDfAgentDescriptions();
+
+        if (e != null) {
+            while (e.hasMoreElements()) {
+                DFAgentDescription dfd = e.nextElement();
+                SubscriptionResponder.Subscription s = getSubscription(dfd);
+                if ((s.getMessage().getConversationId()).equals(convID)) {
+                    subscriptions.remove(dfd);
+                    break;
+                }
+            }
+        }
     }
 
 

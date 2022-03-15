@@ -54,15 +54,6 @@ public class RemovedBehaviour implements Event {
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
-     *
-     * @param id The agent identifier of the agent owning the newly removed behaviour.
-     */
-    public void setAgent(AID id) {
-        agent = id;
-    }
-
-    /**
      * Retrieve the value of the <code>agent</code> slot of this
      * event, containing the agent identifier of the agent owning the
      * newly removed behaviour.
@@ -75,13 +66,12 @@ public class RemovedBehaviour implements Event {
     }
 
     /**
-     * Set the <code>behaviour</code> slot of this event.
+     * Set the <code>agent</code> slot of this event.
      *
-     * @param id The behaviour identifier of the newly removed
-     *           behaviour.
+     * @param id The agent identifier of the agent owning the newly removed behaviour.
      */
-    public void setBehaviour(BehaviourID id) {
-        behaviour = id;
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     /**
@@ -94,6 +84,16 @@ public class RemovedBehaviour implements Event {
      */
     public BehaviourID getBehaviour() {
         return behaviour;
+    }
+
+    /**
+     * Set the <code>behaviour</code> slot of this event.
+     *
+     * @param id The behaviour identifier of the newly removed
+     *           behaviour.
+     */
+    public void setBehaviour(BehaviourID id) {
+        behaviour = id;
     }
 
     /**

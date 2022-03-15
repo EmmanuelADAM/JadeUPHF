@@ -65,6 +65,11 @@ public class SocketProxyAgent extends Agent {
      * my logger
      */
     private final static Logger logger = Logger.getMyLogger(SocketProxyAgent.class.getName());
+    private final static int ONE_SEC_AS_MS = 1000;
+    /**
+     * port we're using
+     */
+    int portNumber = DEFAULT_PORT;
     /**
      * reader for parameters
      */
@@ -73,10 +78,6 @@ public class SocketProxyAgent extends Agent {
      * the thread doing connection on desired port
      */
     private Server proxyServer;
-    /**
-     * port we're using
-     */
-    int portNumber = DEFAULT_PORT;
 
     /**
      * agent setup
@@ -166,8 +167,6 @@ public class SocketProxyAgent extends Agent {
     public int getPort() {
         return portNumber;
     }
-
-    private final static int ONE_SEC_AS_MS = 1000;
 
     /**
      * agent takedown

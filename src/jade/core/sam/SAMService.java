@@ -39,20 +39,22 @@ public class SAMService extends BaseService {
 
     public static final String SAM_INFO_HANDLERS = "jade_core_sam_SAMService_handlers";
     public static final String SAM_INFO_HANDLERS_DEFAULT = "jade.core.sam.DefaultSAMInfoHandlerImpl";
-
-    private final List<EntityInfo> monitoredEntities = new ArrayList<>();
-    private final List<CounterInfo> monitoredCounters = new ArrayList<>();
-
-    private Poller poller;
-
-    private final SAMHelper myHelper = new SAMHelperImpl();
     private static final Object singletonLock = new Object();
     private static SAMHelper singletonHelper;
+    private final List<EntityInfo> monitoredEntities = new ArrayList<>();
+    private final List<CounterInfo> monitoredCounters = new ArrayList<>();
+    private final SAMHelper myHelper = new SAMHelperImpl();
     private final ServiceComponent localSlice = new ServiceComponent();
+    private Poller poller;
     private Filter outgoingFilter = null;
 
     private Profile myProfile;
 
+    public static SAMHelper getSingletonHelper() {
+        synchronized (singletonLock) {
+            return singletonHelper;
+        }
+    }
 
     public String getName() {
         return SAMHelper.SERVICE_NAME;
@@ -156,12 +158,6 @@ public class SAMService extends BaseService {
         return myHelper;
     }
 
-    public static SAMHelper getSingletonHelper() {
-        synchronized (singletonLock) {
-            return singletonHelper;
-        }
-    }
-
     @Override
     public Class<?> getHorizontalInterface() {
         return SAMSlice.class;
@@ -194,6 +190,29 @@ public class SAMService extends BaseService {
         }
     }
 
+    private EntityInfo getEntityInfo(String entityName) {
+        for (EntityInfo info : monitoredEntities) {
+            if (info.getName().equals(entityName)) {
+                return info;
+            }
+        }
+        // Entity not found --> create it
+        EntityInfo info = new EntityInfo(entityName);
+        monitoredEntities.add(info);
+        return info;
+    }
+
+    private CounterInfo getCounterInfo(String counterName) {
+        for (CounterInfo info : monitoredCounters) {
+            if (info.getName().equals(counterName)) {
+                return info;
+            }
+        }
+        // Counter not found --> create it
+        CounterInfo info = new CounterInfo(counterName);
+        monitoredCounters.add(info);
+        return info;
+    }
 
     /**
      * Inner class SAMHelperImpl
@@ -244,7 +263,6 @@ public class SAMService extends BaseService {
         }
     } // END of inner class SAMHelperImpl
 
-
     /**
      * Inner class ServiceComponent
      */
@@ -278,7 +296,6 @@ public class SAMService extends BaseService {
         }
     }  // END of inner class ServiceComponent
 
-
     /**
      * Inner class EntityInfo
      */
@@ -307,19 +324,6 @@ public class SAMService extends BaseService {
             return result;
         }
     } // END of inner class EntityInfo
-
-    private EntityInfo getEntityInfo(String entityName) {
-        for (EntityInfo info : monitoredEntities) {
-            if (info.getName().equals(entityName)) {
-                return info;
-            }
-        }
-        // Entity not found --> create it
-        EntityInfo info = new EntityInfo(entityName);
-        monitoredEntities.add(info);
-        return info;
-    }
-
 
     /**
      * Inner class CounterInfo
@@ -359,16 +363,4 @@ public class SAMService extends BaseService {
             return result;
         }
     } // END of inner class CounterInfo
-
-    private CounterInfo getCounterInfo(String counterName) {
-        for (CounterInfo info : monitoredCounters) {
-            if (info.getName().equals(counterName)) {
-                return info;
-            }
-        }
-        // Counter not found --> create it
-        CounterInfo info = new CounterInfo(counterName);
-        monitoredCounters.add(info);
-        return info;
-    }
 }

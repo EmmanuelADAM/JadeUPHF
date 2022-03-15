@@ -29,12 +29,14 @@ import jade.content.ContentElement;
 /**
  * An abstract descriptor that can hold a generic content element
  * expression.
+ *
  * @author Federico Bergenti - Universita` di Parma
  */
 public interface AbsContentElement extends AbsObject, ContentElement {
     /**
      * Return true if this Abstract Content Element represents a ContentExpression
      * of the SL Grammar (see also FIPA-SL specifications).
+     *
      * @return true if this Abstract Content Element represents a ContentExpression
      * of the SL Grammar (see also FIPA-SL specifications), false otherwise
      */
@@ -43,8 +45,9 @@ public interface AbsContentElement extends AbsObject, ContentElement {
     /**
      * Set the isAContentExpression flag to the passed value.
      * By default, if this method was not called, this value is intialized to false.
+     *
      * @param flag true if this Abstract Content Element represents a ContentExpression
-     * of the SL Grammar (see also FIPA-SL specifications), false otherwise
+     *             of the SL Grammar (see also FIPA-SL specifications), false otherwise
      */
     void setIsAContentExpression(boolean flag);
 }

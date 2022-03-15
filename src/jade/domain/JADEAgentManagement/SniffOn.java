@@ -40,8 +40,8 @@ import java.util.List;
  */
 public class SniffOn implements AgentAction {
 
-    private AID sniffer;
     private final List<AID> sniffedAgents = new ArrayList<>();
+    private AID sniffer;
     private String password;
 
 
@@ -53,15 +53,6 @@ public class SniffOn implements AgentAction {
     }
 
     /**
-     * Set the <code>sniffer</code> slot of this action.
-     *
-     * @param id The agent identifier of the sniffer agent.
-     */
-    public void setSniffer(AID id) {
-        sniffer = id;
-    }
-
-    /**
      * Retrieve the value of the <code>sniffer</code> slot of this
      * action, containing the agent identifier of the sniffer agent.
      *
@@ -70,6 +61,15 @@ public class SniffOn implements AgentAction {
      */
     public AID getSniffer() {
         return sniffer;
+    }
+
+    /**
+     * Set the <code>sniffer</code> slot of this action.
+     *
+     * @param id The agent identifier of the sniffer agent.
+     */
+    public void setSniffer(AID id) {
+        sniffer = id;
     }
 
     /**
@@ -122,16 +122,6 @@ public class SniffOn implements AgentAction {
     }
 
     /**
-     * Set the <code>password</code> slot of this action.
-     *
-     * @param p The password used to authenticate the principal
-     *          requesting this action.
-     */
-    public void setPassword(String p) {
-        password = p;
-    }
-
-    /**
      * Retrieve the value of the <code>password</code> slot of this
      * action, containing the password used to authenticate the
      * principal requesting this action.
@@ -141,6 +131,16 @@ public class SniffOn implements AgentAction {
      */
     public String getPassword() {
         return password;
+    }
+
+    /**
+     * Set the <code>password</code> slot of this action.
+     *
+     * @param p The password used to authenticate the principal
+     *          requesting this action.
+     */
+    public void setPassword(String p) {
+        password = p;
     }
 
 

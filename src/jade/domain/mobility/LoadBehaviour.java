@@ -45,6 +45,13 @@ public class LoadBehaviour implements AgentAction {
     }
 
     /**
+     * @return the name of the class of the behaviour to load
+     */
+    public String getClassName() {
+        return className;
+    }
+
+    /**
      * Sets the name of the class of the behaviour to load
      */
     public void setClassName(String className) {
@@ -52,10 +59,10 @@ public class LoadBehaviour implements AgentAction {
     }
 
     /**
-     * @return the name of the class of the behaviour to load
+     * @return the code of the class of the behaviour to load.
      */
-    public String getClassName() {
-        return className;
+    public byte[] getCode() {
+        return code;
     }
 
     /**
@@ -70,10 +77,11 @@ public class LoadBehaviour implements AgentAction {
     }
 
     /**
-     * @return the code of the class of the behaviour to load.
+     * @return the code of the behaviour to load as the content of a zip
+     * file.
      */
-    public byte[] getCode() {
-        return code;
+    public byte[] getZip() {
+        return zip;
     }
 
     /**
@@ -85,11 +93,10 @@ public class LoadBehaviour implements AgentAction {
     }
 
     /**
-     * @return the code of the behaviour to load as the content of a zip
-     * file.
+     * @return the list of parameters to be passed to the behaviour.
      */
-    public byte[] getZip() {
-        return zip;
+    public List<Parameter> getParameters() {
+        return parameters;
     }
 
     /**
@@ -99,12 +106,5 @@ public class LoadBehaviour implements AgentAction {
      */
     public void setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
-    }
-
-    /**
-     * @return the list of parameters to be passed to the behaviour.
-     */
-    public List<Parameter> getParameters() {
-        return parameters;
     }
 }

@@ -48,23 +48,12 @@ public class ExceptionOntology extends Ontology implements ExceptionVocabulary {
 
     private static final Ontology theInstance = new ExceptionOntology();
 
-    /**
-     * This method returns the unique instance (according to the singleton
-     * pattern) of the Exception-ontology.
-     *
-     * @return The singleton <code>Ontology</code> object, containing the
-     * schemas for the elements of the Exception-ontology.
-     */
-    public static Ontology getInstance() {
-        return theInstance;
-    }
-
     private ExceptionOntology() {
         //#MIDP_EXCLUDE_BEGIN
         super(NAME, BasicOntology.getInstance(), new BCReflectiveIntrospector());
         //#MIDP_EXCLUDE_END
-    	
-		/*#MIDP_INCLUDE_BEGIN    	
+
+		/*#MIDP_INCLUDE_BEGIN
   	super(NAME, BasicOntology.getInstance(), null);
    	#MIDP_INCLUDE_END*/
 
@@ -85,8 +74,8 @@ public class ExceptionOntology extends Ontology implements ExceptionVocabulary {
             add(new PredicateSchema(UNRECOGNISEDPARAMETERVALUE), UnrecognisedParameterValue.class);
             add(new PredicateSchema(INTERNALERROR), InternalError.class);
             //#MIDP_EXCLUDE_END
-			   	  
-			/*#MIDP_INCLUDE_BEGIN    	
+
+			/*#MIDP_INCLUDE_BEGIN
 			add(new PredicateSchema(UNAUTHORISED));
 	  	add(new PredicateSchema(UNSUPPORTEDACT));
 	  	add(new PredicateSchema(UNEXPECTEDACT));
@@ -142,6 +131,17 @@ public class ExceptionOntology extends Ontology implements ExceptionVocabulary {
         } catch (OntologyException oe) {
             oe.printStackTrace();
         }
+    }
+
+    /**
+     * This method returns the unique instance (according to the singleton
+     * pattern) of the Exception-ontology.
+     *
+     * @return The singleton <code>Ontology</code> object, containing the
+     * schemas for the elements of the Exception-ontology.
+     */
+    public static Ontology getInstance() {
+        return theInstance;
     }
 
 

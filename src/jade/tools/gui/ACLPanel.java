@@ -56,7 +56,78 @@ import java.util.Vector;
 public class ACLPanel extends JPanel {
 
     private final Logger logger = Logger.getMyLogger(this.getClass().getName());
+    private final ACLTextField envACLReprTextField = new ACLTextField();
+    private final ACLTextField envPayloadLengthTextField = new ACLTextField();
+    private final ACLTextField envPayloadEncodingTextField = new ACLTextField();
+    private final JTextField envFromTextField = new JTextField();
+    private final JTextField senderTextField = new JTextField();
+    private final ACLPropertyList userpropList = new ACLPropertyList();
+    private final ACLTextField conversationTextField = new ACLTextField();
+    private final ACLTextField languageTextField = new ACLTextField();
+    private final ACLTextField encodingTextField = new ACLTextField();
+    private final ACLTextField ontologyTextField = new ACLTextField();
+    private final ACLComboBox protocolComboBox = new ACLComboBox();
+    private final ACLTextField inreplytoTextField = new ACLTextField();
+    private final ACLTextField replywithTextField = new ACLTextField();
+    private final JTextField replybyTextField = new JTextField();
+    private final ACLComboBox performativesComboBox = new ACLComboBox();
+    private final Vector<JComponent> editsVector = new Vector<>();
+    private final JPanel aclTab = new JPanel();
+    private final GridBagLayout gridBagLayout2 = new GridBagLayout();
+    private final JTabbedPane theTabbedPane = new JTabbedPane();
+    private final JPanel envelopeTab = new JPanel();
+    private final GridBagLayout gridBagLayout3 = new GridBagLayout();
+    private final JScrollPane commentsScrollPane = new JScrollPane();
+    private final EnvCommentsTextArea envCommentsTextArea = new EnvCommentsTextArea();
+    private final ImageIcon zoomIcon =
+            new ImageIcon(this.getClass().getResource("images/zoom.gif"));
+    private final ImageIcon dateIcon =
+            new ImageIcon(this.getClass().getResource("images/date.gif"));
+    private final ImageIcon envelopeIcon =
+            new ImageIcon(this.getClass().getResource("images/envelope.gif"));
+    private final ImageIcon messageIcon =
+            new ImageIcon(this.getClass().getResource("images/message.gif"));
+    GridBagLayout gridBagLayout1 = new GridBagLayout();
+    JLabel senderLabel = new JLabel();
+    JLabel receiverLabel = new JLabel();
+    JLabel replytoLabel = new JLabel();
+    JLabel contentLabel = new JLabel();
+    JLabel languageLabel = new JLabel();
+    JLabel encodingLabel = new JLabel();
+    JLabel ontologyjLabel = new JLabel();
+    JLabel protocolLabel = new JLabel();
+    JLabel inreplytoLabel = new JLabel();
+    JLabel replywithLabel = new JLabel();
+    JLabel replybyLabel = new JLabel();
+    JLabel userpropLabel = new JLabel();
 
+    JLabel convidLabel = new JLabel();
+    JLabel performativeLabel = new JLabel();
+    JButton senderButton = new JButton();
+    JButton replyByButton = new JButton();
+    JLabel toLabel = new JLabel();
+    JLabel fromLabel = new JLabel();
+    JLabel commentsLabel = new JLabel();
+    JLabel aclRepreLabel = new JLabel();
+    JLabel payLoadLabel = new JLabel();
+    JLabel envDateLabel = new JLabel();
+    JLabel intReceiversLabel = new JLabel();
+    JLabel jLabel1 = new JLabel();
+    JTextField envDateTextField = new JTextField();
+    JButton defaultEnvelopeButton = new JButton();
+    JButton fromButton = new JButton();
+    JButton envDateButton = new JButton();
+    JButton contentZoomButton = new JButton();
+    ACLTextArea contentTextArea = new ACLTextArea();
+    private boolean editable = true;
+    private ACLMessage itsMsg = new ACLMessage(ACLMessage.INFORM);
+    private ACLAIDList envToList;
+    private ACLAIDList envIntendedReceiversList;
+    private Agent agent;
+    private ACLAIDList receiverList;
+    private ACLAIDList replytoList;
+    private File currentDir;
+    private Envelope itsEnvelope;
     /**
      * Constructor for the ACLPanel object
      *
@@ -100,7 +171,6 @@ public class ACLPanel extends JPanel {
         }
     }
 
-
     /**
      * Gets the ItsMsg attribute of the ACLPanel object
      *
@@ -109,7 +179,6 @@ public class ACLPanel extends JPanel {
     public ACLMessage getItsMsg() {
         return itsMsg;
     }
-
 
     /**
      * Sets the ItsMsg attribute of the ACLPanel object
@@ -152,7 +221,6 @@ public class ACLPanel extends JPanel {
 
     }
 
-
     /**
      * Sets the ReadOnly attribute of the ACLPanel object
      */
@@ -160,7 +228,6 @@ public class ACLPanel extends JPanel {
         setEnabled(false);
         editable = false;
     }
-
 
     /**
      * Sets the Disabled attribute of the ACLPanel object
@@ -183,7 +250,6 @@ public class ACLPanel extends JPanel {
         }
     }
 
-
     /**
      * Description of the Method
      */
@@ -191,7 +257,6 @@ public class ACLPanel extends JPanel {
         if (logger.isLoggable(Logger.WARNING))
             logger.log(Logger.INFO, "\n" + itsMsg.toString() + "\n");
     }
-
 
     /**
      * Description of the Method
@@ -233,7 +298,6 @@ public class ACLPanel extends JPanel {
         }
     }
 
-
     public void loadACL() {
 
         UIManager.put("FileChooser.openButtonToolTipText", "Open ACLMessage");
@@ -268,7 +332,6 @@ public class ACLPanel extends JPanel {
         }
     }
 
-
     public void doZoomContent() {
 
         ACLContentDialog theDialog = new ACLContentDialog(null, "ACLMessage content", true);
@@ -279,14 +342,12 @@ public class ACLPanel extends JPanel {
         this.contentTextArea.update();
     }
 
-
     void setDefaultEnvelope() {
         itsMsg.setDefaultEnvelope();
         setItsMsg(itsMsg);
         if (logger.isLoggable(Logger.WARNING))
             logger.log(Logger.CONFIG, ":" + this.itsEnvelope.toString());
     }
-
 
     /**
      * Description of the Method
@@ -296,7 +357,6 @@ public class ACLPanel extends JPanel {
     void senderButton_actionPerformed(ActionEvent e) {
         doShowSender();
     }
-
 
     /**
      * Description of the Method
@@ -317,7 +377,6 @@ public class ACLPanel extends JPanel {
 
     }
 
-
     void doShowFrom() {
         ACLAIDDialog aidGui = new ACLAIDDialog(agent);
         AID currentAID = (itsMsg.getEnvelope().getFrom() != null ? itsMsg.getEnvelope().getFrom() : new AID());
@@ -333,7 +392,6 @@ public class ACLPanel extends JPanel {
         }
     }
 
-
     /**
      * Description of the Method
      *
@@ -342,7 +400,6 @@ public class ACLPanel extends JPanel {
     void replyByButton_actionPerformed(ActionEvent e) {
         doShowTimeDialog();
     }
-
 
     /**
      * Description of the Method
@@ -378,7 +435,6 @@ public class ACLPanel extends JPanel {
 
     }
 
-
     void doShowEnvTimeDialog() {
         ACLTimeChooserDialog t = new ACLTimeChooserDialog();
         Date theDate = itsMsg.getEnvelope().getDate();
@@ -411,7 +467,6 @@ public class ACLPanel extends JPanel {
 
     }
 
-
     /**
      * Description of the Method
      *
@@ -425,7 +480,6 @@ public class ACLPanel extends JPanel {
 
     }
 
-
     /**
      * Description of the Method
      *
@@ -434,7 +488,6 @@ public class ACLPanel extends JPanel {
     void senderTextField_mouseClicked(MouseEvent e) {
         doShowSender();
     }
-
 
     /**
      * Description of the Method
@@ -445,36 +498,29 @@ public class ACLPanel extends JPanel {
         doShowTimeDialog();
     }
 
-
     void defaultEnvelopeButton_actionPerformed(ActionEvent e) {
         setDefaultEnvelope();
     }
-
 
     void fromButton_actionPerformed(ActionEvent e) {
         doShowFrom();
     }
 
-
     void envDateButton_actionPerformed(ActionEvent e) {
         this.doShowEnvTimeDialog();
     }
-
 
     void contentZoomButton_actionPerformed(ActionEvent e) {
         doZoomContent();
     }
 
-
     void envFromTextField_mouseClicked(MouseEvent e) {
         doShowFrom();
     }
 
-
     void envDateTextField_mouseClicked(MouseEvent e) {
         this.doShowEnvTimeDialog();
     }
-
 
     /**
      * Description of the Method
@@ -761,11 +807,12 @@ public class ACLPanel extends JPanel {
                 "<b><it>ACC</it></b> for inter-platform messaging.</html>");
     }
 
-
     private class ACLFileFilter extends javax.swing.filechooser.FileFilter {
+        private final String[] extensions = {".acl"};
+
+
         public ACLFileFilter() {
         }
-
 
         /**
          * The description of this filter. For example: "JPG and GIF Images"
@@ -777,95 +824,13 @@ public class ACLPanel extends JPanel {
             return "ACLMessage files (*.acl)";
         }
 
-
         public boolean accept(File pathName) {
             if (pathName.isDirectory()) {
                 return true;
             } else return pathName.isFile() &&
                     (pathName.getName().endsWith(".acl"));
         }
-
-
-        private final String[] extensions = {".acl"};
     }
-
-
-    GridBagLayout gridBagLayout1 = new GridBagLayout();
-    JLabel senderLabel = new JLabel();
-    JLabel receiverLabel = new JLabel();
-    JLabel replytoLabel = new JLabel();
-    JLabel contentLabel = new JLabel();
-    JLabel languageLabel = new JLabel();
-    JLabel encodingLabel = new JLabel();
-    JLabel ontologyjLabel = new JLabel();
-    JLabel protocolLabel = new JLabel();
-    JLabel inreplytoLabel = new JLabel();
-    JLabel replywithLabel = new JLabel();
-    JLabel replybyLabel = new JLabel();
-    JLabel userpropLabel = new JLabel();
-
-    JLabel convidLabel = new JLabel();
-    JLabel performativeLabel = new JLabel();
-    JButton senderButton = new JButton();
-    JButton replyByButton = new JButton();
-    JLabel toLabel = new JLabel();
-    JLabel fromLabel = new JLabel();
-    JLabel commentsLabel = new JLabel();
-    JLabel aclRepreLabel = new JLabel();
-    JLabel payLoadLabel = new JLabel();
-    JLabel envDateLabel = new JLabel();
-    JLabel intReceiversLabel = new JLabel();
-    JLabel jLabel1 = new JLabel();
-    JTextField envDateTextField = new JTextField();
-    JButton defaultEnvelopeButton = new JButton();
-    JButton fromButton = new JButton();
-    JButton envDateButton = new JButton();
-    JButton contentZoomButton = new JButton();
-    ACLTextArea contentTextArea = new ACLTextArea();
-    private final ACLTextField envACLReprTextField = new ACLTextField();
-    private final ACLTextField envPayloadLengthTextField = new ACLTextField();
-    private final ACLTextField envPayloadEncodingTextField = new ACLTextField();
-    private final JTextField envFromTextField = new JTextField();
-    private boolean editable = true;
-    private final JTextField senderTextField = new JTextField();
-    private final ACLPropertyList userpropList = new ACLPropertyList();
-
-    private final ACLTextField conversationTextField = new ACLTextField();
-    private final ACLTextField languageTextField = new ACLTextField();
-    private final ACLTextField encodingTextField = new ACLTextField();
-    private final ACLTextField ontologyTextField = new ACLTextField();
-    private final ACLComboBox protocolComboBox = new ACLComboBox();
-    private final ACLTextField inreplytoTextField = new ACLTextField();
-    private final ACLTextField replywithTextField = new ACLTextField();
-    private final JTextField replybyTextField = new JTextField();
-    private final ACLComboBox performativesComboBox = new ACLComboBox();
-    private ACLMessage itsMsg = new ACLMessage(ACLMessage.INFORM);
-
-    private final Vector<JComponent> editsVector = new Vector<>();
-    private final JPanel aclTab = new JPanel();
-    private final GridBagLayout gridBagLayout2 = new GridBagLayout();
-    private final JTabbedPane theTabbedPane = new JTabbedPane();
-    private final JPanel envelopeTab = new JPanel();
-    private final GridBagLayout gridBagLayout3 = new GridBagLayout();
-    private final JScrollPane commentsScrollPane = new JScrollPane();
-    private final EnvCommentsTextArea envCommentsTextArea = new EnvCommentsTextArea();
-
-    private final ImageIcon zoomIcon =
-            new ImageIcon(this.getClass().getResource("images/zoom.gif"));
-    private final ImageIcon dateIcon =
-            new ImageIcon(this.getClass().getResource("images/date.gif"));
-    private final ImageIcon envelopeIcon =
-            new ImageIcon(this.getClass().getResource("images/envelope.gif"));
-    private final ImageIcon messageIcon =
-            new ImageIcon(this.getClass().getResource("images/message.gif"));
-    private ACLAIDList envToList;
-    private ACLAIDList envIntendedReceiversList;
-    private Agent agent;
-    private ACLAIDList receiverList;
-    private ACLAIDList replytoList;
-
-    private File currentDir;
-    private Envelope itsEnvelope;
 
 }
 //  ***EOF***

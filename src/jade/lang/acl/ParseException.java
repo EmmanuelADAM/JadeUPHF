@@ -13,6 +13,35 @@ package jade.lang.acl;
 public class ParseException extends Exception {
 
     /**
+     * This is the last token that has been consumed successfully.  If
+     * this object has been created due to a parse error, the token
+     * followng this token will (therefore) be the first error token.
+     */
+    public Token currentToken;
+    /**
+     * Each entry in this array is an array of integers.  Each array
+     * of integers represents a sequence of tokens (by their ordinal
+     * values) that is expected at this point of the parse.
+     */
+    public int[][] expectedTokenSequences;
+    /**
+     * This is a reference to the "tokenImage" array of the generated
+     * parser within which the parse error occurred.  This array is
+     * defined in the generated ...Constants interface.
+     */
+    public String[] tokenImage;
+    /**
+     * This variable determines which constructor was used to create
+     * this object and thereby affects the semantics of the
+     * "getMessage" method (see below).
+     */
+    protected boolean specialConstructor;
+    /**
+     * The end of line string for this machine.
+     */
+    protected String eol = System.getProperty("line.separator", "\n");
+
+    /**
      * This constructor is used by the method "generateParseException"
      * in the generated parser.  Calling this constructor generates
      * a new object of this type with the fields "currentToken",
@@ -56,34 +85,6 @@ public class ParseException extends Exception {
     }
 
     /**
-     * This variable determines which constructor was used to create
-     * this object and thereby affects the semantics of the
-     * "getMessage" method (see below).
-     */
-    protected boolean specialConstructor;
-
-    /**
-     * This is the last token that has been consumed successfully.  If
-     * this object has been created due to a parse error, the token
-     * followng this token will (therefore) be the first error token.
-     */
-    public Token currentToken;
-
-    /**
-     * Each entry in this array is an array of integers.  Each array
-     * of integers represents a sequence of tokens (by their ordinal
-     * values) that is expected at this point of the parse.
-     */
-    public int[][] expectedTokenSequences;
-
-    /**
-     * This is a reference to the "tokenImage" array of the generated
-     * parser within which the parse error occurred.  This array is
-     * defined in the generated ...Constants interface.
-     */
-    public String[] tokenImage;
-
-    /**
      * This method has the standard behavior when this object has been
      * created using the standard constructors.  Otherwise, it uses
      * "currentToken" and "expectedTokenSequences" to generate a parse
@@ -103,8 +104,8 @@ public class ParseException extends Exception {
             if (maxSize < expectedTokenSequence.length) {
                 maxSize = expectedTokenSequence.length;
             }
-            for (int j = 0; j < expectedTokenSequence.length; j++) {
-                expected.append(tokenImage[expectedTokenSequence[j]]).append(" ");
+            for (int i : expectedTokenSequence) {
+                expected.append(tokenImage[i]).append(" ");
             }
             if (expectedTokenSequence[expectedTokenSequence.length - 1] != 0) {
                 expected.append("...");
@@ -134,17 +135,12 @@ public class ParseException extends Exception {
     }
 
     /**
-     * The end of line string for this machine.
-     */
-    protected String eol = System.getProperty("line.separator", "\n");
-
-    /**
      * Used to convert raw characters to their escaped version
      * when these raw version cannot be used as part of an ASCII
      * string literal.
      */
     protected String add_escapes(String str) {
-        StringBuffer retval = new StringBuffer();
+        StringBuilder retval = new StringBuilder();
         char ch;
         for (int i = 0; i < str.length(); i++) {
             switch (str.charAt(i)) {

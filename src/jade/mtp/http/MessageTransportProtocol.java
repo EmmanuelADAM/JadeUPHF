@@ -34,6 +34,13 @@
  * @version 0.1
  * @author Nicolas Lhuillier (Motorola Labs)
  * @version 1.0
+ * <p>
+ * MessageTransportProtocol.java
+ * @author Jose Antonio Exposito
+ * @author MARISM-A Development group ( marisma-info@ccd.uab.es )
+ * @version 0.1
+ * @author Nicolas Lhuillier (Motorola Labs)
+ * @version 1.0
  */
 
 /**
@@ -76,7 +83,8 @@ public class MessageTransportProtocol implements MTP {
     private static final String POLICY = "conservative"; //conservative or aggressive
     private static final String PREFIX = "jade_mtp_http_";
     private static final String TIMEOUT = "60000"; // 60 seconds
-
+    private final String FIPA_NAME = "fipa.mts.mtp.http.std";
+    private final Hashtable<String, HTTPServer> addr2srv = new Hashtable<>();
     private int numKA;
     private String proxyHost;
     private int proxyPort;
@@ -85,11 +93,7 @@ public class MessageTransportProtocol implements MTP {
     private boolean policy;
     private boolean keepAlive = false;
     private boolean useProxy = false;
-
     private String[] protocols = {};
-    private final String FIPA_NAME = "fipa.mts.mtp.http.std";
-    private final Hashtable<String, HTTPServer> addr2srv = new Hashtable<>();
-
     //Object Keep-Alive connections
     private KeepAlive ka;
 

@@ -64,16 +64,6 @@ public class PostedMessage implements Event {
     }
 
     /**
-     * Set the <code>sender</code> slot of this event.
-     *
-     * @param id The agent identifier of the agent that sent the
-     *           message.
-     */
-    public void setSender(AID id) {
-        sender = id;
-    }
-
-    /**
      * Retrieve the value of the <code>sender</code> slot of this
      * event, containing the agent identifier of the agent that sent
      * the message.
@@ -86,13 +76,13 @@ public class PostedMessage implements Event {
     }
 
     /**
-     * Set the <code>message</code> slot of this event.
+     * Set the <code>sender</code> slot of this event.
      *
-     * @param msg The ACL message that was posted to the receiver
-     *            agent message queue.
+     * @param id The agent identifier of the agent that sent the
+     *           message.
      */
-    public void setMessage(ACLMessage msg) {
-        message = msg;
+    public void setSender(AID id) {
+        sender = id;
     }
 
     /**
@@ -108,13 +98,13 @@ public class PostedMessage implements Event {
     }
 
     /**
-     * Set the <code>receiver</code> slot of this event.
+     * Set the <code>message</code> slot of this event.
      *
-     * @param id The agent identifier of the agent owning the message
-     *           queue the message was posted to.
+     * @param msg The ACL message that was posted to the receiver
+     *            agent message queue.
      */
-    public void setReceiver(AID id) {
-        receiver = id;
+    public void setMessage(ACLMessage msg) {
+        message = msg;
     }
 
     /**
@@ -127,6 +117,16 @@ public class PostedMessage implements Event {
      */
     public AID getReceiver() {
         return receiver;
+    }
+
+    /**
+     * Set the <code>receiver</code> slot of this event.
+     *
+     * @param id The agent identifier of the agent owning the message
+     *           queue the message was posted to.
+     */
+    public void setReceiver(AID id) {
+        receiver = id;
     }
 
 }

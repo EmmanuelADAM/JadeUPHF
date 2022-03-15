@@ -46,6 +46,9 @@ import java.util.List;
  * @author Giovanni Caire - TILAB
  */
 public class SSContractNetResponder extends SSResponder {
+    public static final String HANDLE_CFP = "Handle-Cfp";
+    public static final String HANDLE_ACCEPT_PROPOSAL = "Handle-Accept-Proposal";
+    public static final String HANDLE_REJECT_PROPOSAL = "Handle-Reject-Proposal";
     /**
      * Key to retrieve from the HashMap of the behaviour the last received
      * CFP ACLMessage
@@ -66,11 +69,6 @@ public class SSContractNetResponder extends SSResponder {
      * REJECT_PROPOSAL ACLMessage
      */
     public final String REJECT_PROPOSAL_KEY = RECEIVED_KEY;
-
-    public static final String HANDLE_CFP = "Handle-Cfp";
-    public static final String HANDLE_ACCEPT_PROPOSAL = "Handle-Accept-Proposal";
-    public static final String HANDLE_REJECT_PROPOSAL = "Handle-Reject-Proposal";
-
     private boolean proposeSent = false;
 
     /**
@@ -115,6 +113,7 @@ public class SSContractNetResponder extends SSResponder {
         registerDSState(b, HANDLE_REJECT_PROPOSAL);
     }
 */
+
     /**
      * Construct a SSContractNetResponder that is activated
      * by the reception of a given initiation CFP message and uses

@@ -34,6 +34,11 @@ import jade.content.Predicate;
 
 public class UnsupportedFunction extends RefuseException implements Predicate {
 
+    /**
+     * @serial
+     */
+    String s;
+
     public UnsupportedFunction() {
         this("unknown-func");
     }
@@ -43,18 +48,13 @@ public class UnsupportedFunction extends RefuseException implements Predicate {
         s = func;
     }
 
-    /**
-     * @serial
-     */
-    String s;
+    public String getFunction() {
+        return s;
+    }
 
     public void setFunction(String a) {
         s = a;
         setMessage("(unsupported-function " + s + ")");
-    }
-
-    public String getFunction() {
-        return s;
     }
 
 }

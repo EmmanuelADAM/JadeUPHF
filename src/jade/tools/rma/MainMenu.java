@@ -41,12 +41,6 @@ class MainMenu extends JMenuBar {
     private JMenuItem tmp;
 
 
-    void paintM(boolean enable, RMAAction obj) {
-        tmp = menu.add(obj);
-        tmp.setEnabled(enable);
-    }
-
-
     public MainMenu(Frame mainWnd, ActionProcessor actPro) {
 
         super();
@@ -105,4 +99,9 @@ class MainMenu extends JMenuBar {
         // builds the popupmenu
 
     } // End Builder
+
+    void paintM(boolean enable, RMAAction obj) {
+        tmp = menu.add(obj);
+        tmp.setEnabled(enable);
+    }
 }

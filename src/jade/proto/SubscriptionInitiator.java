@@ -84,6 +84,15 @@ public class SubscriptionInitiator extends Initiator {
 
     // Private data store keys (can't be static since if we register another instance of this class as stare of the FSM
     //using the same data store the new values overrides the old one.
+    // FSM states names specific to the Subscription protocol
+    private static final String HANDLE_AGREE = "Handle-agree";
+    private static final String HANDLE_REFUSE = "Handle-refuse";
+    private static final String HANDLE_INFORM = "Handle-inform";
+    private static final String HANDLE_ALL_RESPONSES = "Handle-all-responses";
+    private static final String CHECK_AGAIN = "Check-again";
+    // States exit values
+    private static final int ALL_RESPONSES_RECEIVED = 1;
+    private static final int TERMINATED = 2;
     /**
      * key to retrieve from the HashMap of the behaviour the subscription ACLMessage
      * object passed in the constructor of the class.
@@ -105,29 +114,9 @@ public class SubscriptionInitiator extends Initiator {
      * ACLMessage objects that have been received as responses.
      **/
     public final String ALL_RESPONSES_KEY = "__all-responses" + hashCode();
-
-    // FSM states names specific to the Subscription protocol
-    private static final String HANDLE_AGREE = "Handle-agree";
-    private static final String HANDLE_REFUSE = "Handle-refuse";
-    private static final String HANDLE_INFORM = "Handle-inform";
-    private static final String HANDLE_ALL_RESPONSES = "Handle-all-responses";
-    private static final String CHECK_AGAIN = "Check-again";
-
-    // States exit values
-    private static final int ALL_RESPONSES_RECEIVED = 1;
-    private static final int TERMINATED = 2;
-
     // If set to true all expected responses have been received
     private boolean allResponsesReceived = false;
-
-    /**
-     * Construct a <code>SubscriptionInitiator</code> with an empty HashMap
-     *
-     * @see #SubscriptionInitiator(Agent, ACLMessage, HashMap, HashMap)
-     **/
-    public SubscriptionInitiator(Agent a, ACLMessage msg) {
-        this(a, msg, new HashMap<>(), new HashMap<>());
-    }
+    private String[] toBeReset = null;
 
     /**
      * Construct a <code>SubscriptionInitiator</code> with a given HashMap
@@ -144,82 +133,90 @@ public class SubscriptionInitiator extends Initiator {
      * @param mapMessagesList The <code>HashMap</code>  of messages list that will be used by this <code>SubscriptionInitiator</code>
      * deprecated
     public SubscriptionInitiator(Agent a, ACLMessage msg, HashMap<String, List<ACLMessage>> mapMessagesList) {
-        super(a, msg, mapMessagesList);
+    super(a, msg, mapMessagesList);
 
-        // Register the FSM transitions specific to the Achieve-RE protocol
-        registerTransition(CHECK_IN_SEQ, HANDLE_AGREE, ACLMessage.AGREE);
-        registerTransition(CHECK_IN_SEQ, HANDLE_INFORM, ACLMessage.INFORM);
-        registerTransition(CHECK_IN_SEQ, HANDLE_REFUSE, ACLMessage.REFUSE);
-        registerDefaultTransition(HANDLE_AGREE, CHECK_SESSIONS);
-        registerDefaultTransition(HANDLE_INFORM, CHECK_SESSIONS);
-        registerDefaultTransition(HANDLE_REFUSE, CHECK_SESSIONS);
-        registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, ALL_RESPONSES_RECEIVED);
-        registerTransition(CHECK_SESSIONS, DUMMY_FINAL, TERMINATED);
-        registerDefaultTransition(HANDLE_ALL_RESPONSES, CHECK_AGAIN);
-        registerTransition(CHECK_AGAIN, DUMMY_FINAL, 0);
-        registerDefaultTransition(CHECK_AGAIN, RECEIVE_REPLY, getToBeReset());
+    // Register the FSM transitions specific to the Achieve-RE protocol
+    registerTransition(CHECK_IN_SEQ, HANDLE_AGREE, ACLMessage.AGREE);
+    registerTransition(CHECK_IN_SEQ, HANDLE_INFORM, ACLMessage.INFORM);
+    registerTransition(CHECK_IN_SEQ, HANDLE_REFUSE, ACLMessage.REFUSE);
+    registerDefaultTransition(HANDLE_AGREE, CHECK_SESSIONS);
+    registerDefaultTransition(HANDLE_INFORM, CHECK_SESSIONS);
+    registerDefaultTransition(HANDLE_REFUSE, CHECK_SESSIONS);
+    registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, ALL_RESPONSES_RECEIVED);
+    registerTransition(CHECK_SESSIONS, DUMMY_FINAL, TERMINATED);
+    registerDefaultTransition(HANDLE_ALL_RESPONSES, CHECK_AGAIN);
+    registerTransition(CHECK_AGAIN, DUMMY_FINAL, 0);
+    registerDefaultTransition(CHECK_AGAIN, RECEIVE_REPLY, getToBeReset());
 
-        // Create and register the states specific to the Subscription protocol
-        Behaviour b;
-        // HANDLE_AGREE
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895820003L;
+    // Create and register the states specific to the Subscription protocol
+    Behaviour b;
+    // HANDLE_AGREE
+    b = new OneShotBehaviour(myAgent) {
+    @Serial private static final long serialVersionUID = 3487495895820003L;
 
-            public void action() {
-                handleAgree(getMapMessages().get(REPLY_K));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_AGREE);
-
-        // HANDLE_REFUSE
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895820004L;
-
-            public void action() {
-                handleRefuse(getMapMessages().get(REPLY_K));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_REFUSE);
-
-        // HANDLE_INFORM
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895820006L;
-
-            public void action() {
-                handleInform(getMapMessages().get(REPLY_K));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_INFORM);
-
-        // HANDLE_ALL_RESPONSES
-        b = new OneShotBehaviour(myAgent) {
-
-            public void action() {
-                handleAllResponses(getMapMessagesList().get(ALL_RESPONSES_KEY));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_ALL_RESPONSES);
-
-        // CHECK_AGAIN
-        b = new OneShotBehaviour(myAgent) {
-            public void action() {
-            }
-
-            public int onEnd() {
-                return mapSessions.size();
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, CHECK_AGAIN);
+    public void action() {
+    handleAgree(getMapMessages().get(REPLY_K));
     }
-    */
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, HANDLE_AGREE);
+
+    // HANDLE_REFUSE
+    b = new OneShotBehaviour(myAgent) {
+    @Serial private static final long serialVersionUID = 3487495895820004L;
+
+    public void action() {
+    handleRefuse(getMapMessages().get(REPLY_K));
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, HANDLE_REFUSE);
+
+    // HANDLE_INFORM
+    b = new OneShotBehaviour(myAgent) {
+    @Serial private static final long serialVersionUID = 3487495895820006L;
+
+    public void action() {
+    handleInform(getMapMessages().get(REPLY_K));
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, HANDLE_INFORM);
+
+    // HANDLE_ALL_RESPONSES
+    b = new OneShotBehaviour(myAgent) {
+
+    public void action() {
+    handleAllResponses(getMapMessagesList().get(ALL_RESPONSES_KEY));
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, HANDLE_ALL_RESPONSES);
+
+    // CHECK_AGAIN
+    b = new OneShotBehaviour(myAgent) {
+    public void action() {
+    }
+
+    public int onEnd() {
+    return mapSessions.size();
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, CHECK_AGAIN);
+    }
+     */
+
+    /**
+     * Construct a <code>SubscriptionInitiator</code> with an empty HashMap
+     *
+     * @see #SubscriptionInitiator(Agent, ACLMessage, HashMap, HashMap)
+     **/
+    public SubscriptionInitiator(Agent a, ACLMessage msg) {
+        this(a, msg, new HashMap<>(), new HashMap<>());
+    }
+
+    //#APIDOC_EXCLUDE_BEGIN
 
     /**
      * Construct a <code>SubscriptionInitiator</code> with a given HashMap
@@ -318,8 +315,6 @@ public class SubscriptionInitiator extends Initiator {
         registerState(b, CHECK_AGAIN);
     }
 
-    //#APIDOC_EXCLUDE_BEGIN
-
     /**
      * This method is called internally by the framework and is not intended
      * to be called by the user
@@ -327,7 +322,6 @@ public class SubscriptionInitiator extends Initiator {
     protected List<ACLMessage> prepareInitiations(ACLMessage initiation) {
         return prepareSubscriptions(initiation);
     }
-
 
     /**
      * Check whether a reply is in-sequence and update the appropriate Session.
@@ -342,14 +336,17 @@ public class SubscriptionInitiator extends Initiator {
             if (s.update(perf)) {
                 // The reply is compliant to the protocol
                 switch (s.getState()) {
-                    case Session.POSITIVE_RESPONSE_RECEIVED,  Session.NEGATIVE_RESPONSE_RECEIVED-> {
+                    case Session.POSITIVE_RESPONSE_RECEIVED, Session.NEGATIVE_RESPONSE_RECEIVED -> {
                         // The reply is a response
                         var allRsp = getMapMessagesList().get(ALL_RESPONSES_KEY);
                         allRsp.add(reply);
                     }
-                    case Session.NOTIFICATION_RECEIVED->{}
-                    default -> {return false;}
-                        // Something went wrong. Return false --> we will go to the HANDLE_OUT_OF_SEQ state
+                    case Session.NOTIFICATION_RECEIVED -> {
+                    }
+                    default -> {
+                        return false;
+                    }
+                    // Something went wrong. Return false --> we will go to the HANDLE_OUT_OF_SEQ state
                 }
                 // If the session is completed then remove it.
                 if (s.isCompleted()) {
@@ -412,8 +409,6 @@ public class SubscriptionInitiator extends Initiator {
         }
         return ret;
     }
-
-    private String[] toBeReset = null;
 
     /**
      *

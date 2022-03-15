@@ -45,6 +45,8 @@ import java.util.Collection;
  */
 public abstract class CompositeBehaviour extends Behaviour {
 
+    //#APIDOC_EXCLUDE_BEGIN
+    protected boolean currentExecuted = false;
     /**
      * This variable marks the state when no child-behaviour has been run yet.
      */
@@ -53,12 +55,8 @@ public abstract class CompositeBehaviour extends Behaviour {
      * This variable marks the state when all child-behaviours have been run.
      */
     private boolean finished = false;
-
     private boolean currentDone;
     private int currentResult;
-
-    //#APIDOC_EXCLUDE_BEGIN
-    protected boolean currentExecuted = false;
     //#APIDOC_EXCLUDE_END
 
 

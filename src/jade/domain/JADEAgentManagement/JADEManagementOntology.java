@@ -50,23 +50,12 @@ public class JADEManagementOntology extends Ontology implements JADEManagementVo
     // The singleton instance of this ontology
     private static final Ontology theInstance = new JADEManagementOntology();
 
-    /**
-     * This method returns the unique instance (according to the singleton
-     * pattern) of the JADE-Agent-Management-ontology.
-     *
-     * @return The singleton <code>Ontology</code> object, containing the
-     * schemas for the elements of the JADE-Agent-Management-ontology.
-     */
-    public static Ontology getInstance() {
-        return theInstance;
-    }
-
     private JADEManagementOntology() {
         //#MIDP_EXCLUDE_BEGIN
         super(NAME, new Ontology[]{ExceptionOntology.getInstance(), SerializableOntology.getInstance()}, new BCReflectiveIntrospector());
         //#MIDP_EXCLUDE_END
-    	
-		/*#MIDP_INCLUDE_BEGIN    	
+
+		/*#MIDP_INCLUDE_BEGIN
   	super(NAME, ExceptionOntology.getInstance(), null);
    	#MIDP_INCLUDE_END*/
 
@@ -97,13 +86,13 @@ public class JADEManagementOntology extends Ontology implements JADEManagementVo
             add(new PredicateSchema(ALREADYREGISTERED), AlreadyRegistered.class);
             add(new PredicateSchema(NOTREGISTERED), NotRegistered.class);
             //#MIDP_EXCLUDE_END
-    	
-			/*#MIDP_INCLUDE_BEGIN    	
+
+			/*#MIDP_INCLUDE_BEGIN
     	// Concepts definitions
     	add(new ConceptSchema(LOCATION));
     	add(new ConceptSchema(CONTAINERID));
     	add(new ConceptSchema(PLATFORMID));
-    	
+
     	// AgentActions definitions
     	add(new AgentActionSchema(SHUTDOWNPLATFORM));
     	add(new AgentActionSchema(KILLCONTAINER));
@@ -196,6 +185,17 @@ public class JADEManagementOntology extends Ontology implements JADEManagementVo
         } catch (OntologyException oe) {
             oe.printStackTrace();
         }
+    }
+
+    /**
+     * This method returns the unique instance (according to the singleton
+     * pattern) of the JADE-Agent-Management-ontology.
+     *
+     * @return The singleton <code>Ontology</code> object, containing the
+     * schemas for the elements of the JADE-Agent-Management-ontology.
+     */
+    public static Ontology getInstance() {
+        return theInstance;
     }
 
     /**

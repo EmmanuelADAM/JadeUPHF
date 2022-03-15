@@ -61,20 +61,20 @@ public interface Command {
     Object[] getParams();
 
     /**
-     * Assign a return value to this command, so that the original
-     * command issuer can retrieve it.
-     *
-     * @param rv The desired return value for this command object.
-     */
-    void setReturnValue(Object rv);
-
-    /**
      * Obtain the return value for this command.
      *
      * @return The value that is to be returned back to the issuer of
      * this <code>Command</code> object.
      */
     Object getReturnValue();
+
+    /**
+     * Assign a return value to this command, so that the original
+     * command issuer can retrieve it.
+     *
+     * @param rv The desired return value for this command object.
+     */
+    void setReturnValue(Object rv);
 
     /**
      * Get the JADEPrincipal of the actor, respnsible for this Command object.

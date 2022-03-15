@@ -48,20 +48,20 @@ import java.net.URL;
 
 /**
  * Class declaration
+ *
  * @author Giovanni Caire - TILAB
  */
 class HTTPClientConnection extends Connection {
     private static final int READY = 0;
     private static final int WRITTEN = 1;
     private static final int CLOSED = -1;
-
-    //#MIDP_EXCLUDE_BEGIN
-    private HttpURLConnection hc;
     //#MIDP_EXCLUDE_END
 	/*#MIDP_INCLUDE_BEGIN
     private HttpConnection hc;
     #MIDP_INCLUDE_END*/
     private final String url;
+    //#MIDP_EXCLUDE_BEGIN
+    private HttpURLConnection hc;
     private InputStream is;
     private OutputStream os;
     private int state;
@@ -176,6 +176,7 @@ class HTTPClientConnection extends Connection {
     }
 
     /**
+     *
      */
     public void close() throws IOException {
         state = CLOSED;
@@ -204,6 +205,7 @@ class HTTPClientConnection extends Connection {
     //#MIDP_EXCLUDE_BEGIN
 
     /**
+     *
      */
     public String getRemoteHost() throws Exception {
         throw new Exception("Unsupported operation");

@@ -41,23 +41,14 @@ import java.util.List;
  */
 public class APDescription implements Concept {
 
-    private String name;
     private final List<APService> services = new ArrayList<>(1);
+    private String name;
 
 
     /**
      * Default constructor.
      */
     public APDescription() {
-    }
-
-    /**
-     * Set the <code>name</code> slot of this object.
-     *
-     * @param n The string for the platform name.
-     */
-    public void setName(String n) {
-        name = n;
     }
 
     /**
@@ -68,6 +59,15 @@ public class APDescription implements Concept {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Set the <code>name</code> slot of this object.
+     *
+     * @param n The string for the platform name.
+     */
+    public void setName(String n) {
+        name = n;
     }
 
     /**

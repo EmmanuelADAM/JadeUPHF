@@ -33,8 +33,9 @@ package jade.tools.sniffer;
 /**
  * This class is useful to represent the actions that must perform
  * with the agents.
- * @see    AgentAction
- * @see    SnifferAction
+ *
+ * @see AgentAction
+ * @see SnifferAction
  */
 
 abstract class FixedAction extends SnifferAction {

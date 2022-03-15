@@ -32,20 +32,22 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 /**
- This class is an OutputStream whose output is duplicated and
- forwarded to two different output streams.
- @author Giovanni Caire - TILab
+ * This class is an OutputStream whose output is duplicated and
+ * forwarded to two different output streams.
+ *
+ * @author Giovanni Caire - TILab
  */
 public class PrintStreamSplitter extends PrintStream {
     private final PrintStream s1;
     private final PrintStream s2;
 
     /**
-     Create a new stream that feeds the output to the two given
-     streams.
-     @param s1 The first stream to write to.
-     @param s2 The second stream to write to.
-     @throws IOException If some stream operation fails.
+     * Create a new stream that feeds the output to the two given
+     * streams.
+     *
+     * @param s1 The first stream to write to.
+     * @param s2 The second stream to write to.
+     * @throws IOException If some stream operation fails.
      */
     public PrintStreamSplitter(PrintStream s1, PrintStream s2) throws IOException {
         super(new OutputStream() {
@@ -58,8 +60,9 @@ public class PrintStreamSplitter extends PrintStream {
     }
 
     /**
-     Print a Java object to the two streams.
-     @param obj The Java object to print.
+     * Print a Java object to the two streams.
+     *
+     * @param obj The Java object to print.
      */
     public void print(Object obj) {
         s1.print(obj);
@@ -67,8 +70,9 @@ public class PrintStreamSplitter extends PrintStream {
     }
 
     /**
-     Print a string to the two streams.
-     @param str The string to print.
+     * Print a string to the two streams.
+     *
+     * @param str The string to print.
      */
     public void print(String str) {
         s1.print(str);
@@ -76,7 +80,7 @@ public class PrintStreamSplitter extends PrintStream {
     }
 
     /**
-     Print a new line to the two streams.
+     * Print a new line to the two streams.
      */
     public void println() {
         s1.println();
@@ -84,8 +88,9 @@ public class PrintStreamSplitter extends PrintStream {
     }
 
     /**
-     Print a Java object and a new line to the two streams.
-     @param obj The Java object to print.
+     * Print a Java object and a new line to the two streams.
+     *
+     * @param obj The Java object to print.
      */
     public void println(Object obj) {
         s1.println(obj);
@@ -93,8 +98,9 @@ public class PrintStreamSplitter extends PrintStream {
     }
 
     /**
-     Print a string and a new line to the two streams.
-     @param str The string to print.
+     * Print a string and a new line to the two streams.
+     *
+     * @param str The string to print.
      */
     public void println(String str) {
         s1.println(str);

@@ -51,15 +51,6 @@ public class MobileAgentDescription implements Concept {
     }
 
     /**
-     * Set the <code>name</code> slot of this action.
-     *
-     * @param id The agent identifier of the described agent.
-     */
-    public void setName(AID id) {
-        name = id;
-    }
-
-    /**
      * Retrieve the value of the <code>name</code> slot of this event,
      * containing the agent identifier of the described agent.
      *
@@ -71,13 +62,12 @@ public class MobileAgentDescription implements Concept {
     }
 
     /**
-     * Set the <code>destination</code> slot of this action.
+     * Set the <code>name</code> slot of this action.
      *
-     * @param d The destination of the mobility operation performed by
-     *          the described agent.
+     * @param id The agent identifier of the described agent.
      */
-    public void setDestination(Location d) {
-        destination = d;
+    public void setName(AID id) {
+        name = id;
     }
 
     /**
@@ -93,12 +83,13 @@ public class MobileAgentDescription implements Concept {
     }
 
     /**
-     * Set the <code>agent-profile</code> slot of this action.
+     * Set the <code>destination</code> slot of this action.
      *
-     * @param ap The profile for the described agent.
+     * @param d The destination of the mobility operation performed by
+     *          the described agent.
      */
-    public void setAgentProfile(MobileAgentProfile ap) {
-        agentProfile = ap;
+    public void setDestination(Location d) {
+        destination = d;
     }
 
     /**
@@ -113,12 +104,12 @@ public class MobileAgentDescription implements Concept {
     }
 
     /**
-     * Set the <code>agent-version</code> slot of this action.
+     * Set the <code>agent-profile</code> slot of this action.
      *
-     * @param v The version string for the described agent.
+     * @param ap The profile for the described agent.
      */
-    public void setAgentVersion(String v) {
-        agentVersion = v;
+    public void setAgentProfile(MobileAgentProfile ap) {
+        agentProfile = ap;
     }
 
     /**
@@ -134,12 +125,12 @@ public class MobileAgentDescription implements Concept {
     }
 
     /**
-     * Set the <code>signature</code> slot of this action.
+     * Set the <code>agent-version</code> slot of this action.
      *
-     * @param s The signature string for the described agent.
+     * @param v The version string for the described agent.
      */
-    public void setSignature(String s) {
-        signature = s;
+    public void setAgentVersion(String v) {
+        agentVersion = v;
     }
 
     /**
@@ -151,6 +142,15 @@ public class MobileAgentDescription implements Concept {
      */
     public String getSignature() {
         return signature;
+    }
+
+    /**
+     * Set the <code>signature</code> slot of this action.
+     *
+     * @param s The signature string for the described agent.
+     */
+    public void setSignature(String s) {
+        signature = s;
     }
 
 }

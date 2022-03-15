@@ -54,23 +54,20 @@ import java.util.List;
 class Scheduler implements Serializable {
 
 
+    /**
+     * @serial
+     */
+    private final Agent owner;
     //#MIDP_EXCLUDE_BEGIN
     protected List<Behaviour> readyBehaviours = new LinkedList<>();
-    protected List<Behaviour> blockedBehaviours = new LinkedList<>();
     //#MIDP_EXCLUDE_END
 	/*#MIDP_INCLUDE_BEGIN
 	 protected Vector readyBehaviours = new Vector();
 	 protected Vector blockedBehaviours = new Vector();
 	 #MIDP_INCLUDE_END*/
-
-
+    protected List<Behaviour> blockedBehaviours = new LinkedList<>();
     /**
-     @serial
-     */
-    private final Agent owner;
-
-    /**
-     @serial
+     * @serial
      */
     private int currentIndex;
 
@@ -128,16 +125,16 @@ class Scheduler implements Serializable {
     }
 
     /**
-     Restarts all behaviours. This method simply calls
-     Behaviour.restart() on every behaviour. The
-     Behaviour.restart() method then notifies the agent (with the
-     Agent.notifyRestarted() method), causing Scheduler.restart() to
-     be called (this also moves behaviours from the blocked queue to
-     the ready queue --> we must copy all behaviours into a temporary
-     buffer to avoid concurrent modification exceptions).
-     Why not restarting only blocked behaviours?
-     Some ready behaviour can be a ParallelBehaviour with some of its
-     children blocked. These children must be restarted too.
+     * Restarts all behaviours. This method simply calls
+     * Behaviour.restart() on every behaviour. The
+     * Behaviour.restart() method then notifies the agent (with the
+     * Agent.notifyRestarted() method), causing Scheduler.restart() to
+     * be called (this also moves behaviours from the blocked queue to
+     * the ready queue --> we must copy all behaviours into a temporary
+     * buffer to avoid concurrent modification exceptions).
+     * Why not restarting only blocked behaviours?
+     * Some ready behaviour can be a ParallelBehaviour with some of its
+     * children blocked. These children must be restarted too.
      */
     public synchronized void restartAll() {
 
@@ -189,7 +186,7 @@ class Scheduler implements Serializable {
     }
 
     /**
-     Removes a specified behaviour from the scheduler
+     * Removes a specified behaviour from the scheduler
      */
     public synchronized void remove(Behaviour b) {
         boolean found = removeFromBlocked(b);
@@ -204,8 +201,8 @@ class Scheduler implements Serializable {
     }
 
     /**
-     Selects the appropriate behaviour for execution, with a trivial
-     round-robin algorithm.
+     * Selects the appropriate behaviour for execution, with a trivial
+     * round-robin algorithm.
      */
     public synchronized Behaviour schedule() throws InterruptedException {
         while (readyBehaviours.isEmpty()) {

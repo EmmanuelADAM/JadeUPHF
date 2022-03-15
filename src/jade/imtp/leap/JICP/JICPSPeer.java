@@ -51,9 +51,9 @@ import java.net.Socket;
 
 /**
  * JICPSPeer  -  JICP Secure Peer
- *
- * This JICP peer uses secure connections 
- * with or without mutual authentication 
+ * <p>
+ * This JICP peer uses secure connections
+ * with or without mutual authentication
  * of the endpoints by using digital certificates.
  * It leverages SSL/TLS.
  *
@@ -68,6 +68,23 @@ public class JICPSPeer extends JICPPeer {
 
     protected static Logger myLogger = Logger.getMyLogger(JICPSPeer.class.getName());
     private SSLContext ctx = null;
+    private boolean useSSLAuth = false;
+
+    private static String getChiperDebugString(SSLServerSocket sss) {
+        // debug
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n--EnabledProtocols:\n");
+        String[] prot = sss.getEnabledProtocols();
+        for (String item : prot) sb.append("  ").append(item);
+        sb.append("\n--EnabledCipherSuites:\n");
+        String[] suite = sss.getEnabledCipherSuites();
+        for (String value : suite) sb.append("  ").append(value);
+        sb.append("\n--SupportedCipherSuites\n");
+        String[] supported_suite = sss.getSupportedCipherSuites();
+        for (String s : supported_suite) sb.append("  ").append(s);
+        sb.append("\n--\n");
+        return sb.toString();
+    }
 
     public TransportAddress activate(Listener l, String peerID, Profile p) throws ICPException {
         if (myLogger.isLoggable(Logger.FINE)) {
@@ -89,8 +106,8 @@ public class JICPSPeer extends JICPPeer {
     }
 
     /**
-     Subclasses may re-define this method to return their own
-     ConnectionFactory
+     * Subclasses may re-define this method to return their own
+     * ConnectionFactory
      */
     public ConnectionFactory getConnectionFactory() {
         return new ConnectionFactory() {
@@ -163,22 +180,6 @@ public class JICPSPeer extends JICPPeer {
         return sss;
     } // end getServerSocketWithAuth
 
-    private static String getChiperDebugString(SSLServerSocket sss) {
-        // debug
-        StringBuffer sb = new StringBuffer();
-        sb.append("\n--EnabledProtocols:\n");
-        String[] prot = sss.getEnabledProtocols();
-        for (String item : prot) sb.append("  ").append(item);
-        sb.append("\n--EnabledCipherSuites:\n");
-        String[] suite = sss.getEnabledCipherSuites();
-        for (String value : suite) sb.append("  ").append(value);
-        sb.append("\n--SupportedCipherSuites\n");
-        String[] supported_suite = sss.getSupportedCipherSuites();
-        for (String s : supported_suite) sb.append("  ").append(s);
-        sb.append("\n--\n");
-        return sb.toString();
-    }
-
     private ServerSocket getServerSocketNoAuth(String host, int port, boolean changePortIfBusy) throws ICPException {
         // Create the SSLContext if necessary
         if (ctx == null) {
@@ -222,9 +223,6 @@ public class JICPSPeer extends JICPPeer {
 
         return sss;
     } // end getServerSocketNoAuth(..)
-
-
-    private boolean useSSLAuth = false;
 
     private boolean getUseSSLAuth() { // if needed, may become public
         return useSSLAuth;

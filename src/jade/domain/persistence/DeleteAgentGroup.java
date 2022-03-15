@@ -38,27 +38,26 @@ import jade.content.AgentAction;
  */
 public class DeleteAgentGroup implements AgentAction {
 
-    public DeleteAgentGroup() {
-    }
+    private AgentGroup group;
+    private String repository;
 
-    public void setGroup(AgentGroup ag) {
-        group = ag;
+    public DeleteAgentGroup() {
     }
 
     public AgentGroup getGroup() {
         return group;
     }
 
-    public void setRepository(String r) {
-        repository = r;
+    public void setGroup(AgentGroup ag) {
+        group = ag;
     }
 
     public String getRepository() {
         return repository;
     }
 
-
-    private AgentGroup group;
-    private String repository;
+    public void setRepository(String r) {
+        repository = r;
+    }
 
 }

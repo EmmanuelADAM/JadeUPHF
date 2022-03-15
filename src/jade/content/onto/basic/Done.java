@@ -28,9 +28,10 @@ import jade.content.Concept;
 import jade.content.Predicate;
 
 /**
- This class implements the <code>done</code> operator of the
- FIPA SL0 action.
- @author Giovanni Caire - TILAB
+ * This class implements the <code>done</code> operator of the
+ * FIPA SL0 action.
+ *
+ * @author Giovanni Caire - TILAB
  */
 public class Done implements Predicate {
     private Concept action;

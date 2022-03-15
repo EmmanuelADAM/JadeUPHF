@@ -63,17 +63,6 @@ public class ReceivedMessage implements Event {
         return NAME;
     }
 
-
-    /**
-     * Set the <code>sender</code> slot of this event.
-     *
-     * @param id The agent identifier of the agent that sent the
-     *           message.
-     */
-    public void setSender(AID id) {
-        sender = id;
-    }
-
     /**
      * Retrieve the value of the <code>sender</code> slot of this
      * event, containing the agent identifier of the agent that sent
@@ -87,13 +76,13 @@ public class ReceivedMessage implements Event {
     }
 
     /**
-     * Set the <code>message</code> slot of this event.
+     * Set the <code>sender</code> slot of this event.
      *
-     * @param msg The ACL message that was extracted from the receiver
-     *            agent message queue.
+     * @param id The agent identifier of the agent that sent the
+     *           message.
      */
-    public void setMessage(ACLMessage msg) {
-        message = msg;
+    public void setSender(AID id) {
+        sender = id;
     }
 
     /**
@@ -109,13 +98,13 @@ public class ReceivedMessage implements Event {
     }
 
     /**
-     * Set the <code>receiver</code> slot of this event.
+     * Set the <code>message</code> slot of this event.
      *
-     * @param id The agent identifier of the agent owning the message
-     *           queue the message was extracted from.
+     * @param msg The ACL message that was extracted from the receiver
+     *            agent message queue.
      */
-    public void setReceiver(AID id) {
-        receiver = id;
+    public void setMessage(ACLMessage msg) {
+        message = msg;
     }
 
     /**
@@ -128,6 +117,16 @@ public class ReceivedMessage implements Event {
      */
     public AID getReceiver() {
         return receiver;
+    }
+
+    /**
+     * Set the <code>receiver</code> slot of this event.
+     *
+     * @param id The agent identifier of the agent owning the message
+     *           queue the message was extracted from.
+     */
+    public void setReceiver(AID id) {
+        receiver = id;
     }
 
 }

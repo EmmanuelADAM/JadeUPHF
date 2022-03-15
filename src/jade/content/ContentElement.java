@@ -28,9 +28,10 @@ package jade.content;
 import java.io.Serializable;
 
 /**
- * Interface representing a generic content element, i.e. an 
- * expression that can be meaningfully used as the content of 
+ * Interface representing a generic content element, i.e. an
+ * expression that can be meaningfully used as the content of
  * an ACL message.
+ *
  * @author Federico Bergenti - Universita` di Parma
  */
 public interface ContentElement extends Serializable {

@@ -50,15 +50,6 @@ public class UninstallMTP implements AgentAction {
     }
 
     /**
-     * Set the <code>address</code> slot of this action.
-     *
-     * @param a The address URL of the MTP endpoint to uninstall.
-     */
-    public void setAddress(String a) {
-        address = a;
-    }
-
-    /**
      * Retrieve the value of the <code>address</code> slot of this
      * action, containing the address URL of the MTP to uninstall.
      *
@@ -70,13 +61,12 @@ public class UninstallMTP implements AgentAction {
     }
 
     /**
-     * Set the <code>container</code> slot of this action.
+     * Set the <code>address</code> slot of this action.
      *
-     * @param cid The container identifier of the container where the
-     *            MTP to uninstall is deployed.
+     * @param a The address URL of the MTP endpoint to uninstall.
      */
-    public void setContainer(ContainerID cid) {
-        container = cid;
+    public void setAddress(String a) {
+        address = a;
     }
 
     /**
@@ -89,6 +79,16 @@ public class UninstallMTP implements AgentAction {
      */
     public ContainerID getContainer() {
         return container;
+    }
+
+    /**
+     * Set the <code>container</code> slot of this action.
+     *
+     * @param cid The container identifier of the container where the
+     *            MTP to uninstall is deployed.
+     */
+    public void setContainer(ContainerID cid) {
+        container = cid;
     }
 
 

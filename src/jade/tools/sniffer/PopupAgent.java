@@ -39,6 +39,7 @@ import System.Windows.Forms.*;
 /**
  * This is the PopupMenu that will appear if the user click
  * on the canvas of agents.
+ *
  * @see PopupMessage
  */
 
@@ -50,8 +51,6 @@ public class PopupAgent
 	extends ContextMenu
 	#DOTNET_INCLUDE_END*/ {
 
-    //#DOTNET_EXCLUDE_BEGIN
-    private JMenuItem tmp;
     //#DOTNET_EXCLUDE_END
  /*#DOTNET_INCLUDE_BEGIN
  private MenuItem tmp;
@@ -60,8 +59,9 @@ public class PopupAgent
     private final PopSniffAgent popSniffAg;
     private final PopNoSniffAgent popNoSniffAg;
     private final PopShowAgent popShowAg;
-
     protected Agent agent;
+    //#DOTNET_EXCLUDE_BEGIN
+    private JMenuItem tmp;
 
     public PopupAgent(Sniffer mySniffer, MMCanvas canvAgent) {
         super();

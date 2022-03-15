@@ -8,6 +8,8 @@
 package FIPA;
 
 public class stringsHelper {
+    private static org.omg.CORBA.TypeCode _tc;
+
     // It is useless to have instances of this class
     private stringsHelper() {
     }
@@ -44,8 +46,6 @@ public class stringsHelper {
         write(out, that);
         a.read_value(out.create_input_stream(), type());
     }
-
-    private static org.omg.CORBA.TypeCode _tc;
 
     synchronized public static org.omg.CORBA.TypeCode type() {
         if (_tc == null)

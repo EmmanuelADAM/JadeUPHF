@@ -29,7 +29,7 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.util.Event;
 
 /**
- * @author Giovanni Caire - TILab 
+ * @author Giovanni Caire - TILab
  */
 public abstract class SensorManager extends CyclicBehaviour {
     private final Sensor mySensor;

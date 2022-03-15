@@ -65,13 +65,11 @@ public class ContainerLogWindow extends JInternalFrame implements InternalFrameL
     private final String containerName;
     private final AID controller;
     private final LogManagerGUI mainGui;
-
-    private LogManager myLogManager;
     private final LogTable myTable;
     private final JComboBox<String> levelCombo;
     private final JTextField loggingSystemTF;
-
     private final AbstractAction setLoggingSystemAction = new SetLoggingSystemAction(this);
+    private LogManager myLogManager;
 
     public ContainerLogWindow(Agent a, String containerName, AID controller, LogManager logManager, LogManagerGUI gui) throws FIPAException {
         super(containerName);
@@ -118,7 +116,7 @@ public class ContainerLogWindow extends JInternalFrame implements InternalFrameL
         getContentPane().add(new JScrollPane(table), BorderLayout.CENTER);
 
         //Allows the modification to the value in the cell
-        levelCombo = new JComboBox<String>();
+        levelCombo = new JComboBox<>();
         List<LevelInfo> levels = myLogManager.getLogLevels();
         for (LevelInfo level : levels) {
             levelCombo.addItem(level.getName());
@@ -147,8 +145,8 @@ public class ContainerLogWindow extends JInternalFrame implements InternalFrameL
         }
         // Now sort log info in alphabetical order
         List<LoggerInfo> infos = new ArrayList<>(tmp.size());
-        for (Object o : tmp) {
-            LoggerInfo li = (LoggerInfo) o;
+        for (LoggerInfo o : tmp) {
+            LoggerInfo li = o;
             String name = li.toString();
             int i = 0;
             while (i < infos.size() && name.compareTo(infos.get(i).toString()) >= 0) {
@@ -221,92 +219,6 @@ public class ContainerLogWindow extends JInternalFrame implements InternalFrameL
         return 0;
     }
 
-    /**
-     * Inner class LogTable
-     */
-    private class LogTable extends AbstractTableModel {
-        private List<LoggerInfo> logInfos;
-
-        public LogTable(List<LoggerInfo> infos) {
-            logInfos = infos;
-        }
-
-        public void refresh(List<LoggerInfo> infos) {
-            logInfos = infos;
-            validate();
-        }
-
-        public int getRowCount() {
-            return logInfos.size();
-        }
-
-        public int getColumnCount() {
-            return 4;
-        }
-
-
-        // Level and file cells are editables
-        public boolean isCellEditable(int row, int column) {
-            return column == LEVEL_COLUMN || column == FILE_COLUMN;
-        }
-
-        public Object getValueAt(int row, int column) {
-            LoggerInfo info = logInfos.get(row);
-            switch (column) {
-                case NAME_COLUMN:
-                    return info.getName();
-                case LEVEL_COLUMN:
-                    return getLevelName(info.getLevel());
-                case HANDLERS_COLUMN:
-                    StringBuffer sb = new StringBuffer();
-                    List<?> l = info.getHandlers();
-                    if (l != null) {
-                        Iterator<?> it = l.iterator();
-                        while (it.hasNext()) {
-                            sb.append(it.next());
-                            if (it.hasNext()) {
-                                sb.append(", ");
-                            }
-                        }
-                    }
-                    return sb.toString();
-                case FILE_COLUMN:
-                    return info.getFile();
-            }
-            return null;
-        }
-
-        public void setValueAt(Object value, int row, int column) {
-            LoggerInfo info = logInfos.get(row);
-            try {
-                if (column == LEVEL_COLUMN) {
-                    int level = getLevelValue((String) value);
-                    setLogLevel(info.getName(), level);
-                    info.setLevel(level);
-                } else if (column == FILE_COLUMN) {
-                    setLogFile(info.getName(), (String) value);
-                    info.setFile((String) value);
-                }
-            } catch (FIPAException fe) {
-                int res = JOptionPane.showConfirmDialog(mainGui, "Cannot set " + getColumnName(column) + " to logger " + info.getName() + " in container " + containerName + "\nWould you like to see the message?", "WARNING", JOptionPane.YES_NO_OPTION);
-                if (res == JOptionPane.YES_OPTION) {
-                    AclGui.showMsgInDialog(fe.getACLMessage(), mainGui);
-                }
-            }
-        }
-
-        public String getColumnName(int column) {
-            return switch (column) {
-                case NAME_COLUMN -> "Logger Name";
-                case LEVEL_COLUMN -> "Level";
-                case HANDLERS_COLUMN -> "Handlers";
-                case FILE_COLUMN -> "Log file";
-                default -> null;
-            };
-        }
-    } // END of inner class LogTable
-
-
     ///////////////////////////////////
     // Action handling methods
     ///////////////////////////////////
@@ -329,7 +241,6 @@ public class ContainerLogWindow extends JInternalFrame implements InternalFrameL
             }
         }
     }
-
 
     ////////////////////////////////////////////
     // Private utility methods
@@ -418,5 +329,90 @@ public class ContainerLogWindow extends JInternalFrame implements InternalFrameL
             throw new FIPAException(e.getMessage());
         }
     }
+
+    /**
+     * Inner class LogTable
+     */
+    private class LogTable extends AbstractTableModel {
+        private List<LoggerInfo> logInfos;
+
+        public LogTable(List<LoggerInfo> infos) {
+            logInfos = infos;
+        }
+
+        public void refresh(List<LoggerInfo> infos) {
+            logInfos = infos;
+            validate();
+        }
+
+        public int getRowCount() {
+            return logInfos.size();
+        }
+
+        public int getColumnCount() {
+            return 4;
+        }
+
+
+        // Level and file cells are editables
+        public boolean isCellEditable(int row, int column) {
+            return column == LEVEL_COLUMN || column == FILE_COLUMN;
+        }
+
+        public Object getValueAt(int row, int column) {
+            LoggerInfo info = logInfos.get(row);
+            switch (column) {
+                case NAME_COLUMN:
+                    return info.getName();
+                case LEVEL_COLUMN:
+                    return getLevelName(info.getLevel());
+                case HANDLERS_COLUMN:
+                    StringBuilder sb = new StringBuilder();
+                    List<?> l = info.getHandlers();
+                    if (l != null) {
+                        Iterator<?> it = l.iterator();
+                        while (it.hasNext()) {
+                            sb.append(it.next());
+                            if (it.hasNext()) {
+                                sb.append(", ");
+                            }
+                        }
+                    }
+                    return sb.toString();
+                case FILE_COLUMN:
+                    return info.getFile();
+            }
+            return null;
+        }
+
+        public void setValueAt(Object value, int row, int column) {
+            LoggerInfo info = logInfos.get(row);
+            try {
+                if (column == LEVEL_COLUMN) {
+                    int level = getLevelValue((String) value);
+                    setLogLevel(info.getName(), level);
+                    info.setLevel(level);
+                } else if (column == FILE_COLUMN) {
+                    setLogFile(info.getName(), (String) value);
+                    info.setFile((String) value);
+                }
+            } catch (FIPAException fe) {
+                int res = JOptionPane.showConfirmDialog(mainGui, "Cannot set " + getColumnName(column) + " to logger " + info.getName() + " in container " + containerName + "\nWould you like to see the message?", "WARNING", JOptionPane.YES_NO_OPTION);
+                if (res == JOptionPane.YES_OPTION) {
+                    AclGui.showMsgInDialog(fe.getACLMessage(), mainGui);
+                }
+            }
+        }
+
+        public String getColumnName(int column) {
+            return switch (column) {
+                case NAME_COLUMN -> "Logger Name";
+                case LEVEL_COLUMN -> "Level";
+                case HANDLERS_COLUMN -> "Handlers";
+                case FILE_COLUMN -> "Log file";
+                default -> null;
+            };
+        }
+    } // END of inner class LogTable
 }
 

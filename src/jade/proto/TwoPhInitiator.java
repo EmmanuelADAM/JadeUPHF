@@ -73,142 +73,142 @@ public class TwoPhInitiator extends FSMBehaviour {
      * deprecated
 
     public TwoPhInitiator(Agent a, ACLMessage cfp, HashMap<String, List<ACLMessage>> mapMessagesList) {
-        super(a);
-        setMapMessagesList(mapMessagesList);
-        // Register the FSM transitions specific to the Two-Phase-Commit protocol 
-        registerTransition(PH0_STATE, PH1_STATE, ACLMessage.QUERY_IF);
-        registerTransition(PH0_STATE, PH2_STATE, ACLMessage.REJECT_PROPOSAL);
-        registerTransition(PH0_STATE, DUMMY_FINAL, -1);
-        registerTransition(PH0_STATE, PH0_STATE, ACLMessage.CFP, new String[]{PH0_STATE});
+    super(a);
+    setMapMessagesList(mapMessagesList);
+    // Register the FSM transitions specific to the Two-Phase-Commit protocol
+    registerTransition(PH0_STATE, PH1_STATE, ACLMessage.QUERY_IF);
+    registerTransition(PH0_STATE, PH2_STATE, ACLMessage.REJECT_PROPOSAL);
+    registerTransition(PH0_STATE, DUMMY_FINAL, -1);
+    registerTransition(PH0_STATE, PH0_STATE, ACLMessage.CFP, new String[]{PH0_STATE});
 
-        registerTransition(PH1_STATE, PH2_STATE, ACLMessage.ACCEPT_PROPOSAL);
-        registerTransition(PH1_STATE, PH2_STATE, ACLMessage.REJECT_PROPOSAL);
-        registerTransition(PH1_STATE, DUMMY_FINAL, -1); // fix
+    registerTransition(PH1_STATE, PH2_STATE, ACLMessage.ACCEPT_PROPOSAL);
+    registerTransition(PH1_STATE, PH2_STATE, ACLMessage.REJECT_PROPOSAL);
+    registerTransition(PH1_STATE, DUMMY_FINAL, -1); // fix
 
-        // Create and register the states specific to the Two-Phase-Commit protocol
-        Behaviour b;
+    // Create and register the states specific to the Two-Phase-Commit protocol
+    Behaviour b;
 
-        // PH0_STATE activated for the first time. It sends cfps messages and wait
-        // for a propose (operation completed), a failure (operation failed) or
-        // expiration of timeout.
-        b = new TwoPh0Initiator(myAgent, cfp, TEMP, mapMessagesList) {
+    // PH0_STATE activated for the first time. It sends cfps messages and wait
+    // for a propose (operation completed), a failure (operation failed) or
+    // expiration of timeout.
+    b = new TwoPh0Initiator(myAgent, cfp, TEMP, mapMessagesList) {
 
-            protected List<ACLMessage> prepareCfps(ACLMessage cfp) {
-                return TwoPhInitiator.this.prepareCfps(cfp);
-            }
-
-            protected void handlePropose(ACLMessage propose) {
-                TwoPhInitiator.this.handlePropose(propose);
-            }
-
-            protected void handleFailure(ACLMessage failure) {
-                TwoPhInitiator.this.handleFailure(failure);
-            }
-
-            protected void handleNotUnderstood(ACLMessage notUnderstood) {
-                TwoPhInitiator.this.handleNotUnderstood(notUnderstood);
-            }
-
-            protected void handleOutOfSequence(ACLMessage msg) {
-                TwoPhInitiator.this.handleOutOfSequence(msg);
-            }
-
-            protected void handleAllResponses(List<ACLMessage> responses, List<ACLMessage> proposes, List<ACLMessage> pendings, List<ACLMessage> nextPhMsgs) {
-                TwoPhInitiator.this.handleAllPh0Responses(responses, proposes, pendings, nextPhMsgs);
-            }
-        };
-        registerFirstState(b, PH0_STATE);
-
-        // PH1_STATE activated if phase 0 succeded (all propose in phase 0). It
-        // sends queryIf messages and wait for a confirm (receiver prepared), a
-        // disconfirm (receiver aborted), an inform (receiver not changed) or
-        // expiration of timeout.
-        b = new TwoPh1Initiator(myAgent, null, TEMP, mapMessagesList) {
-            protected void initializeHashMap(ACLMessage msg) {
-                // Use the QUERY_IF messages prepared in previous phase
-                var v = getMapMessagesList().get(TEMP);
-                getMapMessagesList().put(ALL_QUERYIFS_KEY, v);
-                super.initializeHashMap(msg);
-            }
-
-            protected void handleConfirm(ACLMessage confirm) {
-                TwoPhInitiator.this.handleConfirm(confirm);
-            }
-
-            protected void handleDisconfirm(ACLMessage disconfirm) {
-                TwoPhInitiator.this.handleDisconfirm(disconfirm);
-            }
-
-            protected void handleInform(ACLMessage inform) {
-                TwoPhInitiator.this.handlePh1Inform(inform);
-            }
-
-            protected void handleFailure(ACLMessage failure) {
-                TwoPhInitiator.this.handleFailure(failure);
-            }
-
-            protected void handleNotUnderstood(ACLMessage notUnderstood) {
-                TwoPhInitiator.this.handleNotUnderstood(notUnderstood);
-            }
-
-            protected void handleOutOfSequence(ACLMessage msg) {
-                TwoPhInitiator.this.handleOutOfSequence(msg);
-            }
-
-            protected void handleAllResponses(List<ACLMessage> responses, List<ACLMessage> confirms, List<ACLMessage> disconfirms,
-                                              List<ACLMessage> informs, List<ACLMessage> pendings, List<ACLMessage> nextPhMsgs) {
-                TwoPhInitiator.this.handleAllPh1Responses(responses, confirms, disconfirms, informs, pendings, nextPhMsgs);
-            }
-        };
-        registerState(b, PH1_STATE);
-
-        // PH2_STATE activated when phase 0 fails (some failure or expiration
-        // of timeout), phase 1 fails (some disconfirm or expiration of timeout) or
-        // phase 1 succeds (no disconfirms). In the first and third case it sends
-        // reject-proposal; in the second case it sends accept-proposal.
-        b = new TwoPh2Initiator(myAgent, null, mapMessagesList) {
-            protected void initializeHashMap(ACLMessage msg) {
-                // Use the acceptance messages prepared in previous phase
-                var v = getMapMessagesList().get(TEMP);
-                getMapMessagesList().put(ALL_ACCEPTANCES_KEY, v);
-                super.initializeHashMap(msg);
-            }
-
-            protected void handleInform(ACLMessage inform) {
-                TwoPhInitiator.this.handlePh2Inform(inform);
-            }
-
-            protected void handleOldResponse(ACLMessage old) {
-                TwoPhInitiator.this.handleOldResponse(old);
-            }
-
-            protected void handleFailure(ACLMessage failure) {
-                TwoPhInitiator.this.handleFailure(failure);
-            }
-
-            protected void handleNotUnderstood(ACLMessage notUnderstood) {
-                TwoPhInitiator.this.handleNotUnderstood(notUnderstood);
-            }
-
-            protected void handleOutOfSequence(ACLMessage msg) {
-                TwoPhInitiator.this.handleOutOfSequence(msg);
-            }
-
-            protected void handleAllResponses(List<ACLMessage> responses) {
-                TwoPhInitiator.this.handleAllPh2Responses(responses);
-            }
-        };
-        registerLastState(b, PH2_STATE);
-
-        // DUMMY_FINAL
-        b = new OneShotBehaviour(myAgent) {
-            public void action() {
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerLastState(b, DUMMY_FINAL);
+    protected List<ACLMessage> prepareCfps(ACLMessage cfp) {
+    return TwoPhInitiator.this.prepareCfps(cfp);
     }
-*/
+
+    protected void handlePropose(ACLMessage propose) {
+    TwoPhInitiator.this.handlePropose(propose);
+    }
+
+    protected void handleFailure(ACLMessage failure) {
+    TwoPhInitiator.this.handleFailure(failure);
+    }
+
+    protected void handleNotUnderstood(ACLMessage notUnderstood) {
+    TwoPhInitiator.this.handleNotUnderstood(notUnderstood);
+    }
+
+    protected void handleOutOfSequence(ACLMessage msg) {
+    TwoPhInitiator.this.handleOutOfSequence(msg);
+    }
+
+    protected void handleAllResponses(List<ACLMessage> responses, List<ACLMessage> proposes, List<ACLMessage> pendings, List<ACLMessage> nextPhMsgs) {
+    TwoPhInitiator.this.handleAllPh0Responses(responses, proposes, pendings, nextPhMsgs);
+    }
+    };
+    registerFirstState(b, PH0_STATE);
+
+    // PH1_STATE activated if phase 0 succeded (all propose in phase 0). It
+    // sends queryIf messages and wait for a confirm (receiver prepared), a
+    // disconfirm (receiver aborted), an inform (receiver not changed) or
+    // expiration of timeout.
+    b = new TwoPh1Initiator(myAgent, null, TEMP, mapMessagesList) {
+    protected void initializeHashMap(ACLMessage msg) {
+    // Use the QUERY_IF messages prepared in previous phase
+    var v = getMapMessagesList().get(TEMP);
+    getMapMessagesList().put(ALL_QUERYIFS_KEY, v);
+    super.initializeHashMap(msg);
+    }
+
+    protected void handleConfirm(ACLMessage confirm) {
+    TwoPhInitiator.this.handleConfirm(confirm);
+    }
+
+    protected void handleDisconfirm(ACLMessage disconfirm) {
+    TwoPhInitiator.this.handleDisconfirm(disconfirm);
+    }
+
+    protected void handleInform(ACLMessage inform) {
+    TwoPhInitiator.this.handlePh1Inform(inform);
+    }
+
+    protected void handleFailure(ACLMessage failure) {
+    TwoPhInitiator.this.handleFailure(failure);
+    }
+
+    protected void handleNotUnderstood(ACLMessage notUnderstood) {
+    TwoPhInitiator.this.handleNotUnderstood(notUnderstood);
+    }
+
+    protected void handleOutOfSequence(ACLMessage msg) {
+    TwoPhInitiator.this.handleOutOfSequence(msg);
+    }
+
+    protected void handleAllResponses(List<ACLMessage> responses, List<ACLMessage> confirms, List<ACLMessage> disconfirms,
+    List<ACLMessage> informs, List<ACLMessage> pendings, List<ACLMessage> nextPhMsgs) {
+    TwoPhInitiator.this.handleAllPh1Responses(responses, confirms, disconfirms, informs, pendings, nextPhMsgs);
+    }
+    };
+    registerState(b, PH1_STATE);
+
+    // PH2_STATE activated when phase 0 fails (some failure or expiration
+    // of timeout), phase 1 fails (some disconfirm or expiration of timeout) or
+    // phase 1 succeds (no disconfirms). In the first and third case it sends
+    // reject-proposal; in the second case it sends accept-proposal.
+    b = new TwoPh2Initiator(myAgent, null, mapMessagesList) {
+    protected void initializeHashMap(ACLMessage msg) {
+    // Use the acceptance messages prepared in previous phase
+    var v = getMapMessagesList().get(TEMP);
+    getMapMessagesList().put(ALL_ACCEPTANCES_KEY, v);
+    super.initializeHashMap(msg);
+    }
+
+    protected void handleInform(ACLMessage inform) {
+    TwoPhInitiator.this.handlePh2Inform(inform);
+    }
+
+    protected void handleOldResponse(ACLMessage old) {
+    TwoPhInitiator.this.handleOldResponse(old);
+    }
+
+    protected void handleFailure(ACLMessage failure) {
+    TwoPhInitiator.this.handleFailure(failure);
+    }
+
+    protected void handleNotUnderstood(ACLMessage notUnderstood) {
+    TwoPhInitiator.this.handleNotUnderstood(notUnderstood);
+    }
+
+    protected void handleOutOfSequence(ACLMessage msg) {
+    TwoPhInitiator.this.handleOutOfSequence(msg);
+    }
+
+    protected void handleAllResponses(List<ACLMessage> responses) {
+    TwoPhInitiator.this.handleAllPh2Responses(responses);
+    }
+    };
+    registerLastState(b, PH2_STATE);
+
+    // DUMMY_FINAL
+    b = new OneShotBehaviour(myAgent) {
+    public void action() {
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerLastState(b, DUMMY_FINAL);
+    }
+     */
     /**
      * Constructs a <code>TwoPhInitiator</code> behaviour.
      *

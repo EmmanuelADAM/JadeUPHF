@@ -25,13 +25,6 @@ public class ObjectManager {
     private static final Map<String, List<Loader>> loaders = new HashMap<>();
 
     /**
-     * The interface to be implemented by classes that can be registered to load objects of a given type
-     */
-    public interface Loader {
-        Object load(String className, Properties pp) throws ClassNotFoundException, IllegalAccessException, InstantiationException;
-    }
-
-    /**
      * Convert a class-name, possibly with attached properties, into a Properties object
      * The actual class-name will be available as the value of the <code>CLASS_NAME</code> property
      */
@@ -66,11 +59,7 @@ public class ObjectManager {
      * @param loader The <code>Loader</code> instance.
      */
     public synchronized static void addLoader(String type, Loader loader) {
-        List<Loader> l = loaders.get(type);
-        if (l == null) {
-            l = new ArrayList<>();
-            loaders.put(type, l);
-        }
+        List<Loader> l = loaders.computeIfAbsent(type, k -> new ArrayList<>());
         l.add(loader);
     }
 
@@ -106,5 +95,12 @@ public class ObjectManager {
             }
         }
         return null;
+    }
+
+    /**
+     * The interface to be implemented by classes that can be registered to load objects of a given type
+     */
+    public interface Loader {
+        Object load(String className, Properties pp) throws ClassNotFoundException, IllegalAccessException, InstantiationException;
     }
 }

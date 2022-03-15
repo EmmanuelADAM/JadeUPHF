@@ -48,6 +48,17 @@ import java.util.Vector;
 
 public class ACLStatisticsFrame extends JFrame {
 
+    GridBagLayout gridBagLayout1 = new GridBagLayout();
+    JLabel jLabel1 = new JLabel();
+    JScrollPane tableScrollPane = new JScrollPane();
+    JButton closeButton = new JButton();
+    JComboBox<String> itemComboBox = new JComboBox<>();
+    JTable statisticsTable = new JTable();
+    DefaultComboBoxModel<String> itemBoxModel = new DefaultComboBoxModel<>();
+    DefaultTreeModel aclTreeModel;
+    ACLStatiscticsTableModel aclTableModel;
+
+
     /**
      * Constructor for the ACLStatisticsFrame object
      *
@@ -75,7 +86,6 @@ public class ACLStatisticsFrame extends JFrame {
         }
     }
 
-
     /**
      * Description of the Method
      *
@@ -88,7 +98,6 @@ public class ACLStatisticsFrame extends JFrame {
 
     }
 
-
     /**
      * Description of the Method
      *
@@ -97,7 +106,6 @@ public class ACLStatisticsFrame extends JFrame {
     void closeButton_actionPerformed(ActionEvent e) {
         this.setVisible(false);
     }
-
 
     /**
      * Description of the Method
@@ -115,7 +123,6 @@ public class ACLStatisticsFrame extends JFrame {
         this.statisticsTable.updateUI();
     }
 
-
     /**
      * Sets the FrameIcon attribute of the ACLFrame object
      *
@@ -125,7 +132,6 @@ public class ACLStatisticsFrame extends JFrame {
         ImageIcon image = new ImageIcon(Objects.requireNonNull(this.getClass().getResource(iconpath)));
         setIconImage(image.getImage());
     }
-
 
     /**
      * Description of the Method
@@ -158,8 +164,12 @@ public class ACLStatisticsFrame extends JFrame {
                 , GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
     }
 
-
     private class ACLStatiscticsTableModel extends DefaultTableModel {
+
+        HashMap<String, String> countTable = new HashMap<>();
+        String theItem;
+        DefaultTreeModel aclModel;
+
 
         /**
          * Constructor for the StatisticsTableModel object
@@ -171,7 +181,6 @@ public class ACLStatisticsFrame extends JFrame {
             fillThis("performative");
         }
 
-
         /**
          * Gets the ColumnCount attribute of the StatisticsTableModel object
          *
@@ -180,7 +189,6 @@ public class ACLStatisticsFrame extends JFrame {
         public int getColumnCount() {
             return 2;
         }
-
 
         /**
          * Gets the ColumnName attribute of the StatisticsTableModel object
@@ -197,7 +205,6 @@ public class ACLStatisticsFrame extends JFrame {
             }
             return "?";
         }
-
 
         /**
          * Gets the ValueAt attribute of the StatisticsTableModel object
@@ -219,7 +226,6 @@ public class ACLStatisticsFrame extends JFrame {
 
             return result;
         }
-
 
         /**
          * Description of the Method
@@ -277,16 +283,12 @@ public class ACLStatisticsFrame extends JFrame {
 
         }
 
-
-        HashMap<String, String> countTable = new HashMap<>();
-
-        String theItem;
-        DefaultTreeModel aclModel;
-
     }
 
-
     private class ACLStatisticsFrame_closeButton_actionAdapter implements ActionListener {
+
+        ACLStatisticsFrame adaptee;
+
 
         /**
          * Constructor for the ACLStatisticsFrame_closeButton_actionAdapter
@@ -298,7 +300,6 @@ public class ACLStatisticsFrame extends JFrame {
             this.adaptee = adaptee;
         }
 
-
         /**
          * Description of the Method
          *
@@ -307,11 +308,7 @@ public class ACLStatisticsFrame extends JFrame {
         public void actionPerformed(ActionEvent e) {
             adaptee.closeButton_actionPerformed(e);
         }
-
-
-        ACLStatisticsFrame adaptee;
     }
-
 
     private class SomeLabelRenderer extends JLabel implements ListCellRenderer<Object> {
         /**
@@ -347,40 +344,9 @@ public class ACLStatisticsFrame extends JFrame {
         }
     }
 
-
-    GridBagLayout gridBagLayout1 = new GridBagLayout();
-    JLabel jLabel1 = new JLabel();
-    JScrollPane tableScrollPane = new JScrollPane();
-    JButton closeButton = new JButton();
-    JComboBox<String> itemComboBox = new JComboBox<>();
-    JTable statisticsTable = new JTable();
-    DefaultComboBoxModel<String> itemBoxModel = new DefaultComboBoxModel<>();
-    DefaultTreeModel aclTreeModel;
-    ACLStatiscticsTableModel aclTableModel;
-
 }
 
 class ACLStatisticsFrame_itemComboBox_itemAdapter implements ItemListener {
-
-
-    /**
-     * Constructor for the ACLStatisticsFrame_itemComboBox_itemAdapter object
-     *
-     * @param adaptee Description of Parameter
-     */
-    ACLStatisticsFrame_itemComboBox_itemAdapter(ACLStatisticsFrame adaptee) {
-        this.adaptee = adaptee;
-    }
-
-
-    /**
-     * Description of the Method
-     *
-     * @param e Description of Parameter
-     */
-    public void itemStateChanged(ItemEvent e) {
-        adaptee.itemComboBox_itemStateChanged(e);
-    }
 
 
     /**
@@ -392,6 +358,25 @@ class ACLStatisticsFrame_itemComboBox_itemAdapter implements ItemListener {
      */
 
     ACLStatisticsFrame adaptee;
+
+
+    /**
+     * Constructor for the ACLStatisticsFrame_itemComboBox_itemAdapter object
+     *
+     * @param adaptee Description of Parameter
+     */
+    ACLStatisticsFrame_itemComboBox_itemAdapter(ACLStatisticsFrame adaptee) {
+        this.adaptee = adaptee;
+    }
+
+    /**
+     * Description of the Method
+     *
+     * @param e Description of Parameter
+     */
+    public void itemStateChanged(ItemEvent e) {
+        adaptee.itemComboBox_itemStateChanged(e);
+    }
 
 //  ***EOF***
 }

@@ -36,8 +36,8 @@ import java.awt.event.MouseListener;
  * @author Andrea Squeri,Corti Denis,Ballestracci Paolo -  Universita` di Parma
  */
 class TableMouseListener implements MouseListener {
-    private MessagePanel parent;
     private final TablePopupMenu popMenu;
+    private MessagePanel parent;
 
     TableMouseListener() {
         popMenu = new TablePopupMenu();

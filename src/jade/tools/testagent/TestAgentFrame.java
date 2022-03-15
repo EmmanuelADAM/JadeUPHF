@@ -47,6 +47,78 @@ import java.awt.event.MouseEvent;
 
 public class TestAgentFrame extends JFrame {
 
+    GridBagLayout gridBagLayout1 = new GridBagLayout();
+    JSplitPane mainSplitPane = new JSplitPane();
+    JMenuBar itsMenuBar = new JMenuBar();
+    JMenu fileMenu = new JMenu();
+    JMenuItem exitMenuItem = new JMenuItem();
+    JMenu messagesMenu = new JMenu();
+    JMenuItem helloWorldMenuItem = new JMenuItem();
+    JMenuItem amsRegMenuItem = new JMenuItem();
+    JMenuItem amsDeregMenuItem = new JMenuItem();
+    JMenuItem amsSearchMenuItem = new JMenuItem();
+    JMenuItem pingLausanneMenuItem = new JMenuItem();
+    JMenuItem dfSearchMenuItem = new JMenuItem();
+    JMenuItem dfDeregMenuItem = new JMenuItem();
+    JMenuItem dfRegMenuItem = new JMenuItem();
+    JMenu helpMenu = new JMenu();
+    JMenuItem aboutMenuItem = new JMenuItem();
+    JPanel leftPanel = new JPanel();
+    JPanel rightPanel = new JPanel();
+    GridBagLayout gridBagLayout2 = new GridBagLayout();
+    GridBagLayout gridBagLayout3 = new GridBagLayout();
+    JToolBar aclTreeToolBar = new JToolBar();
+    JButton writeQueueButton = new JButton();
+    JButton readQueueButton = new JButton();
+    JButton openButton = new JButton();
+    JButton sendButton = new JButton();
+    JButton newButton = new JButton();
+    JButton saveButton = new JButton();
+    JToolBar messageToolBar = new JToolBar();
+    JButton currentButton = new JButton();
+    JButton replyButton = new JButton();
+    JButton viewButton = new JButton();
+    JButton deleteButton = new JButton();
+    JButton statisticsButton = new JButton();
+    JButton quitButton = new JButton();
+    JMenuItem newMenuItem = new JMenuItem();
+    JMenuItem loadMenuItem = new JMenuItem();
+    JMenuItem saveMenuItem = new JMenuItem();
+    JMenuItem sendMenuItem = new JMenuItem();
+    JMenuItem templatesMenuItem = new JMenuItem();
+    JMenu traceMenu = new JMenu();
+    JMenuItem claerQueueMenuItem = new JMenuItem();
+    JMenuItem currentMenuItem = new JMenuItem();
+    JMenuItem replyMenuItem = new JMenuItem();
+    JMenuItem deleteMenuItem = new JMenuItem();
+    JMenuItem statisticsMenuItem = new JMenuItem();
+    JMenuItem loadMsgMenuItem = new JMenuItem();
+    JMenuItem saveMsgMenuItem = new JMenuItem();
+    JMenuItem loadQMenuItem = new JMenuItem();
+    JMenuItem saveQMenuItem = new JMenuItem();
+    JButton systemButton = new JButton();
+    JMenuItem systemOutMenuItem = new JMenuItem();
+    JMenuItem currentToOutMenuItem = new JMenuItem();
+    JMenu behaviourMenu = new JMenu();
+    JRadioButtonMenuItem pingRadioButtonMenuItem = new JRadioButtonMenuItem();
+    JMenuItem localPingMenuItem = new JMenuItem();
+    ImageIcon newIcon;
+    ImageIcon openIcon;
+    ImageIcon saveIcon;
+    ImageIcon sendIcon;
+    ImageIcon readQueueIcon;
+    ImageIcon saveQueueIcon;
+    ImageIcon currentIcon;
+    ImageIcon replyIcon;
+    ImageIcon viewIcon;
+    ImageIcon deleteIcon;
+    ImageIcon statisticsIcon;
+    ImageIcon quitIcon;
+    ImageIcon systemIcon;
+    ACLPanel aclPanel;
+    TestAgent agent;
+    ACLTracePanel aclTreePanel;
+    Border border1;
     /**
      * Constructor for the TestAgentFrame object
      *
@@ -68,7 +140,6 @@ public class TestAgentFrame extends JFrame {
         }
     }
 
-
     /**
      * Gets the ItsMsg attribute of the TestAgentFrame object
      *
@@ -78,6 +149,14 @@ public class TestAgentFrame extends JFrame {
         return aclPanel.getItsMsg();
     }
 
+    /**
+     * Sets the ItsMsg attribute of the TestAgentFrame object
+     *
+     * @param msg The new ItsMsg value
+     */
+    public void setItsMsg(ACLMessage msg) {
+        aclPanel.setItsMsg(msg);
+    }
 
     public void getImages() {
 
@@ -114,17 +193,6 @@ public class TestAgentFrame extends JFrame {
 
     }
 
-
-    /**
-     * Sets the ItsMsg attribute of the TestAgentFrame object
-     *
-     * @param msg The new ItsMsg value
-     */
-    public void setItsMsg(ACLMessage msg) {
-        aclPanel.setItsMsg(msg);
-    }
-
-
     /**
      * Sets the FrameIcon attribute of the TestAgentFrame object
      *
@@ -134,7 +202,6 @@ public class TestAgentFrame extends JFrame {
         ImageIcon image = new ImageIcon(this.getClass().getResource(iconpath));
         setIconImage(image.getImage());
     }
-
 
     /**
      * Adds a feature to the MessageNode attribute of the TestAgentFrame object
@@ -146,7 +213,6 @@ public class TestAgentFrame extends JFrame {
         aclTreePanel.addMessageNode(direction, msg);
     }
 
-
     /**
      * Description of the Method
      *
@@ -155,7 +221,6 @@ public class TestAgentFrame extends JFrame {
     void helloWorldMenuItem_actionPerformed(ActionEvent e) {
         agent.doHelloWorld();
     }
-
 
     /**
      * Description of the Method
@@ -166,7 +231,6 @@ public class TestAgentFrame extends JFrame {
         agent.doRegisterAMS();
     }
 
-
     /**
      * Description of the Method
      *
@@ -175,7 +239,6 @@ public class TestAgentFrame extends JFrame {
     void systemMenuItem_actionPerformed(ActionEvent e) {
         agent.doSystemOut();
     }
-
 
     /**
      * Description of the Method
@@ -186,7 +249,6 @@ public class TestAgentFrame extends JFrame {
         agent.doExit();
     }
 
-
     /**
      * Description of the Method
      *
@@ -195,7 +257,6 @@ public class TestAgentFrame extends JFrame {
     void newButton_actionPerformed(ActionEvent e) {
         agent.doNewMessage();
     }
-
 
     /**
      * Description of the Method
@@ -206,7 +267,6 @@ public class TestAgentFrame extends JFrame {
         agent.sendMessage();
     }
 
-
     /**
      * Description of the Method
      *
@@ -215,7 +275,6 @@ public class TestAgentFrame extends JFrame {
     void pingLausanneMenuItem_actionPerformed(ActionEvent e) {
         agent.doLausannePing();
     }
-
 
     /**
      * Description of the Method
@@ -226,7 +285,6 @@ public class TestAgentFrame extends JFrame {
         agent.doDeRegisterAMS();
     }
 
-
     /**
      * Description of the Method
      *
@@ -236,36 +294,29 @@ public class TestAgentFrame extends JFrame {
         agent.doSearchAMS();
     }
 
-
     void dfRegMenuItem_actionPerformed(ActionEvent e) {
         agent.doRegisterDF();
     }
-
 
     void dfDeregMenuItem_actionPerformed(ActionEvent e) {
         agent.doDeregisterDF();
     }
 
-
     void dfSearchMenuItem_actionPerformed(ActionEvent e) {
         agent.doSearchDF();
     }
-
 
     void aboutMenuItem_actionPerformed(ActionEvent e) {
         new AboutFrame().setVisible(true);
     }
 
-
     void readQueueButton_actionPerformed(ActionEvent e) {
         this.aclTreePanel.loadQueue();
     }
 
-
     void writeQueueButton_actionPerformed(ActionEvent e) {
         this.aclTreePanel.saveQueue();
     }
-
 
     void currentButton_actionPerformed(ActionEvent e) {
 
@@ -275,72 +326,58 @@ public class TestAgentFrame extends JFrame {
         }
     }
 
-
     void viewButton_actionPerformed(ActionEvent e) {
         this.aclTreePanel.doShowCurrentACL();
     }
-
 
     void deleteButton_actionPerformed(ActionEvent e) {
         this.aclTreePanel.deleteCurrent();
     }
 
-
     void statisticsButton_actionPerformed(ActionEvent e) {
         this.aclTreePanel.showStastistics();
     }
-
 
     void quitButton_actionPerformed(ActionEvent e) {
         agent.doDelete();
         System.exit(1);
     }
 
-
     void replyButton_actionPerformed(ActionEvent e) {
         agent.doReply();
     }
-
 
     void newMenuItem_actionPerformed(ActionEvent e) {
         agent.doNewMessage();
     }
 
-
     void loadMenuItem_actionPerformed(ActionEvent e) {
         this.aclPanel.loadACL();
     }
-
 
     void saveMenuItem_actionPerformed(ActionEvent e) {
         this.aclPanel.saveACL();
     }
 
-
     void sendMenuItem_actionPerformed(ActionEvent e) {
         agent.sendMessage();
     }
-
 
     void saveButton_actionPerformed(ActionEvent e) {
         this.aclPanel.saveACL();
     }
 
-
     void openButton_actionPerformed(ActionEvent e) {
         this.aclPanel.loadACL();
     }
-
 
     void saveQueueMenuItem_actionPerformed(ActionEvent e) {
         this.aclTreePanel.saveQueue();
     }
 
-
     void claerQueueMenuItem_actionPerformed(ActionEvent e) {
         this.aclTreePanel.clearACLModel();
     }
-
 
     void currentMenuItem_actionPerformed(ActionEvent e) {
         ACLMessage currentACL = this.aclTreePanel.getCurrentACL();
@@ -350,66 +387,53 @@ public class TestAgentFrame extends JFrame {
 
     }
 
-
     void replyMenuItem_actionPerformed(ActionEvent e) {
         agent.doReply();
     }
-
 
     void deleteMenuItem_actionPerformed(ActionEvent e) {
         this.aclTreePanel.deleteCurrent();
     }
 
-
     void statisticsMenuItem_actionPerformed(ActionEvent e) {
         this.aclTreePanel.showStastistics();
     }
-
 
     void loadMsgMenuItem_actionPerformed(ActionEvent e) {
         this.aclPanel.loadACL();
     }
 
-
     void saveMsgMenuItem_actionPerformed(ActionEvent e) {
         this.aclPanel.saveACL();
     }
-
 
     void loadQMenuItem_actionPerformed(ActionEvent e) {
         this.aclTreePanel.loadQueue();
     }
 
-
     void saveQMenuItem_actionPerformed(ActionEvent e) {
         this.aclTreePanel.saveQueue();
     }
-
 
     void systemButton_actionPerformed(ActionEvent e) {
         this.aclTreePanel.doSystemOut();
     }
 
-
     void systemOutMenuItem_actionPerformed(ActionEvent e) {
         this.aclPanel.doSystemOut();
     }
-
 
     void currentToOutMenuItem_actionPerformed(ActionEvent e) {
         this.aclTreePanel.doSystemOut();
     }
 
-
     void pingRadioButtonMenuItem_stateChanged(ChangeEvent e) {
         agent.pingBehaviour = (pingRadioButtonMenuItem.isSelected());
     }
 
-
     void localPingMenuItem_actionPerformed(ActionEvent e) {
         agent.doLocalPing();
     }
-
 
     /**
      * Description of the Method
@@ -779,8 +803,18 @@ public class TestAgentFrame extends JFrame {
         mainSplitPane.setDividerLocation(200);
     }
 
-
     private class AboutFrame extends JWindow {
+
+        GridBagLayout gridBagLayout1 = new GridBagLayout();
+        ImageIcon acklinIcon =
+                new ImageIcon(getClass().getResource("images/acklinabout.gif"));
+        JPanel contentPanel = new JPanel();
+        GridBagLayout gridBagLayout2 = new GridBagLayout();
+        JLabel logoLabel = new JLabel();
+        JLabel jLabel1 = new JLabel();
+        JLabel jLabel2 = new JLabel();
+        Border border1;
+
 
         public AboutFrame() {
             try {
@@ -795,76 +829,61 @@ public class TestAgentFrame extends JFrame {
             }
         }
 
-
         void logoLabel_mouseClicked(MouseEvent e) {
             this.setVisible(false);
         }
-
 
         void jLabel3_mousePressed(MouseEvent e) {
             this.setVisible(false);
         }
 
-
         void jLabel2_mouseClicked(MouseEvent e) {
             this.setVisible(false);
         }
-
 
         void jLabel3_mouseClicked(MouseEvent e) {
             this.setVisible(false);
         }
 
-
         void logoLabel_mouseEntered(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
-
 
         void logoLabel_mouseExited(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
 
-
         void jLabel3_mouseEntered(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
-
 
         void jLabel3_mouseExited(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
 
-
         void jLabel2_mouseEntered(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
-
 
         void jLabel2_mouseExited(MouseEvent e) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
 
-
         void logoLabel_mousePressed(MouseEvent e) {
 
         }
-
 
         void logoLabel_mouseReleased(MouseEvent e) {
 
         }
 
-
         void jLabel2_mousePressed(MouseEvent e) {
 
         }
 
-
         void jLabel2_mouseReleased(MouseEvent e) {
 
         }
-
 
         private void jbInit() throws Exception {
             // this.setClosable(true);
@@ -924,96 +943,7 @@ public class TestAgentFrame extends JFrame {
                     , GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 0, 5, 0), 0, 0));
         }
 
-
-        GridBagLayout gridBagLayout1 = new GridBagLayout();
-
-        ImageIcon acklinIcon =
-                new ImageIcon(getClass().getResource("images/acklinabout.gif"));
-        JPanel contentPanel = new JPanel();
-        GridBagLayout gridBagLayout2 = new GridBagLayout();
-        JLabel logoLabel = new JLabel();
-        JLabel jLabel1 = new JLabel();
-        JLabel jLabel2 = new JLabel();
-        Border border1;
-
     }
-
-
-    GridBagLayout gridBagLayout1 = new GridBagLayout();
-    JSplitPane mainSplitPane = new JSplitPane();
-    JMenuBar itsMenuBar = new JMenuBar();
-    JMenu fileMenu = new JMenu();
-    JMenuItem exitMenuItem = new JMenuItem();
-    JMenu messagesMenu = new JMenu();
-    JMenuItem helloWorldMenuItem = new JMenuItem();
-    JMenuItem amsRegMenuItem = new JMenuItem();
-    JMenuItem amsDeregMenuItem = new JMenuItem();
-    JMenuItem amsSearchMenuItem = new JMenuItem();
-    JMenuItem pingLausanneMenuItem = new JMenuItem();
-    JMenuItem dfSearchMenuItem = new JMenuItem();
-    JMenuItem dfDeregMenuItem = new JMenuItem();
-    JMenuItem dfRegMenuItem = new JMenuItem();
-
-    JMenu helpMenu = new JMenu();
-    JMenuItem aboutMenuItem = new JMenuItem();
-    JPanel leftPanel = new JPanel();
-    JPanel rightPanel = new JPanel();
-    GridBagLayout gridBagLayout2 = new GridBagLayout();
-    GridBagLayout gridBagLayout3 = new GridBagLayout();
-    JToolBar aclTreeToolBar = new JToolBar();
-    JButton writeQueueButton = new JButton();
-    JButton readQueueButton = new JButton();
-    JButton openButton = new JButton();
-    JButton sendButton = new JButton();
-    JButton newButton = new JButton();
-    JButton saveButton = new JButton();
-    JToolBar messageToolBar = new JToolBar();
-    JButton currentButton = new JButton();
-    JButton replyButton = new JButton();
-    JButton viewButton = new JButton();
-    JButton deleteButton = new JButton();
-    JButton statisticsButton = new JButton();
-    JButton quitButton = new JButton();
-    JMenuItem newMenuItem = new JMenuItem();
-    JMenuItem loadMenuItem = new JMenuItem();
-    JMenuItem saveMenuItem = new JMenuItem();
-    JMenuItem sendMenuItem = new JMenuItem();
-    JMenuItem templatesMenuItem = new JMenuItem();
-    JMenu traceMenu = new JMenu();
-    JMenuItem claerQueueMenuItem = new JMenuItem();
-    JMenuItem currentMenuItem = new JMenuItem();
-    JMenuItem replyMenuItem = new JMenuItem();
-    JMenuItem deleteMenuItem = new JMenuItem();
-    JMenuItem statisticsMenuItem = new JMenuItem();
-    JMenuItem loadMsgMenuItem = new JMenuItem();
-    JMenuItem saveMsgMenuItem = new JMenuItem();
-    JMenuItem loadQMenuItem = new JMenuItem();
-    JMenuItem saveQMenuItem = new JMenuItem();
-    JButton systemButton = new JButton();
-    JMenuItem systemOutMenuItem = new JMenuItem();
-    JMenuItem currentToOutMenuItem = new JMenuItem();
-    JMenu behaviourMenu = new JMenu();
-    JRadioButtonMenuItem pingRadioButtonMenuItem = new JRadioButtonMenuItem();
-    JMenuItem localPingMenuItem = new JMenuItem();
-
-    ImageIcon newIcon;
-    ImageIcon openIcon;
-    ImageIcon saveIcon;
-    ImageIcon sendIcon;
-    ImageIcon readQueueIcon;
-    ImageIcon saveQueueIcon;
-    ImageIcon currentIcon;
-    ImageIcon replyIcon;
-    ImageIcon viewIcon;
-    ImageIcon deleteIcon;
-    ImageIcon statisticsIcon;
-    ImageIcon quitIcon;
-    ImageIcon systemIcon;
-    ACLPanel aclPanel;
-
-    TestAgent agent;
-    ACLTracePanel aclTreePanel;
-    Border border1;
 
 }
 //  ***EOF***

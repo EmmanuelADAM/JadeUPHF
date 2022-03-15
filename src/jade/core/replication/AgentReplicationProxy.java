@@ -37,7 +37,7 @@ public class AgentReplicationProxy extends SliceProxy implements AgentReplicatio
 
         Node n = getNode();
         Object result = n.accept(cmd);
-        if ((result != null) && (result instanceof Throwable)) {
+        if ((result instanceof Throwable)) {
             if (result instanceof NotFoundException) {
                 throw (NotFoundException) result;
             } else if (result instanceof ServiceException) {
@@ -57,7 +57,7 @@ public class AgentReplicationProxy extends SliceProxy implements AgentReplicatio
         try {
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof NotFoundException) {
                     throw (NotFoundException) result;
                 } else if (result instanceof IMTPException) {
@@ -80,7 +80,7 @@ public class AgentReplicationProxy extends SliceProxy implements AgentReplicatio
         try {
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else {
@@ -102,7 +102,7 @@ public class AgentReplicationProxy extends SliceProxy implements AgentReplicatio
         try {
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else {
@@ -121,7 +121,7 @@ public class AgentReplicationProxy extends SliceProxy implements AgentReplicatio
         try {
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else {
@@ -142,7 +142,7 @@ public class AgentReplicationProxy extends SliceProxy implements AgentReplicatio
         try {
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else {

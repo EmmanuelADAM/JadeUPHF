@@ -41,6 +41,16 @@ import java.io.Serializable;
  */
 public class NodeDescriptor implements Serializable {
 
+    private String myName;
+    private Node myNode;
+    private Node parentNode;
+    private ContainerID myContainer;
+    private String username;
+    private byte[] password;
+    private JADEPrincipal myPrincipal;
+    private JADEPrincipal ownerPrincipal;
+    private Credentials ownerCredentials;
+
     /**
      * Builds a new node descriptor, describing the given node with
      * the given name and properties.
@@ -74,15 +84,6 @@ public class NodeDescriptor implements Serializable {
     }
 
     /**
-     * Change the name (if any) of the described node.
-     *
-     * @param nn The name to assign to the described node.
-     */
-    public void setName(String nn) {
-        myName = nn;
-    }
-
-    /**
      * Retrieve the name (if any) of the described node.
      *
      * @return The name of the described node, or <code>null</code>
@@ -93,13 +94,12 @@ public class NodeDescriptor implements Serializable {
     }
 
     /**
-     * Change the described node (if any).
+     * Change the name (if any) of the described node.
      *
-     * @param node The <code>Node</code> object that is to be
-     *             described by this node descriptor.
+     * @param nn The name to assign to the described node.
      */
-    public void setNode(Node node) {
-        myNode = node;
+    public void setName(String nn) {
+        myName = nn;
     }
 
     /**
@@ -113,6 +113,16 @@ public class NodeDescriptor implements Serializable {
     }
 
     /**
+     * Change the described node (if any).
+     *
+     * @param node The <code>Node</code> object that is to be
+     *             described by this node descriptor.
+     */
+    public void setNode(Node node) {
+        myNode = node;
+    }
+
+    /**
      * Retrieve the ID of the container (if any) hosted by the
      * described node.
      *
@@ -123,19 +133,12 @@ public class NodeDescriptor implements Serializable {
         return myContainer;
     }
 
-    public void setParentNode(Node n) {
-        parentNode = n;
-    }
-
     public Node getParentNode() {
         return parentNode;
     }
 
-    /**
-     * Set the username of the owner of the described node
-     */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setParentNode(Node n) {
+        parentNode = n;
     }
 
     /**
@@ -146,10 +149,10 @@ public class NodeDescriptor implements Serializable {
     }
 
     /**
-     * Set the password of the owner of the described node
+     * Set the username of the owner of the described node
      */
-    public void setPassword(byte[] password) {
-        this.password = password;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**
@@ -160,10 +163,10 @@ public class NodeDescriptor implements Serializable {
     }
 
     /**
-     * Set the principal of the described node
+     * Set the password of the owner of the described node
      */
-    public void setPrincipal(JADEPrincipal principal) {
-        myPrincipal = principal;
+    public void setPassword(byte[] password) {
+        this.password = password;
     }
 
     /**
@@ -174,10 +177,10 @@ public class NodeDescriptor implements Serializable {
     }
 
     /**
-     * Set the principal of the owner of this node
+     * Set the principal of the described node
      */
-    public void setOwnerPrincipal(JADEPrincipal principal) {
-        ownerPrincipal = principal;
+    public void setPrincipal(JADEPrincipal principal) {
+        myPrincipal = principal;
     }
 
     /**
@@ -191,10 +194,10 @@ public class NodeDescriptor implements Serializable {
     }
 
     /**
-     * Set the credentials of the owner of this node
+     * Set the principal of the owner of this node
      */
-    public void setOwnerCredentials(Credentials credentials) {
-        ownerCredentials = credentials;
+    public void setOwnerPrincipal(JADEPrincipal principal) {
+        ownerPrincipal = principal;
     }
 
     /**
@@ -207,16 +210,11 @@ public class NodeDescriptor implements Serializable {
         return ownerCredentials;
     }
 
-    private String myName;
-    private Node myNode;
-
-    private Node parentNode;
-
-    private ContainerID myContainer;
-    private String username;
-    private byte[] password;
-    private JADEPrincipal myPrincipal;
-    private JADEPrincipal ownerPrincipal;
-    private Credentials ownerCredentials;
+    /**
+     * Set the credentials of the owner of this node
+     */
+    public void setOwnerCredentials(Credentials credentials) {
+        ownerCredentials = credentials;
+    }
 
 }

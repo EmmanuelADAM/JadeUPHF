@@ -40,7 +40,7 @@ public class ResourceManagementProxy extends SliceProxy implements ResourceManag
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof Exception) {
                     throw (Exception) result;
                 } else {

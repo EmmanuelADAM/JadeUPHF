@@ -47,14 +47,6 @@ import java.util.List;
  */
 public interface AgentManager {
 
-    /**
-     * This callback interface is implemented by the AMS in order to be
-     * notified of significant platform-level events (e.g. container
-     * added or removed, agents birth or death, mtp configuration changes, etc.).
-     */
-    interface Listener extends PlatformListener, MTPListener {
-    }
-
     // Listeners related methods
     void addListener(Listener l);
 
@@ -79,8 +71,6 @@ public interface AgentManager {
 
     AMSAgentDescription getAMSDescription(AID agentID) throws NotFoundException;
 
-    // JADE actions method
-
     /**
      * Create an agent on the given container. If the container-name is null
      * then the agent is created on the main-container.
@@ -90,6 +80,8 @@ public interface AgentManager {
      * @throws JADESecurityException if this action is not authorized
      **/
     void create(String agentName, String className, Object[] arguments, ContainerID cid, JADEPrincipal owner, Credentials initialCredentials, JADEPrincipal requesterPrincipal, Credentials requesterCredentials) throws UnreachableException, JADESecurityException, NotFoundException, NameClashException;
+
+    // JADE actions method
 
     void kill(AID agentID, JADEPrincipal requesterPrincipal, Credentials requesterCredentials) throws NotFoundException, UnreachableException, JADESecurityException;
 
@@ -131,5 +123,13 @@ public interface AgentManager {
     void amsModify(AMSAgentDescription dsc) throws NotRegistered, NotFoundException, UnreachableException, JADESecurityException;
 
     List<?> amsSearch(AMSAgentDescription template, long maxResults);
+
+    /**
+     * This callback interface is implemented by the AMS in order to be
+     * notified of significant platform-level events (e.g. container
+     * added or removed, agents birth or death, mtp configuration changes, etc.).
+     */
+    interface Listener extends PlatformListener, MTPListener {
+    }
 }
 

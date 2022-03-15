@@ -29,8 +29,14 @@ package jade.wrapper;
  * @author David Bell, Dick Cowan: Hewlett-Packard
  */
 public class AgentState extends StateBase {
+    public static final int cAGENT_STATE_INITIATED = 1;
+    public static final int cAGENT_STATE_ACTIVE = 2;
+    public static final int cAGENT_STATE_IDLE = 3;
+    public static final int cAGENT_STATE_SUSPENDED = 4;
+    public static final int cAGENT_STATE_WAITING = 5;
+    public static final int cAGENT_STATE_DELETED = 6;
+    public static final int cAGENT_STATE_TRANSIT = 7;
     static final int LOWEST_STATE = 1;
-
     /**
      * An array of string names, one for each of the valid state this object
      * can represent. This array MUST be initialized before the other static
@@ -45,15 +51,6 @@ public class AgentState extends StateBase {
             "Deleted",      // 6
             "Transit"       // 7
     };
-
-    public static final int cAGENT_STATE_INITIATED = 1;
-    public static final int cAGENT_STATE_ACTIVE = 2;
-    public static final int cAGENT_STATE_IDLE = 3;
-    public static final int cAGENT_STATE_SUSPENDED = 4;
-    public static final int cAGENT_STATE_WAITING = 5;
-    public static final int cAGENT_STATE_DELETED = 6;
-    public static final int cAGENT_STATE_TRANSIT = 7;
-
     static final State AGENT_STATE_INITIATED = new AgentState(cAGENT_STATE_INITIATED);
     static final State AGENT_STATE_ACTIVE = new AgentState(cAGENT_STATE_ACTIVE);
     static final State AGENT_STATE_IDLE = new AgentState(cAGENT_STATE_IDLE);

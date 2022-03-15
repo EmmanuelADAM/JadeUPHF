@@ -37,7 +37,6 @@ public class OntologyException extends ContentException {
      * Construct an <code>OntologyException</code> with a given message.
      *
      * @param message the message
-     *
      */
     public OntologyException(String message) {
         super(message);

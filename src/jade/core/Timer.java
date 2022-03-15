@@ -36,9 +36,9 @@ package jade.core;
  */
 public class Timer {
 
+    private final TimerListener owner;
     private long expireTimeMillis;
     private boolean fired;
-    private final TimerListener owner;
 
     public Timer(long when, TimerListener tl) {
         expireTimeMillis = when;

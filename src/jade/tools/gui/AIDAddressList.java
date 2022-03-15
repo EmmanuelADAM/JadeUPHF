@@ -44,6 +44,18 @@ import java.util.Iterator;
 
 public class AIDAddressList extends JPanel {
 
+    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final JList<String> contentList = new JList<>();
+    private final JButton viewButton = new JButton();
+    private final JButton addButton = new JButton();
+    private final JButton deleteButton = new JButton();
+    private final DefaultListModel<String> listModel = new DefaultListModel<>();
+    private final JScrollPane contentScrollPane = new JScrollPane();
+    private boolean editable = true;
+    private AIDAddressListListener theDataListener;
+    private AID theAID;
+
+
     /**
      * Constructor for the AIDAddressesList object
      */
@@ -54,7 +66,6 @@ public class AIDAddressList extends JPanel {
             e.printStackTrace();
         }
     }
-
 
     /**
      * Sets the Editable attribute of the AIDAddressesList object
@@ -68,7 +79,6 @@ public class AIDAddressList extends JPanel {
             this.deleteButton.setEnabled(false);
         }
     }
-
 
     /**
      * Description of the Method
@@ -90,7 +100,6 @@ public class AIDAddressList extends JPanel {
         contentList.setModel(listModel);
     }
 
-
     /**
      * Description of the Method
      */
@@ -101,7 +110,6 @@ public class AIDAddressList extends JPanel {
             this.listModel.remove(index);
         }
     }
-
 
     /**
      * Description of the Method
@@ -116,7 +124,6 @@ public class AIDAddressList extends JPanel {
         }
 
     }
-
 
     /**
      * Description of the Method
@@ -140,7 +147,6 @@ public class AIDAddressList extends JPanel {
         }
     }
 
-
     /**
      * Description of the Method
      *
@@ -149,7 +155,6 @@ public class AIDAddressList extends JPanel {
     void deleteButton_actionPerformed(ActionEvent e) {
         doDelete();
     }
-
 
     /**
      * Adds a feature to the Button_actionPerformed attribute of the
@@ -162,7 +167,6 @@ public class AIDAddressList extends JPanel {
         doAdd();
     }
 
-
     /**
      * Description of the Method
      *
@@ -171,7 +175,6 @@ public class AIDAddressList extends JPanel {
     void viewButton_actionPerformed(ActionEvent e) {
         doView();
     }
-
 
     /**
      * Description of the Method
@@ -196,14 +199,12 @@ public class AIDAddressList extends JPanel {
 
     }
 
-
     void contentList_mouseClicked(MouseEvent e) {
         if (e.getClickCount() > 1) {
             doView();
         }
 
     }
-
 
     /**
      * Description of the Method
@@ -262,7 +263,6 @@ public class AIDAddressList extends JPanel {
                 , GridBagConstraints.SOUTHEAST, GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
     }
 
-
     /**
      * This class listenes to the AIDAddressList
      *
@@ -272,12 +272,15 @@ public class AIDAddressList extends JPanel {
 
     private class AIDAddressListListener implements ListDataListener {
 
+        private String theRemovedAddress, theChangedAddress;
+        private AID itsAID;
+
+
         /**
          * Constructor for the AddressListListener object
          */
         public AIDAddressListListener() {
         }
-
 
         /**
          * Description of the Method
@@ -288,7 +291,6 @@ public class AIDAddressList extends JPanel {
         public void register(Object obj, String arg) {
             itsAID = (AID) obj;
         }
-
 
         /**
          * Description of the Method
@@ -302,7 +304,6 @@ public class AIDAddressList extends JPanel {
             itsAID.addAddresses(newAddress);
         }
 
-
         /**
          * Description of the Method
          *
@@ -311,7 +312,6 @@ public class AIDAddressList extends JPanel {
         public void registerRemovedAddress(String theRemovedAddress) {
             this.theRemovedAddress = theRemovedAddress;
         }
-
 
         /**
          * Description of the Method
@@ -322,7 +322,6 @@ public class AIDAddressList extends JPanel {
             itsAID.removeAddresses(theRemovedAddress);
         }
 
-
         /**
          * Description of the Method
          *
@@ -331,7 +330,6 @@ public class AIDAddressList extends JPanel {
         public void registerChangedAddress(String theChangedAddress) {
             this.theChangedAddress = theChangedAddress;
         }
-
 
         /**
          * Description of the Method
@@ -345,12 +343,7 @@ public class AIDAddressList extends JPanel {
             itsAID.removeAddresses(currentAddress);
             itsAID.addAddresses(theChangedAddress);
         }
-
-
-        private String theRemovedAddress, theChangedAddress;
-        private AID itsAID;
     }
-
 
     /**
      * This class show a dialog where the address of an AID can be viewed and
@@ -361,6 +354,18 @@ public class AIDAddressList extends JPanel {
      */
 
     private class AIDAddressDialog extends JDialog {
+
+        private final String CANCELLED = "cancelled";
+        GridBagLayout gridBagLayout1 = new GridBagLayout();
+        JTextField theAddressField = new JTextField();
+        JLabel jLabel1 = new JLabel();
+        JPanel buttonPanel = new JPanel();
+        JButton okButton = new JButton();
+        JButton cancelButton = new JButton();
+        private String OK = "ok";
+        private String userAction;
+        private String itsAddress;
+
 
         /**
          * Constructor for the ACLAddressDialog object
@@ -375,7 +380,6 @@ public class AIDAddressList extends JPanel {
             }
         }
 
-
         /**
          * Gets the ItsAddress attribute of the ACLAddressDialog object
          *
@@ -385,6 +389,15 @@ public class AIDAddressList extends JPanel {
             return itsAddress;
         }
 
+        /**
+         * Sets the ItsAddress attribute of the ACLAddressDialog object
+         *
+         * @param newItsAddress The new ItsAddress value
+         */
+        public void setItsAddress(String newItsAddress) {
+            itsAddress = newItsAddress;
+            this.theAddressField.setText(itsAddress);
+        }
 
         /**
          * Gets the OK attribute of the ACLAddressDialog object
@@ -394,7 +407,6 @@ public class AIDAddressList extends JPanel {
         public boolean getOK() {
             return userAction.equals(OK);
         }
-
 
         /**
          * Sets the Editable attribute of the ACLAddressDialog object
@@ -408,18 +420,6 @@ public class AIDAddressList extends JPanel {
                 this.theAddressField.setEnabled(false);
             }
         }
-
-
-        /**
-         * Sets the ItsAddress attribute of the ACLAddressDialog object
-         *
-         * @param newItsAddress The new ItsAddress value
-         */
-        public void setItsAddress(String newItsAddress) {
-            itsAddress = newItsAddress;
-            this.theAddressField.setText(itsAddress);
-        }
-
 
         /**
          * Description of the Method
@@ -452,7 +452,6 @@ public class AIDAddressList extends JPanel {
             buttonPanel.add(cancelButton, null);
         }
 
-
         /**
          * Description of the Method
          *
@@ -462,7 +461,6 @@ public class AIDAddressList extends JPanel {
             setUserAction(CANCELLED);
             setVisible(false);
         }
-
 
         /**
          * Description of the Method
@@ -475,7 +473,6 @@ public class AIDAddressList extends JPanel {
             setVisible(false);
         }
 
-
         /**
          * Gets the UserAction attribute of the ACLAddressDialog object
          *
@@ -484,7 +481,6 @@ public class AIDAddressList extends JPanel {
         private String getUserAction() {
             return userAction;
         }
-
 
         /**
          * Sets the UserAction attribute of the ACLAddressDialog object
@@ -495,34 +491,7 @@ public class AIDAddressList extends JPanel {
             userAction = newUserAction;
         }
 
-
-        GridBagLayout gridBagLayout1 = new GridBagLayout();
-        JTextField theAddressField = new JTextField();
-        JLabel jLabel1 = new JLabel();
-        JPanel buttonPanel = new JPanel();
-        JButton okButton = new JButton();
-        JButton cancelButton = new JButton();
-
-        private String OK = "ok";
-        private final String CANCELLED = "cancelled";
-        private String userAction;
-        private String itsAddress;
-
     }
-
-
-    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
-    private final JList<String> contentList = new JList<>();
-    private final JButton viewButton = new JButton();
-    private final JButton addButton = new JButton();
-    private final JButton deleteButton = new JButton();
-
-    private final DefaultListModel<String> listModel = new DefaultListModel<>();
-    private final JScrollPane contentScrollPane = new JScrollPane();
-
-    private boolean editable = true;
-    private AIDAddressListListener theDataListener;
-    private AID theAID;
 
 }
 //  ***EOF***

@@ -35,41 +35,6 @@ import java.util.EventListener;
  */
 public interface PlatformController {
     /**
-     * Inner callback interface to receive platform events.
-     */
-    interface Listener extends EventListener {
-        /**
-         * Called when an agent is born. EventObject source is AgentController.
-         */
-        void bornAgent(PlatformEvent anEvent);
-
-        /**
-         * Called when an agent dies. PlatformEvent source is AgentController.
-         */
-        void deadAgent(PlatformEvent anEvent);
-
-        /**
-         * Called when the platform is started. PlatformEvent source is PlatformController.
-         */
-        void startedPlatform(PlatformEvent anEvent);
-
-        /**
-         * Called when the platform is suspended. PlatformEvent source is PlatformController.
-         */
-        void suspendedPlatform(PlatformEvent anEvent);
-
-        /**
-         * Called when the platform is activated. PlatformEvent source is PlatformController.
-         */
-        void resumedPlatform(PlatformEvent anEvent);
-
-        /**
-         * Called when the platform is killed (destroyed). PlatformEvent source is PlatformController.
-         */
-        void killedPlatform(PlatformEvent anEvent);
-    }
-
-    /**
      * Get the name of the platform.
      *
      * @return String The platform name.
@@ -148,6 +113,41 @@ public interface PlatformController {
      * @param aListener The listener to be notified.
      */
     void removePlatformListener(Listener aListener) throws ControllerException;
+
+    /**
+     * Inner callback interface to receive platform events.
+     */
+    interface Listener extends EventListener {
+        /**
+         * Called when an agent is born. EventObject source is AgentController.
+         */
+        void bornAgent(PlatformEvent anEvent);
+
+        /**
+         * Called when an agent dies. PlatformEvent source is AgentController.
+         */
+        void deadAgent(PlatformEvent anEvent);
+
+        /**
+         * Called when the platform is started. PlatformEvent source is PlatformController.
+         */
+        void startedPlatform(PlatformEvent anEvent);
+
+        /**
+         * Called when the platform is suspended. PlatformEvent source is PlatformController.
+         */
+        void suspendedPlatform(PlatformEvent anEvent);
+
+        /**
+         * Called when the platform is activated. PlatformEvent source is PlatformController.
+         */
+        void resumedPlatform(PlatformEvent anEvent);
+
+        /**
+         * Called when the platform is killed (destroyed). PlatformEvent source is PlatformController.
+         */
+        void killedPlatform(PlatformEvent anEvent);
+    }
 
 }
 

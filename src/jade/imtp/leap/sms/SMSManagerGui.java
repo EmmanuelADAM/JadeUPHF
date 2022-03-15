@@ -22,6 +22,21 @@ public class SMSManagerGui extends JFrame {
         super("SMS Manager GUI");
     }
 
+    public static void main(String[] args) {
+        if (args != null && args.length == 1) {
+            try {
+                Properties pp = new Properties();
+                pp.load(new FileReader(args[0]));
+                SMSManagerGui gui = new SMSManagerGui();
+                gui.init(pp);
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        } else {
+            System.out.println("USAGE: java SMSManagerGui <properties-file>");
+        }
+    }
+
     public void init(Properties pp) {
         theSMSManager = SMSManager.getInstance(pp);
 
@@ -96,21 +111,6 @@ public class SMSManagerGui extends JFrame {
         int x = (Math.min(screenSize.width, maxX));
         int y = (Math.min(screenSize.height, maxY));
         return new Dimension(x, y);
-    }
-
-    public static void main(String[] args) {
-        if (args != null && args.length == 1) {
-            try {
-                Properties pp = new Properties();
-                pp.load(new FileReader(args[0]));
-                SMSManagerGui gui = new SMSManagerGui();
-                gui.init(pp);
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
-        } else {
-            System.out.println("USAGE: java SMSManagerGui <properties-file>");
-        }
     }
 }
 	

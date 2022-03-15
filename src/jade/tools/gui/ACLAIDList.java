@@ -45,6 +45,24 @@ import java.util.Iterator;
  * @since April 26, 2002
  */
 public class ACLAIDList extends JPanel {
+    private final String MSG = "msg";
+    private final String AID = "Aid";
+    private final JScrollPane contentScrollPane = new JScrollPane();
+    private final JList<AID> contentList = new JList<>();
+    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final JButton viewButton = new JButton();
+    private final JButton addButton = new JButton();
+    private final JButton deleteButton = new JButton();
+    private final DefaultListModel<AID> listModel = new DefaultListModel<>();
+    private final AIDListCellRenderer aidListCellRenderer = new AIDListCellRenderer();
+    private final Agent agent;
+    private boolean editable = true;
+    private String fieldName = "";
+    private String mode = MSG;
+    private AIDListListener theDataListener;
+    private ACLMessage itsMsg;
+    private AID itsAid;
+    private Object itsObj;
     /**
      * Constructor for the ACLAIDList object
      *
@@ -59,7 +77,6 @@ public class ACLAIDList extends JPanel {
         }
     }
 
-
     /**
      * Sets the Editable attribute of the ACLAIDList object
      *
@@ -72,7 +89,6 @@ public class ACLAIDList extends JPanel {
             this.deleteButton.setEnabled(false);
         }
     }
-
 
     /**
      * register Object and accompagnied field name in ACLMessage
@@ -102,7 +118,6 @@ public class ACLAIDList extends JPanel {
         contentList.setModel(listModel);
     }
 
-
     /**
      * register AID and fieldname from ACLMessage
      *
@@ -130,7 +145,6 @@ public class ACLAIDList extends JPanel {
         contentList.setModel(listModel);
     }
 
-
     /**
      * show the current selected AID
      */
@@ -153,7 +167,6 @@ public class ACLAIDList extends JPanel {
         }
     }
 
-
     /**
      * Triggered by delete button
      *
@@ -162,7 +175,6 @@ public class ACLAIDList extends JPanel {
     void deleteButton_actionPerformed(ActionEvent e) {
         doDelete();
     }
-
 
     /**
      * delete selected AID
@@ -175,7 +187,6 @@ public class ACLAIDList extends JPanel {
         }
     }
 
-
     /**
      * Triggered by add button
      *
@@ -184,7 +195,6 @@ public class ACLAIDList extends JPanel {
     void addButton_actionPerformed(ActionEvent e) {
         doAdd();
     }
-
 
     /**
      * Add a AID to the list
@@ -201,7 +211,6 @@ public class ACLAIDList extends JPanel {
 
     }
 
-
     /**
      * Triggered by the view button
      *
@@ -210,7 +219,6 @@ public class ACLAIDList extends JPanel {
     void viewButton_actionPerformed(ActionEvent e) {
         doView();
     }
-
 
     /**
      * Triggered when clicking with mouse pointer. On doubleclick, call
@@ -224,7 +232,6 @@ public class ACLAIDList extends JPanel {
         }
 
     }
-
 
     /**
      * Triggered when pressing a key. Enter will call doView(), Insert will
@@ -250,7 +257,6 @@ public class ACLAIDList extends JPanel {
         }
 
     }
-
 
     /**
      * Builds up the componenent
@@ -314,7 +320,6 @@ public class ACLAIDList extends JPanel {
         contentScrollPane.getViewport().add(contentList, null);
     }
 
-
     public class AIDListCellRenderer extends JLabel implements ListCellRenderer<Object> {
         /**
          * Constructor for the AIDListCellRenderer object
@@ -346,7 +351,6 @@ public class ACLAIDList extends JPanel {
         }
     }
 
-
     /**
      * This class listenes to the AIDList
      *
@@ -355,6 +359,10 @@ public class ACLAIDList extends JPanel {
      */
 
     public class AIDListListener implements ListDataListener {
+        String fieldName = "";
+        private AID theRemovedAID, theChangedAID;
+        private Object itsObj;
+
         /**
          * Description of the Method
          *
@@ -365,7 +373,6 @@ public class ACLAIDList extends JPanel {
             itsObj = obj;
             this.fieldName = fieldName;
         }
-
 
         /**
          * Description of the Method
@@ -387,7 +394,6 @@ public class ACLAIDList extends JPanel {
 
         }
 
-
         /**
          * Description of the Method
          *
@@ -397,7 +403,6 @@ public class ACLAIDList extends JPanel {
             this.theRemovedAID = theRemovedAID;
         }
 
-
         /**
          * Description of the Method
          *
@@ -406,7 +411,6 @@ public class ACLAIDList extends JPanel {
         public void registerChangedAID(AID theChangedAID) {
             this.theChangedAID = theChangedAID;
         }
-
 
         /**
          * Description of the Method
@@ -423,7 +427,6 @@ public class ACLAIDList extends JPanel {
                 ex.printStackTrace();
             }
         }
-
 
         /**
          * Description of the Method
@@ -454,36 +457,7 @@ public class ACLAIDList extends JPanel {
             }
 
         }
-
-
-        String fieldName = "";
-
-        private AID theRemovedAID, theChangedAID;
-
-        private Object itsObj;
     }
-
-
-    private final String MSG = "msg";
-    private final String AID = "Aid";
-    private final JScrollPane contentScrollPane = new JScrollPane();
-    private final JList<AID> contentList = new JList<>();
-
-    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
-    private final JButton viewButton = new JButton();
-    private final JButton addButton = new JButton();
-    private final JButton deleteButton = new JButton();
-
-    private final DefaultListModel<AID> listModel = new DefaultListModel<>();
-    private final AIDListCellRenderer aidListCellRenderer = new AIDListCellRenderer();
-    private boolean editable = true;
-    private String fieldName = "";
-    private String mode = MSG;
-    private final Agent agent;
-    private AIDListListener theDataListener;
-    private ACLMessage itsMsg;
-    private AID itsAid;
-    private Object itsObj;
 
 }
 //  ***EOF***

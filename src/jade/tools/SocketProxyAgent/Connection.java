@@ -45,17 +45,16 @@ class Connection extends Thread {
      */
     private final static Logger logger =
             Logger.getMyLogger(Server.class.getName());
-    private Agent myAgent;
-    private Socket client;
-    private DataInputStream in;
-    private PrintStream out;
     private final boolean done = false;
-    private boolean closed = false;
-
     /**
      * Name of the agents who intend to receive any message from this agent
      */
     private final Vector<String> allowedNames;
+    private Agent myAgent;
+    private Socket client;
+    private DataInputStream in;
+    private PrintStream out;
+    private boolean closed = false;
 
     /**
      * this class is a thread to listen on socket and copy to receivers

@@ -48,15 +48,6 @@ public class MobileAgentLanguage implements Concept {
     }
 
     /**
-     * Set the <code>name</code> slot of this action.
-     *
-     * @param n The language of the described agent.
-     */
-    public void setName(String n) {
-        name = n;
-    }
-
-    /**
      * Retrieve the value of the <code>name</code> slot of this action,
      * containing the language of the described agent.
      *
@@ -68,13 +59,12 @@ public class MobileAgentLanguage implements Concept {
     }
 
     /**
-     * Set the <code>major-version</code> slot of this action.
+     * Set the <code>name</code> slot of this action.
      *
-     * @param v The major version number of the language of the
-     *          described agent.
+     * @param n The language of the described agent.
      */
-    public void setMajorVersion(Long v) {
-        majorVersion = v;
+    public void setName(String n) {
+        name = n;
     }
 
     /**
@@ -90,13 +80,13 @@ public class MobileAgentLanguage implements Concept {
     }
 
     /**
-     * Set the <code>minor-version</code> slot of this action.
+     * Set the <code>major-version</code> slot of this action.
      *
-     * @param v The minor version number of the language of the
+     * @param v The major version number of the language of the
      *          described agent.
      */
-    public void setMinorVersion(Long v) {
-        minorVersion = v;
+    public void setMajorVersion(Long v) {
+        majorVersion = v;
     }
 
     /**
@@ -112,12 +102,13 @@ public class MobileAgentLanguage implements Concept {
     }
 
     /**
-     * Set the <code>dependencies</code> slot of this action.
+     * Set the <code>minor-version</code> slot of this action.
      *
-     * @param d The language dependencies of the described agent.
+     * @param v The minor version number of the language of the
+     *          described agent.
      */
-    public void setDependencies(String d) {
-        dependencies = d;
+    public void setMinorVersion(Long v) {
+        minorVersion = v;
     }
 
     /**
@@ -130,6 +121,15 @@ public class MobileAgentLanguage implements Concept {
      */
     public String getDependencies() {
         return dependencies;
+    }
+
+    /**
+     * Set the <code>dependencies</code> slot of this action.
+     *
+     * @param d The language dependencies of the described agent.
+     */
+    public void setDependencies(String d) {
+        dependencies = d;
     }
 
 }

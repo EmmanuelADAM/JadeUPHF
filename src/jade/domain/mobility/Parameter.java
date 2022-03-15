@@ -60,6 +60,13 @@ public class Parameter implements Concept {
     }
 
     /**
+     * @return the name of this parameter.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * Sets the name of this parameter. This will be used as
      * the key in the dinamically loaded behaviour <code>HashMap</code>
      * for the parameter value
@@ -69,10 +76,10 @@ public class Parameter implements Concept {
     }
 
     /**
-     * @return the name of this parameter.
+     * @return the value of this parameter.
      */
-    public String getName() {
-        return name;
+    public Object getValue() {
+        return value;
     }
 
     /**
@@ -85,10 +92,10 @@ public class Parameter implements Concept {
     }
 
     /**
-     * @return the value of this parameter.
+     * @return the IO mode of this parameter.
      */
-    public Object getValue() {
-        return value;
+    public int getMode() {
+        return mode;
     }
 
     /**
@@ -98,12 +105,5 @@ public class Parameter implements Concept {
      */
     public void setMode(int mode) {
         this.mode = mode;
-    }
-
-    /**
-     * @return the IO mode of this parameter.
-     */
-    public int getMode() {
-        return mode;
     }
 }

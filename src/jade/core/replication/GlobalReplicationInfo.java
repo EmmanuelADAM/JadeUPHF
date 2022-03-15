@@ -30,11 +30,10 @@ import java.io.Serializable;
 
 class GlobalReplicationInfo implements Serializable {
     private final AID virtualAid;
-    private AID masterAid;
     private final int replicationMode;
     private final RoundList allReplicas = new RoundList();
-
     private final Logger myLogger = Logger.getJADELogger(getClass().getName());
+    private AID masterAid;
 
     GlobalReplicationInfo(AID virtual, AID master, int replicationMode) {
         this.virtualAid = virtual;

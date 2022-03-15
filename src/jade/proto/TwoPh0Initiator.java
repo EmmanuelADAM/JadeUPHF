@@ -43,6 +43,10 @@ public class TwoPh0Initiator extends Initiator {
     // Data store keys
     // Private data store keys (can't be static since if we register another instance of this class as state of the FSM
     // using the same data store the new values overrides the old one.
+    /* FSM states names */
+    private static final String HANDLE_PROPOSE = "Handle-Propose";
+    private static final String HANDLE_ALL_RESPONSES = "Handle-all-responses";
+    private static final int ALL_RESPONSES_RECEIVED = 1;
     /**
      * key to retrieve from the HashMap of the behaviour the ACLMessage
      * object passed in the constructor of the class.
@@ -74,31 +78,11 @@ public class TwoPh0Initiator extends Initiator {
      * CFP messages for which a response has not been received yet.
      */
     public final String ALL_PENDINGS_KEY = "__all-pendings" + hashCode();
-
-    /* FSM states names */
-    private static final String HANDLE_PROPOSE = "Handle-Propose";
-    private static final String HANDLE_ALL_RESPONSES = "Handle-all-responses";
-
-    private static final int ALL_RESPONSES_RECEIVED = 1;
-
     /* Data store output key */
     private final String outputKey;
 
     private int totSessions;
-
-    /**
-     * Constructs a <code>TwoPh0Initiator</code> behaviour.
-     *
-     * @param a         The agent performing the protocol.
-     * @param cfp       The message that must be used to initiate the protocol.
-     *                  Notice that the default implementation of the <code>prepareCfps</code> method
-     *                  returns an array composed of that message only.
-     * @param outputKey Data store key where the behaviour will store the Vector
-     *                  of messages to be sent to initiate the successive phase.
-     */
-    public TwoPh0Initiator(Agent a, ACLMessage cfp, String outputKey) {
-        this(a, cfp, outputKey, new HashMap<>(), new HashMap<>());
-    }
+    private String[] toBeReset = null;
 
     /**
      * Constructs a <code>TwoPh0Initiator</code> behaviour.
@@ -113,44 +97,58 @@ public class TwoPh0Initiator extends Initiator {
      * deprecated
 
     public TwoPh0Initiator(Agent a, ACLMessage cfp, String outputKey, HashMap<String, List<ACLMessage>> mapMessagesList) {
-        super(a, cfp, mapMessagesList);
-        //this.conversationId = conversationId;
-        this.outputKey = outputKey;
-        // Register the FSM transitions specific to the Two-Phase0-Commit protocol
-        registerTransition(CHECK_IN_SEQ, HANDLE_PROPOSE, ACLMessage.PROPOSE);
-        registerDefaultTransition(HANDLE_PROPOSE, CHECK_SESSIONS);
-        registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, ALL_RESPONSES_RECEIVED); // update1
-        registerDefaultTransition(HANDLE_ALL_RESPONSES, DUMMY_FINAL);
+    super(a, cfp, mapMessagesList);
+    //this.conversationId = conversationId;
+    this.outputKey = outputKey;
+    // Register the FSM transitions specific to the Two-Phase0-Commit protocol
+    registerTransition(CHECK_IN_SEQ, HANDLE_PROPOSE, ACLMessage.PROPOSE);
+    registerDefaultTransition(HANDLE_PROPOSE, CHECK_SESSIONS);
+    registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, ALL_RESPONSES_RECEIVED); // update1
+    registerDefaultTransition(HANDLE_ALL_RESPONSES, DUMMY_FINAL);
 
-        // Create and register the states specific to the Two-Phase0-Commit protocol
-        //Behaviour b;
+    // Create and register the states specific to the Two-Phase0-Commit protocol
+    //Behaviour b;
 
-        // HANDLE_PROPOSE 
-        // This state is activated when a propose message is received as a reply
-        b = new OneShotBehaviour(myAgent) {
-            public void action() {
-                ACLMessage propose = getMapMessages().get(REPLY_KEY);
-                handlePropose(propose);
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_PROPOSE);
+    // HANDLE_PROPOSE
+    // This state is activated when a propose message is received as a reply
+    b = new OneShotBehaviour(myAgent) {
+    public void action() {
+    ACLMessage propose = getMapMessages().get(REPLY_KEY);
+    handlePropose(propose);
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, HANDLE_PROPOSE);
 
-        // HANDLE_ALL_RESPONSES 
-        // This state is activated when all the responsess have been 
-        // received or the specified timeout has expired.
-        b = new OneShotBehaviour(myAgent) {
-            public void action() {
-                var responses = getMapMessagesList().get(ALL_RESPONSES_KEY);
-                var proposes = getMapMessagesList().get(ALL_PROPOSES_KEY);
-                var pendings = getMapMessagesList().get(ALL_PENDINGS_KEY);
-                var nextPhMsgs = getMapMessagesList().get(TwoPh0Initiator.this.outputKey);
-                handleAllResponses(responses, proposes, pendings, nextPhMsgs);
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_ALL_RESPONSES);
+    // HANDLE_ALL_RESPONSES
+    // This state is activated when all the responsess have been
+    // received or the specified timeout has expired.
+    b = new OneShotBehaviour(myAgent) {
+    public void action() {
+    var responses = getMapMessagesList().get(ALL_RESPONSES_KEY);
+    var proposes = getMapMessagesList().get(ALL_PROPOSES_KEY);
+    var pendings = getMapMessagesList().get(ALL_PENDINGS_KEY);
+    var nextPhMsgs = getMapMessagesList().get(TwoPh0Initiator.this.outputKey);
+    handleAllResponses(responses, proposes, pendings, nextPhMsgs);
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, HANDLE_ALL_RESPONSES);
     }*/
+
+    /**
+     * Constructs a <code>TwoPh0Initiator</code> behaviour.
+     *
+     * @param a         The agent performing the protocol.
+     * @param cfp       The message that must be used to initiate the protocol.
+     *                  Notice that the default implementation of the <code>prepareCfps</code> method
+     *                  returns an array composed of that message only.
+     * @param outputKey Data store key where the behaviour will store the Vector
+     *                  of messages to be sent to initiate the successive phase.
+     */
+    public TwoPh0Initiator(Agent a, ACLMessage cfp, String outputKey) {
+        this(a, cfp, outputKey, new HashMap<>(), new HashMap<>());
+    }
 
     /**
      * Constructs a <code>TwoPh0Initiator</code> behaviour.
@@ -215,8 +213,6 @@ public class TwoPh0Initiator extends Initiator {
             return -1;
         }
     }
-
-    private String[] toBeReset = null;
 
     /* User can override these methods */
 
@@ -486,9 +482,8 @@ public class TwoPh0Initiator extends Initiator {
         // Session states 
         static final int INIT = 0;
         static final int REPLY_RECEIVED = 1;
-
-        private int state = INIT;
         private final String myId;
+        private int state = INIT;
 
         public Session(String id) {
             myId = id;

@@ -59,8 +59,27 @@ public class HTTPPacket {
     protected HTTPPacket() {
     }
 
+    private static boolean endOfHeader(int[] bb, int pos) {
+        if (bb[pos] == LF) {
+            if ((++pos) >= 3) {
+                pos = 0;
+            }
+            if (bb[pos] == CR) {
+                if ((++pos) >= 3) {
+                    pos = 0;
+                }
+                return bb[pos] == LF;
+            }
+        }
+        return false;
+    }
+
     public String getHttpType() {
         return httpType;
+    }
+
+    public void setHttpType(String type) {
+        httpType = type;
     }
 
     public String getField(String key) {
@@ -69,18 +88,6 @@ public class HTTPPacket {
 
     public byte[] getPayload() {
         return payload;
-    }
-
-    public void setHttpType(String type) {
-        httpType = type;
-    }
-
-    public void setField(String key, String value) {
-        if (value != null) {
-            fields.put(new CaseInsensitiveString(key), value);
-        } else {
-            fields.remove(new CaseInsensitiveString(key));
-        }
     }
 
     public void setPayload(byte[] p) {
@@ -92,6 +99,14 @@ public class HTTPPacket {
         }
     }
 
+    public void setField(String key, String value) {
+        if (value != null) {
+            fields.put(new CaseInsensitiveString(key), value);
+        } else {
+            fields.remove(new CaseInsensitiveString(key));
+        }
+    }
+
     public void setPayload(byte[] bb, int first, int length) {
         payload = new byte[length];
         System.arraycopy(bb, first, payload, 0, length);
@@ -100,6 +115,7 @@ public class HTTPPacket {
 
     /**
      * Method declaration
+     *
      * @see
      */
     protected void readFrom(InputStream is) throws IOException {
@@ -166,23 +182,9 @@ public class HTTPPacket {
         }
     }
 
-    private static boolean endOfHeader(int[] bb, int pos) {
-        if (bb[pos] == LF) {
-            if ((++pos) >= 3) {
-                pos = 0;
-            }
-            if (bb[pos] == CR) {
-                if ((++pos) >= 3) {
-                    pos = 0;
-                }
-                return bb[pos] == LF;
-            }
-        }
-        return false;
-    }
-
     /**
      * Method declaration
+     *
      * @see
      */
     protected void writeTo(OutputStream os) throws IOException {
@@ -212,6 +214,7 @@ public class HTTPPacket {
 
     /**
      * Method declaration
+     *
      * @see
      */
     public String toString() {

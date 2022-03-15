@@ -44,6 +44,10 @@ public class ResourceManagementService extends BaseService {
     private ServiceComponent localSlice;
     private ResourceManagementHelper helper;
 
+    public static ResourceManagementHelper getHelper() {
+        return SingletonResourceManagementHelper.getInstance().getHelper();
+    }
+
     @Override
     public void init(AgentContainer ac, Profile p) throws ProfileException {
         super.init(ac, p);
@@ -83,11 +87,6 @@ public class ResourceManagementService extends BaseService {
     public ServiceHelper getHelper(Agent a) {
         return helper;
     }
-
-    public static ResourceManagementHelper getHelper() {
-        return SingletonResourceManagementHelper.getInstance().getHelper();
-    }
-
 
     /**
      * Inner class ServiceComponent

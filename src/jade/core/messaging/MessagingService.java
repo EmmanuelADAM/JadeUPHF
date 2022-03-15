@@ -87,80 +87,7 @@ public class MessagingService extends BaseService implements MessageManager.Chan
     public static final String ENABLE_MESSAGE_MANAGER_METRICS = "jade_core_messaging_MessagingService_enablemessagemanagermetrics";
 
     //#J2ME_EXCLUDE_END
-
-    // The profile passed to this object
-    private Profile myProfile;
-
-    // A flag indicating whether or not we must accept foreign agents
-    private boolean acceptForeignAgents = false;
-
-    // The ID of the Platform this service belongs to
-    private String platformID;
-
-    // The concrete agent container, providing access to LADT, etc.
-    private AgentContainer myContainer;
-
-    // The local slice for this service
-    private final ServiceComponent localSlice = new ServiceComponent();
-
-    // The command sink, source side
-    private final CommandSourceSink senderSink = new CommandSourceSink();
-
-    // The command sink, target side
-    private final CommandTargetSink receiverSink = new CommandTargetSink();
-
-    // The filter for incoming commands related to ACL encoding
-    private OutgoingEncodingFilter encOutFilter;
-
-    // The filter for outgoing commands related to ACL encoding
-    private IncomingEncodingFilter encInFilter;
-
-    // The cached AID -> MessagingSlice associations
-    private Map<Object, Object> cachedSlices;
-
-    // The routing table mapping MTP addresses to their hosting slice
-    private RoutingTable routes;
-
-    private int maxDeliveryRetryAttempts;
-
-    // The map of local and global (used in the Main Container) aliases
-    private final Hashtable<Object, AID> localAliases = new Hashtable<>();
-    private Hashtable<Object, AID> globalAliases;
-    private List<AliasListener> aliasListeners;
-
-    // The handle to the MainReplicationService to keep global aliases info in synch
-    MainReplicationHandle replicationHandle;
-
-
     private final static int EXPECTED_ACLENCODINGS_SIZE = 3;
-    // The table of the locally installed ACL message encodings
-    private final Map<String, ACLCodec> messageEncodings = new HashMap<>(EXPECTED_ACLENCODINGS_SIZE);
-
-    // The platform ID, to be used in inter-platform dispatching
-    private String accID;
-
-    // The component managing asynchronous message delivery and retries
-    private MessageManager myMessageManager;
-
-    //#J2ME_EXCLUDE_BEGIN
-    // SAM related variables
-    private boolean samActive;
-    private int msgCounter = 0;
-    private int deliveryTimeMeasurementRate;
-    private AverageMeasureProviderImpl deliveryTimeMeasureProvider;
-    private long postedMessageCounter;
-    private AverageMeasureProviderImpl avgQueueSizeBytesProvider;
-    private AverageMeasureProviderImpl avgQueueSizeMessagesProvider;
-    private Timer samTimer;
-    //#J2ME_EXCLUDE_END
-
-    public static class UnknownACLEncodingException extends NotFoundException {
-        UnknownACLEncodingException(String msg) {
-            super(msg);
-        }
-    } // End of UnknownACLEncodingException class
-
-
     private static final String[] OWNED_COMMANDS = new String[]{
             MessagingSlice.SEND_MESSAGE,
             MessagingSlice.NOTIFY_FAILURE,
@@ -170,6 +97,54 @@ public class MessagingService extends BaseService implements MessageManager.Chan
             MessagingSlice.DEAD_MTP,
             MessagingSlice.SET_PLATFORM_ADDRESSES
     };
+    // The local slice for this service
+    private final ServiceComponent localSlice = new ServiceComponent();
+    // The command sink, source side
+    private final CommandSourceSink senderSink = new CommandSourceSink();
+    // The command sink, target side
+    private final CommandTargetSink receiverSink = new CommandTargetSink();
+    // The map of local and global (used in the Main Container) aliases
+    private final Hashtable<Object, AID> localAliases = new Hashtable<>();
+    // The table of the locally installed ACL message encodings
+    private final Map<String, ACLCodec> messageEncodings = new HashMap<>(EXPECTED_ACLENCODINGS_SIZE);
+    // The handle to the MainReplicationService to keep global aliases info in synch
+    MainReplicationHandle replicationHandle;
+    // The profile passed to this object
+    private Profile myProfile;
+    // A flag indicating whether or not we must accept foreign agents
+    private boolean acceptForeignAgents = false;
+    // The ID of the Platform this service belongs to
+    private String platformID;
+    // The concrete agent container, providing access to LADT, etc.
+    private AgentContainer myContainer;
+    // The filter for incoming commands related to ACL encoding
+    private OutgoingEncodingFilter encOutFilter;
+    // The filter for outgoing commands related to ACL encoding
+    private IncomingEncodingFilter encInFilter;
+    // The cached AID -> MessagingSlice associations
+    private Map<Object, Object> cachedSlices;
+    // The routing table mapping MTP addresses to their hosting slice
+    private RoutingTable routes;
+    private int maxDeliveryRetryAttempts;
+    private Hashtable<Object, AID> globalAliases;
+    private List<AliasListener> aliasListeners;
+    // The platform ID, to be used in inter-platform dispatching
+    private String accID;
+    // The component managing asynchronous message delivery and retries
+    private MessageManager myMessageManager;
+    //#J2ME_EXCLUDE_BEGIN
+    // SAM related variables
+    private boolean samActive;
+    private int msgCounter = 0;
+    private int deliveryTimeMeasurementRate;
+    private AverageMeasureProviderImpl deliveryTimeMeasureProvider;
+    private long postedMessageCounter;
+    private AverageMeasureProviderImpl avgQueueSizeBytesProvider;
+    private AverageMeasureProviderImpl avgQueueSizeMessagesProvider;
+    //#J2ME_EXCLUDE_END
+    private Timer samTimer;
+    // Only for debugging:
+    private volatile int traceCnt = 0;
 
     public MessagingService() {
     }
@@ -284,10 +259,9 @@ public class MessagingService extends BaseService implements MessageManager.Chan
             // MTPs
             l = myProfile.getSpecifiers(Profile.MTPS);
             PrintWriter f = null;
-            StringBuffer sb = null;
+            StringBuilder sb = null;
 
-            for (Object o : l) {
-                Specifier spec = (Specifier) o;
+            for (Specifier spec : l) {
                 String className = spec.getClassName();
                 String addressURL = null;
                 Object[] args = spec.getArgs();
@@ -304,7 +278,7 @@ public class MessagingService extends BaseService implements MessageManager.Chan
                 if (f == null) {
                     String fileName = myProfile.getParameter(Profile.FILE_DIR, "") + "MTPs-" + myContainer.getID().getName() + ".txt";
                     f = new PrintWriter(new FileWriter(fileName));
-                    sb = new StringBuffer("MTP addresses:");
+                    sb = new StringBuilder("MTP addresses:");
                 }
                 f.println(mtpAddrs[0]);
                 sb.append("\n");
@@ -776,6 +750,516 @@ public class MessagingService extends BaseService implements MessageManager.Chan
         }
     }
 
+    void stamp(GenericMessage gmsg) {
+        //#J2ME_EXCLUDE_BEGIN
+        if (samActive) {
+            synchronized (this) {
+                msgCounter++;
+                if (msgCounter == deliveryTimeMeasurementRate) {
+                    gmsg.setTimeStamp(System.currentTimeMillis());
+                    msgCounter = 0;
+                }
+            }
+        }
+        //#J2ME_EXCLUDE_END
+    }
+
+    private void updateDeliveryTimeMeasurement(GenericMessage gmsg) {
+        //#J2ME_EXCLUDE_BEGIN
+        if (samActive) {
+            long timeStamp = gmsg.getTimeStamp();
+            if (timeStamp > 0 && deliveryTimeMeasureProvider != null) {
+                long deliveryTime = System.currentTimeMillis() - timeStamp;
+                if (myLogger.isLoggable(Logger.FINER)) {
+                    myLogger.log(Logger.FINER, "Delivery time = " + deliveryTime);
+                }
+                deliveryTimeMeasureProvider.addSample(deliveryTime);
+            }
+        }
+        //#J2ME_EXCLUDE_END
+    }
+
+    // Entry point for the ACL message delivery
+    public void deliverNow(GenericMessage msg, AID receiverID) {
+        if (msg.getTraceID() != null) {
+            myLogger.log(Logger.INFO, msg.getTraceID() + " - Serving message delivery");
+        }
+        try {
+            if (!msg.hasForeignReceiver()) {
+                deliverInLocalPlatfrom(msg, receiverID);
+            } else {
+                // Dispatch it through the ACC
+                if (msg.getTraceID() != null) {
+                    myLogger.log(Logger.INFO, msg.getTraceID() + " - Activating ACC delivery");
+                }
+                Iterator<String> addresses = receiverID.getAllAddresses();
+                if (addresses.hasNext()) {
+                    while (addresses.hasNext()) {
+                        String address = addresses.next();
+                        try {
+                            forwardMessage(msg, receiverID, address);
+                            return;
+                        } catch (MTPException mtpe) {
+                            if (myLogger.isLoggable(Logger.WARNING) && !isPersistentDeliveryRetry(msg))
+                                myLogger.log(Logger.WARNING, "Cannot deliver message to address: " + address + " [" + mtpe + "]. Trying the next one...");
+                        }
+                    }
+                    notifyFailureToSender(msg, receiverID, new InternalError(ACLMessage.AMS_FAILURE_FOREIGN_AGENT_UNREACHABLE + ": " + "No valid address contained within the AID " + receiverID.getName()));
+                } else {
+                    notifyFailureToSender(msg, receiverID, new InternalError(ACLMessage.AMS_FAILURE_FOREIGN_AGENT_NO_ADDRESS));
+                }
+            }
+        } catch (NotFoundException nfe) {
+            // The receiver does not exist --> Send a FAILURE message
+            if (msg.getTraceID() != null) {
+                myLogger.log(Logger.WARNING, msg.getTraceID() + " - Receiver " + receiverID.getLocalName() + " does not exist.", nfe);
+            }
+            notifyFailureToSender(msg, receiverID, new InternalError(ACLMessage.AMS_FAILURE_AGENT_NOT_FOUND + ": " + nfe.getMessage()));
+        } catch (IMTPException imtpe) {
+            // Can't reach the destination container --> Send a FAILURE message
+            String id = (msg.getTraceID() != null ? msg.getTraceID() : MessageManager.stringify(msg));
+            myLogger.log(Logger.WARNING, id + " - Receiver " + receiverID.getLocalName() + " unreachable.", imtpe);
+            notifyFailureToSender(msg, receiverID, new InternalError(ACLMessage.AMS_FAILURE_AGENT_UNREACHABLE + ": " + imtpe.getMessage()));
+        } catch (ServiceException se) {
+            // Service error during delivery --> Send a FAILURE message
+            String id = (msg.getTraceID() != null ? msg.getTraceID() : MessageManager.stringify(msg));
+            myLogger.log(Logger.WARNING, id + " - Service error delivering message.", se);
+            notifyFailureToSender(msg, receiverID, new InternalError(ACLMessage.AMS_FAILURE_SERVICE_ERROR + ": " + se.getMessage()));
+        } catch (JADESecurityException jse) {
+            // Delivery not authorized--> Send a FAILURE message
+            if (msg.getTraceID() != null) {
+                myLogger.log(Logger.WARNING, msg.getTraceID() + " - Not authorized.", jse);
+            }
+            notifyFailureToSender(msg, receiverID, new InternalError(ACLMessage.AMS_FAILURE_UNAUTHORIZED + ": " + jse.getMessage()));
+        }
+    }
+
+    private boolean isPersistentDeliveryRetry(GenericMessage msg) {
+        boolean ret = false;
+        //#J2ME_EXCLUDE_BEGIN
+        ACLMessage acl = msg.getACLMessage();
+        if (acl != null) {
+            ret = acl.getAllUserDefinedParameters().containsKey(PersistentDeliveryService.ACL_USERDEF_DUE_DATE);
+        }
+        //#J2ME_EXCLUDE_END
+        return ret;
+    }
+
+    void deliverInLocalPlatfrom(GenericMessage msg, AID receiverID) throws IMTPException, ServiceException, NotFoundException, JADESecurityException {
+        if (msg.getTraceID() != null) {
+            myLogger.log(Logger.INFO, msg.getTraceID() + " - Activating local-platform delivery");
+        }
+
+        MainContainer impl = myContainer.getMain();
+        if (impl != null) {
+            // Directly use the GADT on the main container
+            int attemptsCnt = 0;
+            while (true) {
+                ContainerID cid = getAgentLocation(receiverID);
+                MessagingSlice targetSlice = oneShotDeliver(cid, msg, receiverID);
+                if (targetSlice != null) {
+                    // Success --> Done
+                    //#J2ME_EXCLUDE_BEGIN
+                    DeliveryTracing.setTracingInfo("Target-node", targetSlice.getNode().getName());
+                    //#J2ME_EXCLUDE_END
+                    return;
+                }
+                checkRetry(receiverID, cid, attemptsCnt);
+                attemptsCnt++;
+            }
+        } else {
+            // Try first with the cached <AgentID;MessagingSlice> pairs
+            MessagingSlice cachedSlice = (MessagingSlice) cachedSlices.get(receiverID);
+            if (cachedSlice != null) { // Cache hit :-)
+                try {
+                    if (msg.getTraceID() != null) {
+                        myLogger.log(Logger.INFO, msg.getTraceID() + " - Delivering message to cached slice " + cachedSlice.getNode().getName());
+                    }
+                    cachedSlice.dispatchLocally(msg.getSender(), msg, receiverID);
+                    if (msg.getTraceID() != null) {
+                        myLogger.log(Logger.INFO, msg.getTraceID() + " - Delivery OK.");
+                    }
+                    //#J2ME_EXCLUDE_BEGIN
+                    DeliveryTracing.setTracingInfo("Target-node", cachedSlice.getNode().getName());
+                    //#J2ME_EXCLUDE_END
+                    return;
+                } catch (IMTPException imtpe) {
+                    if (msg.getTraceID() != null) {
+                        myLogger.log(Logger.INFO, msg.getTraceID() + " - Cached slice for receiver " + receiverID.getName() + " unreachable.");
+                    }
+                } catch (NotFoundException nfe) {
+                    if (msg.getTraceID() != null) {
+                        myLogger.log(Logger.INFO, msg.getTraceID() + " - Receiver " + receiverID.getName() + " not found on cached slice container.");
+                    }
+                }
+                // Eliminate stale cache entry
+                cachedSlices.remove(receiverID);
+            }
+
+            // Either the receiver was not found in cache or the cache entry was no longer valid
+            //#J2ME_EXCLUDE_BEGIN
+            DeliveryTracing.setTracingInfo("Messaging-cache-miss", true);
+            //#J2ME_EXCLUDE_END
+            deliverUntilOK(msg, receiverID);
+        }
+    }
+
+
+    ///////////////////////////////////////////////
+    // Message delivery
+    ///////////////////////////////////////////////
+
+    private void deliverUntilOK(GenericMessage msg, AID receiverID) throws IMTPException, NotFoundException, ServiceException, JADESecurityException {
+        int attemptsCnt = 0;
+        while (true) {
+            ContainerID cid;
+            try {
+                MessagingSlice mainSlice = (MessagingSlice) getSlice(MAIN_SLICE);
+                try {
+                    cid = mainSlice.getAgentLocation(receiverID);
+                } catch (IMTPException imtpe) {
+                    // Try to get a newer slice and repeat...
+                    mainSlice = (MessagingSlice) getFreshSlice(MAIN_SLICE);
+                    cid = mainSlice.getAgentLocation(receiverID);
+                }
+            } catch (ServiceException se) {
+                // This container is no longer able to access the Main --> before propagating the exception
+                // try to see if the receiver lives locally
+                if (myContainer.isLocalAgent(receiverID)) {
+                    MessagingSlice localSlice = (MessagingSlice) getIMTPManager().createSliceProxy(getName(), getHorizontalInterface(), getLocalNode());
+                    localSlice.dispatchLocally(msg.getSender(), msg, receiverID);
+                    //#J2ME_EXCLUDE_BEGIN
+                    DeliveryTracing.setTracingInfo("Target-node", localSlice.getNode().getName());
+                    //#J2ME_EXCLUDE_END
+                    return;
+                } else {
+                    throw se;
+                }
+            }
+
+            MessagingSlice targetSlice = oneShotDeliver(cid, msg, receiverID);
+            if (targetSlice != null) {
+                // Success --> Done
+                // On successful message dispatch, put the slice into the slice cache
+                cachedSlices.put(receiverID, targetSlice);
+                //#J2ME_EXCLUDE_BEGIN
+                DeliveryTracing.setTracingInfo("Target-node", targetSlice.getNode().getName());
+                //#J2ME_EXCLUDE_END
+                return;
+            }
+            checkRetry(receiverID, cid, attemptsCnt);
+            attemptsCnt++;
+        }
+    }
+
+    private MessagingSlice oneShotDeliver(ContainerID cid, GenericMessage msg, AID receiverID) throws IMTPException, ServiceException, JADESecurityException {
+        if (msg.getTraceID() != null) {
+            myLogger.log(Logger.FINER, msg.getTraceID() + " - Receiver " + receiverID.getLocalName() + " lives on container " + cid.getName());
+        }
+
+        MessagingSlice targetSlice = (MessagingSlice) getSlice(cid.getName());
+        try {
+            try {
+                if (msg.getTraceID() != null) {
+                    myLogger.log(Logger.INFO, msg.getTraceID() + " - Delivering message to slice " + targetSlice.getNode().getName());
+                }
+                targetSlice.dispatchLocally(msg.getSender(), msg, receiverID);
+            } catch (IMTPException imtpe) {
+                // Try to get a newer slice and repeat...
+                if (msg.getTraceID() != null) {
+                    myLogger.log(Logger.FINER, msg.getTraceID() + " - Messaging slice on container " + cid.getName() + " unreachable. Try to get a fresh one.");
+                }
+
+                targetSlice = (MessagingSlice) getFreshSlice(cid.getName());
+                if (msg.getTraceID() != null && (targetSlice != null)) {
+                    myLogger.log(Logger.FINER, msg.getTraceID() + " - Fresh slice for container " + cid.getName() + " found.");
+                }
+
+                targetSlice.dispatchLocally(msg.getSender(), msg, receiverID);
+            }
+            if (msg.getTraceID() != null) {
+                myLogger.log(Logger.INFO, msg.getTraceID() + " - Delivery OK");
+            }
+            return targetSlice;
+        } catch (NotFoundException nfe) {
+            // The agent was found in the GADT, but not on the container where it is supposed to
+            // be. Possibly it moved elsewhere in the meanwhile. ==> Try again.
+            if (msg.getTraceID() != null) {
+                myLogger.log(Logger.FINER, msg.getTraceID() + " - Receiver " + receiverID.getLocalName() + " not found on container " + cid.getName() + ". Possibly he moved elsewhere --> Retry");
+            }
+        } catch (NullPointerException npe) {
+            // This is thrown if targetSlice is null: The agent was found in the GADT,
+            // but his container does not exist anymore. Possibly the agent moved elsewhere in
+            // the meanwhile ==> Try again.
+            if (msg.getTraceID() != null) {
+                myLogger.log(Logger.FINER, msg.getTraceID() + " - Container " + cid.getName() + " for receiver " + receiverID.getLocalName() + " does not exist anymore. Possibly the receiver moved elsewhere --> Retry");
+            }
+        }
+
+        return null;
+    }
+
+    private void checkRetry(AID receiver, ContainerID cid, int attemptsCnt) throws NotFoundException {
+        if (maxDeliveryRetryAttempts >= 0 && attemptsCnt >= maxDeliveryRetryAttempts) {
+            throw new NotFoundException("Agent " + receiver.getLocalName() + " not found in container " + cid.getName() + " where it was supposed to be");
+        }
+        // Wait a bit before enabling next delivery attempt
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException ie) {
+        }
+    }
+
+    private void forwardMessage(GenericMessage msg, AID receiver, String address) throws MTPException {
+        // FIXME what if there is no envelope?
+        AID aid = msg.getEnvelope().getFrom();
+
+        if (aid == null) {
+            //System.err.println("ERROR: null message sender. Aborting message dispatch...");
+            if (myLogger.isLoggable(Logger.SEVERE))
+                myLogger.log(Logger.SEVERE, "ERROR: null message sender. Aborting message dispatch...");
+            return;
+        }
+
+        // FIXME The message can no longer be updated
+        // if has no address set, then adds the addresses of this platform
+        if (!aid.getAllAddresses().hasNext())
+            addPlatformAddresses(aid);
+
+        try {
+            if (msg.getTraceID() != null) {
+                myLogger.log(Logger.INFO, msg.getTraceID() + " - Routing message out to address " + address);
+                msg.getEnvelope().addProperties(new Property(ACLMessage.TRACE, msg.getTraceID()));
+            }
+            localSlice.routeOut(msg.getEnvelope(), msg.getPayload(), receiver, address);
+        } catch (IMTPException imtpe) {
+            throw new MTPException("Error during message routing", imtpe);
+        }
+
+    }
+
+    /**
+     * This method is used internally by the platform in order
+     * to notify the sender of a message that a failure was reported by
+     * the Message Transport Service.
+     */
+    public void notifyFailureToSender(GenericMessage msg, AID receiver, InternalError ie) {
+        //#J2ME_EXCLUDE_BEGIN
+        // If msg represents a MultipleGenericMessage, recursive call notifyFailureToSender() for each msg
+        if (msg instanceof MultipleGenericMessage) {
+            for (GenericMessage g : ((MultipleGenericMessage) msg).getMessages()) {
+                notifyFailureToSender(g, receiver, ie);
+            }
+            return;
+        }
+        //#J2ME_EXCLUDE_END
+
+        ACLMessage acl = msg.getACLMessage();
+        if (acl == null) {
+            // ACLMessage can be null in case we get a failure delivering a message coming from an external platform (received by a local MTP).
+            // In this case in fact the message is encoded. Try to decode it so that a suitable FAILURE response can be sent back.
+            // If the payload is mangled in some way (e.g. encrypted) decoding will fail and no suitable FAILURE response will be sent
+            try {
+                acl = encInFilter.decodeMessage(msg.getEnvelope(), msg.getPayload());
+                acl.setEnvelope(msg.getEnvelope());
+                msg.setACLMessage(acl);
+            } catch (Exception e) {
+                // Just do nothing
+                e.printStackTrace();
+            }
+        }
+        if (acl == null) {
+            myLogger.log(Logger.WARNING, "Cannot notify failure to sender: GenericMessage contains no ACLMessage");
+            return;
+        }
+        if ("true".equals(acl.getUserDefinedParameter(ACLMessage.IGNORE_FAILURE))) {
+            // Ignore the failure
+            return;
+        }
+
+        GenericCommand cmd = new GenericCommand(MessagingSlice.NOTIFY_FAILURE, MessagingSlice.NAME, null);
+        cmd.addParam(msg);
+        cmd.addParam(receiver);
+        cmd.addParam(ie);
+
+        try {
+            submit(cmd);
+        } catch (ServiceException se) {
+            // It should never happen
+            se.printStackTrace();
+        }
+    }
+
+    /*
+     * This method is called before preparing the Envelope of an outgoing message.
+     * It checks for all the AIDs present in the message and adds the addresses, if not present
+     **/
+    private void addPlatformAddresses(AID id) {
+        Iterator<String> it = routes.getAddresses();
+        while (it.hasNext()) {
+            String addr = it.next();
+            id.addAddresses(addr);
+        }
+    }
+
+    // Package scoped since it is accessed by the OutgoingEncoding filter
+    final boolean livesHere(AID id) {
+        if (!acceptForeignAgents) {
+            // All agents in the platform must have a name with the form
+            // <local-name>@<platform-name>
+            String hap = id.getHap();
+            return CaseInsensitiveString.equalsIgnoreCase(hap, platformID);
+        } else {
+            String[] addresses = id.getAddressesArray();
+            if (addresses.length == 0) {
+                return true;
+            } else {
+                boolean allLocalAddresses = true;
+                for (String address : addresses) {
+                    if (!isPlatformAddress(address)) {
+                        allLocalAddresses = false;
+                        break;
+                    }
+                }
+                if (allLocalAddresses) {
+                    return true;
+                } else {
+                    // Check in the GADT
+                    try {
+                        MainContainer impl = myContainer.getMain();
+                        if (impl != null) {
+                            // Directly use the GADT on the main container
+                            getAgentLocation(id);
+                        } else {
+                            // Use the main slice
+                            MessagingSlice mainSlice = (MessagingSlice) getSlice(MAIN_SLICE);
+                            try {
+                                mainSlice.getAgentLocation(id);
+                            } catch (IMTPException imtpe) {
+                                // Try to get a newer slice and repeat...
+                                mainSlice = (MessagingSlice) getFreshSlice(MAIN_SLICE);
+                                mainSlice.getAgentLocation(id);
+                            }
+                        }
+                        return true;
+                    } catch (Exception nfe) {
+                        // The agent does not live in the platform
+                        return false;
+                    }// Intra-platform delivery would fail, so try inter-platform
+
+                }
+            }
+        }
+    }
+
+    private boolean isPlatformAddress(String addr) {
+        Iterator<String> it = routes.getAddresses();
+        while (it.hasNext()) {
+            String ad = it.next();
+            if (CaseInsensitiveString.equalsIgnoreCase(ad, addr)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Work-around for PJAVA compilation
+    protected Slice getFreshSlice(String name) throws ServiceException {
+        return super.getFreshSlice(name);
+    }
+
+    private boolean needSynchDelivery(GenericMessage gMsg) {
+        ACLMessage acl = gMsg.getACLMessage();
+        if (acl != null) {
+            return "true".equals(acl.clearUserDefinedParameter(ACLMessage.SYNCH_DELIVERY));
+        }
+        return false;
+    }
+
+    private void checkTracing(GenericMessage msg) {
+        ACLMessage acl = msg.getACLMessage();
+        if (acl != null) {
+            if (myLogger.isLoggable(Logger.FINE) || "true".equals(acl.getUserDefinedParameter(ACLMessage.TRACE))) {
+                msg.setTraceID(ACLMessage.getPerformative(acl.getPerformative()) + "-" + msg.getSender().getLocalName() + "-" + traceCnt);
+                traceCnt++;
+            }
+        }
+    }
+
+    private String getTraceId(Envelope env) {
+        Iterator<Property> it = env.getAllProperties();
+        while (it.hasNext()) {
+            Property p = it.next();
+            if (p.getName().equals(ACLMessage.TRACE)) {
+                return (String) p.getValue();
+            }
+        }
+        return null;
+    }
+
+    // For debugging purpose
+    public String[] getMessageManagerQueueStatus() {
+        return myMessageManager.getQueueStatus();
+    }
+
+    // For debugging purpose
+    public String[] getMessageManagerThreadPoolStatus() {
+        return myMessageManager.getThreadPoolStatus();
+    }
+
+    // For debugging purpose
+    public String getMessageManagerGlobalInfo() {
+        return myMessageManager.getGlobalInfo();
+    }
+
+    // For debugging purpose
+    public Thread[] getMessageManagerThreadPool() {
+        return myMessageManager.getThreadPool();
+    }
+
+    protected void clearCachedSlice(String name) {
+        if (cachedSlices != null) {
+            cachedSlices.clear();
+            myLogger.log(Logger.CONFIG, "Clearing cache");
+        }
+        super.clearCachedSlice(name);
+    }
+
+    public String dump(String key) {
+        StringBuilder sb = new StringBuilder("LOCAL ALIASES:\n");
+        if (localAliases.size() > 0) {
+            sb.append(stringifyAliasesMap(localAliases));
+        } else {
+            sb.append("---\n");
+        }
+
+        if (globalAliases != null) {
+            sb.append("GLOBAL ALIASES:\n");
+            if (globalAliases.size() > 0) {
+                sb.append(stringifyAliasesMap(globalAliases));
+            } else {
+                sb.append("---\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    private String stringifyAliasesMap(Hashtable<Object, AID> aliases) {
+        StringBuilder sb = new StringBuilder();
+        for (Object o : aliases.keySet()) {
+            AID alias = (AID) o;
+            AID agent = aliases.get(alias);
+            sb.append("- ").append(alias.getLocalName()).append(" --> ").append(agent.getLocalName()).append("\n");
+        }
+        return sb.toString();
+    }
+
+    public static class UnknownACLEncodingException extends NotFoundException {
+        UnknownACLEncodingException(String msg) {
+            super(msg);
+        }
+    } // End of UnknownACLEncodingException class
+
     /**
      * Inner class CommandSourceSink
      * This inner class handles the messaging commands on the command
@@ -948,7 +1432,6 @@ public class MessagingService extends BaseService implements MessageManager.Chan
         }
 
     } // END of inner class CommandSourceSink
-
 
     /**
      * Inner class CommandTargetSink
@@ -1339,7 +1822,6 @@ public class MessagingService extends BaseService implements MessageManager.Chan
         }
     } // END of inner class CommandTargetSink
 
-
     /**
      * Inner class for this service: this class receives commands from
      * service <code>Sink</code> and serves them, coordinating with
@@ -1383,7 +1865,6 @@ public class MessagingService extends BaseService implements MessageManager.Chan
                         gCmd.addParam(msg);
                         gCmd.addParam(receiverID);
                         result = gCmd;
-                        break;
                     }
                     case MessagingSlice.H_GETAGENTLOCATION -> {
                         AID agentID = (AID) params[0];
@@ -1396,7 +1877,6 @@ public class MessagingService extends BaseService implements MessageManager.Chan
                         String address = (String) params[3];
 
                         routeOut(env, payload, receiverID, address);
-                        break;
                     }
                     case MessagingSlice.H_INSTALLMTP -> {
                         GenericCommand gCmd = new GenericCommand(MessagingSlice.INSTALL_MTP, MessagingSlice.NAME, null);
@@ -1406,7 +1886,6 @@ public class MessagingService extends BaseService implements MessageManager.Chan
                         gCmd.addParam(className);
 
                         result = gCmd;
-                        break;
                     }
                     case MessagingSlice.H_UNINSTALLMTP -> {
                         GenericCommand gCmd = new GenericCommand(MessagingSlice.UNINSTALL_MTP, MessagingSlice.NAME, null);
@@ -1414,7 +1893,6 @@ public class MessagingService extends BaseService implements MessageManager.Chan
                         gCmd.addParam(address);
 
                         result = gCmd;
-                        break;
                     }
                     case MessagingSlice.H_NEWMTP -> {
                         MTPDescriptor mtp = (MTPDescriptor) params[0];
@@ -1425,7 +1903,6 @@ public class MessagingService extends BaseService implements MessageManager.Chan
                         gCmd.addParam(cid);
 
                         result = gCmd;
-                        break;
                     }
                     case MessagingSlice.H_DEADMTP -> {
                         MTPDescriptor mtp = (MTPDescriptor) params[0];
@@ -1436,21 +1913,18 @@ public class MessagingService extends BaseService implements MessageManager.Chan
                         gCmd.addParam(cid);
 
                         result = gCmd;
-                        break;
                     }
                     case MessagingSlice.H_ADDROUTE -> {
                         MTPDescriptor mtp = (MTPDescriptor) params[0];
                         String sliceName = (String) params[1];
 
                         addRoute(mtp, sliceName);
-                        break;
                     }
                     case MessagingSlice.H_REMOVEROUTE -> {
                         MTPDescriptor mtp = (MTPDescriptor) params[0];
                         String sliceName = (String) params[1];
 
                         removeRoute(mtp, sliceName);
-                        break;
                     }
                     case MessagingSlice.H_NEWALIAS -> {
                         AID alias = (AID) params[0];
@@ -1458,14 +1932,12 @@ public class MessagingService extends BaseService implements MessageManager.Chan
 
                         newAlias(alias, name);
                         replicationHandle.invokeReplicatedMethod("newAlias", params);
-                        break;
                     }
                     case MessagingSlice.H_DEADALIAS -> {
                         AID alias = (AID) params[0];
 
                         deadAlias(alias);
                         replicationHandle.invokeReplicatedMethod("deadAlias", params);
-                        break;
                     }
                     case MessagingSlice.H_CURRENTALIASES -> globalAliases = (Hashtable<Object, AID>) params[0];
                     case MessagingSlice.H_TRANSFERLOCALALIASES -> {
@@ -1533,519 +2005,4 @@ public class MessagingService extends BaseService implements MessageManager.Chan
         }
 
     } // End of ServiceComponent class
-
-
-    void stamp(GenericMessage gmsg) {
-        //#J2ME_EXCLUDE_BEGIN
-        if (samActive) {
-            synchronized (this) {
-                msgCounter++;
-                if (msgCounter == deliveryTimeMeasurementRate) {
-                    gmsg.setTimeStamp(System.currentTimeMillis());
-                    msgCounter = 0;
-                }
-            }
-        }
-        //#J2ME_EXCLUDE_END
-    }
-
-    private void updateDeliveryTimeMeasurement(GenericMessage gmsg) {
-        //#J2ME_EXCLUDE_BEGIN
-        if (samActive) {
-            long timeStamp = gmsg.getTimeStamp();
-            if (timeStamp > 0 && deliveryTimeMeasureProvider != null) {
-                long deliveryTime = System.currentTimeMillis() - timeStamp;
-                if (myLogger.isLoggable(Logger.FINER)) {
-                    myLogger.log(Logger.FINER, "Delivery time = " + deliveryTime);
-                }
-                deliveryTimeMeasureProvider.addSample(deliveryTime);
-            }
-        }
-        //#J2ME_EXCLUDE_END
-    }
-
-
-    ///////////////////////////////////////////////
-    // Message delivery
-    ///////////////////////////////////////////////
-
-    // Entry point for the ACL message delivery
-    public void deliverNow(GenericMessage msg, AID receiverID) {
-        if (msg.getTraceID() != null) {
-            myLogger.log(Logger.INFO, msg.getTraceID() + " - Serving message delivery");
-        }
-        try {
-            if (!msg.hasForeignReceiver()) {
-                deliverInLocalPlatfrom(msg, receiverID);
-            } else {
-                // Dispatch it through the ACC
-                if (msg.getTraceID() != null) {
-                    myLogger.log(Logger.INFO, msg.getTraceID() + " - Activating ACC delivery");
-                }
-                Iterator<String> addresses = receiverID.getAllAddresses();
-                if (addresses.hasNext()) {
-                    while (addresses.hasNext()) {
-                        String address = addresses.next();
-                        try {
-                            forwardMessage(msg, receiverID, address);
-                            return;
-                        } catch (MTPException mtpe) {
-                            if (myLogger.isLoggable(Logger.WARNING) && !isPersistentDeliveryRetry(msg))
-                                myLogger.log(Logger.WARNING, "Cannot deliver message to address: " + address + " [" + mtpe + "]. Trying the next one...");
-                        }
-                    }
-                    notifyFailureToSender(msg, receiverID, new InternalError(ACLMessage.AMS_FAILURE_FOREIGN_AGENT_UNREACHABLE + ": " + "No valid address contained within the AID " + receiverID.getName()));
-                } else {
-                    notifyFailureToSender(msg, receiverID, new InternalError(ACLMessage.AMS_FAILURE_FOREIGN_AGENT_NO_ADDRESS));
-                }
-            }
-        } catch (NotFoundException nfe) {
-            // The receiver does not exist --> Send a FAILURE message
-            if (msg.getTraceID() != null) {
-                myLogger.log(Logger.WARNING, msg.getTraceID() + " - Receiver " + receiverID.getLocalName() + " does not exist.", nfe);
-            }
-            notifyFailureToSender(msg, receiverID, new InternalError(ACLMessage.AMS_FAILURE_AGENT_NOT_FOUND + ": " + nfe.getMessage()));
-        } catch (IMTPException imtpe) {
-            // Can't reach the destination container --> Send a FAILURE message
-            String id = (msg.getTraceID() != null ? msg.getTraceID() : MessageManager.stringify(msg));
-            myLogger.log(Logger.WARNING, id + " - Receiver " + receiverID.getLocalName() + " unreachable.", imtpe);
-            notifyFailureToSender(msg, receiverID, new InternalError(ACLMessage.AMS_FAILURE_AGENT_UNREACHABLE + ": " + imtpe.getMessage()));
-        } catch (ServiceException se) {
-            // Service error during delivery --> Send a FAILURE message
-            String id = (msg.getTraceID() != null ? msg.getTraceID() : MessageManager.stringify(msg));
-            myLogger.log(Logger.WARNING, id + " - Service error delivering message.", se);
-            notifyFailureToSender(msg, receiverID, new InternalError(ACLMessage.AMS_FAILURE_SERVICE_ERROR + ": " + se.getMessage()));
-        } catch (JADESecurityException jse) {
-            // Delivery not authorized--> Send a FAILURE message
-            if (msg.getTraceID() != null) {
-                myLogger.log(Logger.WARNING, msg.getTraceID() + " - Not authorized.", jse);
-            }
-            notifyFailureToSender(msg, receiverID, new InternalError(ACLMessage.AMS_FAILURE_UNAUTHORIZED + ": " + jse.getMessage()));
-        }
-    }
-
-    private boolean isPersistentDeliveryRetry(GenericMessage msg) {
-        boolean ret = false;
-        //#J2ME_EXCLUDE_BEGIN
-        ACLMessage acl = msg.getACLMessage();
-        if (acl != null) {
-            ret = acl.getAllUserDefinedParameters().containsKey(PersistentDeliveryService.ACL_USERDEF_DUE_DATE);
-        }
-        //#J2ME_EXCLUDE_END
-        return ret;
-    }
-
-    void deliverInLocalPlatfrom(GenericMessage msg, AID receiverID) throws IMTPException, ServiceException, NotFoundException, JADESecurityException {
-        if (msg.getTraceID() != null) {
-            myLogger.log(Logger.INFO, msg.getTraceID() + " - Activating local-platform delivery");
-        }
-
-        MainContainer impl = myContainer.getMain();
-        if (impl != null) {
-            // Directly use the GADT on the main container
-            int attemptsCnt = 0;
-            while (true) {
-                ContainerID cid = getAgentLocation(receiverID);
-                MessagingSlice targetSlice = oneShotDeliver(cid, msg, receiverID);
-                if (targetSlice != null) {
-                    // Success --> Done
-                    //#J2ME_EXCLUDE_BEGIN
-                    DeliveryTracing.setTracingInfo("Target-node", targetSlice.getNode().getName());
-                    //#J2ME_EXCLUDE_END
-                    return;
-                }
-                checkRetry(receiverID, cid, attemptsCnt);
-                attemptsCnt++;
-            }
-        } else {
-            // Try first with the cached <AgentID;MessagingSlice> pairs
-            MessagingSlice cachedSlice = (MessagingSlice) cachedSlices.get(receiverID);
-            if (cachedSlice != null) { // Cache hit :-)
-                try {
-                    if (msg.getTraceID() != null) {
-                        myLogger.log(Logger.INFO, msg.getTraceID() + " - Delivering message to cached slice " + cachedSlice.getNode().getName());
-                    }
-                    cachedSlice.dispatchLocally(msg.getSender(), msg, receiverID);
-                    if (msg.getTraceID() != null) {
-                        myLogger.log(Logger.INFO, msg.getTraceID() + " - Delivery OK.");
-                    }
-                    //#J2ME_EXCLUDE_BEGIN
-                    DeliveryTracing.setTracingInfo("Target-node", cachedSlice.getNode().getName());
-                    //#J2ME_EXCLUDE_END
-                    return;
-                } catch (IMTPException imtpe) {
-                    if (msg.getTraceID() != null) {
-                        myLogger.log(Logger.INFO, msg.getTraceID() + " - Cached slice for receiver " + receiverID.getName() + " unreachable.");
-                    }
-                } catch (NotFoundException nfe) {
-                    if (msg.getTraceID() != null) {
-                        myLogger.log(Logger.INFO, msg.getTraceID() + " - Receiver " + receiverID.getName() + " not found on cached slice container.");
-                    }
-                }
-                // Eliminate stale cache entry
-                cachedSlices.remove(receiverID);
-            }
-
-            // Either the receiver was not found in cache or the cache entry was no longer valid
-            //#J2ME_EXCLUDE_BEGIN
-            DeliveryTracing.setTracingInfo("Messaging-cache-miss", true);
-            //#J2ME_EXCLUDE_END
-            deliverUntilOK(msg, receiverID);
-        }
-    }
-
-
-    private void deliverUntilOK(GenericMessage msg, AID receiverID) throws IMTPException, NotFoundException, ServiceException, JADESecurityException {
-        int attemptsCnt = 0;
-        while (true) {
-            ContainerID cid;
-            try {
-                MessagingSlice mainSlice = (MessagingSlice) getSlice(MAIN_SLICE);
-                try {
-                    cid = mainSlice.getAgentLocation(receiverID);
-                } catch (IMTPException imtpe) {
-                    // Try to get a newer slice and repeat...
-                    mainSlice = (MessagingSlice) getFreshSlice(MAIN_SLICE);
-                    cid = mainSlice.getAgentLocation(receiverID);
-                }
-            } catch (ServiceException se) {
-                // This container is no longer able to access the Main --> before propagating the exception
-                // try to see if the receiver lives locally
-                if (myContainer.isLocalAgent(receiverID)) {
-                    MessagingSlice localSlice = (MessagingSlice) getIMTPManager().createSliceProxy(getName(), getHorizontalInterface(), getLocalNode());
-                    localSlice.dispatchLocally(msg.getSender(), msg, receiverID);
-                    //#J2ME_EXCLUDE_BEGIN
-                    DeliveryTracing.setTracingInfo("Target-node", localSlice.getNode().getName());
-                    //#J2ME_EXCLUDE_END
-                    return;
-                } else {
-                    throw se;
-                }
-            }
-
-            MessagingSlice targetSlice = oneShotDeliver(cid, msg, receiverID);
-            if (targetSlice != null) {
-                // Success --> Done
-                // On successful message dispatch, put the slice into the slice cache
-                cachedSlices.put(receiverID, targetSlice);
-                //#J2ME_EXCLUDE_BEGIN
-                DeliveryTracing.setTracingInfo("Target-node", targetSlice.getNode().getName());
-                //#J2ME_EXCLUDE_END
-                return;
-            }
-            checkRetry(receiverID, cid, attemptsCnt);
-            attemptsCnt++;
-        }
-    }
-
-    private MessagingSlice oneShotDeliver(ContainerID cid, GenericMessage msg, AID receiverID) throws IMTPException, ServiceException, JADESecurityException {
-        if (msg.getTraceID() != null) {
-            myLogger.log(Logger.FINER, msg.getTraceID() + " - Receiver " + receiverID.getLocalName() + " lives on container " + cid.getName());
-        }
-
-        MessagingSlice targetSlice = (MessagingSlice) getSlice(cid.getName());
-        try {
-            try {
-                if (msg.getTraceID() != null) {
-                    myLogger.log(Logger.INFO, msg.getTraceID() + " - Delivering message to slice " + targetSlice.getNode().getName());
-                }
-                targetSlice.dispatchLocally(msg.getSender(), msg, receiverID);
-            } catch (IMTPException imtpe) {
-                // Try to get a newer slice and repeat...
-                if (msg.getTraceID() != null) {
-                    myLogger.log(Logger.FINER, msg.getTraceID() + " - Messaging slice on container " + cid.getName() + " unreachable. Try to get a fresh one.");
-                }
-
-                targetSlice = (MessagingSlice) getFreshSlice(cid.getName());
-                if (msg.getTraceID() != null && (targetSlice != null)) {
-                    myLogger.log(Logger.FINER, msg.getTraceID() + " - Fresh slice for container " + cid.getName() + " found.");
-                }
-
-                targetSlice.dispatchLocally(msg.getSender(), msg, receiverID);
-            }
-            if (msg.getTraceID() != null) {
-                myLogger.log(Logger.INFO, msg.getTraceID() + " - Delivery OK");
-            }
-            return targetSlice;
-        } catch (NotFoundException nfe) {
-            // The agent was found in the GADT, but not on the container where it is supposed to
-            // be. Possibly it moved elsewhere in the meanwhile. ==> Try again.
-            if (msg.getTraceID() != null) {
-                myLogger.log(Logger.FINER, msg.getTraceID() + " - Receiver " + receiverID.getLocalName() + " not found on container " + cid.getName() + ". Possibly he moved elsewhere --> Retry");
-            }
-        } catch (NullPointerException npe) {
-            // This is thrown if targetSlice is null: The agent was found in the GADT,
-            // but his container does not exist anymore. Possibly the agent moved elsewhere in
-            // the meanwhile ==> Try again.
-            if (msg.getTraceID() != null) {
-                myLogger.log(Logger.FINER, msg.getTraceID() + " - Container " + cid.getName() + " for receiver " + receiverID.getLocalName() + " does not exist anymore. Possibly the receiver moved elsewhere --> Retry");
-            }
-        }
-
-        return null;
-    }
-
-    private void checkRetry(AID receiver, ContainerID cid, int attemptsCnt) throws NotFoundException {
-        if (maxDeliveryRetryAttempts >= 0 && attemptsCnt >= maxDeliveryRetryAttempts) {
-            throw new NotFoundException("Agent " + receiver.getLocalName() + " not found in container " + cid.getName() + " where it was supposed to be");
-        }
-        // Wait a bit before enabling next delivery attempt
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException ie) {
-        }
-    }
-
-
-    private void forwardMessage(GenericMessage msg, AID receiver, String address) throws MTPException {
-        // FIXME what if there is no envelope?
-        AID aid = msg.getEnvelope().getFrom();
-
-        if (aid == null) {
-            //System.err.println("ERROR: null message sender. Aborting message dispatch...");
-            if (myLogger.isLoggable(Logger.SEVERE))
-                myLogger.log(Logger.SEVERE, "ERROR: null message sender. Aborting message dispatch...");
-            return;
-        }
-
-        // FIXME The message can no longer be updated
-        // if has no address set, then adds the addresses of this platform
-        if (!aid.getAllAddresses().hasNext())
-            addPlatformAddresses(aid);
-
-        try {
-            if (msg.getTraceID() != null) {
-                myLogger.log(Logger.INFO, msg.getTraceID() + " - Routing message out to address " + address);
-                msg.getEnvelope().addProperties(new Property(ACLMessage.TRACE, msg.getTraceID()));
-            }
-            localSlice.routeOut(msg.getEnvelope(), msg.getPayload(), receiver, address);
-        } catch (IMTPException imtpe) {
-            throw new MTPException("Error during message routing", imtpe);
-        }
-
-    }
-
-
-    /**
-     * This method is used internally by the platform in order
-     * to notify the sender of a message that a failure was reported by
-     * the Message Transport Service.
-     */
-    public void notifyFailureToSender(GenericMessage msg, AID receiver, InternalError ie) {
-        //#J2ME_EXCLUDE_BEGIN
-        // If msg represents a MultipleGenericMessage, recursive call notifyFailureToSender() for each msg
-        if (msg instanceof MultipleGenericMessage) {
-            for (GenericMessage g : ((MultipleGenericMessage) msg).getMessages()) {
-                notifyFailureToSender(g, receiver, ie);
-            }
-            return;
-        }
-        //#J2ME_EXCLUDE_END
-
-        ACLMessage acl = msg.getACLMessage();
-        if (acl == null) {
-            // ACLMessage can be null in case we get a failure delivering a message coming from an external platform (received by a local MTP).
-            // In this case in fact the message is encoded. Try to decode it so that a suitable FAILURE response can be sent back.
-            // If the payload is mangled in some way (e.g. encrypted) decoding will fail and no suitable FAILURE response will be sent
-            try {
-                acl = encInFilter.decodeMessage(msg.getEnvelope(), msg.getPayload());
-                acl.setEnvelope(msg.getEnvelope());
-                msg.setACLMessage(acl);
-            } catch (Exception e) {
-                // Just do nothing
-                e.printStackTrace();
-            }
-        }
-        if (acl == null) {
-            myLogger.log(Logger.WARNING, "Cannot notify failure to sender: GenericMessage contains no ACLMessage");
-            return;
-        }
-        if ("true".equals(acl.getUserDefinedParameter(ACLMessage.IGNORE_FAILURE))) {
-            // Ignore the failure
-            return;
-        }
-
-        GenericCommand cmd = new GenericCommand(MessagingSlice.NOTIFY_FAILURE, MessagingSlice.NAME, null);
-        cmd.addParam(msg);
-        cmd.addParam(receiver);
-        cmd.addParam(ie);
-
-        try {
-            submit(cmd);
-        } catch (ServiceException se) {
-            // It should never happen
-            se.printStackTrace();
-        }
-    }
-
-
-    /*
-     * This method is called before preparing the Envelope of an outgoing message.
-     * It checks for all the AIDs present in the message and adds the addresses, if not present
-     **/
-    private void addPlatformAddresses(AID id) {
-        Iterator<String> it = routes.getAddresses();
-        while (it.hasNext()) {
-            String addr = it.next();
-            id.addAddresses(addr);
-        }
-    }
-
-    // Package scoped since it is accessed by the OutgoingEncoding filter
-    final boolean livesHere(AID id) {
-        if (!acceptForeignAgents) {
-            // All agents in the platform must have a name with the form
-            // <local-name>@<platform-name>
-            String hap = id.getHap();
-            return CaseInsensitiveString.equalsIgnoreCase(hap, platformID);
-        } else {
-            String[] addresses = id.getAddressesArray();
-            if (addresses.length == 0) {
-                return true;
-            } else {
-                boolean allLocalAddresses = true;
-                for (String address : addresses) {
-                    if (!isPlatformAddress(address)) {
-                        allLocalAddresses = false;
-                        break;
-                    }
-                }
-                if (allLocalAddresses) {
-                    return true;
-                } else {
-                    // Check in the GADT
-                    try {
-                        MainContainer impl = myContainer.getMain();
-                        if (impl != null) {
-                            // Directly use the GADT on the main container
-                            getAgentLocation(id);
-                        } else {
-                            // Use the main slice
-                            MessagingSlice mainSlice = (MessagingSlice) getSlice(MAIN_SLICE);
-                            try {
-                                mainSlice.getAgentLocation(id);
-                            } catch (IMTPException imtpe) {
-                                // Try to get a newer slice and repeat...
-                                mainSlice = (MessagingSlice) getFreshSlice(MAIN_SLICE);
-                                mainSlice.getAgentLocation(id);
-                            }
-                        }
-                        return true;
-                    } catch (NotFoundException nfe) {
-                        // The agent does not live in the platform
-                        return false;
-                    } catch (Exception e) {
-                        // Intra-platform delivery would fail, so try inter-platform
-                        return false;
-                    }
-                }
-            }
-        }
-    }
-
-    private boolean isPlatformAddress(String addr) {
-        Iterator<String> it = routes.getAddresses();
-        while (it.hasNext()) {
-            String ad = it.next();
-            if (CaseInsensitiveString.equalsIgnoreCase(ad, addr)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Work-around for PJAVA compilation
-    protected Slice getFreshSlice(String name) throws ServiceException {
-        return super.getFreshSlice(name);
-    }
-
-
-    private boolean needSynchDelivery(GenericMessage gMsg) {
-        ACLMessage acl = gMsg.getACLMessage();
-        if (acl != null) {
-            return "true".equals(acl.clearUserDefinedParameter(ACLMessage.SYNCH_DELIVERY));
-        }
-        return false;
-    }
-
-    // Only for debugging:
-    private volatile int traceCnt = 0;
-
-    private void checkTracing(GenericMessage msg) {
-        ACLMessage acl = msg.getACLMessage();
-        if (acl != null) {
-            if (myLogger.isLoggable(Logger.FINE) || "true".equals(acl.getUserDefinedParameter(ACLMessage.TRACE))) {
-                msg.setTraceID(ACLMessage.getPerformative(acl.getPerformative()) + "-" + msg.getSender().getLocalName() + "-" + traceCnt);
-                traceCnt++;
-            }
-        }
-    }
-
-    private String getTraceId(Envelope env) {
-        Iterator<Property> it = env.getAllProperties();
-        while (it.hasNext()) {
-            Property p = it.next();
-            if (p.getName().equals(ACLMessage.TRACE)) {
-                return (String) p.getValue();
-            }
-        }
-        return null;
-    }
-
-    // For debugging purpose
-    public String[] getMessageManagerQueueStatus() {
-        return myMessageManager.getQueueStatus();
-    }
-
-    // For debugging purpose
-    public String[] getMessageManagerThreadPoolStatus() {
-        return myMessageManager.getThreadPoolStatus();
-    }
-
-    // For debugging purpose
-    public String getMessageManagerGlobalInfo() {
-        return myMessageManager.getGlobalInfo();
-    }
-
-    // For debugging purpose
-    public Thread[] getMessageManagerThreadPool() {
-        return myMessageManager.getThreadPool();
-    }
-
-    protected void clearCachedSlice(String name) {
-        if (cachedSlices != null) {
-            cachedSlices.clear();
-            myLogger.log(Logger.CONFIG, "Clearing cache");
-        }
-        super.clearCachedSlice(name);
-    }
-
-    public String dump(String key) {
-        StringBuffer sb = new StringBuffer("LOCAL ALIASES:\n");
-        if (localAliases.size() > 0) {
-            sb.append(stringifyAliasesMap(localAliases));
-        } else {
-            sb.append("---\n");
-        }
-
-        if (globalAliases != null) {
-            sb.append("GLOBAL ALIASES:\n");
-            if (globalAliases.size() > 0) {
-                sb.append(stringifyAliasesMap(globalAliases));
-            } else {
-                sb.append("---\n");
-            }
-        }
-        return sb.toString();
-    }
-
-    private String stringifyAliasesMap(Hashtable<Object, AID> aliases) {
-        StringBuffer sb = new StringBuffer();
-        for (Object o : aliases.keySet()) {
-            AID alias = (AID) o;
-            AID agent = aliases.get(alias);
-            sb.append("- ").append(alias.getLocalName()).append(" --> ").append(agent.getLocalName()).append("\n");
-        }
-        return sb.toString();
-    }
 }

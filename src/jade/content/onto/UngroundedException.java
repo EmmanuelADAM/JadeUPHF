@@ -30,14 +30,13 @@ package jade.content.onto;
  * Typically, thrown when applying <code>Ontology.toObject(AbsObject)</code>
  * to an ungrouded abstract descriptor.
  *
- * @see    jade.content.onto
  * @author Federico Bergenti - Universita` di Parma
+ * @see jade.content.onto
  */
 public class UngroundedException extends OntologyException {
 
     /**
      * Constructor
-     *
      */
     public UngroundedException() {
         super("The abstract descriptor contains variables.");

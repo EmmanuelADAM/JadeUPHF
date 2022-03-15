@@ -41,17 +41,13 @@ class DefaultSAMInfoHandlerImpl implements SAMInfoHandler {
     private final Map<String, CounterInfo> counters = new HashMap<>();
 
     private final SimpleDateFormat timeStampFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
     private String csvSeparator;
-
     private List<String> summaryFields = null;
     private List<String> summaryValues = null;
     private PrintStream summaryFile = null;
-
-
     private File samInfoDirectory;
     private String fileSeparator;
-
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
 
     public void initialize(Profile p) throws Exception {
         fileSeparator = System.getProperty("file.separator");

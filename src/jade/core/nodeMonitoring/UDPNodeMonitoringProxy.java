@@ -19,7 +19,7 @@ public class UDPNodeMonitoringProxy extends SliceProxy implements UDPNodeMonitor
 
         Node n = getNode();
         Object result = n.accept(cmd);
-        if ((result != null) && (result instanceof Throwable)) {
+        if ((result instanceof Throwable)) {
             if (result instanceof IMTPException) {
                 throw (IMTPException) result;
             } else {

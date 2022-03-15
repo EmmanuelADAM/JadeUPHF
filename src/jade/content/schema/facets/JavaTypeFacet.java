@@ -33,25 +33,26 @@ public class JavaTypeFacet implements Facet {
     private final String javaType;
 
     /**
-     Construct a <code>JavaTypeFacet</code> that
-     set the java type
+     * Construct a <code>JavaTypeFacet</code> that
+     * set the java type
      */
     public JavaTypeFacet(String javaType) {
         this.javaType = javaType;
     }
 
     /**
-     Get the java type associated to this facet
+     * Get the java type associated to this facet
      */
     public String getJavaType() {
         return javaType;
     }
 
     /**
-     Check whether a given value for the slot this Facet applies
-     to is valid.
-     @param value The value to be checked
-     @throws OntologyException If the value is not valid
+     * Check whether a given value for the slot this Facet applies
+     * to is valid.
+     *
+     * @param value The value to be checked
+     * @throws OntologyException If the value is not valid
      */
     public void validate(AbsObject value, Ontology onto) throws OntologyException {
     }

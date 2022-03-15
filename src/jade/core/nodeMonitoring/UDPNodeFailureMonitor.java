@@ -58,15 +58,13 @@ class UDPNodeFailureMonitor extends NodeFailureMonitor {
      * monitored anymore.
      */
     public static final int STATE_FINAL = 2;
-
-
+    private final UDPMonitorServer server;
+    private final UDPNodeMonitoringService service;
+    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
     private long deadlineId = -1;
     private long lastPing = -1;
     private int state = -1;
     private long key = 0;
-    private final UDPMonitorServer server;
-    private final UDPNodeMonitoringService service;
-    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
 
 
     /**
@@ -118,6 +116,17 @@ class UDPNodeFailureMonitor extends NodeFailureMonitor {
         return lastPing;
     }
 
+    /**
+     * Sets the time when the last ping message has been received
+     * from the targeted node
+     *
+     * @param time the difference, measured in milliseconds,
+     *             between the current time and midnight, January 1, 1970 UTC.
+     */
+    void setLastPing(long time) {
+        lastPing = time;
+    }
+
     public long getDeadlineID() {
         return deadlineId;
     }
@@ -162,17 +171,6 @@ class UDPNodeFailureMonitor extends NodeFailureMonitor {
         }
 
         state = newState;
-    }
-
-    /**
-     * Sets the time when the last ping message has been received
-     * from the targeted node
-     *
-     * @param time the difference, measured in milliseconds,
-     *             between the current time and midnight, January 1, 1970 UTC.
-     */
-    void setLastPing(long time) {
-        lastPing = time;
     }
 
     public String requireService() {

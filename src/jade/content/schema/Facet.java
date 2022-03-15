@@ -31,17 +31,19 @@ import jade.content.onto.OntologyException;
 import java.io.Serializable;
 
 /**
- * Represent a generic Facet (i.e. a constraint on the possible 
- * values) that can be applied on a slot in a schema of 
+ * Represent a generic Facet (i.e. a constraint on the possible
+ * values) that can be applied on a slot in a schema of
  * an ontological element.
+ *
  * @author Giovanni Caire - TILAB
  */
 public interface Facet extends Serializable {
     /**
-     Check whether a given value for the slot this Facet applies
-     to is valid.
-     @param value The value to be checked
-     @throws OntologyException If the value is not valid
+     * Check whether a given value for the slot this Facet applies
+     * to is valid.
+     *
+     * @param value The value to be checked
+     * @throws OntologyException If the value is not valid
      */
     void validate(AbsObject value, Ontology onto) throws OntologyException;
 }

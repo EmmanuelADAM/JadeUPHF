@@ -53,6 +53,12 @@ import java.util.Date;
 public class TestAgent extends Agent {
 
     private static final Logger logger = Logger.getMyLogger(TestAgent.class.getName());
+    boolean pingBehaviour = true;
+    ImageIcon dummyIcon =
+            new ImageIcon(this.getClass().getResource("images/dummy.gif"));
+    SplashScreen splash;
+    TestAgentFrame itsFrame;
+
 
     /**
      * Constructor for the TestAgent
@@ -60,7 +66,6 @@ public class TestAgent extends Agent {
     public TestAgent() {
         super();
     }
-
 
     /**
      * The main program for the TestAgent class
@@ -72,7 +77,6 @@ public class TestAgent extends Agent {
         String[] argsv = {"-host", host, "-container", "ruurd:jade.tools.testagent.TestAgent"};
         jade.Boot3.main(argsv);
     }
-
 
     /**
      * Gets the PlatformRequest attribute of the TestAgent object
@@ -91,7 +95,6 @@ public class TestAgent extends Agent {
         return msg;
     }
 
-
     /**
      * Description of the Method
      */
@@ -107,7 +110,6 @@ public class TestAgent extends Agent {
         ACLMessage msg = createRequestMessage(this, this.getAMS(), register);
         itsFrame.setItsMsg(msg);
     }
-
 
     public void doRegisterDF() {
 
@@ -129,7 +131,6 @@ public class TestAgent extends Agent {
         itsFrame.setItsMsg(msg);
     }
 
-
     public void doDeregisterDF() {
         DFAgentDescription dFAgentDescription = new DFAgentDescription();
         dFAgentDescription.setName(getAID());
@@ -139,7 +140,6 @@ public class TestAgent extends Agent {
         ACLMessage msg = createRequestMessage(this, getDefaultDF(), deregister);
         itsFrame.setItsMsg(msg);
     }
-
 
     public void doDeRegisterAMS() {
 
@@ -151,7 +151,6 @@ public class TestAgent extends Agent {
         ACLMessage msg = createRequestMessage(this, getAMS(), deregister);
         itsFrame.setItsMsg(msg);
     }
-
 
     public void doSearchAMS() {
 
@@ -167,7 +166,6 @@ public class TestAgent extends Agent {
         ACLMessage msg = createRequestMessage(this, getAMS(), search);
         itsFrame.setItsMsg(msg);
     }
-
 
     public void doSearchDF() {
 
@@ -185,7 +183,6 @@ public class TestAgent extends Agent {
         itsFrame.setItsMsg(msg);
     }
 
-
     public void doLausannePing() {
         ACLMessage msg = new ACLMessage(ACLMessage.QUERY_REF);
         msg.setSender(getAID());
@@ -201,7 +198,6 @@ public class TestAgent extends Agent {
         itsFrame.setItsMsg(msg);
     }
 
-
     public void doLocalPing() {
         ACLMessage msg = new ACLMessage(ACLMessage.QUERY_REF);
         msg.setSender(getAID());
@@ -212,7 +208,6 @@ public class TestAgent extends Agent {
         msg.setContent("ping");
         itsFrame.setItsMsg(msg);
     }
-
 
     /**
      * Description of the Method
@@ -230,14 +225,12 @@ public class TestAgent extends Agent {
         itsFrame.setItsMsg(msg);
     }
 
-
     /**
      * Description of the Method
      */
     public void doSystemOut() {
         System.out.println(itsFrame.getItsMsg());
     }
-
 
     /**
      * exit method
@@ -246,7 +239,6 @@ public class TestAgent extends Agent {
         this.doDelete();
         System.exit(0);
     }
-
 
     /**
      * Description of the Method
@@ -257,7 +249,6 @@ public class TestAgent extends Agent {
         itsFrame.setItsMsg(msg);
     }
 
-
     /**
      * Description of the Method
      */
@@ -267,7 +258,6 @@ public class TestAgent extends Agent {
         send(msg);
         doNewMessage();
     }
-
 
     /**
      * Description of the Method
@@ -295,7 +285,6 @@ public class TestAgent extends Agent {
         }
     }
 
-
     public void doReply() {
         ACLMessage msg = itsFrame.aclTreePanel.getCurrentACL();
         if (msg == null) {
@@ -305,7 +294,6 @@ public class TestAgent extends Agent {
         reply.setSender(this.getAID());
         itsFrame.aclPanel.setItsMsg(reply);
     }
-
 
     /**
      * Description of the Method
@@ -334,7 +322,6 @@ public class TestAgent extends Agent {
         splash.setVisible(false);
     }
 
-
     ACLMessage createRequestMessage(Agent sender, AID receiver, AgentAction what) {
         ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
         request.setSender(sender.getAID());
@@ -358,7 +345,6 @@ public class TestAgent extends Agent {
         return request;
     }
 
-
     /**
      * Description of the Class
      *
@@ -366,6 +352,11 @@ public class TestAgent extends Agent {
      * @created May 21, 2002
      */
     private class SplashScreen extends JWindow {
+        GridBagLayout gridBagLayout1 = new GridBagLayout();
+        JPanel jPanel1 = new JPanel();
+        GridBagLayout gridBagLayout2 = new GridBagLayout();
+        JLabel jLabel1 = new JLabel();
+        JProgressBar theProgressBar = new JProgressBar();
         /**
          * Constructor for the SplashScreen object
          */
@@ -387,7 +378,6 @@ public class TestAgent extends Agent {
             }
         }
 
-
         /**
          * Sets the Progress attribute of the SplashScreen object
          *
@@ -396,7 +386,6 @@ public class TestAgent extends Agent {
         public void setProgress(int p) {
             theProgressBar.setValue(p);
         }
-
 
         void jbInit() {
             this.getContentPane().setLayout(gridBagLayout1);
@@ -428,23 +417,6 @@ public class TestAgent extends Agent {
 
         }
 
-
-        GridBagLayout gridBagLayout1 = new GridBagLayout();
-        JPanel jPanel1 = new JPanel();
-        GridBagLayout gridBagLayout2 = new GridBagLayout();
-        JLabel jLabel1 = new JLabel();
-        JProgressBar theProgressBar = new JProgressBar();
-
     }
-
-
-    boolean pingBehaviour = true;
-
-    ImageIcon dummyIcon =
-            new ImageIcon(this.getClass().getResource("images/dummy.gif"));
-
-    SplashScreen splash;
-
-    TestAgentFrame itsFrame;
 }
 //  ***EOF***

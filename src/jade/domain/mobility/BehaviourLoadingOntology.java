@@ -40,17 +40,6 @@ public class BehaviourLoadingOntology extends Ontology implements BehaviourLoadi
 
     private static final Ontology theInstance = new BehaviourLoadingOntology();
 
-    /**
-     * This method returns the singleton instance of the
-     * Behaviour-Loading ontology.
-     *
-     * @return The singleton <code>Ontology</code> object, containing the
-     * schemas for the elements of the Behaviour-Loading ontology.
-     */
-    public static Ontology getInstance() {
-        return theInstance;
-    }
-
     private BehaviourLoadingOntology() {
         super(NAME, new Ontology[]{ExceptionOntology.getInstance(), SerializableOntology.getInstance()}, new ReflectiveIntrospector());
 
@@ -71,5 +60,16 @@ public class BehaviourLoadingOntology extends Ontology implements BehaviourLoadi
         } catch (OntologyException oe) {
             oe.printStackTrace();
         }
+    }
+
+    /**
+     * This method returns the singleton instance of the
+     * Behaviour-Loading ontology.
+     *
+     * @return The singleton <code>Ontology</code> object, containing the
+     * schemas for the elements of the Behaviour-Loading ontology.
+     */
+    public static Ontology getInstance() {
+        return theInstance;
     }
 }

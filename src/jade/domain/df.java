@@ -227,35 +227,6 @@ public class df extends GuiAgent implements DFGUIAdapter {
 
     // FIXME The size of the cache must be read from the Profile
     private final static int SEARCH_ID_CACHE_SIZE = 16;
-    private final jade.util.HashCache searchIdCache = new jade.util.HashCache(SEARCH_ID_CACHE_SIZE);
-    private int searchIdCnt = 0;
-
-    // The DF federated with this DF
-    private final List<AID> children = new ArrayList<>();
-    // The DF this DF is federated with
-    private final List<AID> parents = new ArrayList<>();
-    // Maps a parent DF to the description used by this DF to federate with that parent
-    private final HashMap<AID, DFAgentDescription> dscDFParentMap = new HashMap<>();
-    // Maps an action that is being serviced by a Behaviour to the
-    // request message that activated the Behaviour and the notification message
-    // to be sent back (as soon as the Behaviour will complete) to the requester
-    private final HashMap<Object, ACLMessage> pendingRequests = new HashMap<>();
-
-    // The GUI of this DF
-    private DFGUIInterface gui;
-
-    // Current description of this df
-    private DFAgentDescription myDescription = null;
-
-    private final Codec codec = new SLCodec();
-
-    //#PJAVA_EXCLUDE_BEGIN
-    // This is used in case a pool-size != 0 is specified to serve FIPA requests
-    private ThreadedBehaviourFactory tbf;
-
-    private AMSSubscriber amsSubscriber;
-    //#PJAVA_EXCLUDE_END
-
     // Configuration parameter keys
     private static final String AUTOCLEANUP = "jade_domain_df_autocleanup";
     private static final String POOLSIZE = "jade_domain_df_poolsize";
@@ -268,14 +239,35 @@ public class df extends GuiAgent implements DFGUIAdapter {
     private static final String DB_PASSWORD = "jade_domain_df_db-password";
     private static final String KB_FACTORY = "jade_domain_df_kb-factory";
     private static final String DB_DEFAULT = "jade_domain_df_db-default";
+    //#PJAVA_EXCLUDE_END
     private static final String DB_CLEANTABLES = "jade_domain_df_db-cleantables";
     private static final String DB_ABORTONERROR = "jade_domain_df_db-abortonerror";
-
     // Limit of searchConstraints.maxresult
     // FIPA Agent Management Specification doc num: SC00023J (6.1.4 Search Constraints)
     // a negative value of maxresults indicates that the sender agent is willing to receive
     // all available results
     private static final String DEFAULT_MAX_RESULTS = "100";
+    private final jade.util.HashCache searchIdCache = new jade.util.HashCache(SEARCH_ID_CACHE_SIZE);
+    // The DF federated with this DF
+    private final List<AID> children = new ArrayList<>();
+    // The DF this DF is federated with
+    private final List<AID> parents = new ArrayList<>();
+    // Maps a parent DF to the description used by this DF to federate with that parent
+    private final HashMap<AID, DFAgentDescription> dscDFParentMap = new HashMap<>();
+    // Maps an action that is being serviced by a Behaviour to the
+    // request message that activated the Behaviour and the notification message
+    // to be sent back (as soon as the Behaviour will complete) to the requester
+    private final HashMap<Object, ACLMessage> pendingRequests = new HashMap<>();
+    private final Codec codec = new SLCodec();
+    private int searchIdCnt = 0;
+    // The GUI of this DF
+    private DFGUIInterface gui;
+    // Current description of this df
+    private DFAgentDescription myDescription = null;
+    //#PJAVA_EXCLUDE_BEGIN
+    // This is used in case a pool-size != 0 is specified to serve FIPA requests
+    private ThreadedBehaviourFactory tbf;
+    private AMSSubscriber amsSubscriber;
     /*
      * This is the actual value for the limit on the maximum number of results to be
      * returned in case of an ulimited search. This value is read from the Profile,
@@ -747,142 +739,6 @@ public class df extends GuiAgent implements DFGUIAdapter {
         addBehaviour(new RecursiveSearchHandler(localResults, dfd, newConstr, action));
     }
 
-    /**
-     * Inner class RecursiveSearchHandler.
-     * This is a behaviour handling recursive searches i.e. searches that
-     * must be propagated to children (federated) DFs.
-     */
-    private class RecursiveSearchHandler extends AchieveREInitiator {
-        private static final long DEFAULTTIMEOUT = 300000; // 5 minutes
-
-        private final List<DFAgentDescription> results;
-        private final DFAgentDescription template;
-        private final SearchConstraints constraints;
-        private final Search action;
-        private final int maxExpectedResults;
-        private int receivedResults;
-
-        /**
-         * Construct a new RecursiveSearchHandler.
-         *
-         * @param results     The search results. Initially this includes the items found
-         *                    locally.
-         * @param template    The DFAgentDescription used as tamplate for the search.
-         * @param constraints The constraints for the search to be propagated.
-         * @param action      The original Search action. This is used as a key to retrieve
-         *                    the incoming REQUEST message.
-         */
-        private RecursiveSearchHandler(List<DFAgentDescription> results, DFAgentDescription template, SearchConstraints constraints, Search action) {
-            super(df.this, null);
-
-            this.results = results;
-            this.template = template;
-            this.constraints = constraints;
-            this.action = action;
-
-            maxExpectedResults = constraints.getMaxResults().intValue();
-            receivedResults = 0;
-        }
-
-        /**
-         * We broadcast the search REQUEST to all children (federated) DFs in parallel.
-         */
-        protected Vector<ACLMessage> prepareRequests(ACLMessage request) {
-            Vector<ACLMessage> requests = null;
-            ACLMessage incomingRequest = pendingRequests.get(action);
-            if (incomingRequest != null) {
-                Date deadline = incomingRequest.getReplyByDate();
-                if (deadline == null) {
-                    deadline = new Date(System.currentTimeMillis() + DEFAULTTIMEOUT);
-                }
-                requests = new Vector<>(children.size());
-                for (AID childDF : children) {
-                    ACLMessage msg = DFService.createRequestMessage(myAgent, childDF, FIPAManagementVocabulary.SEARCH, template, constraints);
-                    msg.setReplyByDate(deadline);
-                    requests.addElement(msg);
-                }
-            }
-            return requests;
-        }
-
-        /**
-         * As long as we receive the replies we update the results. If we reach the
-         * max-results we send back the notification to the requester and discard
-         * successive replies.
-         */
-        protected void handleInform(ACLMessage inform) {
-            if (logger.isLoggable(Logger.CONFIG))
-                logger.log(Logger.CONFIG, "Agent " + getLocalName() + " - Recursive search result received from " + inform.getSender().getName() + ".");
-            int cnt = 0;
-            if (receivedResults < maxExpectedResults) {
-                try {
-                    DFAgentDescription[] dfds = DFService.decodeResult(inform.getContent());
-                    for (DFAgentDescription dfd : dfds) {
-                        // We add the item only if not already present
-                        if (addResult(dfd)) {
-                            receivedResults++;
-                            cnt++;
-                            if (receivedResults >= maxExpectedResults) {
-                                sendPendingNotification(action, results);
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    if (logger.isLoggable(Logger.SEVERE))
-                        logger.log(Logger.SEVERE, "Agent " + getLocalName() + " - Error decoding reply from federated DF " + inform.getSender().getName() + " during recursive search [" + e + "].");
-                }
-            }
-            if (logger.isLoggable(Logger.CONFIG))
-                logger.log(Logger.CONFIG, "Agent " + getLocalName() + " - " + cnt + " new items found in recursive search.");
-        }
-
-        protected void handleRefuse(ACLMessage refuse) {
-            if (logger.isLoggable(Logger.WARNING))
-                logger.log(Logger.WARNING, "Agent " + getLocalName() + " - REFUSE received from federated DF " + refuse.getSender().getName() + " during recursive search.");
-        }
-
-        protected void handleFailure(ACLMessage failure) {
-            // FIXME: In general this is due to a federation loop (search-id already used)
-            // In this case no warning must be printed --> We should use FINE log level in that case
-            if (logger.isLoggable(Logger.WARNING))
-                logger.log(Logger.WARNING, "Agent " + getLocalName() + " - FAILURE received from federated DF " + failure.getSender().getName() + " during recursive search.");
-        }
-
-        protected void handleNotUnderstood(ACLMessage notUnderstood) {
-            if (logger.isLoggable(Logger.WARNING))
-                logger.log(Logger.WARNING, "Agent " + getLocalName() + " - NOT_UNDERSTOOD received from federated DF " + notUnderstood.getSender().getName() + " during recursive search.");
-        }
-
-        protected void handleOutOfSequence(ACLMessage msg) {
-            if (logger.isLoggable(Logger.WARNING))
-                logger.log(Logger.WARNING, "Agent " + getLocalName() + " - Out of sequence message " + ACLMessage.getPerformative(msg.getPerformative()) + " received from " + msg.getSender().getName() + " during recursive search.");
-        }
-
-        public int onEnd() {
-            // Send back the notification to the originator of the
-            // search (unless already sent)
-            if (receivedResults < maxExpectedResults) {
-                sendPendingNotification(action, results);
-            }
-            return super.onEnd();
-        }
-
-        private boolean addResult(DFAgentDescription newDfd) {
-            for (DFAgentDescription result : results) {
-                if (result.getName().equals(newDfd.getName())) {
-                    return false;
-                }
-            }
-            results.add(newDfd);
-            return true;
-        }
-    } // END of inner class RecursiveSearchHandler
-
-
-    //////////////////////////////////////////////////////
-    // Methods actually accessing the DF Knowledge base
-    //////////////////////////////////////////////////////
-
     protected void DFRegister(DFAgentDescription dfd) throws AlreadyRegistered {
 
         //checkMandatorySlots(FIPAAgentManagementOntology.REGISTER, dfd);
@@ -909,6 +765,11 @@ public class df extends GuiAgent implements DFGUIAdapter {
         }
 
     }
+
+
+    //////////////////////////////////////////////////////
+    // Methods actually accessing the DF Knowledge base
+    //////////////////////////////////////////////////////
 
     //this method is called into the prepareResponse of the DFFipaAgentManagementBehaviour to perform a Deregister action
     protected void DFDeregister(DFAgentDescription dfd) throws NotRegistered {
@@ -938,7 +799,6 @@ public class df extends GuiAgent implements DFGUIAdapter {
         }
     }
 
-
     protected void DFModify(DFAgentDescription dfd) throws NotRegistered {
         //checkMandatorySlots(FIPAAgentManagementOntology.MODIFY, dfd);
         Object old = agentDescriptions.register(dfd.getName(), dfd);
@@ -966,11 +826,6 @@ public class df extends GuiAgent implements DFGUIAdapter {
         return agentDescriptions.iterator(dfd);
     }
 
-
-    ////////////////////////////////////////////////////////////////
-    // Methods serving the actions of the FIPA Management ontology
-    ////////////////////////////////////////////////////////////////
-
     /**
      * Serve the Register action of the FIPA management ontology.
      */
@@ -990,6 +845,11 @@ public class df extends GuiAgent implements DFGUIAdapter {
         // Do it
         DFRegister(dfd);
     }
+
+
+    ////////////////////////////////////////////////////////////////
+    // Methods serving the actions of the FIPA Management ontology
+    ////////////////////////////////////////////////////////////////
 
     /**
      * Serve the Deregister action of the FIPA management ontology.
@@ -1078,10 +938,6 @@ public class df extends GuiAgent implements DFGUIAdapter {
         return DFIteratedSearch(dfd);
     }
 
-    ////////////////////////////////////////////////////////////////
-    // Methods serving the actions of the JADE Management ontology
-    ////////////////////////////////////////////////////////////////
-
     /**
      * Serve the ShowGui action of the JADE management ontology.
      * Package scoped since it is called by DFJadeAgentManagementBehaviour.
@@ -1097,9 +953,9 @@ public class df extends GuiAgent implements DFGUIAdapter {
         }
     }
 
-    //////////////////////////////////////////////////////////
-    // Methods serving the actions of the DF-Applet ontology
-    //////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    // Methods serving the actions of the JADE Management ontology
+    ////////////////////////////////////////////////////////////////
 
     /**
      * Serve the GetParents action of the DF-Applet ontology
@@ -1111,6 +967,9 @@ public class df extends GuiAgent implements DFGUIAdapter {
         return parents;
     }
 
+    //////////////////////////////////////////////////////////
+    // Methods serving the actions of the DF-Applet ontology
+    //////////////////////////////////////////////////////////
 
     /**
      * Serve the GetDescription action of the DF-Applet ontology
@@ -1256,13 +1115,6 @@ public class df extends GuiAgent implements DFGUIAdapter {
         };
         addBehaviour(b);
     }
-
-
-    //#APIDOC_EXCLUDE_BEGIN
-
-    ///////////////////////////////////////////////////////////
-    // GUI Management: DFGUIAdapter interface implementation
-    ///////////////////////////////////////////////////////////
 
     protected void onGuiEvent(GuiEvent ev) {
         try {
@@ -1422,7 +1274,12 @@ public class df extends GuiAgent implements DFGUIAdapter {
         }
     }
 
-    //#APIDOC_EXCLUDE_END
+
+    //#APIDOC_EXCLUDE_BEGIN
+
+    ///////////////////////////////////////////////////////////
+    // GUI Management: DFGUIAdapter interface implementation
+    ///////////////////////////////////////////////////////////
 
     /**
      * This method returns the description of an agent registered with the DF.
@@ -1437,12 +1294,27 @@ public class df extends GuiAgent implements DFGUIAdapter {
             return l.get(0);
     }
 
+    //#APIDOC_EXCLUDE_END
 
     /**
      * This method returns the current description of this DF
      */
     public DFAgentDescription getDescriptionOfThisDF() {
         return myDescription;
+    }
+
+    /**
+     * This method set the description of the df according to the DFAgentDescription passed.
+     * The programmers can call this method to provide a different initialization of the description of the df they are implementing.
+     * The method is called inside the setup of the agent and set the df description using a default description.
+     */
+    protected void setDescriptionOfThisDF(DFAgentDescription dfd) {
+        myDescription = dfd;
+        myDescription.setName(getAID());
+        if (!isADF(myDescription)) {
+            if (logger.isLoggable(Logger.WARNING))
+                logger.log(Logger.WARNING, "Agent " + getLocalName() + " - The description set for this DF does not include a \"fipa-df\" service.");
+        }
     }
 
     /**
@@ -1515,20 +1387,6 @@ public class df extends GuiAgent implements DFGUIAdapter {
     }
 
     /**
-     * This method set the description of the df according to the DFAgentDescription passed.
-     * The programmers can call this method to provide a different initialization of the description of the df they are implementing.
-     * The method is called inside the setup of the agent and set the df description using a default description.
-     */
-    protected void setDescriptionOfThisDF(DFAgentDescription dfd) {
-        myDescription = dfd;
-        myDescription.setName(getAID());
-        if (!isADF(myDescription)) {
-            if (logger.isLoggable(Logger.WARNING))
-                logger.log(Logger.WARNING, "Agent " + getLocalName() + " - The description set for this DF does not include a \"fipa-df\" service.");
-        }
-    }
-
-    /**
      * This method can be used to add a parent (a DF this DF is federated with).
      *
      * @param dfName the parent df (the df with which this df has been registered)
@@ -1565,7 +1423,6 @@ public class df extends GuiAgent implements DFGUIAdapter {
     void removePendingRequest(Object key) {
         pendingRequests.remove(key);
     }
-
 
     /**
      * Send the notification related to an action that has been processed
@@ -1647,11 +1504,142 @@ public class df extends GuiAgent implements DFGUIAdapter {
     private boolean isADF(DFAgentDescription dfd) {
         try {
             var l = dfd.getAllServices();
-            var sd = l.get(l.size()-1);
+            var sd = l.get(l.size() - 1);
             return sd.getType().equalsIgnoreCase("fipa-df");
         } catch (Exception e) {
             return false;
         }
     }
+
+    /**
+     * Inner class RecursiveSearchHandler.
+     * This is a behaviour handling recursive searches i.e. searches that
+     * must be propagated to children (federated) DFs.
+     */
+    private class RecursiveSearchHandler extends AchieveREInitiator {
+        private static final long DEFAULTTIMEOUT = 300000; // 5 minutes
+
+        private final List<DFAgentDescription> results;
+        private final DFAgentDescription template;
+        private final SearchConstraints constraints;
+        private final Search action;
+        private final int maxExpectedResults;
+        private int receivedResults;
+
+        /**
+         * Construct a new RecursiveSearchHandler.
+         *
+         * @param results     The search results. Initially this includes the items found
+         *                    locally.
+         * @param template    The DFAgentDescription used as tamplate for the search.
+         * @param constraints The constraints for the search to be propagated.
+         * @param action      The original Search action. This is used as a key to retrieve
+         *                    the incoming REQUEST message.
+         */
+        private RecursiveSearchHandler(List<DFAgentDescription> results, DFAgentDescription template, SearchConstraints constraints, Search action) {
+            super(df.this, null);
+
+            this.results = results;
+            this.template = template;
+            this.constraints = constraints;
+            this.action = action;
+
+            maxExpectedResults = constraints.getMaxResults().intValue();
+            receivedResults = 0;
+        }
+
+        /**
+         * We broadcast the search REQUEST to all children (federated) DFs in parallel.
+         */
+        protected Vector<ACLMessage> prepareRequests(ACLMessage request) {
+            Vector<ACLMessage> requests = null;
+            ACLMessage incomingRequest = pendingRequests.get(action);
+            if (incomingRequest != null) {
+                Date deadline = incomingRequest.getReplyByDate();
+                if (deadline == null) {
+                    deadline = new Date(System.currentTimeMillis() + DEFAULTTIMEOUT);
+                }
+                requests = new Vector<>(children.size());
+                for (AID childDF : children) {
+                    ACLMessage msg = DFService.createRequestMessage(myAgent, childDF, FIPAManagementVocabulary.SEARCH, template, constraints);
+                    msg.setReplyByDate(deadline);
+                    requests.addElement(msg);
+                }
+            }
+            return requests;
+        }
+
+        /**
+         * As long as we receive the replies we update the results. If we reach the
+         * max-results we send back the notification to the requester and discard
+         * successive replies.
+         */
+        protected void handleInform(ACLMessage inform) {
+            if (logger.isLoggable(Logger.CONFIG))
+                logger.log(Logger.CONFIG, "Agent " + getLocalName() + " - Recursive search result received from " + inform.getSender().getName() + ".");
+            int cnt = 0;
+            if (receivedResults < maxExpectedResults) {
+                try {
+                    DFAgentDescription[] dfds = DFService.decodeResult(inform.getContent());
+                    for (DFAgentDescription dfd : dfds) {
+                        // We add the item only if not already present
+                        if (addResult(dfd)) {
+                            receivedResults++;
+                            cnt++;
+                            if (receivedResults >= maxExpectedResults) {
+                                sendPendingNotification(action, results);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    if (logger.isLoggable(Logger.SEVERE))
+                        logger.log(Logger.SEVERE, "Agent " + getLocalName() + " - Error decoding reply from federated DF " + inform.getSender().getName() + " during recursive search [" + e + "].");
+                }
+            }
+            if (logger.isLoggable(Logger.CONFIG))
+                logger.log(Logger.CONFIG, "Agent " + getLocalName() + " - " + cnt + " new items found in recursive search.");
+        }
+
+        protected void handleRefuse(ACLMessage refuse) {
+            if (logger.isLoggable(Logger.WARNING))
+                logger.log(Logger.WARNING, "Agent " + getLocalName() + " - REFUSE received from federated DF " + refuse.getSender().getName() + " during recursive search.");
+        }
+
+        protected void handleFailure(ACLMessage failure) {
+            // FIXME: In general this is due to a federation loop (search-id already used)
+            // In this case no warning must be printed --> We should use FINE log level in that case
+            if (logger.isLoggable(Logger.WARNING))
+                logger.log(Logger.WARNING, "Agent " + getLocalName() + " - FAILURE received from federated DF " + failure.getSender().getName() + " during recursive search.");
+        }
+
+        protected void handleNotUnderstood(ACLMessage notUnderstood) {
+            if (logger.isLoggable(Logger.WARNING))
+                logger.log(Logger.WARNING, "Agent " + getLocalName() + " - NOT_UNDERSTOOD received from federated DF " + notUnderstood.getSender().getName() + " during recursive search.");
+        }
+
+        protected void handleOutOfSequence(ACLMessage msg) {
+            if (logger.isLoggable(Logger.WARNING))
+                logger.log(Logger.WARNING, "Agent " + getLocalName() + " - Out of sequence message " + ACLMessage.getPerformative(msg.getPerformative()) + " received from " + msg.getSender().getName() + " during recursive search.");
+        }
+
+        public int onEnd() {
+            // Send back the notification to the originator of the
+            // search (unless already sent)
+            if (receivedResults < maxExpectedResults) {
+                sendPendingNotification(action, results);
+            }
+            return super.onEnd();
+        }
+
+        private boolean addResult(DFAgentDescription newDfd) {
+            for (DFAgentDescription result : results) {
+                if (result.getName().equals(newDfd.getName())) {
+                    return false;
+                }
+            }
+            results.add(newDfd);
+            return true;
+        }
+    } // END of inner class RecursiveSearchHandler
     //#APIDOC_EXCLUDE_END
 }

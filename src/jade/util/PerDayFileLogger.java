@@ -35,23 +35,24 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- This class is an OutputStream whose output is stored in
- in different files according to the day it is produced.
- Existing files, if any, are not rewritten as output is appended
- at the end of the file.
- @author Giovanni Caire - TILab
+ * This class is an OutputStream whose output is stored in
+ * in different files according to the day it is produced.
+ * Existing files, if any, are not rewritten as output is appended
+ * at the end of the file.
+ *
+ * @author Giovanni Caire - TILab
  */
 public class PerDayFileLogger extends PrintStream {
     private final static long DAY = 24 * 60 * 60 * 1000;
-
+    private static final DateFormat df = new SimpleDateFormat("yyyyMMdd");
     private final String file;
     private long dayCnt;
-    private static final DateFormat df = new SimpleDateFormat("yyyyMMdd");
 
     /**
-     Create a new day-based logger.
-     @param file The name of the file to write logs to.
-     @throws IOException If some filesystem operation fails.
+     * Create a new day-based logger.
+     *
+     * @param file The name of the file to write logs to.
+     * @throws IOException If some filesystem operation fails.
      */
     public PerDayFileLogger(String file) throws IOException {
         super(new FileOutputStream(file + "." + df.format(new Date()), true), true);
@@ -73,9 +74,10 @@ public class PerDayFileLogger extends PrintStream {
     }
 
     /**
-     Print a Java object to the proper file, replacing the file
-     every new day.
-     @param obj The Java object to print.
+     * Print a Java object to the proper file, replacing the file
+     * every new day.
+     *
+     * @param obj The Java object to print.
      */
     public void print(Object obj) {
         checkDate();
@@ -83,9 +85,10 @@ public class PerDayFileLogger extends PrintStream {
     }
 
     /**
-     Print a string to the proper file, replacing the file every new
-     day.
-     @param str The string to print.
+     * Print a string to the proper file, replacing the file every new
+     * day.
+     *
+     * @param str The string to print.
      */
     public void print(String str) {
         checkDate();
@@ -93,8 +96,8 @@ public class PerDayFileLogger extends PrintStream {
     }
 
     /**
-     Print a new line to the proper file, replacing the file every
-     new day.
+     * Print a new line to the proper file, replacing the file every
+     * new day.
      */
     public void println() {
         checkDate();
@@ -102,9 +105,10 @@ public class PerDayFileLogger extends PrintStream {
     }
 
     /**
-     Print a Java object and a newline to the proper file, replacing
-     the file every new day.
-     @param obj The Java object to print.
+     * Print a Java object and a newline to the proper file, replacing
+     * the file every new day.
+     *
+     * @param obj The Java object to print.
      */
     public void println(Object obj) {
         checkDate();
@@ -112,9 +116,10 @@ public class PerDayFileLogger extends PrintStream {
     }
 
     /**
-     Print a string and a new line to the proper file, replacing the
-     file every new day.
-     @param str THe string to print.
+     * Print a string and a new line to the proper file, replacing the
+     * file every new day.
+     *
+     * @param str THe string to print.
      */
     public void println(String str) {
         checkDate();

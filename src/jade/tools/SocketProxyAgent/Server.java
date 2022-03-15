@@ -42,9 +42,9 @@ class Server extends Thread {
      */
     private final static Logger logger =
             Logger.getMyLogger(Server.class.getName());
-    private ServerSocket listen_socket;
     private final Agent myAgent;
     private final Vector<String> myOnlyReceivers;
+    private ServerSocket listen_socket;
     private boolean done = false;
     private Socket client_socket;
     private Connection c;

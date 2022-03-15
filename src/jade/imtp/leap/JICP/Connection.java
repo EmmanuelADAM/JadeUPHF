@@ -36,25 +36,26 @@ package jade.imtp.leap.JICP;
 import java.io.IOException;
 
 /**
- Abstract base class representing a generic connection that can be used
- to send/receive JICP packets over the network.
- @author Giovanni Caire - TILAB
+ * Abstract base class representing a generic connection that can be used
+ * to send/receive JICP packets over the network.
+ *
+ * @author Giovanni Caire - TILAB
  */
 public abstract class Connection {
     public static int socketCnt = 0;
 
     /**
-     Read a JICPPacket from the connection
+     * Read a JICPPacket from the connection
      */
     public abstract JICPPacket readPacket() throws IOException;
 
     /**
-     Write a JICPPacket on the connection
+     * Write a JICPPacket on the connection
      */
     public abstract int writePacket(JICPPacket pkt) throws IOException;
 
     /**
-     Close the connection
+     * Close the connection
      */
     public abstract void close() throws IOException;
 

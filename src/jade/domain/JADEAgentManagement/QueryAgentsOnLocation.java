@@ -48,15 +48,6 @@ public class QueryAgentsOnLocation implements AgentAction {
     }
 
     /**
-     * Set the <code>location</code> slot of this action.
-     *
-     * @param loc The location for which the agent list is requested.
-     */
-    public void setLocation(Location loc) {
-        location = loc;
-    }
-
-    /**
      * Retrieve the value of the <code>location</code> slot of this
      * event, containing the location for which the agent list is
      * requested.
@@ -66,6 +57,15 @@ public class QueryAgentsOnLocation implements AgentAction {
      */
     public Location getLocation() {
         return location;
+    }
+
+    /**
+     * Set the <code>location</code> slot of this action.
+     *
+     * @param loc The location for which the agent list is requested.
+     */
+    public void setLocation(Location loc) {
+        location = loc;
     }
 
 }

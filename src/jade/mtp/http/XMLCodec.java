@@ -105,14 +105,14 @@ public class XMLCodec extends DefaultHandler {
 	public final static char[] badChars  = { '\r', '\n', ' ' };
 	public final static String CHARS_CODEC = "ISO-8859-1";
 	#DOTNET_INCLUDE_END*/
-
-    //#DOTNET_EXCLUDE_BEGIN
-    private final XMLReader parser;
+    //logging
+    private static final Logger logger = Logger.getMyLogger(XMLCodec.class.getName());
     //#DOTNET_EXCLUDE_END
 	/*#DOTNET_INCLUDE_BEGIN
 	private XmlTextReader  parser = null;
 	#DOTNET_INCLUDE_END*/
-
+    //#DOTNET_EXCLUDE_BEGIN
+    private final XMLReader parser;
     private Envelope env = null;
     private ReceivedObject ro = null;
     private AID aid = null;
@@ -120,8 +120,6 @@ public class XMLCodec extends DefaultHandler {
     // Accumulate parsed text
     private StringBuffer accumulator;
     private String propType;
-    //logging
-    private static final Logger logger = Logger.getMyLogger(XMLCodec.class.getName());
 
     //var for detected tag to then origin=0, or tag from then origin=1
     //private int origin;
@@ -142,6 +140,7 @@ public class XMLCodec extends DefaultHandler {
 
     /**
      * Constructor:
+     *
      * @param parserClass the SAX parser class to use
      */
     public XMLCodec(String parserClass) throws MTPException {
@@ -166,7 +165,9 @@ public class XMLCodec extends DefaultHandler {
     // *               Encoding methods                  *
     // ***************************************************
 
-    /** Encode the information of Agent, Tags To and From **/
+    /**
+     * Encode the information of Agent, Tags To and From
+     **/
     private static void encodeAid(StringBuffer sb, AID aid) {
         sb.append(OT).append(AID_TAG).append(CT);
         encodeTag(sb, AID_NAME, aid.getName());
@@ -195,7 +196,6 @@ public class XMLCodec extends DefaultHandler {
     /**
      * A user-defined property (String name, Object value) is encoded the following way:
      * <user-defined href="name" type="type">value</user-defined>
-     *
      */
     private static void encodeProp(StringBuffer sb, Property p) {
         String v = null;
@@ -230,32 +230,14 @@ public class XMLCodec extends DefaultHandler {
         sb.append(ET).append(PROP_TAG).append(CT);
     }
 
-    private void decodeProp(StringBuffer acc, Property p) {
-        if (propType.equals(PROP_SER_TYPE)) {
-            try {
-                byte[] serdata = acc.toString().getBytes(StandardCharsets.US_ASCII);
-                ObjectInputStream ois = new ObjectInputStream(
-                        new ByteArrayInputStream(Base64.decodeBase64(serdata)));
-                p.setValue(ois.readObject());
-            } catch (Exception e) {
-                // nothing, we leave value of this property as null;
-            }
-        } else if (propType.equals(PROP_BYTE_TYPE)) {
-            byte[] bytes;
-            bytes = acc.toString().getBytes(StandardCharsets.US_ASCII);
-            p.setValue(Base64.decodeBase64(bytes));
-        } else {
-            p.setValue(acc.toString());
-        }
-        propType = null;
-    }
-
     private static void encodeOneLineTag(StringBuffer sb, String tag1, String tag2, String value) {
         sb.append(OT).append(tag1).append(" ");
         sb.append(tag2).append("=\"").append(value).append("\"/>");
     }
 
-    /** General Encoding of the envelope */
+    /**
+     * General Encoding of the envelope
+     */
     public static synchronized String encodeXML(Envelope env) {
 
         //Create the message XML
@@ -311,7 +293,7 @@ public class XMLCodec extends DefaultHandler {
         //Create tag encrypted (NL: not sure it is still in FIPA)
     /*
       for (i=env.getAllEncrypted();i.hasNext();) {
-      encodeTag(sb,ENCRYPTED_TAG,i.next().toString());  
+      encodeTag(sb,ENCRYPTED_TAG,i.next().toString());
       }
     */
 
@@ -361,23 +343,49 @@ public class XMLCodec extends DefaultHandler {
         return sb.toString();
     }
 
+    private void decodeProp(StringBuffer acc, Property p) {
+        if (propType.equals(PROP_SER_TYPE)) {
+            try {
+                byte[] serdata = acc.toString().getBytes(StandardCharsets.US_ASCII);
+                ObjectInputStream ois = new ObjectInputStream(
+                        new ByteArrayInputStream(Base64.decodeBase64(serdata)));
+                p.setValue(ois.readObject());
+            } catch (Exception e) {
+                // nothing, we leave value of this property as null;
+            }
+        } else if (propType.equals(PROP_BYTE_TYPE)) {
+            byte[] bytes;
+            bytes = acc.toString().getBytes(StandardCharsets.US_ASCII);
+            p.setValue(Base64.decodeBase64(bytes));
+        } else {
+            p.setValue(acc.toString());
+        }
+        propType = null;
+    }
+
     // ***************************************************
     // *               Decoding methods                  *
     // ***************************************************
 
-    /** This method is called when start the document XML*/
+    /**
+     * This method is called when start the document XML
+     */
     public void startDocument() {
         env = new Envelope();
     }
 
-    /** This method is called at the end of parsing */
+    /**
+     * This method is called at the end of parsing
+     */
     public void endDocument() {
 
         //Put the ro object in to envelope
         //env.setReceived(ro);
     }
 
-    /** This method is called when jmp event of begin element.*/
+    /**
+     * This method is called when jmp event of begin element.
+     */
     public void startElement(String uri, String localName, String rawName, Attributes attributes) {
         //Detection of the begin of to or from tags
 
@@ -414,7 +422,9 @@ public class XMLCodec extends DefaultHandler {
         }
     }
 
-    /** This method is called the end of element */
+    /**
+     * This method is called the end of element
+     */
     public void endElement(String namespaceURL, String localName, String qname) {
 
         //Capture the value the attributes of class
@@ -446,12 +456,16 @@ public class XMLCodec extends DefaultHandler {
     */
     }
 
-    /** This method is called when exist characters in the elements*/
+    /**
+     * This method is called when exist characters in the elements
+     */
     public void characters(char[] buffer, int start, int length) {
         accumulator.append(buffer, start, length);
     }
 
-    /** This method is called when warning occur*/
+    /**
+     * This method is called when warning occur
+     */
     //#DOTNET_EXCLUDE_BEGIN
     public void warning(SAXParseException exception) {
         //#DOTNET_EXCLUDE_END
@@ -469,7 +483,9 @@ public class XMLCodec extends DefaultHandler {
 		#DOTNET_INCLUDE_END*/
     }
 
-    /** This method is called when errors occur*/
+    /**
+     * This method is called when errors occur
+     */
     //#DOTNET_EXCLUDE_BEGIN
     public void error(SAXParseException exception) {
         //#DOTNET_EXCLUDE_END
@@ -487,7 +503,9 @@ public class XMLCodec extends DefaultHandler {
 	   #DOTNET_INCLUDE_END*/
     }
 
-    /** This method is called when non-recoverable errors occur.*/
+    /**
+     * This method is called when non-recoverable errors occur.
+     */
     //#DOTNET_EXCLUDE_BEGIN
     public void fatalError(SAXParseException exception) throws SAXException {
         //#DOTNET_EXCLUDE_END

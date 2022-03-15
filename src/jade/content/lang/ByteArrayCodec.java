@@ -28,8 +28,9 @@ import jade.content.abs.AbsContentElement;
 import jade.content.onto.Ontology;
 
 /**
- * Base class for content language codecs that transform 
+ * Base class for content language codecs that transform
  * AbsContentElements to/from sequences of bytes
+ *
  * @author Giovanni Caire - TILAB
  */
 public abstract class ByteArrayCodec extends Codec {
@@ -43,6 +44,7 @@ public abstract class ByteArrayCodec extends Codec {
 
     /**
      * Encodes a content into a byte array.
+     *
      * @param content the content as an abstract descriptor.
      * @return the content as a byte array.
      * @throws CodecException
@@ -52,8 +54,9 @@ public abstract class ByteArrayCodec extends Codec {
 
     /**
      * Encodes a content into a byte array.
-     * @param ontology the ontology 
-     * @param content the content as an abstract descriptor.
+     *
+     * @param ontology the ontology
+     * @param content  the content as an abstract descriptor.
      * @return the content as a byte array.
      * @throws CodecException
      */
@@ -62,6 +65,7 @@ public abstract class ByteArrayCodec extends Codec {
 
     /**
      * Decodes the content to an abstract description.
+     *
      * @param content the content as a byte array.
      * @return the content as an abstract description.
      * @throws CodecException
@@ -71,8 +75,9 @@ public abstract class ByteArrayCodec extends Codec {
 
     /**
      * Decodes the content to an abstract description.
+     *
      * @param ontology the ontology.
-     * @param content the content as a byte array.
+     * @param content  the content as a byte array.
      * @return the content as an abstract description.
      * @throws CodecException
      */

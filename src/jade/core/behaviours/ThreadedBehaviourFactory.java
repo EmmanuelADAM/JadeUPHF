@@ -25,12 +25,14 @@ package jade.core.behaviours;
 
 import jade.core.Agent;
 import jade.core.NotFoundException;
+import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
 
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.List;
 
 /**
  * This class provides support for executing JADE Behaviours
@@ -203,13 +205,25 @@ public class ThreadedBehaviourFactory {
         }
     }
 
+    private void invokeMethod(Object obj, String methodName) {
+        try {
+            Method m = obj.getClass().getMethod(methodName);
+            m.invoke(obj);
+        } catch (NoSuchMethodException nsme) {
+            // Callback method not defined. Just do nothing
+        } catch (Exception e) {
+            myLogger.log(Logger.WARNING, "Error invoking callback method " + methodName, e);
+        }
+    }
+    //#APIDOC_EXCLUDE_END
+
     /**
      * Inner class ThreadedBehaviourWrapper
      * This class is declared public for debugging purpose only
      */
     public class ThreadedBehaviourWrapper extends Behaviour implements Runnable {
-        private Thread myThread;
         private final Behaviour myBehaviour;
+        private Thread myThread;
         private volatile boolean restarted = false;
         private boolean finished = false;
         private volatile boolean suspended = false;
@@ -271,12 +285,11 @@ public class ThreadedBehaviourFactory {
             myBehaviour.setWrappedParent(parent);
         }
 
-        public void setMapMessagesList(HashMap ds) {
-            myBehaviour.setMapMessagesList(ds);
-        }
+        public HashMap<String, List<ACLMessage>> getMapMessagesList() {
+            return myBehaviour.getMapMessagesList();}
 
-        public HashMap getMapMessagesList() {
-            return myBehaviour.getMapMessagesList();
+        public void setMapMessagesList(HashMap<String, List<ACLMessage>> ds) {
+            myBehaviour.setMapMessagesList(ds);
         }
 
         public void reset() {
@@ -467,18 +480,6 @@ public class ThreadedBehaviourFactory {
             return threadState;
         }
     } // END of inner class ThreadedBehaviourWrapper
-    //#APIDOC_EXCLUDE_END
-
-    private void invokeMethod(Object obj, String methodName) {
-        try {
-            Method m = obj.getClass().getMethod(methodName);
-            m.invoke(obj);
-        } catch (NoSuchMethodException nsme) {
-            // Callback method not defined. Just do nothing
-        } catch (Exception e) {
-            myLogger.log(Logger.WARNING, "Error invoking callback method " + methodName, e);
-        }
-    }
 
     /**
      * Inner class DummyParentBehaviour.

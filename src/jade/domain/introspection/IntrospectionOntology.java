@@ -57,17 +57,6 @@ public class IntrospectionOntology extends Ontology implements IntrospectionVoca
     private static final Ontology theInstance = new IntrospectionOntology();
 
 
-    /**
-     * This method grants access to the unique instance of the
-     * ontology.
-     *
-     * @return An <code>Ontology</code> object, containing the concepts
-     * of the ontology.
-     */
-    public static Ontology getInstance() {
-        return theInstance;
-    }
-
     private IntrospectionOntology() {
 
         super(NAME, new Ontology[]{BasicOntology.getInstance(), SerializableOntology.getInstance()}, new BCReflectiveIntrospector());
@@ -294,6 +283,17 @@ public class IntrospectionOntology extends Ontology implements IntrospectionVoca
             oe.printStackTrace();
         }
     } //end of initInstance
+
+    /**
+     * This method grants access to the unique instance of the
+     * ontology.
+     *
+     * @return An <code>Ontology</code> object, containing the concepts
+     * of the ontology.
+     */
+    public static Ontology getInstance() {
+        return theInstance;
+    }
 
     //#APIDOC_EXCLUDE_BEGIN
 

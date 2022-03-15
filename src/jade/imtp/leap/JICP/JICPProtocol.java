@@ -43,6 +43,7 @@ import java.util.Vector;
 
 /**
  * Class declaration
+ *
  * @author Giovanni Caire - TILAB
  * @author Ronnie Taib - Motorola
  * @author Steffen Rusitschka - Siemens
@@ -57,25 +58,45 @@ public class JICPProtocol extends TransportProtocol {
 
     // JICP packet types
 
-    /** ID code for packets carrying IMTP commands */
+    /**
+     * ID code for packets carrying IMTP commands
+     */
     public static final byte COMMAND_TYPE = 0;
-    /** ID code for packets carrying IMTP responses */
+    /**
+     * ID code for packets carrying IMTP responses
+     */
     public static final byte RESPONSE_TYPE = 1;
-    /** ID code for packets carrying keep-alive  */
+    /**
+     * ID code for packets carrying keep-alive
+     */
     public static final byte KEEP_ALIVE_TYPE = 2;
-    /** ID code for packets carrying requests to get the local address */
+    /**
+     * ID code for packets carrying requests to get the local address
+     */
     public static final byte GET_CONFIG_OPTIONS_TYPE = 20;
-    /** ID code for packets carrying requests to get the local address */
+    /**
+     * ID code for packets carrying requests to get the local address
+     */
     public static final byte GET_ADDRESS_TYPE = 21;
-    /** ID code for packets carrying requests to create a Mediator */
+    /**
+     * ID code for packets carrying requests to create a Mediator
+     */
     public static final byte CREATE_MEDIATOR_TYPE = 22;
-    /** ID code for packets carrying requests to connect to a Mediator */
+    /**
+     * ID code for packets carrying requests to connect to a Mediator
+     */
     public static final byte CONNECT_MEDIATOR_TYPE = 23;
-    /** ID code for packets carrying requests to retrieve the current server time */
+    /**
+     * ID code for packets carrying requests to retrieve the current server time
+     */
     public static final byte GET_SERVER_TIME_TYPE = 24;
-    /** ID code for packets carrying requests to drop-down the connection with the mediator */
+    /**
+     * ID code for packets carrying requests to drop-down the connection with the mediator
+     */
     public static final byte DROP_DOWN_TYPE = 30;
-    /** ID code for packets carrying JICP protocol errors */
+    /**
+     * ID code for packets carrying JICP protocol errors
+     */
     public static final byte ERROR_TYPE = 100;
 
 
@@ -158,6 +179,14 @@ public class JICPProtocol extends TransportProtocol {
         return theInstance;
     }
 
+    public static final long computeTimeout(long timeoutOffset, double factor, int packetLength) {
+        // factor < 0 means "use default"
+        if (factor < 0) {
+            factor = DEFAULT_RESPONSE_TIMEOUT_MULTIPLICATIVE_FACTOR;
+        }
+        return timeoutOffset + (long) (factor * packetLength);
+    }
+
     /**
      * Constructor declaration
      */
@@ -177,6 +206,7 @@ public class JICPProtocol extends TransportProtocol {
 
     /**
      * Method declaration
+     *
      * @param s
      * @return
      * @throws ICPException
@@ -199,6 +229,7 @@ public class JICPProtocol extends TransportProtocol {
     }
 
     /**
+     *
      */
     public TransportAddress buildAddress(String host, String port, String file, String anchor) {
         return new JICPAddress(host, port, file, anchor);
@@ -206,19 +237,12 @@ public class JICPProtocol extends TransportProtocol {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
     public String getName() {
         return NAME;
-    }
-
-    public static final long computeTimeout(long timeoutOffset, double factor, int packetLength) {
-        // factor < 0 means "use default"
-        if (factor < 0) {
-            factor = DEFAULT_RESPONSE_TIMEOUT_MULTIPLICATIVE_FACTOR;
-        }
-        return timeoutOffset + (long) (factor * packetLength);
     }
 
 }

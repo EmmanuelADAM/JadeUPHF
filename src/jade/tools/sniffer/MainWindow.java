@@ -46,7 +46,7 @@ import java.net.InetAddress;
  * This class performs the <em>Sniffer</em> main-windows GUI setup. Also provides method for
  * asynchronous disposal at takedown.
  *
- * @see    JFrame
+ * @see JFrame
  */
 
 
@@ -58,14 +58,14 @@ public class MainWindow
 	extends Form {
 	#DOTNET_INCLUDE_END*/
 
-    protected MainPanel mainPanel;
-    protected ActionProcessor actPro; // Making this public allows us to get directly to the sniff agent action.
     //#DOTNET_EXCLUDE_BEGIN
     private final PopupMenuAgent popA;
     //#DOTNET_EXCLUDE_END
     private final Sniffer mySniffer;
     private final ExtendedProperties myProperties;
     private final String snifferLogo = "images/sniffer.gif";
+    protected MainPanel mainPanel;
+    protected ActionProcessor actPro; // Making this public allows us to get directly to the sniff agent action.
   /*#DOTNET_INCLUDE_BEGIN
   private System.Windows.Forms.Panel MainPanelW;
   private System.Windows.Forms.Splitter splitter2;
@@ -293,7 +293,7 @@ public class MainWindow
     /**
      * Tells the Agent Tree to add a container.
      *
-     * @param    name name of the container to be added
+     * @param name name of the container to be added
      */
 
     public void addContainer(final String name, final InetAddress addr) {
@@ -316,7 +316,7 @@ public class MainWindow
     /**
      * Tells the Agent Tree to remove a specified container.
      *
-     * @param    name cont name of the container to be removed
+     * @param name cont name of the container to be removed
      */
 
     public void removeContainer(final String name) {
@@ -332,7 +332,7 @@ public class MainWindow
     /**
      * Tells the Agent Tree to add an agent.
      *
-     * @param    containerName name of the container to contain the new agent
+     * @param containerName name of the container to contain the new agent
      */
 
     public void addAgent(final String containerName, final AID agentID) {
@@ -356,8 +356,8 @@ public class MainWindow
     /**
      * Tells the Agent Tree to remove a specified agent.
      *
-     * @param    containerName name of the container containing the agent
-     * @param agentID name of the agent to be removed
+     * @param containerName name of the container containing the agent
+     * @param agentID       name of the agent to be removed
      */
 
     public void removeAgent(final String containerName, final AID agentID) {
@@ -381,7 +381,7 @@ public class MainWindow
     /**
      * Displays a dialog box with the error string.
      *
-     * @param    errMsg error message to print
+     * @param errMsg error message to print
      */
 
     public void showError(String errMsg) {
@@ -410,7 +410,7 @@ public class MainWindow
     }
 
     /**
-     enables Motif L&F
+     * enables Motif L&F
      */
 
     public void setUI2Motif() {
@@ -418,7 +418,7 @@ public class MainWindow
     }
 
     /**
-     enables Windows L&F
+     * enables Windows L&F
      */
 
     public void setUI2Windows() {
@@ -426,7 +426,7 @@ public class MainWindow
     }
 
     /**
-     enables Multi L&F
+     * enables Multi L&F
      */
 
     public void setUI2Multi() {
@@ -434,7 +434,7 @@ public class MainWindow
     }
 
     /**
-     enables Metal L&F
+     * enables Metal L&F
      */
     public void setUI2Metal() {
         setUI("metal.MetalLookAndFeel");

@@ -42,27 +42,20 @@ public class Federate implements AgentAction {
     private AID df;
     private DFAgentDescription description;
 
-    public void setDf(AID df) {
-        this.df = df;
-    }
-
     public AID getDf() {
         return df;
     }
 
-    public void setDescription(DFAgentDescription description) {
-        this.description = description;
+    public void setDf(AID df) {
+        this.df = df;
     }
 
     public DFAgentDescription getDescription() {
         return description;
     }
 
-    /**
-     * @deprecated Use setDf() instead.
-     */
-    public void setParentDF(Object parent) {
-        setDf((AID) parent);
+    public void setDescription(DFAgentDescription description) {
+        this.description = description;
     }
 
     /**
@@ -73,10 +66,10 @@ public class Federate implements AgentAction {
     }
 
     /**
-     * @deprecated Use setDescription() instead.
+     * @deprecated Use setDf() instead.
      */
-    public void setChildrenDF(Object desc) {
-        setDescription((DFAgentDescription) desc);
+    public void setParentDF(Object parent) {
+        setDf((AID) parent);
     }
 
     /**
@@ -84,5 +77,12 @@ public class Federate implements AgentAction {
      */
     public Object getChildrenDF() {
         return getDescription();
+    }
+
+    /**
+     * @deprecated Use setDescription() instead.
+     */
+    public void setChildrenDF(Object desc) {
+        setDescription((DFAgentDescription) desc);
     }
 }

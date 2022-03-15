@@ -64,16 +64,6 @@ public class SentMessage implements Event {
     }
 
     /**
-     * Set the <code>sender</code> slot of this event.
-     *
-     * @param id The agent identifier of the agent that sent the
-     *           message.
-     */
-    public void setSender(AID id) {
-        sender = id;
-    }
-
-    /**
      * Retrieve the value of the <code>sender</code> slot of this
      * event, containing the agent identifier of the agent that sent
      * the message.
@@ -86,13 +76,13 @@ public class SentMessage implements Event {
     }
 
     /**
-     * Set the unicast <code>receiver</code> slot of this event.
+     * Set the <code>sender</code> slot of this event.
      *
-     * @param id The agent identifier of the unicast receiver of the
-     *           sent message.
+     * @param id The agent identifier of the agent that sent the
+     *           message.
      */
-    public void setReceiver(AID id) {
-        receiver = id;
+    public void setSender(AID id) {
+        sender = id;
     }
 
     /**
@@ -107,12 +97,13 @@ public class SentMessage implements Event {
     }
 
     /**
-     * Set the <code>message</code> slot of this event.
+     * Set the unicast <code>receiver</code> slot of this event.
      *
-     * @param msg The ACL message that was sent.
+     * @param id The agent identifier of the unicast receiver of the
+     *           sent message.
      */
-    public void setMessage(ACLMessage msg) {
-        message = msg;
+    public void setReceiver(AID id) {
+        receiver = id;
     }
 
     /**
@@ -124,6 +115,15 @@ public class SentMessage implements Event {
      */
     public ACLMessage getMessage() {
         return message;
+    }
+
+    /**
+     * Set the <code>message</code> slot of this event.
+     *
+     * @param msg The ACL message that was sent.
+     */
+    public void setMessage(ACLMessage msg) {
+        message = msg;
     }
 
 }

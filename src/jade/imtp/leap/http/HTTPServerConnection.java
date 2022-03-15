@@ -42,12 +42,13 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 /**
- * Connection class to handle HTTP requests/responses on 
+ * Connection class to handle HTTP requests/responses on
  * the server side.
- * Note that unlike the HTTPClientConnection that "looks 
- * like" a permanent pipe where several request/response sessions 
+ * Note that unlike the HTTPClientConnection that "looks
+ * like" a permanent pipe where several request/response sessions
  * can occur, the HTTPServerConnection handles a single
  * request/response session.
+ *
  * @author Giovanni Caire - TILAB
  */
 class HTTPServerConnection extends Connection {
@@ -102,6 +103,7 @@ class HTTPServerConnection extends Connection {
     }
 
     /**
+     *
      */
     public void close() throws IOException {
         readAvailable = false;
@@ -124,6 +126,7 @@ class HTTPServerConnection extends Connection {
     }
 
     /**
+     *
      */
     public String getRemoteHost() throws Exception {
         return sc.getInetAddress().getHostAddress();

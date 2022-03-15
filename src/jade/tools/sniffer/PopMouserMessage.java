@@ -37,6 +37,7 @@ import java.awt.event.MouseEvent;
 
 /**
  * This is the listener for the canvas of messages
+ *
  * @see PopMouserAgent
  */
 

@@ -41,26 +41,27 @@ public class RegexFacet implements Facet {
     private final String regex;
 
     /**
-     Construct a <code>PermittedValuesFacet</code> that
-     forces an AbsPrimitive to contain a specific set of values
-     expressed as a regular expression
+     * Construct a <code>PermittedValuesFacet</code> that
+     * forces an AbsPrimitive to contain a specific set of values
+     * expressed as a regular expression
      */
     public RegexFacet(String regex) {
         this.regex = regex;
     }
 
     /**
-     Get the regex associated to this facet
+     * Get the regex associated to this facet
      */
     public String getRegex() {
         return regex;
     }
 
     /**
-     Check whether a given value for the slot this Facet applies
-     to is valid.
-     @param value The value to be checked
-     @throws OntologyException If the value is not valid
+     * Check whether a given value for the slot this Facet applies
+     * to is valid.
+     *
+     * @param value The value to be checked
+     * @throws OntologyException If the value is not valid
      */
     public void validate(AbsObject value, Ontology onto) throws OntologyException {
         if (!(value instanceof AbsPrimitive absPrimitive)) {

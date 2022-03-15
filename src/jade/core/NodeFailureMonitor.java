@@ -114,6 +114,39 @@ public abstract class NodeFailureMonitor {
     protected Map<String, Node> childNodes = new HashMap<>();
 
     /**
+     * Factory method to create NodeFailureMonitor objects
+     *
+     * @return a new instance of a <code>NodeFailureMonitor</code>.
+     */
+    public static NodeFailureMonitor getFailureMonitor() {
+        NodeFailureMonitor nfm = null;
+        if (theMonitoringService != null) {
+            nfm = theMonitoringService.getFailureMonitor();
+        }
+
+        if (nfm == null) {
+            // Use the default NodeFailureMonitor
+            nfm = getDefaultFailureMonitor();
+        }
+
+        return nfm;
+    }
+
+    public static NodeFailureMonitor getDefaultFailureMonitor() {
+        try {
+            return (NodeFailureMonitor) Class.forName("jade.core.nodeMonitoring.BlockingNodeFailureMonitor").getDeclaredConstructor().newInstance();
+        } catch (Throwable t) {
+            // Should never happen
+            t.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void init(NodeMonitoringService nms) {
+        theMonitoringService = nms;
+    }
+
+    /**
      * Start the monitoring
      *
      * @param n   target node to monitor
@@ -200,6 +233,11 @@ public abstract class NodeFailureMonitor {
         }
     }
 
+
+    /////////////////////////////////////////////////////
+    // Static methods
+    /////////////////////////////////////////////////////
+
     private void issueNodeReachable(Node n) {
         if (theMonitoringService != null) {
             GenericCommand cmd = new GenericCommand(NodeMonitoringService.NODE_REACHABLE, theMonitoringService.getName(), null);
@@ -228,44 +266,5 @@ public abstract class NodeFailureMonitor {
 
     public String requireService() {
         return null;
-    }
-
-
-    /////////////////////////////////////////////////////
-    // Static methods
-    /////////////////////////////////////////////////////
-
-    /**
-     * Factory method to create NodeFailureMonitor objects
-     *
-     * @return a new instance of a <code>NodeFailureMonitor</code>.
-     */
-    public static NodeFailureMonitor getFailureMonitor() {
-        NodeFailureMonitor nfm = null;
-        if (theMonitoringService != null) {
-            nfm = theMonitoringService.getFailureMonitor();
-        }
-
-        if (nfm == null) {
-            // Use the default NodeFailureMonitor
-            nfm = getDefaultFailureMonitor();
-        }
-
-        return nfm;
-    }
-
-    public static NodeFailureMonitor getDefaultFailureMonitor() {
-        try {
-            return (NodeFailureMonitor) Class.forName("jade.core.nodeMonitoring.BlockingNodeFailureMonitor").getDeclaredConstructor().newInstance();
-        } catch (Throwable t) {
-            // Should never happen
-            t.printStackTrace();
-            return null;
-        }
-    }
-
-
-    public static void init(NodeMonitoringService nms) {
-        theMonitoringService = nms;
     }
 }

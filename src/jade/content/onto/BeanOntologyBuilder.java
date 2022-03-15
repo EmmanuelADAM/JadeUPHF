@@ -42,9 +42,8 @@ import java.util.Map.Entry;
 
 class BeanOntologyBuilder {
 
-    private final static Logger logger = Logger.getMyLogger(BeanOntologyBuilder.class.getName());
-
     public static final String ENUM_SLOT_NAME = "name";
+    private final static Logger logger = Logger.getMyLogger(BeanOntologyBuilder.class.getName());
     private static final String GETTER_PREFIX = "get";
     private static final String BOOLEAN_GETTER_PREFIX = "is";
     private static final String SETTER_PREFIX = "set";
@@ -147,10 +146,9 @@ class BeanOntologyBuilder {
     }
 
     private static String buildSetterNameFromBeanPropertyName(String beanPropertyName) {
-        StringBuilder sb = new StringBuilder(SETTER_PREFIX);
-        sb.append(Character.toUpperCase(beanPropertyName.charAt(0)));
-        sb.append(beanPropertyName.substring(1));
-        return sb.toString();
+        String sb = SETTER_PREFIX + Character.toUpperCase(beanPropertyName.charAt(0)) +
+                beanPropertyName.substring(1);
+        return sb;
     }
 
     private static boolean accessorsAreConsistent(Method getter, Method setter) {
@@ -273,8 +271,7 @@ class BeanOntologyBuilder {
                             aggregateType = slotClazz.getComponentType();
                         }
                         Type slotType = getter.getGenericReturnType();
-                        if (slotType instanceof ParameterizedType) {
-                            ParameterizedType slotParameterizedType = (ParameterizedType) slotType;
+                        if (slotType instanceof ParameterizedType slotParameterizedType) {
                             Type[] actuals = slotParameterizedType.getActualTypeArguments();
                             // slotType must be an array or a Collection => we expect only 1 item in actuals
                             // get first element

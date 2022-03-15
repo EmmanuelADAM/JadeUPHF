@@ -50,16 +50,6 @@ public class WhereIsAgentAction implements AgentAction {
     }
 
     /**
-     * Set the <code>agent-identifier</code> slot of this action.
-     *
-     * @param id The agent identifier for the agent whose location is
-     *           requested.
-     */
-    public void setAgentIdentifier(AID id) {
-        agentName = id;
-    }
-
-    /**
      * Retrieve the value of the <code>agent-identifier</code> slot of
      * this action, containing the agent identifier for the agent
      * whose location is requested.
@@ -69,6 +59,16 @@ public class WhereIsAgentAction implements AgentAction {
      */
     public AID getAgentIdentifier() {
         return agentName;
+    }
+
+    /**
+     * Set the <code>agent-identifier</code> slot of this action.
+     *
+     * @param id The agent identifier for the agent whose location is
+     *           requested.
+     */
+    public void setAgentIdentifier(AID id) {
+        agentName = id;
     }
 
 }

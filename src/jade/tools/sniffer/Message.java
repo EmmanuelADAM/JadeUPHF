@@ -44,18 +44,16 @@ import java.util.Properties;
 
 public class Message extends ACLMessage implements Serializable {
 
-    private final AID unicastReceiver;
-
-    private int x1, x2, y;
-    private final int[] xCoords = new int[3];
-    private final int[] yCoords = new int[3];
-
     public static final int step = 80;
     public static final int offset = 45;
     public static final int r = 8;
+    private final AID unicastReceiver;
+    private final int[] xCoords = new int[3];
+    private final int[] yCoords = new int[3];
     private final int yDim = 0;
     private final int xS = 0;
     private final int xD = 0;
+    private int x1, x2, y;
     private int messageNumber = 0;
 
   /* TO BE REMOVED

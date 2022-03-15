@@ -43,58 +43,6 @@ public class LEAPACLCodec implements ACLCodec {
     public static final String NAME = "leap.acl.rep";
 
     /**
-     * Encodes an <code>ACLMessage</code> object into a byte sequence,
-     * according to the specific message representation.
-     *
-     * @param msg     The ACL message to encode.
-     * @param charset This parameter is not taken into account
-     * @return a byte array, containing the encoded message.
-     */
-    public byte[] encode(ACLMessage msg, String charset) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(baos);
-        try {
-            serializeACL(msg, dos);
-            return baos.toByteArray();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-        return new byte[0];
-    }
-
-    /**
-     * Recovers an <code>ACLMessage</code> object back from raw data,
-     * using the specific message representation to interpret the byte
-     * sequence.
-     *
-     * @param data    The byte sequence containing the encoded message.
-     * @param charset This parameter is not taken into account
-     * @return A new <code>ACLMessage</code> object, built from the raw
-     * data.
-     * @throws CodecException If some kind of syntax error occurs.
-     */
-    public ACLMessage decode(byte[] data, String charset) throws CodecException {
-        DataInputStream din = new DataInputStream(new ByteArrayInputStream(data));
-        try {
-            return deserializeACL(din);
-        } catch (IOException ioe) {
-            throw new CodecException(getName() + " ACLMessage decoding exception", ioe);
-        }
-    }
-
-    /**
-     * Query the name of the message representation handled by this
-     * <code>Codec</code> object. The FIPA standard representations have
-     * a name starting with <code><b>"fipa.acl.rep."</b></code>.
-     *
-     * @return The name of the handled ACL message representation.
-     */
-    public String getName() {
-        return NAME;
-    }
-
-
-    /**
      *
      */
     public final static void serializeACL(ACLMessage msg, DataOutputStream dos) throws IOException {
@@ -287,7 +235,6 @@ public class LEAPACLCodec implements ACLCodec {
         return msg;
     }
 
-
     public final static void serializeAID(AID id, DataOutputStream dos) throws IOException {
         byte presence = 0;
         String name = id.getName();
@@ -359,5 +306,56 @@ public class LEAPACLCodec implements ACLCodec {
             dos.writeUTF(key);
             dos.writeUTF(props.getProperty(key));
         }
+    }
+
+    /**
+     * Encodes an <code>ACLMessage</code> object into a byte sequence,
+     * according to the specific message representation.
+     *
+     * @param msg     The ACL message to encode.
+     * @param charset This parameter is not taken into account
+     * @return a byte array, containing the encoded message.
+     */
+    public byte[] encode(ACLMessage msg, String charset) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(baos);
+        try {
+            serializeACL(msg, dos);
+            return baos.toByteArray();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return new byte[0];
+    }
+
+    /**
+     * Recovers an <code>ACLMessage</code> object back from raw data,
+     * using the specific message representation to interpret the byte
+     * sequence.
+     *
+     * @param data    The byte sequence containing the encoded message.
+     * @param charset This parameter is not taken into account
+     * @return A new <code>ACLMessage</code> object, built from the raw
+     * data.
+     * @throws CodecException If some kind of syntax error occurs.
+     */
+    public ACLMessage decode(byte[] data, String charset) throws CodecException {
+        DataInputStream din = new DataInputStream(new ByteArrayInputStream(data));
+        try {
+            return deserializeACL(din);
+        } catch (IOException ioe) {
+            throw new CodecException(getName() + " ACLMessage decoding exception", ioe);
+        }
+    }
+
+    /**
+     * Query the name of the message representation handled by this
+     * <code>Codec</code> object. The FIPA standard representations have
+     * a name starting with <code><b>"fipa.acl.rep."</b></code>.
+     *
+     * @return The name of the handled ACL message representation.
+     */
+    public String getName() {
+        return NAME;
     }
 }

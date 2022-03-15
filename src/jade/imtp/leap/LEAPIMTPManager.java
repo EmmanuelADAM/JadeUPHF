@@ -48,32 +48,25 @@ import java.util.List;
  */
 public class LEAPIMTPManager implements IMTPManager {
 
+    public static final String CHANGE_PORT_IF_BUSY = "jade_imtp_leap_LEAPIMTPManager_changeportifbusy";
     /**
      * Profile keys for LEAP-IMTP specific parameters
      */
     static final String MAIN_URL = "main-url";
-
-    public static final String CHANGE_PORT_IF_BUSY = "jade_imtp_leap_LEAPIMTPManager_changeportifbusy";
-
     private static final String ICPS = "icps";
     private static final String ROUTER_URL = "router-url";
-
+    Logger logger = Logger.getMyLogger(getClass().getName());
     /**
      * Local pointer to the singleton command dispatcher in this JVM
      */
     private CommandDispatcher theDispatcher = null;
-
     /**
      * The Profile holding the configuration for this IMTPManager
      */
     private Profile theProfile = null;
-
     private String masterPMAddr;
     private String localAddr;
-
     private NodeLEAP localNode;
-
-    Logger logger = Logger.getMyLogger(getClass().getName());
 
     /**
      * Default constructor used to dynamically instantiate a new
@@ -203,7 +196,7 @@ public class LEAPIMTPManager implements IMTPManager {
                 throw new IMTPException("Cannot attach to the original PlatformManager.", se);
             } catch (IMTPException imtpe) {
                 Throwable t = imtpe.getNested();
-                if ((t != null) && (t instanceof UnreachableException)) {
+                if ((t instanceof UnreachableException)) {
                     // The master main container does not exist. Become the leader
                     logger.log(Logger.INFO, "No master Main Container found at address " + masterPMAddr + ". Take the leadership");
                     masterPMAddr = null;
@@ -238,10 +231,6 @@ public class LEAPIMTPManager implements IMTPManager {
             Class<?> proxyClass = Class.forName(serviceName + "Proxy");
             Service.Slice proxy = (Service.Slice) proxyClass.getDeclaredConstructor().newInstance();
             if (proxy instanceof SliceProxy) {
-                ((SliceProxy) proxy).setNode(where);
-            }
-            //#DOTNET_EXCLUDE_BEGIN
-            else if (proxy instanceof SliceProxy) {
                 ((SliceProxy) proxy).setNode(where);
             }
             //#DOTNET_EXCLUDE_END

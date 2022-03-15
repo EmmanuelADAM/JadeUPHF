@@ -39,20 +39,20 @@ import java.util.Properties;
  */
 public class DFHSQLKB extends DFDBKB {
 
+    protected final static String CACHE_SCALE = "8";
+    protected final static String CACHE_SIZE_SCALE = "8";
+    protected final static String GC_INTERVAL = "10000";
     private static final String db_driver = "org.hsqldb.jdbcDriver";
     private static final String db_url = "jdbc:hsqldb:file:dfdb";
     private static final String db_user = "sa";
     private static final String db_passwd = "";
 
-    protected final static String CACHE_SCALE = "8";
-    protected final static String CACHE_SIZE_SCALE = "8";
-    protected final static String GC_INTERVAL = "10000";
-
 
     /**
      * Constructor
+     *
      * @param maxResultLimit JADE internal limit for the number of maximum search results.
-     * @param cleanTables specifies whether the KB should delete all existing tables for the DF at startup
+     * @param cleanTables    specifies whether the KB should delete all existing tables for the DF at startup
      * @throws SQLException if a database access error occurs
      */
     public DFHSQLKB(int maxResultLimit, boolean cleanTables) throws SQLException {

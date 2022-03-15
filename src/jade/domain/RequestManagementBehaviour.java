@@ -47,8 +47,8 @@ import jade.util.Logger;
  * @author Giovanni Caire - Tilab
  */
 public abstract class RequestManagementBehaviour extends SimpleAchieveREResponder {
-    private ACLMessage notification;
     protected Logger myLogger;
+    private ACLMessage notification;
 
     protected RequestManagementBehaviour(Agent a, MessageTemplate mt) {
         super(a, mt);
@@ -84,18 +84,12 @@ public abstract class RequestManagementBehaviour extends SimpleAchieveREResponde
             notification = performAction(slAction, request);
 
             // Action OK
-        } catch (OntologyException oe) {
+        } catch (OntologyException | CodecException oe) {
             // Error decoding request --> NOT_UNDERSTOOD
             response = request.createReply();
             response.setPerformative(ACLMessage.NOT_UNDERSTOOD);
             response.setContent("(" + ExceptionVocabulary.UNRECOGNISEDVALUE + " content)");
             t = oe;
-        } catch (CodecException ce) {
-            // Error decoding request --> NOT_UNDERSTOOD
-            response = request.createReply();
-            response.setPerformative(ACLMessage.NOT_UNDERSTOOD);
-            response.setContent("(" + ExceptionVocabulary.UNRECOGNISEDVALUE + " content)");
-            t = ce;
         } catch (RefuseException re) {
             // RefuseException thrown during action execution --> REFUSE
             response = request.createReply();

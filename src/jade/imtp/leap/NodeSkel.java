@@ -61,7 +61,6 @@ class NodeSkel extends Skeleton {
 
                 command.reset(Command.OK);
                 command.addParam(result);
-                break;
             }
             case Command.PING_NODE_BLOCKING, Command.PING_NODE_NONBLOCKING -> {
                 Boolean hang = (Boolean) command.getParamAt(0);
@@ -69,17 +68,14 @@ class NodeSkel extends Skeleton {
 
                 command.reset(Command.OK);
                 command.addParam(result);
-                break;
             }
             case Command.EXIT_NODE -> {
                 myNode.exit();
                 command.reset(Command.OK);
-                break;
             }
             case Command.INTERRUPT_NODE -> {
                 myNode.interrupt();
                 command.reset(Command.OK);
-                break;
             }
             case Command.PLATFORM_MANAGER_DEAD -> {
                 String deadPMAddress = (String) command.getParamAt(0);
@@ -87,7 +83,6 @@ class NodeSkel extends Skeleton {
                 myNode.platformManagerDead(deadPMAddress, notifyingPMAddress);
 
                 command.reset(Command.OK);
-                break;
             }
         }
 

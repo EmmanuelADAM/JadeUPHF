@@ -65,31 +65,24 @@ public class NotificationService extends BaseService {
 
     // The special name of an auxiliary thread used to avoid deadlock when debugging the AMS
     private final static String AMS_DEBUG_HELPER = "AMS-debug-helper";
-
-    // The concrete agent container, providing access to LADT, etc.
-    private AgentContainer myContainer;
-
-    // The local slice for this service
-    private ServiceComponent localSlice;
     private final Sink sourceSink = new NotificationSourceSink();
     private final Filter outgoingFilter = new NotificationOutgoingFilter();
     private final Filter incomingFilter = new NotificationIncomingFilter();
     private final NotificationHelper helper = new NotificationHelperImpl();
-
     // The list of all listeners of ACL messaging related events (uses RW-locking)
     private final SynchList messageListeners = new SynchList();
-
     // The list of all listeners of agent life cycle events (uses RW-locking)
     private final SynchList agentListeners = new SynchList();
-
     // The list of all listeners of container events (uses RW-locking)
     private final SynchList containerListeners = new SynchList();
-
     // This maps a debugged agent into the list of debuggers that are
     // currently debugging it. It is used to know when an agent is no longer
     // debugged by any debugger and behaviour event generation can be turned off.
     private final Map<AID, List<AID>> debuggers = new HashMap<>();
-
+    // The concrete agent container, providing access to LADT, etc.
+    private AgentContainer myContainer;
+    // The local slice for this service
+    private ServiceComponent localSlice;
 
     public void init(AgentContainer ac, Profile p) throws ProfileException {
         super.init(ac, p);
@@ -134,524 +127,6 @@ public class NotificationService extends BaseService {
     public String[] getOwnedCommands() {
         return OWNED_COMMANDS;
     }
-
-
-    /**
-     * Inner class NotificationSourceSink
-     */
-    private class NotificationSourceSink implements Sink {
-        public void consume(VerticalCommand cmd) {
-            try {
-                String name = cmd.getName();
-                if (name.equals(NotificationSlice.SNIFF_ON)) {
-                    handleSniffOn(cmd);
-                }
-                switch (name) {
-                    case NotificationSlice.SNIFF_OFF -> handleSniffOff(cmd);
-                    case NotificationSlice.DEBUG_ON -> handleDebugOn(cmd);
-                    case NotificationSlice.DEBUG_OFF -> handleDebugOff(cmd);
-                    case NotificationSlice.NOTIFY_POSTED -> handleNotifyPosted(cmd);
-                    case NotificationSlice.NOTIFY_RECEIVED -> handleNotifyReceived(cmd);
-                    case NotificationSlice.NOTIFY_CHANGED_AGENT_PRINCIPAL -> handleNotifyChangedAgentPrincipal(cmd);
-                    case NotificationSlice.NOTIFY_BEHAVIOUR_ADDED -> handleNotifyAddedBehaviour(cmd);
-                    case NotificationSlice.NOTIFY_BEHAVIOUR_REMOVED -> handleNotifyRemovedBehaviour(cmd);
-                    case NotificationSlice.NOTIFY_CHANGED_BEHAVIOUR_STATE -> handleNotifyChangedBehaviourState(cmd);
-                }
-            } catch (Throwable t) {
-                cmd.setReturnValue(t);
-            }
-        }
-
-        private void handleSniffOn(VerticalCommand cmd) throws IMTPException, ServiceException, NotFoundException {
-            Object[] params = cmd.getParams();
-            AID sniffer = (AID) params[0];
-            List<AID> targets = (List<AID>) params[1];
-
-            MainContainer impl = myContainer.getMain();
-            if (impl != null) {
-                // Activate sniffing each element of the list
-                for (AID o : targets) {
-                    ContainerID cid = impl.getContainerID(o);
-
-                    NotificationSlice slice = (NotificationSlice) getSlice(cid.getName());
-                    try {
-                        slice.sniffOn(sniffer, o);
-                    } catch (IMTPException imtpe) {
-                        // Try to get a newer slice and repeat...
-                        slice = (NotificationSlice) getFreshSlice(cid.getName());
-                        slice.sniffOn(sniffer, o);
-                    }
-                }
-            } else {
-                // Do nothing for now, but could also route the command to the main slice, thus enabling e.g. AMS replication
-            }
-        }
-
-        private void handleSniffOff(VerticalCommand cmd) throws IMTPException, ServiceException, NotFoundException {
-            Object[] params = cmd.getParams();
-            AID sniffer = (AID) params[0];
-            List<AID> targets = (List<AID>) params[1];
-
-            MainContainer impl = myContainer.getMain();
-            if (impl != null) {
-                // Deactivate sniffing each element of the list
-                for (AID o : targets) {
-                    ContainerID cid = impl.getContainerID(o);
-
-                    NotificationSlice slice = (NotificationSlice) getSlice(cid.getName());
-                    try {
-                        slice.sniffOff(sniffer, o);
-                    } catch (IMTPException imtpe) {
-                        // Try to get a newer slice and repeat...
-                        slice = (NotificationSlice) getFreshSlice(cid.getName());
-                        slice.sniffOff(sniffer, o);
-                    }
-                }
-            } else {
-                // Do nothing for now, but could also route the command to the main slice, thus enabling e.g. AMS replication
-            }
-        }
-
-        private void handleDebugOn(VerticalCommand cmd) throws IMTPException, ServiceException, NotFoundException {
-            Object[] params = cmd.getParams();
-            AID introspector = (AID) params[0];
-            List<AID> targets = (List<AID>) params[1];
-
-            MainContainer impl = myContainer.getMain();
-            if (impl != null) {
-                // Activate debugging each element of the list
-                for (AID o : targets) {
-                    ContainerID cid = impl.getContainerID(o);
-
-                    NotificationSlice slice = (NotificationSlice) getSlice(cid.getName());
-                    try {
-                        slice.debugOn(introspector, o);
-                    } catch (IMTPException imtpe) {
-                        // Try to get a newer slice and repeat...
-                        slice = (NotificationSlice) getFreshSlice(cid.getName());
-                        slice.debugOn(introspector, o);
-                    }
-                }
-            } else {
-                // Do nothing for now, but could also route the command to the main slice, thus enabling e.g. AMS replication
-            }
-        }
-
-        private void handleDebugOff(VerticalCommand cmd) throws IMTPException, ServiceException, NotFoundException {
-            Object[] params = cmd.getParams();
-            AID introspector = (AID) params[0];
-            List<AID> targets = (List<AID>) params[1];
-
-            MainContainer impl = myContainer.getMain();
-            if (impl != null) {
-                // Deactivate debugging each element of the list
-                for (AID o : targets) {
-                    ContainerID cid = impl.getContainerID(o);
-
-                    NotificationSlice slice = (NotificationSlice) getSlice(cid.getName());
-                    try {
-                        slice.debugOff(introspector, o);
-                    } catch (IMTPException imtpe) {
-                        // Try to get a newer slice and repeat...
-                        slice = (NotificationSlice) getFreshSlice(cid.getName());
-                        slice.debugOff(introspector, o);
-                    }
-                }
-            } else {
-                // Do nothing for now, but could also route the command to the main slice, thus enabling e.g. AMS replication
-            }
-        }
-
-        private void handleNotifyPosted(VerticalCommand cmd) {
-            Object[] params = cmd.getParams();
-            ACLMessage msg = (ACLMessage) params[0];
-            AID receiver = (AID) params[1];
-
-            firePostedMessage(msg, receiver);
-        }
-
-        private void handleNotifyReceived(VerticalCommand cmd) {
-            Object[] params = cmd.getParams();
-            ACLMessage msg = (ACLMessage) params[0];
-            AID receiver = (AID) params[1];
-
-            fireReceivedMessage(msg, receiver);
-        }
-
-        private void handleNotifyChangedAgentPrincipal(VerticalCommand cmd) {
-            Object[] params = cmd.getParams();
-            AID id = (AID) params[0];
-            JADEPrincipal from = (JADEPrincipal) params[1];
-            JADEPrincipal to = (JADEPrincipal) params[2];
-
-            fireChangedAgentPrincipal(id, from, to);
-        }
-
-        private void handleNotifyAddedBehaviour(VerticalCommand cmd) {
-            Object[] params = cmd.getParams();
-            AID id = (AID) params[0];
-            Behaviour b = (Behaviour) params[1];
-
-            fireAddedBehaviour(id, b);
-        }
-
-        private void handleNotifyRemovedBehaviour(VerticalCommand cmd) {
-            Object[] params = cmd.getParams();
-            AID id = (AID) params[0];
-            Behaviour b = (Behaviour) params[1];
-
-            fireRemovedBehaviour(id, b);
-        }
-
-        private void handleNotifyChangedBehaviourState(VerticalCommand cmd) {
-            Object[] params = cmd.getParams();
-            AID id = (AID) params[0];
-            Behaviour b = (Behaviour) params[1];
-            String from = (String) params[2];
-            String to = (String) params[3];
-
-            fireChangedBehaviourState(id, b, from, to);
-        }
-    } // End of inner class NotificationSourceSink
-
-
-    /**
-     * Inner class NotificationOutgoingFilter
-     */
-    private class NotificationOutgoingFilter extends Filter {
-        public boolean accept(VerticalCommand cmd) {
-            try {
-                String name = cmd.getName();
-                switch (name) {
-                    case jade.core.messaging.MessagingSlice.SEND_MESSAGE -> handleSendMessage(cmd);
-                    case jade.core.management.AgentManagementSlice.INFORM_CREATED -> handleInformCreated(cmd);
-                    case jade.core.management.AgentManagementSlice.INFORM_KILLED -> handleInformKilled(cmd);
-                    case jade.core.management.AgentManagementSlice.INFORM_STATE_CHANGED -> handleInformStateChanged(cmd);
-                    case jade.core.replication.MainReplicationSlice.LEADERSHIP_ACQUIRED -> handleLeadershipAcquired(cmd);
-                }
-            } catch (Throwable t) {
-                cmd.setReturnValue(t);
-            }
-
-            // Never veto a command
-            return true;
-        }
-
-        private void handleSendMessage(VerticalCommand cmd) {
-            Object[] params = cmd.getParams();
-            AID sender = (AID) params[0];
-            // NOTE that the gmsg cannot be a MultipleGenericMessage since we are in the outgoing chain
-            ACLMessage msg = ((GenericMessage) params[1]).getACLMessage();
-            AID receiver = (AID) params[2];
-
-            fireSentMessage(msg, sender, receiver);
-        }
-
-        private void handleInformCreated(VerticalCommand cmd) {
-            Object[] params = cmd.getParams();
-            AID agent = (AID) params[0];
-
-            fireBornAgent(agent);
-        }
-
-        private void handleInformKilled(VerticalCommand cmd) {
-            Object[] params = cmd.getParams();
-            AID agent = (AID) params[0];
-
-            fireDeadAgent(agent);
-        }
-
-        private void handleInformStateChanged(VerticalCommand cmd) {
-            Object[] params = cmd.getParams();
-            AID id = (AID) params[0];
-            AgentState from = (AgentState) params[1];
-            AgentState to = (AgentState) params[2];
-
-            fireChangedAgentState(id, from, to);
-        }
-
-        private void handleLeadershipAcquired(VerticalCommand cmd) {
-            fireLeadershipAcquired();
-        }
-    } // END of inner class NotificationOutgoingFilter
-
-
-    /**
-     * Inner class NotificationIncomingFilter
-     */
-    private class NotificationIncomingFilter extends Filter {
-        // Notify listeners about the REATTACHED and RECONNECTED events only when the reattachment/reconnection procedure
-        // has been completed
-        public void postProcess(VerticalCommand cmd) {
-            try {
-                String name = cmd.getName();
-                if (name.equals(Service.REATTACHED)) {
-                    handleReattached(cmd);
-                } else if (name.equals(Service.RECONNECTED)) {
-                    handleReconnected(cmd);
-                }
-            } catch (Throwable t) {
-                cmd.setReturnValue(t);
-            }
-        }
-
-        private void handleReattached(VerticalCommand cmd) {
-            fireReattached();
-        }
-
-        private void handleReconnected(VerticalCommand cmd) {
-            fireReconnected();
-        }
-    } // END of inner class NotificationIncomingFilter
-
-
-    /**
-     * Inner class ServiceComponent
-     */
-    private class ServiceComponent implements Slice {
-        public Service getService() {
-            return NotificationService.this;
-        }
-
-        public Node getNode() throws ServiceException {
-            try {
-                return NotificationService.this.getLocalNode();
-            } catch (IMTPException imtpe) {
-                throw new ServiceException("Problem in contacting the IMTP Manager", imtpe);
-            }
-        }
-
-        public VerticalCommand serve(HorizontalCommand cmd) {
-            try {
-                String cmdName = cmd.getName();
-                Object[] params = cmd.getParams();
-
-                switch (cmdName) {
-                    case NotificationSlice.H_SNIFFON -> {
-                        AID snifferName = (AID) params[0];
-                        AID targetName = (AID) params[1];
-                        sniffOn(snifferName, targetName);
-                    }
-                    case NotificationSlice.H_SNIFFOFF -> {
-                        AID snifferName = (AID) params[0];
-                        AID targetName = (AID) params[1];
-                        sniffOff(snifferName, targetName);
-                    }
-                    case NotificationSlice.H_DEBUGON -> {
-                        AID introspectorName = (AID) params[0];
-                        AID targetName = (AID) params[1];
-                        debugOn(introspectorName, targetName);
-                    }
-                    case NotificationSlice.H_DEBUGOFF -> {
-                        AID introspectorName = (AID) params[0];
-                        AID targetName = (AID) params[1];
-                        debugOff(introspectorName, targetName);
-                    }
-                }
-            } catch (Throwable t) {
-                cmd.setReturnValue(t);
-            }
-
-            return null;
-        }
-
-        private void sniffOn(AID snifferName, AID targetName) {
-            ToolNotifier tn = findNotifier(snifferName);
-            if (tn == null) { // Need a new notifier
-                tn = new ToolNotifier(snifferName);
-                try {
-                    String platformID = myContainer.getPlatformID();
-                    AID id = new AID(AID.createGUID(snifferName.getLocalName() + "-on-" + myID().getName(), myContainer.getPlatformID()), AID.ISGUID);
-                    myContainer.initAgent(id, tn, null, null); // FIXME: Modify to use a proper owner Principal
-                    myContainer.powerUpLocalAgent(id);
-                    helper.registerMessageListener(tn);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            tn.addObservedAgent(targetName);
-        }
-
-        private void sniffOff(AID snifferName, AID targetName) {
-            ToolNotifier tn = findNotifier(snifferName);
-            if (tn != null) {
-                tn.removeObservedAgent(targetName);
-            }
-        }
-
-        private void debugOn(AID introspectorName, AID targetName) throws IMTPException {
-            // AMS debug enabling must be done by a separated Thread to avoid
-            // deadlock with ToolNotifier startup
-            if (targetName.equals(myContainer.getAMS()) && !(Thread.currentThread().getName().equals(AMS_DEBUG_HELPER))) {
-                final AID in = introspectorName;
-                final AID tg = targetName;
-                Thread helper = new Thread(() -> {
-                    try {
-                        debugOn(in, tg);
-                    } catch (IMTPException imtpe) {
-                        imtpe.printStackTrace();
-                    }
-                });
-                helper.setName(AMS_DEBUG_HELPER);
-                helper.start();
-                return;
-            }
-
-            // Get the ToolNotifier for the indicated debugger (or create a new one
-            // if not yet there)
-            ToolNotifier tn = findNotifier(introspectorName);
-            if (tn == null) { // Need a new notifier
-                tn = new ToolNotifier(introspectorName);
-                AID id = new AID(AID.createGUID(introspectorName.getLocalName() + "-on-" + myID().getName(), myContainer.getPlatformID()), AID.ISGUID);
-                try {
-                    myContainer.initAgent(id, tn, null, null); // FIXME: Modify to use a proper owner Principal
-                    myContainer.powerUpLocalAgent(id);
-                    if (targetName.equals(myContainer.getAMS())) {
-                        // If we are debugging the AMS, let's wait for the ToolNotifier
-                        // to be ready to avoid deadlock problems. Note also that in
-                        // this case this code is executed by the ams-debug-helper thread and not
-                        // by the AMS thread
-                        tn.waitUntilStarted();
-                    }
-                    // Wait a bit to let the ToolNotifier pass in ACTIVE_STATE
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception ignored) {
-                    }
-                    helper.registerMessageListener(tn);
-                    helper.registerAgentListener(tn);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            tn.addObservedAgent(targetName);
-
-            // Update the map of debuggers currently debugging the targetName agent
-            synchronized (debuggers) {
-                List<AID> l = debuggers.computeIfAbsent(targetName, k -> new LinkedList<>());
-                if (!l.contains(introspectorName)) {
-                    l.add(introspectorName);
-                }
-            }
-
-            Agent a = myContainer.acquireLocalAgent(targetName);
-
-            // Activate generation of behaviour-related events on the
-            // target agent
-            a.setGenerateBehaviourEvents(true);
-
-            // Retrieve the current agent state
-            AgentState as = a.getAgentState();
-
-            // Retrieve the list of pending ACL messages
-            List<ACLMessage> messages = new LinkedList<>();
-            myContainer.fillListFromMessageQueue(messages, a);
-
-            // Retrieve the list of ready and blocked agent behaviour IDs
-            List<BehaviourID> readyBehaviours = new LinkedList<>();
-            myContainer.fillListFromReadyBehaviours(readyBehaviours, a);
-            List<BehaviourID> blockedBehaviours = new LinkedList<>();
-            myContainer.fillListFromBlockedBehaviours(blockedBehaviours, a);
-
-            myContainer.releaseLocalAgent(targetName);
-
-            // Notify all the needed events
-            fireChangedAgentState(targetName, as, as);
-
-            for (BehaviourID readyBehaviour : readyBehaviours) {
-                AgentEvent ev = new AgentEvent(AgentEvent.ADDED_BEHAVIOUR, targetName, readyBehaviour, myContainer.getID());
-                tn.addedBehaviour(ev);
-            }
-
-            for (BehaviourID blockedBehaviour : blockedBehaviours) {
-                AgentEvent ev = new AgentEvent(AgentEvent.ADDED_BEHAVIOUR, targetName, blockedBehaviour, myContainer.getID());
-                tn.addedBehaviour(ev);
-                ev = new AgentEvent(AgentEvent.CHANGED_BEHAVIOUR_STATE, targetName, blockedBehaviour, Behaviour.STATE_READY, Behaviour.STATE_BLOCKED, myContainer.getID());
-                tn.changedBehaviourState(ev);
-            }
-
-            for (ACLMessage message : messages) {
-                MessageEvent ev = new MessageEvent(MessageEvent.POSTED_MESSAGE, message, null, targetName, myContainer.getID());
-                tn.postedMessage(ev);
-            }
-        }
-
-        private void debugOff(AID introspectorName, AID targetName) {
-            ToolNotifier tn = findNotifier(introspectorName);
-            if (tn != null) {
-                tn.removeObservedAgent(targetName);
-            }
-
-            boolean resetGenerateBehaviourEvents = true;
-            synchronized (debuggers) {
-                List<AID> l = debuggers.get(targetName);
-                if (l != null) {
-                    l.remove(introspectorName);
-                    if (l.size() > 0) {
-                        // There is still at least 1 debugger debugging the agent
-                        // Do not stop generation of behaviour events
-                        resetGenerateBehaviourEvents = false;
-                    } else {
-                        debuggers.remove(targetName);
-                    }
-                }
-            }
-
-            if (resetGenerateBehaviourEvents) {
-                Agent a = myContainer.acquireLocalAgent(targetName);
-                if (a != null) {
-                    a.setGenerateBehaviourEvents(false);
-                }
-                myContainer.releaseLocalAgent(targetName);
-            }
-        }
-    } // End of ServiceComponent class
-
-
-    /**
-     * Inner class NotificationHelperImpl
-     */
-    private class NotificationHelperImpl implements NotificationHelper {
-        public void init(Agent a) {
-        }
-
-        public void registerMessageListener(MessageListener ml) {
-            List<Object> l = messageListeners.startModifying();
-            l.add(ml);
-            messageListeners.stopModifying();
-        }
-
-        public void deregisterMessageListener(MessageListener ml) {
-            List<Object> l = messageListeners.startModifying();
-
-            l.remove(ml);
-            messageListeners.stopModifying();
-        }
-
-        public void registerAgentListener(AgentListener al) {
-            List<Object> l = agentListeners.startModifying();
-            l.add(al);
-            agentListeners.stopModifying();
-        }
-
-        public void deregisterAgentListener(AgentListener al) {
-            List<Object> l = agentListeners.startModifying();
-            l.remove(al);
-            agentListeners.stopModifying();
-        }
-
-        public void registerContainerListener(ContainerListener cl) {
-            List<Object> l = containerListeners.startModifying();
-            l.add(cl);
-            containerListeners.stopModifying();
-        }
-
-        public void deregisterContainerListener(ContainerListener cl) {
-            List<Object> l = containerListeners.startModifying();
-            l.remove(cl);
-            containerListeners.stopModifying();
-        }
-    } // END of inner class NotificationHelperImpl
 
     /////////////////////////////////////
     // Event dispatching methods
@@ -873,7 +348,6 @@ public class NotificationService extends BaseService {
         }
     }
 
-
     ////////////////////////////
     // Utility methods
     ////////////////////////////
@@ -907,4 +381,517 @@ public class NotificationService extends BaseService {
     private ContainerID myID() {
         return (ContainerID) myContainer.here();
     }
+
+    /**
+     * Inner class NotificationSourceSink
+     */
+    private class NotificationSourceSink implements Sink {
+        public void consume(VerticalCommand cmd) {
+            try {
+                String name = cmd.getName();
+                if (name.equals(NotificationSlice.SNIFF_ON)) {
+                    handleSniffOn(cmd);
+                }
+                switch (name) {
+                    case NotificationSlice.SNIFF_OFF -> handleSniffOff(cmd);
+                    case NotificationSlice.DEBUG_ON -> handleDebugOn(cmd);
+                    case NotificationSlice.DEBUG_OFF -> handleDebugOff(cmd);
+                    case NotificationSlice.NOTIFY_POSTED -> handleNotifyPosted(cmd);
+                    case NotificationSlice.NOTIFY_RECEIVED -> handleNotifyReceived(cmd);
+                    case NotificationSlice.NOTIFY_CHANGED_AGENT_PRINCIPAL -> handleNotifyChangedAgentPrincipal(cmd);
+                    case NotificationSlice.NOTIFY_BEHAVIOUR_ADDED -> handleNotifyAddedBehaviour(cmd);
+                    case NotificationSlice.NOTIFY_BEHAVIOUR_REMOVED -> handleNotifyRemovedBehaviour(cmd);
+                    case NotificationSlice.NOTIFY_CHANGED_BEHAVIOUR_STATE -> handleNotifyChangedBehaviourState(cmd);
+                }
+            } catch (Throwable t) {
+                cmd.setReturnValue(t);
+            }
+        }
+
+        private void handleSniffOn(VerticalCommand cmd) throws IMTPException, ServiceException, NotFoundException {
+            Object[] params = cmd.getParams();
+            AID sniffer = (AID) params[0];
+            List<AID> targets = (List<AID>) params[1];
+
+            MainContainer impl = myContainer.getMain();
+            if (impl != null) {
+                // Activate sniffing each element of the list
+                for (AID o : targets) {
+                    ContainerID cid = impl.getContainerID(o);
+
+                    NotificationSlice slice = (NotificationSlice) getSlice(cid.getName());
+                    try {
+                        slice.sniffOn(sniffer, o);
+                    } catch (IMTPException imtpe) {
+                        // Try to get a newer slice and repeat...
+                        slice = (NotificationSlice) getFreshSlice(cid.getName());
+                        slice.sniffOn(sniffer, o);
+                    }
+                }
+            } else {
+                // Do nothing for now, but could also route the command to the main slice, thus enabling e.g. AMS replication
+            }
+        }
+
+        private void handleSniffOff(VerticalCommand cmd) throws IMTPException, ServiceException, NotFoundException {
+            Object[] params = cmd.getParams();
+            AID sniffer = (AID) params[0];
+            List<AID> targets = (List<AID>) params[1];
+
+            MainContainer impl = myContainer.getMain();
+            if (impl != null) {
+                // Deactivate sniffing each element of the list
+                for (AID o : targets) {
+                    ContainerID cid = impl.getContainerID(o);
+
+                    NotificationSlice slice = (NotificationSlice) getSlice(cid.getName());
+                    try {
+                        slice.sniffOff(sniffer, o);
+                    } catch (IMTPException imtpe) {
+                        // Try to get a newer slice and repeat...
+                        slice = (NotificationSlice) getFreshSlice(cid.getName());
+                        slice.sniffOff(sniffer, o);
+                    }
+                }
+            } else {
+                // Do nothing for now, but could also route the command to the main slice, thus enabling e.g. AMS replication
+            }
+        }
+
+        private void handleDebugOn(VerticalCommand cmd) throws IMTPException, ServiceException, NotFoundException {
+            Object[] params = cmd.getParams();
+            AID introspector = (AID) params[0];
+            List<AID> targets = (List<AID>) params[1];
+
+            MainContainer impl = myContainer.getMain();
+            if (impl != null) {
+                // Activate debugging each element of the list
+                for (AID o : targets) {
+                    ContainerID cid = impl.getContainerID(o);
+
+                    NotificationSlice slice = (NotificationSlice) getSlice(cid.getName());
+                    try {
+                        slice.debugOn(introspector, o);
+                    } catch (IMTPException imtpe) {
+                        // Try to get a newer slice and repeat...
+                        slice = (NotificationSlice) getFreshSlice(cid.getName());
+                        slice.debugOn(introspector, o);
+                    }
+                }
+            } else {
+                // Do nothing for now, but could also route the command to the main slice, thus enabling e.g. AMS replication
+            }
+        }
+
+        private void handleDebugOff(VerticalCommand cmd) throws IMTPException, ServiceException, NotFoundException {
+            Object[] params = cmd.getParams();
+            AID introspector = (AID) params[0];
+            List<AID> targets = (List<AID>) params[1];
+
+            MainContainer impl = myContainer.getMain();
+            if (impl != null) {
+                // Deactivate debugging each element of the list
+                for (AID o : targets) {
+                    ContainerID cid = impl.getContainerID(o);
+
+                    NotificationSlice slice = (NotificationSlice) getSlice(cid.getName());
+                    try {
+                        slice.debugOff(introspector, o);
+                    } catch (IMTPException imtpe) {
+                        // Try to get a newer slice and repeat...
+                        slice = (NotificationSlice) getFreshSlice(cid.getName());
+                        slice.debugOff(introspector, o);
+                    }
+                }
+            } else {
+                // Do nothing for now, but could also route the command to the main slice, thus enabling e.g. AMS replication
+            }
+        }
+
+        private void handleNotifyPosted(VerticalCommand cmd) {
+            Object[] params = cmd.getParams();
+            ACLMessage msg = (ACLMessage) params[0];
+            AID receiver = (AID) params[1];
+
+            firePostedMessage(msg, receiver);
+        }
+
+        private void handleNotifyReceived(VerticalCommand cmd) {
+            Object[] params = cmd.getParams();
+            ACLMessage msg = (ACLMessage) params[0];
+            AID receiver = (AID) params[1];
+
+            fireReceivedMessage(msg, receiver);
+        }
+
+        private void handleNotifyChangedAgentPrincipal(VerticalCommand cmd) {
+            Object[] params = cmd.getParams();
+            AID id = (AID) params[0];
+            JADEPrincipal from = (JADEPrincipal) params[1];
+            JADEPrincipal to = (JADEPrincipal) params[2];
+
+            fireChangedAgentPrincipal(id, from, to);
+        }
+
+        private void handleNotifyAddedBehaviour(VerticalCommand cmd) {
+            Object[] params = cmd.getParams();
+            AID id = (AID) params[0];
+            Behaviour b = (Behaviour) params[1];
+
+            fireAddedBehaviour(id, b);
+        }
+
+        private void handleNotifyRemovedBehaviour(VerticalCommand cmd) {
+            Object[] params = cmd.getParams();
+            AID id = (AID) params[0];
+            Behaviour b = (Behaviour) params[1];
+
+            fireRemovedBehaviour(id, b);
+        }
+
+        private void handleNotifyChangedBehaviourState(VerticalCommand cmd) {
+            Object[] params = cmd.getParams();
+            AID id = (AID) params[0];
+            Behaviour b = (Behaviour) params[1];
+            String from = (String) params[2];
+            String to = (String) params[3];
+
+            fireChangedBehaviourState(id, b, from, to);
+        }
+    } // End of inner class NotificationSourceSink
+
+    /**
+     * Inner class NotificationOutgoingFilter
+     */
+    private class NotificationOutgoingFilter extends Filter {
+        public boolean accept(VerticalCommand cmd) {
+            try {
+                String name = cmd.getName();
+                switch (name) {
+                    case jade.core.messaging.MessagingSlice.SEND_MESSAGE -> handleSendMessage(cmd);
+                    case jade.core.management.AgentManagementSlice.INFORM_CREATED -> handleInformCreated(cmd);
+                    case jade.core.management.AgentManagementSlice.INFORM_KILLED -> handleInformKilled(cmd);
+                    case jade.core.management.AgentManagementSlice.INFORM_STATE_CHANGED -> handleInformStateChanged(cmd);
+                    case jade.core.replication.MainReplicationSlice.LEADERSHIP_ACQUIRED -> handleLeadershipAcquired(cmd);
+                }
+            } catch (Throwable t) {
+                cmd.setReturnValue(t);
+            }
+
+            // Never veto a command
+            return true;
+        }
+
+        private void handleSendMessage(VerticalCommand cmd) {
+            Object[] params = cmd.getParams();
+            AID sender = (AID) params[0];
+            // NOTE that the gmsg cannot be a MultipleGenericMessage since we are in the outgoing chain
+            ACLMessage msg = ((GenericMessage) params[1]).getACLMessage();
+            AID receiver = (AID) params[2];
+
+            fireSentMessage(msg, sender, receiver);
+        }
+
+        private void handleInformCreated(VerticalCommand cmd) {
+            Object[] params = cmd.getParams();
+            AID agent = (AID) params[0];
+
+            fireBornAgent(agent);
+        }
+
+        private void handleInformKilled(VerticalCommand cmd) {
+            Object[] params = cmd.getParams();
+            AID agent = (AID) params[0];
+
+            fireDeadAgent(agent);
+        }
+
+        private void handleInformStateChanged(VerticalCommand cmd) {
+            Object[] params = cmd.getParams();
+            AID id = (AID) params[0];
+            AgentState from = (AgentState) params[1];
+            AgentState to = (AgentState) params[2];
+
+            fireChangedAgentState(id, from, to);
+        }
+
+        private void handleLeadershipAcquired(VerticalCommand cmd) {
+            fireLeadershipAcquired();
+        }
+    } // END of inner class NotificationOutgoingFilter
+
+    /**
+     * Inner class NotificationIncomingFilter
+     */
+    private class NotificationIncomingFilter extends Filter {
+        // Notify listeners about the REATTACHED and RECONNECTED events only when the reattachment/reconnection procedure
+        // has been completed
+        public void postProcess(VerticalCommand cmd) {
+            try {
+                String name = cmd.getName();
+                if (name.equals(Service.REATTACHED)) {
+                    handleReattached(cmd);
+                } else if (name.equals(Service.RECONNECTED)) {
+                    handleReconnected(cmd);
+                }
+            } catch (Throwable t) {
+                cmd.setReturnValue(t);
+            }
+        }
+
+        private void handleReattached(VerticalCommand cmd) {
+            fireReattached();
+        }
+
+        private void handleReconnected(VerticalCommand cmd) {
+            fireReconnected();
+        }
+    } // END of inner class NotificationIncomingFilter
+
+    /**
+     * Inner class ServiceComponent
+     */
+    private class ServiceComponent implements Slice {
+        public Service getService() {
+            return NotificationService.this;
+        }
+
+        public Node getNode() throws ServiceException {
+            try {
+                return NotificationService.this.getLocalNode();
+            } catch (IMTPException imtpe) {
+                throw new ServiceException("Problem in contacting the IMTP Manager", imtpe);
+            }
+        }
+
+        public VerticalCommand serve(HorizontalCommand cmd) {
+            try {
+                String cmdName = cmd.getName();
+                Object[] params = cmd.getParams();
+
+                switch (cmdName) {
+                    case NotificationSlice.H_SNIFFON -> {
+                        AID snifferName = (AID) params[0];
+                        AID targetName = (AID) params[1];
+                        sniffOn(snifferName, targetName);
+                    }
+                    case NotificationSlice.H_SNIFFOFF -> {
+                        AID snifferName = (AID) params[0];
+                        AID targetName = (AID) params[1];
+                        sniffOff(snifferName, targetName);
+                    }
+                    case NotificationSlice.H_DEBUGON -> {
+                        AID introspectorName = (AID) params[0];
+                        AID targetName = (AID) params[1];
+                        debugOn(introspectorName, targetName);
+                    }
+                    case NotificationSlice.H_DEBUGOFF -> {
+                        AID introspectorName = (AID) params[0];
+                        AID targetName = (AID) params[1];
+                        debugOff(introspectorName, targetName);
+                    }
+                }
+            } catch (Throwable t) {
+                cmd.setReturnValue(t);
+            }
+
+            return null;
+        }
+
+        private void sniffOn(AID snifferName, AID targetName) {
+            ToolNotifier tn = findNotifier(snifferName);
+            if (tn == null) { // Need a new notifier
+                tn = new ToolNotifier(snifferName);
+                try {
+                    String platformID = myContainer.getPlatformID();
+                    AID id = new AID(AID.createGUID(snifferName.getLocalName() + "-on-" + myID().getName(), myContainer.getPlatformID()), AID.ISGUID);
+                    myContainer.initAgent(id, tn, null, null); // FIXME: Modify to use a proper owner Principal
+                    myContainer.powerUpLocalAgent(id);
+                    helper.registerMessageListener(tn);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            tn.addObservedAgent(targetName);
+        }
+
+        private void sniffOff(AID snifferName, AID targetName) {
+            ToolNotifier tn = findNotifier(snifferName);
+            if (tn != null) {
+                tn.removeObservedAgent(targetName);
+            }
+        }
+
+        private void debugOn(AID introspectorName, AID targetName) throws IMTPException {
+            // AMS debug enabling must be done by a separated Thread to avoid
+            // deadlock with ToolNotifier startup
+            if (targetName.equals(myContainer.getAMS()) && !(Thread.currentThread().getName().equals(AMS_DEBUG_HELPER))) {
+                final AID in = introspectorName;
+                final AID tg = targetName;
+                Thread helper = new Thread(() -> {
+                    try {
+                        debugOn(in, tg);
+                    } catch (IMTPException imtpe) {
+                        imtpe.printStackTrace();
+                    }
+                });
+                helper.setName(AMS_DEBUG_HELPER);
+                helper.start();
+                return;
+            }
+
+            // Get the ToolNotifier for the indicated debugger (or create a new one
+            // if not yet there)
+            ToolNotifier tn = findNotifier(introspectorName);
+            if (tn == null) { // Need a new notifier
+                tn = new ToolNotifier(introspectorName);
+                AID id = new AID(AID.createGUID(introspectorName.getLocalName() + "-on-" + myID().getName(), myContainer.getPlatformID()), AID.ISGUID);
+                try {
+                    myContainer.initAgent(id, tn, null, null); // FIXME: Modify to use a proper owner Principal
+                    myContainer.powerUpLocalAgent(id);
+                    if (targetName.equals(myContainer.getAMS())) {
+                        // If we are debugging the AMS, let's wait for the ToolNotifier
+                        // to be ready to avoid deadlock problems. Note also that in
+                        // this case this code is executed by the ams-debug-helper thread and not
+                        // by the AMS thread
+                        tn.waitUntilStarted();
+                    }
+                    // Wait a bit to let the ToolNotifier pass in ACTIVE_STATE
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception ignored) {
+                    }
+                    helper.registerMessageListener(tn);
+                    helper.registerAgentListener(tn);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            tn.addObservedAgent(targetName);
+
+            // Update the map of debuggers currently debugging the targetName agent
+            synchronized (debuggers) {
+                List<AID> l = debuggers.computeIfAbsent(targetName, k -> new LinkedList<>());
+                if (!l.contains(introspectorName)) {
+                    l.add(introspectorName);
+                }
+            }
+
+            Agent a = myContainer.acquireLocalAgent(targetName);
+
+            // Activate generation of behaviour-related events on the
+            // target agent
+            a.setGenerateBehaviourEvents(true);
+
+            // Retrieve the current agent state
+            AgentState as = a.getAgentState();
+
+            // Retrieve the list of pending ACL messages
+            List<ACLMessage> messages = new LinkedList<>();
+            myContainer.fillListFromMessageQueue(messages, a);
+
+            // Retrieve the list of ready and blocked agent behaviour IDs
+            List<BehaviourID> readyBehaviours = new LinkedList<>();
+            myContainer.fillListFromReadyBehaviours(readyBehaviours, a);
+            List<BehaviourID> blockedBehaviours = new LinkedList<>();
+            myContainer.fillListFromBlockedBehaviours(blockedBehaviours, a);
+
+            myContainer.releaseLocalAgent(targetName);
+
+            // Notify all the needed events
+            fireChangedAgentState(targetName, as, as);
+
+            for (BehaviourID readyBehaviour : readyBehaviours) {
+                AgentEvent ev = new AgentEvent(AgentEvent.ADDED_BEHAVIOUR, targetName, readyBehaviour, myContainer.getID());
+                tn.addedBehaviour(ev);
+            }
+
+            for (BehaviourID blockedBehaviour : blockedBehaviours) {
+                AgentEvent ev = new AgentEvent(AgentEvent.ADDED_BEHAVIOUR, targetName, blockedBehaviour, myContainer.getID());
+                tn.addedBehaviour(ev);
+                ev = new AgentEvent(AgentEvent.CHANGED_BEHAVIOUR_STATE, targetName, blockedBehaviour, Behaviour.STATE_READY, Behaviour.STATE_BLOCKED, myContainer.getID());
+                tn.changedBehaviourState(ev);
+            }
+
+            for (ACLMessage message : messages) {
+                MessageEvent ev = new MessageEvent(MessageEvent.POSTED_MESSAGE, message, null, targetName, myContainer.getID());
+                tn.postedMessage(ev);
+            }
+        }
+
+        private void debugOff(AID introspectorName, AID targetName) {
+            ToolNotifier tn = findNotifier(introspectorName);
+            if (tn != null) {
+                tn.removeObservedAgent(targetName);
+            }
+
+            boolean resetGenerateBehaviourEvents = true;
+            synchronized (debuggers) {
+                List<AID> l = debuggers.get(targetName);
+                if (l != null) {
+                    l.remove(introspectorName);
+                    if (l.size() > 0) {
+                        // There is still at least 1 debugger debugging the agent
+                        // Do not stop generation of behaviour events
+                        resetGenerateBehaviourEvents = false;
+                    } else {
+                        debuggers.remove(targetName);
+                    }
+                }
+            }
+
+            if (resetGenerateBehaviourEvents) {
+                Agent a = myContainer.acquireLocalAgent(targetName);
+                if (a != null) {
+                    a.setGenerateBehaviourEvents(false);
+                }
+                myContainer.releaseLocalAgent(targetName);
+            }
+        }
+    } // End of ServiceComponent class
+
+    /**
+     * Inner class NotificationHelperImpl
+     */
+    private class NotificationHelperImpl implements NotificationHelper {
+        public void init(Agent a) {
+        }
+
+        public void registerMessageListener(MessageListener ml) {
+            List<Object> l = messageListeners.startModifying();
+            l.add(ml);
+            messageListeners.stopModifying();
+        }
+
+        public void deregisterMessageListener(MessageListener ml) {
+            List<Object> l = messageListeners.startModifying();
+
+            l.remove(ml);
+            messageListeners.stopModifying();
+        }
+
+        public void registerAgentListener(AgentListener al) {
+            List<Object> l = agentListeners.startModifying();
+            l.add(al);
+            agentListeners.stopModifying();
+        }
+
+        public void deregisterAgentListener(AgentListener al) {
+            List<Object> l = agentListeners.startModifying();
+            l.remove(al);
+            agentListeners.stopModifying();
+        }
+
+        public void registerContainerListener(ContainerListener cl) {
+            List<Object> l = containerListeners.startModifying();
+            l.add(cl);
+            containerListeners.stopModifying();
+        }
+
+        public void deregisterContainerListener(ContainerListener cl) {
+            List<Object> l = containerListeners.startModifying();
+            l.remove(cl);
+            containerListeners.stopModifying();
+        }
+    } // END of inner class NotificationHelperImpl
 }

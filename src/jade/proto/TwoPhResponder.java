@@ -243,6 +243,17 @@ public class TwoPhResponder extends Responder {
     }
 
     /**
+     * This static method can be used to set the proper message Template
+     * (based on the interaction protocol and the performative) to be passed to the constructor of this behaviour.
+     *
+     * @see jade.domain.FIPANames.InteractionProtocol
+     **/
+    public static MessageTemplate createMessageTemplate() {
+        return MessageTemplate.and(MessageTemplate.MatchProtocol(TwoPhConstants.JADE_TWO_PHASE_COMMIT),
+                MessageTemplate.MatchPerformative(ACLMessage.CFP));
+    }
+
+    /**
      * This method is called when the initiator's
      * message is received that matches the message template
      * passed in the constructor.
@@ -352,6 +363,8 @@ public class TwoPhResponder extends Responder {
         registerDSState(b, HANDLE_REJECT_PROPOSAL);
     }
 
+    /**todo@ Da rivedere il createMessageTemplate E I COMMENTI!!!! */
+
     /**
      * This method allows to register a user defined <code>Behaviour</code>
      * in the HANDLE_ACCEPTANCE state. This behaviour would override the homonymous
@@ -364,18 +377,6 @@ public class TwoPhResponder extends Responder {
      **/
     public void registerHandleAcceptProposal(Behaviour b) {
         registerDSState(b, HANDLE_ACCEPT_PROPOSAL);
-    }
-
-    /**todo@ Da rivedere il createMessageTemplate E I COMMENTI!!!! */
-    /**
-     * This static method can be used to set the proper message Template
-     * (based on the interaction protocol and the performative) to be passed to the constructor of this behaviour.
-     *
-     * @see jade.domain.FIPANames.InteractionProtocol
-     **/
-    public static MessageTemplate createMessageTemplate() {
-        return MessageTemplate.and(MessageTemplate.MatchProtocol(TwoPhConstants.JADE_TWO_PHASE_COMMIT),
-                MessageTemplate.MatchPerformative(ACLMessage.CFP));
     }
 
     public void reset() {

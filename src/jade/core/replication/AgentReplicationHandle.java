@@ -34,9 +34,8 @@ import jade.util.Logger;
  * AgentReplicationService.
  */
 public class AgentReplicationHandle {
-    static ThreadLocal<Boolean> replicatedCalls = new ThreadLocal<>();
-
     private static final Logger myLogger = Logger.getJADELogger(AgentReplicationHandle.class.getName());
+    static ThreadLocal<Boolean> replicatedCalls = new ThreadLocal<>();
 
     /**
      * Utility method to be called at the beginning of each replicated method as

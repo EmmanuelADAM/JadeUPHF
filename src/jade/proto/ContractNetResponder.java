@@ -98,6 +98,7 @@ import java.util.List;
  */
 
 public class ContractNetResponder extends SSContractNetResponder {
+    public static final String RECEIVE_CFP = "Receive-Cfp";
     /**
      * @deprecated Use <code>REPLY_KEY</code>
      */
@@ -112,8 +113,6 @@ public class ContractNetResponder extends SSContractNetResponder {
      * @deprecated Use <code>REPLY_KEY</code>
      */
     public final String RESULT_NOTIFICATION_KEY = REPLY_KEY;
-
-    public static final String RECEIVE_CFP = "Receive-Cfp";
 
     /**
      * Constructor of the behaviour that creates a new empty HashMap
@@ -158,6 +157,23 @@ public class ContractNetResponder extends SSContractNetResponder {
     }
 
     /**
+     * This static method can be used
+     * to set the proper message Template (based on the interaction protocol
+     * and the performative) to be passed to the constructor of this behaviour.
+     *
+     * @see FIPANames.InteractionProtocol
+     */
+    public static MessageTemplate createMessageTemplate(String iprotocol) {
+        if (CaseInsensitiveString.equalsIgnoreCase(FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET, iprotocol)) {
+            return MessageTemplate.and(MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET), MessageTemplate.MatchPerformative(ACLMessage.CFP));
+        } else if (CaseInsensitiveString.equalsIgnoreCase(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET, iprotocol)) {
+            return MessageTemplate.and(MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET), MessageTemplate.MatchPerformative(ACLMessage.CFP));
+        } else {
+            return MessageTemplate.MatchProtocol(iprotocol);
+        }
+    }
+
+    /**
      * @deprecated Use <code>handleCfp()</code> instead
      */
     protected ACLMessage prepareResponse(ACLMessage cfp) throws NotUnderstoodException, RefuseException {
@@ -178,15 +194,15 @@ public class ContractNetResponder extends SSContractNetResponder {
         registerHandleCfp(b);
     }
 
+
+    //#APIDOC_EXCLUDE_BEGIN
+
     /**
      * @deprecated Use <code>registerHandleAcceptProposal()</code> instead.
      */
     public void registerPrepareResultNotification(Behaviour b) {
         registerHandleAcceptProposal(b);
     }
-
-
-    //#APIDOC_EXCLUDE_BEGIN
 
     /**
      * Redefine this method to call prepareResponse()
@@ -209,6 +225,7 @@ public class ContractNetResponder extends SSContractNetResponder {
     public void registerHandleCfp(Behaviour b) {
         registerDSState(b, HANDLE_CFP);
     }
+    //#APIDOC_EXCLUDE_END
 
     protected void sessionTerminated() {
         // Once the current session is terminated reinit the
@@ -217,24 +234,5 @@ public class ContractNetResponder extends SSContractNetResponder {
 
         // Be sure all children can be correctly re-executed
         resetChildren();
-    }
-    //#APIDOC_EXCLUDE_END
-
-
-    /**
-     * This static method can be used
-     * to set the proper message Template (based on the interaction protocol
-     * and the performative) to be passed to the constructor of this behaviour.
-     *
-     * @see FIPANames.InteractionProtocol
-     */
-    public static MessageTemplate createMessageTemplate(String iprotocol) {
-        if (CaseInsensitiveString.equalsIgnoreCase(FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET, iprotocol)) {
-            return MessageTemplate.and(MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET), MessageTemplate.MatchPerformative(ACLMessage.CFP));
-        } else if (CaseInsensitiveString.equalsIgnoreCase(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET, iprotocol)) {
-            return MessageTemplate.and(MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET), MessageTemplate.MatchPerformative(ACLMessage.CFP));
-        } else {
-            return MessageTemplate.MatchProtocol(iprotocol);
-        }
     }
 }

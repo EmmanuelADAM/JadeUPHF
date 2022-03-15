@@ -41,11 +41,13 @@ import java.util.Observer;
 
 public class ACLTextField extends JTextField implements Observer {
 
+    private Object theObj;
+    private String fieldName;
+
     public void setEditable(boolean theBool) {
         super.setEditable(true);
         super.setEnabled(theBool);
     }
-
 
     /**
      * register an ACLMessage with the accompagnied membername
@@ -79,7 +81,6 @@ public class ACLTextField extends JTextField implements Observer {
 
     }
 
-
     /**
      * unregister ACLMessage
      *
@@ -89,7 +90,6 @@ public class ACLTextField extends JTextField implements Observer {
     public void unregister(Object arg, String str) {
 
     }
-
 
     /**
      * update textField
@@ -112,7 +112,6 @@ public class ACLTextField extends JTextField implements Observer {
 
     }
 
-
     /**
      * triggered when focus lossed
      *
@@ -130,7 +129,6 @@ public class ACLTextField extends JTextField implements Observer {
         }
     }
 
-
     /**
      * processFocusEvent listener
      *
@@ -143,9 +141,5 @@ public class ACLTextField extends JTextField implements Observer {
         }
 
     }
-
-
-    private Object theObj;
-    private String fieldName;
 }
 //  ***EOF***

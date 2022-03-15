@@ -42,22 +42,16 @@ import java.util.*;
 
 
 /**
- * This class implements an ontology containing schemas for 
- * Primitive types and SL0 operators i.e. basic ontological elements 
+ * This class implements an ontology containing schemas for
+ * Primitive types and SL0 operators i.e. basic ontological elements
  * required for minimal agent interaction.
- * Users should always extend this ontology when defining their 
+ * Users should always extend this ontology when defining their
  * ontologies.
+ *
  * @author Federico Bergenti - Universita` di Parma
  * @author Giovanni Caire - TILAB
  */
 public class BasicOntology extends Ontology implements SL0Vocabulary {
-
-    // The singleton instance of this ontology
-    private static final BasicOntology theInstance = new BasicOntology();
-
-    static {
-        theInstance.initialize();
-    }
 
     // Primitive types names
     public static final String STRING = "BO_String";
@@ -66,9 +60,14 @@ public class BasicOntology extends Ontology implements SL0Vocabulary {
     public static final String BOOLEAN = "BO_Boolean";
     public static final String DATE = "BO_Date";
     public static final String BYTE_SEQUENCE = "BO_Byte-sequence";
-
     // Content element list
     public static final String CONTENT_ELEMENT_LIST = ContentElementListSchema.BASE_NAME;
+    // The singleton instance of this ontology
+    private static final BasicOntology theInstance = new BasicOntology();
+
+    static {
+        theInstance.initialize();
+    }
 
     //#MIDP_EXCLUDE_BEGIN
     private transient Map<Class<?>, ObjectSchema> primitiveSchemas;
@@ -80,6 +79,97 @@ public class BasicOntology extends Ontology implements SL0Vocabulary {
     private BasicOntology() {
         super("BASIC_ONTOLOGY", (Ontology) null, null);
     }
+
+    /**
+     * Returns the singleton instance of the <code>BasicOntology</code>.
+     *
+     * @return the singleton instance of the <code>BasicOntology</code>
+     */
+    public static Ontology getInstance() {
+        return theInstance;
+    }
+
+    /**
+     * Convert, if possible, the numeric value srcValue into an instance of destClass
+     */
+    public static Object adjustPrimitiveValue(Object srcValue, Class<?> destClass) {
+        Object destValue = srcValue;
+        if (srcValue != null) {
+            Class<?> srcClass = srcValue.getClass();
+            // Note that we deal with Integer, int, Long, long... classes only --> we can compare the classes using == and != instead of using instanceof
+            if (srcClass != destClass) {
+                if (destClass == Integer.class ||
+                        destClass == int.class) {
+                    if (srcClass == Long.class) {
+                        destValue = ((Long) srcValue).intValue();
+                    } else if (srcClass == String.class) {
+                        destValue = Integer.valueOf((String) srcValue);
+                    }
+                } else if (destClass == Long.class ||
+                        destClass == long.class) {
+                    if (srcClass == Integer.class) {
+                        destValue = ((Integer) srcValue).longValue();
+                    } else if (srcClass == String.class) {
+                        destValue = Long.valueOf((String) srcValue);
+                    }
+                } else if (destClass == Float.class ||
+                        destClass == float.class) {
+                    if (srcClass == Integer.class) {
+                        destValue = ((Integer) srcValue).floatValue();
+                    } else if (srcClass == Long.class) {
+                        destValue = ((Long) srcValue).floatValue();
+                    } else if (srcClass == Double.class) {
+                        destValue = ((Double) srcValue).floatValue();
+                    } else if (srcClass == String.class) {
+                        destValue = Float.valueOf((String) srcValue);
+                    }
+                } else if (destClass == Double.class ||
+                        destClass == double.class) {
+                    if (srcClass == Integer.class) {
+                        destValue = ((Integer) srcValue).doubleValue();
+                    } else if (srcClass == Long.class) {
+                        destValue = ((Long) srcValue).doubleValue();
+                    } else if (srcClass == Float.class) {
+                        destValue = ((Float) srcValue).doubleValue();
+                    } else if (srcClass == String.class) {
+                        destValue = Double.valueOf((String) srcValue);
+                    }
+                } else if (destClass == String.class) {
+                    destValue = srcValue.toString();
+                } else if (destClass == Boolean.class ||
+                        destClass == boolean.class) {
+                    if (srcClass == String.class) {
+                        String s = (String) srcValue;
+                        if (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false")) {
+                            destValue = Boolean.valueOf(s);
+                        }
+                    }
+                } else if (destClass == Date.class) {
+                    try {
+                        // Try to convert string from FIPA-ISO8601 format
+                        destValue = ISO8601.toDate(srcValue.toString());
+                    } catch (Exception e) {
+                        try {
+                            // Try to convert string from W3C-ISO8601 format
+                            java.text.SimpleDateFormat W3CISO8601DateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                            destValue = W3CISO8601DateFormat.parse(srcValue.toString());
+                        } catch (java.text.ParseException e1) {
+                            // Date format not correct
+                        }
+                    }
+                }
+            }
+        }
+        return destValue;
+    }
+
+    /**
+     * @deprecated Use adjustPrimitiveValue() instead
+     */
+    public static Object resolveNumericValue(Object srcValue, Class<?> destClass) {
+        return adjustPrimitiveValue(srcValue, destClass);
+    }
+    //#MIDP_EXCLUDE_END
 
     private void initialize() {
         // Note that the association between schemas and classes is not
@@ -117,8 +207,8 @@ public class BasicOntology extends Ontology implements SL0Vocabulary {
 			add(new PrimitiveSchema(STRING));
 			add(new PrimitiveSchema(DATE));
 			add(new PrimitiveSchema(BYTE_SEQUENCE));
-			add(new ConceptSchema(AID)); 
-			add(new AgentActionSchema(ACLMSG)); 
+			add(new ConceptSchema(AID));
+			add(new AgentActionSchema(ACLMSG));
 			add(new PredicateSchema(TRUE_PROPOSITION));
 			add(new PredicateSchema(FALSE_PROPOSITION));
 			add(new AgentActionSchema(ACTION));
@@ -178,6 +268,8 @@ public class BasicOntology extends Ontology implements SL0Vocabulary {
         }
     }
 
+    //#APIDOC_EXCLUDE_BEGIN
+
     //#MIDP_EXCLUDE_BEGIN
     private void fillPrimitiveSchemas() throws OntologyException {
         // This map is only needed to make the getSchema(Class) method work properly also in the case of java primitives
@@ -205,21 +297,12 @@ public class BasicOntology extends Ontology implements SL0Vocabulary {
             oe.printStackTrace();
         }
     }
-    //#MIDP_EXCLUDE_END
-
-    /**
-     * Returns the singleton instance of the <code>BasicOntology</code>.
-     * @return the singleton instance of the <code>BasicOntology</code>
-     */
-    public static Ontology getInstance() {
-        return theInstance;
-    }
-
-    //#APIDOC_EXCLUDE_BEGIN
+    //#APIDOC_EXCLUDE_END
 
     /**
      * This method is redefined as BasicOntology does not use an
      * Introspector for performance reason
+     *
      * @see Ontology#toObject(AbsObject)
      */
     protected Object toObject(AbsObject abs, String lcType, Ontology referenceOnto) throws OntologyException {
@@ -315,6 +398,7 @@ public class BasicOntology extends Ontology implements SL0Vocabulary {
     /**
      * This method is redefined as BasicOntology does not use an
      * Introspector for performance reason
+     *
      * @see Ontology#toObject(AbsObject)
      */
     protected AbsObject fromObject(Object obj, Ontology referenceOnto) throws OntologyException {
@@ -428,11 +512,11 @@ public class BasicOntology extends Ontology implements SL0Vocabulary {
             throw new OntologyException("Unexpected error externalising " + obj + ".", t);
         }
     }
-    //#APIDOC_EXCLUDE_END
 
     /**
      * Redefine the <code>getSchema()</code> method to take into
      * account ACL performatives.
+     *
      * @param name the name of the schema in the vocabulary.
      * @return the schema or <code>null</code> if the schema is not found.
      * @throws OntologyException
@@ -448,9 +532,12 @@ public class BasicOntology extends Ontology implements SL0Vocabulary {
         return ret;
     }
 
+    //#MIDP_EXCLUDE_BEGIN
+
     /**
      * Redefine the <code>getSchema()</code> method to take into
      * account java primitives.
+     *
      * @param clazz the class whose associated schema must be retrieved.
      * @return the schema associated to the given class or <code>null</code> if the schema is not found.
      * @throws OntologyException
@@ -469,97 +556,14 @@ public class BasicOntology extends Ontology implements SL0Vocabulary {
     }
 
     /**
-     Note that we don't want to keep 22 different schemas for the 22 
-     FIPA communicative acts --> We generate the schemas for communicative
-     acts on the fly as needed.
+     * Note that we don't want to keep 22 different schemas for the 22
+     * FIPA communicative acts --> We generate the schemas for communicative
+     * acts on the fly as needed.
      */
     private ObjectSchema createMsgSchema(String performative) throws OntologyException {
         AgentActionSchema msgSchema = new AgentActionSchema(performative);
         msgSchema.addSuperSchema((AgentActionSchema) getSchema(ACLMSG));
         return msgSchema;
-    }
-
-    //#MIDP_EXCLUDE_BEGIN
-
-    /**
-     Convert, if possible, the numeric value srcValue into an instance of destClass
-     */
-    public static Object adjustPrimitiveValue(Object srcValue, Class<?> destClass) {
-        Object destValue = srcValue;
-        if (srcValue != null) {
-            Class<?> srcClass = srcValue.getClass();
-            // Note that we deal with Integer, int, Long, long... classes only --> we can compare the classes using == and != instead of using instanceof
-            if (srcClass != destClass) {
-                if (destClass == Integer.class ||
-                        destClass == int.class) {
-                    if (srcClass == Long.class) {
-                        destValue = ((Long) srcValue).intValue();
-                    } else if (srcClass == String.class) {
-                        destValue = Integer.valueOf((String) srcValue);
-                    }
-                } else if (destClass == Long.class ||
-                        destClass == long.class) {
-                    if (srcClass == Integer.class) {
-                        destValue = ((Integer) srcValue).longValue();
-                    } else if (srcClass == String.class) {
-                        destValue = Long.valueOf((String) srcValue);
-                    }
-                } else if (destClass == Float.class ||
-                        destClass == float.class) {
-                    if (srcClass == Integer.class) {
-                        destValue = ((Integer) srcValue).floatValue();
-                    } else if (srcClass == Long.class) {
-                        destValue = ((Long) srcValue).floatValue();
-                    } else if (srcClass == Double.class) {
-                        destValue = ((Double) srcValue).floatValue();
-                    } else if (srcClass == String.class) {
-                        destValue = Float.valueOf((String) srcValue);
-                    }
-                } else if (destClass == Double.class ||
-                        destClass == double.class) {
-                    if (srcClass == Integer.class) {
-                        destValue = ((Integer) srcValue).doubleValue();
-                    } else if (srcClass == Long.class) {
-                        destValue = ((Long) srcValue).doubleValue();
-                    } else if (srcClass == Float.class) {
-                        destValue = ((Float) srcValue).doubleValue();
-                    } else if (srcClass == String.class) {
-                        destValue = Double.valueOf((String) srcValue);
-                    }
-                } else if (destClass == String.class) {
-                    destValue = srcValue.toString();
-                } else if (destClass == Boolean.class ||
-                        destClass == boolean.class) {
-                    if (srcClass == String.class) {
-                        String s = (String) srcValue;
-                        if (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false")) {
-                            destValue = Boolean.valueOf(s);
-                        }
-                    }
-                } else if (destClass == Date.class) {
-                    try {
-                        // Try to convert string from FIPA-ISO8601 format
-                        destValue = ISO8601.toDate(srcValue.toString());
-                    } catch (Exception e) {
-                        try {
-                            // Try to convert string from W3C-ISO8601 format
-                            java.text.SimpleDateFormat W3CISO8601DateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-                            destValue = W3CISO8601DateFormat.parse(srcValue.toString());
-                        } catch (java.text.ParseException e1) {
-                            // Date format not correct
-                        }
-                    }
-                }
-            }
-        }
-        return destValue;
-    }
-
-    /**
-     * @deprecated Use adjustPrimitiveValue() instead
-     */
-    public static Object resolveNumericValue(Object srcValue, Class<?> destClass) {
-        return adjustPrimitiveValue(srcValue, destClass);
     }
     //#MIDP_EXCLUDE_END
 }

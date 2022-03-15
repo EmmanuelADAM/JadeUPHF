@@ -7,7 +7,74 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 public class ACLParserTokenManager implements ACLParserConstants {
+    public static final String[] jjstrLiteralImages = {
+            "", null, null, null, null, "\50", null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, "\51", null, null, null, null, null, null, null, null, null, null, null, null,
+            "\51", "\50", null, null, null, null, null, null, null, null, null, null, null,
+            "\51", "\50",};
+    public static final String[] lexStateNames = {
+            "DEFAULT",
+            "MESSAGETYPESTATE",
+            "MESSAGEPARAMETERSTATE",
+            "CONTENTSTATE",
+            "AIDSTATE",
+    };
+    public static final int[] jjnewLexState = {
+            -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, -1, -1, -1, 4, 4, 3, 3, 3, 3, 4, 3, 3, 3,
+            3, 3, 3, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            3, -1, -1, 3, -1, -1,
+    };
+    static final long[] jjbitVec0 = {
+            0xfffffffffffffffeL, 0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffffffffffffffL
+    };
+    static final long[] jjbitVec2 = {
+            0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
+    };
+    static final int[] jjnextStates = {
+            22, 40, 46, 47, 49, 11, 41, 42, 21, 40, 11, 41, 45, 3, 4, 6,
+            3, 4, 8, 6, 46, 47, 49, 11, 5, 7, 9, 14, 15, 43, 44, 125,
+            138, 144, 155, 170, 113, 120, 95, 99, 106, 73, 81, 89, 61, 63, 68, 53,
+            56,
+    };
+    static final long[] jjtoToken = {
+            0xff87fe1fff8421L,
+    };
+    static final long[] jjtoSkip = {
+            0x7801e0007bdeL,
+    };
+    private final int[] jjrounds = new int[171];
+    private final int[] jjstateSet = new int[342];
     public PrintStream debugStream = System.out;
+    protected SimpleCharStream input_stream;
+    protected char curChar;
+    StringBuffer image;
+    int jjimageLen;
+    int lengthOfMatch;
+    int curLexState = 0;
+    int defaultLexState = 0;
+    int jjnewStateCnt;
+    int jjround;
+    int jjmatchedPos;
+    int jjmatchedKind;
+
+    public ACLParserTokenManager(SimpleCharStream stream) {
+        if (SimpleCharStream.staticFlag)
+            throw new Error("ERROR: Cannot use a static CharStream class with a non-static lexical analyzer.");
+        input_stream = stream;
+    }
+
+    public ACLParserTokenManager(SimpleCharStream stream, int lexState) {
+        this(stream);
+        SwitchTo(lexState);
+    }
+
+    private static boolean jjCanMove_0(int hiByte, int i1, int i2, long l1, long l2) {
+        if (hiByte == 0) {
+            return ((jjbitVec2[i2] & l2) != 0L);
+        }
+        return (jjbitVec0[i1] & l1) != 0L;
+    }
 
     public void setDebugStream(PrintStream ds) {
         debugStream = ds;
@@ -62,24 +129,13 @@ public class ACLParserTokenManager implements ACLParserConstants {
             return 1;
         }
         switch (curChar) {
-            case 65:
-            case 97:
-                return jjMoveStringLiteralDfa2_4(active0, 0x8000000000000L);
-            case 69:
-            case 101:
-                return jjMoveStringLiteralDfa2_4(active0, 0x1800000000000L);
-            case 71:
-            case 103:
-                return jjMoveStringLiteralDfa2_4(active0, 0x2000000000000L);
-            case 78:
-            case 110:
-                return jjMoveStringLiteralDfa2_4(active0, 0x4000000000000L);
-            case 82:
-            case 114:
-                return jjMoveStringLiteralDfa2_4(active0, 0x10000000000000L);
-            default:
-                break;
-        }
+            case 65, 97  ->  {return jjMoveStringLiteralDfa2_4(active0, 0x8000000000000L);}
+            case 69, 101 ->  {return jjMoveStringLiteralDfa2_4(active0, 0x1800000000000L);}
+            case 71, 103 ->  {return jjMoveStringLiteralDfa2_4(active0, 0x2000000000000L);}
+            case 78, 110 ->  {return jjMoveStringLiteralDfa2_4(active0, 0x4000000000000L);}
+            case 82, 114 ->  {return jjMoveStringLiteralDfa2_4(active0, 0x10000000000000L);}
+            default -> {}
+            }
         return jjStartNfa_4(0, active0);
     }
 
@@ -93,25 +149,13 @@ public class ACLParserTokenManager implements ACLParserConstants {
             return 2;
         }
         switch (curChar) {
-            case 65:
-            case 97:
-                return jjMoveStringLiteralDfa3_4(active0, 0x4000000000000L);
-            case 68:
-            case 100:
-                return jjMoveStringLiteralDfa3_4(active0, 0x8000000000000L);
-            case 69:
-            case 101:
-                return jjMoveStringLiteralDfa3_4(active0, 0x12000000000000L);
-            case 81:
-            case 113:
-                return jjMoveStringLiteralDfa3_4(active0, 0x1000000000000L);
-            case 84:
-            case 116:
-                if ((active0 & 0x800000000000L) != 0L)
-                    return jjStopAtPos(2, 47);
-                break;
-            default:
-                break;
+            case 65, 97 -> { return jjMoveStringLiteralDfa3_4(active0, 0x4000000000000L);}
+            case 68, 100 -> { return jjMoveStringLiteralDfa3_4(active0, 0x8000000000000L);}
+            case 69, 101 -> { return jjMoveStringLiteralDfa3_4(active0, 0x12000000000000L);}
+            case 81, 113 -> { return jjMoveStringLiteralDfa3_4(active0, 0x1000000000000L);}
+            case 84, 116 -> { if ((active0 & 0x800000000000L) != 0L) return jjStopAtPos(2, 47);}
+            default -> {
+            }
         }
         return jjStartNfa_4(1, active0);
     }
@@ -451,13 +495,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
         jjCheckNAdd(jjnextStates[start]);
         jjCheckNAdd(jjnextStates[start + 1]);
     }
-
-    static final long[] jjbitVec0 = {
-            0xfffffffffffffffeL, 0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffffffffffffffL
-    };
-    static final long[] jjbitVec2 = {
-            0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
-    };
 
     private int jjMoveNfa_4(int startState, int curPos) {
         int[] nextStates;
@@ -1308,13 +1345,13 @@ public class ACLParserTokenManager implements ACLParserConstants {
             return 11;
         }
         switch (curChar) {
-            case 79:
-            case 111:
+            case 79, 111 -> {
                 if ((active0 & 0x100000L) != 0L)
                     return jjStopAtPos(11, 20);
                 return jjMoveStringLiteralDfa12_2(active0, 0x4000000L);
-            default:
-                break;
+            }
+            default -> {
+            }
         }
         return jjStartNfa_2(10, active0);
     }
@@ -2222,8 +2259,8 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 MatchLoop:
                 do {
                     switch (jjstateSet[--i]) {
-                        default:
-                            break;
+                        default -> {
+                        }
                     }
                 } while (i != startsAt);
             }
@@ -2241,63 +2278,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 return curPos;
             }
         }
-    }
-
-    static final int[] jjnextStates = {
-            22, 40, 46, 47, 49, 11, 41, 42, 21, 40, 11, 41, 45, 3, 4, 6,
-            3, 4, 8, 6, 46, 47, 49, 11, 5, 7, 9, 14, 15, 43, 44, 125,
-            138, 144, 155, 170, 113, 120, 95, 99, 106, 73, 81, 89, 61, 63, 68, 53,
-            56,
-    };
-
-    private static boolean jjCanMove_0(int hiByte, int i1, int i2, long l1, long l2) {
-        if (hiByte == 0) {
-            return ((jjbitVec2[i2] & l2) != 0L);
-        }
-        return (jjbitVec0[i1] & l1) != 0L;
-    }
-
-    public static final String[] jjstrLiteralImages = {
-            "", null, null, null, null, "\50", null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            null, "\51", null, null, null, null, null, null, null, null, null, null, null, null,
-            "\51", "\50", null, null, null, null, null, null, null, null, null, null, null,
-            "\51", "\50",};
-    public static final String[] lexStateNames = {
-            "DEFAULT",
-            "MESSAGETYPESTATE",
-            "MESSAGEPARAMETERSTATE",
-            "CONTENTSTATE",
-            "AIDSTATE",
-    };
-    public static final int[] jjnewLexState = {
-            -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, -1, -1, -1, 4, 4, 3, 3, 3, 3, 4, 3, 3, 3,
-            3, 3, 3, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-            3, -1, -1, 3, -1, -1,
-    };
-    static final long[] jjtoToken = {
-            0xff87fe1fff8421L,
-    };
-    static final long[] jjtoSkip = {
-            0x7801e0007bdeL,
-    };
-    protected SimpleCharStream input_stream;
-    private final int[] jjrounds = new int[171];
-    private final int[] jjstateSet = new int[342];
-    StringBuffer image;
-    int jjimageLen;
-    int lengthOfMatch;
-    protected char curChar;
-
-    public ACLParserTokenManager(SimpleCharStream stream) {
-        if (SimpleCharStream.staticFlag)
-            throw new Error("ERROR: Cannot use a static CharStream class with a non-static lexical analyzer.");
-        input_stream = stream;
-    }
-
-    public ACLParserTokenManager(SimpleCharStream stream, int lexState) {
-        this(stream);
-        SwitchTo(lexState);
     }
 
     public void ReInit(SimpleCharStream stream) {
@@ -2337,13 +2317,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
         t.endColumn = input_stream.getEndColumn();
         return t;
     }
-
-    int curLexState = 0;
-    int defaultLexState = 0;
-    int jjnewStateCnt;
-    int jjround;
-    int jjmatchedPos;
-    int jjmatchedKind;
 
     public Token getNextToken() {
         int kind;

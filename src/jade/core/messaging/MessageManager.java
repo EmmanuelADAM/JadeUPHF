@@ -49,29 +49,22 @@ import java.util.List;
  */
 class MessageManager {
 
-    public interface Channel {
-        void deliverNow(GenericMessage msg, AID receiverID) throws UnreachableException, NotFoundException;
-
-        void notifyFailureToSender(GenericMessage msg, AID receiver, InternalError ie);
-    }
-
-
-    // A shared instance to have a single thread pool
-    private static MessageManager theInstance; // FIXME: Maybe a table, indexed by a profile subset, would be better?
-
     private static final String DUMMY_RECEIVER_NAME = "___DUMMY_";
-
     private static final int POOL_SIZE_DEFAULT = 5;
     private static final int MAX_POOL_SIZE = 100;
-
     private static final int DELIVERY_TIME_THRESHOLD_DEFAULT = 1000; // ms
     private static final int DELIVERY_TIME_THRESHOLD2_DEFAULT = 5000; // ms
     private static final int DELIVERY_STUCK_TIME_DEFAULT = 60000; // ms
-
     private static final int WARNING_QUEUE_SIZE_DEFAULT = 10000000; // 10MBytes
     private static final int MAX_QUEUE_SIZE_DEFAULT = 100000000; // 100MBytes
     private static final int SLEEP_TIME_FACTOR_DEFAULT = -1; // ms/MByes, -1=no sleep time
-
+    // A shared instance to have a single thread pool
+    private static MessageManager theInstance; // FIXME: Maybe a table, indexed by a profile subset, would be better?
+    //#J2ME_EXCLUDE_BEGIN
+    private final AverageMeasureProviderImpl avgMsgCountPerMultipleDelivery = new AverageMeasureProviderImpl(); // Average number of messages delivered in multiple-message-delivery
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    //#MIDP_EXCLUDE_BEGIN
+    private final java.text.SimpleDateFormat timeFormat = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private OutBox outBox;
     private Thread[] delivererThreads;
     private Deliverer[] deliverers;
@@ -79,20 +72,13 @@ class MessageManager {
     private long deliveryTimeThreshold;
     private long deliveryTimeThreshold2;
     private long deliveryStuckTime;
-
     private long totSubmittedCnt = 0;
     private long totServedCnt = 0;
     private long totDiscardedCnt = 0;
     private long totSlowDeliveryCnt = 0;
     private long totVerySlowDeliveryCnt = 0;
-
-    private long totMultipleDeliveryCnt = 0; // How many times multiple-message-delivery was triggered
-    //#J2ME_EXCLUDE_BEGIN
-    private final AverageMeasureProviderImpl avgMsgCountPerMultipleDelivery = new AverageMeasureProviderImpl(); // Average number of messages delivered in multiple-message-delivery
     //#J2ME_EXCLUDE_END
-
-
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    private long totMultipleDeliveryCnt = 0; // How many times multiple-message-delivery was triggered
 
     private MessageManager() {
     }
@@ -104,6 +90,72 @@ class MessageManager {
         }
 
         return theInstance;
+    }
+
+    /**
+     *
+     */
+    public static String stringify(GenericMessage m) {
+        //#J2ME_EXCLUDE_BEGIN
+        if (m instanceof MultipleGenericMessage mm) {
+            // MULTIPLE message
+            StringBuilder sb = new StringBuilder("[SET");
+            List<GenericMessage> l = mm.getMessages();
+            int cnt = 0;
+            for (GenericMessage gm : l) {
+                sb.append(" ");
+                sb.append(stringify(gm));
+                // Avoid stringifying to many messages
+                cnt++;
+                if (cnt > 10 && cnt < l.size()) {
+                    sb.append("...").append(l.size()).append(" messages in total");
+                    break;
+                }
+            }
+            sb.append("]");
+            return sb.toString();
+        } else {
+            //#J2ME_EXCLUDE_END
+            // SINGLE (normal) message
+            ACLMessage msg = m.getACLMessage();
+            if (msg != null) {
+                StringBuilder sb = new StringBuilder("(");
+                sb.append(ACLMessage.getPerformative(msg.getPerformative()));
+                sb.append(" sender: ");
+                sb.append(msg.getSender().getName());
+                if (msg.getOntology() != null) {
+                    sb.append(" ontology: ");
+                    sb.append(msg.getOntology());
+                }
+                if (msg.getConversationId() != null) {
+                    sb.append(" conversation-id: ");
+                    sb.append(msg.getConversationId());
+                }
+                sb.append(')');
+                return sb.toString();
+            } else {
+                return ("\"Unavailable\"");
+            }
+            //#J2ME_EXCLUDE_BEGIN
+        }
+        //#J2ME_EXCLUDE_END
+    }
+
+    //#J2ME_EXCLUDE_BEGIN
+    public static void main(String[] args) {
+        GenericMessage gm = new GenericMessage();
+        ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+        msg.setSender(new AID("pippo@P1", AID.ISGUID));
+        msg.addReceiver(new AID("pluto@P1", AID.ISGUID));
+        gm.setACLMessage(msg);
+        System.out.println(stringify(gm));
+
+        MultipleGenericMessage mgm = new MultipleGenericMessage(200);
+        List<GenericMessage> l = new ArrayList<>();
+        l.add(gm);
+        l.add(gm);
+        mgm.setMessages(l);
+        System.out.println(stringify(mgm));
     }
 
     public void initialize(Profile p) {
@@ -283,6 +335,153 @@ class MessageManager {
         }
     }
 
+    // For debugging purpose
+    String[] getQueueStatus() {
+        return outBox.getStatus();
+    }
+
+    // For debugging purpose
+    int getSize() {
+        return outBox.getSize();
+    }
+    //#J2ME_EXCLUDE_END
+
+    int getPendingCnt() {
+        return outBox.getPendingCnt();
+    }
+
+    long getSubmittedCnt() {
+        return totSubmittedCnt;
+    }
+
+    long getServedCnt() {
+        return totServedCnt;
+    }
+
+    long getDiscardedCnt() {
+        return totDiscardedCnt;
+    }
+
+    long getSlowDeliveryCnt() {
+        return totSlowDeliveryCnt;
+    }
+
+    long getVerySlowDeliveryCnt() {
+        return totVerySlowDeliveryCnt;
+    }
+
+    long getMultipleDeliveryCnt() {
+        return totMultipleDeliveryCnt;
+    }
+
+    //#J2ME_EXCLUDE_BEGIN
+    AverageMeasureProviderImpl getAvgMsgCountPerMultipleDeliveryProvider() {
+        return avgMsgCountPerMultipleDelivery;
+    }
+
+    // For debugging purpose
+    String getGlobalInfo() {
+        return "Submitted-messages = " + totSubmittedCnt + ", Served-messages = " + totServedCnt + ", Discarded-messages = " + totDiscardedCnt + ", Queue-size (byte) = " + outBox.getSize() + ", Multiple-delivery-occurrences = " + totMultipleDeliveryCnt;
+    }
+
+    // For debugging purpose
+    String[] getThreadPoolStatus() {
+        String[] status = new String[deliverers.length];
+        for (int i = 0; i < deliverers.length; ++i) {
+            Deliverer d = deliverers[i];
+            String details;
+            if (d.isStuck()) {
+                //#MIDP_EXCLUDE_BEGIN
+                details = "STUCK!!! last-delivery-start-time=" + timeFormat.format(new java.util.Date(d.getLastDeliveryStartTime()));
+                //#MIDP_EXCLUDE_END
+				/*#MIDP_INCLUDE_BEGIN
+				details = "STUCK!!! last-delivery-start-time="+formatDate(d.getLastDeliveryStartTime());
+				#MIDP_INCLUDE_END*/
+            } else {
+                //#MIDP_EXCLUDE_BEGIN
+                details = "last-delivery-end-time=" + timeFormat.format(new java.util.Date(d.getLastDeliveryEndTime()));
+                //#MIDP_EXCLUDE_END
+				/*#MIDP_INCLUDE_BEGIN
+				details = "last-delivery-end-time="+formatDate(d.getLastDeliveryEndTime());
+				#MIDP_INCLUDE_END*/
+            }
+            status[i] = "(" + d.name + ": thread-alive=" + delivererThreads[i].isAlive() + ", Served-messages=" + d.getServedCnt() + ", " + details + ")";
+        }
+        return status;
+    }
+    //#J2ME_EXCLUDE_END
+
+    // For debugging purpose
+    Thread[] getThreadPool() {
+        return delivererThreads;
+    }
+
+    public interface Channel {
+        void deliverNow(GenericMessage msg, AID receiverID) throws UnreachableException, NotFoundException;
+
+        void notifyFailureToSender(GenericMessage msg, AID receiver, InternalError ie);
+    }
+    //#MIDP_EXCLUDE_END
+	/*#MIDP_INCLUDE_BEGIN
+	private String formatDate(long date) {
+		java.util.Calendar calendar = java.util.Calendar.getInstance();
+		calendar.setTime(new java.util.Date(date));
+		java.lang.StringBuffer sb = new java.lang.StringBuffer();
+		sb.append(calendar.get(java.util.Calendar.YEAR));
+		sb.append("/");
+		sb.append(calendar.get(java.util.Calendar.MONTH));
+		sb.append("/");
+		sb.append(calendar.get(java.util.Calendar.DAY_OF_MONTH));
+		sb.append(" ");
+		sb.append(calendar.get(java.util.Calendar.HOUR));
+		sb.append(":");
+		sb.append(calendar.get(java.util.Calendar.MINUTE));
+		sb.append(":");
+		sb.append(calendar.get(java.util.Calendar.SECOND));
+		return sb.toString();
+	}
+	#MIDP_INCLUDE_END*/
+
+    /**
+     * Inner class PendingMsg
+     */
+    public static class PendingMsg {
+        private final AID receiverID;
+        private final Channel channel;
+        private GenericMessage msg;
+        private long deadline;
+
+        public PendingMsg(GenericMessage msg, AID receiverID, Channel channel, long deadline) {
+            this.msg = msg;
+            this.receiverID = receiverID;
+            this.channel = channel;
+            this.deadline = deadline;
+        }
+
+        public GenericMessage getMessage() {
+            return msg;
+        }
+
+        public void setMessage(GenericMessage msg) {
+            this.msg = msg;
+        }
+
+        public AID getReceiver() {
+            return receiverID;
+        }
+
+        public Channel getChannel() {
+            return channel;
+        }
+
+        public long getDeadline() {
+            return deadline;
+        }
+
+        public void setDeadline(long deadline) {
+            this.deadline = deadline;
+        }
+    } // END of inner class PendingMsg
 
     /**
      * Inner class Deliverer
@@ -395,218 +594,5 @@ class MessageManager {
             }
         }
     } // END of inner class Deliverer
-
-
-    /**
-     * Inner class PendingMsg
-     */
-    public static class PendingMsg {
-        private GenericMessage msg;
-        private final AID receiverID;
-        private final Channel channel;
-        private long deadline;
-
-        public PendingMsg(GenericMessage msg, AID receiverID, Channel channel, long deadline) {
-            this.msg = msg;
-            this.receiverID = receiverID;
-            this.channel = channel;
-            this.deadline = deadline;
-        }
-
-        public void setMessage(GenericMessage msg) {
-            this.msg = msg;
-        }
-
-        public GenericMessage getMessage() {
-            return msg;
-        }
-
-        public AID getReceiver() {
-            return receiverID;
-        }
-
-        public Channel getChannel() {
-            return channel;
-        }
-
-        public long getDeadline() {
-            return deadline;
-        }
-
-        public void setDeadline(long deadline) {
-            this.deadline = deadline;
-        }
-    } // END of inner class PendingMsg
-
-
-    /**
-     *
-     */
-    public static String stringify(GenericMessage m) {
-        //#J2ME_EXCLUDE_BEGIN
-        if (m instanceof MultipleGenericMessage mm) {
-            // MULTIPLE message
-            StringBuilder sb = new StringBuilder("[SET");
-            List<GenericMessage> l = mm.getMessages();
-            int cnt = 0;
-            for (GenericMessage gm : l) {
-                sb.append(" ");
-                sb.append(stringify(gm));
-                // Avoid stringifying to many messages
-                cnt++;
-                if (cnt > 10 && cnt < l.size()) {
-                    sb.append("...").append(l.size()).append(" messages in total");
-                    break;
-                }
-            }
-            sb.append("]");
-            return sb.toString();
-        } else {
-            //#J2ME_EXCLUDE_END
-            // SINGLE (normal) message
-            ACLMessage msg = m.getACLMessage();
-            if (msg != null) {
-                StringBuilder sb = new StringBuilder("(");
-                sb.append(ACLMessage.getPerformative(msg.getPerformative()));
-                sb.append(" sender: ");
-                sb.append(msg.getSender().getName());
-                if (msg.getOntology() != null) {
-                    sb.append(" ontology: ");
-                    sb.append(msg.getOntology());
-                }
-                if (msg.getConversationId() != null) {
-                    sb.append(" conversation-id: ");
-                    sb.append(msg.getConversationId());
-                }
-                sb.append(')');
-                return sb.toString();
-            } else {
-                return ("\"Unavailable\"");
-            }
-            //#J2ME_EXCLUDE_BEGIN
-        }
-        //#J2ME_EXCLUDE_END
-    }
-
-    //#J2ME_EXCLUDE_BEGIN
-    public static void main(String[] args) {
-        GenericMessage gm = new GenericMessage();
-        ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-        msg.setSender(new AID("pippo@P1", AID.ISGUID));
-        msg.addReceiver(new AID("pluto@P1", AID.ISGUID));
-        gm.setACLMessage(msg);
-        System.out.println(stringify(gm));
-
-        MultipleGenericMessage mgm = new MultipleGenericMessage(200);
-        List<GenericMessage> l = new ArrayList<>();
-        l.add(gm);
-        l.add(gm);
-        mgm.setMessages(l);
-        System.out.println(stringify(mgm));
-    }
-    //#J2ME_EXCLUDE_END
-
-    // For debugging purpose
-    String[] getQueueStatus() {
-        return outBox.getStatus();
-    }
-
-    // For debugging purpose
-    int getSize() {
-        return outBox.getSize();
-    }
-
-    int getPendingCnt() {
-        return outBox.getPendingCnt();
-    }
-
-    long getSubmittedCnt() {
-        return totSubmittedCnt;
-    }
-
-    long getServedCnt() {
-        return totServedCnt;
-    }
-
-    long getDiscardedCnt() {
-        return totDiscardedCnt;
-    }
-
-    long getSlowDeliveryCnt() {
-        return totSlowDeliveryCnt;
-    }
-
-    long getVerySlowDeliveryCnt() {
-        return totVerySlowDeliveryCnt;
-    }
-
-    long getMultipleDeliveryCnt() {
-        return totMultipleDeliveryCnt;
-    }
-
-    //#J2ME_EXCLUDE_BEGIN
-    AverageMeasureProviderImpl getAvgMsgCountPerMultipleDeliveryProvider() {
-        return avgMsgCountPerMultipleDelivery;
-    }
-    //#J2ME_EXCLUDE_END
-
-    // For debugging purpose
-    String getGlobalInfo() {
-        return "Submitted-messages = " + totSubmittedCnt + ", Served-messages = " + totServedCnt + ", Discarded-messages = " + totDiscardedCnt + ", Queue-size (byte) = " + outBox.getSize() + ", Multiple-delivery-occurrences = " + totMultipleDeliveryCnt;
-    }
-
-    //#MIDP_EXCLUDE_BEGIN
-    private final java.text.SimpleDateFormat timeFormat = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    //#MIDP_EXCLUDE_END
-	/*#MIDP_INCLUDE_BEGIN
-	private String formatDate(long date) {
-		java.util.Calendar calendar = java.util.Calendar.getInstance();
-		calendar.setTime(new java.util.Date(date));
-		java.lang.StringBuffer sb = new java.lang.StringBuffer();
-		sb.append(calendar.get(java.util.Calendar.YEAR));
-		sb.append("/");
-		sb.append(calendar.get(java.util.Calendar.MONTH));
-		sb.append("/");
-		sb.append(calendar.get(java.util.Calendar.DAY_OF_MONTH));
-		sb.append(" ");
-		sb.append(calendar.get(java.util.Calendar.HOUR));
-		sb.append(":");
-		sb.append(calendar.get(java.util.Calendar.MINUTE));
-		sb.append(":");
-		sb.append(calendar.get(java.util.Calendar.SECOND));
-		return sb.toString();
-	}
-	#MIDP_INCLUDE_END*/
-
-    // For debugging purpose
-    String[] getThreadPoolStatus() {
-        String[] status = new String[deliverers.length];
-        for (int i = 0; i < deliverers.length; ++i) {
-            Deliverer d = deliverers[i];
-            String details;
-            if (d.isStuck()) {
-                //#MIDP_EXCLUDE_BEGIN
-                details = "STUCK!!! last-delivery-start-time=" + timeFormat.format(new java.util.Date(d.getLastDeliveryStartTime()));
-                //#MIDP_EXCLUDE_END
-				/*#MIDP_INCLUDE_BEGIN
-				details = "STUCK!!! last-delivery-start-time="+formatDate(d.getLastDeliveryStartTime()); 
-				#MIDP_INCLUDE_END*/
-            } else {
-                //#MIDP_EXCLUDE_BEGIN
-                details = "last-delivery-end-time=" + timeFormat.format(new java.util.Date(d.getLastDeliveryEndTime()));
-                //#MIDP_EXCLUDE_END
-				/*#MIDP_INCLUDE_BEGIN
-				details = "last-delivery-end-time="+formatDate(d.getLastDeliveryEndTime()); 
-				#MIDP_INCLUDE_END*/
-            }
-            status[i] = "(" + d.name + ": thread-alive=" + delivererThreads[i].isAlive() + ", Served-messages=" + d.getServedCnt() + ", " + details + ")";
-        }
-        return status;
-    }
-
-    // For debugging purpose
-    Thread[] getThreadPool() {
-        return delivererThreads;
-    }
 }
 

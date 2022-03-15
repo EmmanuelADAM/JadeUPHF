@@ -37,14 +37,13 @@ import javax.swing.*;
 
 /**
  * This class loads the icons used in the toolbar and menus
- *
  */
 
 public class GuiProperties {
 
+    public static final String ImagePath = "";
     protected static UIDefaults MyDefaults;
     protected static GuiProperties foo = new GuiProperties();
-    public static final String ImagePath = "";
 
     static {
         Object[] icons = {

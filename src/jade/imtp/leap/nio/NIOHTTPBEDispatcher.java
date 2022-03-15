@@ -33,31 +33,26 @@ public class NIOHTTPBEDispatcher implements NIOMediator, Dispatcher, BEConnectio
     private static final long RESPONSE_TIMEOUT_INCREMENT = 100; // 100 msec
 
     private static final int MAX_SID = 0x0f;
-
+    private final Object outgoingCommandsConnectionLock = new Object();
+    private final Object responseToLastOutgoingCommandLock = new Object();
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
     private JICPMediatorManager myMediatorManager;
     private String myID;
     private MicroSkeleton mySkel = null;
     private FrontEndStub myStub = null;
     private BackEndContainer myContainer = null;
-
     private int status = ACTIVE;
     private int frontEndStatus = CONNECTING;
     private long maxDisconnectionTime;
     private Timer maxDisconnectionTimer = null;
     private long keepAliveTime;
     private Timer keepAliveTimer = null;
-
     private JICPPacket lastResponse = null;
     private byte lastIncomingCommandSid;
-
     private boolean waitingForFlush = false;
     private Connection outgoingCommandsConnection = null;
-    private final Object outgoingCommandsConnectionLock = new Object();
     private int nextOutgoingCommandSid;
     private JICPPacket responseToLastOutgoingCommand = null;
-    private final Object responseToLastOutgoingCommandLock = new Object();
-
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
 
     //////////////////////////////////////////
     // NIOMediator interface implementation

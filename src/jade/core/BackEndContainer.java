@@ -50,30 +50,35 @@ public class BackEndContainer extends AgentContainerImpl implements BackEnd {
 
 
     private static final String ADDR_LIST_DELIMITERS = ", \n\t\r";
-
+    // The manager of the connection with the FrontEnd
+    private final BEConnectionManager myConnectionManager;
+    private final Map<AID, AgentImage> agentImages = new HashMap<>(1);
+    private final Map<?, ?> principals = new HashMap<>(1);
+    // The original properties passed to this container when it was created
+    private final Properties creationProperties;
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    private final Object frontEndSynchLock = new Object();
+    private final ArrayList<MessageSenderPair> fronEndSynchBuffer = new ArrayList<>();
     // This flag is used to prevent two parallel shut-down processes and
     // also to be sure that threads possibly started by this BEContainer
     // do not survive after the BEContainer shutdown.
     private boolean terminating = false;
-
     // The FrontEnd this BackEndContainer is connected to
     private FrontEnd myFrontEnd;
-
-    // The manager of the connection with the FrontEnd
-    private final BEConnectionManager myConnectionManager;
-
     private BackEndManager theBEManager;
-
-    private final Map<AID, AgentImage> agentImages = new HashMap<>(1);
-
     private Map<String, BECodec> serviceBECodecs = null; // Lazy initialization
+    // Flag indicating that the front-end synchronization process is in place
+    private boolean synchronizing = false;
 
-    private final Map<?, ?> principals = new HashMap<>(1);
 
-    // The original properties passed to this container when it was created
-    private final Properties creationProperties;
+    public BackEndContainer(Properties props, BEConnectionManager cm) throws ProfileException {
+        // Do not call the parent constructor to avoid creating a big LADT
+        myProfile = new ProfileImpl(adjustProperties(props));
+        localAgents = new LADT(1);
 
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+        creationProperties = props;
+        myConnectionManager = cm;
+    }
 
     private static Properties adjustProperties(Properties pp) {
         // A BackEndContainer is never a Main
@@ -106,14 +111,9 @@ public class BackEndContainer extends AgentContainerImpl implements BackEnd {
         return pp;
     }
 
-    public BackEndContainer(Properties props, BEConnectionManager cm) throws ProfileException {
-        // Do not call the parent constructor to avoid creating a big LADT
-        myProfile = new ProfileImpl(adjustProperties(props));
-        localAgents = new LADT(1);
-
-        creationProperties = props;
-        myConnectionManager = cm;
-    }
+    /////////////////////////////////////
+    // BackEnd interface implementation
+    /////////////////////////////////////
 
     public boolean connect() {
         try {
@@ -173,7 +173,6 @@ public class BackEndContainer extends AgentContainerImpl implements BackEnd {
         }
     }
 
-
     protected void startNode() throws IMTPException, ProfileException, ServiceException, JADESecurityException, NotFoundException {
         // Initialize all services (without activating them)
         List<ServiceDescriptor> services = new ArrayList<>();
@@ -209,10 +208,6 @@ public class BackEndContainer extends AgentContainerImpl implements BackEnd {
         dsc.setMandatory(true);
         services.add(dsc);
     }
-
-    /////////////////////////////////////
-    // BackEnd interface implementation
-    /////////////////////////////////////
 
     /**
      * A new agent has just started on the FrontEnd.
@@ -380,6 +375,11 @@ public class BackEndContainer extends AgentContainerImpl implements BackEnd {
         myFrontEnd.createAgent(name, className, args);
     }
 
+
+    /////////////////////////////////////////////////////
+    // Redefined methods of the AgentContainer interface
+    /////////////////////////////////////////////////////
+
     public void killAgentOnFE(String name) throws IMTPException, NotFoundException {
         try {
             myFrontEnd.killAgent(name);
@@ -406,11 +406,6 @@ public class BackEndContainer extends AgentContainerImpl implements BackEnd {
             resumedAgent(name);
         }
     }
-
-
-    /////////////////////////////////////////////////////
-    // Redefined methods of the AgentContainer interface
-    /////////////////////////////////////////////////////
 
     /**
      * Dispatch a message to an agent in the FrontEnd.
@@ -572,7 +567,6 @@ public class BackEndContainer extends AgentContainerImpl implements BackEnd {
         }
     }
 
-
     private String[] parseAddressList(String toParse) {
 
         StringTokenizer lexer = new StringTokenizer(toParse, ADDR_LIST_DELIMITERS);
@@ -602,17 +596,6 @@ public class BackEndContainer extends AgentContainerImpl implements BackEnd {
         return null;
     }
 
-
-    /**
-     * Inner class AgentImage
-     */
-    public class AgentImage extends Agent {
-        private AgentImage(AID id) {
-            super(id);
-            setToolkit(BackEndContainer.this);
-        }
-    }
-
     // Factory method for the inner class
     public AgentImage createAgentImage(AID id) {
         return new AgentImage(id);
@@ -634,6 +617,22 @@ public class BackEndContainer extends AgentContainerImpl implements BackEnd {
         return agentImages.get(id);
     }
 
+
+    ////////////////////////////////////////////////////////////
+    // Methods and variables related to the front-end synchronization
+    // mechanism that allows a FrontEnd to re-join the platform after
+    // his BackEnd got lost (e.g. because of a crash of the hosting
+    // container).
+    //
+    // - The BackEnd waits for the input connection to be ready
+    //   and then asks the FrontEnd to synchronize.
+    // - In the meanwhile some messages could arrive from the
+    //   FrontEnd and the sender may not have an image in the BackEnd
+    //   yet -->
+    // - While synchronizing outgoing messages are bufferd and
+    //   actually sent as soon as the synchronization process completes
+    ////////////////////////////////////////////////////////////
+
     public AID[] getAgentImages() {
         Object[] objs = agentImages.keySet().toArray();
         AID[] result = new AID[objs.length];
@@ -643,7 +642,6 @@ public class BackEndContainer extends AgentContainerImpl implements BackEnd {
 
         return result;
     }
-
 
     public List<Object[]> removePendingMessages(MessageTemplate template, boolean notifyFailure) {
         List<Object[]> pendingMsg = ((jade.imtp.leap.FrontEndStub) myFrontEnd).removePendingMessages(template);
@@ -667,27 +665,6 @@ public class BackEndContainer extends AgentContainerImpl implements BackEnd {
         }
         return pendingMsg;
     }
-
-
-    ////////////////////////////////////////////////////////////
-    // Methods and variables related to the front-end synchronization
-    // mechanism that allows a FrontEnd to re-join the platform after
-    // his BackEnd got lost (e.g. because of a crash of the hosting
-    // container).
-    //
-    // - The BackEnd waits for the input connection to be ready
-    //   and then asks the FrontEnd to synchronize.
-    // - In the meanwhile some messages could arrive from the
-    //   FrontEnd and the sender may not have an image in the BackEnd
-    //   yet -->
-    // - While synchronizing outgoing messages are bufferd and
-    //   actually sent as soon as the synchronization process completes
-    ////////////////////////////////////////////////////////////
-
-    // Flag indicating that the front-end synchronization process is in place
-    private boolean synchronizing = false;
-    private final Object frontEndSynchLock = new Object();
-    private final ArrayList<MessageSenderPair> fronEndSynchBuffer = new ArrayList<>();
 
     /**
      * Start the front-end synchronization process.
@@ -750,6 +727,16 @@ public class BackEndContainer extends AgentContainerImpl implements BackEnd {
             }
             fronEndSynchBuffer.clear();
             synchronizing = false;
+        }
+    }
+
+    /**
+     * Inner class AgentImage
+     */
+    public class AgentImage extends Agent {
+        private AgentImage(AID id) {
+            super(id);
+            setToolkit(BackEndContainer.this);
         }
     }
 

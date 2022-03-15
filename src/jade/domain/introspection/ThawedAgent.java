@@ -65,15 +65,6 @@ public class ThawedAgent implements Event {
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
-     *
-     * @param id The agent identifier of the newly suspended agent.
-     */
-    public void setAgent(AID id) {
-        agent = id;
-    }
-
-    /**
      * Retrieve the value of the <code>agent</code> slot of this
      * event, containing the agent identifier of the newly suspended
      * agent.
@@ -86,13 +77,12 @@ public class ThawedAgent implements Event {
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
+     * Set the <code>agent</code> slot of this event.
      *
-     * @param id The container identifier of the container where the
-     *           newly frozen agent was deployed.
+     * @param id The agent identifier of the newly suspended agent.
      */
-    public void setWhere(ContainerID id) {
-        where = id;
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     /**
@@ -108,14 +98,13 @@ public class ThawedAgent implements Event {
     }
 
     /**
-     * Set the <code>buffer-container</code> slot of this event.
+     * Set the <code>where</code> slot of this event.
      *
      * @param id The container identifier of the container where the
-     *           frozen agent will appear to reside (and where ACL messages for
-     *           that agent will be redirected and buffered).
+     *           newly frozen agent was deployed.
      */
-    public void setBufferContainer(ContainerID id) {
-        bufferContainer = id;
+    public void setWhere(ContainerID id) {
+        where = id;
     }
 
     /**
@@ -130,6 +119,17 @@ public class ThawedAgent implements Event {
      */
     public ContainerID getBufferContainer() {
         return bufferContainer;
+    }
+
+    /**
+     * Set the <code>buffer-container</code> slot of this event.
+     *
+     * @param id The container identifier of the container where the
+     *           frozen agent will appear to reside (and where ACL messages for
+     *           that agent will be redirected and buffered).
+     */
+    public void setBufferContainer(ContainerID id) {
+        bufferContainer = id;
     }
 
 }

@@ -36,6 +36,13 @@ import java.awt.event.FocusEvent;
 public class ACLContentDialog extends JDialog {
 
 
+    JPanel contentPanel = new JPanel();
+    BorderLayout borderLayout1 = new BorderLayout();
+    JLabel titleLabel = new JLabel();
+    JButton doneButton = new JButton();
+    ACLTextArea contentTextArea = new ACLTextArea();
+
+
     public ACLContentDialog(Frame frame, String title, boolean modal) {
         super(frame, title, modal);
         try {
@@ -51,11 +58,9 @@ public class ACLContentDialog extends JDialog {
         this(null, "", false);
     }
 
-
     public void setEditable(boolean theBool) {
         this.contentTextArea.setEditable(theBool);
     }
-
 
     public void setItsContent(ACLMessage itsMsg) {
 
@@ -67,7 +72,6 @@ public class ACLContentDialog extends JDialog {
         this.titleLabel.setText("content with language=" + contentLanguage + " and ontology=" + contentOntology);
 
     }
-
 
     void jbInit() {
         contentPanel.setLayout(borderLayout1);
@@ -96,22 +100,12 @@ public class ACLContentDialog extends JDialog {
         contentPanel.add(contentTextArea, BorderLayout.CENTER);
     }
 
-
     void doneButton_actionPerformed(ActionEvent e) {
         this.setVisible(false);
     }
 
-
     void this_focusGained(FocusEvent e) {
         this.contentTextArea.requestFocus();
     }
-
-
-    JPanel contentPanel = new JPanel();
-    BorderLayout borderLayout1 = new BorderLayout();
-    JLabel titleLabel = new JLabel();
-    JButton doneButton = new JButton();
-
-    ACLTextArea contentTextArea = new ACLTextArea();
 }
 //  ***EOF***

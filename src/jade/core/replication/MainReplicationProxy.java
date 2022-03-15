@@ -45,7 +45,7 @@ public class MainReplicationProxy extends SliceProxy implements MainReplicationS
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else {
@@ -65,7 +65,7 @@ public class MainReplicationProxy extends SliceProxy implements MainReplicationS
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else {
@@ -130,7 +130,7 @@ public class MainReplicationProxy extends SliceProxy implements MainReplicationS
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else {
@@ -205,7 +205,7 @@ public class MainReplicationProxy extends SliceProxy implements MainReplicationS
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else if (result instanceof NotFoundException) {
@@ -295,7 +295,7 @@ public class MainReplicationProxy extends SliceProxy implements MainReplicationS
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else {

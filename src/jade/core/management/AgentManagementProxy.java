@@ -78,7 +78,7 @@ public class AgentManagementProxy extends SliceProxy implements AgentManagementS
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else if (result instanceof NotFoundException) {
@@ -124,7 +124,7 @@ public class AgentManagementProxy extends SliceProxy implements AgentManagementS
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else if (result instanceof NotFoundException) {
@@ -151,7 +151,7 @@ public class AgentManagementProxy extends SliceProxy implements AgentManagementS
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else if (result instanceof NotFoundException) {
@@ -172,7 +172,7 @@ public class AgentManagementProxy extends SliceProxy implements AgentManagementS
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else if (result instanceof NotFoundException) {
@@ -193,7 +193,7 @@ public class AgentManagementProxy extends SliceProxy implements AgentManagementS
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else if (result instanceof NotFoundException) {
@@ -213,7 +213,7 @@ public class AgentManagementProxy extends SliceProxy implements AgentManagementS
 
             Node n = getNode();
             Object result = n.accept(cmd);
-            if ((result != null) && (result instanceof Throwable)) {
+            if ((result instanceof Throwable)) {
                 if (result instanceof IMTPException) {
                     throw (IMTPException) result;
                 } else if (result instanceof NotFoundException) {

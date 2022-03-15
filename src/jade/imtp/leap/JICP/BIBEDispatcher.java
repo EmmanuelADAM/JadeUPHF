@@ -43,25 +43,25 @@ public class BIBEDispatcher extends Thread implements BEConnectionManager, Dispa
     private static final int UNREACHABLE = 0;
 
     private final int frontEndStatus = UNREACHABLE;
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    private final Object shutdownLock = new Object();
+    protected InpConnectionHolder inpHolder = new InpConnectionHolder();
+    protected OutConnectionHolder outHolder = new OutConnectionHolder();
     private long maxDisconnectionTime;
     private long keepAliveTime;
     private long lastReceivedTime;
-
     private JICPMediatorManager myMediatorManager;
     private String myID;
-
     private byte lastSid = 0x0f;
     private int inpCnt = 0;
     private boolean active = true;
-
-    protected InpConnectionHolder inpHolder = new InpConnectionHolder();
-    protected OutConnectionHolder outHolder = new OutConnectionHolder();
-
     private MicroSkeleton mySkel = null;
     private FrontEndStub myStub = null;
     private BackEndContainer myContainer = null;
-
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    //////////////////////////////////////////////////
+    // The embedded Thread handling outgoing commands
+    //////////////////////////////////////////////////
+    private JICPPacket lastResponse;
 
     /**
      * Constructor declaration
@@ -156,8 +156,6 @@ public class BIBEDispatcher extends Thread implements BEConnectionManager, Dispa
         }
     }
 
-    private final Object shutdownLock = new Object();
-
     /**
      * Shutdown self initiated or forced by the JICPServer this
      * BackEndContainer is attached to.
@@ -212,6 +210,10 @@ public class BIBEDispatcher extends Thread implements BEConnectionManager, Dispa
         return true;
     }
 
+    ////////////////////////////////////////////////
+    // BEConnectionManager interface implementation
+    ////////////////////////////////////////////////
+
     public void tick(long currentTime) {
         if (keepAliveTime > 0) {
             if ((currentTime - lastReceivedTime) > (keepAliveTime + 60000)) {
@@ -241,10 +243,6 @@ public class BIBEDispatcher extends Thread implements BEConnectionManager, Dispa
         }
     }
 
-    ////////////////////////////////////////////////
-    // BEConnectionManager interface implementation
-    ////////////////////////////////////////////////
-
     /**
      * Return a stub of the remote FrontEnd that is connected to the
      * local BackEnd.
@@ -257,7 +255,6 @@ public class BIBEDispatcher extends Thread implements BEConnectionManager, Dispa
     public FrontEnd getFrontEnd(BackEnd be, Properties props) throws IMTPException {
         return myStub;
     }
-
 
     /**
      * Make this BackEndDispatcher terminate.
@@ -345,11 +342,6 @@ public class BIBEDispatcher extends Thread implements BEConnectionManager, Dispa
             throw new ICPException("Unreachable");
         }
     }
-
-    //////////////////////////////////////////////////
-    // The embedded Thread handling outgoing commands
-    //////////////////////////////////////////////////
-    private JICPPacket lastResponse;
 
     public void run() {
         lastResponse = null;
@@ -456,6 +448,13 @@ public class BIBEDispatcher extends Thread implements BEConnectionManager, Dispa
         return pkt;
     }
 
+    private void close(Connection c) {
+        try {
+            c.close();
+        } catch (IOException ioe) {
+        }
+    }
+
     /**
      * Inner class InpConnectionHolder.
      * Wrapper for the connection used to deliver commands to the FrontEnd
@@ -529,7 +528,6 @@ public class BIBEDispatcher extends Thread implements BEConnectionManager, Dispa
         }
     } // END of inner class InpConnectionHolder
 
-
     /**
      * Inner class OutConnectionHolder
      * Wrapper for the connection used to receive commands from the FrontEnd
@@ -537,18 +535,6 @@ public class BIBEDispatcher extends Thread implements BEConnectionManager, Dispa
     protected class OutConnectionHolder {
         private Connection myConnection;
         private boolean connectionRefreshed;
-
-        private synchronized void setConnection(Connection c) {
-            if (myLogger.isLoggable(Logger.FINE))
-                myLogger.log(Logger.FINE, myID + " - New output connection.");
-
-            if (myConnection != null) {
-                close(myConnection);
-            }
-            myConnection = c;
-            connectionRefreshed = true;
-            notifyAll();
-        }
 
         private synchronized Connection getConnection() {
             while (myConnection == null) {
@@ -566,6 +552,18 @@ public class BIBEDispatcher extends Thread implements BEConnectionManager, Dispa
             return myConnection;
         }
 
+        private synchronized void setConnection(Connection c) {
+            if (myLogger.isLoggable(Logger.FINE))
+                myLogger.log(Logger.FINE, myID + " - New output connection.");
+
+            if (myConnection != null) {
+                close(myConnection);
+            }
+            myConnection = c;
+            connectionRefreshed = true;
+            notifyAll();
+        }
+
         public synchronized void resetConnection() {
             if (!connectionRefreshed) {
                 if (myConnection != null) {
@@ -579,12 +577,5 @@ public class BIBEDispatcher extends Thread implements BEConnectionManager, Dispa
             return myConnection != null;
         }
     } // END of inner class OutConnectionHolder
-
-    private void close(Connection c) {
-        try {
-            c.close();
-        } catch (IOException ioe) {
-        }
-    }
 }
 

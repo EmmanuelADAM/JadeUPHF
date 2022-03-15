@@ -61,10 +61,8 @@ public class TableUpdater implements Runnable {
             ACLCodec codec = new StringACLCodec();
             msg = codec.decode(s.getBytes(charset), charset);
             msg.setEnvelope(e);
-        } catch (ACLCodec.CodecException aclce) {
+        } catch (ACLCodec.CodecException | UnsupportedEncodingException aclce) {
             aclce.printStackTrace();
-        } catch (UnsupportedEncodingException exception) {
-            exception.printStackTrace();
         }
     }
 
@@ -83,10 +81,8 @@ public class TableUpdater implements Runnable {
             ACLCodec codec = new StringACLCodec();
             msg = codec.decode(s.getBytes(charset), charset);
             msg.setEnvelope(e);
-        } catch (ACLCodec.CodecException aclce) {
+        } catch (ACLCodec.CodecException | UnsupportedEncodingException aclce) {
             aclce.printStackTrace();
-        } catch (UnsupportedEncodingException exception) {
-            exception.printStackTrace();
         }
     }
 
@@ -105,10 +101,8 @@ public class TableUpdater implements Runnable {
             ACLCodec codec = new StringACLCodec();
             msg = codec.decode(s.getBytes(charset), charset);
             msg.setEnvelope(e);
-        } catch (ACLCodec.CodecException aclce) {
+        } catch (ACLCodec.CodecException | UnsupportedEncodingException aclce) {
             aclce.printStackTrace();
-        } catch (UnsupportedEncodingException exception) {
-            exception.printStackTrace();
         }
     }
 

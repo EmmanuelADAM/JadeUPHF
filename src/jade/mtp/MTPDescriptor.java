@@ -35,6 +35,8 @@ public class MTPDescriptor implements Serializable {
     private String className;
     private String[] addresses;
     private String[] protoNames;
+    // For persistence service
+    private Long persistentID;
 
     public MTPDescriptor(String n, String cn, String[] a, String[] pn) {
         name = n;
@@ -43,20 +45,45 @@ public class MTPDescriptor implements Serializable {
         protoNames = pn;
     }
 
+    //#MIDP_EXCLUDE_BEGIN
+    // For persistence service
+    private MTPDescriptor() {
+    }
+
     public String getName() {
         return name;
+    }
+
+    // For persistence service
+    private void setName(String n) {
+        name = n;
     }
 
     public String getClassName() {
         return className;
     }
 
+    // For persistence service
+    private void setClassName(String cn) {
+        className = cn;
+    }
+
     public String[] getAddresses() {
         return addresses;
     }
 
+    // For persistence service
+    private void setAddresses(String[] a) {
+        addresses = a;
+    }
+
     public String[] getSupportedProtocols() {
         return protoNames;
+    }
+
+    // For persistence service
+    private void setSupportedProtocols(String[] sp) {
+        protoNames = sp;
     }
 
     public boolean equals(Object obj) {
@@ -94,35 +121,6 @@ public class MTPDescriptor implements Serializable {
     public String toString() {
         return "(MTP :name " + name + " :class-name" + className + " :addresses " + Arrays.toString(addresses) + ")";
     }
-
-    //#MIDP_EXCLUDE_BEGIN
-    // For persistence service
-    private MTPDescriptor() {
-    }
-
-    // For persistence service
-    private void setName(String n) {
-        name = n;
-    }
-
-    // For persistence service
-    private void setClassName(String cn) {
-        className = cn;
-    }
-
-    // For persistence service
-    private void setAddresses(String[] a) {
-        addresses = a;
-    }
-
-    // For persistence service
-    private void setSupportedProtocols(String[] sp) {
-        protoNames = sp;
-    }
-
-
-    // For persistence service
-    private Long persistentID;
 
     // For persistence service
     private Long getPersistentID() {

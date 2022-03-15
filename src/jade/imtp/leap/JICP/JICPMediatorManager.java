@@ -46,17 +46,17 @@ public interface JICPMediatorManager {
     String LEAP_PROPERTY_FILE_DEFAULT = "leap.properties";
 
     /**
-     Deregister a given mediator from this JICPMediatorManager
+     * Deregister a given mediator from this JICPMediatorManager
      */
     void deregisterMediator(String mediatorId);
 
     /**
-     Retrieve the local host of this JICPMediatorManager
+     * Retrieve the local host of this JICPMediatorManager
      */
     String getLocalHost();
 
     /**
-     Retrieve the local port of this JICPMediatorManager
+     * Retrieve the local port of this JICPMediatorManager
      */
     int getLocalPort();
 }

@@ -54,200 +54,32 @@ import java.util.*;
  */
 class UDPMonitorServer {
 
+    private static long currentId = 0;
     private final Logger logger;
-
     private final UDPNodeMonitoringService myService;
-
     private final String host;
     private final boolean acceptLocalHostOnly;
-    private int port;
     private final int pingDelay;
     private final int pingDelayLimit;
     private final int unreachLimit;
 
     private final NetworkChecker checker;
-
-    //#DOTNET_EXCLUDE_BEGIN
-    private DatagramChannel server;
-    private Selector selector;
-    //#DOTNET_EXCLUDE_END
-
     private final Hashtable<String, UDPNodeFailureMonitor> targets = new Hashtable<>();
-    private PingHandler pingHandler;
-    private Timer timer;
     private final Hashtable<String, Deadline> deadlines = new Hashtable<>();
-
+    //#DOTNET_EXCLUDE_END
     private final int orphanNodePingsCnt;
     private final int maxTracedUnknownPings;
     private final Hashtable<String, Counter> unknownPingCounters = new Hashtable<>();
+    private int port;
+    //#DOTNET_EXCLUDE_BEGIN
+    private DatagramChannel server;
+    private Selector selector;
+    private PingHandler pingHandler;
 
 	/*#DOTNET_INCLUDE_BEGIN
 	 private Socket server;
 	 #DOTNET_INCLUDE_END*/
-
-    private static long currentId = 0;
-
-    private synchronized static long getUniqueId() {
-        return currentId++;
-    }
-
-    /**
-     * Class to store a deadline for the next ping
-     * of a targeted node
-     */
-    private class Deadline extends TimerTask {
-
-        private final String nodeID;
-
-        private final long id;
-
-        public Deadline(String nodeID) {
-            this.nodeID = nodeID;
-            this.id = getUniqueId();
-        }
-
-        public long getID() {
-            return id;
-        }
-
-        public void run() {
-            try {
-                UDPNodeFailureMonitor mon = targets.get(nodeID);
-
-                // node is still supervised and there are no new deadlines
-                if (mon != null) {
-                    synchronized (mon) { // Mutual exclusion with pingReceived()
-                        if (mon.getDeadlineID() == id) {
-                            timeout(nodeID, mon);
-                        } else {
-                            // NB: This may happen when we receive a delayed UDP packet while the deadline expiration is being processed (the timeout()
-                            // method is being executed).
-                            // This is not so rare since deadline expiration processing involves checking reachability of the target node and this may
-                            // take a while (especially if the target node is overloaded ... this also justifies the fact that the UDP packet is delayed).
-                            // In such case in fact the UDP packet reception cancels the current Deadline (that has already expired) and then sets a new
-                            // Deadline (overriding the one set within the timeout() method) as soon as we exit this synchronized block
-                            logger.log(Logger.WARNING, "expired Deadline " + id + " for node " + nodeID + " is not the same as monitor Deadline " + mon.getDeadlineID());
-                        }
-                    }
-                }
-            } catch (Throwable t) {
-                // If we get an uncaught Exception here the Timer thread dies with no log and from now on no more Deadline can be processed
-                logger.log(Logger.WARNING, "Unexpected error managing UDP Deadline for node " + nodeID, t);
-            }
-        }
-
-        public String toString() {
-            return "Deadline{nodeID=" + nodeID + " id=" + id + "}";
-        }
-    }
-
-    /**
-     * Class to handles incomming ping messages
-     */
-    private class PingHandler implements Runnable {
-
-        private final byte TERMINATING_INFO = 1; // bit 1
-        private boolean interrupted = false;
-        private final Thread thread;
-
-        public PingHandler(String name) {
-            thread = new Thread(this, name);
-        }
-
-        private void handlePing() throws IOException {
-            // allocate maximum size of one UDP packet
-            ByteBuffer datagramBuffer = ByteBuffer.allocate(1 << 16);
-
-            //#DOTNET_EXCLUDE_BEGIN
-            SocketAddress address = server.receive(datagramBuffer);
-            //#DOTNET_EXCLUDE_END
-
-			/*#DOTNET_INCLUDE_BEGIN
-			 ubyte[] recData = new ubyte[datagramBuffer.getUByte().length];
-
-			 if ( server != null)
-			 {
-			 try
-			 {
-			 if (server.get_Available() <= 0)
-			 return;
-			 }
-			 catch (System.ObjectDisposedException ode)
-			 {
-			 return;
-			 }
-			 }
-			 else
-			 return;
-
-			 try
-			 {
-			 server.Receive(recData, 0, server.get_Available(), SocketFlags.None);
-			 }
-			 catch (SocketException se)
-			 {
-			 int socketError = se.get_ErrorCode();
-			 return;
-			 }
-			 IPEndPoint IPendPt  = (IPEndPoint) server.get_LocalEndPoint();
-			 IPAddress address	= IPendPt.get_Address();
-			 datagramBuffer.copyUByte(recData);
-			 #DOTNET_INCLUDE_END*/
-
-            datagramBuffer.position(0);
-
-            if (address != null) {
-
-                int nodeIDLength = datagramBuffer.getInt();
-
-                // get node ID
-                byte[] bb = new byte[nodeIDLength];
-                datagramBuffer.get(bb, 0, nodeIDLength);
-                String nodeID = new String(bb);
-
-                // analyse info byte
-                byte info = datagramBuffer.get();
-                boolean isTerminating = (info & TERMINATING_INFO) != 0;
-
-                pingReceived(nodeID, isTerminating);
-            }
-        }
-
-        public void run() {
-            while (!interrupted) { // endless loop
-                try {
-                    //#DOTNET_EXCLUDE_BEGIN
-                    selector.select();
-
-                    Set<SelectionKey> keys = selector.selectedKeys();
-                    interrupted = keys.size() == 0;
-                    Iterator<SelectionKey> i = keys.iterator();
-
-                    while (i.hasNext()) {
-                        SelectionKey key = i.next();
-                        i.remove();
-                        if (key.isValid() && key.isReadable()) {
-                            //#DOTNET_EXCLUDE_END
-                            handlePing();
-                            //#DOTNET_EXCLUDE_BEGIN
-                        }
-                    }
-                    //#DOTNET_EXCLUDE_END
-                } catch (Exception e) // .net requires I catch Exception instead of IOException
-                {
-                    logger.log(Logger.SEVERE, "UDP Connection error ", e);
-                }
-            } // for
-        }
-
-        public void start() {
-            thread.start();
-        }
-
-        public void stop() {
-            interrupted = true;
-        }
-    }
+    private Timer timer;
 
     /**
      * Constructs a new UDPMonitorServer object
@@ -277,6 +109,10 @@ class UDPMonitorServer {
             logger.log(Logger.SEVERE, "Cannot open UDP channel. " + e);
             e.printStackTrace();
         }
+    }
+
+    private synchronized static long getUniqueId() {
+        return currentId++;
     }
 
     String getHost() {
@@ -474,20 +310,6 @@ class UDPMonitorServer {
         }
     }
 
-
-    private class Counter {
-        private int value = 0;
-
-        private void increment() {
-            value++;
-        }
-
-        private int getValue() {
-            return value;
-        }
-    }
-
-
     /**
      * This method is invoked by a TimeoutHandler at a timeout
      */
@@ -537,6 +359,176 @@ class UDPMonitorServer {
                 timer.schedule(deadline, delay);
                 deadlines.put(nodeID, deadline);
             }
+        }
+    }
+
+    /**
+     * Class to store a deadline for the next ping
+     * of a targeted node
+     */
+    private class Deadline extends TimerTask {
+
+        private final String nodeID;
+
+        private final long id;
+
+        public Deadline(String nodeID) {
+            this.nodeID = nodeID;
+            this.id = getUniqueId();
+        }
+
+        public long getID() {
+            return id;
+        }
+
+        public void run() {
+            try {
+                UDPNodeFailureMonitor mon = targets.get(nodeID);
+
+                // node is still supervised and there are no new deadlines
+                if (mon != null) {
+                    synchronized (mon) { // Mutual exclusion with pingReceived()
+                        if (mon.getDeadlineID() == id) {
+                            timeout(nodeID, mon);
+                        } else {
+                            // NB: This may happen when we receive a delayed UDP packet while the deadline expiration is being processed (the timeout()
+                            // method is being executed).
+                            // This is not so rare since deadline expiration processing involves checking reachability of the target node and this may
+                            // take a while (especially if the target node is overloaded ... this also justifies the fact that the UDP packet is delayed).
+                            // In such case in fact the UDP packet reception cancels the current Deadline (that has already expired) and then sets a new
+                            // Deadline (overriding the one set within the timeout() method) as soon as we exit this synchronized block
+                            logger.log(Logger.WARNING, "expired Deadline " + id + " for node " + nodeID + " is not the same as monitor Deadline " + mon.getDeadlineID());
+                        }
+                    }
+                }
+            } catch (Throwable t) {
+                // If we get an uncaught Exception here the Timer thread dies with no log and from now on no more Deadline can be processed
+                logger.log(Logger.WARNING, "Unexpected error managing UDP Deadline for node " + nodeID, t);
+            }
+        }
+
+        public String toString() {
+            return "Deadline{nodeID=" + nodeID + " id=" + id + "}";
+        }
+    }
+
+    /**
+     * Class to handles incomming ping messages
+     */
+    private class PingHandler implements Runnable {
+
+        private final byte TERMINATING_INFO = 1; // bit 1
+        private final Thread thread;
+        private boolean interrupted = false;
+
+        public PingHandler(String name) {
+            thread = new Thread(this, name);
+        }
+
+        private void handlePing() throws IOException {
+            // allocate maximum size of one UDP packet
+            ByteBuffer datagramBuffer = ByteBuffer.allocate(1 << 16);
+
+            //#DOTNET_EXCLUDE_BEGIN
+            SocketAddress address = server.receive(datagramBuffer);
+            //#DOTNET_EXCLUDE_END
+
+			/*#DOTNET_INCLUDE_BEGIN
+			 ubyte[] recData = new ubyte[datagramBuffer.getUByte().length];
+
+			 if ( server != null)
+			 {
+			 try
+			 {
+			 if (server.get_Available() <= 0)
+			 return;
+			 }
+			 catch (System.ObjectDisposedException ode)
+			 {
+			 return;
+			 }
+			 }
+			 else
+			 return;
+
+			 try
+			 {
+			 server.Receive(recData, 0, server.get_Available(), SocketFlags.None);
+			 }
+			 catch (SocketException se)
+			 {
+			 int socketError = se.get_ErrorCode();
+			 return;
+			 }
+			 IPEndPoint IPendPt  = (IPEndPoint) server.get_LocalEndPoint();
+			 IPAddress address	= IPendPt.get_Address();
+			 datagramBuffer.copyUByte(recData);
+			 #DOTNET_INCLUDE_END*/
+
+            datagramBuffer.position(0);
+
+            if (address != null) {
+
+                int nodeIDLength = datagramBuffer.getInt();
+
+                // get node ID
+                byte[] bb = new byte[nodeIDLength];
+                datagramBuffer.get(bb, 0, nodeIDLength);
+                String nodeID = new String(bb);
+
+                // analyse info byte
+                byte info = datagramBuffer.get();
+                boolean isTerminating = (info & TERMINATING_INFO) != 0;
+
+                pingReceived(nodeID, isTerminating);
+            }
+        }
+
+        public void run() {
+            while (!interrupted) { // endless loop
+                try {
+                    //#DOTNET_EXCLUDE_BEGIN
+                    selector.select();
+
+                    Set<SelectionKey> keys = selector.selectedKeys();
+                    interrupted = keys.size() == 0;
+                    Iterator<SelectionKey> i = keys.iterator();
+
+                    while (i.hasNext()) {
+                        SelectionKey key = i.next();
+                        i.remove();
+                        if (key.isValid() && key.isReadable()) {
+                            //#DOTNET_EXCLUDE_END
+                            handlePing();
+                            //#DOTNET_EXCLUDE_BEGIN
+                        }
+                    }
+                    //#DOTNET_EXCLUDE_END
+                } catch (Exception e) // .net requires I catch Exception instead of IOException
+                {
+                    logger.log(Logger.SEVERE, "UDP Connection error ", e);
+                }
+            } // for
+        }
+
+        public void start() {
+            thread.start();
+        }
+
+        public void stop() {
+            interrupted = true;
+        }
+    }
+
+    private class Counter {
+        private int value = 0;
+
+        private void increment() {
+            value++;
+        }
+
+        private int getValue() {
+            return value;
         }
     }
 }

@@ -38,15 +38,12 @@ import java.util.List;
  */
 public class TopicManagementService extends BaseService {
     public static final String NAME = TopicManagementHelper.SERVICE_NAME;
-
+    private final TopicTable topicTable = new TopicTable();
     private AgentContainer myContainer;
     private MainContainer myMain;
-
     private Filter incFilter;
     private Filter outFilter;
     private ServiceComponent localSlice;
-
-    private final TopicTable topicTable = new TopicTable();
     private MessagingService theMessagingService;
     private boolean shutdownInProgress = false;
 
@@ -111,6 +108,133 @@ public class TopicManagementService extends BaseService {
         return (topicTable + super.dump(key));
     }
 
+    private void sendMessage(AID sender, GenericMessage gMsg, AID receiver) {
+        GenericCommand cmd = new GenericCommand(MessagingSlice.SEND_MESSAGE, MessagingService.NAME, null);
+        cmd.addParam(sender);
+        cmd.addParam(gMsg);
+        cmd.addParam(receiver);
+
+        try {
+            theMessagingService.submit(cmd);
+        } catch (ServiceException se) {
+            // Should never happen
+            se.printStackTrace();
+        }
+    }
+
+    /**
+     * If the dead agent was interested in some topic, notify all slices that its interest is no longer valid
+     */
+    private void handleInformKilled(VerticalCommand cmd) {
+        if (!shutdownInProgress) {
+            Object[] params = cmd.getParams();
+            AID aid = (AID) params[0];
+            List<AID> topics = topicTable.getRelevantTopics(aid);
+            if (topics.size() > 0) {
+                try {
+                    Slice[] slices = getAllSlices();
+                    for (AID topic : topics) {
+                        broadcastDeregistration(aid, topic, slices);
+                    }
+                } catch (Throwable t) {
+                    myLogger.log(Logger.WARNING, "Error retrieving topic-management-slices when trying to broadcast topic de-registration due to agent death. ", t);
+                }
+            }
+        }
+    }
+
+    /**
+     * If the new slice is a TopicManagementSlice notify it about all current registrations
+     */
+    private void handleNewSlice(VerticalCommand cmd) {
+        if (cmd.getService().equals(NAME)) {
+            Object[] params = cmd.getParams();
+            String newSliceName = (String) params[0];
+            try {
+                // Be sure to get the new (fresh) slice --> Bypass the service cache
+                TopicManagementSlice newSlice = (TopicManagementSlice) getFreshSlice(newSliceName);
+                List<TopicRegistration> registrations = topicTable.getAllRegistrations();
+                for (TopicRegistration reg : registrations) {
+                    newSlice.register(reg.getAID(), reg.getTopic());
+                }
+            } catch (Throwable t) {
+                myLogger.log(Logger.WARNING, "Error notifying new slice " + newSliceName + " about current topic registrations", t);
+            }
+        }
+    }
+
+
+    //////////////////////////////////////////////////
+    // Methods called by the CommandIncomingFilter
+    //////////////////////////////////////////////////
+
+    /**
+     * The Main lost all information about the local node --> Notify the Main slice about all local registrations
+     */
+    private void handleReattached(VerticalCommand cmd) {
+        try {
+            // Be sure to get a fresh slice --> Bypass the service cache
+            TopicManagementSlice newSlice = (TopicManagementSlice) getFreshSlice(MAIN_SLICE);
+            List<TopicRegistration> registrations = topicTable.getAllRegistrations();
+            for (TopicRegistration reg : registrations) {
+                AID aid = reg.getAID();
+                if (myContainer.acquireLocalAgent(aid) != null) {
+                    try {
+                        newSlice.register(aid, reg.getTopic());
+                    } catch (Exception e) {
+                        myLogger.log(Logger.WARNING, "Error notifying main slice about current local topic registrations", e);
+                    }
+                    myContainer.releaseLocalAgent(aid);
+                }
+            }
+        } catch (Throwable t) {
+            myLogger.log(Logger.WARNING, "Error retrieving main slice.", t);
+        }
+    }
+
+    ///////////////////////////////////////////////////
+    // Utility methods
+    ///////////////////////////////////////////////////
+    private void broadcastRegistration(AID aid, AID topic, Slice[] slices) {
+        if (myLogger.isLoggable(Logger.CONFIG)) {
+            myLogger.log(Logger.CONFIG, "Registering agent " + aid.getName() + " to topic " + topic.getLocalName());
+        }
+        for (Slice value : slices) {
+            String sliceName = null;
+            try {
+                TopicManagementSlice slice = (TopicManagementSlice) value;
+                sliceName = slice.getNode().getName();
+                if (myLogger.isLoggable(Logger.FINER)) {
+                    myLogger.log(Logger.FINER, "Propagating registration of agent " + aid.getName() + " to slice " + sliceName);
+                }
+                slice.register(aid, topic);
+            } catch (Throwable t) {
+                // NOTE that slices are always retrieved from the main and not from the cache --> No need to retry in case of failure
+                myLogger.log(Logger.WARNING, "Error propagating topic registration to slice  " + sliceName, t);
+            }
+        }
+    }
+
+    private void broadcastDeregistration(AID aid, AID topic, Slice[] slices) {
+        if (myLogger.isLoggable(Logger.CONFIG)) {
+            myLogger.log(Logger.CONFIG, "Deregistering agent " + aid.getName() + " from topic " + topic.getLocalName());
+        }
+        for (Slice value : slices) {
+            String sliceName = null;
+            try {
+                TopicManagementSlice slice = (TopicManagementSlice) value;
+                sliceName = slice.getNode().getName();
+                if (myLogger.isLoggable(Logger.FINER)) {
+                    myLogger.log(Logger.FINER, "Propagating deregistration of agent " + aid.getName() + " to slice " + sliceName);
+                }
+                slice.deregister(aid, topic);
+            } catch (Throwable t) {
+                // NOTE that slices are always retrieved from the main and not from the cache --> No need to retry in case of failure
+                myLogger.log(Logger.WARNING, "Error propagating topic de-registration to slice  " + sliceName, t);
+            }
+        }
+    }
+
     /**
      * Inner class CommandOutgoingFilter.
      * Intercepts the SEND_MESSAGE VCommand and broadcast messages directed to a topic to all
@@ -162,22 +286,6 @@ public class TopicManagementService extends BaseService {
         }
     } // END of inner class CommandOutgoingFilter
 
-
-    private void sendMessage(AID sender, GenericMessage gMsg, AID receiver) {
-        GenericCommand cmd = new GenericCommand(MessagingSlice.SEND_MESSAGE, MessagingService.NAME, null);
-        cmd.addParam(sender);
-        cmd.addParam(gMsg);
-        cmd.addParam(receiver);
-
-        try {
-            theMessagingService.submit(cmd);
-        } catch (ServiceException se) {
-            // Should never happen
-            se.printStackTrace();
-        }
-    }
-
-
     /**
      * Inner class CommandIncomingFilter.
      */
@@ -203,77 +311,6 @@ public class TopicManagementService extends BaseService {
             return true;
         }
     } // END of inner class CommandIncomingFilter
-
-
-    //////////////////////////////////////////////////
-    // Methods called by the CommandIncomingFilter
-    //////////////////////////////////////////////////
-
-    /**
-     * If the dead agent was interested in some topic, notify all slices that its interest is no longer valid
-     */
-    private void handleInformKilled(VerticalCommand cmd) {
-        if (!shutdownInProgress) {
-            Object[] params = cmd.getParams();
-            AID aid = (AID) params[0];
-            List<AID> topics = topicTable.getRelevantTopics(aid);
-            if (topics.size() > 0) {
-                try {
-                    Slice[] slices = getAllSlices();
-                    for (AID topic : topics) {
-                        broadcastDeregistration(aid, topic, slices);
-                    }
-                } catch (Throwable t) {
-                    myLogger.log(Logger.WARNING, "Error retrieving topic-management-slices when trying to broadcast topic de-registration due to agent death. ", t);
-                }
-            }
-        }
-    }
-
-    /**
-     * If the new slice is a TopicManagementSlice notify it about all current registrations
-     */
-    private void handleNewSlice(VerticalCommand cmd) {
-        if (cmd.getService().equals(NAME)) {
-            Object[] params = cmd.getParams();
-            String newSliceName = (String) params[0];
-            try {
-                // Be sure to get the new (fresh) slice --> Bypass the service cache
-                TopicManagementSlice newSlice = (TopicManagementSlice) getFreshSlice(newSliceName);
-                List<TopicRegistration> registrations = topicTable.getAllRegistrations();
-                for (TopicRegistration reg : registrations) {
-                    newSlice.register(reg.getAID(), reg.getTopic());
-                }
-            } catch (Throwable t) {
-                myLogger.log(Logger.WARNING, "Error notifying new slice " + newSliceName + " about current topic registrations", t);
-            }
-        }
-    }
-
-    /**
-     * The Main lost all information about the local node --> Notify the Main slice about all local registrations
-     */
-    private void handleReattached(VerticalCommand cmd) {
-        try {
-            // Be sure to get a fresh slice --> Bypass the service cache
-            TopicManagementSlice newSlice = (TopicManagementSlice) getFreshSlice(MAIN_SLICE);
-            List<TopicRegistration> registrations = topicTable.getAllRegistrations();
-            for (TopicRegistration reg : registrations) {
-                AID aid = reg.getAID();
-                if (myContainer.acquireLocalAgent(aid) != null) {
-                    try {
-                        newSlice.register(aid, reg.getTopic());
-                    } catch (Exception e) {
-                        myLogger.log(Logger.WARNING, "Error notifying main slice about current local topic registrations", e);
-                    }
-                    myContainer.releaseLocalAgent(aid);
-                }
-            }
-        } catch (Throwable t) {
-            myLogger.log(Logger.WARNING, "Error retrieving main slice.", t);
-        }
-    }
-
 
     /**
      * Inner class ServiceComponent
@@ -366,48 +403,4 @@ public class TopicManagementService extends BaseService {
             broadcastDeregistration(id, topic, slices);
         }
     }  // END of inner class TopicHelperImpl
-
-
-    ///////////////////////////////////////////////////
-    // Utility methods
-    ///////////////////////////////////////////////////
-    private void broadcastRegistration(AID aid, AID topic, Slice[] slices) {
-        if (myLogger.isLoggable(Logger.CONFIG)) {
-            myLogger.log(Logger.CONFIG, "Registering agent " + aid.getName() + " to topic " + topic.getLocalName());
-        }
-        for (Slice value : slices) {
-            String sliceName = null;
-            try {
-                TopicManagementSlice slice = (TopicManagementSlice) value;
-                sliceName = slice.getNode().getName();
-                if (myLogger.isLoggable(Logger.FINER)) {
-                    myLogger.log(Logger.FINER, "Propagating registration of agent " + aid.getName() + " to slice " + sliceName);
-                }
-                slice.register(aid, topic);
-            } catch (Throwable t) {
-                // NOTE that slices are always retrieved from the main and not from the cache --> No need to retry in case of failure
-                myLogger.log(Logger.WARNING, "Error propagating topic registration to slice  " + sliceName, t);
-            }
-        }
-    }
-
-    private void broadcastDeregistration(AID aid, AID topic, Slice[] slices) {
-        if (myLogger.isLoggable(Logger.CONFIG)) {
-            myLogger.log(Logger.CONFIG, "Deregistering agent " + aid.getName() + " from topic " + topic.getLocalName());
-        }
-        for (Slice value : slices) {
-            String sliceName = null;
-            try {
-                TopicManagementSlice slice = (TopicManagementSlice) value;
-                sliceName = slice.getNode().getName();
-                if (myLogger.isLoggable(Logger.FINER)) {
-                    myLogger.log(Logger.FINER, "Propagating deregistration of agent " + aid.getName() + " to slice " + sliceName);
-                }
-                slice.deregister(aid, topic);
-            } catch (Throwable t) {
-                // NOTE that slices are always retrieved from the main and not from the cache --> No need to retry in case of failure
-                myLogger.log(Logger.WARNING, "Error propagating topic de-registration to slice  " + sliceName, t);
-            }
-        }
-    }
 }

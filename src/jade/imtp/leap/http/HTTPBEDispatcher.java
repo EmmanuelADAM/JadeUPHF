@@ -38,6 +38,7 @@ import java.util.Properties;
  */
 public class HTTPBEDispatcher implements BEConnectionManager, Dispatcher, JICPMediator {
 
+    private final Logger myLogger = Logger.getMyLogger(this.getClass().getName());
     private JICPMediatorManager myMediatorManager;
     private String myID;
     private MicroSkeleton mySkel = null;
@@ -46,7 +47,6 @@ public class HTTPBEDispatcher implements BEConnectionManager, Dispatcher, JICPMe
     private OutgoingsHandler myOutgoingsHandler;
     private JICPPacket lastResponse = null;
     private byte lastSid = 0x10;
-    private final Logger myLogger = Logger.getMyLogger(this.getClass().getName());
 
     /////////////////////////////////////
     // JICPMediator interface implementation
@@ -296,7 +296,10 @@ public class HTTPBEDispatcher implements BEConnectionManager, Dispatcher, JICPMe
         private static final int TERMINATED = 3;
         private static final long RESPONSE_TIMEOUT = 5000; // 30 sec
         private static final int MAX_SID = 0x0f;
-
+        private final boolean connectionReset = false;
+        private final long maxDisconnectionTime;
+        private final long keepAliveTime;
+        private final Object initialResponseLock = new Object();
         private int frontEndStatus = CONNECTING;
         private int outCnt = 0;
         private Thread responseWaiter = null;
@@ -304,12 +307,8 @@ public class HTTPBEDispatcher implements BEConnectionManager, Dispatcher, JICPMe
         private JICPPacket currentResponse = null;
         private boolean commandReady = false;
         private boolean responseReady = false;
-        private final boolean connectionReset = false;
-        private final long maxDisconnectionTime;
-        private final long keepAliveTime;
         private Timer maxDisconnectionTimer = null;
         private boolean waitingForFlush = false;
-        private final Object initialResponseLock = new Object();
         private boolean initialResponseReceived;
 
         public OutgoingsHandler(long maxDisconnectionTime, long keepAliveTime) {

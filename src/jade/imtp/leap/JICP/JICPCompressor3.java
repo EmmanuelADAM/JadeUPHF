@@ -25,9 +25,9 @@ public class JICPCompressor3 {
 
     // internal fields
     private static final int RLE_FLUSH = 0x100;
+    private final int count = 0;
     private int rleOldValue = RLE_FLUSH;
     private int rleOccurrence = 0;
-    private final int count = 0;
     private byte[] ba;
 
 
@@ -39,6 +39,38 @@ public class JICPCompressor3 {
                 value == '_');
     }
 
+    /**
+     * compress()
+     * <p>
+     * algorithm:
+     * <p>
+     * if during compression a word is detected, its position inside the array
+     * is stored in the wordIndexes[] array. but only, if the word itself was not
+     * found in the array before. if so, only a magic byte (WORD_MAGIC=255) and the index of
+     * the word in the wordIndexes[] array is stored as a byte. the magic byte is
+     * encoded as (255, 255). this limits the number of words that are possible
+     * inside the wordIndexs[] array to 254 (=MAX_WORD constant).
+     */
+    public static byte[] compress(byte[] ba) {
+        return new JICPCompressor3().compressHelper(ba);
+    }
+
+    /**
+     * decompress()
+     * <p>
+     * algorithm:
+     * <p>
+     * during decompression, the wordIndexes[] array will be built. this is done by reading
+     * the compressed array, decode it and look for words. if a magic byte (WORD_MAGIC=255) is detected,
+     * it will be decoded to a "real" 255 if the following byte is also 255 (255, 255 - sequence).
+     * if the following byte is not 255, it is treated as an index in the wordIndexes[] array.
+     * the index stored inside there is used as the beginning of a word. this word will be copied
+     * to the end of the decoded stream. the end of the word is detected by a separator (see
+     * isSep()).
+     */
+    public static byte[] decompress(byte[] cba) {
+        return new JICPCompressor3().decompressHelper(cba);
+    }
 
     /**
      * run length encoding write
@@ -106,24 +138,6 @@ public class JICPCompressor3 {
             ba = newba;
         }
         ba[index] = (byte) value;
-    }
-
-
-    /**
-     * compress()
-     *
-     * algorithm:
-     *
-     * if during compression a word is detected, its position inside the array
-     * is stored in the wordIndexes[] array. but only, if the word itself was not
-     * found in the array before. if so, only a magic byte (WORD_MAGIC=255) and the index of
-     * the word in the wordIndexes[] array is stored as a byte. the magic byte is
-     * encoded as (255, 255). this limits the number of words that are possible
-     * inside the wordIndexs[] array to 254 (=MAX_WORD constant).
-     *
-     */
-    public static byte[] compress(byte[] ba) {
-        return new JICPCompressor3().compressHelper(ba);
     }
 
     private byte[] compressHelper(byte[] uba) {
@@ -204,24 +218,6 @@ public class JICPCompressor3 {
 
         //        System.out.println("" + ba.length + "->" + result.length + " = " + (result.length*100)/ba.length+"%");
         return baos.toByteArray();
-    }
-
-
-    /**
-     * decompress()
-     *
-     * algorithm:
-     *
-     * during decompression, the wordIndexes[] array will be built. this is done by reading
-     * the compressed array, decode it and look for words. if a magic byte (WORD_MAGIC=255) is detected,
-     * it will be decoded to a "real" 255 if the following byte is also 255 (255, 255 - sequence).
-     * if the following byte is not 255, it is treated as an index in the wordIndexes[] array.
-     * the index stored inside there is used as the beginning of a word. this word will be copied
-     * to the end of the decoded stream. the end of the word is detected by a separator (see
-     * isSep()).
-     */
-    public static byte[] decompress(byte[] cba) {
-        return new JICPCompressor3().decompressHelper(cba);
     }
 
     private byte[] decompressHelper(byte[] cba) {

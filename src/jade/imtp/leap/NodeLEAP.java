@@ -45,9 +45,9 @@ class NodeLEAP extends BaseNode {
     // This monitor is used to hang a remote ping() call in order to
     // detect node failures.
     private final Object terminationLock = new Object();
-    private boolean terminating = false;
     private final CommandDispatcher myDispatcher;
     private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    private boolean terminating = false;
 
     public NodeLEAP(String name, boolean hasPM, CommandDispatcher dispatcher) {
         super(name, hasPM);

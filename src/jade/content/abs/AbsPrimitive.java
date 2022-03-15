@@ -30,12 +30,13 @@ import java.util.Date;
 
 /**
  * An abstract descriptor that can hold a primitive expression.
+ *
  * @author Paola Turci, Federico Bergenti - Universita` di Parma
  * @author Giovanni Caire - TILAB
  */
 public class AbsPrimitive implements AbsTerm {
-    private Object value;
     private final String typeName;
+    private Object value;
 
     /**
      * Construct an Abstract descriptor to hold a primitive of
@@ -49,8 +50,9 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * Construct an Abstract descriptor to hold a primitive of
      * the proper type (e.g. String, int, boolean...).
+     *
      * @param typeName The name of the type of the primitive held by
-     * this abstract descriptor.
+     *                 this abstract descriptor.
      */
     public AbsPrimitive(String typeName) {
         this(typeName, null);
@@ -138,9 +140,10 @@ public class AbsPrimitive implements AbsTerm {
 
     /**
      * Set the value of this AbsPrimitive to the given String.
+     *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.STRING</code>
+     *                                  is not <code>BasicOntology.STRING</code>
      */
     public void set(String value) {
         if (!getTypeName().equals(BasicOntology.STRING))
@@ -150,9 +153,10 @@ public class AbsPrimitive implements AbsTerm {
 
     /**
      * Set the value of this AbsPrimitive to the given boolean value.
+     *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.BOOLEAN</code>
+     *                                  is not <code>BasicOntology.BOOLEAN</code>
      */
     public void set(boolean value) {
         if (!getTypeName().equals(BasicOntology.BOOLEAN))
@@ -162,9 +166,10 @@ public class AbsPrimitive implements AbsTerm {
 
     /**
      * Set the value of this AbsPrimitive to the given int value.
+     *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.INTEGER</code>
+     *                                  is not <code>BasicOntology.INTEGER</code>
      */
     public void set(int value) {
         if (!getTypeName().equals(BasicOntology.INTEGER))
@@ -174,9 +179,10 @@ public class AbsPrimitive implements AbsTerm {
 
     /**
      * Set the value of this AbsPrimitive to the given long value.
+     *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.INTEGER</code>
+     *                                  is not <code>BasicOntology.INTEGER</code>
      */
     public void set(long value) {
         if (!getTypeName().equals(BasicOntology.INTEGER))
@@ -188,9 +194,10 @@ public class AbsPrimitive implements AbsTerm {
 
     /**
      * Set the value of this AbsPrimitive to the given float value.
+     *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.FLOAT</code>
+     *                                  is not <code>BasicOntology.FLOAT</code>
      */
     public void set(float value) {
         if (!getTypeName().equals(BasicOntology.FLOAT))
@@ -200,9 +207,10 @@ public class AbsPrimitive implements AbsTerm {
 
     /**
      * Set the value of this AbsPrimitive to the given double value.
+     *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.FLOAT</code>
+     *                                  is not <code>BasicOntology.FLOAT</code>
      */
     public void set(double value) {
         if (!getTypeName().equals(BasicOntology.FLOAT))
@@ -213,9 +221,10 @@ public class AbsPrimitive implements AbsTerm {
 
     /**
      * Set the value of this AbsPrimitive to the given Date value.
+     *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.DATE</code>
+     *                                  is not <code>BasicOntology.DATE</code>
      */
     public void set(Date value) {
         if (!getTypeName().equals(BasicOntology.DATE))
@@ -225,9 +234,10 @@ public class AbsPrimitive implements AbsTerm {
 
     /**
      * Set the value of this AbsPrimitive to the given byte[] value.
+     *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.BYTE_SEQUENCE</code>
+     *                                  is not <code>BasicOntology.BYTE_SEQUENCE</code>
      */
     public void set(byte[] value) {
         if (!getTypeName().equals(BasicOntology.BYTE_SEQUENCE))
@@ -238,7 +248,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a String.
      * @throws ClassCastException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.STRING</code>
+     *                            is not <code>BasicOntology.STRING</code>
      */
     public String getString() {
         return (String) value;
@@ -247,7 +257,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a boolean.
      * @throws ClassCastException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.BOOLEAN</code>
+     *                            is not <code>BasicOntology.BOOLEAN</code>
      */
     public boolean getBoolean() {
         return (Boolean) value;
@@ -256,7 +266,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as an int.
      * @throws ClassCastException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.INTEGER</code>
+     *                            is not <code>BasicOntology.INTEGER</code>
      */
     public int getInteger() {
         try {
@@ -270,7 +280,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a long.
      * @throws ClassCastException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.INTEGER</code>
+     *                            is not <code>BasicOntology.INTEGER</code>
      */
     public long getLong() {
         try {
@@ -286,7 +296,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a float.
      * @throws ClassCastException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.FLOAT</code>
+     *                            is not <code>BasicOntology.FLOAT</code>
      */
     public float getFloat() {
         try {
@@ -300,7 +310,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a double.
      * @throws ClassCastException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.FLOAT</code>
+     *                            is not <code>BasicOntology.FLOAT</code>
      */
     public double getDouble() {
         try {
@@ -315,7 +325,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a Date.
      * @throws ClassCastException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.DATE</code>
+     *                            is not <code>BasicOntology.DATE</code>
      */
     public Date getDate() {
         return (Date) value;
@@ -324,7 +334,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a byte[].
      * @throws ClassCastException If the type of this AbsPrimitive
-     * is not <code>BasicOntology.BYTE_SEQUENCE</code>
+     *                            is not <code>BasicOntology.BYTE_SEQUENCE</code>
      */
     public byte[] getByteSequence() {
         return (byte[]) value;
@@ -351,16 +361,16 @@ public class AbsPrimitive implements AbsTerm {
     }
 
     /**
-     Makes no sense in the case of an AbsPrimitive that has no attribute
-     --> Just return null
+     * Makes no sense in the case of an AbsPrimitive that has no attribute
+     * --> Just return null
      */
     public AbsObject getAbsObject(String name) {
         return null;
     }
 
     /**
-     Makes no sense in the case of an AbsPrimitive that has no attribute
-     --> Just return null
+     * Makes no sense in the case of an AbsPrimitive that has no attribute
+     * --> Just return null
      */
     public String[] getNames() {
         return null;
@@ -374,8 +384,8 @@ public class AbsPrimitive implements AbsTerm {
     }
 
     /**
-     Makes no sense in the case of an AbsPrimitive that has no attribute
-     --> Just return 0
+     * Makes no sense in the case of an AbsPrimitive that has no attribute
+     * --> Just return 0
      */
     public int getCount() {
         return 0;

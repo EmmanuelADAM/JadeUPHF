@@ -40,8 +40,8 @@ import java.util.List;
  */
 public class DebugOn implements AgentAction {
 
-    private AID debugger;
     private final List<AID> debuggedAgents = new ArrayList<>();
+    private AID debugger;
     private String password;
 
 
@@ -53,15 +53,6 @@ public class DebugOn implements AgentAction {
     }
 
     /**
-     * Set the <code>debugger</code> slot of this action.
-     *
-     * @param id The agent identifier of the debugger agent.
-     */
-    public void setDebugger(AID id) {
-        debugger = id;
-    }
-
-    /**
      * Retrieve the value of the <code>debugger</code> slot of this
      * action, containing the agent identifier of the debugger agent.
      *
@@ -70,6 +61,15 @@ public class DebugOn implements AgentAction {
      */
     public AID getDebugger() {
         return debugger;
+    }
+
+    /**
+     * Set the <code>debugger</code> slot of this action.
+     *
+     * @param id The agent identifier of the debugger agent.
+     */
+    public void setDebugger(AID id) {
+        debugger = id;
     }
 
     /**
@@ -126,16 +126,6 @@ public class DebugOn implements AgentAction {
     //#APIDOC_EXCLUDE_END
 
     /**
-     * Set the <code>password</code> slot of this action.
-     *
-     * @param p The password used to authenticate the principal
-     *          requesting this action.
-     */
-    public void setPassword(String p) {
-        password = p;
-    }
-
-    /**
      * Retrieve the value of the <code>password</code> slot of this
      * action, containing the password used to authenticate the
      * principal requesting this action.
@@ -145,6 +135,16 @@ public class DebugOn implements AgentAction {
      */
     public String getPassword() {
         return password;
+    }
+
+    /**
+     * Set the <code>password</code> slot of this action.
+     *
+     * @param p The password used to authenticate the principal
+     *          requesting this action.
+     */
+    public void setPassword(String p) {
+        password = p;
     }
 
 }

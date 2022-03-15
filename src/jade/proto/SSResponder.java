@@ -47,26 +47,6 @@ import java.util.List;
  * @author Giovanni Caire - TILAB
  */
 abstract class SSResponder extends FSMBehaviour {
-    /**
-     * Key to retrieve from the HashMap of the behaviour the initiation
-     * ACLMessage that triggered this responder session
-     */
-    public final String INITIATION_KEY = "__Initiation_key" + hashCode();
-
-    /**
-     * Key to retrieve from the HashMap of the behaviour the last received
-     * ACLMessage
-     */
-    public final String RECEIVED_KEY = "__Received_key" + hashCode();
-
-    /**
-     * Key to set into the HashMap of the behaviour the new ACLMessage
-     * to be sent back to the initiator as a reply.
-     */
-    public final String REPLY_KEY = "__Reply_key" + hashCode();
-
-    private static final int OUT_OF_SEQUENCE_EXIT_CODE = -98765; // Very strange number
-
     //#APIDOC_EXCLUDE_BEGIN
     // FSM states names
     protected static final String RECEIVE_NEXT = "Receive-Next";
@@ -74,7 +54,22 @@ abstract class SSResponder extends FSMBehaviour {
     protected static final String HANDLE_OUT_OF_SEQUENCE = "Handle-Out-of-seq";
     protected static final String SEND_REPLY = "Send-Reply";
     protected static final String DUMMY_FINAL = "Dummy-Final";
-
+    private static final int OUT_OF_SEQUENCE_EXIT_CODE = -98765; // Very strange number
+    /**
+     * Key to retrieve from the HashMap of the behaviour the initiation
+     * ACLMessage that triggered this responder session
+     */
+    public final String INITIATION_KEY = "__Initiation_key" + hashCode();
+    /**
+     * Key to retrieve from the HashMap of the behaviour the last received
+     * ACLMessage
+     */
+    public final String RECEIVED_KEY = "__Received_key" + hashCode();
+    /**
+     * Key to set into the HashMap of the behaviour the new ACLMessage
+     * to be sent back to the initiator as a reply.
+     */
+    public final String REPLY_KEY = "__Reply_key" + hashCode();
     private final ACLMessage initiation;
     private final String initiationKey;
 
@@ -119,6 +114,7 @@ abstract class SSResponder extends FSMBehaviour {
      */
 
     /**
+     *
      */
     public SSResponder(Agent a, ACLMessage initiation, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages, boolean useInitiationKey) {
         super(a);
@@ -291,9 +287,9 @@ abstract class SSResponder extends FSMBehaviour {
      * Inner class SeqChecker
      */
     private static class SeqChecker extends OneShotBehaviour {
-        private int ret;
         @Serial
         private static final long serialVersionUID = 4487495895818002L;
+        private int ret;
 
         public SeqChecker(Agent a) {
             super(a);

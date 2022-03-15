@@ -94,7 +94,21 @@ public class PersistentDeliveryService extends BaseService {
 
 
     static final String ACL_USERDEF_DUE_DATE = "JADE-persistentdelivery-duedate";
-
+    // The local slice for this service
+    private final ServiceComponent localSlice = new ServiceComponent();
+    // The command filter, outgoing direction
+    private final CommandOutgoingFilter outFilter = new CommandOutgoingFilter();
+    // The command filter, incoming direction
+    private final CommandIncomingFilter inFilter = new CommandIncomingFilter();
+    // The concrete agent container, providing access to LADT, etc.
+    private AgentContainer myContainer;
+    // The service finder component
+    private ServiceFinder myServiceFinder;
+    // The component managing ACL message storage and delayed delivery
+    private PersistentDeliveryManager myManager;
+    // The filter to be matched by undelivered ACL messages
+    private PersistentDeliveryFilter messageFilter;
+    private String[] storageEnabledSliceNames;
 
     public void init(AgentContainer ac, Profile p) throws ProfileException {
         super.init(ac, p);
@@ -126,6 +140,89 @@ public class PersistentDeliveryService extends BaseService {
         }
     }
 
+    /**
+     * Activate the PersistentDeliveryManager and instantiate the
+     * PersistentDeliveryFilter.
+     * Note that getting the MessagingService (required to instantiate
+     * the PersistentDeliveryManager) cannot be done in the init() method
+     * since at that time the MessagingService may not be installed yet.
+     */
+    public void boot(Profile myProfile) throws ServiceException {
+        // getting the delivery channel
+        try {
+            String str = myProfile.getParameter(PERSISTENT_DELIVERY_STORAGENODES, null);
+            if (str != null) {
+                storageEnabledSliceNames = str.split(";");
+                myLogger.log(Logger.CONFIG, "Persistent-Delivery - Storage enabled nodes: " + str);
+            }
+
+            MessageManager.Channel ch = (MessageManager.Channel) myServiceFinder.findService(MessagingSlice.NAME);
+            if (ch == null)
+                throw new ServiceException("Can't locate delivery channel");
+            myManager = PersistentDeliveryManager.instance(myProfile, ch);
+            myManager.start();
+        } catch (IMTPException imtpe) {
+            imtpe.printStackTrace();
+            throw new ServiceException("Cannot retrieve the delivery channel", imtpe);
+        }
+
+        try {
+            // Load the supplied class to filter messages if any
+            String className = myProfile.getParameter(PERSISTENT_DELIVERY_FILTER, null);
+            if (className != null) {
+                Class<?> c = Class.forName(className);
+                messageFilter = (PersistentDeliveryFilter) c.getDeclaredConstructor().newInstance();
+                myLogger.log(Logger.INFO, "Persistent-Delivery - Using message filter of type " + messageFilter.getClass().getName());
+            }
+        } catch (Exception e) {
+            throw new ServiceException("Exception in message filter initialization", e);
+        }
+    }
+
+    /**
+     * Requests all slices to flush the stored messages for a newly born target agent.
+     * Do it in a separated thread since this may take time.
+     * This happens on the main container only.
+     */
+    private void flushMessages(final AID target) {
+        Thread t = new Thread(() -> {
+            try {
+                Slice[] slices = getStorageEnabledSlices();
+                String sliceName = null;
+                for (Slice value : slices) {
+                    PersistentDeliverySlice slice = (PersistentDeliverySlice) value;
+                    try {
+                        sliceName = slice.getNode().getName();
+                        slice.flushMessages(target);
+                    } catch (Exception e) {
+                        myLogger.log(Logger.WARNING, "Persistent-Delivery - Error trying to flush messages for agent " + target.getName() + " on node " + sliceName);
+// Ignore it and try other slices...
+                    }
+                }
+            } catch (ServiceException se) {
+                myLogger.log(Logger.WARNING, "Persistent-Delivery - Error retrieving storage-enabled slices to flush persisted messages for agent " + target.getName());
+            }
+        });
+        t.start();
+    }
+
+    private Slice[] getStorageEnabledSlices() throws ServiceException {
+        if (storageEnabledSliceNames != null) {
+            List<Slice> ss = new ArrayList<>(storageEnabledSliceNames.length);
+            for (String storageEnabledSliceName : storageEnabledSliceNames) {
+                try {
+                    Slice s = getSlice(storageEnabledSliceName);
+                    ss.add(s);
+                } catch (ServiceException se) {
+                    // Slice not present
+                }
+            }
+            return ss.toArray(new Slice[0]);
+        } else {
+            // No storage enabled slices explicitly specified --> Use all
+            return getAllSlices();
+        }
+    }
 
     /**
      * Outgoing command FILTER.
@@ -194,7 +291,6 @@ public class PersistentDeliveryService extends BaseService {
 
     } // End of CommandOutgoingFilter class
 
-
     /**
      * Incoming command FILTER.
      * Processes the INFORM_CREATED command. Note that we do this
@@ -224,7 +320,6 @@ public class PersistentDeliveryService extends BaseService {
         }
 
     } // End of CommandIncomingFilter class
-
 
     /**
      * The SLICE.
@@ -335,112 +430,4 @@ public class PersistentDeliveryService extends BaseService {
         }
 
     } // End of ServiceComponent class
-
-
-    /**
-     * Activate the PersistentDeliveryManager and instantiate the
-     * PersistentDeliveryFilter.
-     * Note that getting the MessagingService (required to instantiate
-     * the PersistentDeliveryManager) cannot be done in the init() method
-     * since at that time the MessagingService may not be installed yet.
-     */
-    public void boot(Profile myProfile) throws ServiceException {
-        // getting the delivery channel
-        try {
-            String str = myProfile.getParameter(PERSISTENT_DELIVERY_STORAGENODES, null);
-            if (str != null) {
-                storageEnabledSliceNames = str.split(";");
-                myLogger.log(Logger.CONFIG, "Persistent-Delivery - Storage enabled nodes: " + str);
-            }
-
-            MessageManager.Channel ch = (MessageManager.Channel) myServiceFinder.findService(MessagingSlice.NAME);
-            if (ch == null)
-                throw new ServiceException("Can't locate delivery channel");
-            myManager = PersistentDeliveryManager.instance(myProfile, ch);
-            myManager.start();
-        } catch (IMTPException imtpe) {
-            imtpe.printStackTrace();
-            throw new ServiceException("Cannot retrieve the delivery channel", imtpe);
-        }
-
-        try {
-            // Load the supplied class to filter messages if any
-            String className = myProfile.getParameter(PERSISTENT_DELIVERY_FILTER, null);
-            if (className != null) {
-                Class<?> c = Class.forName(className);
-                messageFilter = (PersistentDeliveryFilter) c.getDeclaredConstructor().newInstance();
-                myLogger.log(Logger.INFO, "Persistent-Delivery - Using message filter of type " + messageFilter.getClass().getName());
-            }
-        } catch (Exception e) {
-            throw new ServiceException("Exception in message filter initialization", e);
-        }
-    }
-
-    /**
-     * Requests all slices to flush the stored messages for a newly born target agent.
-     * Do it in a separated thread since this may take time.
-     * This happens on the main container only.
-     */
-    private void flushMessages(final AID target) {
-        Thread t = new Thread(() -> {
-            try {
-                Slice[] slices = getStorageEnabledSlices();
-                String sliceName = null;
-                for (Slice value : slices) {
-                    PersistentDeliverySlice slice = (PersistentDeliverySlice) value;
-                    try {
-                        sliceName = slice.getNode().getName();
-                        slice.flushMessages(target);
-                    } catch (Exception e) {
-                        myLogger.log(Logger.WARNING, "Persistent-Delivery - Error trying to flush messages for agent " + target.getName() + " on node " + sliceName);
-// Ignore it and try other slices...
-                    }
-                }
-            } catch (ServiceException se) {
-                myLogger.log(Logger.WARNING, "Persistent-Delivery - Error retrieving storage-enabled slices to flush persisted messages for agent " + target.getName());
-            }
-        });
-        t.start();
-    }
-
-    private Slice[] getStorageEnabledSlices() throws ServiceException {
-        if (storageEnabledSliceNames != null) {
-            List<Slice> ss = new ArrayList<>(storageEnabledSliceNames.length);
-            for (String storageEnabledSliceName : storageEnabledSliceNames) {
-                try {
-                    Slice s = getSlice(storageEnabledSliceName);
-                    ss.add(s);
-                } catch (ServiceException se) {
-                    // Slice not present
-                }
-            }
-            return ss.toArray(new Slice[0]);
-        } else {
-            // No storage enabled slices explicitly specified --> Use all
-            return getAllSlices();
-        }
-    }
-
-    // The concrete agent container, providing access to LADT, etc.
-    private AgentContainer myContainer;
-
-    // The service finder component
-    private ServiceFinder myServiceFinder;
-
-    // The component managing ACL message storage and delayed delivery
-    private PersistentDeliveryManager myManager;
-
-    // The local slice for this service
-    private final ServiceComponent localSlice = new ServiceComponent();
-
-    // The command filter, outgoing direction
-    private final CommandOutgoingFilter outFilter = new CommandOutgoingFilter();
-
-    // The command filter, incoming direction
-    private final CommandIncomingFilter inFilter = new CommandIncomingFilter();
-
-    // The filter to be matched by undelivered ACL messages
-    private PersistentDeliveryFilter messageFilter;
-
-    private String[] storageEnabledSliceNames;
 }

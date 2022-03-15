@@ -36,9 +36,10 @@ import jade.content.onto.OntologyException;
 import jade.core.AID;
 
 /**
- This class implements the <code>action</code> operator of the
- FIPA SL0 action.
- @author Giovanni Caire - TILAB
+ * This class implements the <code>action</code> operator of the
+ * FIPA SL0 action.
+ *
+ * @author Giovanni Caire - TILAB
  */
 public class Action implements AgentAction, Introspectable {
     private AID actor;

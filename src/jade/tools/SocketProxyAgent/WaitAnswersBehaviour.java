@@ -36,21 +36,21 @@ import java.util.Date;
  * behaviour to wait for answer to message sent
  */
 class WaitAnswersBehaviour extends SimpleBehaviour {
-    ACLMessage msg;
-    PrintStream out;
-    long timeout;
     private final static long ONE_SEC_AS_MS = 1000;
     private final static long TEN_SEC_AS_MS = 10 * ONE_SEC_AS_MS;
     final static long DEFAULT_TIMEOUT = TEN_SEC_AS_MS;
-    boolean finished;
-    MessageTemplate mt;
-    Agent myAgent = null;
-    private final String myThreadName;
     /**
      * my logger
      */
     private final static Logger logger =
             Logger.getMyLogger(WaitAnswersBehaviour.class.getName());
+    private final String myThreadName;
+    ACLMessage msg;
+    PrintStream out;
+    long timeout;
+    boolean finished;
+    MessageTemplate mt;
+    Agent myAgent = null;
 
     /**
      * construct behaviour to wait for answer to message sent

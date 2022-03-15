@@ -44,10 +44,11 @@ class InternalMessageQueue implements MessageQueue {
 	/*#MIDP_INCLUDE_BEGIN
 	 private Vector list;
 	 #MIDP_INCLUDE_END*/
-
-    private int maxSize;
     private final Agent myAgent;
     private final Logger myLogger = Logger.getJADELogger(getClass().getName());
+    private int maxSize;
+    // For persistence service
+    private Long persistentID;
 
     public InternalMessageQueue(int size, Agent a) {
         maxSize = size;
@@ -68,14 +69,14 @@ class InternalMessageQueue implements MessageQueue {
         return list.isEmpty();
     }
 
+    public int getMaxSize() {
+        return maxSize;
+    }
+
     public void setMaxSize(int newSize) throws IllegalArgumentException {
         if (newSize < 0)
             throw new IllegalArgumentException("Invalid MsgQueue size");
         maxSize = newSize;
-    }
-
-    public int getMaxSize() {
-        return maxSize;
     }
 
     /**
@@ -110,7 +111,7 @@ class InternalMessageQueue implements MessageQueue {
         //#MIDP_EXCLUDE_END
 		/*#MIDP_INCLUDE_BEGIN
 		 list.removeElementAt(0);
-		 } 
+		 }
 		 list.addElement(msg);
 		 #MIDP_INCLUDE_END*/
     }
@@ -149,13 +150,6 @@ class InternalMessageQueue implements MessageQueue {
 		 #MIDP_INCLUDE_END*/
     }
 
-    //#J2ME_EXCLUDE_BEGIN
-    // For persistence service
-    private void setMessages(List<?> l) {
-        // FIXME: To be implemented
-        System.out.println(">>> MessageQueue::setMessages() <<<");
-    }
-
     // For persistence service
     private List<?> getMessages() {
         // FIXME: To be implemented
@@ -164,9 +158,12 @@ class InternalMessageQueue implements MessageQueue {
     }
     //#J2ME_EXCLUDE_END
 
-
+    //#J2ME_EXCLUDE_BEGIN
     // For persistence service
-    private Long persistentID;
+    private void setMessages(List<?> l) {
+        // FIXME: To be implemented
+        System.out.println(">>> MessageQueue::setMessages() <<<");
+    }
 
     // For persistence service
     private Long getPersistentID() {

@@ -45,23 +45,11 @@ import java.nio.charset.StandardCharsets;
  * @author Giovanni Caire - TILAB
  */
 public class SerializableOntology extends Ontology {
-    // The singleton instance of this ontology
-    private static final SerializableOntology theInstance = new SerializableOntology();
-
     public static final String SERIALIZABLE = "serializable";
     public static final String SERIALIZABLE_VALUE = "value";
-
-
+    // The singleton instance of this ontology
+    private static final SerializableOntology theInstance = new SerializableOntology();
     private ClassLoader myClassLoader;
-
-    /**
-     * Returns the singleton instance of the <code>SerializableOntology</code>.
-     *
-     * @return the singleton instance of the <code>SerializableOntology</code>
-     */
-    public static Ontology getInstance() {
-        return theInstance;
-    }
 
     /**
      * Construct a SerializableOntology object
@@ -80,6 +68,15 @@ public class SerializableOntology extends Ontology {
             // Should never happen
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Returns the singleton instance of the <code>SerializableOntology</code>.
+     *
+     * @return the singleton instance of the <code>SerializableOntology</code>
+     */
+    public static Ontology getInstance() {
+        return theInstance;
     }
 
     public void setClassLoader(ClassLoader cl) {

@@ -33,25 +33,26 @@ public class DocumentationFacet implements Facet {
     private final String documentation;
 
     /**
-     Construct a <code>DocumentationFacet</code> that
-     set the documentation of an AbsObject
+     * Construct a <code>DocumentationFacet</code> that
+     * set the documentation of an AbsObject
      */
     public DocumentationFacet(String documentation) {
         this.documentation = documentation;
     }
 
     /**
-     Get the documentation associated to this facet
+     * Get the documentation associated to this facet
      */
     public String getDocumentation() {
         return documentation;
     }
 
     /**
-     Check whether a given value for the slot this Facet applies
-     to is valid.
-     @param value The value to be checked
-     @throws OntologyException If the value is not valid
+     * Check whether a given value for the slot this Facet applies
+     * to is valid.
+     *
+     * @param value The value to be checked
+     * @throws OntologyException If the value is not valid
      */
     public void validate(AbsObject value, Ontology onto) throws OntologyException {
     }

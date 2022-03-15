@@ -50,13 +50,12 @@ import java.util.List;
  * @author Giovanni Caire - TILab
  */
 public class IteratedAchieveREInitiator extends AchieveREInitiator {
+    public static final String REINIT = "Reinit";
     /**
      * Key to retrieve from the HashMap of the behaviour the vector of
      * ACLMessage objects that will be sent at next round.
      */
     public final String ALL_NEXT_REQUESTS_KEY = "__all-next-requests" + hashCode();
-
-    public static final String REINIT = "Reinit";
 
     /**
      * Construct an <code>IteratedAchieveREInitiator</code> with an empty HashMap
@@ -79,25 +78,25 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
      * deprecated use the constructor with 2 hashmap
 
     public IteratedAchieveREInitiator(Agent a, ACLMessage msg, HashMap<String, List<ACLMessage>> mapMessagesList) {
-        super(a, msg, mapMessagesList);
+    super(a, msg, mapMessagesList);
 
-        // The HANDLE_ALL_RESULT_NOTIFICATIONS state must no longer be final
-        Behaviour b = deregisterState(HANDLE_ALL_RESULT_NOTIFICATIONS);
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
+    // The HANDLE_ALL_RESULT_NOTIFICATIONS state must no longer be final
+    Behaviour b = deregisterState(HANDLE_ALL_RESULT_NOTIFICATIONS);
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
 
-        // REINIT
-        b = new OneShotBehaviour(myAgent) {
-            public void action() {
-                prepareForNextRound();
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, REINIT);
+    // REINIT
+    b = new OneShotBehaviour(myAgent) {
+    public void action() {
+    prepareForNextRound();
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, REINIT);
 
-        // Register the FSM transitions specific to the Iterated-Achieve-RE protocol
-        registerDefaultTransition(HANDLE_ALL_RESULT_NOTIFICATIONS, REINIT);
-        registerDefaultTransition(REINIT, SEND_INITIATIONS);
+    // Register the FSM transitions specific to the Iterated-Achieve-RE protocol
+    registerDefaultTransition(HANDLE_ALL_RESULT_NOTIFICATIONS, REINIT);
+    registerDefaultTransition(REINIT, SEND_INITIATIONS);
     }*/
 
     /**
@@ -137,6 +136,14 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
         registerDefaultTransition(REINIT, SEND_INITIATIONS);
     }
 
+    /**
+     * Check if the responder has closed the session just after sending this <code>inform</code> message.
+     */
+    public static boolean isSessionTerminated(ACLMessage inform) {
+        String terminatedStr = inform.getUserDefinedParameter(SSIteratedAchieveREResponder.ACL_USERDEF_TERMINATED_SESSION);
+        return "true".equals(terminatedStr);
+    }
+
     //#APIDOC_EXCLUDE_BEGIN
     protected void prepareForNextRound() {
         // Reset local variables, clean data store, reset children and copy the
@@ -153,6 +160,7 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
         List<ACLMessage> v = new ArrayList<>();
         getMapMessagesList().put(ALL_NEXT_REQUESTS_KEY, v);
     }
+    //#APIDOC_EXCLUDE_END
 
     protected ProtocolSession getSession(ACLMessage msg, int sessionIndex) {
         if (msg.getPerformative() == ACLMessage.CANCEL) {
@@ -161,8 +169,6 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
             return super.getSession(msg, sessionIndex);
         }
     }
-    //#APIDOC_EXCLUDE_END
-
 
     /**
      * This method is called every time an <code>inform</code>
@@ -250,14 +256,6 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
         // registered as a final state
         registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
         b.setMapMessagesList(getMapMessagesList());
-    }
-
-    /**
-     * Check if the responder has closed the session just after sending this <code>inform</code> message.
-     */
-    public static boolean isSessionTerminated(ACLMessage inform) {
-        String terminatedStr = inform.getUserDefinedParameter(SSIteratedAchieveREResponder.ACL_USERDEF_TERMINATED_SESSION);
-        return "true".equals(terminatedStr);
     }
 }
 

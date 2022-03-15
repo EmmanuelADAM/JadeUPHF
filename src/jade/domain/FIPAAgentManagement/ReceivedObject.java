@@ -57,17 +57,6 @@ public class ReceivedObject implements Concept, Serializable {
         via = "";
     }
 
-
-    /**
-     * Set the <code>by</code> slot of this object.
-     *
-     * @param b The identifier for the ACC that received the envelope
-     *          containing this object.
-     */
-    public void setBy(String b) {
-        by = b;
-    }
-
     /**
      * Retrieve the <code>by</code> slot of this object. This slot
      * identifies the ACC that received the envelope containing this
@@ -81,13 +70,13 @@ public class ReceivedObject implements Concept, Serializable {
     }
 
     /**
-     * Set the <code>from</code> slot of this object.
+     * Set the <code>by</code> slot of this object.
      *
-     * @param f The identifier for the ACC that sent the envelope
+     * @param b The identifier for the ACC that received the envelope
      *          containing this object.
      */
-    public void setFrom(String f) {
-        from = f;
+    public void setBy(String b) {
+        by = b;
     }
 
     /**
@@ -103,13 +92,13 @@ public class ReceivedObject implements Concept, Serializable {
     }
 
     /**
-     * Set the <code>date</code> slot of this object.
+     * Set the <code>from</code> slot of this object.
      *
-     * @param d The date when the envelope containing this object was
-     *          sent.
+     * @param f The identifier for the ACC that sent the envelope
+     *          containing this object.
      */
-    public void setDate(Date d) {
-        date = d;
+    public void setFrom(String f) {
+        from = f;
     }
 
     /**
@@ -125,12 +114,13 @@ public class ReceivedObject implements Concept, Serializable {
     }
 
     /**
-     * Set the <code>id</code> slot of this object.
+     * Set the <code>date</code> slot of this object.
      *
-     * @param i A unique id for the envelope containing this object.
+     * @param d The date when the envelope containing this object was
+     *          sent.
      */
-    public void setId(String i) {
-        id = i;
+    public void setDate(Date d) {
+        date = d;
     }
 
     /**
@@ -145,13 +135,12 @@ public class ReceivedObject implements Concept, Serializable {
     }
 
     /**
-     * Set the <code>via</code> slot of this object.
+     * Set the <code>id</code> slot of this object.
      *
-     * @param v The name of the MTP over which the envelope containing
-     *          this object was sent.
+     * @param i A unique id for the envelope containing this object.
      */
-    public void setVia(String v) {
-        via = v;
+    public void setId(String i) {
+        id = i;
     }
 
     /**
@@ -164,6 +153,16 @@ public class ReceivedObject implements Concept, Serializable {
      */
     public String getVia() {
         return via;
+    }
+
+    /**
+     * Set the <code>via</code> slot of this object.
+     *
+     * @param v The name of the MTP over which the envelope containing
+     *          this object was sent.
+     */
+    public void setVia(String v) {
+        via = v;
     }
 
     /**

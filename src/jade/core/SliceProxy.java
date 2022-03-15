@@ -29,6 +29,10 @@ package jade.core;
  */
 public class SliceProxy implements Service.Slice {
 
+    private final transient Service myService;
+    private Node myNode;
+    private transient NodeDescriptor localNodeDescriptor;
+
     public SliceProxy() {
         this(null, null);
     }
@@ -69,9 +73,5 @@ public class SliceProxy implements Service.Slice {
     void setLocalNodeDescriptor(NodeDescriptor dsc) {
         localNodeDescriptor = dsc;
     }
-
-    private Node myNode;
-    private transient NodeDescriptor localNodeDescriptor;
-    private final transient Service myService;
 
 }

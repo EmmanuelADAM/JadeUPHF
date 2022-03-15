@@ -45,16 +45,6 @@ public class MoveAction implements AgentAction {
     }
 
     /**
-     * Set the <code>mobile-agent-description</code> slot of this
-     * action.
-     *
-     * @param desc The description of the agent to migrate.
-     */
-    public void setMobileAgentDescription(MobileAgentDescription desc) {
-        agentToMove = desc;
-    }
-
-    /**
      * Retrieve the value of the <code>mobile-agent-description</code>
      * slot of this event, containing the description of the agent to
      * migrate.
@@ -64,6 +54,16 @@ public class MoveAction implements AgentAction {
      */
     public MobileAgentDescription getMobileAgentDescription() {
         return agentToMove;
+    }
+
+    /**
+     * Set the <code>mobile-agent-description</code> slot of this
+     * action.
+     *
+     * @param desc The description of the agent to migrate.
+     */
+    public void setMobileAgentDescription(MobileAgentDescription desc) {
+        agentToMove = desc;
     }
 
 }

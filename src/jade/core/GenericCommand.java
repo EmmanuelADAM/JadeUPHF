@@ -39,6 +39,14 @@ import java.util.List;
  */
 public class GenericCommand implements HorizontalCommand, VerticalCommand {
 
+    private final String myName;
+    private final String myService;
+    private final String myInteraction;
+    private final List<Object> params;
+    private jade.security.JADEPrincipal principal = null;
+    private jade.security.Credentials creds;
+    private Object returnValue;
+
     /**
      * Creates a new generic command, with the given name and
      * belonging to the given service and interaction.
@@ -54,7 +62,6 @@ public class GenericCommand implements HorizontalCommand, VerticalCommand {
 
         params = new LinkedList<>();
     }
-
 
     public String getName() {
         return myName;
@@ -93,10 +100,6 @@ public class GenericCommand implements HorizontalCommand, VerticalCommand {
         params.clear();
     }
 
-    public void setReturnValue(Object rv) {
-        returnValue = rv;
-    }
-
     public final Object getParam(int index) {
         return params.get(index);
     }
@@ -107,6 +110,10 @@ public class GenericCommand implements HorizontalCommand, VerticalCommand {
 
     public Object getReturnValue() {
         return returnValue;
+    }
+
+    public void setReturnValue(Object rv) {
+        returnValue = rv;
     }
 
     public jade.security.JADEPrincipal getPrincipal() {
@@ -132,16 +139,5 @@ public class GenericCommand implements HorizontalCommand, VerticalCommand {
             this.creds = creds;
         }
     } // end setCredentials
-
-
-    private jade.security.JADEPrincipal principal = null;
-    private jade.security.Credentials creds;
-
-    private final String myName;
-    private final String myService;
-    private final String myInteraction;
-
-    private final List<Object> params;
-    private Object returnValue;
 
 }

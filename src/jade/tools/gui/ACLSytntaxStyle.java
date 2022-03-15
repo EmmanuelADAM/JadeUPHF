@@ -38,13 +38,22 @@ import java.awt.*;
  */
 
 public class ACLSytntaxStyle {
+    // private members
+    private final Color color;
+    private final boolean italics;
+    private final boolean bold;
+    JComponent theComp;
+    private Font lastFont;
+    private Font lastStyledFont;
+    private FontMetrics fontMetrics;
+
+
     public ACLSytntaxStyle(Color color, boolean italics, boolean bold, JComponent theComp) {
         this.color = color;
         this.italics = italics;
         this.bold = bold;
         this.theComp = theComp;
     }
-
 
     /**
      * Returns the color specified in this style.
@@ -55,7 +64,6 @@ public class ACLSytntaxStyle {
         return color;
     }
 
-
     /**
      * Returns true if italics is enabled for this style.
      *
@@ -65,7 +73,6 @@ public class ACLSytntaxStyle {
         return italics;
     }
 
-
     /**
      * Returns true if boldface is enabled for this style.
      *
@@ -74,7 +81,6 @@ public class ACLSytntaxStyle {
     public boolean isBold() {
         return bold;
     }
-
 
     /**
      * Returns the specified font, but with the style's bold and italic flags
@@ -99,7 +105,6 @@ public class ACLSytntaxStyle {
         return lastStyledFont;
     }
 
-
     /**
      * Returns the font metrics for the styled font.
      *
@@ -123,7 +128,6 @@ public class ACLSytntaxStyle {
         return fontMetrics;
     }
 
-
     /**
      * Sets the foreground color and font of the specified graphics context to
      * that specified in this style.
@@ -137,7 +141,6 @@ public class ACLSytntaxStyle {
         gfx.setColor(color);
     }
 
-
     /**
      * Returns a string representation of this object.
      *
@@ -148,15 +151,5 @@ public class ACLSytntaxStyle {
                 (italics ? ",italics" : "") +
                 (bold ? ",bold" : "") + "]";
     }
-
-    JComponent theComp;
-
-    // private members
-    private final Color color;
-    private final boolean italics;
-    private final boolean bold;
-    private Font lastFont;
-    private Font lastStyledFont;
-    private FontMetrics fontMetrics;
 }
 //  ***EOF***

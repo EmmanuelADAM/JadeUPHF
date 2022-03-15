@@ -62,15 +62,6 @@ public class APService implements Concept {
     }
 
     /**
-     * Set the <code>name</code> slot of this object.
-     *
-     * @param n The string for the platform service name.
-     */
-    public void setName(String n) {
-        name = n;
-    }
-
-    /**
      * Retrieve the <code>name</code> slot of this object.
      *
      * @return The value of the <code>name</code> slot of this
@@ -82,12 +73,12 @@ public class APService implements Concept {
     }
 
     /**
-     * Set the <code>type</code> slot of this object.
+     * Set the <code>name</code> slot of this object.
      *
-     * @param t The string for the platform service type.
+     * @param n The string for the platform service name.
      */
-    public void setType(String t) {
-        type = t;
+    public void setName(String n) {
+        name = n;
     }
 
     /**
@@ -99,6 +90,15 @@ public class APService implements Concept {
      */
     public String getType() {
         return type;
+    }
+
+    /**
+     * Set the <code>type</code> slot of this object.
+     *
+     * @param t The string for the platform service type.
+     */
+    public void setType(String t) {
+        type = t;
     }
 
     /**

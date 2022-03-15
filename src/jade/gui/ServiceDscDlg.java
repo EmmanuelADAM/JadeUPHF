@@ -36,6 +36,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -87,10 +88,7 @@ public class ServiceDscDlg extends JDialog {
         editable = ed;
         checkSlots = checkMandatorySlots;
 
-        if (dsc != null)
-            serviceDesc = dsc;
-        else
-            serviceDesc = new ServiceDescription();
+        serviceDesc = Objects.requireNonNullElseGet(dsc, ServiceDescription::new);
 
         JPanel main = new JPanel();
         main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));

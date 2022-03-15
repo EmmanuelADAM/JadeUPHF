@@ -110,24 +110,36 @@ import java.util.*;
  * @see ACLMessage
  */
 public class AclGui extends JPanel {
+    private static final int TEXT_SIZE = 30;
+    private static final int N_FIPA_PROTOCOLS = 8;
+    private static final String[] fipaProtocols = {FIPANames.InteractionProtocol.FIPA_ENGLISH_AUCTION,
+            FIPANames.InteractionProtocol.FIPA_DUTCH_AUCTION,
+            FIPANames.InteractionProtocol.FIPA_CONTRACT_NET,
+            FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET,
+            FIPANames.InteractionProtocol.FIPA_QUERY,
+            FIPANames.InteractionProtocol.FIPA_REQUEST,
+            FIPANames.InteractionProtocol.FIPA_REQUEST_WHEN,
+            FIPANames.InteractionProtocol.FIPA_PROPOSE};
+    private static final String LABEL_TO_ADD_PROT = "ADD USER-DEF PROTOCOL";
     // Controls for ACL message parameter editing
     static String ADD_NEW_RECEIVER = "Insert receiver";
-
+    // Other data used
+    private static ACLMessage editedMsg;
     //the owner  of the panel.
     private final Component ownerGui;
-
     //the logger
     private final Logger logger = Logger.getMyLogger(this.getClass().getName());
-
     AID SenderAID = new AID();
     AID newAIDSender = null;
     AID fromAID = new AID();
     AID newAIDFrom = null;
-
     VisualAIDList receiverListPanel;
     VisualAIDList replyToListPanel;
     VisualPropertiesList propertiesListPanel;
-
+    // Data for panel layout definition
+    GridBagLayout lm = new GridBagLayout();
+    GridBagConstraints constraint = new GridBagConstraints();
+    SLFormatter slFormatter;
     private boolean guiEnabledFlag;
     private JTextField sender;
     private boolean senderEnabledFlag;
@@ -145,43 +157,19 @@ public class AclGui extends JPanel {
     private Date replyByDate;
     private Date dateDate;
     private Date dateRecDate;
-
-    // Data for panel layout definition
-    GridBagLayout lm = new GridBagLayout();
-    GridBagConstraints constraint = new GridBagConstraints();
     private int leftBorder, rightBorder, topBorder, bottomBorder;
     private int xSpacing, ySpacing;
     private int gridNCol, gridNRow;
     private int[] colWidth;
-    private static final int TEXT_SIZE = 30;
-
     private Vector<?> fipaActVector;
-
-    private static final int N_FIPA_PROTOCOLS = 8;
-    private static final String[] fipaProtocols = {FIPANames.InteractionProtocol.FIPA_ENGLISH_AUCTION,
-            FIPANames.InteractionProtocol.FIPA_DUTCH_AUCTION,
-            FIPANames.InteractionProtocol.FIPA_CONTRACT_NET,
-            FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET,
-            FIPANames.InteractionProtocol.FIPA_QUERY,
-            FIPANames.InteractionProtocol.FIPA_REQUEST,
-            FIPANames.InteractionProtocol.FIPA_REQUEST_WHEN,
-            FIPANames.InteractionProtocol.FIPA_PROPOSE};
-
     private ArrayList<String> fipaProtocolArrayList;
-
-
     // Data for the editing of user defined iteration protocols
     private int lastSelectedIndex;
     private String lastSelectedItem;
-    private static final String LABEL_TO_ADD_PROT = "ADD USER-DEF PROTOCOL";
-
     // These data are used to correctly handle the resizing of the AclGui panel
     private JPanel aclPanel;
     private Dimension minDim;
     private boolean firstPaintFlag;
-
-    // Other data used
-    private static ACLMessage editedMsg;
     private JButton senderButton;
     private VisualAIDList toPanel;
     private JTextField from;
@@ -201,6 +189,655 @@ public class AclGui extends JPanel {
     private JTextField via;
     private JTextField id;
 
+    /**
+     * Ordinary <code>AclGui</code> constructor.
+     *
+     * @see ACLMessage#ACLMessage(int)
+     */
+
+    public AclGui(Component owner) {
+
+        firstPaintFlag = true;
+        guiEnabledFlag = true;
+        minDim = new Dimension();
+        ownerGui = owner;
+
+        JTabbedPane tabbed = new JTabbedPane();
+        AclMessagePanel aclPane = new AclMessagePanel();
+        EnvelopePanel envelope = new EnvelopePanel();
+        tabbed.addTab("ACLMessage", aclPane);
+        tabbed.addTab("Envelope", envelope);
+        //to enable the textfields if needed.
+        updateEnabled();
+        add(tabbed);
+
+        // Try inserting formatted SL content.
+        // any Exception is catched in order to remove unwished dependency
+        // on the jade.tools.sl package from this package at run-time.
+        try {
+            slFormatter = new SLFormatter();
+        } catch (Exception ignored) {
+        }
+    }
+
+
+    /////////////////
+    // CONSTRUCTOR
+    /////////////////
+
+    /**
+     * Pops up a dialog window including an editing-disabled AclGui panel and displays the specified
+     * ACL message in it.
+     *
+     * @param msg    The ACL message to be displayed
+     * @param parent The parent window of the dialog window
+     * @see AclGui#editMsgInDialog(ACLMessage msg, Frame parent)
+     */
+    public static void showMsgInDialog(ACLMessage msg, Frame parent) {
+        final JDialog tempAclDlg = new JDialog(parent, "ACL Message", true);
+
+        AclGui aclPanel = new AclGui(parent);
+        //aclPanel.setBorder(new BevelBorder(BevelBorder.RAISED));
+        aclPanel.setEnabled(false);
+        aclPanel.setMsg(msg);
+
+        JButton okButton = new JButton("OK");
+        JPanel buttonPanel = new JPanel();
+        // Use default (FlowLayout) layout manager to dispose the OK button
+        buttonPanel.add(okButton);
+
+        tempAclDlg.getContentPane().setLayout(new BorderLayout());
+        tempAclDlg.getContentPane().add("Center", aclPanel);
+        tempAclDlg.getContentPane().add("South", buttonPanel);
+
+        okButton.addActionListener(e -> tempAclDlg.dispose());
+
+        tempAclDlg.pack();
+        tempAclDlg.setResizable(false);
+        if (parent != null) {
+            int locx = parent.getX() + (parent.getWidth() - tempAclDlg.getWidth()) / 2;
+            if (locx < 0)
+                locx = 0;
+            int locy = parent.getY() + (parent.getHeight() - tempAclDlg.getHeight()) / 2;
+            if (locy < 0)
+                locy = 0;
+            tempAclDlg.setLocation(locx, locy);
+        }
+        tempAclDlg.setVisible(true);
+    }
+
+    /**
+     * Pops up a dialog window including an editing-enabled AclGui panel and displays the specified
+     * ACL message in it. The dialog window also includes an OK and a Cancel button to accept or
+     * discard the performed editing.
+     *
+     * @param msg    The ACL message to be initially displayed
+     * @param parent The parent window of the dialog window
+     * @return The ACL message displayed in the dialog window or null depending on whether the user close the window
+     * by clicking the OK or Cancel button
+     * @see AclGui#showMsgInDialog(ACLMessage msg, Frame parent)
+     */
+    public static ACLMessage editMsgInDialog(ACLMessage msg, Frame parent) {
+        final JDialog tempAclDlg = new JDialog(parent, "ACL Message", true);
+        final AclGui aclPanel = new AclGui(parent);
+        aclPanel.setBorder(new BevelBorder(BevelBorder.RAISED));
+        aclPanel.setSenderEnabled(true);
+        aclPanel.setMsg(msg);
+
+        JButton okButton = new JButton("OK");
+        JButton cancelButton = new JButton("Cancel");
+        okButton.setPreferredSize(cancelButton.getPreferredSize());
+        JPanel buttonPanel = new JPanel();
+        // Use default (FlowLayout) layout manager to dispose the OK and Cancel buttons
+        buttonPanel.add(okButton);
+        buttonPanel.add(cancelButton);
+
+        tempAclDlg.getContentPane().setLayout(new BorderLayout());
+        tempAclDlg.getContentPane().add("Center", aclPanel);
+        tempAclDlg.getContentPane().add("South", buttonPanel);
+
+        okButton.addActionListener(e -> {
+            editedMsg = aclPanel.getMsg();
+            tempAclDlg.dispose();
+        });
+        cancelButton.addActionListener(e -> {
+            editedMsg = null;
+            tempAclDlg.dispose();
+        });
+
+        tempAclDlg.pack();
+        tempAclDlg.setResizable(false);
+
+        if (parent != null) {
+            int x = parent.getX() + (parent.getWidth() - tempAclDlg.getWidth()) / 2;
+            int y = parent.getY() + (parent.getHeight() - tempAclDlg.getHeight()) / 2;
+            tempAclDlg.setLocation(Math.max(x, 0), Math.max(y, 0));
+        }
+
+        tempAclDlg.setVisible(true);
+
+        ACLMessage m = null;
+        if (editedMsg != null)
+            m = (ACLMessage) editedMsg.clone();
+
+        return m;
+    }
+
+    private Component getChildrenOwner() {
+        // If we have a parent return it, else return myself
+        return ownerGui != null ? ownerGui : this;
+    }
+
+    ////////////////////
+    // PRIVATE METHODS
+    ////////////////////
+    private void formatGrid(int nr, int nc, int lb, int rb, int tb, int bb, int xs, int ys) {
+        gridNRow = nr;
+        gridNCol = nc;
+        colWidth = new int[3];
+        //colWidth[0] = 120;
+        //colWidth[1] = 63;
+        //colWidth[2] = 180;
+        leftBorder = lb;
+        rightBorder = rb;
+        topBorder = tb;
+        bottomBorder = bb;
+        xSpacing = xs;
+        ySpacing = ys;
+    }
+
+    private void setGridColumnWidth(int col, int width) {
+        colWidth[col] = width;
+    }
+
+    private void put(JPanel panel, JComponent c, int x, int y, int dx, int dy, boolean fill) {
+        int leftMargin, rightMargin, topMargin, bottomMargin;
+        int preferredWidth, preferredHeight;
+
+        constraint.gridx = x;
+        constraint.gridy = y;
+        constraint.gridwidth = dx;
+        constraint.gridheight = dy;
+        constraint.anchor = GridBagConstraints.WEST;
+        if (fill)
+            constraint.fill = GridBagConstraints.BOTH;
+        else
+            constraint.fill = GridBagConstraints.VERTICAL;
+
+        leftMargin = (x == 0 ? leftBorder : 0);
+        rightMargin = (x + dx == gridNCol ? rightBorder : xSpacing);
+        topMargin = (y == 0 ? topBorder : 0);
+        bottomMargin = (y + dy == gridNRow ? bottomBorder : ySpacing);
+
+        int i;
+        preferredWidth = 0;
+        for (i = 0; i < dx; ++i)
+            preferredWidth += colWidth[x + i] + xSpacing;
+        preferredWidth -= xSpacing;
+        preferredHeight = c.getPreferredSize().height;
+        c.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
+
+        constraint.insets = new Insets(topMargin, leftMargin, bottomMargin, rightMargin);
+        lm.setConstraints(c, constraint);
+        panel.add(c);
+    }
+
+    private void updateEnabled() {
+        communicativeAct.setEnabled(guiEnabledFlag);
+        senderButton.setText((guiEnabledFlag && senderEnabledFlag) ? "Set" : "View");
+
+        receiverListPanel.setEnabled(guiEnabledFlag);
+        replyToListPanel.setEnabled(guiEnabledFlag);
+        propertiesListPanel.setEnabled(guiEnabledFlag);
+
+        replyWith.setEditable(guiEnabledFlag);
+        inReplyTo.setEditable(guiEnabledFlag);
+        conversationId.setEditable(guiEnabledFlag);
+        replyBy.setEditable(false);
+        replyBySet.setEnabled(true);
+        replyBySet.setText(guiEnabledFlag ? "Set" : "View");
+        encoding.setEditable(guiEnabledFlag);
+        protocol.setEnabled(guiEnabledFlag);
+        language.setEditable(guiEnabledFlag);
+        ontology.setEditable(guiEnabledFlag);
+        content.setEditable(guiEnabledFlag);
+
+        //Envelope
+        fromButton.setText(guiEnabledFlag && senderEnabledFlag ? "Set" : "View");
+        toPanel.setEnabled(guiEnabledFlag);
+        comments.setEnabled(guiEnabledFlag);
+        representation.setEnabled(guiEnabledFlag);
+        payloadLength.setEnabled(guiEnabledFlag);
+        payloadEncoding.setEnabled(guiEnabledFlag);
+        date.setEditable(false);
+        dateButton.setText(guiEnabledFlag ? "Set" : "View");
+
+        intendedReceiverPanel.setEnabled(guiEnabledFlag);
+        defaultEnvelopeButton.setVisible(guiEnabledFlag);
+        //ReceivedObject
+        by.setEditable(guiEnabledFlag);
+        fromRec.setEditable(guiEnabledFlag);
+        dateRec.setEditable(false);
+        dateRecButton.setText(guiEnabledFlag ? "Set" : "View");
+        id.setEditable(guiEnabledFlag);
+        via.setEditable(guiEnabledFlag);
+    }
+
+    private void showEnvelope(Envelope envelope) {
+        String param;
+        try {
+            this.fromAID = envelope.getFrom();
+            param = fromAID.getName();
+        } catch (NullPointerException e1) {
+            param = "";
+            this.fromAID = new AID();
+        }
+        from.setText(param);
+
+        //#DOTNET_EXCLUDE_BEGIN
+        toPanel.resetContent(envelope.getAllTo());
+        //#DOTNET_EXCLUDE_END
+        try {
+            AID fromAID = envelope.getFrom();
+            param = fromAID.getName();
+
+        } catch (NullPointerException e1) {
+            param = "";
+        }
+        from.setText(param);
+
+        try {
+            param = envelope.getComments();
+        } catch (NullPointerException e1) {
+            param = "";
+        }
+        comments.setText(param);
+
+        try {
+            param = envelope.getAclRepresentation();
+        } catch (NullPointerException e1) {
+            param = "";
+        }
+        representation.setText(param);
+
+        try {
+            param = envelope.getPayloadLength().toString();
+        } catch (NullPointerException e1) {
+            param = "-1";
+        }
+        payloadLength.setText(param);
+
+        try {
+            param = envelope.getPayloadEncoding();
+        } catch (NullPointerException e1) {
+            param = "";
+        }
+        payloadEncoding.setText(param);
+
+        //Date
+        dateDate = envelope.getDate();
+        if (dateDate != null)
+            date.setText(ISO8601.toString(dateDate));
+        else
+            date.setText("");
+
+        //#DOTNET_EXCLUDE_BEGIN
+        intendedReceiverPanel.resetContent(envelope.getAllIntendedReceiver());
+        //#DOTNET_EXCLUDE_END
+
+        ReceivedObject recObject = envelope.getReceived();
+        try {
+            param = recObject.getBy();
+        } catch (NullPointerException e) {
+            param = "";
+        }
+        by.setText(param);
+        try {
+            param = recObject.getFrom();
+        } catch (NullPointerException e) {
+            param = "";
+        }
+        fromRec.setText(param);
+
+        try {
+            dateRecDate = recObject.getDate();
+            param = ISO8601.toString(dateRecDate);
+        } catch (NullPointerException e) {
+            param = "";
+        }
+        dateRec.setText(param);
+
+        try {
+            param = recObject.getId();
+        } catch (NullPointerException e) {
+            param = "";
+        }
+        id.setText(param);
+        try {
+            param = recObject.getVia();
+        } catch (NullPointerException e) {
+            param = "";
+        }
+        via.setText(param);
+    }
+
+    /////////////////////////////////////////////
+    // MESSAGE GETTING and SETTING PUBLIC METHODS
+    /////////////////////////////////////////////
+
+    /**
+     * Get the ACL message currently displayed by the AclGui panel
+     *
+     * @return The ACL message currently displayed by the AclGui panel as an ACLMessage object
+     * @see AclGui#setMsg(ACLMessage msg)
+     */
+    public ACLMessage getMsg() {
+        String param;
+        param = (String) communicativeAct.getSelectedItem();
+        int perf = ACLMessage.getInteger(param);
+        ACLMessage msg = new ACLMessage(perf);
+
+        if (newAIDSender != null)
+            SenderAID = newAIDSender;
+
+		/*if ( ((param = sender.getText()).trim()).length() > 0 )
+      SenderAID.setName(param);*/
+        // check if SenderAID has a guid. SenderAID is surely not null here
+        if (SenderAID.getName().length() > 0)
+            msg.setSender(SenderAID);
+
+        Enumeration<Object> rec_Enum = receiverListPanel.getContent();
+        while (rec_Enum.hasMoreElements())
+            msg.addReceiver((AID) rec_Enum.nextElement());
+
+        Enumeration<Object> replyTo_Enum = replyToListPanel.getContent();
+        while (replyTo_Enum.hasMoreElements())
+            msg.addReplyTo((AID) replyTo_Enum.nextElement());
+
+        Properties user_Prop = propertiesListPanel.getContentProperties();
+        Enumeration<?> keys = user_Prop.propertyNames();
+        while (keys.hasMoreElements()) {
+            String k = (String) keys.nextElement();
+            msg.addUserDefinedParameter(k, user_Prop.getProperty(k));
+        }
+
+        param = replyWith.getText().trim();
+        if (param.length() > 0)
+            msg.setReplyWith(param);
+
+        param = inReplyTo.getText().trim();
+        if (param.length() > 0)
+            msg.setInReplyTo(param);
+
+        param = conversationId.getText().trim();
+        if (param.length() > 0)
+            msg.setConversationId(param);
+
+        param = replyBy.getText().trim();
+        try {
+            msg.setReplyByDate(ISO8601.toDate(param));
+        } catch (Exception ignored) {
+        }
+
+        if (!Objects.equals(param = (String) protocol.getSelectedItem(), "Null"))
+            msg.setProtocol(param);
+
+        param = language.getText().trim();
+        if (param.length() > 0)
+            msg.setLanguage(param);
+
+        param = ontology.getText().trim();
+        if (param.length() > 0)
+            msg.setOntology(param);
+
+        param = content.getText().trim();
+        if (param.length() > 0)
+            msg.setContent(param);
+
+        param = (encoding.getText()).trim();
+        if (param.length() > 0)
+            msg.setEncoding(param);
+
+        Envelope env = new Envelope();
+
+        Enumeration<Object> to_Enum = toPanel.getContent();
+        while (to_Enum.hasMoreElements())
+            env.addTo((AID) to_Enum.nextElement());
+
+        if (newAIDFrom != null)
+            fromAID = newAIDFrom;
+        if (fromAID.getName().length() > 0)
+            env.setFrom(fromAID);
+
+        param = comments.getText().trim();
+        if (param.length() > 0)
+            env.setComments(param);
+
+        param = representation.getText().trim();
+        if (param.length() > 0)
+            env.setAclRepresentation(param);
+
+        try {
+            param = payloadLength.getText().trim();
+            env.setPayloadLength(Long.parseLong(param));
+        } catch (Exception e) {
+            //System.err.println("Incorrect int format. payloadLength must be an integer. Automatic reset to -1.");
+            //env.setPayloadLength(new Long(-1));
+            //payloadLength.setText("-1");
+        }
+
+        param = payloadEncoding.getText().trim();
+        if (param.length() > 0)
+            env.setPayloadEncoding(param);
+
+        //setDate require a Date not a String
+        if (dateDate != null)
+            env.setDate(dateDate);
+
+        Enumeration<Object> int_Enum = intendedReceiverPanel.getContent();
+        while (int_Enum.hasMoreElements())
+            env.addIntendedReceiver((AID) int_Enum.nextElement());
+
+
+        param = language.getText().trim();
+        if (param.length() > 0)
+            msg.setLanguage(param);
+
+
+		/* ReceivedObject recObject = new ReceivedObject();
+    boolean filled = false;
+    param = by.getText().trim();
+
+    if(param.length()>0)
+    {
+      filled = true;
+      recObject.setBy(param);
+    }
+    param = fromRec.getText().trim();
+    if(param.length()>0)
+    {
+      filled = true;
+      recObject.setFrom(param);
+    }
+
+    if (dateRecDate != null)
+    {
+      filled = true;
+      recObject.setDate(dateRecDate);
+    }
+
+    param = id.getText().trim();
+    if(param.length()>0)
+    {
+      filled = true;
+      recObject.setId(param);
+    }
+
+    param = via.getText().trim();
+    if(param.length()>0)
+    {
+      filled = true;
+      recObject.setVia(param);
+    }
+
+    if(filled)
+      env.setReceived(recObject);
+		 */
+        msg.setEnvelope(env);
+        return msg;
+    }
+
+    /**
+     * Displays the specified ACL message into the AclGui panel
+     *
+     * @param msg The ACL message to be displayed
+     * @see AclGui#getMsg()
+     */
+    public void setMsg(ACLMessage msg) {
+        int i;
+        String param, lowerCase;
+
+        int perf = msg.getPerformative();
+        lowerCase = (ACLMessage.getPerformative(perf)).toLowerCase();
+
+        //No control if the ACLMessage is a well-known one
+        //if not present the first of the comboBox is selected
+        communicativeAct.setSelectedItem(lowerCase);
+
+        try {
+            this.SenderAID = msg.getSender();
+            param = SenderAID.getName();
+        } catch (NullPointerException e) {
+            param = "";
+            this.SenderAID = new AID();
+        }
+
+        sender.setText(param);
+
+        //#DOTNET_EXCLUDE_BEGIN
+        receiverListPanel.resetContent(msg.getAllReceiver());
+        replyToListPanel.resetContent(msg.getAllReplyTo());
+        //#DOTNET_EXCLUDE_END
+
+        Enumeration<?> e = msg.getAllUserDefinedParameters().propertyNames();
+        ArrayList<Object> list = new ArrayList<>();
+        while (e.hasMoreElements())
+            list.add(e.nextElement());
+        propertiesListPanel.resetContent(list.iterator());
+        propertiesListPanel.setContentProperties(msg.getAllUserDefinedParameters());
+
+        if ((param = msg.getReplyWith()) == null) param = "";
+        replyWith.setText(param);
+        if ((param = msg.getInReplyTo()) == null) param = "";
+        inReplyTo.setText(param);
+        if ((param = msg.getConversationId()) == null) param = "";
+        conversationId.setText(param);
+        try {
+            param = ISO8601.toString(msg.getReplyByDate());
+        } catch (Exception exc) {
+            param = "";
+        }
+        replyBy.setText(param);
+
+        if ((param = msg.getProtocol()) == null)
+            protocol.setSelectedItem("Null");
+        else if (param.equals("") || param.equalsIgnoreCase("Null"))
+            protocol.setSelectedItem("Null");
+        else {
+            lowerCase = param.toLowerCase();
+            if ((i = fipaProtocolArrayList.indexOf(lowerCase)) < 0) {
+                // This is done to avoid inserting the same user-defined protocol more than once
+                protocol.addItem(param);
+                int cnt = protocol.getItemCount();
+                protocol.setSelectedItem(param);
+                int n = protocol.getSelectedIndex();
+                if (n != cnt - 1)
+                    protocol.removeItemAt(cnt - 1);
+            } else
+                protocol.setSelectedIndex(i);
+        }
+        String lang;
+        if ((lang = msg.getLanguage()) == null) lang = "";
+        language.setText(lang);
+        if ((param = msg.getOntology()) == null) param = "";
+        ontology.setText(param);
+
+        if ((param = msg.getContent()) == null) param = "";
+        if ((lang.equalsIgnoreCase(FIPANames.ContentLanguage.FIPA_SL0) ||
+                lang.equalsIgnoreCase(FIPANames.ContentLanguage.FIPA_SL1) ||
+                lang.equalsIgnoreCase(FIPANames.ContentLanguage.FIPA_SL2) ||
+                lang.equalsIgnoreCase(FIPANames.ContentLanguage.FIPA_SL)) &&
+                (slFormatter != null))
+            // Try inserting formatted SL content.
+            param = SLFormatter.format(param);
+        content.setText(param);
+
+        if ((param = msg.getEncoding()) == null) param = "";
+        encoding.setText(param);
+
+        //Envelope
+        Envelope envelope = msg.getEnvelope();
+
+        if (envelope != null)
+            showEnvelope(envelope);
+
+
+    }
+
+
+    /////////////////////////
+    // UTILITY PUBLIC METHODS
+    /////////////////////////
+
+    /**
+     * Enables/disables the editability of all the controls in an AclGui panel (default is enabled)
+     *
+     * @param enabledFlag If true enables editability
+     * @see AclGui#setSenderEnabled(boolean enabledFlag)
+     */
+    public void setEnabled(boolean enabledFlag) {
+        guiEnabledFlag = enabledFlag;
+        updateEnabled();
+    }
+
+    /**
+     * Enables/disables the editability of the sender field of an AclGui panel (default is enabled)
+     *
+     * @param enabledFlag If true enables editability
+     * @see AclGui#setEnabled(boolean enabledFlag)
+     */
+    public void setSenderEnabled(boolean enabledFlag) {
+        senderEnabledFlag = enabledFlag;
+        updateEnabled();
+    }
+
+    /**
+     Set the specified border to the AclGui panel
+     @param b Specifies the type of border
+     */
+	/*public void setBorder(Border b)
+  {
+    if (aclPanel != null)
+      aclPanel.setBorder(b);
+  }*/
+
+    /**
+     * Paint the AclGui panel
+     */
+    public void paint(Graphics g) {
+        if (firstPaintFlag) {
+            firstPaintFlag = false;
+            minDim = aclPanel.getSize();
+        } else
+            aclPanel.setMinimumSize(minDim);
+
+        super.paint(g);
+    }
+
+
+    //////////////////
+    // STATIC METHODS
+    //////////////////
 
     private class AclMessagePanel extends JPanel
             //#DOTNET_EXCLUDE_BEGIN
@@ -840,659 +1477,6 @@ public class AclGui extends JPanel {
 
         }
 
-    }
-
-
-    /////////////////
-    // CONSTRUCTOR
-    /////////////////
-
-    /**
-     * Ordinary <code>AclGui</code> constructor.
-     *
-     * @see ACLMessage#ACLMessage(int)
-     */
-
-    public AclGui(Component owner) {
-
-        firstPaintFlag = true;
-        guiEnabledFlag = true;
-        minDim = new Dimension();
-        ownerGui = owner;
-
-        JTabbedPane tabbed = new JTabbedPane();
-        AclMessagePanel aclPane = new AclMessagePanel();
-        EnvelopePanel envelope = new EnvelopePanel();
-        tabbed.addTab("ACLMessage", aclPane);
-        tabbed.addTab("Envelope", envelope);
-        //to enable the textfields if needed.
-        updateEnabled();
-        add(tabbed);
-
-        // Try inserting formatted SL content.
-        // any Exception is catched in order to remove unwished dependency
-        // on the jade.tools.sl package from this package at run-time.
-        try {
-            slFormatter = new SLFormatter();
-        } catch (Exception ignored) {
-        }
-    }
-
-    private Component getChildrenOwner() {
-        // If we have a parent return it, else return myself
-        return ownerGui != null ? ownerGui : this;
-    }
-
-    SLFormatter slFormatter;
-
-    ////////////////////
-    // PRIVATE METHODS
-    ////////////////////
-    private void formatGrid(int nr, int nc, int lb, int rb, int tb, int bb, int xs, int ys) {
-        gridNRow = nr;
-        gridNCol = nc;
-        colWidth = new int[3];
-        //colWidth[0] = 120;
-        //colWidth[1] = 63;
-        //colWidth[2] = 180;
-        leftBorder = lb;
-        rightBorder = rb;
-        topBorder = tb;
-        bottomBorder = bb;
-        xSpacing = xs;
-        ySpacing = ys;
-    }
-
-    private void setGridColumnWidth(int col, int width) {
-        colWidth[col] = width;
-    }
-
-    private void put(JPanel panel, JComponent c, int x, int y, int dx, int dy, boolean fill) {
-        int leftMargin, rightMargin, topMargin, bottomMargin;
-        int preferredWidth, preferredHeight;
-
-        constraint.gridx = x;
-        constraint.gridy = y;
-        constraint.gridwidth = dx;
-        constraint.gridheight = dy;
-        constraint.anchor = GridBagConstraints.WEST;
-        if (fill)
-            constraint.fill = GridBagConstraints.BOTH;
-        else
-            constraint.fill = GridBagConstraints.VERTICAL;
-
-        leftMargin = (x == 0 ? leftBorder : 0);
-        rightMargin = (x + dx == gridNCol ? rightBorder : xSpacing);
-        topMargin = (y == 0 ? topBorder : 0);
-        bottomMargin = (y + dy == gridNRow ? bottomBorder : ySpacing);
-
-        int i;
-        preferredWidth = 0;
-        for (i = 0; i < dx; ++i)
-            preferredWidth += colWidth[x + i] + xSpacing;
-        preferredWidth -= xSpacing;
-        preferredHeight = c.getPreferredSize().height;
-        c.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
-
-        constraint.insets = new Insets(topMargin, leftMargin, bottomMargin, rightMargin);
-        lm.setConstraints(c, constraint);
-        panel.add(c);
-    }
-
-    private void updateEnabled() {
-        communicativeAct.setEnabled(guiEnabledFlag);
-        senderButton.setText((guiEnabledFlag && senderEnabledFlag) ? "Set" : "View");
-
-        receiverListPanel.setEnabled(guiEnabledFlag);
-        replyToListPanel.setEnabled(guiEnabledFlag);
-        propertiesListPanel.setEnabled(guiEnabledFlag);
-
-        replyWith.setEditable(guiEnabledFlag);
-        inReplyTo.setEditable(guiEnabledFlag);
-        conversationId.setEditable(guiEnabledFlag);
-        replyBy.setEditable(false);
-        replyBySet.setEnabled(true);
-        replyBySet.setText(guiEnabledFlag ? "Set" : "View");
-        encoding.setEditable(guiEnabledFlag);
-        protocol.setEnabled(guiEnabledFlag);
-        language.setEditable(guiEnabledFlag);
-        ontology.setEditable(guiEnabledFlag);
-        content.setEditable(guiEnabledFlag);
-
-        //Envelope
-        fromButton.setText(guiEnabledFlag && senderEnabledFlag ? "Set" : "View");
-        toPanel.setEnabled(guiEnabledFlag);
-        comments.setEnabled(guiEnabledFlag);
-        representation.setEnabled(guiEnabledFlag);
-        payloadLength.setEnabled(guiEnabledFlag);
-        payloadEncoding.setEnabled(guiEnabledFlag);
-        date.setEditable(false);
-        dateButton.setText(guiEnabledFlag ? "Set" : "View");
-
-        intendedReceiverPanel.setEnabled(guiEnabledFlag);
-        defaultEnvelopeButton.setVisible(guiEnabledFlag);
-        //ReceivedObject
-        by.setEditable(guiEnabledFlag);
-        fromRec.setEditable(guiEnabledFlag);
-        dateRec.setEditable(false);
-        dateRecButton.setText(guiEnabledFlag ? "Set" : "View");
-        id.setEditable(guiEnabledFlag);
-        via.setEditable(guiEnabledFlag);
-    }
-
-    private void showEnvelope(Envelope envelope) {
-        String param;
-        try {
-            this.fromAID = envelope.getFrom();
-            param = fromAID.getName();
-        } catch (NullPointerException e1) {
-            param = "";
-            this.fromAID = new AID();
-        }
-        from.setText(param);
-
-        //#DOTNET_EXCLUDE_BEGIN
-        toPanel.resetContent(envelope.getAllTo());
-        //#DOTNET_EXCLUDE_END
-        try {
-            AID fromAID = envelope.getFrom();
-            param = fromAID.getName();
-
-        } catch (NullPointerException e1) {
-            param = "";
-        }
-        from.setText(param);
-
-        try {
-            param = envelope.getComments();
-        } catch (NullPointerException e1) {
-            param = "";
-        }
-        comments.setText(param);
-
-        try {
-            param = envelope.getAclRepresentation();
-        } catch (NullPointerException e1) {
-            param = "";
-        }
-        representation.setText(param);
-
-        try {
-            param = envelope.getPayloadLength().toString();
-        } catch (NullPointerException e1) {
-            param = "-1";
-        }
-        payloadLength.setText(param);
-
-        try {
-            param = envelope.getPayloadEncoding();
-        } catch (NullPointerException e1) {
-            param = "";
-        }
-        payloadEncoding.setText(param);
-
-        //Date
-        dateDate = envelope.getDate();
-        if (dateDate != null)
-            date.setText(ISO8601.toString(dateDate));
-        else
-            date.setText("");
-
-        //#DOTNET_EXCLUDE_BEGIN
-        intendedReceiverPanel.resetContent(envelope.getAllIntendedReceiver());
-        //#DOTNET_EXCLUDE_END
-
-        ReceivedObject recObject = envelope.getReceived();
-        try {
-            param = recObject.getBy();
-        } catch (NullPointerException e) {
-            param = "";
-        }
-        by.setText(param);
-        try {
-            param = recObject.getFrom();
-        } catch (NullPointerException e) {
-            param = "";
-        }
-        fromRec.setText(param);
-
-        try {
-            dateRecDate = recObject.getDate();
-            param = ISO8601.toString(dateRecDate);
-        } catch (NullPointerException e) {
-            param = "";
-        }
-        dateRec.setText(param);
-
-        try {
-            param = recObject.getId();
-        } catch (NullPointerException e) {
-            param = "";
-        }
-        id.setText(param);
-        try {
-            param = recObject.getVia();
-        } catch (NullPointerException e) {
-            param = "";
-        }
-        via.setText(param);
-    }
-
-    /////////////////////////////////////////////
-    // MESSAGE GETTING and SETTING PUBLIC METHODS
-    /////////////////////////////////////////////
-
-    /**
-     * Displays the specified ACL message into the AclGui panel
-     *
-     * @param msg The ACL message to be displayed
-     * @see AclGui#getMsg()
-     */
-    public void setMsg(ACLMessage msg) {
-        int i;
-        String param, lowerCase;
-
-        int perf = msg.getPerformative();
-        lowerCase = (ACLMessage.getPerformative(perf)).toLowerCase();
-
-        //No control if the ACLMessage is a well-known one
-        //if not present the first of the comboBox is selected
-        communicativeAct.setSelectedItem(lowerCase);
-
-        try {
-            this.SenderAID = msg.getSender();
-            param = SenderAID.getName();
-        } catch (NullPointerException e) {
-            param = "";
-            this.SenderAID = new AID();
-        }
-
-        sender.setText(param);
-
-        //#DOTNET_EXCLUDE_BEGIN
-        receiverListPanel.resetContent(msg.getAllReceiver());
-        replyToListPanel.resetContent(msg.getAllReplyTo());
-        //#DOTNET_EXCLUDE_END
-
-        Enumeration<?> e = msg.getAllUserDefinedParameters().propertyNames();
-        ArrayList<Object> list = new ArrayList<>();
-        while (e.hasMoreElements())
-            list.add(e.nextElement());
-        propertiesListPanel.resetContent(list.iterator());
-        propertiesListPanel.setContentProperties(msg.getAllUserDefinedParameters());
-
-        if ((param = msg.getReplyWith()) == null) param = "";
-        replyWith.setText(param);
-        if ((param = msg.getInReplyTo()) == null) param = "";
-        inReplyTo.setText(param);
-        if ((param = msg.getConversationId()) == null) param = "";
-        conversationId.setText(param);
-        try {
-            param = ISO8601.toString(msg.getReplyByDate());
-        } catch (Exception exc) {
-            param = "";
-        }
-        replyBy.setText(param);
-
-        if ((param = msg.getProtocol()) == null)
-            protocol.setSelectedItem("Null");
-        else if (param.equals("") || param.equalsIgnoreCase("Null"))
-            protocol.setSelectedItem("Null");
-        else {
-            lowerCase = param.toLowerCase();
-            if ((i = fipaProtocolArrayList.indexOf(lowerCase)) < 0) {
-                // This is done to avoid inserting the same user-defined protocol more than once
-                protocol.addItem(param);
-                int cnt = protocol.getItemCount();
-                protocol.setSelectedItem(param);
-                int n = protocol.getSelectedIndex();
-                if (n != cnt - 1)
-                    protocol.removeItemAt(cnt - 1);
-            } else
-                protocol.setSelectedIndex(i);
-        }
-        String lang;
-        if ((lang = msg.getLanguage()) == null) lang = "";
-        language.setText(lang);
-        if ((param = msg.getOntology()) == null) param = "";
-        ontology.setText(param);
-
-        if ((param = msg.getContent()) == null) param = "";
-        if ((lang.equalsIgnoreCase(FIPANames.ContentLanguage.FIPA_SL0) ||
-                lang.equalsIgnoreCase(FIPANames.ContentLanguage.FIPA_SL1) ||
-                lang.equalsIgnoreCase(FIPANames.ContentLanguage.FIPA_SL2) ||
-                lang.equalsIgnoreCase(FIPANames.ContentLanguage.FIPA_SL)) &&
-                (slFormatter != null))
-            // Try inserting formatted SL content.
-            param = SLFormatter.format(param);
-        content.setText(param);
-
-        if ((param = msg.getEncoding()) == null) param = "";
-        encoding.setText(param);
-
-        //Envelope
-        Envelope envelope = msg.getEnvelope();
-
-        if (envelope != null)
-            showEnvelope(envelope);
-
-
-    }
-
-
-    /**
-     * Get the ACL message currently displayed by the AclGui panel
-     *
-     * @return The ACL message currently displayed by the AclGui panel as an ACLMessage object
-     * @see AclGui#setMsg(ACLMessage msg)
-     */
-    public ACLMessage getMsg() {
-        String param;
-        param = (String) communicativeAct.getSelectedItem();
-        int perf = ACLMessage.getInteger(param);
-        ACLMessage msg = new ACLMessage(perf);
-
-        if (newAIDSender != null)
-            SenderAID = newAIDSender;
-
-		/*if ( ((param = sender.getText()).trim()).length() > 0 )
-      SenderAID.setName(param);*/
-        // check if SenderAID has a guid. SenderAID is surely not null here
-        if (SenderAID.getName().length() > 0)
-            msg.setSender(SenderAID);
-
-        Enumeration<Object> rec_Enum = receiverListPanel.getContent();
-        while (rec_Enum.hasMoreElements())
-            msg.addReceiver((AID) rec_Enum.nextElement());
-
-        Enumeration<Object> replyTo_Enum = replyToListPanel.getContent();
-        while (replyTo_Enum.hasMoreElements())
-            msg.addReplyTo((AID) replyTo_Enum.nextElement());
-
-        Properties user_Prop = propertiesListPanel.getContentProperties();
-        Enumeration<?> keys = user_Prop.propertyNames();
-        while (keys.hasMoreElements()) {
-            String k = (String) keys.nextElement();
-            msg.addUserDefinedParameter(k, user_Prop.getProperty(k));
-        }
-
-        param = replyWith.getText().trim();
-        if (param.length() > 0)
-            msg.setReplyWith(param);
-
-        param = inReplyTo.getText().trim();
-        if (param.length() > 0)
-            msg.setInReplyTo(param);
-
-        param = conversationId.getText().trim();
-        if (param.length() > 0)
-            msg.setConversationId(param);
-
-        param = replyBy.getText().trim();
-        try {
-            msg.setReplyByDate(ISO8601.toDate(param));
-        } catch (Exception ignored) {
-        }
-
-        if (!Objects.equals(param = (String) protocol.getSelectedItem(), "Null"))
-            msg.setProtocol(param);
-
-        param = language.getText().trim();
-        if (param.length() > 0)
-            msg.setLanguage(param);
-
-        param = ontology.getText().trim();
-        if (param.length() > 0)
-            msg.setOntology(param);
-
-        param = content.getText().trim();
-        if (param.length() > 0)
-            msg.setContent(param);
-
-        param = (encoding.getText()).trim();
-        if (param.length() > 0)
-            msg.setEncoding(param);
-
-        Envelope env = new Envelope();
-
-        Enumeration<Object> to_Enum = toPanel.getContent();
-        while (to_Enum.hasMoreElements())
-            env.addTo((AID) to_Enum.nextElement());
-
-        if (newAIDFrom != null)
-            fromAID = newAIDFrom;
-        if (fromAID.getName().length() > 0)
-            env.setFrom(fromAID);
-
-        param = comments.getText().trim();
-        if (param.length() > 0)
-            env.setComments(param);
-
-        param = representation.getText().trim();
-        if (param.length() > 0)
-            env.setAclRepresentation(param);
-
-        try {
-            param = payloadLength.getText().trim();
-            env.setPayloadLength(Long.parseLong(param));
-        } catch (Exception e) {
-            //System.err.println("Incorrect int format. payloadLength must be an integer. Automatic reset to -1.");
-            //env.setPayloadLength(new Long(-1));
-            //payloadLength.setText("-1");
-        }
-
-        param = payloadEncoding.getText().trim();
-        if (param.length() > 0)
-            env.setPayloadEncoding(param);
-
-        //setDate require a Date not a String
-        if (dateDate != null)
-            env.setDate(dateDate);
-
-        Enumeration<Object> int_Enum = intendedReceiverPanel.getContent();
-        while (int_Enum.hasMoreElements())
-            env.addIntendedReceiver((AID) int_Enum.nextElement());
-
-
-        param = language.getText().trim();
-        if (param.length() > 0)
-            msg.setLanguage(param);
-
-
-		/* ReceivedObject recObject = new ReceivedObject();
-    boolean filled = false;
-    param = by.getText().trim();
-
-    if(param.length()>0)
-    {
-      filled = true;
-      recObject.setBy(param);
-    }
-    param = fromRec.getText().trim();
-    if(param.length()>0)
-    {
-      filled = true;
-      recObject.setFrom(param);
-    }
-
-    if (dateRecDate != null)  
-    {
-      filled = true;
-      recObject.setDate(dateRecDate);
-    }
-
-    param = id.getText().trim();
-    if(param.length()>0)
-    {
-      filled = true;
-      recObject.setId(param);
-    }
-
-    param = via.getText().trim();
-    if(param.length()>0)
-    {
-      filled = true;
-      recObject.setVia(param);
-    }
-
-    if(filled)
-      env.setReceived(recObject);
-		 */
-        msg.setEnvelope(env);
-        return msg;
-    }
-
-
-    /////////////////////////
-    // UTILITY PUBLIC METHODS
-    /////////////////////////
-
-    /**
-     * Enables/disables the editability of all the controls in an AclGui panel (default is enabled)
-     *
-     * @param enabledFlag If true enables editability
-     * @see AclGui#setSenderEnabled(boolean enabledFlag)
-     */
-    public void setEnabled(boolean enabledFlag) {
-        guiEnabledFlag = enabledFlag;
-        updateEnabled();
-    }
-
-    /**
-     * Enables/disables the editability of the sender field of an AclGui panel (default is enabled)
-     *
-     * @param enabledFlag If true enables editability
-     * @see AclGui#setEnabled(boolean enabledFlag)
-     */
-    public void setSenderEnabled(boolean enabledFlag) {
-        senderEnabledFlag = enabledFlag;
-        updateEnabled();
-    }
-
-    /**
-     Set the specified border to the AclGui panel
-     @param b Specifies the type of border
-     */
-	/*public void setBorder(Border b)
-  {
-    if (aclPanel != null)
-      aclPanel.setBorder(b);
-  }*/
-
-    /**
-     * Paint the AclGui panel
-     */
-    public void paint(Graphics g) {
-        if (firstPaintFlag) {
-            firstPaintFlag = false;
-            minDim = aclPanel.getSize();
-        } else
-            aclPanel.setMinimumSize(minDim);
-
-        super.paint(g);
-    }
-
-
-    //////////////////
-    // STATIC METHODS
-    //////////////////
-
-    /**
-     * Pops up a dialog window including an editing-disabled AclGui panel and displays the specified
-     * ACL message in it.
-     *
-     * @param msg    The ACL message to be displayed
-     * @param parent The parent window of the dialog window
-     * @see AclGui#editMsgInDialog(ACLMessage msg, Frame parent)
-     */
-    public static void showMsgInDialog(ACLMessage msg, Frame parent) {
-        final JDialog tempAclDlg = new JDialog(parent, "ACL Message", true);
-
-        AclGui aclPanel = new AclGui(parent);
-        //aclPanel.setBorder(new BevelBorder(BevelBorder.RAISED));
-        aclPanel.setEnabled(false);
-        aclPanel.setMsg(msg);
-
-        JButton okButton = new JButton("OK");
-        JPanel buttonPanel = new JPanel();
-        // Use default (FlowLayout) layout manager to dispose the OK button
-        buttonPanel.add(okButton);
-
-        tempAclDlg.getContentPane().setLayout(new BorderLayout());
-        tempAclDlg.getContentPane().add("Center", aclPanel);
-        tempAclDlg.getContentPane().add("South", buttonPanel);
-
-        okButton.addActionListener(e -> tempAclDlg.dispose());
-
-        tempAclDlg.pack();
-        tempAclDlg.setResizable(false);
-        if (parent != null) {
-            int locx = parent.getX() + (parent.getWidth() - tempAclDlg.getWidth()) / 2;
-            if (locx < 0)
-                locx = 0;
-            int locy = parent.getY() + (parent.getHeight() - tempAclDlg.getHeight()) / 2;
-            if (locy < 0)
-                locy = 0;
-            tempAclDlg.setLocation(locx, locy);
-        }
-        tempAclDlg.setVisible(true);
-    }
-
-    /**
-     * Pops up a dialog window including an editing-enabled AclGui panel and displays the specified
-     * ACL message in it. The dialog window also includes an OK and a Cancel button to accept or
-     * discard the performed editing.
-     *
-     * @param msg    The ACL message to be initially displayed
-     * @param parent The parent window of the dialog window
-     * @return The ACL message displayed in the dialog window or null depending on whether the user close the window
-     * by clicking the OK or Cancel button
-     * @see AclGui#showMsgInDialog(ACLMessage msg, Frame parent)
-     */
-    public static ACLMessage editMsgInDialog(ACLMessage msg, Frame parent) {
-        final JDialog tempAclDlg = new JDialog(parent, "ACL Message", true);
-        final AclGui aclPanel = new AclGui(parent);
-        aclPanel.setBorder(new BevelBorder(BevelBorder.RAISED));
-        aclPanel.setSenderEnabled(true);
-        aclPanel.setMsg(msg);
-
-        JButton okButton = new JButton("OK");
-        JButton cancelButton = new JButton("Cancel");
-        okButton.setPreferredSize(cancelButton.getPreferredSize());
-        JPanel buttonPanel = new JPanel();
-        // Use default (FlowLayout) layout manager to dispose the OK and Cancel buttons
-        buttonPanel.add(okButton);
-        buttonPanel.add(cancelButton);
-
-        tempAclDlg.getContentPane().setLayout(new BorderLayout());
-        tempAclDlg.getContentPane().add("Center", aclPanel);
-        tempAclDlg.getContentPane().add("South", buttonPanel);
-
-        okButton.addActionListener(e -> {
-            editedMsg = aclPanel.getMsg();
-            tempAclDlg.dispose();
-        });
-        cancelButton.addActionListener(e -> {
-            editedMsg = null;
-            tempAclDlg.dispose();
-        });
-
-        tempAclDlg.pack();
-        tempAclDlg.setResizable(false);
-
-        if (parent != null) {
-            int x = parent.getX() + (parent.getWidth() - tempAclDlg.getWidth()) / 2;
-            int y = parent.getY() + (parent.getHeight() - tempAclDlg.getHeight()) / 2;
-            tempAclDlg.setLocation(Math.max(x, 0), Math.max(y, 0));
-        }
-
-        tempAclDlg.setVisible(true);
-
-        ACLMessage m = null;
-        if (editedMsg != null)
-            m = (ACLMessage) editedMsg.clone();
-
-        return m;
     }
 
 	/*public static void main(String[] args)

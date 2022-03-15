@@ -50,12 +50,21 @@ abstract class Responder extends FSMBehaviour {
 
 
     // Data store keys
+    //#APIDOC_EXCLUDE_BEGIN
+    // FSM states names
+    protected static final String RECEIVE_INITIATION = "Receive-Initiation";
+    protected static final String RECEIVE_NEXT = "Receive-Next";
+
+
+    // private inner classes for the FSM states
+    protected static final String HANDLE_OUT_OF_SEQUENCE = "Handle-Out-of-seq";
+    protected static final String CHECK_IN_SEQ = "Check-In-seq";
+    protected static final String SEND_REPLY = "Send-Reply";
     /**
      * Key to retrieve from the HashMap of the behaviour the last received
      * ACLMessage
      */
     public final String RECEIVED_KEY = "__Received_key" + hashCode();
-
     /**
      * Key to set into the HashMap of the behaviour the new ACLMessage
      * to be sent back to the initiator as a reply.
@@ -63,8 +72,167 @@ abstract class Responder extends FSMBehaviour {
     public final String REPLY_KEY = "__Reply_key" + hashCode();
 
 
-    // private inner classes for the FSM states
+    /**
+     * Constructor of the behaviour that creates a new empty HashMap
+     *
+     * @see #Responder(Agent a, MessageTemplate mt, HashMap, HashMap)
+     **/
+    public Responder(Agent a, MessageTemplate mt) {
+        this(a, mt, new HashMap<>(), new HashMap<>());
+    }
+    /**
+     * Constructor of the behaviour.
+     *
+     * @param a               is the reference to the Agent object
+     * @param mt              is the MessageTemplate that must be used to match
+     *                        the initiation message. Take care that if mt is null every message is
+     *                        consumed by this protocol.
+     * @param mapMessagesList the HashMap of messages list  for this protocol behaviour
+     * @deprecated
+     **/
+    public Responder(Agent a, MessageTemplate mt, HashMap<String, List<ACLMessage>> mapMessagesList) {
+        super(a);
+        setMapMessagesList(mapMessagesList);
 
+        registerDefaultTransition(RECEIVE_INITIATION, CHECK_IN_SEQ);
+        registerDefaultTransition(RECEIVE_NEXT, CHECK_IN_SEQ);
+
+        registerDefaultTransition(CHECK_IN_SEQ, HANDLE_OUT_OF_SEQUENCE);
+        registerDefaultTransition(HANDLE_OUT_OF_SEQUENCE, RECEIVE_NEXT, new String[]{HANDLE_OUT_OF_SEQUENCE});
+
+
+        Behaviour b;
+
+        // RECEIVE_INITIATION
+        b = new CfpReceiver(myAgent, mt, -1, getMapMessagesList(), getMapMessages(), RECEIVED_KEY);
+        registerFirstState(b, RECEIVE_INITIATION);
+
+        // RECEIVE_NEXT
+        b = new NextReceiver(myAgent, null, -1, getMapMessagesList(), getMapMessages(), RECEIVED_KEY);
+        registerState(b, RECEIVE_NEXT);
+
+        // CHECK_IN_SEQ
+        b = new CheckInSeq(myAgent);
+        registerDSState(b, CHECK_IN_SEQ);
+
+        // HANDLE_OUT_OF_SEQUENCE
+        b = new HandleOutOfSeq(myAgent);
+        registerDSState(b, HANDLE_OUT_OF_SEQUENCE);
+
+        // SEND_REPLY
+        b = new SendReply(myAgent, REPLY_KEY, RECEIVED_KEY, getMapMessagesList(), getMapMessages());
+        registerDSState(b, SEND_REPLY);
+    }
+    /**
+     * Constructor of the behaviour.
+     *
+     * @param a               is the reference to the Agent object
+     * @param mt              is the MessageTemplate that must be used to match
+     *                        the initiation message. Take care that if mt is null every message is
+     *                        consumed by this protocol.
+     * @param mapMessagesList the HashMap of messages list  for this protocol behaviour
+     * @param mapMessages     the HashMap of messages   for this protocol behaviour
+     **/
+    public Responder(Agent a, MessageTemplate mt, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
+        super(a);
+        setMapMessagesList(mapMessagesList);
+        setMapMessages(mapMessages);
+
+        registerDefaultTransition(RECEIVE_INITIATION, CHECK_IN_SEQ);
+        registerDefaultTransition(RECEIVE_NEXT, CHECK_IN_SEQ);
+
+        registerDefaultTransition(CHECK_IN_SEQ, HANDLE_OUT_OF_SEQUENCE);
+        registerDefaultTransition(HANDLE_OUT_OF_SEQUENCE, RECEIVE_NEXT, new String[]{HANDLE_OUT_OF_SEQUENCE});
+
+
+        Behaviour b;
+
+        // RECEIVE_INITIATION
+        b = new CfpReceiver(myAgent, mt, -1, getMapMessagesList(), getMapMessages(), RECEIVED_KEY);
+        registerFirstState(b, RECEIVE_INITIATION);
+
+        // RECEIVE_NEXT
+        b = new NextReceiver(myAgent, null, -1, getMapMessagesList(), getMapMessages(), RECEIVED_KEY);
+        registerState(b, RECEIVE_NEXT);
+
+        // CHECK_IN_SEQ
+        b = new CheckInSeq(myAgent);
+        registerDSState(b, CHECK_IN_SEQ);
+
+        // HANDLE_OUT_OF_SEQUENCE
+        b = new HandleOutOfSeq(myAgent);
+        registerDSState(b, HANDLE_OUT_OF_SEQUENCE);
+
+        // SEND_REPLY
+        b = new SendReply(myAgent, REPLY_KEY, RECEIVED_KEY, getMapMessagesList(), getMapMessages());
+        registerDSState(b, SEND_REPLY);
+    }
+    // For persistence service
+    private Responder() {
+    }
+
+    /**
+     * This method is called whenever a message is received that does
+     * not comply to the protocol rules.
+     * This default implementation does nothing.
+     * Programmers may override it in case they need to react to this event.
+     *
+     * @param msg the received out-of-sequence message.
+     */
+    protected void handleOutOfSequence(ACLMessage msg) {
+    }
+
+    /**
+     * This method allows to register a user defined <code>Behaviour</code>
+     * in the HANDLE_OUT_OF_SEQ state.
+     * This behaviour would override the homonymous method.
+     * This method also sets the
+     * data store of the registered <code>Behaviour</code> to the
+     * HashMap of this current behaviour.
+     * The registered behaviour can retrieve
+     * the <code>out of sequence</code> ACLMessage object received
+     * from the HashMap at the <code>RECEIVED_KEY</code>
+     * key.
+     *
+     * @param b the Behaviour that will handle this state
+     */
+    public void registerHandleOutOfSequence(Behaviour b) {
+        registerDSState(b, HANDLE_OUT_OF_SEQUENCE);
+    }
+
+    /**
+     * Reset this behaviour.
+     */
+    public void reset() {
+        super.reset();
+        var ds = getMapMessagesList();
+        ds.remove(RECEIVED_KEY);
+        ds.remove(REPLY_KEY);
+    }
+
+    /**
+     * Check whether a received message complies with the protocol rules.
+     */
+    protected abstract boolean checkInSequence(ACLMessage received);
+
+    /**
+     * This method can be redefined by protocol specific implementations
+     * to update the status of the protocol after a reply has been sent.
+     * This default implementation does nothing.
+     */
+    protected void replySent(int exitValue) {
+    }
+
+    //#APIDOC_EXCLUDE_END
+
+    /**
+     * Utility method to register a behaviour in a state of the
+     * protocol and set the HashMap appropriately
+     */
+    protected void registerDSState(Behaviour b, String name) {
+        b.setMapMessagesList(getMapMessagesList());
+        registerState(b, name);
+    }
 
     private static class CfpReceiver extends MsgReceiver {
 
@@ -126,11 +294,13 @@ abstract class Responder extends FSMBehaviour {
 
     } // End of NextReceiver class
 
+    //#APIDOC_EXCLUDE_BEGIN
+
     private static class CheckInSeq extends OneShotBehaviour {
 
-        private int ret;
         @Serial
         private static final long serialVersionUID = 4487495895818000L;
+        private int ret;
 
         public CheckInSeq(Agent a) {
             super(a);
@@ -156,7 +326,6 @@ abstract class Responder extends FSMBehaviour {
 
     } // End of CheckInSeq class
 
-
     private static class HandleOutOfSeq extends OneShotBehaviour {
 
         @Serial
@@ -177,10 +346,9 @@ abstract class Responder extends FSMBehaviour {
 
     } // End of HandleOutOfSeq class
 
-
     private static class SendReply extends ReplySender {
 
-        public SendReply(Agent a, String replyKey, String msgKey, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage>  mapMessages) {
+        public SendReply(Agent a, String replyKey, String msgKey, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
             super(a, replyKey, msgKey, mapMessagesList, mapMessages);
         }
 
@@ -196,181 +364,5 @@ abstract class Responder extends FSMBehaviour {
         }
 
     } // End of SendReply class
-
-
-    //#APIDOC_EXCLUDE_BEGIN
-    // FSM states names
-    protected static final String RECEIVE_INITIATION = "Receive-Initiation";
-    protected static final String RECEIVE_NEXT = "Receive-Next";
-    protected static final String HANDLE_OUT_OF_SEQUENCE = "Handle-Out-of-seq";
-    protected static final String CHECK_IN_SEQ = "Check-In-seq";
-    protected static final String SEND_REPLY = "Send-Reply";
-
-    /**
-     * Constructor of the behaviour that creates a new empty HashMap
-     *
-     * @see #Responder(Agent a, MessageTemplate mt, HashMap, HashMap)
-     **/
-    public Responder(Agent a, MessageTemplate mt) {
-        this(a, mt, new HashMap<>(), new HashMap<>());
-    }
-
-    /**
-     * Constructor of the behaviour.
-     *
-     * @param a               is the reference to the Agent object
-     * @param mt              is the MessageTemplate that must be used to match
-     *                        the initiation message. Take care that if mt is null every message is
-     *                        consumed by this protocol.
-     * @param mapMessagesList the HashMap of messages list  for this protocol behaviour
-     * @deprecated
-     **/
-    public Responder(Agent a, MessageTemplate mt, HashMap<String, List<ACLMessage>> mapMessagesList) {
-        super(a);
-        setMapMessagesList(mapMessagesList);
-
-        registerDefaultTransition(RECEIVE_INITIATION, CHECK_IN_SEQ);
-        registerDefaultTransition(RECEIVE_NEXT, CHECK_IN_SEQ);
-
-        registerDefaultTransition(CHECK_IN_SEQ, HANDLE_OUT_OF_SEQUENCE);
-        registerDefaultTransition(HANDLE_OUT_OF_SEQUENCE, RECEIVE_NEXT, new String[]{HANDLE_OUT_OF_SEQUENCE});
-
-
-        Behaviour b;
-
-        // RECEIVE_INITIATION
-        b = new CfpReceiver(myAgent, mt, -1, getMapMessagesList(), getMapMessages(), RECEIVED_KEY);
-        registerFirstState(b, RECEIVE_INITIATION);
-
-        // RECEIVE_NEXT
-        b = new NextReceiver(myAgent, null, -1, getMapMessagesList(), getMapMessages(), RECEIVED_KEY);
-        registerState(b, RECEIVE_NEXT);
-
-        // CHECK_IN_SEQ
-        b = new CheckInSeq(myAgent);
-        registerDSState(b, CHECK_IN_SEQ);
-
-        // HANDLE_OUT_OF_SEQUENCE
-        b = new HandleOutOfSeq(myAgent);
-        registerDSState(b, HANDLE_OUT_OF_SEQUENCE);
-
-        // SEND_REPLY
-        b = new SendReply(myAgent, REPLY_KEY, RECEIVED_KEY, getMapMessagesList(), getMapMessages());
-        registerDSState(b, SEND_REPLY);
-    }
-
-    /**
-     * Constructor of the behaviour.
-     *
-     * @param a               is the reference to the Agent object
-     * @param mt              is the MessageTemplate that must be used to match
-     *                        the initiation message. Take care that if mt is null every message is
-     *                        consumed by this protocol.
-     * @param mapMessagesList the HashMap of messages list  for this protocol behaviour
-     * @param mapMessages     the HashMap of messages   for this protocol behaviour
-     **/
-    public Responder(Agent a, MessageTemplate mt, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
-        super(a);
-        setMapMessagesList(mapMessagesList);
-        setMapMessages(mapMessages);
-
-        registerDefaultTransition(RECEIVE_INITIATION, CHECK_IN_SEQ);
-        registerDefaultTransition(RECEIVE_NEXT, CHECK_IN_SEQ);
-
-        registerDefaultTransition(CHECK_IN_SEQ, HANDLE_OUT_OF_SEQUENCE);
-        registerDefaultTransition(HANDLE_OUT_OF_SEQUENCE, RECEIVE_NEXT, new String[]{HANDLE_OUT_OF_SEQUENCE});
-
-
-        Behaviour b;
-
-        // RECEIVE_INITIATION
-        b = new CfpReceiver(myAgent, mt, -1, getMapMessagesList(), getMapMessages(), RECEIVED_KEY);
-        registerFirstState(b, RECEIVE_INITIATION);
-
-        // RECEIVE_NEXT
-        b = new NextReceiver(myAgent, null, -1, getMapMessagesList(), getMapMessages(), RECEIVED_KEY);
-        registerState(b, RECEIVE_NEXT);
-
-        // CHECK_IN_SEQ
-        b = new CheckInSeq(myAgent);
-        registerDSState(b, CHECK_IN_SEQ);
-
-        // HANDLE_OUT_OF_SEQUENCE
-        b = new HandleOutOfSeq(myAgent);
-        registerDSState(b, HANDLE_OUT_OF_SEQUENCE);
-
-        // SEND_REPLY
-        b = new SendReply(myAgent, REPLY_KEY, RECEIVED_KEY, getMapMessagesList(), getMapMessages());
-        registerDSState(b, SEND_REPLY);
-    }
-
-    // For persistence service
-    private Responder() {
-    }
-
-    //#APIDOC_EXCLUDE_END
-
-    /**
-     * This method is called whenever a message is received that does
-     * not comply to the protocol rules.
-     * This default implementation does nothing.
-     * Programmers may override it in case they need to react to this event.
-     *
-     * @param msg the received out-of-sequence message.
-     */
-    protected void handleOutOfSequence(ACLMessage msg) {
-    }
-
-    /**
-     * This method allows to register a user defined <code>Behaviour</code>
-     * in the HANDLE_OUT_OF_SEQ state.
-     * This behaviour would override the homonymous method.
-     * This method also sets the
-     * data store of the registered <code>Behaviour</code> to the
-     * HashMap of this current behaviour.
-     * The registered behaviour can retrieve
-     * the <code>out of sequence</code> ACLMessage object received
-     * from the HashMap at the <code>RECEIVED_KEY</code>
-     * key.
-     *
-     * @param b the Behaviour that will handle this state
-     */
-    public void registerHandleOutOfSequence(Behaviour b) {
-        registerDSState(b, HANDLE_OUT_OF_SEQUENCE);
-    }
-
-    /**
-     * Reset this behaviour.
-     */
-    public void reset() {
-        super.reset();
-        var ds = getMapMessagesList();
-        ds.remove(RECEIVED_KEY);
-        ds.remove(REPLY_KEY);
-    }
-
-    //#APIDOC_EXCLUDE_BEGIN
-
-    /**
-     * Check whether a received message complies with the protocol rules.
-     */
-    protected abstract boolean checkInSequence(ACLMessage received);
-
-    /**
-     * This method can be redefined by protocol specific implementations
-     * to update the status of the protocol after a reply has been sent.
-     * This default implementation does nothing.
-     */
-    protected void replySent(int exitValue) {
-    }
-
-    /**
-     * Utility method to register a behaviour in a state of the
-     * protocol and set the HashMap appropriately
-     */
-    protected void registerDSState(Behaviour b, String name) {
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, name);
-    }
     //#APIDOC_EXCLUDE_END
 }

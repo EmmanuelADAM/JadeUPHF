@@ -118,11 +118,25 @@ public class PropertyType {
         return this.name;
     }
 
+    /*
+    To set the name of the property to a specified value.
+    */
+    public void setName(String value) {
+        this.name = value;
+    }
+
     /**
      * Returns the default value of the property.
      */
     public String getDefaultValue() {
         return this.defaultValue;
+    }
+
+    /*
+    To set the default value of the property.
+    */
+    public void setDefaultValue(String value) {
+        this.defaultValue = value;
     }
 
     /**
@@ -144,21 +158,6 @@ public class PropertyType {
      */
     public boolean isMandatory() {
         return this.mandatory;
-    }
-
-    /*
-    To set the name of the property to a specified value.
-    */
-    public void setName(String value) {
-        this.name = value;
-    }
-
-
-    /*
-    To set the default value of the property.
-    */
-    public void setDefaultValue(String value) {
-        this.defaultValue = value;
     }
 
 

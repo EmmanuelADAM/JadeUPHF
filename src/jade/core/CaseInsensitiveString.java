@@ -61,6 +61,23 @@ public class CaseInsensitiveString implements Serializable {
     }
 
     /**
+     * Static method for case insensitive string comparasion.
+     * For comparasion used the regionMatches approach which
+     * doesn't allocate any additional memory.
+     *
+     * @param s1, s2 The <code>String</code> objects to compare
+     * @return <code>true</code> if the strings are equal, apart from case.
+     */
+    public static final boolean equalsIgnoreCase(String s1, String s2) {
+        if (s1 == null || s2 == null) {
+            return false;
+        } else {
+            return ((s1.length() == s2.length())
+                    && s1.regionMatches(true, 0, s2, 0, s1.length()));
+        }
+    }
+
+    /**
      * Converts the <code>CaseInsensitiveString</code> object into a
      * string.
      *
@@ -103,23 +120,6 @@ public class CaseInsensitiveString implements Serializable {
      */
     public final int hashCode() {
         return hashCode;
-    }
-
-    /**
-     * Static method for case insensitive string comparasion.
-     * For comparasion used the regionMatches approach which
-     * doesn't allocate any additional memory.
-     *
-     * @param s1, s2 The <code>String</code> objects to compare
-     * @return <code>true</code> if the strings are equal, apart from case.
-     */
-    public static final boolean equalsIgnoreCase(String s1, String s2) {
-        if (s1 == null || s2 == null) {
-            return false;
-        } else {
-            return ((s1.length() == s2.length())
-                    && s1.regionMatches(true, 0, s2, 0, s1.length()));
-        }
     }
 
 }

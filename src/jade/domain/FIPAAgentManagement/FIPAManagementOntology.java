@@ -42,23 +42,12 @@ public class FIPAManagementOntology extends Ontology implements FIPAManagementVo
 
     private static final Ontology theInstance = new FIPAManagementOntology();
 
-    /**
-     * This method returns the unique instance (according to the singleton
-     * pattern) of the FIPA-Agent-Management-ontology.
-     *
-     * @return The singleton <code>Ontology</code> object, containing the
-     * schemas for the elements of the FIPA-Agent-Management-ontology.
-     */
-    public static Ontology getInstance() {
-        return theInstance;
-    }
-
     private FIPAManagementOntology() {
         //#MIDP_EXCLUDE_BEGIN
         super(NAME, new Ontology[]{ExceptionOntology.getInstance(), SerializableOntology.getInstance()}, new BCReflectiveIntrospector());
         //#MIDP_EXCLUDE_END
-    	
-		/*#MIDP_INCLUDE_BEGIN    	
+
+		/*#MIDP_INCLUDE_BEGIN
   	super(NAME, ExceptionOntology.getInstance(), null);
    	#MIDP_INCLUDE_END*/
 
@@ -84,8 +73,8 @@ public class FIPAManagementOntology extends Ontology implements FIPAManagementVo
             add(new PredicateSchema(ALREADYREGISTERED), AlreadyRegistered.class);
             add(new PredicateSchema(NOTREGISTERED), NotRegistered.class);
             //#MIDP_EXCLUDE_END
-			   	  
-			/*#MIDP_INCLUDE_BEGIN    	
+
+			/*#MIDP_INCLUDE_BEGIN
 	  	add(new ConceptSchema(DFAGENTDESCRIPTION));
 	  	add(new ConceptSchema(SERVICEDESCRIPTION));
 	  	add(new ConceptSchema(SEARCHCONSTRAINTS));
@@ -95,13 +84,13 @@ public class FIPAManagementOntology extends Ontology implements FIPAManagementVo
 	  	add(new ConceptSchema(RECEIVEDOBJECT));
 	  	add(new ConceptSchema(APDESCRIPTION));
 	  	add(new ConceptSchema(APSERVICE));
-	  	
+
 	  	add(new AgentActionSchema(REGISTER));
 	  	add(new AgentActionSchema(DEREGISTER));
 	  	add(new AgentActionSchema(MODIFY));
 	  	add(new AgentActionSchema(SEARCH));
 	  	add(new AgentActionSchema(GETDESCRIPTION));
-	  
+
 	  	add(new PredicateSchema(ALREADYREGISTERED));
 	  	add(new PredicateSchema(NOTREGISTERED));
    		#MIDP_INCLUDE_END*/
@@ -187,5 +176,16 @@ public class FIPAManagementOntology extends Ontology implements FIPAManagementVo
         } catch (OntologyException oe) {
             oe.printStackTrace();
         }
+    }
+
+    /**
+     * This method returns the unique instance (according to the singleton
+     * pattern) of the FIPA-Agent-Management-ontology.
+     *
+     * @return The singleton <code>Ontology</code> object, containing the
+     * schemas for the elements of the FIPA-Agent-Management-ontology.
+     */
+    public static Ontology getInstance() {
+        return theInstance;
     }
 }

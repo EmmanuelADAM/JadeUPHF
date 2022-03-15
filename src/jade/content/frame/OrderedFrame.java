@@ -27,17 +27,19 @@ package jade.content.frame;
 import java.util.Vector;
 
 /**
- Generic class representing all frames (such as aggregates
- and content-element-lists) whose composing elements can be
- retrieved by an index.
- @author Giovanni Caire - TILAB
+ * Generic class representing all frames (such as aggregates
+ * and content-element-lists) whose composing elements can be
+ * retrieved by an index.
+ *
+ * @author Giovanni Caire - TILAB
  */
 public class OrderedFrame extends Vector<Object> implements Frame {
     private final String typeName;
 
     /**
-     Create an OrderedFrame with a given type-name.
-     @param typeName The type-name of the OrderedFrame to be created.
+     * Create an OrderedFrame with a given type-name.
+     *
+     * @param typeName The type-name of the OrderedFrame to be created.
      */
     public OrderedFrame(String typeName) {
         super();
@@ -45,8 +47,9 @@ public class OrderedFrame extends Vector<Object> implements Frame {
     }
 
     /**
-     Retrieve the type-name of this OrderedFrame.
-     @return the type-name of this OrderedFrame
+     * Retrieve the type-name of this OrderedFrame.
+     *
+     * @return the type-name of this OrderedFrame
      */
     public String getTypeName() {
         return typeName;

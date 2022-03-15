@@ -44,9 +44,9 @@ import java.util.List;
  */
 public class CreateAgent implements AgentAction {
 
+    private final List<Object> arguments = new ArrayList<>();
     private String agentName;
     private String className;
-    private final List<Object> arguments = new ArrayList<>();
     private ContainerID container;
     //#MIDP_EXCLUDE_BEGIN
     private JADEPrincipal owner;
@@ -58,16 +58,6 @@ public class CreateAgent implements AgentAction {
      * ontological classes.
      */
     public CreateAgent() {
-    }
-
-    /**
-     * Set the <code>agent-name</code> slot of this action.
-     *
-     * @param an The local name (i.e. without the platform ID) of the
-     *           agent to create.
-     */
-    public void setAgentName(String an) {
-        agentName = an;
     }
 
     /**
@@ -83,13 +73,13 @@ public class CreateAgent implements AgentAction {
     }
 
     /**
-     * Set the <code>class-name</code> slot of this action.
+     * Set the <code>agent-name</code> slot of this action.
      *
-     * @param cn The name of the Java class implementing the agent to
-     *           create.
+     * @param an The local name (i.e. without the platform ID) of the
+     *           agent to create.
      */
-    public void setClassName(String cn) {
-        className = cn;
+    public void setAgentName(String an) {
+        agentName = an;
     }
 
     /**
@@ -105,13 +95,13 @@ public class CreateAgent implements AgentAction {
     }
 
     /**
-     * Set the <code>container</code> slot of this action.
+     * Set the <code>class-name</code> slot of this action.
      *
-     * @param cid The container identifier of the container where the
-     *            agent is to be created.
+     * @param cn The name of the Java class implementing the agent to
+     *           create.
      */
-    public void setContainer(ContainerID cid) {
-        container = cid;
+    public void setClassName(String cn) {
+        className = cn;
     }
 
     /**
@@ -126,7 +116,24 @@ public class CreateAgent implements AgentAction {
         return container;
     }
 
+    /**
+     * Set the <code>container</code> slot of this action.
+     *
+     * @param cid The container identifier of the container where the
+     *            agent is to be created.
+     */
+    public void setContainer(ContainerID cid) {
+        container = cid;
+    }
+
     //#MIDP_EXCLUDE_BEGIN
+
+    /**
+     * @return The principal of the owner of the agent to be created.
+     */
+    public JADEPrincipal getOwner() {
+        return owner;
+    }
 
     /**
      * Set the principal of the owner of the agent to be created.
@@ -138,10 +145,10 @@ public class CreateAgent implements AgentAction {
     }
 
     /**
-     * @return The principal of the owner of the agent to be created.
+     * @return The initial credentials to be granted to the agent to be created.
      */
-    public JADEPrincipal getOwner() {
-        return owner;
+    public Credentials getInitialCredentials() {
+        return initialCredentials;
     }
 
     /**
@@ -151,13 +158,6 @@ public class CreateAgent implements AgentAction {
      */
     public void setInitialCredentials(Credentials c) {
         initialCredentials = c;
-    }
-
-    /**
-     * @return The initial credentials to be granted to the agent to be created.
-     */
-    public Credentials getInitialCredentials() {
-        return initialCredentials;
     }
     //#MIDP_EXCLUDE_END
 

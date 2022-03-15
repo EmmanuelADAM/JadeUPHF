@@ -32,6 +32,7 @@ import jade.core.CaseInsensitiveString;
 /**
  * Ontology containing schemas for the SL0 language operators.
  * see jade.content.Ontology
+ *
  * @author Giovanni Caire - TILAB
  */
 class SL0Ontology extends Ontology implements SL0Vocabulary {
@@ -41,15 +42,15 @@ class SL0Ontology extends Ontology implements SL0Vocabulary {
     // The singleton instance of this ontology
     private static final Ontology theInstance = new SL0Ontology(ONTOLOGY_NAME, BasicOntology.getInstance(), null);
 
-    public static Ontology getInstance() {
-        return theInstance;
-    }
-
     /**
      * Constructor
      */
     protected SL0Ontology(String name, Ontology base, Introspector intro) {
         super(name, base, intro);
+    }
+
+    public static Ontology getInstance() {
+        return theInstance;
     }
 
     boolean isUnaryLogicalOp(String symbol) {

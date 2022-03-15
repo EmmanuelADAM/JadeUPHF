@@ -34,28 +34,28 @@ import jade.content.Predicate;
 
 public class MissingArgument extends RefuseException implements Predicate {
 
+    /**
+     * @serial
+     */
+    String s1;
+
     public MissingArgument() {
         this("Unknown-argument-name");
     }
+
 
     public MissingArgument(String argumentName) {
         super("(missing-argument " + argumentName + ")");
         s1 = argumentName;
     }
 
-
-    /**
-     * @serial
-     */
-    String s1;
+    public String getArgumentName() {
+        return s1;
+    }
 
     public void setArgumentName(String a) {
         s1 = a;
         setMessage("(missing-argument " + s1 + ")");
-    }
-
-    public String getArgumentName() {
-        return s1;
     }
 
 }

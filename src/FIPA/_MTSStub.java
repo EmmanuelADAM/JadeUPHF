@@ -11,14 +11,14 @@ public class _MTSStub
         extends org.omg.CORBA.portable.ObjectImpl
         implements MTS {
 
+    private static final String[] _type_ids = {
+            "IDL:FIPA/MTS:1.0"
+    };
+
     public _MTSStub(org.omg.CORBA.portable.Delegate d) {
         super();
         _set_delegate(d);
     }
-
-    private static final String[] _type_ids = {
-            "IDL:FIPA/MTS:1.0"
-    };
 
     public String[] _ids() {
         return _type_ids.clone();

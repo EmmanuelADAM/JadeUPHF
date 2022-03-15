@@ -122,20 +122,6 @@ public class APServicePanel extends JPanel {
     }
 
     /**
-     * Set the field of the gui.
-     */
-    private void setAPService(APService ap) {
-
-        if (ap != null) {
-            name_Field.setText(ap.getName());
-            type_Field.setText(ap.getType());
-            //#DOTNET_EXCLUDE_BEGIN
-            address_List.resetContent(ap.getAllAddresses());
-            //#DOTNET_EXCLUDE_END
-        }
-    }
-
-    /**
      * To show an <code>APService</code> in A JDialog.
      */
     public static void viewAPServiceDialog(APService ap, Dialog parent, String title) {
@@ -169,6 +155,20 @@ public class APServicePanel extends JPanel {
         }
         tempDlg.setVisible(true);
 
+    }
+
+    /**
+     * Set the field of the gui.
+     */
+    private void setAPService(APService ap) {
+
+        if (ap != null) {
+            name_Field.setText(ap.getName());
+            type_Field.setText(ap.getType());
+            //#DOTNET_EXCLUDE_BEGIN
+            address_List.resetContent(ap.getAllAddresses());
+            //#DOTNET_EXCLUDE_END
+        }
     }
 
 

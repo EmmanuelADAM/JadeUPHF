@@ -31,6 +31,7 @@ import java.util.Iterator;
 /**
  * Utility class that allow using an <code>AID</code> object
  * as an ontological concept.
+ *
  * @author Giovanni Caire - TILAB
  */
 public class OntoAID extends AID implements Concept {
@@ -38,6 +39,7 @@ public class OntoAID extends AID implements Concept {
     /**
      * Constructs an ontological Agent-Identifier whose slot name is
      * set to an empty string
+     *
      * @see AID#AID()
      */
     public OntoAID() {
@@ -46,13 +48,14 @@ public class OntoAID extends AID implements Concept {
 
     /**
      * Constructor for an ontological Agent-identifier
-     * @param name is the value for the slot name for the agent.
+     *
+     * @param name   is the value for the slot name for the agent.
      * @param isGUID indicates if the passed <code>name</code>
-     * is already a globally unique identifier or not. Two
-     * constants <code>ISGUID</code>, <code>ISLOCALNAME</code>
-     * have also been defined for setting a value for this parameter.
-     * If the name is a local name, then the HAP (Home Agent Platform)
-     * is concatenated to the name, separated by  "@".
+     *               is already a globally unique identifier or not. Two
+     *               constants <code>ISGUID</code>, <code>ISLOCALNAME</code>
+     *               have also been defined for setting a value for this parameter.
+     *               If the name is a local name, then the HAP (Home Agent Platform)
+     *               is concatenated to the name, separated by  "@".
      * @see AID#AID(String, boolean)
      */
     public OntoAID(String name, boolean isGUID) {
@@ -62,10 +65,11 @@ public class OntoAID extends AID implements Concept {
     /**
      * Create an ontological Agent identifier that wraps an existing
      * <code>AID</code>.
+     *
      * @param id the <code>AID</code>to be wrapped. If <code>id</code>
-     * is already an ontological agent identifier no new object is
-     * created and <code>id</code> is returned with the resolvers
-     * (if any) properly wrapped.
+     *           is already an ontological agent identifier no new object is
+     *           created and <code>id</code> is returned with the resolvers
+     *           (if any) properly wrapped.
      */
     public static OntoAID wrap(AID id) {
         OntoAID wrapper = null;

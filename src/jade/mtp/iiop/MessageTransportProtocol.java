@@ -60,128 +60,10 @@ import java.util.*;
 public class MessageTransportProtocol implements MTP {
 
 
-    private static class MTSImpl extends FIPA._MTSImplBase {
-
-        private final Dispatcher dispatcher;
-
-        public MTSImpl(Dispatcher disp) {
-            dispatcher = disp;
-        }
-
-        public void message(FipaMessage aFipaMessage) {
-            FIPA.Envelope[] envelopes = aFipaMessage.messageEnvelopes;
-            byte[] payload = aFipaMessage.messageBody;
-
-            Envelope env = new Envelope();
-
-            // Read all the envelopes sequentially, so that later slots
-            // overwrite earlier ones.
-            for (FIPA.Envelope IDLenv : envelopes) {
-                // Read in the 'to' slot
-                if (IDLenv.to.length > 0)
-                    env.clearAllTo();
-                for (int i = 0; i < IDLenv.to.length; i++) {
-                    AID id = unmarshalAID(IDLenv.to[i]);
-                    env.addTo(id);
-                }
-
-                // Read in the 'from' slot
-                if (IDLenv.from.length > 0) {
-                    AID id = unmarshalAID(IDLenv.from[0]);
-                    env.setFrom(id);
-                }
-
-                // Read in the 'intended-receiver' slot
-                if (IDLenv.intendedReceiver.length > 0)
-                    env.clearAllIntendedReceiver();
-                for (int i = 0; i < IDLenv.intendedReceiver.length; i++) {
-                    AID id = unmarshalAID(IDLenv.intendedReceiver[i]);
-                    env.addIntendedReceiver(id);
-                }
-
-                // Read in the 'encrypted' slot
-                //if(IDLenv.encrypted.length > 0)
-                //  env.clearAllEncrypted();
-                //for(int i = 0; i < IDLenv.encrypted.length; i++) {
-                //  String word = IDLenv.encrypted[i];
-                //  env.addEncrypted(word);
-                //}
-
-                // Read in the other slots
-                if (IDLenv.comments.length() > 0)
-                    env.setComments(IDLenv.comments);
-                if (IDLenv.aclRepresentation.length() > 0)
-                    env.setAclRepresentation(IDLenv.aclRepresentation);
-                if (IDLenv.payloadLength > 0)
-                    env.setPayloadLength((long) IDLenv.payloadLength);
-                if (IDLenv.payloadEncoding.length() > 0)
-                    env.setPayloadEncoding(IDLenv.payloadEncoding);
-                if (IDLenv.date.length > 0) {
-                    Date d = unmarshalDateTime(IDLenv.date[0]);
-                    env.setDate(d);
-                }
-
-                // Read in the 'received' stamp
-                if (IDLenv.received.length > 0)
-                    env.addStamp(unmarshalReceivedObj(IDLenv.received[0]));
-
-                // Read in the 'user-defined properties' slot
-                if (IDLenv.userDefinedProperties.length > 0)
-                    env.clearAllProperties();
-                for (int i = 0; i < IDLenv.userDefinedProperties.length; i++) {
-                    env.addProperties(unmarshalProperty(IDLenv.userDefinedProperties[i]));
-                }
-            }
-
-            //String tmp = "\n\n"+(new  java.util.Date()).toString()+"   RECEIVED IIOP MESSAGE"+ "\n" + env.toString() + "\n" + new String(payload);
-            //System.out.println(tmp);
-
-
-            //MessageTransportProtocol.log(tmp); //Write in a log file for iiop incoming message
-
-            // Dispatch the message
-            dispatcher.dispatchMessage(env, payload);
-
-        }
-
-
-        private AID unmarshalAID(AgentID id) {
-            AID result = new AID();
-            result.setName(id.name);
-            for (int i = 0; i < id.addresses.length; i++)
-                result.addAddresses(id.addresses[i]);
-            for (int i = 0; i < id.resolvers.length; i++)
-                result.addResolvers(unmarshalAID(id.resolvers[i]));
-            return result;
-        }
-
-        private Date unmarshalDateTime(FIPA.DateTime d) {
-            return new Date();
-        }
-
-        private Property unmarshalProperty(FIPA.Property p) {
-            return new Property(p.keyword, p.value.extract_Value());
-        }
-
-        private ReceivedObject unmarshalReceivedObj(FIPA.ReceivedObject ro) {
-            ReceivedObject result = new ReceivedObject();
-            result.setBy(ro.by);
-            result.setFrom(ro.from);
-            result.setDate(unmarshalDateTime(ro.date));
-            result.setId(ro.id);
-            result.setVia(ro.via);
-            return result;
-        }
-
-    } // End of MTSImpl class
-
-
     private static final String[] PROTOCOLS = new String[]{"IOR", "corbaloc", "corbaname"};
-
+    private static PrintWriter logFile;
     private final ORB myORB;
     private MTSImpl server;
-    private static PrintWriter logFile;
-
     public MessageTransportProtocol() {
         myORB = ORB.init(new String[0], null);
 
@@ -420,6 +302,121 @@ public class MessageTransportProtocol implements MTP {
         return result;
     }
 
+    private static class MTSImpl extends FIPA._MTSImplBase {
+
+        private final Dispatcher dispatcher;
+
+        public MTSImpl(Dispatcher disp) {
+            dispatcher = disp;
+        }
+
+        public void message(FipaMessage aFipaMessage) {
+            FIPA.Envelope[] envelopes = aFipaMessage.messageEnvelopes;
+            byte[] payload = aFipaMessage.messageBody;
+
+            Envelope env = new Envelope();
+
+            // Read all the envelopes sequentially, so that later slots
+            // overwrite earlier ones.
+            for (FIPA.Envelope IDLenv : envelopes) {
+                // Read in the 'to' slot
+                if (IDLenv.to.length > 0)
+                    env.clearAllTo();
+                for (int i = 0; i < IDLenv.to.length; i++) {
+                    AID id = unmarshalAID(IDLenv.to[i]);
+                    env.addTo(id);
+                }
+
+                // Read in the 'from' slot
+                if (IDLenv.from.length > 0) {
+                    AID id = unmarshalAID(IDLenv.from[0]);
+                    env.setFrom(id);
+                }
+
+                // Read in the 'intended-receiver' slot
+                if (IDLenv.intendedReceiver.length > 0)
+                    env.clearAllIntendedReceiver();
+                for (int i = 0; i < IDLenv.intendedReceiver.length; i++) {
+                    AID id = unmarshalAID(IDLenv.intendedReceiver[i]);
+                    env.addIntendedReceiver(id);
+                }
+
+                // Read in the 'encrypted' slot
+                //if(IDLenv.encrypted.length > 0)
+                //  env.clearAllEncrypted();
+                //for(int i = 0; i < IDLenv.encrypted.length; i++) {
+                //  String word = IDLenv.encrypted[i];
+                //  env.addEncrypted(word);
+                //}
+
+                // Read in the other slots
+                if (IDLenv.comments.length() > 0)
+                    env.setComments(IDLenv.comments);
+                if (IDLenv.aclRepresentation.length() > 0)
+                    env.setAclRepresentation(IDLenv.aclRepresentation);
+                if (IDLenv.payloadLength > 0)
+                    env.setPayloadLength((long) IDLenv.payloadLength);
+                if (IDLenv.payloadEncoding.length() > 0)
+                    env.setPayloadEncoding(IDLenv.payloadEncoding);
+                if (IDLenv.date.length > 0) {
+                    Date d = unmarshalDateTime(IDLenv.date[0]);
+                    env.setDate(d);
+                }
+
+                // Read in the 'received' stamp
+                if (IDLenv.received.length > 0)
+                    env.addStamp(unmarshalReceivedObj(IDLenv.received[0]));
+
+                // Read in the 'user-defined properties' slot
+                if (IDLenv.userDefinedProperties.length > 0)
+                    env.clearAllProperties();
+                for (int i = 0; i < IDLenv.userDefinedProperties.length; i++) {
+                    env.addProperties(unmarshalProperty(IDLenv.userDefinedProperties[i]));
+                }
+            }
+
+            //String tmp = "\n\n"+(new  java.util.Date()).toString()+"   RECEIVED IIOP MESSAGE"+ "\n" + env.toString() + "\n" + new String(payload);
+            //System.out.println(tmp);
+
+
+            //MessageTransportProtocol.log(tmp); //Write in a log file for iiop incoming message
+
+            // Dispatch the message
+            dispatcher.dispatchMessage(env, payload);
+
+        }
+
+
+        private AID unmarshalAID(AgentID id) {
+            AID result = new AID();
+            result.setName(id.name);
+            for (int i = 0; i < id.addresses.length; i++)
+                result.addAddresses(id.addresses[i]);
+            for (int i = 0; i < id.resolvers.length; i++)
+                result.addResolvers(unmarshalAID(id.resolvers[i]));
+            return result;
+        }
+
+        private Date unmarshalDateTime(FIPA.DateTime d) {
+            return new Date();
+        }
+
+        private Property unmarshalProperty(FIPA.Property p) {
+            return new Property(p.keyword, p.value.extract_Value());
+        }
+
+        private ReceivedObject unmarshalReceivedObj(FIPA.ReceivedObject ro) {
+            ReceivedObject result = new ReceivedObject();
+            result.setBy(ro.by);
+            result.setFrom(ro.from);
+            result.setDate(unmarshalDateTime(ro.date));
+            result.setId(ro.id);
+            result.setVia(ro.via);
+            return result;
+        }
+
+    } // End of MTSImpl class
+
 
 //Method to write on a file the iiop message log file
 /*public static synchronized void log(String str) {
@@ -472,20 +469,12 @@ class IIOPAddress implements TransportAddress {
             '0', '1', '2', '3', '4', '5', '6', '7',
             '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
     };
-
-    private static byte getASCIIByte(String ch) {
-        return (ch.getBytes(StandardCharsets.US_ASCII))[0];
-    }
-
-
     private final ORB orb;
-
     private String ior;
     private String host;
     private short port;
     private String objectKey;
     private String anchor;
-
     private CDRCodec codecStrategy;
 
     public IIOPAddress(ORB anOrb, FIPA.MTS objRef) throws MTPException {
@@ -502,6 +491,10 @@ class IIOPAddress implements TransportAddress {
             initFromNS(s);
         else
             throw new MTPException("Invalid string prefix");
+    }
+
+    private static byte getASCIIByte(String ch) {
+        return (ch.getBytes(StandardCharsets.US_ASCII))[0];
     }
 
     void initFromIOR(String s) throws MTPException {
@@ -773,6 +766,26 @@ class IIOPAddress implements TransportAddress {
         return FIPA.MTSHelper.narrow(orb.string_to_object(ior));
     }
 
+    public String getProto() {
+        return "iiop";
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public String getPort() {
+        return Short.toString(port);
+    }
+
+    public String getFile() {
+        return objectKey;
+    }
+
+    public String getAnchor() {
+        return anchor;
+    }
+
     private static abstract class CDRCodec {
 
         protected byte[] readBuffer;
@@ -1005,26 +1018,6 @@ class IIOPAddress implements TransportAddress {
         }
 
     }  // End of LittleEndianCodec class
-
-    public String getProto() {
-        return "iiop";
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public String getPort() {
-        return Short.toString(port);
-    }
-
-    public String getFile() {
-        return objectKey;
-    }
-
-    public String getAnchor() {
-        return anchor;
-    }
 
 
 } // End of IIOPAddress class

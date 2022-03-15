@@ -47,20 +47,18 @@ import java.util.GregorianCalendar;
  */
 
 public class TimeChooser implements ActionListener {
-    private Date date;
-    private int mode;
-    private int retVal;
-    private JDialog dlg;
-    private JTextField year, month, day, hour, min, sec;
-
-    JToggleButton absButton;
-    JToggleButton relButton;
-
     //#APIDOC_EXCLUDE_BEGIN
     public static final int ABSOLUTE = 0;
     public static final int RELATIVE = 1;
     public static final int OK = 1;
     public static final int CANCEL = 0;
+    JToggleButton absButton;
+    JToggleButton relButton;
+    private Date date;
+    private int mode;
+    private int retVal;
+    private JDialog dlg;
+    private JTextField year, month, day, hour, min, sec;
     //#APIDOC_EXCLUDE_END
 
     /**

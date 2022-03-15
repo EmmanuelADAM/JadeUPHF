@@ -33,6 +33,8 @@ import jade.content.Predicate;
 
 public class UnsupportedAct extends NotUnderstoodException implements Predicate {
 
+    String s;
+
     public UnsupportedAct() {
         super("(unsupported-act unknown)");
     }
@@ -42,15 +44,13 @@ public class UnsupportedAct extends NotUnderstoodException implements Predicate 
         s = act;
     }
 
-    String s;
+    public String getAct() {
+        return s;
+    }
 
     public void setAct(String a) {
         s = a;
         setMessage("(unsupported-act " + a + ")");
-    }
-
-    public String getAct() {
-        return s;
     }
 
 }

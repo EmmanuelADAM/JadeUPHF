@@ -60,11 +60,14 @@ import java.util.Iterator;
  **/
 
 public class VisualStringList extends JPanel {
+    static String VIEW_LABEL = "View";
+    static String EDIT_LABEL = "Edit";
+    static String ADD_LABEL = "Add";
+    static String REMOVE_LABEL = "Remove";
     /**
      * @serial
      */
     Component owner;
-
     /**
      * @serial
      */
@@ -93,11 +96,6 @@ public class VisualStringList extends JPanel {
      * @serial
      */
     JMenuItem removeItem;
-
-    static String VIEW_LABEL = "View";
-    static String EDIT_LABEL = "Edit";
-    static String ADD_LABEL = "Add";
-    static String REMOVE_LABEL = "Remove";
 
     /**
      * Constructor of a panel showing a list of strings.

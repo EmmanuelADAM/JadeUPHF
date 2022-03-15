@@ -36,25 +36,26 @@ public class DefaultValueFacet implements Facet {
     private final Object defaultValue;
 
     /**
-     Construct a <code>DefaultValueFacet</code> that
-     set the default value of an AbsObject
+     * Construct a <code>DefaultValueFacet</code> that
+     * set the default value of an AbsObject
      */
     public DefaultValueFacet(Object defaultValue) {
         this.defaultValue = defaultValue;
     }
 
     /**
-     Get the default value associated to this facet
+     * Get the default value associated to this facet
      */
     public Object getDefaultValue() {
         return defaultValue;
     }
 
     /**
-     Check whether a given value for the slot this Facet applies
-     to is valid.
-     @param value The value to be checked
-     @throws OntologyException If the value is not valid
+     * Check whether a given value for the slot this Facet applies
+     * to is valid.
+     *
+     * @param value The value to be checked
+     * @throws OntologyException If the value is not valid
      */
     public void validate(AbsObject value, Ontology onto) throws OntologyException {
     }

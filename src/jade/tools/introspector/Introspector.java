@@ -63,43 +63,6 @@ import java.util.*;
  */
 public class Introspector extends ToolAgent {
 
-    private Set<AID> allAgents = null;
-    private Hashtable<String, boolean[]> preload = null;
-
-    private class AMSRequester extends SimpleAchieveREInitiator {
-
-        private final String actionName;
-
-
-        public AMSRequester(String an, ACLMessage request) {
-            super(Introspector.this, request);
-            actionName = an;
-        }
-
-        protected void handleNotUnderstood(ACLMessage reply) {
-            myGUI.showError("NOT-UNDERSTOOD received during " + actionName);
-        }
-
-        protected void handleRefuse(ACLMessage reply) {
-            myGUI.showError("REFUSE received during " + actionName);
-        }
-
-        protected void handleAgree(ACLMessage reply) {
-            if (logger.isLoggable(Logger.FINEST))
-                logger.log(Logger.FINEST, "AGREE received");
-        }
-
-        protected void handleFailure(ACLMessage reply) {
-            myGUI.showError("FAILURE received during " + actionName);
-        }
-
-        protected void handleInform(ACLMessage reply) {
-            if (logger.isLoggable(Logger.FINEST))
-                logger.log(Logger.FINEST, "INFORM received");
-        }
-
-    } // End of AMSRequester class
-
     // GUI events
     public static final int STEP_EVENT = 1;
     public static final int BREAK_EVENT = 2;
@@ -107,12 +70,8 @@ public class Introspector extends ToolAgent {
     public static final int GO_EVENT = 4;
     public static final int KILL_EVENT = 5;
     public static final int SUSPEND_EVENT = 6;
-
-    private IntrospectorGUI myGUI;
     private final Sensor guiSensor = new Sensor();
-    private String myContainerName;
     private final Map<AID, MainWindow> windowMap = Collections.synchronizedMap(new TreeMap<>());
-
     // The set of agents that are observed in step-by-step mode
     private final Set<AID> stepByStepAgents = new HashSet<>();
     // The set of agents that are observed in slow mode
@@ -123,89 +82,11 @@ public class Introspector extends ToolAgent {
     // Maps an observed agent with the ToolNotifier that notifies events
     // about that agent to this Introspector
     private final Map<AID, AID> notifiers = new HashMap<>();
-
     private final SequentialBehaviour AMSSubscribe = new SequentialBehaviour();
-
-    class IntrospectorAMSListenerBehaviour extends AMSListenerBehaviour {
-
-        protected void installHandlers(Map<String, EventHandler> handlersTable) {
-
-            handlersTable.put(IntrospectionVocabulary.META_RESETEVENTS, (EventHandler) ev -> {
-                ResetEvents re = (ResetEvents) ev;
-                myGUI.resetTree();
-            });
-
-            handlersTable.put(IntrospectionVocabulary.ADDEDCONTAINER, (EventHandler) ev -> {
-                AddedContainer ac = (AddedContainer) ev;
-                ContainerID cid = ac.getContainer();
-                String name = cid.getName();
-                String address = cid.getAddress();
-                try {
-                    InetAddress addr = InetAddress.getByName(address);
-                    myGUI.addContainer(name, addr);
-                } catch (UnknownHostException uhe) {
-                    myGUI.addContainer(name, null);
-                }
-            });
-
-            handlersTable.put(IntrospectionVocabulary.REMOVEDCONTAINER, (EventHandler) ev -> {
-                RemovedContainer rc = (RemovedContainer) ev;
-                ContainerID cid = rc.getContainer();
-                String name = cid.getName();
-                myGUI.removeContainer(name);
-            });
-
-            handlersTable.put(IntrospectionVocabulary.BORNAGENT, (EventHandler) ev -> {
-                BornAgent ba = (BornAgent) ev;
-                ContainerID cid = ba.getWhere();
-                // ContainerID is null in case of foreign agents registered with the local AMS or virtual agents
-                // FIXME: Such agents should be shown somewhere
-                if (cid != null) {
-                    String container = cid.getName();
-                    AID agent = ba.getAgent();
-                    allAgents.add(agent);
-                    myGUI.addAgent(container, agent);
-                    if (preloadContains(agent.getName()) != null)
-                        Introspector.this.addAgent(agent);
-                    if (agent.equals(getAID()))
-                        myContainerName = container;
-                }
-            });
-
-            handlersTable.put(IntrospectionVocabulary.DEADAGENT, (EventHandler) ev -> {
-                DeadAgent da = (DeadAgent) ev;
-                ContainerID cid = da.getWhere();
-                // ContainerID is null in case of foreign agents registered with the local AMS or virtual agents
-                if (cid != null) {
-                    String container = cid.getName();
-                    AID agent = da.getAgent();
-                    allAgents.remove(agent);
-                    MainWindow m = windowMap.get(agent);
-                    if (m != null) {
-                        myGUI.closeInternal(m);
-                        windowMap.remove(agent);
-                    }
-                    myGUI.removeAgent(container, agent);
-                }
-            });
-
-            handlersTable.put(IntrospectionVocabulary.MOVEDAGENT, (EventHandler) ev -> {
-                MovedAgent ma = (MovedAgent) ev;
-                AID agent = ma.getAgent();
-                ContainerID from = ma.getFrom();
-                myGUI.removeAgent(from.getName(), agent);
-                ContainerID to = ma.getTo();
-                myGUI.addAgent(to.getName(), agent);
-
-                if (windowMap.containsKey(agent)) {
-                    MainWindow m = windowMap.get(agent);
-                    // FIXME: We should clean behaviours and pending messages here
-                    requestDebugOn(agent);
-                }
-            });
-
-        } // End of installHandlers() method
-    }
+    private Set<AID> allAgents = null;
+    private Hashtable<String, boolean[]> preload = null;
+    private IntrospectorGUI myGUI;
+    private String myContainerName;
 
     public void toolSetup() {
 
@@ -348,7 +229,6 @@ public class Introspector extends ToolAgent {
         }
     }
 
-
     /**
      * Cleanup during agent shutdown. This method cleans things up when
      * <em>RMA</em> agent is destroyed, disconnecting from <em>AMS</em>
@@ -385,173 +265,12 @@ public class Introspector extends ToolAgent {
         myGUI.disposeAsync();
     }
 
-
     /**
      * Callback method for platform management <em>GUI</em>.
      */
     public AgentTreeModel getModel() {
         return myGUI.getModel();
     }
-
-    /*
-     Listens to introspective messages and dispatches them.
-     */
-    private class IntrospectionListenerBehaviour extends CyclicBehaviour {
-
-        private final MessageTemplate template;
-        private final Map<String, Object> handlers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-
-        IntrospectionListenerBehaviour() {
-            template = MessageTemplate.and(MessageTemplate.MatchOntology(IntrospectionOntology.NAME),
-                    MessageTemplate.MatchConversationId(getName() + "-event"));
-
-            // Fill handlers table ...
-            handlers.put(IntrospectionVocabulary.CHANGEDAGENTSTATE, (EventHandler) ev -> {
-
-            });
-
-            handlers.put(IntrospectionVocabulary.ADDEDBEHAVIOUR, (EventHandler) ev -> {
-                AddedBehaviour ab = (AddedBehaviour) ev;
-                AID agent = ab.getAgent();
-                MainWindow wnd = windowMap.get(agent);
-                if (wnd != null)
-                    myGUI.behaviourAdded(wnd, ab);
-            });
-
-            handlers.put(IntrospectionVocabulary.REMOVEDBEHAVIOUR, (EventHandler) ev -> {
-                RemovedBehaviour rb = (RemovedBehaviour) ev;
-                AID agent = rb.getAgent();
-                MainWindow wnd = windowMap.get(agent);
-                if (wnd != null)
-                    myGUI.behaviourRemoved(wnd, rb);
-            });
-
-            handlers.put(IntrospectionVocabulary.CHANGEDBEHAVIOURSTATE, (EventHandler) ev -> {
-                ChangedBehaviourState cs = (ChangedBehaviourState) ev;
-                AID agent = cs.getAgent();
-                MainWindow wnd = windowMap.get(agent);
-                if (wnd != null) {
-                    myGUI.behaviourChangeState(wnd, cs);
-                }
-                if (stepByStepAgents.contains(agent)) {
-                    return;
-                }
-                if (slowAgents.contains(agent)) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException ie) {
-                        // The introspector is probably being killed
-                    }
-                }
-                proceed(agent);
-            });
-
-            handlers.put(IntrospectionVocabulary.SENTMESSAGE, (EventHandler) ev -> {
-                SentMessage sm = (SentMessage) ev;
-                AID sender = sm.getSender();
-
-                MainWindow wnd = windowMap.get(sender);
-                if (wnd != null)
-                    myGUI.messageSent(wnd, sm);
-            });
-
-            handlers.put(IntrospectionVocabulary.RECEIVEDMESSAGE, (EventHandler) ev -> {
-                ReceivedMessage rm = (ReceivedMessage) ev;
-                AID receiver = rm.getReceiver();
-
-                MainWindow wnd = windowMap.get(receiver);
-                if (wnd != null)
-                    myGUI.messageReceived(wnd, rm);
-            });
-
-            handlers.put(IntrospectionVocabulary.POSTEDMESSAGE, (EventHandler) ev -> {
-                PostedMessage pm = (PostedMessage) ev;
-                AID receiver = pm.getReceiver();
-
-                MainWindow wnd = windowMap.get(receiver);
-                if (wnd != null)
-                    myGUI.messagePosted(wnd, pm);
-            });
-
-            handlers.put(IntrospectionVocabulary.CHANGEDAGENTSTATE, (EventHandler) ev -> {
-                ChangedAgentState cas = (ChangedAgentState) ev;
-                AID agent = cas.getAgent();
-
-                MainWindow wnd = windowMap.get(agent);
-                if (wnd != null)
-                    myGUI.changedAgentState(wnd, cas);
-            });
-
-        }
-
-        public void action() {
-
-            ACLMessage message = receive(template);
-            if (message != null) {
-                AID name = message.getSender();
-                try {
-                    Occurred o = (Occurred) getContentManager().extractContent(message);
-                    EventRecord er = o.getWhat();
-                    Event ev = er.getWhat();
-                    // DEBUG
-                    if (logger.isLoggable(Logger.FINEST))
-                        logger.log(Logger.FINEST, "Received event " + ev);
-                    if (message.getReplyWith() != null) {
-                        // A reply is expected --> put relevant information into the
-                        // pendingReplies Map
-                        ChangedBehaviourState cs = (ChangedBehaviourState) ev;
-                        pendingReplies.put(cs.getAgent(), message.getReplyWith());
-                    }
-                    String eventName = ev.getName();
-                    EventHandler h = (EventHandler) handlers.get(eventName);
-                    if (h != null)
-                        h.handle(ev);
-                } catch (Exception fe) {
-                    fe.printStackTrace();
-                }
-            } else
-                block();
-        }
-
-    } // End of inner class IntrospectionListenerBehaviour
-
-
-    /**
-     * Inner class ControlListenerBehaviour.
-     * This is a behaviour that listen for messages from ToolNotifiers
-     * informing that they have started notifying events about a given
-     * agent. These information are used to keep the map between observed
-     * agents and ToolNotifiers up to date.
-     */
-    private class ControlListenerBehaviour extends CyclicBehaviour {
-        private final MessageTemplate template;
-
-        ControlListenerBehaviour(Agent a) {
-            super(a);
-            template = MessageTemplate.and(
-                    MessageTemplate.MatchOntology(IntrospectionOntology.NAME),
-                    MessageTemplate.MatchConversationId(getName() + "-control"));
-        }
-
-        public void action() {
-            ACLMessage message = receive(template);
-            if (message != null) {
-                try {
-                    Done d = (Done) getContentManager().extractContent(message);
-                    Action a = (Action) d.getAction();
-                    AID tn = a.getActor();
-                    StartNotify sn = (StartNotify) a.getAction();
-                    AID observed = sn.getObserved();
-                    notifiers.put(observed, tn);
-                } catch (Exception fe) {
-                    fe.printStackTrace();
-                }
-            } else {
-                block();
-            }
-        }
-
-    } // End of inner class ControlListenerBehaviour
 
     private void proceed(AID id) {
         String pendingReplyWith = pendingReplies.remove(id);
@@ -683,6 +402,280 @@ public class Introspector extends ToolAgent {
         }
         preload.put(name, filter);
     }
+
+    private class AMSRequester extends SimpleAchieveREInitiator {
+
+        private final String actionName;
+
+
+        public AMSRequester(String an, ACLMessage request) {
+            super(Introspector.this, request);
+            actionName = an;
+        }
+
+        protected void handleNotUnderstood(ACLMessage reply) {
+            myGUI.showError("NOT-UNDERSTOOD received during " + actionName);
+        }
+
+        protected void handleRefuse(ACLMessage reply) {
+            myGUI.showError("REFUSE received during " + actionName);
+        }
+
+        protected void handleAgree(ACLMessage reply) {
+            if (logger.isLoggable(Logger.FINEST))
+                logger.log(Logger.FINEST, "AGREE received");
+        }
+
+        protected void handleFailure(ACLMessage reply) {
+            myGUI.showError("FAILURE received during " + actionName);
+        }
+
+        protected void handleInform(ACLMessage reply) {
+            if (logger.isLoggable(Logger.FINEST))
+                logger.log(Logger.FINEST, "INFORM received");
+        }
+
+    } // End of AMSRequester class
+
+    class IntrospectorAMSListenerBehaviour extends AMSListenerBehaviour {
+
+        protected void installHandlers(Map<String, EventHandler> handlersTable) {
+
+            handlersTable.put(IntrospectionVocabulary.META_RESETEVENTS, (EventHandler) ev -> {
+                ResetEvents re = (ResetEvents) ev;
+                myGUI.resetTree();
+            });
+
+            handlersTable.put(IntrospectionVocabulary.ADDEDCONTAINER, (EventHandler) ev -> {
+                AddedContainer ac = (AddedContainer) ev;
+                ContainerID cid = ac.getContainer();
+                String name = cid.getName();
+                String address = cid.getAddress();
+                try {
+                    InetAddress addr = InetAddress.getByName(address);
+                    myGUI.addContainer(name, addr);
+                } catch (UnknownHostException uhe) {
+                    myGUI.addContainer(name, null);
+                }
+            });
+
+            handlersTable.put(IntrospectionVocabulary.REMOVEDCONTAINER, (EventHandler) ev -> {
+                RemovedContainer rc = (RemovedContainer) ev;
+                ContainerID cid = rc.getContainer();
+                String name = cid.getName();
+                myGUI.removeContainer(name);
+            });
+
+            handlersTable.put(IntrospectionVocabulary.BORNAGENT, (EventHandler) ev -> {
+                BornAgent ba = (BornAgent) ev;
+                ContainerID cid = ba.getWhere();
+                // ContainerID is null in case of foreign agents registered with the local AMS or virtual agents
+                // FIXME: Such agents should be shown somewhere
+                if (cid != null) {
+                    String container = cid.getName();
+                    AID agent = ba.getAgent();
+                    allAgents.add(agent);
+                    myGUI.addAgent(container, agent);
+                    if (preloadContains(agent.getName()) != null)
+                        Introspector.this.addAgent(agent);
+                    if (agent.equals(getAID()))
+                        myContainerName = container;
+                }
+            });
+
+            handlersTable.put(IntrospectionVocabulary.DEADAGENT, (EventHandler) ev -> {
+                DeadAgent da = (DeadAgent) ev;
+                ContainerID cid = da.getWhere();
+                // ContainerID is null in case of foreign agents registered with the local AMS or virtual agents
+                if (cid != null) {
+                    String container = cid.getName();
+                    AID agent = da.getAgent();
+                    allAgents.remove(agent);
+                    MainWindow m = windowMap.get(agent);
+                    if (m != null) {
+                        myGUI.closeInternal(m);
+                        windowMap.remove(agent);
+                    }
+                    myGUI.removeAgent(container, agent);
+                }
+            });
+
+            handlersTable.put(IntrospectionVocabulary.MOVEDAGENT, (EventHandler) ev -> {
+                MovedAgent ma = (MovedAgent) ev;
+                AID agent = ma.getAgent();
+                ContainerID from = ma.getFrom();
+                myGUI.removeAgent(from.getName(), agent);
+                ContainerID to = ma.getTo();
+                myGUI.addAgent(to.getName(), agent);
+
+                if (windowMap.containsKey(agent)) {
+                    MainWindow m = windowMap.get(agent);
+                    // FIXME: We should clean behaviours and pending messages here
+                    requestDebugOn(agent);
+                }
+            });
+
+        } // End of installHandlers() method
+    }
+
+    /*
+     Listens to introspective messages and dispatches them.
+     */
+    private class IntrospectionListenerBehaviour extends CyclicBehaviour {
+
+        private final MessageTemplate template;
+        private final Map<String, Object> handlers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+
+        IntrospectionListenerBehaviour() {
+            template = MessageTemplate.and(MessageTemplate.MatchOntology(IntrospectionOntology.NAME),
+                    MessageTemplate.MatchConversationId(getName() + "-event"));
+
+            // Fill handlers table ...
+            handlers.put(IntrospectionVocabulary.CHANGEDAGENTSTATE, (EventHandler) ev -> {
+
+            });
+
+            handlers.put(IntrospectionVocabulary.ADDEDBEHAVIOUR, (EventHandler) ev -> {
+                AddedBehaviour ab = (AddedBehaviour) ev;
+                AID agent = ab.getAgent();
+                MainWindow wnd = windowMap.get(agent);
+                if (wnd != null)
+                    myGUI.behaviourAdded(wnd, ab);
+            });
+
+            handlers.put(IntrospectionVocabulary.REMOVEDBEHAVIOUR, (EventHandler) ev -> {
+                RemovedBehaviour rb = (RemovedBehaviour) ev;
+                AID agent = rb.getAgent();
+                MainWindow wnd = windowMap.get(agent);
+                if (wnd != null)
+                    myGUI.behaviourRemoved(wnd, rb);
+            });
+
+            handlers.put(IntrospectionVocabulary.CHANGEDBEHAVIOURSTATE, (EventHandler) ev -> {
+                ChangedBehaviourState cs = (ChangedBehaviourState) ev;
+                AID agent = cs.getAgent();
+                MainWindow wnd = windowMap.get(agent);
+                if (wnd != null) {
+                    myGUI.behaviourChangeState(wnd, cs);
+                }
+                if (stepByStepAgents.contains(agent)) {
+                    return;
+                }
+                if (slowAgents.contains(agent)) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ie) {
+                        // The introspector is probably being killed
+                    }
+                }
+                proceed(agent);
+            });
+
+            handlers.put(IntrospectionVocabulary.SENTMESSAGE, (EventHandler) ev -> {
+                SentMessage sm = (SentMessage) ev;
+                AID sender = sm.getSender();
+
+                MainWindow wnd = windowMap.get(sender);
+                if (wnd != null)
+                    myGUI.messageSent(wnd, sm);
+            });
+
+            handlers.put(IntrospectionVocabulary.RECEIVEDMESSAGE, (EventHandler) ev -> {
+                ReceivedMessage rm = (ReceivedMessage) ev;
+                AID receiver = rm.getReceiver();
+
+                MainWindow wnd = windowMap.get(receiver);
+                if (wnd != null)
+                    myGUI.messageReceived(wnd, rm);
+            });
+
+            handlers.put(IntrospectionVocabulary.POSTEDMESSAGE, (EventHandler) ev -> {
+                PostedMessage pm = (PostedMessage) ev;
+                AID receiver = pm.getReceiver();
+
+                MainWindow wnd = windowMap.get(receiver);
+                if (wnd != null)
+                    myGUI.messagePosted(wnd, pm);
+            });
+
+            handlers.put(IntrospectionVocabulary.CHANGEDAGENTSTATE, (EventHandler) ev -> {
+                ChangedAgentState cas = (ChangedAgentState) ev;
+                AID agent = cas.getAgent();
+
+                MainWindow wnd = windowMap.get(agent);
+                if (wnd != null)
+                    myGUI.changedAgentState(wnd, cas);
+            });
+
+        }
+
+        public void action() {
+
+            ACLMessage message = receive(template);
+            if (message != null) {
+                AID name = message.getSender();
+                try {
+                    Occurred o = (Occurred) getContentManager().extractContent(message);
+                    EventRecord er = o.getWhat();
+                    Event ev = er.getWhat();
+                    // DEBUG
+                    if (logger.isLoggable(Logger.FINEST))
+                        logger.log(Logger.FINEST, "Received event " + ev);
+                    if (message.getReplyWith() != null) {
+                        // A reply is expected --> put relevant information into the
+                        // pendingReplies Map
+                        ChangedBehaviourState cs = (ChangedBehaviourState) ev;
+                        pendingReplies.put(cs.getAgent(), message.getReplyWith());
+                    }
+                    String eventName = ev.getName();
+                    EventHandler h = (EventHandler) handlers.get(eventName);
+                    if (h != null)
+                        h.handle(ev);
+                } catch (Exception fe) {
+                    fe.printStackTrace();
+                }
+            } else
+                block();
+        }
+
+    } // End of inner class IntrospectionListenerBehaviour
+
+    /**
+     * Inner class ControlListenerBehaviour.
+     * This is a behaviour that listen for messages from ToolNotifiers
+     * informing that they have started notifying events about a given
+     * agent. These information are used to keep the map between observed
+     * agents and ToolNotifiers up to date.
+     */
+    private class ControlListenerBehaviour extends CyclicBehaviour {
+        private final MessageTemplate template;
+
+        ControlListenerBehaviour(Agent a) {
+            super(a);
+            template = MessageTemplate.and(
+                    MessageTemplate.MatchOntology(IntrospectionOntology.NAME),
+                    MessageTemplate.MatchConversationId(getName() + "-control"));
+        }
+
+        public void action() {
+            ACLMessage message = receive(template);
+            if (message != null) {
+                try {
+                    Done d = (Done) getContentManager().extractContent(message);
+                    Action a = (Action) d.getAction();
+                    AID tn = a.getActor();
+                    StartNotify sn = (StartNotify) a.getAction();
+                    AID observed = sn.getObserved();
+                    notifiers.put(observed, tn);
+                } catch (Exception fe) {
+                    fe.printStackTrace();
+                }
+            } else {
+                block();
+            }
+        }
+
+    } // End of inner class ControlListenerBehaviour
 
     /**
      * Inner class RequestListenerBehaviour.

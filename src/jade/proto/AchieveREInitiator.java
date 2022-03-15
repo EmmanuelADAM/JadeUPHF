@@ -155,98 +155,95 @@ public class AchieveREInitiator extends Initiator {
      *              <code>AchieveREInitiator</code>
      * deprecated
     public AchieveREInitiator(Agent a, ACLMessage msg, HashMap<String, List<ACLMessage>> msgList) {
-        super(a, msg, msgList);
+    super(a, msg, msgList);
 
-        // Register the FSM transitions specific to the Achieve-RE protocol
-        registerTransition(CHECK_IN_SEQ, HANDLE_AGREE, ACLMessage.AGREE);
-        registerTransition(CHECK_IN_SEQ, HANDLE_INFORM, ACLMessage.INFORM);
-        registerTransition(CHECK_IN_SEQ, HANDLE_REFUSE, ACLMessage.REFUSE);
-        registerDefaultTransition(HANDLE_AGREE, CHECK_SESSIONS);
-        registerDefaultTransition(HANDLE_INFORM, CHECK_SESSIONS);
-        registerDefaultTransition(HANDLE_REFUSE, CHECK_SESSIONS);
-        registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, ALL_RESPONSES_RECEIVED);
-        registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESULT_NOTIFICATIONS, ALL_RESULT_NOTIFICATIONS_RECEIVED);
-        registerDefaultTransition(HANDLE_ALL_RESPONSES, CHECK_AGAIN);
-        registerTransition(CHECK_AGAIN, HANDLE_ALL_RESULT_NOTIFICATIONS, 0);
-        registerDefaultTransition(CHECK_AGAIN, RECEIVE_REPLY, toBeReset);
+    // Register the FSM transitions specific to the Achieve-RE protocol
+    registerTransition(CHECK_IN_SEQ, HANDLE_AGREE, ACLMessage.AGREE);
+    registerTransition(CHECK_IN_SEQ, HANDLE_INFORM, ACLMessage.INFORM);
+    registerTransition(CHECK_IN_SEQ, HANDLE_REFUSE, ACLMessage.REFUSE);
+    registerDefaultTransition(HANDLE_AGREE, CHECK_SESSIONS);
+    registerDefaultTransition(HANDLE_INFORM, CHECK_SESSIONS);
+    registerDefaultTransition(HANDLE_REFUSE, CHECK_SESSIONS);
+    registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESPONSES, ALL_RESPONSES_RECEIVED);
+    registerTransition(CHECK_SESSIONS, HANDLE_ALL_RESULT_NOTIFICATIONS, ALL_RESULT_NOTIFICATIONS_RECEIVED);
+    registerDefaultTransition(HANDLE_ALL_RESPONSES, CHECK_AGAIN);
+    registerTransition(CHECK_AGAIN, HANDLE_ALL_RESULT_NOTIFICATIONS, 0);
+    registerDefaultTransition(CHECK_AGAIN, RECEIVE_REPLY, toBeReset);
 
-        // Create and register the states specific to the Achieve-RE protocol
-        Behaviour b;
-        // HANDLE_AGREE
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895818003L;
+    // Create and register the states specific to the Achieve-RE protocol
+    Behaviour b;
+    // HANDLE_AGREE
+    b = new OneShotBehaviour(myAgent) {
+    @Serial private static final long serialVersionUID = 3487495895818003L;
 
-            public void action() {
-                handleAgree(getMapMessages().get(REPLY_K));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
-        registerState(b, HANDLE_AGREE);
-
-        // HANDLE_REFUSE
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895818004L;
-
-            public void action() {
-                handleRefuse(getMapMessages().get(REPLY_K));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
-        registerState(b, HANDLE_REFUSE);
-
-        // HANDLE_INFORM
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895818006L;
-
-            public void action() {
-                handleInform(getMapMessages().get(REPLY_K));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
-        registerState(b, HANDLE_INFORM);
-
-        // HANDLE_ALL_RESPONSES
-        b = new OneShotBehaviour(myAgent) {
-
-            public void action() {
-                handleAllResponses(getMapMessagesList().get(ALL_RESPONSES_KEY));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
-        registerState(b, HANDLE_ALL_RESPONSES);
-
-        // HANDLE_ALL_RESULT_NOTIFICATIONS
-        b = new OneShotBehaviour(myAgent) {
-
-            public void action() {
-                handleAllResultNotifications(getMapMessagesList().get(ALL_RESULT_NOTIFICATIONS_KEY));
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
-        registerLastState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
-
-        // CHECK_AGAIN
-        b = new OneShotBehaviour(myAgent) {
-            public void action() {
-            }
-
-            public int onEnd() {
-                return mapSessions.size();
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
-        registerState(b, CHECK_AGAIN);
+    public void action() {
+    handleAgree(getMapMessages().get(REPLY_K));
     }
-*/
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    b.setMapMessages(getMapMessages());
+    registerState(b, HANDLE_AGREE);
+
+    // HANDLE_REFUSE
+    b = new OneShotBehaviour(myAgent) {
+    @Serial private static final long serialVersionUID = 3487495895818004L;
+
+    public void action() {
+    handleRefuse(getMapMessages().get(REPLY_K));
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    b.setMapMessages(getMapMessages());
+    registerState(b, HANDLE_REFUSE);
+
+    // HANDLE_INFORM
+    b = new OneShotBehaviour(myAgent) {
+    @Serial private static final long serialVersionUID = 3487495895818006L;
+
+    public void action() {
+    handleInform(getMapMessages().get(REPLY_K));
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    b.setMapMessages(getMapMessages());
+    registerState(b, HANDLE_INFORM);
+
+    // HANDLE_ALL_RESPONSES
+    b = new OneShotBehaviour(myAgent) {
+
+    public void action() {
+    handleAllResponses(getMapMessagesList().get(ALL_RESPONSES_KEY));
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    b.setMapMessages(getMapMessages());
+    registerState(b, HANDLE_ALL_RESPONSES);
+
+    // HANDLE_ALL_RESULT_NOTIFICATIONS
+    b = new OneShotBehaviour(myAgent) {
+
+    public void action() {
+    handleAllResultNotifications(getMapMessagesList().get(ALL_RESULT_NOTIFICATIONS_KEY));
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    b.setMapMessages(getMapMessages());
+    registerLastState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
+
+    // CHECK_AGAIN
+    b = new OneShotBehaviour(myAgent) {
+    public void action() {
+    }
+
+    public int onEnd() {
+    return mapSessions.size();
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    b.setMapMessages(getMapMessages());
+    registerState(b, CHECK_AGAIN);
+    }
+     */
     //#APIDOC_EXCLUDE_BEGIN
 
     /**

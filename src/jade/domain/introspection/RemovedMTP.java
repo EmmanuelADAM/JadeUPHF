@@ -60,15 +60,6 @@ public class RemovedMTP implements Event {
     }
 
     /**
-     * Set the <code>address</code> slot of this event.
-     *
-     * @param s The address URL of the newly removed MTP.
-     */
-    public void setAddress(String s) {
-        address = s;
-    }
-
-    /**
      * Retrieve the value of the <code>address</code> slot of this
      * event, containing the address URL of the newly removed MTP.
      *
@@ -80,12 +71,12 @@ public class RemovedMTP implements Event {
     }
 
     /**
-     * Set the <code>proto</code> slot of this event.
+     * Set the <code>address</code> slot of this event.
      *
-     * @param p The protocol name for the newly removed MTP.
+     * @param s The address URL of the newly removed MTP.
      */
-    public void setProto(String p) {
-        proto = p;
+    public void setAddress(String s) {
+        address = s;
     }
 
     /**
@@ -100,13 +91,12 @@ public class RemovedMTP implements Event {
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
+     * Set the <code>proto</code> slot of this event.
      *
-     * @param id The container identifier of the container where the
-     *           newly removed MTP was deployed.
+     * @param p The protocol name for the newly removed MTP.
      */
-    public void setWhere(ContainerID id) {
-        where = id;
+    public void setProto(String p) {
+        proto = p;
     }
 
     /**
@@ -119,6 +109,16 @@ public class RemovedMTP implements Event {
      */
     public ContainerID getWhere() {
         return where;
+    }
+
+    /**
+     * Set the <code>where</code> slot of this event.
+     *
+     * @param id The container identifier of the container where the
+     *           newly removed MTP was deployed.
+     */
+    public void setWhere(ContainerID id) {
+        where = id;
     }
 
 }

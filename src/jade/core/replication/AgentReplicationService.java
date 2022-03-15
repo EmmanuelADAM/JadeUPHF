@@ -44,23 +44,18 @@ import java.util.*;
 
 public class AgentReplicationService extends BaseService {
     public static final String NAME = AgentReplicationHelper.SERVICE_NAME;
-
-    private AgentContainer myContainer;
-    private MessagingService theMessagingService;
-
-    private Filter outFilter;
-    private Filter incFilter;
-    private ServiceComponent localSlice;
-
     // Map a virtual agent to the set of global information associated to it
     private final Map<AID, GlobalReplicationInfo> globalReplications = new Hashtable<>();
     // Map a replica agent to the related virtual agent
     private final Map<AID, AID> replicaToVirtualMap = new Hashtable<>();
     // Map a master replica agent to the pending replica creation requests
     private final Map<AID, List<ReplicaInfo>> pendingReplicaCreationRequests = new Hashtable<>();
-
     private final Map<String, Method> cachedAgentMethods = new HashMap<>();
-
+    private AgentContainer myContainer;
+    private MessagingService theMessagingService;
+    private Filter outFilter;
+    private Filter incFilter;
+    private ServiceComponent localSlice;
 
     public String getName() {
         return NAME;
@@ -129,467 +124,6 @@ public class AgentReplicationService extends BaseService {
     public Slice getLocalSlice() {
         return localSlice;
     }
-
-
-    /**
-     * Inner class AgentReplicationHelperImpl
-     */
-    private class AgentReplicationHelperImpl implements AgentReplicationHelper {
-        private AID myAid;
-        private AID virtualAid;
-        private final List<ReplicaInfo> peerReplicas = new ArrayList<>();
-        private ReplicaInfo[] peerReplicasArray = new ReplicaInfo[0];
-
-        public void init(Agent a) {
-            myAid = a.getAID();
-
-            // If the agent retrieving this helper is already a replica, initialize virtualAid
-            // and peerReplicas from the global replication information
-            virtualAid = replicaToVirtualMap.get(myAid);
-            if (virtualAid != null) {
-                GlobalReplicationInfo info = globalReplications.get(virtualAid);
-                if (info != null) {
-                    AID[] currentReplicas = info.getAllReplicas();
-                    for (AID replica : currentReplicas) {
-                        // Exclude the agent itself from peer replicas
-                        if (!replica.equals(myAid)) {
-                            try {
-                                Location location = getLocation(replica);
-                                addPeerReplica(new ReplicaInfo(replica, location));
-                            } catch (NotFoundException nfe) {
-                                myLogger.log(Logger.WARNING, "Replica " + replica.getLocalName() + " not found. Likely it died in the meanwhile");
-                            } catch (Exception e) {
-                                myLogger.log(Logger.SEVERE, "Error retrieving location for agent " + replica.getLocalName(), e);
-                            }
-                        }
-                    }
-                } else {
-                    myLogger.log(Logger.SEVERE, "Virtual agent " + virtualAid.getLocalName() + " for replica agent " + myAid.getLocalName() + " not found");
-                }
-            }
-        }
-
-        public AID makeVirtual(String virtualName, int replicationMode) throws ServiceException {
-            if (virtualAid == null) {
-                virtualAid = new AID(AID.createGUID(virtualName, myContainer.getPlatformID()), AID.ISGUID);
-
-                // Reserve the virtualName by registering the virtual AID to the AMS
-                AMSAgentDescription amsd = new AMSAgentDescription();
-                amsd.setName(virtualAid);
-                amsd.setState(AMSAgentDescription.ACTIVE);
-                Agent agent = myContainer.acquireLocalAgent(myAid);
-                // Immediately release the agent: AMSService.register() requires that the agent receives the AMS reply
-                myContainer.releaseLocalAgent(myAid);
-                if (agent != null) {
-                    try {
-                        AMSService.register(agent, amsd);
-                    } catch (Exception e) {
-                        throw new ServiceException("Error registering virtual name " + virtualName, e);
-                    }
-                }
-
-                broadcastNewVirtualAgent(virtualAid, myAid, replicationMode);
-                return virtualAid;
-            } else {
-                throw new ServiceException("Agent " + myAid.getLocalName() + " has already been made virtual");
-            }
-        }
-
-        public void createReplica(String replicaName, Location where) throws ServiceException {
-            if (virtualAid != null) {
-                if (isMaster()) {
-                    // The agent this helper belongs to is virtualized and is the master replica
-                    // Go on with the replica creation process
-                    AgentReplicationSlice slice = (AgentReplicationSlice) getSlice(where.getName());
-                    if (slice != null) {
-                        // Notify the destination slice that a replica for our virtual agent is
-                        // going to be created there (see comment in AgentReplicationSlice)
-                        AID replicaAid = new AID(AID.createGUID(replicaName, myContainer.getPlatformID()), AID.ISGUID);
-                        try {
-                            slice.replicaCreationRequested(virtualAid, replicaAid);
-                        } catch (IMTPException imtpe) {
-                            // Get a fresh slice and retry
-                            slice = (AgentReplicationSlice) getFreshSlice(where.getName());
-                            try {
-                                slice.replicaCreationRequested(virtualAid, replicaAid);
-                            } catch (IMTPException imtpe1) {
-                                throw new ServiceException("IMTP error contacting destination slice", imtpe1);
-                            }
-                        }
-
-                        // Enqueue the replica creation request
-                        List<ReplicaInfo> rr = pendingReplicaCreationRequests.get(myAid);
-                        if (rr == null) {
-                            rr = new ArrayList<>();
-                            pendingReplicaCreationRequests.put(myAid, rr);
-                        }
-                        rr.add(new ReplicaInfo(replicaAid, where));
-
-                        // If there are no other ongoing replica creation processes --> directly clone the (master) agent.
-                        if (rr.size() == 1) {
-                            cloneReplica(myAid, replicaName, where);
-                        }
-                    } else {
-                        throw new ServiceException("AgentReplicationService not installed in the destination container " + where.getName() + " for replica " + replicaName);
-                    }
-                } else {
-                    throw new ServiceException("Agent " + myAid.getLocalName() + " is not the master replica");
-                }
-            } else {
-                throw new ServiceException("Agent " + myAid.getLocalName() + " has not been made virtual");
-            }
-        }
-
-        public AID getVirtualAid() {
-            return virtualAid;
-        }
-
-        public AID getMasterAid() {
-            if (virtualAid != null) {
-                GlobalReplicationInfo info = globalReplications.get(virtualAid);
-                return info.getMaster();
-            }
-            return null;
-        }
-
-        public boolean isMaster() {
-            if (virtualAid != null) {
-                GlobalReplicationInfo info = globalReplications.get(virtualAid);
-                return myAid.equals(info.getMaster());
-            }
-            return false;
-        }
-
-        public Map<AID, Location> getReplicas() {
-            // FIXME: To be implemented
-            return null;
-        }
-
-        public void invokeReplicatedMethod(String methodName, Object[] arguments) {
-            ReplicaInfo[] tmp = peerReplicasArray;
-            myLogger.log(Logger.FINE, "Invoking method " + methodName + " on " + tmp.length + " replica(s)");
-            for (ReplicaInfo r : tmp) {
-                try {
-                    if (!invokeOnReplica(methodName, arguments, r)) {
-                        // This replica agent does not exist anymore --> remove it
-                        removePeerReplica(r);
-                        GlobalReplicationInfo info = globalReplications.get(virtualAid);
-                        if (info != null) {
-                            info.removeReplica(r.replicaAid);
-                        }
-                    }
-                } catch (Exception e) {
-                    myLogger.log(Logger.SEVERE, "Error propagating call to method " + methodName + " to agent " + r.replicaAid.getLocalName(), e);
-                }
-            }
-        }
-
-        private boolean invokeOnReplica(String methodName, Object[] arguments, ReplicaInfo r) throws Exception {
-            myLogger.log(Logger.FINER, "Invoking method " + methodName + " on replica " + r.replicaAid.getLocalName());
-            // If we get an Exception, refresh the location of the replica (it
-            // may have moved or be recreated somewhere else) and retry until OK.
-            // If not found in Main Container --> Ignore: replica has terminated in the meanwhile
-            do {
-                AgentReplicationSlice slice = (AgentReplicationSlice) getSlice(r.where.getName());
-                if (slice != null) {
-                    try {
-                        try {
-                            slice.invokeAgentMethod(r.replicaAid, methodName, arguments);
-                            // Done: Jump out
-                            break;
-                        } catch (IMTPException imtpe) {
-                            // Try to get a newer slice and repeat...
-                            slice = (AgentReplicationSlice) getFreshSlice(r.where.getName());
-                            slice.invokeAgentMethod(r.replicaAid, methodName, arguments);
-                            // Done: Jump out
-                            break;
-                        }
-                    } catch (NotFoundException nfe) {
-                        // The replica agent was not found on the container where it was supposed to be
-                        // Possibly it has moved elsewhere --> Check with the Main Container
-                    }
-                }
-
-                // Not done: Update the replica location and retry
-                try {
-                    myLogger.log(Logger.CONFIG, "Updating location of replica " + r.replicaAid.getLocalName());
-                    // The replica agent is alive: update its location and retry
-                    r.where = getLocation(r.replicaAid);
-                } catch (NotFoundException nfe1) {
-                    // The replica agent does not exist anymore in the whole platform --> silently remove it
-                    return false;
-                }
-            } while (true);
-
-            return true;
-        }
-
-        private synchronized void addPeerReplica(ReplicaInfo r) {
-            if (!peerReplicas.contains(r)) {
-                myLogger.log(Logger.CONFIG, "Adding replica " + r.replicaAid.getLocalName() + " to Helper of agent " + myAid.getLocalName());
-                peerReplicas.add(r);
-                peerReplicasArray = peerReplicas.toArray(new ReplicaInfo[0]);
-            }
-        }
-
-        private synchronized void removePeerReplica(ReplicaInfo r) {
-            if (peerReplicas.remove(r)) {
-                myLogger.log(Logger.CONFIG, "Removing replica " + r.replicaAid.getLocalName() + " from Helper of agent " + myAid.getLocalName());
-                peerReplicasArray = peerReplicas.toArray(new ReplicaInfo[0]);
-            }
-        }
-    }  // END of inner class AgentReplicationHelperImpl
-
-
-    /**
-     * Inner class CommandOutgoingFilter
-     */
-    private class CommandOutgoingFilter extends Filter {
-        public CommandOutgoingFilter() {
-            super();
-            setPreferredPosition(2);  // Before the Messaging (encoding) filter and the security related ones
-        }
-
-        @Override
-        public final boolean accept(VerticalCommand cmd) {
-            String name = cmd.getName();
-            switch (name) {
-                case MessagingSlice.SEND_MESSAGE -> {
-                    AID receiver = (AID) cmd.getParam(2);
-                    GlobalReplicationInfo info = globalReplications.get(receiver);
-                    if (info != null) {
-                        // Receiver is a virtual AID --> Redirect the SEND_MESSAGE command to one of the implementation replicas
-                        AID replica = info.getReplica();
-                        AID sender = (AID) cmd.getParam(0);
-                        // NOTE that the gMsg cannot be a MultipleGenericMessage since we are in the outgoing chain
-                        GenericMessage gMsg = (GenericMessage) cmd.getParam(1);
-                        // In case the selected replica is no longer valid, the message will have to be delivered
-                        // again to another replica --> instruct JADE not to clear the message content (see
-                        // jade.core.messaging.OutBox.addLast())
-                        gMsg.setModifiable(false);
-                        ACLMessage msg = gMsg.getACLMessage();
-                        if (msg != null) {
-                            msg.addUserDefinedParameter(AgentReplicationHelper.VIRTUAL_RECEIVER, receiver.getLocalName());
-                        }
-                        sendMessage(sender, gMsg, replica);
-
-                        // Veto the original command
-                        return false;
-                    }
-                }
-                case MessagingSlice.NOTIFY_FAILURE -> {
-                    GenericMessage gMsg = (GenericMessage) cmd.getParam(0);
-                    ACLMessage msg = gMsg.getACLMessage();
-                    if (msg != null) {
-                        String virtualName = msg.getUserDefinedParameter(AgentReplicationHelper.VIRTUAL_RECEIVER);
-                        if (virtualName != null) {
-                            // This message was originally sent to a virtual agent. The selected
-                            // implementation replica is no longer there or is unreachable however -->
-                            // Remove the dirty replica, then select a new one and retry
-                            AID virtualAid = new AID(AID.createGUID(virtualName, myContainer.getPlatformID()), AID.ISGUID);
-                            AID receiver = (AID) cmd.getParam(1);
-                            removeReplica(virtualAid, receiver);
-
-                            GlobalReplicationInfo info = globalReplications.get(virtualAid);
-                            if (info != null) {
-                                AID newReplica = info.getReplica();
-                                myLogger.log(Logger.FINE, "Redirecting message " + ACLMessage.getPerformative(msg.getPerformative()) + "[" + msg.getContent() + "] from dirty replica " + receiver.getLocalName() + " to new replica " + newReplica.getLocalName());
-                                if (receiver.equals(newReplica)) {
-                                    // This may happen in COLD_REPLICATION mode when the master replica
-                                    // has just died and has not been replaced yet. In this case sending
-                                    // this message will certainly fail, but we do it anyway until a new
-                                    // master replica is selected. Just wait a little bit in order to avoid
-                                    // entering a CPU consuming loop
-                                    try {
-                                        Thread.sleep(100);
-                                    } catch (Exception ignored) {
-                                    }
-                                }
-                                sendMessage(msg.getSender(), gMsg, newReplica);
-
-                                // Veto the original command
-                                return false;
-                            }
-                        }
-                    }
-                }
-                case MainReplicationSlice.LEADERSHIP_ACQUIRED ->
-                        // The master Main Container died and this backup Main just took the leadership.
-                        // Other peripheral containers may have died in the meanwhile -->
-                        // Check all replicated agents
-                        checkAllReplications();
-            }
-            return true;
-        }
-
-        @Override
-        public final void postProcess(VerticalCommand cmd) {
-            if (cmd.getName().equals(AgentMobilityHelper.INFORM_CLONED)) {
-                AID id = (AID) cmd.getParam(0);
-                Location where = (Location) cmd.getParam(1);
-                String newName = (String) cmd.getParam(2);
-                List<ReplicaInfo> rr = pendingReplicaCreationRequests.get(id);
-                if (rr != null) {
-                    ReplicaInfo r = rr.get(0);
-                    if (r.where.equals(where) && r.replicaAid.getLocalName().equals(newName)) {
-                        // This cloning process was triggered by a replica creation request.
-                        // Remove the pending replica creation request, check if cloning was
-                        // successful and, if this is the case register the new replica.
-                        rr.remove(0);
-                        boolean success = cmd.getReturnValue() == null;
-                        if (success) {
-                            broadcastAddReplica(id, r);
-                            localNotifyReplicaAddedToMaster(id, r);
-                        }
-
-
-                        // Finally, if there are other pending replica creation requests, serve the next one
-                        if (rr.size() > 0) {
-                            ReplicaInfo nextR = rr.get(0);
-                            // In this very moment the agent state is already AP_COPY --> Cloning the agent now would have no effect
-                            asynchCloneReplica(id, nextR.replicaAid.getLocalName(), nextR.where);
-                        } else {
-                            // NO more pending replica creation requests for agent id
-                            pendingReplicaCreationRequests.remove(id);
-                        }
-                    }
-                }
-            }
-        }
-    }  // END of inner class CommandOutgoingFilter
-
-
-    /**
-     * Inner class CommandIncomingFilter
-     */
-    private class CommandIncomingFilter extends Filter {
-        public CommandIncomingFilter() {
-            super();
-            setPreferredPosition(2);  // Before the Messaging (encoding) filter and the security related ones
-        }
-
-        @Override
-        public final boolean accept(VerticalCommand cmd) {
-            String name = cmd.getName();
-            if (myContainer.getMain() != null) {
-                switch (name) {
-                    case AgentManagementSlice.INFORM_KILLED:
-                        // If the dead agent is a master replica of a virtual agent, select a new master replica and broadcast the information
-                        AID deadAgent = (AID) cmd.getParam(0);
-                        handleInformKilled(deadAgent);
-                        break;
-                    case Service.NEW_SLICE:
-                        // If the new slice is an AgentReplicationSlice, notify it about the current virtual agents
-                        if (cmd.getService().equals(NAME)) {
-                            String sliceName = (String) cmd.getParam(0);
-                            handleNewSlice(sliceName);
-                        }
-                        break;
-                    case Service.DEAD_NODE:
-                        // A node monitored by this Main Container has just been removed
-                        // If it was a sudden termination (e.g. fault) INFORM_KILLED VCommands
-                        // for agents in the dead node were not issued -->
-                        // Check all replicated agents
-                        checkAllReplications();
-                        break;
-                }
-            } else {
-                if (name.equals(Service.REATTACHED)) {
-                    // The Main lost all information related to this container --> Notify it again
-                    handleReattached();
-                }
-            }
-            // Never veto a Command
-            return true;
-        }
-
-        private void handleInformKilled(AID deadAid) {
-            AID virtualAid = replicaToVirtualMap.remove(deadAid);
-            if (virtualAid != null) {
-                GlobalReplicationInfo info = globalReplications.get(virtualAid);
-                if (info != null) {
-                    if (deadAid.equals(info.getMaster())) {
-                        // The dead agent is the master replica of a virtual agent
-                        handleMasterReplicaDead(info);
-                    } else {
-                        // The dead agent is a non-master replica --> Just notify the master
-                        notifyReplicaRemovedToMaster(info.getMaster(), deadAid, null);
-                    }
-                }
-            }
-        }
-
-        private void handleNewSlice(String newSliceName) {
-            try {
-                // Be sure to get the new (fresh) slice --> Bypass the service cache
-                AgentReplicationSlice newSlice = (AgentReplicationSlice) getFreshSlice(newSliceName);
-                GlobalReplicationInfo[] allInfos = globalReplications.values().toArray(new GlobalReplicationInfo[0]);
-
-                for (GlobalReplicationInfo info : allInfos) {
-                    newSlice.synchReplication(info);
-                }
-            } catch (Throwable t) {
-                myLogger.log(Logger.WARNING, "Error notifying new slice " + newSliceName + " about current replication information", t);
-            }
-        }
-
-        private void handleReattached() {
-            try {
-                // Be sure to get a fresh slice --> Bypass the service cache
-                AgentReplicationSlice mainSlice = (AgentReplicationSlice) getFreshSlice(MAIN_SLICE);
-                // Notify the new Main Slice all replication information related to virtual agents
-                // for which an implementation replica lives in the local container.
-                // NOTE that the same replication information can be notified to the new Main Slice
-                // by more than one container, but this case is properly taken into account so
-                // that duplications are avoided.
-                AID[] aa = replicaToVirtualMap.keySet().toArray(new AID[0]);
-                List<AID> vv = new ArrayList<>();
-                for (AID aid : aa) {
-                    if (myContainer.isLocalAgent(aid)) {
-                        AID virtualAid = replicaToVirtualMap.get(aid);
-                        if (virtualAid != null && !vv.contains(virtualAid)) {
-                            GlobalReplicationInfo info = globalReplications.get(virtualAid);
-                            if (info != null) {
-                                try {
-                                    mainSlice.synchReplication(info);
-                                } catch (Exception e) {
-                                    myLogger.log(Logger.WARNING, "Error notifying main slice about current local replication information", e);
-                                }
-                            }
-                            vv.add(virtualAid);
-                        }
-                    }
-                }
-            } catch (Throwable t) {
-                myLogger.log(Logger.WARNING, "Error retrieving main slice.", t);
-            }
-        }
-    }  // END of inner class CommandIncomingFilter
-
-
-    /**
-     * Inner class ReplicaInfo
-     */
-    private class ReplicaInfo {
-        private final AID replicaAid;
-        private Location where;
-
-        private ReplicaInfo(AID replicaAid, Location where) {
-            this.replicaAid = replicaAid;
-            this.where = where;
-        }
-
-        @Override
-        public int hashCode() {
-            return replicaAid.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return replicaAid.equals(((ReplicaInfo) obj).replicaAid);
-        }
-    }  // END of inner class ReplicaInfo
-
 
     private void localNotifyReplicaAddedToMaster(AID masterAid, ReplicaInfo r) {
         // Note that this method is invoked in the master replica container -->
@@ -758,7 +292,6 @@ public class AgentReplicationService extends BaseService {
             myLogger.log(Logger.WARNING, "Error broadcasting master replica changed for virtual agent " + virtualAid.getLocalName(), e);
         }
     }
-
 
     private void cloneReplica(AID aid, String replicaName, Location where) {
         Agent agent = myContainer.acquireLocalAgent(aid);
@@ -990,6 +523,477 @@ public class AgentReplicationService extends BaseService {
         }
     }
 
+    private Method getMethod(Agent agent, String methodName) throws NoSuchMethodException {
+        String key = agent.getLocalName() + '#' + methodName;
+        Method m = cachedAgentMethods.get(key);
+        if (m == null) {
+            // NOTE: We cannot use Class.getMethod() since we have parameter values, but not parameter types
+            Method[] mm = agent.getClass().getMethods();
+            for (Method method : mm) {
+                if (method.getName().equals(methodName)) {
+                    m = method;
+                    cachedAgentMethods.put(key, m);
+                    break;
+                }
+            }
+        }
+        if (m == null) {
+            throw new NoSuchMethodException(methodName);
+        }
+        return m;
+    }
+
+    /**
+     * Inner class AgentReplicationHelperImpl
+     */
+    private class AgentReplicationHelperImpl implements AgentReplicationHelper {
+        private final List<ReplicaInfo> peerReplicas = new ArrayList<>();
+        private AID myAid;
+        private AID virtualAid;
+        private ReplicaInfo[] peerReplicasArray = new ReplicaInfo[0];
+
+        public void init(Agent a) {
+            myAid = a.getAID();
+
+            // If the agent retrieving this helper is already a replica, initialize virtualAid
+            // and peerReplicas from the global replication information
+            virtualAid = replicaToVirtualMap.get(myAid);
+            if (virtualAid != null) {
+                GlobalReplicationInfo info = globalReplications.get(virtualAid);
+                if (info != null) {
+                    AID[] currentReplicas = info.getAllReplicas();
+                    for (AID replica : currentReplicas) {
+                        // Exclude the agent itself from peer replicas
+                        if (!replica.equals(myAid)) {
+                            try {
+                                Location location = getLocation(replica);
+                                addPeerReplica(new ReplicaInfo(replica, location));
+                            } catch (NotFoundException nfe) {
+                                myLogger.log(Logger.WARNING, "Replica " + replica.getLocalName() + " not found. Likely it died in the meanwhile");
+                            } catch (Exception e) {
+                                myLogger.log(Logger.SEVERE, "Error retrieving location for agent " + replica.getLocalName(), e);
+                            }
+                        }
+                    }
+                } else {
+                    myLogger.log(Logger.SEVERE, "Virtual agent " + virtualAid.getLocalName() + " for replica agent " + myAid.getLocalName() + " not found");
+                }
+            }
+        }
+
+        public AID makeVirtual(String virtualName, int replicationMode) throws ServiceException {
+            if (virtualAid == null) {
+                virtualAid = new AID(AID.createGUID(virtualName, myContainer.getPlatformID()), AID.ISGUID);
+
+                // Reserve the virtualName by registering the virtual AID to the AMS
+                AMSAgentDescription amsd = new AMSAgentDescription();
+                amsd.setName(virtualAid);
+                amsd.setState(AMSAgentDescription.ACTIVE);
+                Agent agent = myContainer.acquireLocalAgent(myAid);
+                // Immediately release the agent: AMSService.register() requires that the agent receives the AMS reply
+                myContainer.releaseLocalAgent(myAid);
+                if (agent != null) {
+                    try {
+                        AMSService.register(agent, amsd);
+                    } catch (Exception e) {
+                        throw new ServiceException("Error registering virtual name " + virtualName, e);
+                    }
+                }
+
+                broadcastNewVirtualAgent(virtualAid, myAid, replicationMode);
+                return virtualAid;
+            } else {
+                throw new ServiceException("Agent " + myAid.getLocalName() + " has already been made virtual");
+            }
+        }
+
+        public void createReplica(String replicaName, Location where) throws ServiceException {
+            if (virtualAid != null) {
+                if (isMaster()) {
+                    // The agent this helper belongs to is virtualized and is the master replica
+                    // Go on with the replica creation process
+                    AgentReplicationSlice slice = (AgentReplicationSlice) getSlice(where.getName());
+                    if (slice != null) {
+                        // Notify the destination slice that a replica for our virtual agent is
+                        // going to be created there (see comment in AgentReplicationSlice)
+                        AID replicaAid = new AID(AID.createGUID(replicaName, myContainer.getPlatformID()), AID.ISGUID);
+                        try {
+                            slice.replicaCreationRequested(virtualAid, replicaAid);
+                        } catch (IMTPException imtpe) {
+                            // Get a fresh slice and retry
+                            slice = (AgentReplicationSlice) getFreshSlice(where.getName());
+                            try {
+                                slice.replicaCreationRequested(virtualAid, replicaAid);
+                            } catch (IMTPException imtpe1) {
+                                throw new ServiceException("IMTP error contacting destination slice", imtpe1);
+                            }
+                        }
+
+                        // Enqueue the replica creation request
+                        List<ReplicaInfo> rr = pendingReplicaCreationRequests.computeIfAbsent(myAid, k -> new ArrayList<>());
+                        rr.add(new ReplicaInfo(replicaAid, where));
+
+                        // If there are no other ongoing replica creation processes --> directly clone the (master) agent.
+                        if (rr.size() == 1) {
+                            cloneReplica(myAid, replicaName, where);
+                        }
+                    } else {
+                        throw new ServiceException("AgentReplicationService not installed in the destination container " + where.getName() + " for replica " + replicaName);
+                    }
+                } else {
+                    throw new ServiceException("Agent " + myAid.getLocalName() + " is not the master replica");
+                }
+            } else {
+                throw new ServiceException("Agent " + myAid.getLocalName() + " has not been made virtual");
+            }
+        }
+
+        public AID getVirtualAid() {
+            return virtualAid;
+        }
+
+        public AID getMasterAid() {
+            if (virtualAid != null) {
+                GlobalReplicationInfo info = globalReplications.get(virtualAid);
+                return info.getMaster();
+            }
+            return null;
+        }
+
+        public boolean isMaster() {
+            if (virtualAid != null) {
+                GlobalReplicationInfo info = globalReplications.get(virtualAid);
+                return myAid.equals(info.getMaster());
+            }
+            return false;
+        }
+
+        public Map<AID, Location> getReplicas() {
+            // FIXME: To be implemented
+            return null;
+        }
+
+        public void invokeReplicatedMethod(String methodName, Object[] arguments) {
+            ReplicaInfo[] tmp = peerReplicasArray;
+            myLogger.log(Logger.FINE, "Invoking method " + methodName + " on " + tmp.length + " replica(s)");
+            for (ReplicaInfo r : tmp) {
+                try {
+                    if (!invokeOnReplica(methodName, arguments, r)) {
+                        // This replica agent does not exist anymore --> remove it
+                        removePeerReplica(r);
+                        GlobalReplicationInfo info = globalReplications.get(virtualAid);
+                        if (info != null) {
+                            info.removeReplica(r.replicaAid);
+                        }
+                    }
+                } catch (Exception e) {
+                    myLogger.log(Logger.SEVERE, "Error propagating call to method " + methodName + " to agent " + r.replicaAid.getLocalName(), e);
+                }
+            }
+        }
+
+        private boolean invokeOnReplica(String methodName, Object[] arguments, ReplicaInfo r) throws Exception {
+            myLogger.log(Logger.FINER, "Invoking method " + methodName + " on replica " + r.replicaAid.getLocalName());
+            // If we get an Exception, refresh the location of the replica (it
+            // may have moved or be recreated somewhere else) and retry until OK.
+            // If not found in Main Container --> Ignore: replica has terminated in the meanwhile
+            do {
+                AgentReplicationSlice slice = (AgentReplicationSlice) getSlice(r.where.getName());
+                if (slice != null) {
+                    try {
+                        try {
+                            slice.invokeAgentMethod(r.replicaAid, methodName, arguments);
+                            // Done: Jump out
+                            break;
+                        } catch (IMTPException imtpe) {
+                            // Try to get a newer slice and repeat...
+                            slice = (AgentReplicationSlice) getFreshSlice(r.where.getName());
+                            slice.invokeAgentMethod(r.replicaAid, methodName, arguments);
+                            // Done: Jump out
+                            break;
+                        }
+                    } catch (NotFoundException nfe) {
+                        // The replica agent was not found on the container where it was supposed to be
+                        // Possibly it has moved elsewhere --> Check with the Main Container
+                    }
+                }
+
+                // Not done: Update the replica location and retry
+                try {
+                    myLogger.log(Logger.CONFIG, "Updating location of replica " + r.replicaAid.getLocalName());
+                    // The replica agent is alive: update its location and retry
+                    r.where = getLocation(r.replicaAid);
+                } catch (NotFoundException nfe1) {
+                    // The replica agent does not exist anymore in the whole platform --> silently remove it
+                    return false;
+                }
+            } while (true);
+
+            return true;
+        }
+
+        private synchronized void addPeerReplica(ReplicaInfo r) {
+            if (!peerReplicas.contains(r)) {
+                myLogger.log(Logger.CONFIG, "Adding replica " + r.replicaAid.getLocalName() + " to Helper of agent " + myAid.getLocalName());
+                peerReplicas.add(r);
+                peerReplicasArray = peerReplicas.toArray(new ReplicaInfo[0]);
+            }
+        }
+
+        private synchronized void removePeerReplica(ReplicaInfo r) {
+            if (peerReplicas.remove(r)) {
+                myLogger.log(Logger.CONFIG, "Removing replica " + r.replicaAid.getLocalName() + " from Helper of agent " + myAid.getLocalName());
+                peerReplicasArray = peerReplicas.toArray(new ReplicaInfo[0]);
+            }
+        }
+    }  // END of inner class AgentReplicationHelperImpl
+
+    /**
+     * Inner class CommandOutgoingFilter
+     */
+    private class CommandOutgoingFilter extends Filter {
+        public CommandOutgoingFilter() {
+            super();
+            setPreferredPosition(2);  // Before the Messaging (encoding) filter and the security related ones
+        }
+
+        @Override
+        public final boolean accept(VerticalCommand cmd) {
+            String name = cmd.getName();
+            switch (name) {
+                case MessagingSlice.SEND_MESSAGE -> {
+                    AID receiver = (AID) cmd.getParam(2);
+                    GlobalReplicationInfo info = globalReplications.get(receiver);
+                    if (info != null) {
+                        // Receiver is a virtual AID --> Redirect the SEND_MESSAGE command to one of the implementation replicas
+                        AID replica = info.getReplica();
+                        AID sender = (AID) cmd.getParam(0);
+                        // NOTE that the gMsg cannot be a MultipleGenericMessage since we are in the outgoing chain
+                        GenericMessage gMsg = (GenericMessage) cmd.getParam(1);
+                        // In case the selected replica is no longer valid, the message will have to be delivered
+                        // again to another replica --> instruct JADE not to clear the message content (see
+                        // jade.core.messaging.OutBox.addLast())
+                        gMsg.setModifiable(false);
+                        ACLMessage msg = gMsg.getACLMessage();
+                        if (msg != null) {
+                            msg.addUserDefinedParameter(AgentReplicationHelper.VIRTUAL_RECEIVER, receiver.getLocalName());
+                        }
+                        sendMessage(sender, gMsg, replica);
+
+                        // Veto the original command
+                        return false;
+                    }
+                }
+                case MessagingSlice.NOTIFY_FAILURE -> {
+                    GenericMessage gMsg = (GenericMessage) cmd.getParam(0);
+                    ACLMessage msg = gMsg.getACLMessage();
+                    if (msg != null) {
+                        String virtualName = msg.getUserDefinedParameter(AgentReplicationHelper.VIRTUAL_RECEIVER);
+                        if (virtualName != null) {
+                            // This message was originally sent to a virtual agent. The selected
+                            // implementation replica is no longer there or is unreachable however -->
+                            // Remove the dirty replica, then select a new one and retry
+                            AID virtualAid = new AID(AID.createGUID(virtualName, myContainer.getPlatformID()), AID.ISGUID);
+                            AID receiver = (AID) cmd.getParam(1);
+                            removeReplica(virtualAid, receiver);
+
+                            GlobalReplicationInfo info = globalReplications.get(virtualAid);
+                            if (info != null) {
+                                AID newReplica = info.getReplica();
+                                myLogger.log(Logger.FINE, "Redirecting message " + ACLMessage.getPerformative(msg.getPerformative()) + "[" + msg.getContent() + "] from dirty replica " + receiver.getLocalName() + " to new replica " + newReplica.getLocalName());
+                                if (receiver.equals(newReplica)) {
+                                    // This may happen in COLD_REPLICATION mode when the master replica
+                                    // has just died and has not been replaced yet. In this case sending
+                                    // this message will certainly fail, but we do it anyway until a new
+                                    // master replica is selected. Just wait a little bit in order to avoid
+                                    // entering a CPU consuming loop
+                                    try {
+                                        Thread.sleep(100);
+                                    } catch (Exception ignored) {
+                                    }
+                                }
+                                sendMessage(msg.getSender(), gMsg, newReplica);
+
+                                // Veto the original command
+                                return false;
+                            }
+                        }
+                    }
+                }
+                case MainReplicationSlice.LEADERSHIP_ACQUIRED ->
+                        // The master Main Container died and this backup Main just took the leadership.
+                        // Other peripheral containers may have died in the meanwhile -->
+                        // Check all replicated agents
+                        checkAllReplications();
+            }
+            return true;
+        }
+
+        @Override
+        public final void postProcess(VerticalCommand cmd) {
+            if (cmd.getName().equals(AgentMobilityHelper.INFORM_CLONED)) {
+                AID id = (AID) cmd.getParam(0);
+                Location where = (Location) cmd.getParam(1);
+                String newName = (String) cmd.getParam(2);
+                List<ReplicaInfo> rr = pendingReplicaCreationRequests.get(id);
+                if (rr != null) {
+                    ReplicaInfo r = rr.get(0);
+                    if (r.where.equals(where) && r.replicaAid.getLocalName().equals(newName)) {
+                        // This cloning process was triggered by a replica creation request.
+                        // Remove the pending replica creation request, check if cloning was
+                        // successful and, if this is the case register the new replica.
+                        rr.remove(0);
+                        boolean success = cmd.getReturnValue() == null;
+                        if (success) {
+                            broadcastAddReplica(id, r);
+                            localNotifyReplicaAddedToMaster(id, r);
+                        }
+
+
+                        // Finally, if there are other pending replica creation requests, serve the next one
+                        if (rr.size() > 0) {
+                            ReplicaInfo nextR = rr.get(0);
+                            // In this very moment the agent state is already AP_COPY --> Cloning the agent now would have no effect
+                            asynchCloneReplica(id, nextR.replicaAid.getLocalName(), nextR.where);
+                        } else {
+                            // NO more pending replica creation requests for agent id
+                            pendingReplicaCreationRequests.remove(id);
+                        }
+                    }
+                }
+            }
+        }
+    }  // END of inner class CommandOutgoingFilter
+
+    /**
+     * Inner class CommandIncomingFilter
+     */
+    private class CommandIncomingFilter extends Filter {
+        public CommandIncomingFilter() {
+            super();
+            setPreferredPosition(2);  // Before the Messaging (encoding) filter and the security related ones
+        }
+
+        @Override
+        public final boolean accept(VerticalCommand cmd) {
+            String name = cmd.getName();
+            if (myContainer.getMain() != null) {
+                switch (name) {
+                    case AgentManagementSlice.INFORM_KILLED:
+                        // If the dead agent is a master replica of a virtual agent, select a new master replica and broadcast the information
+                        AID deadAgent = (AID) cmd.getParam(0);
+                        handleInformKilled(deadAgent);
+                        break;
+                    case Service.NEW_SLICE:
+                        // If the new slice is an AgentReplicationSlice, notify it about the current virtual agents
+                        if (cmd.getService().equals(NAME)) {
+                            String sliceName = (String) cmd.getParam(0);
+                            handleNewSlice(sliceName);
+                        }
+                        break;
+                    case Service.DEAD_NODE:
+                        // A node monitored by this Main Container has just been removed
+                        // If it was a sudden termination (e.g. fault) INFORM_KILLED VCommands
+                        // for agents in the dead node were not issued -->
+                        // Check all replicated agents
+                        checkAllReplications();
+                        break;
+                }
+            } else {
+                if (name.equals(Service.REATTACHED)) {
+                    // The Main lost all information related to this container --> Notify it again
+                    handleReattached();
+                }
+            }
+            // Never veto a Command
+            return true;
+        }
+
+        private void handleInformKilled(AID deadAid) {
+            AID virtualAid = replicaToVirtualMap.remove(deadAid);
+            if (virtualAid != null) {
+                GlobalReplicationInfo info = globalReplications.get(virtualAid);
+                if (info != null) {
+                    if (deadAid.equals(info.getMaster())) {
+                        // The dead agent is the master replica of a virtual agent
+                        handleMasterReplicaDead(info);
+                    } else {
+                        // The dead agent is a non-master replica --> Just notify the master
+                        notifyReplicaRemovedToMaster(info.getMaster(), deadAid, null);
+                    }
+                }
+            }
+        }
+
+        private void handleNewSlice(String newSliceName) {
+            try {
+                // Be sure to get the new (fresh) slice --> Bypass the service cache
+                AgentReplicationSlice newSlice = (AgentReplicationSlice) getFreshSlice(newSliceName);
+                GlobalReplicationInfo[] allInfos = globalReplications.values().toArray(new GlobalReplicationInfo[0]);
+
+                for (GlobalReplicationInfo info : allInfos) {
+                    newSlice.synchReplication(info);
+                }
+            } catch (Throwable t) {
+                myLogger.log(Logger.WARNING, "Error notifying new slice " + newSliceName + " about current replication information", t);
+            }
+        }
+
+        private void handleReattached() {
+            try {
+                // Be sure to get a fresh slice --> Bypass the service cache
+                AgentReplicationSlice mainSlice = (AgentReplicationSlice) getFreshSlice(MAIN_SLICE);
+                // Notify the new Main Slice all replication information related to virtual agents
+                // for which an implementation replica lives in the local container.
+                // NOTE that the same replication information can be notified to the new Main Slice
+                // by more than one container, but this case is properly taken into account so
+                // that duplications are avoided.
+                AID[] aa = replicaToVirtualMap.keySet().toArray(new AID[0]);
+                List<AID> vv = new ArrayList<>();
+                for (AID aid : aa) {
+                    if (myContainer.isLocalAgent(aid)) {
+                        AID virtualAid = replicaToVirtualMap.get(aid);
+                        if (virtualAid != null && !vv.contains(virtualAid)) {
+                            GlobalReplicationInfo info = globalReplications.get(virtualAid);
+                            if (info != null) {
+                                try {
+                                    mainSlice.synchReplication(info);
+                                } catch (Exception e) {
+                                    myLogger.log(Logger.WARNING, "Error notifying main slice about current local replication information", e);
+                                }
+                            }
+                            vv.add(virtualAid);
+                        }
+                    }
+                }
+            } catch (Throwable t) {
+                myLogger.log(Logger.WARNING, "Error retrieving main slice.", t);
+            }
+        }
+    }  // END of inner class CommandIncomingFilter
+
+    /**
+     * Inner class ReplicaInfo
+     */
+    private class ReplicaInfo {
+        private final AID replicaAid;
+        private Location where;
+
+        private ReplicaInfo(AID replicaAid, Location where) {
+            this.replicaAid = replicaAid;
+            this.where = where;
+        }
+
+        @Override
+        public int hashCode() {
+            return replicaAid.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return replicaAid.equals(((ReplicaInfo) obj).replicaAid);
+        }
+    }  // END of inner class ReplicaInfo
 
     /**
      * Inner class ServiceComponent
@@ -1016,32 +1020,27 @@ public class AgentReplicationService extends BaseService {
                         String methodName = (String) cmd.getParam(1);
                         Object[] arguments = (Object[]) cmd.getParam(2);
                         invokeAgentMethod(aid, methodName, arguments);
-                        break;
                     }
                     case AgentReplicationSlice.H_ADDREPLICA -> {
                         AID virtualAid = (AID) cmd.getParam(0);
                         AID replicaAid = (AID) cmd.getParam(1);
                         Location where = (Location) cmd.getParam(2);
                         addReplica(virtualAid, replicaAid, where);
-                        break;
                     }
                     case AgentReplicationSlice.H_NEWVIRTUALAGENT -> {
                         AID virtualAid = (AID) cmd.getParam(0);
                         AID masterAid = (AID) cmd.getParam(1);
                         int replicationMode = (Integer) cmd.getParam(2);
                         newVirtualAgent(virtualAid, masterAid, replicationMode);
-                        break;
                     }
                     case AgentReplicationSlice.H_GETAGENTLOCATION -> {
                         AID aid = (AID) cmd.getParam(0);
                         cmd.setReturnValue(getAgentLocation(aid));
-                        break;
                     }
                     case AgentReplicationSlice.H_REPLICACREATIONREQUESTED -> {
                         AID virtualAid = (AID) cmd.getParam(0);
                         AID replicaAid = (AID) cmd.getParam(1);
                         addReplicaVirtualMapping(replicaAid, virtualAid);
-                        break;
                     }
                     case AgentReplicationSlice.H_SYNCHREPLICATION -> {
                         AID virtualAid = (AID) cmd.getParam(0);
@@ -1058,7 +1057,6 @@ public class AgentReplicationService extends BaseService {
                                 addReplicaVirtualMapping(replicaAid, virtualAid);
                             }
                         }
-                        break;
                     }
                     case AgentReplicationSlice.H_MASTERREPLICACHANGED -> {
                         AID virtualAid = (AID) cmd.getParam(0);
@@ -1067,25 +1065,21 @@ public class AgentReplicationService extends BaseService {
                         if (info != null) {
                             info.masterReplicaChanged(newMasterAid);
                         }
-                        break;
                     }
                     case AgentReplicationSlice.H_VIRTUALAGENTDEAD -> {
                         AID virtualAid = (AID) cmd.getParam(0);
                         globalReplications.remove(virtualAid);
                         myLogger.log(Logger.CONFIG, "Virtual agent " + virtualAid.getLocalName() + " removed");
-                        break;
                     }
                     case AgentReplicationSlice.H_NOTIFYBECOMEMASTER -> {
                         AID newMasterAid = (AID) cmd.getParam(0);
                         localNotifyBecomeMasterToMaster(newMasterAid);
-                        break;
                     }
                     case AgentReplicationSlice.H_NOTIFYREPLICAREMOVED -> {
                         AID masterAid = (AID) cmd.getParam(0);
                         AID removedReplica = (AID) cmd.getParam(1);
                         Location where = (Location) cmd.getParam(2);
                         localNotifyReplicaRemovedToMaster(masterAid, removedReplica, where);
-                        break;
                     }
                 }
             } catch (Throwable t) {
@@ -1095,26 +1089,6 @@ public class AgentReplicationService extends BaseService {
         }
 
     }  // END of inner class ServiceComponent
-
-    private Method getMethod(Agent agent, String methodName) throws NoSuchMethodException {
-        String key = agent.getLocalName() + '#' + methodName;
-        Method m = cachedAgentMethods.get(key);
-        if (m == null) {
-            // NOTE: We cannot use Class.getMethod() since we have parameter values, but not parameter types
-            Method[] mm = agent.getClass().getMethods();
-            for (Method method : mm) {
-                if (method.getName().equals(methodName)) {
-                    m = method;
-                    cachedAgentMethods.put(key, m);
-                    break;
-                }
-            }
-        }
-        if (m == null) {
-            throw new NoSuchMethodException(methodName);
-        }
-        return m;
-    }
 
 
 }

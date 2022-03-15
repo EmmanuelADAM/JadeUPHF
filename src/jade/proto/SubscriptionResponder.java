@@ -59,6 +59,12 @@ import java.util.List;
  */
 public class SubscriptionResponder extends FSMBehaviour implements FIPANames.InteractionProtocol {
 
+    // FSM states names
+    private static final String RECEIVE_SUBSCRIPTION = "Receive-subscription";
+    private static final String HANDLE_SUBSCRIPTION = "Handle-subscription";
+    private static final String HANDLE_CANCEL = "Handle-cancel";
+    private static final String SEND_RESPONSE = "Send-response";
+    private static final String SEND_NOTIFICATIONS = "Send-notifications";
     /**
      * key to retrieve from the HashMap of the behaviour the ACLMessage
      * object sent by the initiator as a subscription.
@@ -74,40 +80,17 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
      * object sent as a response to the initiator.
      **/
     public final String RESPONSE_KEY = "__response" + hashCode();
-
-    // FSM states names
-    private static final String RECEIVE_SUBSCRIPTION = "Receive-subscription";
-    private static final String HANDLE_SUBSCRIPTION = "Handle-subscription";
-    private static final String HANDLE_CANCEL = "Handle-cancel";
-    private static final String SEND_RESPONSE = "Send-response";
-    private static final String SEND_NOTIFICATIONS = "Send-notifications";
-
     // The MsgReceiver behaviour used to receive subscription messages
     private final MsgReceiver msgRecBehaviour;
 
     private final Hashtable<String, Subscription> subscriptions = new Hashtable<>();
     private final List<ACLMessage[]> notifications = new ArrayList<>();
-
+    private final Logger myLogger = Logger.getJADELogger(getClass().getName());
     /**
      * The <code>SubscriptionManager</code> used by this
      * <code>SubscriptionResponder</code> to register subscriptions
      */
     protected SubscriptionManager mySubscriptionManager;
-
-    private final Logger myLogger = Logger.getJADELogger(getClass().getName());
-
-    /**
-     * This static method can be used
-     * to set the proper message Template (based on the performative of the
-     * subscription message) into the constructor of this behaviour.
-     *
-     * @param perf The performative of the subscription message
-     */
-    public static MessageTemplate createMessageTemplate(int perf) {
-        return MessageTemplate.and(
-                MessageTemplate.MatchProtocol(FIPA_SUBSCRIBE),
-                MessageTemplate.or(MessageTemplate.MatchPerformative(perf), MessageTemplate.MatchPerformative(ACLMessage.CANCEL)));
-    }
 
     /**
      * Construct a SubscriptionResponder behaviour that handles subscription messages matching a given template.
@@ -121,97 +104,12 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
     /**
      * Construct a SubscriptionResponder behaviour that handles subscription messages matching a given template and
      * notifies a given SubscriptionManager about subscription/un-subscription events.
-     *
-     *  see #SubscriptionResponder(Agent, MessageTemplate, SubscriptionManager, HashMap)
+     * <p>
+     * see #SubscriptionResponder(Agent, MessageTemplate, SubscriptionManager, HashMap)
      **/
     public SubscriptionResponder(Agent a, MessageTemplate mt, SubscriptionManager sm) {
         this(a, mt, sm, new HashMap<>(), new HashMap<>());
     }
-
-    /**
-     * Construct a SubscriptionResponder behaviour that handles subscription messages matching a given template,
-     * notifies a given SubscriptionManager about subscription/un-subscription events and uses a given HashMap.
-     *
-     * @param a               is the reference to the Agent performing this behaviour.
-     * @param mt              is the MessageTemplate that must be used to match
-     *                        subscription messages sent by the initiators. Take care that
-     *                        if mt is null every message is consumed by this protocol.
-     * @param sm              The <code>SubscriptionManager</code> object that is notified about subscription/un-subscription events
-     * @param mapMessagesList the HashMap that will be used by protocol
-     * @deprecated
-    public SubscriptionResponder(Agent a, MessageTemplate mt, SubscriptionManager sm, HashMap<String, List<ACLMessage>> mapMessagesList) {
-        super(a);
-        setMapMessagesList(mapMessagesList);
-        mySubscriptionManager = sm;
-
-        // Register the FSM transitions
-        registerDefaultTransition(RECEIVE_SUBSCRIPTION, HANDLE_SUBSCRIPTION);
-        registerTransition(RECEIVE_SUBSCRIPTION, HANDLE_CANCEL, ACLMessage.CANCEL);
-        registerTransition(RECEIVE_SUBSCRIPTION, SEND_NOTIFICATIONS, MsgReceiver.INTERRUPTED);
-        registerDefaultTransition(HANDLE_SUBSCRIPTION, SEND_RESPONSE);
-        registerDefaultTransition(HANDLE_CANCEL, SEND_RESPONSE);
-        registerDefaultTransition(SEND_RESPONSE, RECEIVE_SUBSCRIPTION, new String[]{HANDLE_SUBSCRIPTION, HANDLE_CANCEL});
-        registerDefaultTransition(SEND_NOTIFICATIONS, RECEIVE_SUBSCRIPTION);
-
-        //***********************************************
-        // For each state create and register a behaviour
-        //***********************************************
-        Behaviour b;
-
-        // RECEIVE_SUBSCRIPTION
-        msgRecBehaviour = new MsgReceiver(myAgent, mt, MsgReceiver.INFINITE, getMapMessagesList(), SUBSCRIPTION_KEY);
-        registerFirstState(msgRecBehaviour, RECEIVE_SUBSCRIPTION);
-
-        // HANDLE_SUBSCRIPTION
-        b = new OneShotBehaviour(myAgent) {
-
-            public void action() {
-                var ds = getMapMessages();
-                ACLMessage subscription = ds.get(SUBSCRIPTION_KEY);
-                ACLMessage response;
-                try {
-                    response = handleSubscription(subscription);
-                } catch (NotUnderstoodException | RefuseException nue) {
-                    response = nue.getACLMessage();
-                }
-                ds.put(RESPONSE_KEY, response);
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_SUBSCRIPTION);
-
-        // HANDLE_CANCEL
-        b = new OneShotBehaviour(myAgent) {
-            public void action() {
-                var ds = getMapMessages();
-                ACLMessage cancel = ds.get(CANCEL_KEY);
-                ACLMessage response;
-                try {
-                    response = handleCancel(cancel);
-                } catch (FailureException fe) {
-                    response = fe.getACLMessage();
-                }
-                ds.put(RESPONSE_KEY, response);
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_CANCEL);
-
-        // SEND_RESPONSE
-        b = new ReplySender(myAgent, RESPONSE_KEY, SUBSCRIPTION_KEY, mapMessagesList, null);
-        registerState(b, SEND_RESPONSE);
-
-        // SEND_NOTIFICATIONS
-        b = new OneShotBehaviour(myAgent) {
-            public void action() {
-                sendNotifications();
-            }
-        };
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, SEND_NOTIFICATIONS);
-
-    } // End of Constructor
-*/
 
     /**
      * Construct a SubscriptionResponder behaviour that handles subscription messages matching a given template,
@@ -301,6 +199,103 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
         registerState(b, SEND_NOTIFICATIONS);
 
     } // End of Constructor
+
+    /**
+     * Construct a SubscriptionResponder behaviour that handles subscription messages matching a given template,
+     * notifies a given SubscriptionManager about subscription/un-subscription events and uses a given HashMap.
+     *
+     * @param a               is the reference to the Agent performing this behaviour.
+     * @param mt              is the MessageTemplate that must be used to match
+     *                        subscription messages sent by the initiators. Take care that
+     *                        if mt is null every message is consumed by this protocol.
+     * @param sm              The <code>SubscriptionManager</code> object that is notified about subscription/un-subscription events
+     * @param mapMessagesList the HashMap that will be used by protocol
+     * @deprecated public SubscriptionResponder(Agent a, MessageTemplate mt, SubscriptionManager sm, HashMap<String, List<ACLMessage>> mapMessagesList) {
+    super(a);
+    setMapMessagesList(mapMessagesList);
+    mySubscriptionManager = sm;
+
+    // Register the FSM transitions
+    registerDefaultTransition(RECEIVE_SUBSCRIPTION, HANDLE_SUBSCRIPTION);
+    registerTransition(RECEIVE_SUBSCRIPTION, HANDLE_CANCEL, ACLMessage.CANCEL);
+    registerTransition(RECEIVE_SUBSCRIPTION, SEND_NOTIFICATIONS, MsgReceiver.INTERRUPTED);
+    registerDefaultTransition(HANDLE_SUBSCRIPTION, SEND_RESPONSE);
+    registerDefaultTransition(HANDLE_CANCEL, SEND_RESPONSE);
+    registerDefaultTransition(SEND_RESPONSE, RECEIVE_SUBSCRIPTION, new String[]{HANDLE_SUBSCRIPTION, HANDLE_CANCEL});
+    registerDefaultTransition(SEND_NOTIFICATIONS, RECEIVE_SUBSCRIPTION);
+
+    //***********************************************
+    // For each state create and register a behaviour
+    //***********************************************
+    Behaviour b;
+
+    // RECEIVE_SUBSCRIPTION
+    msgRecBehaviour = new MsgReceiver(myAgent, mt, MsgReceiver.INFINITE, getMapMessagesList(), SUBSCRIPTION_KEY);
+    registerFirstState(msgRecBehaviour, RECEIVE_SUBSCRIPTION);
+
+    // HANDLE_SUBSCRIPTION
+    b = new OneShotBehaviour(myAgent) {
+
+    public void action() {
+    var ds = getMapMessages();
+    ACLMessage subscription = ds.get(SUBSCRIPTION_KEY);
+    ACLMessage response;
+    try {
+    response = handleSubscription(subscription);
+    } catch (NotUnderstoodException | RefuseException nue) {
+    response = nue.getACLMessage();
+    }
+    ds.put(RESPONSE_KEY, response);
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, HANDLE_SUBSCRIPTION);
+
+    // HANDLE_CANCEL
+    b = new OneShotBehaviour(myAgent) {
+    public void action() {
+    var ds = getMapMessages();
+    ACLMessage cancel = ds.get(CANCEL_KEY);
+    ACLMessage response;
+    try {
+    response = handleCancel(cancel);
+    } catch (FailureException fe) {
+    response = fe.getACLMessage();
+    }
+    ds.put(RESPONSE_KEY, response);
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, HANDLE_CANCEL);
+
+    // SEND_RESPONSE
+    b = new ReplySender(myAgent, RESPONSE_KEY, SUBSCRIPTION_KEY, mapMessagesList, null);
+    registerState(b, SEND_RESPONSE);
+
+    // SEND_NOTIFICATIONS
+    b = new OneShotBehaviour(myAgent) {
+    public void action() {
+    sendNotifications();
+    }
+    };
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, SEND_NOTIFICATIONS);
+
+    } // End of Constructor
+     */
+
+    /**
+     * This static method can be used
+     * to set the proper message Template (based on the performative of the
+     * subscription message) into the constructor of this behaviour.
+     *
+     * @param perf The performative of the subscription message
+     */
+    public static MessageTemplate createMessageTemplate(int perf) {
+        return MessageTemplate.and(
+                MessageTemplate.MatchProtocol(FIPA_SUBSCRIBE),
+                MessageTemplate.or(MessageTemplate.MatchPerformative(perf), MessageTemplate.MatchPerformative(ACLMessage.CANCEL)));
+    }
 
     /**
      * Reset this behaviour

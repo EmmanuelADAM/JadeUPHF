@@ -38,6 +38,7 @@ import jade.mtp.TransportAddress;
 
 /**
  * Class declaration
+ *
  * @author Giovanni Caire - TILAB
  */
 public class JICPAddress implements TransportAddress {
@@ -54,6 +55,7 @@ public class JICPAddress implements TransportAddress {
 
     /**
      * Constructor declaration
+     *
      * @param host
      * @param port
      * @param file
@@ -68,6 +70,7 @@ public class JICPAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -77,6 +80,7 @@ public class JICPAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -86,6 +90,7 @@ public class JICPAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -95,6 +100,7 @@ public class JICPAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -104,6 +110,7 @@ public class JICPAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -120,7 +127,7 @@ public class JICPAddress implements TransportAddress {
     }
 
     public String toString() {
-        StringBuffer address = new StringBuffer();
+        StringBuilder address = new StringBuilder();
 
         address.append(JICPProtocol.NAME);
         address.append("://");

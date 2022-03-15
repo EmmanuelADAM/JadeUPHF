@@ -127,18 +127,6 @@ class MoveDialog extends JDialog implements ActionListener {
         setVisible(true);
     }
 
-    public Dimension getPreferredSize() {
-        return (new Dimension(450, 170));
-    }
-
-    public void actionPerformed(ActionEvent evt) {
-        choice = CANCEL_BUTTON;
-        if (evt.getSource() == OKButton) {
-            choice = OK_BUTTON;
-        }
-        dispose();
-    }
-
     public static int showMoveDialog(String agent, Frame owner, boolean editable) {
         choice = CANCEL_BUTTON;
         agentName.setEditable(editable);
@@ -152,17 +140,28 @@ class MoveDialog extends JDialog implements ActionListener {
         return agentName.getText();
     }
 
+    public static void setAgentName(String agentNameP) {
+        agentName.setText(agentNameP);
+    }
 
     public static String getContainer() {
         return container.getText();
     }
 
-    public static void setAgentName(String agentNameP) {
-        agentName.setText(agentNameP);
-    }
-
     public static void setContainer(String containerP) {
         container.setText(containerP);
+    }
+
+    public Dimension getPreferredSize() {
+        return (new Dimension(450, 170));
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        choice = CANCEL_BUTTON;
+        if (evt.getSource() == OKButton) {
+            choice = OK_BUTTON;
+        }
+        dispose();
     }
 
 }

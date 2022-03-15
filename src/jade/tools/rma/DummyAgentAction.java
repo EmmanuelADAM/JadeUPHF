@@ -33,12 +33,11 @@ import jade.gui.AgentTree;
 
 class DummyAgentAction extends ContainerAction {
 
+    private final rma myRMA;
     /**
      * Progressive Number to give always a new name to DummyAgent
      */
     private int progressiveNumber = 0;
-
-    private final rma myRMA;
 
     public DummyAgentAction(rma anRMA, ActionProcessor actPro) {
         super("DummyAgentActionIcon", "Start DummyAgent", actPro);

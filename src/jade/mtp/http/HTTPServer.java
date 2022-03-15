@@ -34,6 +34,13 @@
  * @version 0.1
  * @author Nicolas Lhuillier (Motorola Labs)
  * @version 1.0
+ * <p>
+ * HTTPServer.java
+ * @author Jose Antonio Exposito
+ * @author MARISM-A Development group ( marisma-info@ccd.uab.es )
+ * @version 0.1
+ * @author Nicolas Lhuillier (Motorola Labs)
+ * @version 1.0
  */
 
 /**
@@ -64,26 +71,21 @@ import java.util.Vector;
 public class HTTPServer extends Thread {
     // Codec class
 
+    //logging
+    private static final Logger logger = Logger.getMyLogger(HTTPServer.class.getName());
+    //attribute for synchronized
+    private static final Object lock = new Object();
     //static String CODEC = "org.apache.xerces.parsers.SAXParser";
     static String CODEC = "org.apache.crimson.parser.XMLReaderImpl";
-
     private final String address;
     private final int port;
     private final Dispatcher dispatcher;
     private final int maxKA;
     private final int timeout;
-    private ServerSocket server;
-
-    //logging
-    private static final Logger logger = Logger.getMyLogger(HTTPServer.class.getName());
-
     private final Vector<ServerThread> threads; // for keep alive connections
-
-    //attribute for synchronized
-    private static final Object lock = new Object();
-
     // the flag that shows if the server is active or not
     boolean active = true;
+    private ServerSocket server;
 
     /** Constructor: Store the information*/
     public HTTPServer(String interfaceAddress, int p, Dispatcher d, int m, String s, int t, boolean changePortIfBusy) throws IOException {
@@ -210,9 +212,9 @@ public class HTTPServer extends Thread {
     public static class ServerThread extends Thread {
         private final HTTPServer father;
         private final Socket client;
+        private final Dispatcher dispatcher;
         private InputStream input;
         private OutputStream output;
-        private final Dispatcher dispatcher;
         private XMLCodec codec;
         private boolean keepAlive = false;
         private boolean active = false;

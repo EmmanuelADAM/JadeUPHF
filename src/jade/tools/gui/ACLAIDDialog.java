@@ -44,6 +44,23 @@ import java.awt.event.ItemEvent;
  */
 
 public class ACLAIDDialog extends JDialog {
+    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final JLabel jLabel1 = new JLabel();
+    private final JTextField nameTextField = new JTextField();
+    private final JLabel jLabel2 = new JLabel();
+    private final JLabel jLabel3 = new JLabel();
+    private final JPanel buttonPanel = new JPanel();
+    private final JButton okButton = new JButton();
+    private final JButton cancelButton = new JButton();
+    private final String CANCELLED = "cancelled";
+    private final AIDAddressList addressesList = new AIDAddressList();
+    private final boolean editable = true;
+    private final Agent agent;
+    public JCheckBox localCheckBox = new JCheckBox();
+    private String OK = "ok";
+    private String userAction = CANCELLED;
+    private ACLAIDList resolverList;
+    private AID itsAID;
     /**
      * Constructor for the ACLAIDDialog object
      *
@@ -62,7 +79,6 @@ public class ACLAIDDialog extends JDialog {
         }
     }
 
-
     /**
      * Gets the ItsAID attribute of the ACLAIDDialog object
      *
@@ -71,35 +87,6 @@ public class ACLAIDDialog extends JDialog {
     public AID getItsAID() {
         return itsAID;
     }
-
-
-    /**
-     * Gets the OK attribute of the ACLAIDDialog object. OK is true when the
-     * user has pressed the ob button of the dialog.
-     *
-     * @return The OK value
-     */
-    public boolean getOK() {
-        return userAction.equals(OK);
-    }
-
-
-    /**
-     * Sets the Editable attribute of the ACLAIDDialog object
-     *
-     * @param theBool The new Editable value
-     */
-    public void setEditable(boolean theBool) {
-        if (!theBool) {
-            OK = "CLOSED";
-            this.cancelButton.setVisible(false);
-            this.nameTextField.setEnabled(false);
-            this.localCheckBox.setEnabled(false);
-            this.resolverList.setEditable(false);
-            this.addressesList.setEditable(false);
-        }
-    }
-
 
     /**
      * Sets the ItsAID attribute of the ACLAIDDialog object
@@ -119,6 +106,31 @@ public class ACLAIDDialog extends JDialog {
 
     }
 
+    /**
+     * Gets the OK attribute of the ACLAIDDialog object. OK is true when the
+     * user has pressed the ob button of the dialog.
+     *
+     * @return The OK value
+     */
+    public boolean getOK() {
+        return userAction.equals(OK);
+    }
+
+    /**
+     * Sets the Editable attribute of the ACLAIDDialog object
+     *
+     * @param theBool The new Editable value
+     */
+    public void setEditable(boolean theBool) {
+        if (!theBool) {
+            OK = "CLOSED";
+            this.cancelButton.setVisible(false);
+            this.nameTextField.setEnabled(false);
+            this.localCheckBox.setEnabled(false);
+            this.resolverList.setEditable(false);
+            this.addressesList.setEditable(false);
+        }
+    }
 
     /**
      * Sets the UserAction attribute of the ACLAIDDialog object
@@ -128,7 +140,6 @@ public class ACLAIDDialog extends JDialog {
     public void setUserAction(String newUserAction) {
         userAction = newUserAction;
     }
-
 
     /**
      * Method triggered by the OK button
@@ -140,7 +151,6 @@ public class ACLAIDDialog extends JDialog {
         this.setVisible(false);
     }
 
-
     /**
      * Method triggered by the cancel button
      *
@@ -151,7 +161,6 @@ public class ACLAIDDialog extends JDialog {
         this.setVisible(false);
     }
 
-
     /**
      * Method triggered when leaving the textfield of "name"
      *
@@ -160,7 +169,6 @@ public class ACLAIDDialog extends JDialog {
     void nameTextField_focusLost(FocusEvent e) {
         updateSenderName();
     }
-
 
     /**
      * Updates the name field of the current AID. The localCheckBox indicates
@@ -175,7 +183,6 @@ public class ACLAIDDialog extends JDialog {
 
     }
 
-
     /**
      * Method triggered by changing the state of the checkbox of "local"
      *
@@ -184,7 +191,6 @@ public class ACLAIDDialog extends JDialog {
     void localCheckBox_itemStateChanged(ItemEvent e) {
         updateSenderName();
     }
-
 
     /**
      * builds up the dialog
@@ -241,27 +247,5 @@ public class ACLAIDDialog extends JDialog {
         this.getContentPane().add(localCheckBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0
                 , GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
     }
-
-
-    public JCheckBox localCheckBox = new JCheckBox();
-
-    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
-    private final JLabel jLabel1 = new JLabel();
-    private final JTextField nameTextField = new JTextField();
-    private final JLabel jLabel2 = new JLabel();
-    private final JLabel jLabel3 = new JLabel();
-    private final JPanel buttonPanel = new JPanel();
-    private final JButton okButton = new JButton();
-    private final JButton cancelButton = new JButton();
-
-    private String OK = "ok";
-    private final String CANCELLED = "cancelled";
-    private final AIDAddressList addressesList = new AIDAddressList();
-    private final boolean editable = true;
-    private String userAction = CANCELLED;
-    private ACLAIDList resolverList;
-
-    private final Agent agent;
-    private AID itsAID;
 }
 //  ***EOF***

@@ -50,49 +50,21 @@ import java.util.NoSuchElementException;
 public abstract class DBKB extends KB {
 
     /**
-     * Used database driver
-     */
-    protected String driver = "sun.jdbc.odbc.JdbcOdbcDriver";
-
-    /**
      * This ThreadLocal is used to hold connections and associated additional information
      * (such as prepared statements) currently used by each Thread
      */
     private final ThreadLocal<ConnectionWrapper> connections = new ThreadLocal<>();
-
-    private String url;
     private final String username;
     private final String password;
-
+    /**
+     * Used database driver
+     */
+    protected String driver = "sun.jdbc.odbc.JdbcOdbcDriver";
     /**
      * Specifies whether the KB should delete all existing tables for the DF at startup
      */
     protected boolean cleanTables;
-
-    protected class ConnectionWrapper {
-        private Connection conn;
-        private Object info;
-
-        public ConnectionWrapper(Connection conn) {
-            this.conn = conn;
-        }
-
-        public Connection getConnection() {
-            return conn;
-        }
-
-        public void setConnection(Connection conn) {
-            this.conn = conn;
-        }
-
-        public Object getInfo() {
-            return info;
-        }
-
-        public void setInfo(Object info) {
-            this.info = info;
-        }
-    }
+    private String url;
 
     /**
      * Constructs a new <code>DFKB</code> and establishes a connection to the database
@@ -219,7 +191,6 @@ public abstract class DBKB extends KB {
             connections.set(null);
         }
     }
-
 
     @Override
     protected Object insert(Object name, Object fact) {
@@ -373,6 +344,30 @@ public abstract class DBKB extends KB {
 
     protected abstract void unsubscribeSingle(SubscriptionResponder.Subscription s) throws SQLException;
 
+    protected class ConnectionWrapper {
+        private Connection conn;
+        private Object info;
+
+        public ConnectionWrapper(Connection conn) {
+            this.conn = conn;
+        }
+
+        public Connection getConnection() {
+            return conn;
+        }
+
+        public void setConnection(Connection conn) {
+            this.conn = conn;
+        }
+
+        public Object getInfo() {
+            return info;
+        }
+
+        public void setInfo(Object info) {
+            this.info = info;
+        }
+    }
 
     /**
      * Inner class EmptyKBIterator

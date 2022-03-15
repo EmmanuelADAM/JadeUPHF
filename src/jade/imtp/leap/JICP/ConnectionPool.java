@@ -83,11 +83,7 @@ class ConnectionPool {
                 throw new ICPException("Pool closed");
             }
 
-            l = connections.get(url);
-            if (l == null) {
-                l = new ArrayList<>();
-                connections.put(url, l);
-            }
+            l = connections.computeIfAbsent(url, k -> new ArrayList<>());
 
             if (requireFreshConnection) {
                 // We are checking a given destination. This means that this destination may be no longer valid

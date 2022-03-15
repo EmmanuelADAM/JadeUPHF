@@ -86,33 +86,6 @@ public class AMSAgentDescription implements Concept {
     }
 
     /**
-     * Set the <code>name</code> slot of this object.
-     *
-     * @param n The agent identifier for the name.
-     */
-    public void setName(AID n) {
-        name = n;
-    }
-
-    /**
-     * Set the <code>ownership</code> slot of this object.
-     *
-     * @param n The string for the ownership.
-     */
-    public void setOwnership(String n) {
-        ownership = n;
-    }
-
-    /**
-     * Set the <code>state</code> slot of this object.
-     *
-     * @param n The string for the state.
-     */
-    public void setState(String n) {
-        state = n;
-    }
-
-    /**
      * Retrieve the <code>name</code> slot of this object.
      *
      * @return The value of the <code>name</code> slot, or
@@ -120,6 +93,15 @@ public class AMSAgentDescription implements Concept {
      */
     public AID getName() {
         return name;
+    }
+
+    /**
+     * Set the <code>name</code> slot of this object.
+     *
+     * @param n The agent identifier for the name.
+     */
+    public void setName(AID n) {
+        name = n;
     }
 
     /**
@@ -133,6 +115,15 @@ public class AMSAgentDescription implements Concept {
     }
 
     /**
+     * Set the <code>ownership</code> slot of this object.
+     *
+     * @param n The string for the ownership.
+     */
+    public void setOwnership(String n) {
+        ownership = n;
+    }
+
+    /**
      * Retrieve the <code>state</code> slot of this object.
      *
      * @return The value of the <code>state</code> slot, or
@@ -140,6 +131,15 @@ public class AMSAgentDescription implements Concept {
      */
     public String getState() {
         return state;
+    }
+
+    /**
+     * Set the <code>state</code> slot of this object.
+     *
+     * @param n The string for the state.
+     */
+    public void setState(String n) {
+        state = n;
     }
 
 }

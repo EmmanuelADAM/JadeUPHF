@@ -47,6 +47,9 @@ import java.util.List;
  * @author Giovanni Caire - TILAB
  */
 public class SSIteratedAchieveREResponder extends SSResponder {
+    public static final String HANDLE_REQUEST = "Handle-Request";
+    public static final String HANDLE_CANCEL = "Handle-Cancel";
+    static final String ACL_USERDEF_TERMINATED_SESSION = "iterated-fipa-request-terminated-session";
     /**
      * Key to retrieve from the HashMap of the behaviour the last received
      * REQUEST ACLMessage
@@ -57,14 +60,8 @@ public class SSIteratedAchieveREResponder extends SSResponder {
      * CANCEL ACLMessage
      */
     public final String CANCEL_KEY = RECEIVED_KEY;
-
-    public static final String HANDLE_REQUEST = "Handle-Request";
-    public static final String HANDLE_CANCEL = "Handle-Cancel";
-
-    static final String ACL_USERDEF_TERMINATED_SESSION = "iterated-fipa-request-terminated-session";
-
-    private boolean sessionClosed = false;
     private final int initiationPerformative;
+    private boolean sessionClosed = false;
 
     /**
      * Construct a SSIteratedAchieveREResponder that is activated
@@ -79,33 +76,31 @@ public class SSIteratedAchieveREResponder extends SSResponder {
      * by the reception of a given initiation REQUEST message and uses
      * a given HashMap of messages list.
      *
-     * @deprecated
+     * @deprecated public SSIteratedAchieveREResponder(Agent a, ACLMessage request, HashMap<String, List<ACLMessage>> store) {
+    // 4th parameter is false since in this protocol we treat the initiation message exactly as all subsequent incoming messages
+    super(a, request, store, false);
 
-    public SSIteratedAchieveREResponder(Agent a, ACLMessage request, HashMap<String, List<ACLMessage>> store) {
-        // 4th parameter is false since in this protocol we treat the initiation message exactly as all subsequent incoming messages
-        super(a, request, store, false);
+    initiationPerformative = request.getPerformative();
 
-        initiationPerformative = request.getPerformative();
+    registerDefaultTransition(HANDLE_REQUEST, SEND_REPLY);
+    registerTransition(SEND_REPLY, RECEIVE_NEXT, ACLMessage.INFORM);
+    registerTransition(RECEIVE_NEXT, HANDLE_CANCEL, MsgReceiver.TIMEOUT_EXPIRED);
+    registerTransition(CHECK_IN_SEQ, HANDLE_REQUEST, initiationPerformative, new String[]{HANDLE_REQUEST, SEND_REPLY, RECEIVE_NEXT, CHECK_IN_SEQ});
+    registerTransition(CHECK_IN_SEQ, HANDLE_CANCEL, ACLMessage.CANCEL);
+    registerDefaultTransition(HANDLE_CANCEL, DUMMY_FINAL);
 
-        registerDefaultTransition(HANDLE_REQUEST, SEND_REPLY);
-        registerTransition(SEND_REPLY, RECEIVE_NEXT, ACLMessage.INFORM);
-        registerTransition(RECEIVE_NEXT, HANDLE_CANCEL, MsgReceiver.TIMEOUT_EXPIRED);
-        registerTransition(CHECK_IN_SEQ, HANDLE_REQUEST, initiationPerformative, new String[]{HANDLE_REQUEST, SEND_REPLY, RECEIVE_NEXT, CHECK_IN_SEQ});
-        registerTransition(CHECK_IN_SEQ, HANDLE_CANCEL, ACLMessage.CANCEL);
-        registerDefaultTransition(HANDLE_CANCEL, DUMMY_FINAL);
+    Behaviour b;
 
-        Behaviour b;
+    // HANDLE_REQUEST
+    b = new RequestHandler(myAgent);
+    registerFirstState(b, HANDLE_REQUEST);
+    b.setMapMessagesList(getMapMessagesList());
 
-        // HANDLE_REQUEST
-        b = new RequestHandler(myAgent);
-        registerFirstState(b, HANDLE_REQUEST);
-        b.setMapMessagesList(getMapMessagesList());
-
-        // HANDLE_CANCEL
-        b = new CancelHandler(myAgent);
-        registerDSState(b, HANDLE_CANCEL);
+    // HANDLE_CANCEL
+    b = new CancelHandler(myAgent);
+    registerDSState(b, HANDLE_CANCEL);
     }
-*/
+     */
     /**
      * Construct a SSIteratedAchieveREResponder that is activated
      * by the reception of a given initiation REQUEST message and uses

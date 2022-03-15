@@ -45,16 +45,6 @@ public class ACLMessage implements Concept {
     }
 
     /**
-     * Set the message envelope.
-     *
-     * @param e The transport-level envelope to attach to this ACL
-     *          message.
-     */
-    public void setEnvelope(Envelope e) {
-        env = e;
-    }
-
-    /**
      * Retrieve the message envelope.
      *
      * @return The transport-level envelope attached to this ACL
@@ -65,14 +55,13 @@ public class ACLMessage implements Concept {
     }
 
     /**
-     * Set the representation of the message payload.
+     * Set the message envelope.
      *
-     * @param r The name of the representation expressing the message
-     *          payload.
+     * @param e The transport-level envelope to attach to this ACL
+     *          message.
      */
-    public void setAclRepresentation(String r) {
-        if (env != null)
-            env.setAclRepresentation(r);
+    public void setEnvelope(Envelope e) {
+        env = e;
     }
 
     /**
@@ -88,14 +77,14 @@ public class ACLMessage implements Concept {
     }
 
     /**
-     * Set the payload (i.e. the speech act level part) of this ACL
-     * message.
+     * Set the representation of the message payload.
      *
-     * @param p A string containing the encoding of the payload
-     *          according to a concrete ACL representaiton.
+     * @param r The name of the representation expressing the message
+     *          payload.
      */
-    public void setPayload(String p) {
-        payload = p;
+    public void setAclRepresentation(String r) {
+        if (env != null)
+            env.setAclRepresentation(r);
     }
 
     /**
@@ -107,6 +96,17 @@ public class ACLMessage implements Concept {
      */
     public String getPayload() {
         return payload;
+    }
+
+    /**
+     * Set the payload (i.e. the speech act level part) of this ACL
+     * message.
+     *
+     * @param p A string containing the encoding of the payload
+     *          according to a concrete ACL representaiton.
+     */
+    public void setPayload(String p) {
+        payload = p;
     }
 
 }

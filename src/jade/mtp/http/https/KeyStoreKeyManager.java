@@ -59,6 +59,11 @@ import java.security.cert.X509Certificate;
  */
 public class KeyStoreKeyManager implements HTTPSKeyManager {
 
+    private static final String PREFIX = "jade_mtp_http_https_";
+    private PrivateKey privateKey;
+    private X509Certificate[] cert;
+    private String alias;
+
     public void init(Profile profile) throws Exception {
 
         String pass = profile.getParameter(PREFIX + "keyStorePass", "");
@@ -99,9 +104,4 @@ public class KeyStoreKeyManager implements HTTPSKeyManager {
             Socket arg2) {
         return alias;
     }
-
-    private PrivateKey privateKey;
-    private X509Certificate[] cert;
-    private String alias;
-    private static final String PREFIX = "jade_mtp_http_https_";
 }

@@ -40,28 +40,28 @@ public class RoutedMessage implements Concept {
     private Channel to;
     private ACLMessage message;
 
-    public void setFrom(Channel c) {
-        from = c;
-    }
-
     public Channel getFrom() {
         return from;
     }
 
-    public void setTo(Channel c) {
-        to = c;
+    public void setFrom(Channel c) {
+        from = c;
     }
 
     public Channel getTo() {
         return to;
     }
 
-    public void setMessage(ACLMessage msg) {
-        message = msg;
+    public void setTo(Channel c) {
+        to = c;
     }
 
     public ACLMessage getMessage() {
         return message;
+    }
+
+    public void setMessage(ACLMessage msg) {
+        message = msg;
     }
 
 }

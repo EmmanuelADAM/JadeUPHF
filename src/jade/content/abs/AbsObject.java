@@ -29,6 +29,7 @@ import java.io.Serializable;
 
 /**
  * The common ancestor of all abstract descriptors
+ *
  * @author Federico Bergenti - Universita` di Parma
  * @author Giovanni Caire - TILAB
  */
@@ -53,6 +54,7 @@ public interface AbsObject extends Serializable {
     /**
      * Gets the value of an attribute of the object held by this
      * abstract descriptor.
+     *
      * @param name The name of the attribute.
      * @return value The value of the attribute.
      */
@@ -64,14 +66,16 @@ public interface AbsObject extends Serializable {
     String[] getNames();
 
     /**
-     * Tests if the object is grounded, i.e., if no one of its attributes 
+     * Tests if the object is grounded, i.e., if no one of its attributes
      * is associated with a variable
+     *
      * @return <code>true</code> if the object is grounded.
      */
     boolean isGrounded();
 
     /**
      * Gets the number of attributes.
+     *
      * @return the number of attributes.
      */
     int getCount();

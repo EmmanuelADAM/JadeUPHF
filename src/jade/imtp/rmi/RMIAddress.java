@@ -32,6 +32,7 @@ import jade.mtp.TransportAddress;
 
 /**
  * Class declaration
+ *
  * @author LEAP
  */
 public class RMIAddress implements TransportAddress {
@@ -48,6 +49,7 @@ public class RMIAddress implements TransportAddress {
 
     /**
      * Constructor declaration
+     *
      * @param host
      * @param port
      * @param file
@@ -62,6 +64,7 @@ public class RMIAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -71,6 +74,7 @@ public class RMIAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -80,6 +84,7 @@ public class RMIAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -89,6 +94,7 @@ public class RMIAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -98,6 +104,7 @@ public class RMIAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */

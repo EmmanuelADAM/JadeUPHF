@@ -40,27 +40,37 @@ import java.util.*;
  */
 public class AID implements Comparable<Object>, Serializable {
     public static final char HAP_SEPARATOR = '@';
-
-    // Unique ID of the platform, used to build the GUID of resident agents.
-    private static String platformID;
-
-    private String name;
-    private int hashCode;
-
+    /**
+     * constant to be used in the constructor of the AID
+     **/
+    public static final boolean ISGUID = true;
+    /**
+     * constant to be used in the constructor of the AID
+     **/
+    public static final boolean ISLOCALNAME = false;
+    /**
+     * Key to retrieve the agent class name as a user defined slot of
+     * the AID included in the AMSAgentDescription registered with
+     * the AMS.
+     */
+    public static final String AGENT_CLASSNAME = "JADE-agent-classname";
     private static final int EXPECTED_ADDRESSES_SIZE = 1;
     private static final int EXPECTED_RESOLVERS_SIZE = 1;
-
-    //#MIDP_EXCLUDE_BEGIN
-    private List<String> addresses = new ArrayList<>(EXPECTED_ADDRESSES_SIZE);
-    private List<AID> resolvers = new ArrayList<>(EXPECTED_RESOLVERS_SIZE);
+    // Unique ID of the platform, used to build the GUID of resident agents.
+    private static String platformID;
+    private String name;
     //#MIDP_EXCLUDE_END
 	/*#MIDP_INCLUDE_BEGIN
 	 private Vector addresses = new Vector(EXPECTED_ADDRESSES_SIZE,1);
 	 private Vector resolvers = new Vector(EXPECTED_RESOLVERS_SIZE,1);
 	 #MIDP_INCLUDE_END*/
-
+    private int hashCode;
+    //#MIDP_EXCLUDE_BEGIN
+    private List<String> addresses = new ArrayList<>(EXPECTED_ADDRESSES_SIZE);
+    private List<AID> resolvers = new ArrayList<>(EXPECTED_RESOLVERS_SIZE);
     private Properties userDefSlots = new Properties();
-
+    // For persistence service
+    private transient Long persistentID;
 
     /**
      * Constructs an Agent-Identifier whose slot name is set to an empty string
@@ -87,8 +97,6 @@ public class AID implements Comparable<Object>, Serializable {
     public AID(String guid) {
         this(guid, ISGUID);
     }
-
-
     /**
      * Constructor for an Agent-identifier
      *
@@ -115,45 +123,6 @@ public class AID implements Comparable<Object>, Serializable {
         platformID = id;
     }
 
-    /**
-     * constant to be used in the constructor of the AID
-     **/
-    public static final boolean ISGUID = true;
-    /**
-     * constant to be used in the constructor of the AID
-     **/
-    public static final boolean ISLOCALNAME = false;
-
-    /**
-     * Key to retrieve the agent class name as a user defined slot of
-     * the AID included in the AMSAgentDescription registered with
-     * the AMS.
-     */
-    public static final String AGENT_CLASSNAME = "JADE-agent-classname";
-
-    /**
-     * This method permits to set the symbolic name of an agent.
-     * The passed parameter must be a GUID and not a local name.
-     */
-    public void setName(String n) {
-        name = n.trim();
-        hashCode = name.toLowerCase().hashCode();
-    }
-
-    /**
-     * This method permits to set the symbolic name of an agent.
-     * The passed parameter must be a local name.
-     */
-    public void setLocalName(String n) {
-        String hap = getPlatformID();
-        if (hap == null) {
-            throw new RuntimeException("Unknown Platform Name");
-        }
-        name = n.trim();
-        name = createGUID(name, hap);
-        hashCode = name.toLowerCase().hashCode();
-    }
-
     public static String createGUID(String localName, String platformName) {
         String n = localName.trim();
         return n.concat(HAP_SEPARATOR + platformName);
@@ -164,6 +133,15 @@ public class AID implements Comparable<Object>, Serializable {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * This method permits to set the symbolic name of an agent.
+     * The passed parameter must be a GUID and not a local name.
+     */
+    public void setName(String n) {
+        name = n.trim();
+        hashCode = name.toLowerCase().hashCode();
     }
 
     /**
@@ -543,6 +521,20 @@ public class AID implements Comparable<Object>, Serializable {
     }
 
     /**
+     * This method permits to set the symbolic name of an agent.
+     * The passed parameter must be a local name.
+     */
+    public void setLocalName(String n) {
+        String hap = getPlatformID();
+        if (hap == null) {
+            throw new RuntimeException("Unknown Platform Name");
+        }
+        name = n.trim();
+        name = createGUID(name, hap);
+        hashCode = name.toLowerCase().hashCode();
+    }
+
+    /**
      * Returns the HAP of the agent or null if the GUID of this
      * <code>AID</code> is not of the form <local-name>@<platform-name>
      */
@@ -553,10 +545,6 @@ public class AID implements Comparable<Object>, Serializable {
         else
             return name.substring(atPos + 1);
     }
-
-
-    // For persistence service
-    private transient Long persistentID;
 
     // For persistence service
     private Long getPersistentID() {

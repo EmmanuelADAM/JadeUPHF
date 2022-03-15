@@ -42,7 +42,7 @@ import System.Drawing.FontStyle;
 
 /**
  * Clears the Message Canvas.
- *
+ * <p>
  * see FixedAction
  */
 

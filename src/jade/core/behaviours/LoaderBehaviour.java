@@ -73,8 +73,6 @@ public class LoaderBehaviour extends Behaviour {
     private final Codec codec = new LEAPCodec();
     private final Ontology onto = BehaviourLoadingOntology.getInstance();
     private final ContentManager myContentManager = new ContentManager();
-    private ClassLoader localLoader;
-
     private final MessageTemplate myTemplate = MessageTemplate.and(
             MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
             MessageTemplate.and(
@@ -82,7 +80,7 @@ public class LoaderBehaviour extends Behaviour {
                     MessageTemplate.MatchOntology(onto.getName())
             )
     );
-
+    private ClassLoader localLoader;
     private boolean finished = false;
 
     /**
@@ -276,6 +274,28 @@ public class LoaderBehaviour extends Behaviour {
         return b;
     }
 
+    protected void setInputParameters(Behaviour b, List<Parameter> params) {
+        var ds = b.getMapMessages();
+        if (params != null) {
+            for (Parameter param : params) {
+                if (param.getMode() == Parameter.IN_MODE || param.getMode() == Parameter.INOUT_MODE) {
+                    ds.put(param.getName(), (ACLMessage)param.getValue());
+                }
+            }
+        }
+    }
+
+    protected void getOutputParameters(Behaviour b, List<Parameter> params) {
+        var ds = b.getMapMessages();
+        if (params != null) {
+            for (Parameter param : params) {
+                if (param.getMode() == Parameter.OUT_MODE || param.getMode() == Parameter.INOUT_MODE) {
+                    param.setValue(ds.get(param.getName()));
+                }
+            }
+        }
+    }
+
     /**
      * Inner class HashClassLoader
      */
@@ -306,7 +326,7 @@ public class LoaderBehaviour extends Behaviour {
     protected Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
 	  	// 1) Try to see if the class has already been loaded
 	  	Class c = findLoadedClass(name);
-		  	
+
 			// 2) Try to load the class using the system class loader
 	  	if(c == null) {
 		    try {
@@ -315,45 +335,20 @@ public class LoaderBehaviour extends Behaviour {
 		    catch (ClassNotFoundException cnfe) {
 		    }
 			}
-		  	
+
 	  	// 3) If still not found, try to load the class from the code
 	  	if(c == null) {
   	    c = findClass(name);
 	  	}
-		  	
+
 	  	if(resolve) {
 	  	    resolveClass(c);
 	  	}
-		    
+
 	  	return c;
     }
 		#PJAVA_INCLUDE_END*/
     }  // END of inner class HashClassLoader
-
-
-    protected void setInputParameters(Behaviour b, List<Parameter> params) {
-        HashMap ds = b.getMapMessages();
-        if (params != null) {
-            for (Parameter param : params) {
-                if (param.getMode() == Parameter.IN_MODE || param.getMode() == Parameter.INOUT_MODE) {
-                    ds.put(param.getName(), param.getValue());
-                }
-            }
-        }
-    }
-
-    protected void getOutputParameters(Behaviour b, List<Parameter> params) {
-        HashMap ds = b.getMapMessages();
-        if (params != null) {
-            for (Object param : params) {
-                Parameter p = (Parameter) param;
-                if (p.getMode() == Parameter.OUT_MODE || p.getMode() == Parameter.INOUT_MODE) {
-                    p.setValue(ds.get(p.getName()));
-                }
-            }
-        }
-    }
-
 
     /**
      * Inner class ResultCollector.
@@ -363,9 +358,9 @@ public class LoaderBehaviour extends Behaviour {
      */
     private class ResultCollector extends OneShotBehaviour {
         private final Behaviour myBehaviour;
-        private List<Parameter> myParams;
         private final Action actionExpr;
         private final ACLMessage request;
+        private List<Parameter> myParams;
 
         ResultCollector(Behaviour b, List<Parameter> l, Action a, ACLMessage m) {
             super();

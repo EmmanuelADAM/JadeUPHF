@@ -19,36 +19,36 @@ public class LoggerInfo implements Concept {
         setLevel(level);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getLevel() {
         return level;
     }
 
-    public void setHandlers(List<?> handlers) {
-        this.handlers = handlers;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public List<?> getHandlers() {
         return handlers;
     }
 
-    public void setFile(String file) {
-        this.file = file;
+    public void setHandlers(List<?> handlers) {
+        this.handlers = handlers;
     }
 
     public String getFile() {
         return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public String toString() {

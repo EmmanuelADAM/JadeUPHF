@@ -14,51 +14,39 @@ import java.util.StringTokenizer;
 
 public class MainDetectionManager {
 
-    private final static Logger logger = Logger.getMyLogger(MainDetectionManager.class.getName());
-
-    /*
-     *  configuration options with defaults
-     */
-    private final static String OPT_MCAST_ADDR = "jade_core_MainDetectionManager_mcastaddr";
-    private final static String OPT_MCAST_ADDR_DEFAULT = "239.255.10.99";
-
-    private final static String OPT_MCAST_PORT = "jade_core_MainDetectionManager_mcastport";
-    private final static String OPT_MCAST_PORT_DEFAULT = "1199";
-
-    private final static String OPT_MCAST_TTL = "jade_core_MainDetectionManager_mcastttl";
-    private final static String OPT_MCAST_TTL_DEFAULT = "4";
-
-    private final static String OPT_MCAST_FIRST_TIMEOUT = "jade_core_MainDetectionManager_mcastfirsttimeout";
-    private final static String OPT_MCAST_FIRST_TIMEOUT_DEFAULT = "500";
-
-    private final static String OPT_MCAST_TIMEOUT = "jade_core_MainDetectionManager_mcasttimeout";
-    private final static String OPT_MCAST_TIMEOUT_DEFAULT = "2500";
-
-    private final static String OPT_MCAST_RETRIES = "jade_core_MainDetectionManager_mcastretries";
-    private final static String OPT_MCAST_RETRIES_DEFAULT = "3";
-
     /*
      *  protocol data
      */
     // version string
     public final static String PROTO_VERSION = " MJADE/1.0";
-
     // charset used to encode/decode packets
     public final static String PROTO_ENCODING = "ISO-8859-1";
-
     // protocol commands
     public final static String PROTO_CMD_GETMAIN = "get-main";
     public final static String PROTO_CMD_PING = "ping";
-
     // constants for get-main command
     public final static String PROTO_ADDRESSES_SEPARATOR = ";";
     public final static String PROTO_ADDR_SEPARATOR = ":";
-
     // protocol responses
     public final static String PROTO_RESP_OK = "200 OK ";
     public final static String PROTO_RESP_ERR = "500 Internal Server Error";
     public final static String PROTO_RESP_NOTFOUND = "404 Not Found";
-
+    private final static Logger logger = Logger.getMyLogger(MainDetectionManager.class.getName());
+    /*
+     *  configuration options with defaults
+     */
+    private final static String OPT_MCAST_ADDR = "jade_core_MainDetectionManager_mcastaddr";
+    private final static String OPT_MCAST_ADDR_DEFAULT = "239.255.10.99";
+    private final static String OPT_MCAST_PORT = "jade_core_MainDetectionManager_mcastport";
+    private final static String OPT_MCAST_PORT_DEFAULT = "1199";
+    private final static String OPT_MCAST_TTL = "jade_core_MainDetectionManager_mcastttl";
+    private final static String OPT_MCAST_TTL_DEFAULT = "4";
+    private final static String OPT_MCAST_FIRST_TIMEOUT = "jade_core_MainDetectionManager_mcastfirsttimeout";
+    private final static String OPT_MCAST_FIRST_TIMEOUT_DEFAULT = "500";
+    private final static String OPT_MCAST_TIMEOUT = "jade_core_MainDetectionManager_mcasttimeout";
+    private final static String OPT_MCAST_TIMEOUT_DEFAULT = "2500";
+    private final static String OPT_MCAST_RETRIES = "jade_core_MainDetectionManager_mcastretries";
+    private final static String OPT_MCAST_RETRIES_DEFAULT = "3";
     // buffer size
     private final static int DGRAM_BUF_LEN = 1024;
 
@@ -66,81 +54,6 @@ public class MainDetectionManager {
     private final static int SRC_PORT = 1198;
 
     private static final String MATCH_ALL_PLATFORMS = "*";
-
-    /*
-     * inner class used to parse and keep addresses from main
-     */
-    private static class MainAddr {
-        public String protocol;
-        public String hostname;
-        public int port;
-
-        public MainAddr(String address) {
-            StringTokenizer ast;
-            /*
-             * Address must be in form "proto:host:port"
-             * If address has a bad format, the following code
-             * will throw an exception. The behaviour is by design.
-             */
-            ast = new StringTokenizer(address, PROTO_ADDR_SEPARATOR);
-            protocol = ast.nextToken();
-            hostname = ast.nextToken();
-            port = Integer.parseInt(ast.nextToken());
-        }
-    }
-
-    /*
-     * inner class used to get multicast parameters from Profile
-     */
-    static class MulticastParams {
-        String address;
-        int port;
-        int firstTimeout;
-        int timeout;
-        int retries;
-        int ttl;
-
-        private void checkTrue(boolean condition, String paramName, String paramValue) throws ProfileException {
-            if (!condition) {
-                throw new ProfileException("Bad value \"" + paramValue + "\" for option " + paramName);
-            }
-        }
-
-        private int parseInt(String paramName, String paramValue) throws ProfileException {
-            try {
-                return Integer.parseInt(paramValue);
-            } catch (NumberFormatException nfe) {
-                throw new ProfileException("Bad value \"" + paramValue + "\" for option " + paramName + ": integer value required", nfe);
-            }
-        }
-
-        public MulticastParams(Profile p) throws ProfileException {
-            String s;
-
-            address = p.getParameter(OPT_MCAST_ADDR, OPT_MCAST_ADDR_DEFAULT);
-            checkTrue(address != null && address.length() > 0, OPT_MCAST_ADDR, address);
-
-            s = p.getParameter(OPT_MCAST_PORT, OPT_MCAST_PORT_DEFAULT);
-            port = parseInt(OPT_MCAST_PORT, s);
-            checkTrue(port > 0, OPT_MCAST_PORT, s);
-
-            s = p.getParameter(OPT_MCAST_FIRST_TIMEOUT, OPT_MCAST_FIRST_TIMEOUT_DEFAULT);
-            firstTimeout = parseInt(OPT_MCAST_FIRST_TIMEOUT, s);
-            checkTrue(firstTimeout > 0, OPT_MCAST_FIRST_TIMEOUT, s);
-
-            s = p.getParameter(OPT_MCAST_TIMEOUT, OPT_MCAST_TIMEOUT_DEFAULT);
-            timeout = parseInt(OPT_MCAST_TIMEOUT, s);
-            checkTrue(timeout >= 0, OPT_MCAST_TIMEOUT, s);
-
-            s = p.getParameter(OPT_MCAST_RETRIES, OPT_MCAST_RETRIES_DEFAULT);
-            retries = parseInt(OPT_MCAST_RETRIES, s);
-            checkTrue(retries >= 0, OPT_MCAST_RETRIES, s);
-
-            s = p.getParameter(OPT_MCAST_TTL, OPT_MCAST_TTL_DEFAULT);
-            ttl = parseInt(OPT_MCAST_TTL, s);
-            checkTrue(ttl > 0, OPT_MCAST_TTL, s);
-        }
-    }
 
     /*
      * decode data using the right protocol charset and throw away trailing '\0's
@@ -348,7 +261,7 @@ public class MainDetectionManager {
      */
     private static String buildGetMainRequest(String platformName, String proto) {
         // build request
-        StringBuffer msg = new StringBuffer(PROTO_CMD_GETMAIN);
+        StringBuilder msg = new StringBuilder(PROTO_CMD_GETMAIN);
         if (platformName != null) {
             msg.append('@');
             msg.append(platformName);
@@ -412,5 +325,80 @@ public class MainDetectionManager {
         Thread listenerThread = new Thread(listener);
         listenerThread.start();
         return listener;
+    }
+
+    /*
+     * inner class used to parse and keep addresses from main
+     */
+    private static class MainAddr {
+        public String protocol;
+        public String hostname;
+        public int port;
+
+        public MainAddr(String address) {
+            StringTokenizer ast;
+            /*
+             * Address must be in form "proto:host:port"
+             * If address has a bad format, the following code
+             * will throw an exception. The behaviour is by design.
+             */
+            ast = new StringTokenizer(address, PROTO_ADDR_SEPARATOR);
+            protocol = ast.nextToken();
+            hostname = ast.nextToken();
+            port = Integer.parseInt(ast.nextToken());
+        }
+    }
+
+    /*
+     * inner class used to get multicast parameters from Profile
+     */
+    static class MulticastParams {
+        String address;
+        int port;
+        int firstTimeout;
+        int timeout;
+        int retries;
+        int ttl;
+
+        public MulticastParams(Profile p) throws ProfileException {
+            String s;
+
+            address = p.getParameter(OPT_MCAST_ADDR, OPT_MCAST_ADDR_DEFAULT);
+            checkTrue(address != null && address.length() > 0, OPT_MCAST_ADDR, address);
+
+            s = p.getParameter(OPT_MCAST_PORT, OPT_MCAST_PORT_DEFAULT);
+            port = parseInt(OPT_MCAST_PORT, s);
+            checkTrue(port > 0, OPT_MCAST_PORT, s);
+
+            s = p.getParameter(OPT_MCAST_FIRST_TIMEOUT, OPT_MCAST_FIRST_TIMEOUT_DEFAULT);
+            firstTimeout = parseInt(OPT_MCAST_FIRST_TIMEOUT, s);
+            checkTrue(firstTimeout > 0, OPT_MCAST_FIRST_TIMEOUT, s);
+
+            s = p.getParameter(OPT_MCAST_TIMEOUT, OPT_MCAST_TIMEOUT_DEFAULT);
+            timeout = parseInt(OPT_MCAST_TIMEOUT, s);
+            checkTrue(timeout >= 0, OPT_MCAST_TIMEOUT, s);
+
+            s = p.getParameter(OPT_MCAST_RETRIES, OPT_MCAST_RETRIES_DEFAULT);
+            retries = parseInt(OPT_MCAST_RETRIES, s);
+            checkTrue(retries >= 0, OPT_MCAST_RETRIES, s);
+
+            s = p.getParameter(OPT_MCAST_TTL, OPT_MCAST_TTL_DEFAULT);
+            ttl = parseInt(OPT_MCAST_TTL, s);
+            checkTrue(ttl > 0, OPT_MCAST_TTL, s);
+        }
+
+        private void checkTrue(boolean condition, String paramName, String paramValue) throws ProfileException {
+            if (!condition) {
+                throw new ProfileException("Bad value \"" + paramValue + "\" for option " + paramName);
+            }
+        }
+
+        private int parseInt(String paramName, String paramValue) throws ProfileException {
+            try {
+                return Integer.parseInt(paramValue);
+            } catch (NumberFormatException nfe) {
+                throw new ProfileException("Bad value \"" + paramValue + "\" for option " + paramName + ": integer value required", nfe);
+            }
+        }
     }
 }

@@ -30,34 +30,36 @@ import java.util.Vector;
 
 /**
  * This class implements a FIFO queue of objects that can be put and got
- * in a synchronized way. This is useful when an external thread, 
+ * in a synchronized way. This is useful when an external thread,
  * e.g. a GUI, has to communicate with an agent: The external thread
  * puts objects in the queue and the agent gets and processes them.
  * The queue can be associated to a <code>Behaviour</code>. This
- * Behaviour will be restarted each time an object is inserted in the 
- * queue. 
- * This class can be effectively used in combination with the 
- * <code>Event</code> class to support a synchronization between the 
+ * Behaviour will be restarted each time an object is inserted in the
+ * queue.
+ * This class can be effectively used in combination with the
+ * <code>Event</code> class to support a synchronization between the
  * external therad (posting the event in the <code>InputQueue</code>)
  * and the Agent thread (processing the event).
+ *
+ * @author Giovanni Caire - TILab
  * @see Event
- * @author Giovanni Caire - TILab 
  */
 public class InputQueue {
     private final Vector<Object> queue = new Vector<>();
     private Behaviour myManager;
 
     /**
-     Default constructor.
+     * Default constructor.
      */
     public InputQueue() {
     }
 
     /**
-     Associate this <code>InputQueue</code> object with the indicated
-     <code>Behaviour</code> so that it will be restarted each time
-     a new object is inserted.
-     @param b The <code>Behaviour</code> to associate.
+     * Associate this <code>InputQueue</code> object with the indicated
+     * <code>Behaviour</code> so that it will be restarted each time
+     * a new object is inserted.
+     *
+     * @param b The <code>Behaviour</code> to associate.
      */
     public synchronized void associate(Behaviour b) {
 
@@ -70,9 +72,10 @@ public class InputQueue {
     }
 
     /**
-     Insert an object into the queue. If there is a <code>Behaviour</code>
-     associated to this <code>InputQueue</code> it will be restarted.
-     @param obj The object to insert.
+     * Insert an object into the queue. If there is a <code>Behaviour</code>
+     * associated to this <code>InputQueue</code> it will be restarted.
+     *
+     * @param obj The object to insert.
      */
     public synchronized void put(Object obj) {
         queue.addElement(obj);
@@ -85,9 +88,10 @@ public class InputQueue {
     }
 
     /**
-     Extract the first object in the queue (if any).
-     @return The first object in the queue or <code>null</code> if
-     the queue is empty.
+     * Extract the first object in the queue (if any).
+     *
+     * @return The first object in the queue or <code>null</code> if
+     * the queue is empty.
      */
     public synchronized Object get() {
         Object obj = null;
@@ -99,7 +103,7 @@ public class InputQueue {
     }
 
     /**
-     Remove all elements from this queue.
+     * Remove all elements from this queue.
      */
     public synchronized void clear() {
         queue.removeAllElements();

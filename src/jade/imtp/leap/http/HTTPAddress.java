@@ -38,6 +38,7 @@ import jade.mtp.TransportAddress;
 
 /**
  * Class declaration
+ *
  * @author Giovanni Caire - TILAB
  */
 public class HTTPAddress implements TransportAddress {
@@ -48,6 +49,7 @@ public class HTTPAddress implements TransportAddress {
 
     /**
      * Constructor declaration
+     *
      * @param host
      * @param port
      * @param file
@@ -62,6 +64,7 @@ public class HTTPAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -71,6 +74,7 @@ public class HTTPAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -80,6 +84,7 @@ public class HTTPAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -89,6 +94,7 @@ public class HTTPAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -98,6 +104,7 @@ public class HTTPAddress implements TransportAddress {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */
@@ -106,7 +113,7 @@ public class HTTPAddress implements TransportAddress {
     }
 
     public String toString() {
-        StringBuffer address = new StringBuffer();
+        StringBuilder address = new StringBuilder();
 
         address.append(getProto());
         address.append("://");

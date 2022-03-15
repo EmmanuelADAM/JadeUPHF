@@ -36,9 +36,8 @@ import jade.util.Logger;
 public class MainReplicationHandle {
     //#J2ME_EXCLUDE_BEGIN
     private final String myService;
-    private MainReplicationService replicationService;
-
     private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    private MainReplicationService replicationService;
     //#J2ME_EXCLUDE_END
 
     public MainReplicationHandle(Service svc, ServiceFinder sf) {

@@ -41,35 +41,35 @@ import jade.core.ContainerID;
  */
 public class ThawAgent implements AgentAction {
 
-    public ThawAgent() {
-    }
+    private AID agent;
+    private String repository;
+    private ContainerID newContainer;
 
-    public void setAgent(AID id) {
-        agent = id;
+    public ThawAgent() {
     }
 
     public AID getAgent() {
         return agent;
     }
 
-    public void setRepository(String r) {
-        repository = r;
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     public String getRepository() {
         return repository;
     }
 
-    public void setNewContainer(ContainerID cid) {
-        newContainer = cid;
+    public void setRepository(String r) {
+        repository = r;
     }
 
     public ContainerID getNewContainer() {
         return newContainer;
     }
 
-    private AID agent;
-    private String repository;
-    private ContainerID newContainer;
+    public void setNewContainer(ContainerID cid) {
+        newContainer = cid;
+    }
 
 }

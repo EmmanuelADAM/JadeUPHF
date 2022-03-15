@@ -55,15 +55,13 @@ import java.util.*;
  * @version 1.0
  */
 class CommandDispatcher implements StubHelper, ICP.Listener {
-    private static final String MAIN_PROTO_CLASS = "main-proto-class";
-
     /**
      * The default name for new instances of the class
      * <tt>CommandDispatcher</tt> that have not get an unique name by
      * their container yet.
      */
     protected static final String DEFAULT_NAME = "Default";
-
+    private static final String MAIN_PROTO_CLASS = "main-proto-class";
     private static final boolean enableMultiplePlatforms;
 
     /**
@@ -76,42 +74,39 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
      */
     protected static Map dispatchers = new HashMap();
 
-    private String platformName;
+    static {
+        enableMultiplePlatforms = "true".equals(System.getProperty("jade.enable.multiple.platforms"));
+    }
 
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
     /**
      * The unique name of this command dispatcher used to avoid loops in
      * the forwarding mechanism.
      */
     protected String name;
-
     /**
      * The transport address of the default router. Commands that cannot
      * be dispatched directly will be sent to this address.
      */
     protected TransportAddress routerTA = null;
-
-
     /**
      * This hashtable maps the IDs of the objects remotized by this
      * command dispatcher to the skeletons for these objects. It is used
      * when a command is received from a remote JVM.
      */
     protected Map skeletons = new HashMap();
-
     /**
      * This hashtable maps the objects remotized by this command
      * dispatcher to their IDs. It is used when a stub of a remotized
      * object must be built to be sent to a remote JVM.
      */
     protected Map ids = new HashMap();
-
     /**
      * A counter that is used for determining IDs for remotized objects.
      * Everytime a new object is registered by the command dispatcher it
      * gets the value of this field as ID and the field is increased.
      */
     protected int nextID;
-
     /**
      * The pool of ICP objects used by this command dispatcher to
      * actually send/receive data over the network. It is a table that
@@ -119,29 +114,35 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
      * to a list of ICPs supporting that protocol.
      */
     protected Map icps = new HashMap();
-
     /**
      * The transport addresses the ICPs managed by this command
      * dispatcher are listening for commands on.
      */
     protected List addresses = new ArrayList();
-
     /**
      * The URLs corresponding to the local transport addresses.
      */
     protected List urls = new ArrayList();
-
+    private String platformName;
     /**
-     The stub for the platform service manager. This stub will be
-     shared by all nodes within this Java virtual Machine.
+     * The stub for the platform service manager. This stub will be
+     * shared by all nodes within this Java virtual Machine.
      */
     private PlatformManager thePlatformManager = null;
 
-
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
-
-    static {
-        enableMultiplePlatforms = "true".equals(System.getProperty("jade.enable.multiple.platforms"));
+    /**
+     * A sole constructor. To get a command dispatcher the constructor
+     * should not be called directly but the static <tt>create</tt> and
+     * <tt>getDispatcher</tt> methods should be used. Thereby the
+     * existence of a singleton instance of the command dispatcher will
+     * be guaranteed.
+     */
+    private CommandDispatcher() {
+        // Set a temporary name. Will be substituted as soon as the first
+        // container attached to this CommandDispatcher will receive a
+        // unique name from the main.
+        name = DEFAULT_NAME;
+        nextID = 1;
     }
 
     /**
@@ -149,6 +150,7 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
      * Such instance is created if necessary.
      * If no platform name is specified or the enableMultiplePlatforms flag is not set, then use the default
      * CommandDispatcher
+     *
      * @return the singleton instance of the CommandDispatcher for the indicated platform.
      */
     public synchronized static final CommandDispatcher getDispatcher(String name) throws IMTPException {
@@ -182,21 +184,6 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
 
     private void setPlatformName(String name) {
         platformName = name;
-    }
-
-    /**
-     * A sole constructor. To get a command dispatcher the constructor
-     * should not be called directly but the static <tt>create</tt> and
-     * <tt>getDispatcher</tt> methods should be used. Thereby the
-     * existence of a singleton instance of the command dispatcher will
-     * be guaranteed.
-     */
-    private CommandDispatcher() {
-        // Set a temporary name. Will be substituted as soon as the first
-        // container attached to this CommandDispatcher will receive a
-        // unique name from the main.
-        name = DEFAULT_NAME;
-        nextID = 1;
     }
 
     synchronized PlatformManager getPlatformManagerProxy(Profile p) throws IMTPException {
@@ -300,12 +287,12 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
      * (among those specified) to which dispatching succeeds.
      *
      * @param destTAs a list of transport addresses where the command
-     * dispatcher should try to dispatch the command.
+     *                dispatcher should try to dispatch the command.
      * @param command the command that is to be dispatched.
      * @return a response command from the receiving container.
-     *  throws DispatcherException if an error occurs during dispatching.
+     * throws DispatcherException if an error occurs during dispatching.
      * @throws UnreachableException if none of the destination addresses
-     * is reachable.
+     *                              is reachable.
      */
     public Command dispatchCommand(List destTAs, Command command) throws DispatcherException, UnreachableException {
         // DEBUG
@@ -352,16 +339,16 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
      * specified transport addresses (the first where dispatching
      * succeeds) directly or through the router.
      *
-     * @param destTAs a list of transport addresses where the command
-     * dispatcher should try to dispatch the command.
+     * @param destTAs        a list of transport addresses where the command
+     *                       dispatcher should try to dispatch the command.
      * @param commandPayload the serialized command that is to be
-     * dispatched.
-     * @param origin a <tt>String</tt> object describing the origin of
-     * the command to be dispatched.
+     *                       dispatched.
+     * @param origin         a <tt>String</tt> object describing the origin of
+     *                       the command to be dispatched.
      * @return a response command from the receiving container.
      * throws DispatcherException if an error occurs during dispatching.
      * @throws UnreachableException if none of the destination addresses
-     * is reachable.
+     *                              is reachable.
      */
     private Command dispatchSerializedCommand(List destTAs, byte[] commandPayload, boolean requireFreshConnection, String origin) throws DispatcherException, UnreachableException {
         // Be sure that the destination addresses are correctly specified
@@ -405,23 +392,23 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
      * specified transport addresses (the first where dispatching
      * succeeds) directly.
      *
-     * @param destTAs a list of transport addresses where the command
-     * dispatcher should try to dispatch the command.
+     * @param destTAs        a list of transport addresses where the command
+     *                       dispatcher should try to dispatch the command.
      * @param commandPayload the serialized command that is to be
-     * dispatched.
+     *                       dispatched.
      * @return a serialized response command from the receiving
      * container.
      * @throws UnreachableException if none of the destination addresses
-     * is reachable.
+     *                              is reachable.
      */
     private byte[] dispatchDirectly(List destTAs, byte[] commandPayload, boolean requireFreshConnection) throws UnreachableException {
 
         // Loop on destinaltion addresses (No need to check again
         // that the list of addresses is not-null and not-empty)
         UnreachableException lastException = null;
-        for (int i = 0; i < destTAs.size(); i++) {
+        for (Object destTA : destTAs) {
             try {
-                return send((TransportAddress) destTAs.get(i), commandPayload, requireFreshConnection);
+                return send((TransportAddress) destTA, commandPayload, requireFreshConnection);
             } catch (UnreachableException ue) {
                 lastException = ue;
                 // Can't send command to this address --> try the next one
@@ -442,17 +429,17 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
      * specified transport addresses (the first where dispatching
      * succeeds) through the router.
      *
-     * @param destTAs a list of transport addresses where the command
-     * dispatcher should try to dispatch the command.
+     * @param destTAs        a list of transport addresses where the command
+     *                       dispatcher should try to dispatch the command.
      * @param commandPayload the serialized command that is to be
-     * dispatched.
-     * @param origin a <tt>String</tt> object describing the origin of
-     * the command to be dispatched.
+     *                       dispatched.
+     * @param origin         a <tt>String</tt> object describing the origin of
+     *                       the command to be dispatched.
      * @return a serialized response command from the receiving
      * container.
      * throws DispatcherException if an error occurs during dispatching.
      * @throws UnreachableException if none of the destination addresses
-     * is reachable.
+     *                              is reachable.
      */
     private byte[] dispatchThroughRouter(List destTAs, byte[] commandPayload, boolean requireFreshConnection, String origin) throws DispatcherException, UnreachableException {
         // Build a FORWARD command
@@ -474,10 +461,10 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
      * command dispatcher throws the corresponding exception locally.
      *
      * @param response the resonse comman from the receiving container.
-     * throws DispatcherException if an error occurs on the remote site
-     * during dispatching.
+     *                 throws DispatcherException if an error occurs on the remote site
+     *                 during dispatching.
      * @throws UnreachableException if the destination address is not
-     * reachable.
+     *                              reachable.
      */
     protected void checkRemoteExceptions(Command response) throws DispatcherException, UnreachableException {
         if (response.getCode() == Command.ERROR) {
@@ -579,8 +566,8 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
      * Adds (and activates) an ICP to this command dispatcher.
      *
      * @param peer the ICP to add.
-     * param args the arguments required by the ICP for the activation.
-     * These arguments are ICP specific.
+     *             param args the arguments required by the ICP for the activation.
+     *             These arguments are ICP specific.
      */
     public void addICP(ICP peer, String peerID, Profile p) {
         try {
@@ -626,12 +613,12 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
      * @param remoteObject the object whose ID should be returned.
      * @return the ID of the reomte object.
      * @throws RuntimeException if the specified object is not
-     * remotized by this command dispatcher.
+     *                          remotized by this command dispatcher.
      */
     public int getID(Object remoteObject) throws IMTPException {
         Integer id = (Integer) ids.get(remoteObject);
         if (id != null) {
-            return id.intValue();
+            return id;
         }
 
         throw new IMTPException("specified object is not remotized by this command dispatcher.");
@@ -691,10 +678,10 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
     /**
      * Registers the specified skeleton to the command dispatcher.
      *
-     * @param skeleton a skeleton to be managed by the command
-     * dispatcher.
+     * @param skeleton        a skeleton to be managed by the command
+     *                        dispatcher.
      * @param remotizedObject the remote object related to the specified
-     * skeleton.
+     *                        skeleton.
      */
     public synchronized void registerSkeleton(Skeleton skeleton, Object remotizedObject) throws IMTPException {
         Integer id = null;
@@ -716,7 +703,7 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
      * Deregisters the specified remote object from the command dispatcher.
      *
      * @param remoteObject the remote object related to the specified
-     * skeleton.
+     *                     skeleton.
      */
     public synchronized void deregisterSkeleton(final Object remoteObject) {
         if (myLogger.isLoggable(Logger.FINE)) {
@@ -731,15 +718,13 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
             // JVM it needs some time to broadcast the termination of this node
             // to its replicas (if any) --> asynchronously deregister the skeleton after
             // a while
-            Thread t = new Thread() {
-                public void run() {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ignored) {
-                    }
-                    removeRemoteObject(remoteObject);
+            Thread t = new Thread(() -> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignored) {
                 }
-            };
+                removeRemoteObject(remoteObject);
+            });
             t.start();
         }
     }
@@ -788,14 +773,14 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
      * Selects a suitable peer and sends the specified serialized command
      * to the specified transport address.
      *
-     * @param ta the transport addresses where the command should be
-     * sent.
+     * @param ta             the transport addresses where the command should be
+     *                       sent.
      * @param commandPayload the serialized command that is to be
-     * sent.
+     *                       sent.
      * @return a serialized response command from the receiving
      * container.
      * @throws UnreachableException if the destination address is not
-     * reachable.
+     *                              reachable.
      */
     private byte[] send(TransportAddress ta, byte[] commandPayload, boolean requireFreshConnection) throws UnreachableException {
 
@@ -860,7 +845,7 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
      * deserialize it and launch processing of the command.
      *
      * @param commandPayload the command to be deserialized and
-     * processed.
+     *                       processed.
      * @return a <tt>byte</tt> array containing the serialized response
      * command.
      * throws LEAPSerializationException if the command cannot be

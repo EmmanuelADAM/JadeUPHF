@@ -63,13 +63,16 @@ public class Property implements Concept {
         this.value = value;
     }
 
-    /**
-     * Set the name of the property object.
-     *
-     * @param n The new name for this property.
-     */
-    public void setName(String n) {
-        name = n;
+    public static Properties convertPropertyListToProperties(List<Property> pp) {
+        if (pp == null) {
+            return null;
+        } else {
+            Properties props = new Properties();
+            for (Property p : pp) {
+                props.put(p.getName(), p.getValue());
+            }
+            return props;
+        }
     }
 
     /**
@@ -83,13 +86,12 @@ public class Property implements Concept {
     }
 
     /**
-     * Set the value for this property object, attached to the
-     * property name.
+     * Set the name of the property object.
      *
-     * @param o The new Java object to attach to the property name.
+     * @param n The new name for this property.
      */
-    public void setValue(Object o) {
-        value = o;
+    public void setName(String n) {
+        name = n;
     }
 
     /**
@@ -103,6 +105,16 @@ public class Property implements Concept {
         return value;
     }
 
+    /**
+     * Set the value for this property object, attached to the
+     * property name.
+     *
+     * @param o The new Java object to attach to the property name.
+     */
+    public void setValue(Object o) {
+        value = o;
+    }
+
     //#J2ME_EXCLUDE_BEGIN
     // For persistence only
     private void setsvalue(java.io.Serializable s) {
@@ -111,18 +123,6 @@ public class Property implements Concept {
 
     private java.io.Serializable getsvalue() {
         return (java.io.Serializable) value;
-    }
-
-    public static Properties convertPropertyListToProperties(List<Property> pp) {
-        if (pp == null) {
-            return null;
-        } else {
-            Properties props = new Properties();
-            for (Property p : pp) {
-                props.put(p.getName(), p.getValue());
-            }
-            return props;
-        }
     }
 
     //#J2ME_EXCLUDE_END

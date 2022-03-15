@@ -1,7 +1,6 @@
 package jade.gui;
 
 import javax.swing.*;
-import java.util.Random;
 
 
 /**
@@ -9,28 +8,33 @@ import java.util.Random;
  *
  * @author revised by Emmanuel ADAM
  */
-public   class AgentWindowed extends GuiAgent{
+public class AgentWindowed extends GuiAgent {
 
 
     protected SimpleWindow4Agent window;
 
-    /**  GUI */
+    /**
+     * GUI
+     */
 
-    public  AgentWindowed() {
+    public AgentWindowed() {
     }
 
 
-    /**print a msg n the associated window*/
-    protected void println(String msg)
-    {
+    /**
+     * print a msg n the associated window
+     */
+    protected void println(String msg) {
         SwingUtilities.invokeLater(() -> window.println(msg));
     }
 
-    /**fonction a remplir pour repondre aux evenements de la fenetre
-     * (par defaut, tue l'agent quand la fenetre est fermee)*/
+    /**
+     * fonction a remplir pour repondre aux evenements de la fenetre
+     * (par defaut, tue l'agent quand la fenetre est fermee)
+     */
     @Override
     protected void onGuiEvent(GuiEvent evt) {
-        if(evt.getType()==SimpleWindow4Agent.QUIT_EVENT) {
+        if (evt.getType() == SimpleWindow4Agent.QUIT_EVENT) {
             //fermeture de la fenetre, on tue l'agent
             doDelete();
         }

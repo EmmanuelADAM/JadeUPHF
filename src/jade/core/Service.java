@@ -91,116 +91,6 @@ public interface Service {
     String RECONNECTED = "Reconnected";
 
     /**
-     * The <code>Slice</code> nested interface represents that part of
-     * a service that is deployed at a given network node.
-     */
-    interface Slice extends Serializable {
-
-        /**
-         * Access the service object which this slice is a part of.
-         *
-         * @return A <code>Service</code> object, that has
-         * <code>this</code> as one of its slices.
-         * @see Service#getSlice(String name)
-         */
-        Service getService();
-
-        /**
-         * Access the node where this slice resides.
-         *
-         * @returns The node where this service slice is actually
-         * running.
-         * throws ServiceException If some problems occur in
-         * retrieving the local node.
-         */
-        Node getNode() throws ServiceException;
-
-        /**
-         * Serves an incoming horizontal command, performing any
-         * required immediate processing, before turning it into a
-         * vertical command to be processed by the incoming filter
-         * chain.
-         *
-         * @param cmd The command that is to be served.
-         * @return A vertical command, that will be processed by the
-         * incoming filter chain of the receiving node. If
-         * <code>null</code> is returned, no filter/sink processing
-         * will happen. This feature can be used to decouple incoming
-         * horizontal interaction patterns from vertical incoming
-         * commands (e.g. no incoming vertical command is generated
-         * until a required set of horizontal commands has been
-         * received).
-         */
-        VerticalCommand serve(HorizontalCommand cmd);
-
-
-    }
-
-    //#APIDOC_EXCLUDE_BEGIN
-    //#DOTNET_EXCLUDE_BEGIN
-    // 15/4/05 We had to deprecate this class because of the .NET integration
-
-    /**
-     * An implementation of the <code>Slice</code> interface,
-     * supporting routed dispatching of horizontal commands.
-     *
-     * @deprecated use the class jade.core.SliceProxy instead of this inner class
-     */
-    class SliceProxy extends jade.core.SliceProxy implements Slice {
-
-        public SliceProxy() {
-            super();
-        }
-
-        public SliceProxy(Service svc, Node n) {
-            super(svc, n);
-        }
-		/*public SliceProxy() {
-			this(null, null);
-		}
-
-		public SliceProxy(Service svc, Node n) {
-			myService = svc;
-			myNode = n;
-		}
-
-		public Service getService() {
-			return myService;
-		}
-
-		public Node getNode() throws ServiceException {
-			return myNode;
-		}
-
-		public void setNode(Node n) {
-			myNode = n;
-		}*/
-
-		/*
-	   Try to serve an incoming horizontal command, routing it to
-	   a remote slice implementation.
-
-	   @param cmd The command to serve, possibly through the network.
-		 *
-		public VerticalCommand serve(HorizontalCommand cmd) {
-			try {
-				cmd.setReturnValue(myNode.accept(cmd));
-			}
-			catch(IMTPException imtpe) {
-				cmd.setReturnValue(new ServiceException("An error occurred while routing the command to the remote implementation", imtpe));
-			}
-			// No local processing of this command is required
-			return null;
-		}
-
-		private Node myNode;
-		private transient Service myService;
-		*/
-    }
-    //#DOTNET_EXCLUDE_END
-    //#APIDOC_EXCLUDE_END
-
-    /**
      * Retrieve the name of this service, that can be used to look up
      * its slices in the Service Finder.
      *
@@ -208,6 +98,10 @@ public interface Service {
      * @see ServiceFinder
      */
     String getName();
+
+    //#APIDOC_EXCLUDE_BEGIN
+    //#DOTNET_EXCLUDE_BEGIN
+    // 15/4/05 We had to deprecate this class because of the .NET integration
 
     /**
      * Retrieve by name a slice of this service. For distributed
@@ -226,6 +120,8 @@ public interface Service {
      *                          the requested slice exists or not.
      */
     Slice getSlice(String name) throws ServiceException;
+    //#DOTNET_EXCLUDE_END
+    //#APIDOC_EXCLUDE_END
 
     /**
      * Retrieve the locally installed slice of this service. A service
@@ -275,7 +171,6 @@ public interface Service {
      */
     int getNumberOfSlices();
 
-
     /**
      * Access the command filter this service needs to perform its
      * tasks. This filter will be installed within the local command
@@ -296,7 +191,6 @@ public interface Service {
      */
     Filter getCommandFilter(boolean direction);
 
-
     /**
      * Access the command sink this service uses to handle its own
      * vertical commands.
@@ -314,7 +208,6 @@ public interface Service {
      * @see Service#getOwnedCommands()
      */
     Sink getCommandSink(boolean side);
-
 
     /**
      * Access the names of the vertical commands this service wants to
@@ -388,7 +281,6 @@ public interface Service {
      */
     void shutdown();
 
-
     /**
      * Allows submitting a vertical command for processing.
      * The given vertical command must be owned by this service
@@ -404,5 +296,109 @@ public interface Service {
      *                          to this service.
      */
     Object submit(VerticalCommand cmd) throws ServiceException;
+
+    /**
+     * The <code>Slice</code> nested interface represents that part of
+     * a service that is deployed at a given network node.
+     */
+    interface Slice extends Serializable {
+
+        /**
+         * Access the service object which this slice is a part of.
+         *
+         * @return A <code>Service</code> object, that has
+         * <code>this</code> as one of its slices.
+         * @see Service#getSlice(String name)
+         */
+        Service getService();
+
+        /**
+         * Access the node where this slice resides.
+         *
+         * @returns The node where this service slice is actually
+         * running.
+         * throws ServiceException If some problems occur in
+         * retrieving the local node.
+         */
+        Node getNode() throws ServiceException;
+
+        /**
+         * Serves an incoming horizontal command, performing any
+         * required immediate processing, before turning it into a
+         * vertical command to be processed by the incoming filter
+         * chain.
+         *
+         * @param cmd The command that is to be served.
+         * @return A vertical command, that will be processed by the
+         * incoming filter chain of the receiving node. If
+         * <code>null</code> is returned, no filter/sink processing
+         * will happen. This feature can be used to decouple incoming
+         * horizontal interaction patterns from vertical incoming
+         * commands (e.g. no incoming vertical command is generated
+         * until a required set of horizontal commands has been
+         * received).
+         */
+        VerticalCommand serve(HorizontalCommand cmd);
+
+
+    }
+
+    /**
+     * An implementation of the <code>Slice</code> interface,
+     * supporting routed dispatching of horizontal commands.
+     *
+     * @deprecated use the class jade.core.SliceProxy instead of this inner class
+     */
+    class SliceProxy extends jade.core.SliceProxy implements Slice {
+
+        public SliceProxy() {
+            super();
+        }
+
+        public SliceProxy(Service svc, Node n) {
+            super(svc, n);
+        }
+		/*public SliceProxy() {
+			this(null, null);
+		}
+
+		public SliceProxy(Service svc, Node n) {
+			myService = svc;
+			myNode = n;
+		}
+
+		public Service getService() {
+			return myService;
+		}
+
+		public Node getNode() throws ServiceException {
+			return myNode;
+		}
+
+		public void setNode(Node n) {
+			myNode = n;
+		}*/
+
+		/*
+	   Try to serve an incoming horizontal command, routing it to
+	   a remote slice implementation.
+
+	   @param cmd The command to serve, possibly through the network.
+		 *
+		public VerticalCommand serve(HorizontalCommand cmd) {
+			try {
+				cmd.setReturnValue(myNode.accept(cmd));
+			}
+			catch(IMTPException imtpe) {
+				cmd.setReturnValue(new ServiceException("An error occurred while routing the command to the remote implementation", imtpe));
+			}
+			// No local processing of this command is required
+			return null;
+		}
+
+		private Node myNode;
+		private transient Service myService;
+		*/
+    }
 
 }

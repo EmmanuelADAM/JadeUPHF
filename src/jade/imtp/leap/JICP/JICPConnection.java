@@ -49,14 +49,15 @@ import java.net.Socket;
 
 /**
  * Class declaration
+ *
  * @author Steffen Rusitschka - Siemens
  */
 public class JICPConnection extends Connection {
 
 
+    protected static Logger myLogger = Logger.getMyLogger(JICPConnection.class.getName());
     //#MIDP_EXCLUDE_BEGIN
     protected Socket sc;
-    protected static Logger myLogger = Logger.getMyLogger(JICPConnection.class.getName());
     //#MIDP_EXCLUDE_END
 	/*#MIDP_INCLUDE_BEGIN
 	protected StreamConnection sc;
@@ -127,6 +128,13 @@ public class JICPConnection extends Connection {
 		#MIDP_INCLUDE_END*/
     }
 
+    /**
+     * Constructor declaration
+     */
+    public JICPConnection(Socket s) {
+        sc = s;
+    }
+
     //#MIDP_EXCLUDE_BEGIN
     public void setReadTimeout(int timeout) throws IOException {
         if (sc != null) {
@@ -136,13 +144,6 @@ public class JICPConnection extends Connection {
 
     protected void bindSocket(Socket sc) {
         // Just do nothing.
-    }
-
-    /**
-     * Constructor declaration
-     */
-    public JICPConnection(Socket s) {
-        sc = s;
     }
     //#MIDP_EXCLUDE_END
 
@@ -176,6 +177,7 @@ public class JICPConnection extends Connection {
     }
 
     /**
+     *
      */
     protected OutputStream getOutputStream() throws IOException {
         return new ByteArrayOutputStream() {
@@ -206,6 +208,7 @@ public class JICPConnection extends Connection {
     }
 
     /**
+     *
      */
     public void close() throws IOException {
         IOException firstExc = null;
@@ -242,6 +245,7 @@ public class JICPConnection extends Connection {
     //#MIDP_EXCLUDE_BEGIN
 
     /**
+     *
      */
     public String getRemoteHost() throws Exception {
         return sc.getInetAddress().getHostAddress();

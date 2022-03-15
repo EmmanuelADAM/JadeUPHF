@@ -30,7 +30,7 @@ import jade.util.Event;
 import java.util.Vector;
 
 /**
- * @author Giovanni Caire - TILab 
+ * @author Giovanni Caire - TILab
  */
 public class Sensor {
     private final Vector<Event> eventQueue = new Vector<>();

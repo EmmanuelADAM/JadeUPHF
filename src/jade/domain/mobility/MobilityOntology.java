@@ -41,19 +41,16 @@ import jade.domain.JADEAgentManagement.JADEManagementOntology;
  */
 
 /**
- This class represents the ontology used for JADE mobility. There is
- only a single instance of this class.
- @see MobilityOntology#getInstance()
+ * This class represents the ontology used for JADE mobility. There is
+ * only a single instance of this class.
+ *
+ * @see MobilityOntology#getInstance()
  */
 public class MobilityOntology extends Ontology implements MobilityVocabulary {
 
     public static final String NAME = "jade-mobility-ontology";
 
     private static final Ontology theInstance = new MobilityOntology();
-
-    public static Ontology getInstance() {
-        return theInstance;
-    }
 
     private MobilityOntology() {
 
@@ -113,6 +110,10 @@ public class MobilityOntology extends Ontology implements MobilityVocabulary {
         } catch (OntologyException oe) {
             oe.printStackTrace();
         }
+    }
+
+    public static Ontology getInstance() {
+        return theInstance;
     }
 
 }

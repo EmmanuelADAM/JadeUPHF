@@ -123,16 +123,13 @@ public class SimpleAchieveREInitiator extends SimpleBehaviour {
      * key to retrive the result notification received.
      **/
     public final String ALL_RESULT_NOTIFICATIONS_KEY = "_all-result-notification" + hashCode();
-
+    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
     //private ACLMessage request = null;
     private MessageTemplate mt = null;
-
     private int state = PREPARE_MSG_STATE;
     private boolean finished;
     private long timeout = -1;
     private long endingTime = 0;
-
-    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
 
     /**
      * Construct for the class by creating a new empty HashMap

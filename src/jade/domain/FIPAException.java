@@ -80,6 +80,16 @@ public class FIPAException extends Exception implements Predicate {
     }
 
     /**
+     * Get the content of the ACL message representing this exception
+     *
+     * @return A string representing the message content that describes
+     * this FIPA exception.
+     **/
+    public String getMessage() {
+        return content;
+    }
+
+    /**
      * Set the content of the ACL message representing this exception
      *
      * @param message is the content
@@ -88,16 +98,6 @@ public class FIPAException extends Exception implements Predicate {
         content = message;
         if (msg != null)
             msg.setContent(message);
-    }
-
-    /**
-     * Get the content of the ACL message representing this exception
-     *
-     * @return A string representing the message content that describes
-     * this FIPA exception.
-     **/
-    public String getMessage() {
-        return content;
     }
 
 }

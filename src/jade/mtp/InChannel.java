@@ -32,14 +32,6 @@ import jade.domain.FIPAAgentManagement.Envelope;
 public interface InChannel {
 
     /**
-     * Callback interface to be notified of message arrivals over this
-     * Message Transport Protocol.
-     */
-    interface Dispatcher {
-        void dispatchMessage(Envelope env, byte[] payload);
-    }
-
-    /**
      * Activates an MTP handler for incoming messages on a default
      * address.
      *
@@ -81,5 +73,13 @@ public interface InChannel {
      * @throws MTPException Thrown if some MTP cleanup error occurs.
      */
     void deactivate() throws MTPException;
+
+    /**
+     * Callback interface to be notified of message arrivals over this
+     * Message Transport Protocol.
+     */
+    interface Dispatcher {
+        void dispatchMessage(Envelope env, byte[] payload);
+    }
 
 }

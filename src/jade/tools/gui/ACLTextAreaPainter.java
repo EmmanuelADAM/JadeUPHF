@@ -42,6 +42,33 @@ import java.awt.*;
  * @since June 14, 2002
  */
 public class ACLTextAreaPainter extends JComponent implements TabExpander {
+    protected static boolean copyAreaBroken;
+    // protected members
+    protected ACLTextArea textArea;
+    protected ACLSytntaxStyle[] styles;
+    protected Color caretColor;
+    protected Color selectionColor;
+    protected Color lineHighlightColor;
+    protected Color bracketHighlightColor;
+    protected Color eolMarkerColor;
+    protected boolean blockCaret;
+    protected boolean lineHighlight;
+    protected boolean bracketHighlight;
+    protected boolean eolMarkers;
+    protected int cols;
+    protected int rows;
+    protected int tabSize;
+    protected FontMetrics fm;
+    protected Graphics offGfx;
+    protected Image offImg;
+    protected int firstInvalid;
+    protected int lastInvalid;
+    // package-private members
+    int currentLineIndex;
+    ACLToken currentLineTokens;
+    Segment currentLine;
+
+
     /**
      * Creates a new repaint manager. This should be not be called directly.
      *
@@ -76,7 +103,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         copyAreaBroken = true;
     }
 
-
     /**
      * Returns if this component can be traversed by pressing the Tab key. This
      * returns false.
@@ -89,7 +115,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         return false;
     }
 
-
     /**
      * Returns the syntax styles used to paint colorized text. Entry <i>n</i>
      * will be used to paint tokens with id = <i>n</i> .
@@ -100,99 +125,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
     public final ACLSytntaxStyle[] getStyles() {
         return styles;
     }
-
-
-    /**
-     * Returns the caret color.
-     *
-     * @return The CaretColor value
-     */
-    public final Color getCaretColor() {
-        return caretColor;
-    }
-
-
-    /**
-     * Returns the selection color.
-     *
-     * @return The SelectionColor value
-     */
-    public final Color getSelectionColor() {
-        return selectionColor;
-    }
-
-
-    /**
-     * Returns the line highlight color.
-     *
-     * @return The LineHighlightColor value
-     */
-    public final Color getLineHighlightColor() {
-        return lineHighlightColor;
-    }
-
-
-    /**
-     * Returns true if line highlight is enabled, false otherwise.
-     *
-     * @return The LineHighlightEnabled value
-     */
-    public final boolean isLineHighlightEnabled() {
-        return lineHighlight;
-    }
-
-
-    /**
-     * Returns the bracket highlight color.
-     *
-     * @return The BracketHighlightColor value
-     */
-    public final Color getBracketHighlightColor() {
-        return bracketHighlightColor;
-    }
-
-
-    /**
-     * Returns true if bracket highlighting is enabled, false otherwise. When
-     * bracket highlighting is enabled, the bracket matching the one before the
-     * caret (if any) is highlighted.
-     *
-     * @return The BracketHighlightEnabled value
-     */
-    public final boolean isBracketHighlightEnabled() {
-        return bracketHighlight;
-    }
-
-
-    /**
-     * Returns true if the caret should be drawn as a block, false otherwise.
-     *
-     * @return The BlockCaretEnabled value
-     */
-    public final boolean isBlockCaretEnabled() {
-        return blockCaret;
-    }
-
-
-    /**
-     * Returns the EOL marker color.
-     *
-     * @return The EOLMarkerColor value
-     */
-    public final Color getEOLMarkerColor() {
-        return eolMarkerColor;
-    }
-
-
-    /**
-     * Returns true if EOL markers are drawn, false otherwise.
-     *
-     * @return The EOLMarkerEnabled value
-     */
-    public final boolean isEOLMarkerEnabled() {
-        return eolMarkers;
-    }
-
 
     /**
      * Sets the syntax styles used to paint colorized text. Entry <i>n</i> will
@@ -207,6 +139,14 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         repaint();
     }
 
+    /**
+     * Returns the caret color.
+     *
+     * @return The CaretColor value
+     */
+    public final Color getCaretColor() {
+        return caretColor;
+    }
 
     /**
      * Sets the caret color.
@@ -218,6 +158,14 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         invalidateSelectedLines();
     }
 
+    /**
+     * Returns the selection color.
+     *
+     * @return The SelectionColor value
+     */
+    public final Color getSelectionColor() {
+        return selectionColor;
+    }
 
     /**
      * Sets the selection color.
@@ -229,6 +177,14 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         invalidateSelectedLines();
     }
 
+    /**
+     * Returns the line highlight color.
+     *
+     * @return The LineHighlightColor value
+     */
+    public final Color getLineHighlightColor() {
+        return lineHighlightColor;
+    }
 
     /**
      * Sets the line highlight color.
@@ -240,6 +196,14 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         invalidateSelectedLines();
     }
 
+    /**
+     * Returns true if line highlight is enabled, false otherwise.
+     *
+     * @return The LineHighlightEnabled value
+     */
+    public final boolean isLineHighlightEnabled() {
+        return lineHighlight;
+    }
 
     /**
      * Enables or disables current line highlighting.
@@ -252,6 +216,14 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         invalidateSelectedLines();
     }
 
+    /**
+     * Returns the bracket highlight color.
+     *
+     * @return The BracketHighlightColor value
+     */
+    public final Color getBracketHighlightColor() {
+        return bracketHighlightColor;
+    }
 
     /**
      * Sets the bracket highlight color.
@@ -263,6 +235,16 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         invalidateLine(textArea.getBracketLine());
     }
 
+    /**
+     * Returns true if bracket highlighting is enabled, false otherwise. When
+     * bracket highlighting is enabled, the bracket matching the one before the
+     * caret (if any) is highlighted.
+     *
+     * @return The BracketHighlightEnabled value
+     */
+    public final boolean isBracketHighlightEnabled() {
+        return bracketHighlight;
+    }
 
     /**
      * Enables or disables bracket highlighting. When bracket highlighting is
@@ -277,6 +259,14 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         invalidateLine(textArea.getBracketLine());
     }
 
+    /**
+     * Returns true if the caret should be drawn as a block, false otherwise.
+     *
+     * @return The BlockCaretEnabled value
+     */
+    public final boolean isBlockCaretEnabled() {
+        return blockCaret;
+    }
 
     /**
      * Sets if the caret should be drawn as a block, false otherwise.
@@ -289,6 +279,14 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         invalidateSelectedLines();
     }
 
+    /**
+     * Returns the EOL marker color.
+     *
+     * @return The EOLMarkerColor value
+     */
+    public final Color getEOLMarkerColor() {
+        return eolMarkerColor;
+    }
 
     /**
      * Sets the EOL marker color.
@@ -301,6 +299,14 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         repaint();
     }
 
+    /**
+     * Returns true if EOL markers are drawn, false otherwise.
+     *
+     * @return The EOLMarkerEnabled value
+     */
+    public final boolean isEOLMarkerEnabled() {
+        return eolMarkers;
+    }
 
     /**
      * Sets if EOL markers are to be drawn.
@@ -312,7 +318,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         invalidateOffscreen();
         repaint();
     }
-
 
     /**
      * Queues a repaint of the changed lines only.
@@ -329,7 +334,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
 
     }
 
-
     /**
      * Repaints the specified line. This is equivalent to calling <code>_invalidateLine()</code>
      * and <code>repaint()</code>.
@@ -341,7 +345,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         _invalidateLine(line);
         fastRepaint();
     }
-
 
     /**
      * Repaints the specified line range. This is equivalent to calling <code>_invalidateLineRange()</code>
@@ -355,7 +358,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         fastRepaint();
     }
 
-
     /**
      * Repaints the lines containing the selection.
      */
@@ -363,7 +365,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         invalidateLineRange(textArea.getSelectionStartLine(),
                 textArea.getSelectionEndLine());
     }
-
 
     /**
      * Invalidates the offscreen graphics context. This should not be called
@@ -374,7 +375,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         offGfx = null;
     }
 
-
     /**
      * Returns the font metrics used by this component.
      *
@@ -383,7 +383,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
     public FontMetrics getFontMetrics() {
         return fm;
     }
-
 
     /**
      * Returns if the copyArea() should not be used.
@@ -394,6 +393,15 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         return copyAreaBroken;
     }
 
+    /**
+     * Disables the use of the copyArea() function (which is broken in JDK
+     * 1.2).
+     *
+     * @param copyAreaBroken The new CopyAreaBroken value
+     */
+    public void setCopyAreaBroken(boolean copyAreaBroken) {
+        ACLTextAreaPainter.copyAreaBroken = copyAreaBroken;
+    }
 
     /**
      * Returns the painter's preferred size.
@@ -410,7 +418,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
       */
     }
 
-
     /**
      * Returns the painter's minimum size.
      *
@@ -419,7 +426,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
     public Dimension getMinimumSize() {
         return super.getMinimumSize();
     }
-
 
     /**
      * Sets the font for this component. This is overridden to update the
@@ -432,18 +438,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         fm = textArea.getFontMetrics(font);
         textArea.recalculateVisibleLines();
     }
-
-
-    /**
-     * Disables the use of the copyArea() function (which is broken in JDK
-     * 1.2).
-     *
-     * @param copyAreaBroken The new CopyAreaBroken value
-     */
-    public void setCopyAreaBroken(boolean copyAreaBroken) {
-        ACLTextAreaPainter.copyAreaBroken = copyAreaBroken;
-    }
-
 
     /**
      * Paints any lines that changed since the last paint to the offscreen
@@ -493,7 +487,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         g.drawImage(offImg, 0, 0, null);
     }
 
-
     /**
      * Same as <code>update(g)</code>.
      *
@@ -502,7 +495,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
     public void paint(Graphics g) {
         update(g);
     }
-
 
     /**
      * Marks a line as needing a repaint, but doesn't actually repaint it until
@@ -529,7 +521,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
             lastInvalid = Math.max(line, lastInvalid);
         }
     }
-
 
     /**
      * Marks a range of lines as needing a repaint, but doesn't actually
@@ -568,7 +559,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         lastInvalid = Math.min(lastInvalid, lastVisible);
     }
 
-
     /**
      * Simulates scrolling from <code>oldFirstLine</code> to <code>newFirstLine</code>
      * by shifting the offscreen graphics and repainting any revealed lines.
@@ -604,7 +594,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         }
     }
 
-
     /**
      * Implementation of TabExpander interface. Returns next tab stop after a
      * specified point.
@@ -619,7 +608,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         return (ntabs + 1) * tabSize + offset;
     }
 
-
     protected boolean ensureOffscreenValid() {
         if (offImg == null || offGfx == null) {
             offImg = textArea.createImage(getWidth(), getHeight());
@@ -629,7 +617,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
             return false;
         }
     }
-
 
     protected int offscreenRepaintLineRange(int firstLine, int lastLine) {
         if (offGfx == null) {
@@ -645,7 +632,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
 
         return line - firstLine;
     }
-
 
     protected int offscreenRepaintLine(int line, int x) {
         ACLSLTokenMarker tokenMarker = textArea.getTokenMarker();
@@ -682,7 +668,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         }
     }
 
-
     protected void paintPlainLine(int line, Font defaultFont,
                                   Color defaultColor, int x, int y) {
         paintHighlight(line, y);
@@ -699,7 +684,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
             offGfx.drawString(".", x, y);
         }
     }
-
 
     protected void paintSyntaxLine(ACLSLTokenMarker tokenMarker, int line,
                                    Font defaultFont, Color defaultColor, int x, int y) {
@@ -721,7 +705,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
             offGfx.drawString(".", x, y);
         }
     }
-
 
     protected void paintHighlight(int line, int y) {
     /*
@@ -745,7 +728,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         }
 
     }
-
 
     protected void paintLineHighlight(int line, int y) {
         int height = fm.getHeight();
@@ -792,7 +774,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
 
     }
 
-
     protected void paintBracketHighlight(int line, int y) {
         int position = textArea.getBracketPosition();
         if (position == -1) {
@@ -807,7 +788,6 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
         offGfx.drawRect(x, y, fm.charWidth('(') - 1,
                 fm.getHeight() - 1);
     }
-
 
     protected void paintCaret(int line, int y) {
         if (textArea.isCaretVisible()) {
@@ -831,38 +811,5 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
 
         }
     }
-
-
-    protected static boolean copyAreaBroken;
-
-    // protected members
-    protected ACLTextArea textArea;
-
-    protected ACLSytntaxStyle[] styles;
-    protected Color caretColor;
-    protected Color selectionColor;
-    protected Color lineHighlightColor;
-    protected Color bracketHighlightColor;
-    protected Color eolMarkerColor;
-
-    protected boolean blockCaret;
-    protected boolean lineHighlight;
-    protected boolean bracketHighlight;
-    protected boolean eolMarkers;
-    protected int cols;
-    protected int rows;
-
-    protected int tabSize;
-    protected FontMetrics fm;
-    protected Graphics offGfx;
-    protected Image offImg;
-
-    protected int firstInvalid;
-    protected int lastInvalid;
-
-    // package-private members
-    int currentLineIndex;
-    ACLToken currentLineTokens;
-    Segment currentLine;
 }
 //  ***EOF***

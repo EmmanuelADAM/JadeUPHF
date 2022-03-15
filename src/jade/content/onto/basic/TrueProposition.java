@@ -27,8 +27,9 @@ package jade.content.onto.basic;
 import jade.content.Predicate;
 
 /**
- * This class represents the TRUE proposition i.e. a predicate 
+ * This class represents the TRUE proposition i.e. a predicate
  * that is always true.
+ *
  * @author Giovanni Caire - TILAB
  */
 public class TrueProposition implements Predicate {

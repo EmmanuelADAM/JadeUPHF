@@ -29,32 +29,35 @@ package jade.content.onto;
 import jade.content.abs.AbsObject;
 
 /**
- This interface must be implemented by ontological classes that
- belong to an ontology using the <code>MicroIntrospector</code>.
- It includes methods by means of which an object can be converted
- into/from an abstract descriptor.
- see MicroIntrospector
- @author Giovanni Caire - TILAB
+ * This interface must be implemented by ontological classes that
+ * belong to an ontology using the <code>MicroIntrospector</code>.
+ * It includes methods by means of which an object can be converted
+ * into/from an abstract descriptor.
+ * see MicroIntrospector
+ *
+ * @author Giovanni Caire - TILAB
  */
 public interface Introspectable {
 
     /**
      * Externalise this object into the given abstract descriptor
-     * @param abs The abstract descriptor this object must externalise 
-     * itself into.
-     * @param onto The reference ontology 
+     *
+     * @param abs  The abstract descriptor this object must externalise
+     *             itself into.
+     * @param onto The reference ontology
      * @throws OntologyException If some error occurs during the externalisation
      */
     void externalise(AbsObject abs, Ontology onto) throws OntologyException;
 
     /**
-     * Internalise this object from a given abstract descriptor 
-     * @param abs The abstract descriptor this object must internalise 
-     * itself from
-     * @param onto The reference ontology 
-     * @throws UngroundedException If the abstract descriptor  
-     * contains a variable
-     * @throws OntologyException If some error occurs during the internalisation
+     * Internalise this object from a given abstract descriptor
+     *
+     * @param abs  The abstract descriptor this object must internalise
+     *             itself from
+     * @param onto The reference ontology
+     * @throws UngroundedException If the abstract descriptor
+     *                             contains a variable
+     * @throws OntologyException   If some error occurs during the internalisation
      */
     void internalise(AbsObject abs, Ontology onto) throws UngroundedException, OntologyException;
 }

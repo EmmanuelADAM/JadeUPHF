@@ -30,16 +30,15 @@ import java.util.List;
 
 class SingletonResourceManagementHelper {
 
-    private final List<ResourceManagementHelper> helpers;
-
     private final static SingletonResourceManagementHelper theInstance = new SingletonResourceManagementHelper();
-
-    public final static SingletonResourceManagementHelper getInstance() {
-        return theInstance;
-    }
+    private final List<ResourceManagementHelper> helpers;
 
     private SingletonResourceManagementHelper() {
         helpers = new ArrayList<>();
+    }
+
+    public final static SingletonResourceManagementHelper getInstance() {
+        return theInstance;
     }
 
     public void addHelper(ResourceManagementHelper helper) {

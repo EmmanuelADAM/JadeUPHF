@@ -50,7 +50,8 @@ import java.util.Iterator;
  * grammar.
  * By default the class implements full SL grammar, otherwise the proper
  * value must be used in the constructor.
- * @author Fabio Bellifemine - TILAB 
+ *
+ * @author Fabio Bellifemine - TILAB
  * @author Nicolas Lhuillier - Motorola (added support for byte[] primitive)
  * @version $Date: 2010-07-05 17:38:19 +0200(lun, 05 lug 2010) $ $Revision: 6354 $
  */
@@ -61,16 +62,18 @@ public class SLCodec extends SimpleSLCodec {
 public class SLCodec extends StringCodec {
 
     public static final String PRESERVE_JAVA_TYPES = "SL-preserve-java-types";
-
+    private final SL0Ontology slOnto; // ontology of the content language
+    /**
+     * This variable is true, when meta symbols are allowed (metas are a semantics-specific extension to the SL Grammar)
+     **/
+    private final boolean metaAllowed = true; //FIXME set/unset this variable to do
     private transient SLParser parser;
     private transient ExtendedSLParser extendedParser;
-    private final SL0Ontology slOnto; // ontology of the content language
     private Ontology domainOnto = null; // application ontology
-    /** This is the StringBuffer used by the encode method **/
+    /**
+     * This is the StringBuffer used by the encode method
+     **/
     private transient StringBuffer buffer = null;
-    /** This variable is true, when meta symbols are allowed (metas are a semantics-specific extension to the SL Grammar) **/
-    private final boolean metaAllowed = true; //FIXME set/unset this variable to do
-
     private boolean preserveJavaTypes = false;
 
     /**
@@ -85,6 +88,7 @@ public class SLCodec extends StringCodec {
      * (long, int, float, double) must be preserved.
      * This is achieved by encoding long values as <numeric-value>L and float values as <numeric-valueF.
      * It should be noticed that this encoding is NOT FIPA SL standard
+     *
      * @param preserveJavaTypes Indicates whether or not java primitive types must be preserved
      */
     public SLCodec(boolean preserveJavaTypes) {
@@ -93,6 +97,7 @@ public class SLCodec extends StringCodec {
 
     /**
      * Construct a Codec object for the given profile of SL-language.
+     *
      * @param slType specify 0 for FIPA-SL0, 1 for FIPA-SL1, 2 for FIPA-SL2, any other value can be used for full FIPA-SL
      */
     public SLCodec(int slType) {
@@ -102,7 +107,8 @@ public class SLCodec extends StringCodec {
     /**
      * Create an SLCodec for the given profile of SL-language specifying whether or not java primitive types
      * (long, int, float, double) must be preserved.
-     * @param slType specify 0 for FIPA-SL0, 1 for FIPA-SL1, 2 for FIPA-SL2, any other value can be used for full FIPA-SL
+     *
+     * @param slType            specify 0 for FIPA-SL0, 1 for FIPA-SL1, 2 for FIPA-SL2, any other value can be used for full FIPA-SL
      * @param preserveJavaTypes Indicates whether or not java primitive types must be preserved
      */
     public SLCodec(int slType, boolean preserveJavaTypes) {
@@ -122,6 +128,55 @@ public class SLCodec extends StringCodec {
     private static boolean readPreserveJavaTypesProperty() {
         String strPreserveJavaTypes = System.getProperty(PRESERVE_JAVA_TYPES);
         return "true".equals(strPreserveJavaTypes);
+    }
+
+    public static void main(String[] args) {
+        SLCodec codec = null;
+        char contentType = 'C';
+        try {
+            codec = new SLCodec(Integer.parseInt(args[0]));
+            contentType = (args.length > 1 ? args[1].charAt(0) : 'C');
+        } catch (Exception e) {
+            System.out.println("usage: SLCodec SLLevel [ContentType]\n where SLLevel can be 0 for SL0, 1 for SL1, 2 for SL2, 3 or more for full SL \n and where ContentType is a char representing the type of content to be parsed: C for a contentexpression (default), T for a term, F for a formula");
+            System.exit(0);
+        }
+
+        while (true) {
+            try {
+                System.out.println("insert an SL " + (contentType == 'F' ? "Well-Formed Formula" : (contentType == 'T' ? "Term" : "Content Expression")) + " to parse (all the expression on a single line!): ");
+                BufferedReader buff = new BufferedReader(new InputStreamReader(System.in));
+                String str = buff.readLine();
+                System.out.println("\n\n");
+                if (contentType == 'F') {
+                    AbsPredicate result = codec.decodeFormula(null, str);
+                    System.out.println("DUMP OF THE DECODE OUTPUT (just for debugging):");
+                    System.out.println(result);
+                    System.out.println("\n\n");
+                    System.out.println("AFTER ENCODE:");
+                    System.out.println(codec.encodeFormula(null, result));
+                    System.out.println("\n\n");
+                } else if (contentType == 'T') {
+                    AbsTerm result = codec.decodeTerm(null, str);
+                    System.out.println("DUMP OF THE DECODE OUTPUT (just for debugging):");
+                    System.out.println(result);
+                    System.out.println("\n\n");
+                    System.out.println("AFTER ENCODE:");
+                    System.out.println(codec.encodeTerm(null, result));
+                    System.out.println("\n\n");
+                } else {
+                    AbsContentElement result = codec.decode(str);
+                    System.out.println("DUMP OF THE DECODE OUTPUT (just for debugging):");
+                    System.out.println(result);
+                    System.out.println("\n\n");
+                    System.out.println("AFTER ENCODE:");
+                    System.out.println(codec.encode(result));
+                    System.out.println("\n\n");
+                }
+            } catch (Exception pe) {
+                pe.printStackTrace();
+                //System.exit(0);
+            }
+        }
     }
 
     private void initParser() {
@@ -144,6 +199,7 @@ public class SLCodec extends StringCodec {
 
     /**
      * Encodes a content into a String.
+     *
      * @param content the content as an abstract descriptor.
      * @return the content as a String.
      * @throws CodecException
@@ -154,8 +210,9 @@ public class SLCodec extends StringCodec {
 
     /**
      * Encodes a content into a String.
+     *
      * @param ontology the ontology
-     * @param content the content as an abstract descriptor.
+     * @param content  the content as an abstract descriptor.
      * @return the content as a String.
      * @throws CodecException
      */
@@ -177,7 +234,6 @@ public class SLCodec extends StringCodec {
         }
     }
 
-
     /**
      * Encode a string, taking care of quoting separated words and
      * escaping strings, if necessary.
@@ -189,8 +245,9 @@ public class SLCodec extends StringCodec {
         buffer.append(out);
     }
 
-
-    /** Encode the passed Abstract Predicate and append its encoding to buffer **/
+    /**
+     * Encode the passed Abstract Predicate and append its encoding to buffer
+     **/
     private void encodeAndAppend(AbsPredicate val) throws CodecException {
         String propositionSymbol = val.getTypeName();
         if (val.getCount() > 0) { // predicate with arguments
@@ -332,7 +389,6 @@ public class SLCodec extends StringCodec {
         buffer.append(')');
     }
 
-
     private void encodeAndAppend(AbsAggregate val) throws CodecException {
         buffer.append('(');
         encodeAndAppend(val.getTypeName());
@@ -342,7 +398,6 @@ public class SLCodec extends StringCodec {
         }
         buffer.append(')');
     }
-
 
     private void encodeAndAppend(AbsPrimitive val) throws CodecException {
         Object v = val.getObject();
@@ -391,9 +446,9 @@ public class SLCodec extends StringCodec {
         else throw new CodecException("SLCodec cannot encode this object " + val);
     }
 
-
     /**
      * Decodes the content to an abstract description.
+     *
      * @param content the content as a String.
      * @return the content as an abstract description.
      * @throws CodecException
@@ -404,8 +459,9 @@ public class SLCodec extends StringCodec {
 
     /**
      * Decodes the content to an abstract description.
+     *
      * @param ontology the ontology.
-     * @param content the content as a String.
+     * @param content  the content as a String.
      * @return the content as an abstract description.
      * @throws CodecException
      */
@@ -428,11 +484,11 @@ public class SLCodec extends StringCodec {
         }
     }
 
-
     /**
      * Decodes the content to an abstract description, where the content is known to be a Term.
+     *
      * @param ontology the ontology.
-     * @param term the term as a String.
+     * @param term     the term as a String.
      * @return the content as an abstract description.
      * @throws CodecException
      * @since JADE 3.4
@@ -451,11 +507,11 @@ public class SLCodec extends StringCodec {
         }
     }
 
-
     /**
      * Encodes the content into a String, where the content is known to be a Term.
+     *
      * @param ontology the ontology.
-     * @param term the termt as an abstract descriptor
+     * @param term     the termt as an abstract descriptor
      * @return the content as a String
      * @throws CodecException
      * @since JADE 3.4
@@ -471,11 +527,11 @@ public class SLCodec extends StringCodec {
         }
     }
 
-
     /**
      * Decodes the content to an abstract description, where the content is known to be a Well-formed Formula
+     *
      * @param ontology the ontology.
-     * @param formula the content as a String.
+     * @param formula  the content as a String.
      * @return the content as an abstract description.
      * @throws CodecException
      * @since JADE 3.4
@@ -494,11 +550,11 @@ public class SLCodec extends StringCodec {
         }
     }
 
-
     /**
      * Encodes the content into a String, where the content is known to be a Well-formed Formula
+     *
      * @param ontology the ontology.
-     * @param formula the formula as an abstract descriptor
+     * @param formula  the formula as an abstract descriptor
      * @return the content as a String
      * @throws CodecException
      * @since JADE 3.4
@@ -511,56 +567,6 @@ public class SLCodec extends StringCodec {
             return buffer.toString();
         } finally {
             buffer = null; //frees the memory
-        }
-    }
-
-
-    public static void main(String[] args) {
-        SLCodec codec = null;
-        char contentType = 'C';
-        try {
-            codec = new SLCodec(Integer.parseInt(args[0]));
-            contentType = (args.length > 1 ? args[1].charAt(0) : 'C');
-        } catch (Exception e) {
-            System.out.println("usage: SLCodec SLLevel [ContentType]\n where SLLevel can be 0 for SL0, 1 for SL1, 2 for SL2, 3 or more for full SL \n and where ContentType is a char representing the type of content to be parsed: C for a contentexpression (default), T for a term, F for a formula");
-            System.exit(0);
-        }
-
-        while (true) {
-            try {
-                System.out.println("insert an SL " + (contentType == 'F' ? "Well-Formed Formula" : (contentType == 'T' ? "Term" : "Content Expression")) + " to parse (all the expression on a single line!): ");
-                BufferedReader buff = new BufferedReader(new InputStreamReader(System.in));
-                String str = buff.readLine();
-                System.out.println("\n\n");
-                if (contentType == 'F') {
-                    AbsPredicate result = codec.decodeFormula(null, str);
-                    System.out.println("DUMP OF THE DECODE OUTPUT (just for debugging):");
-                    System.out.println(result);
-                    System.out.println("\n\n");
-                    System.out.println("AFTER ENCODE:");
-                    System.out.println(codec.encodeFormula(null, result));
-                    System.out.println("\n\n");
-                } else if (contentType == 'T') {
-                    AbsTerm result = codec.decodeTerm(null, str);
-                    System.out.println("DUMP OF THE DECODE OUTPUT (just for debugging):");
-                    System.out.println(result);
-                    System.out.println("\n\n");
-                    System.out.println("AFTER ENCODE:");
-                    System.out.println(codec.encodeTerm(null, result));
-                    System.out.println("\n\n");
-                } else {
-                    AbsContentElement result = codec.decode(str);
-                    System.out.println("DUMP OF THE DECODE OUTPUT (just for debugging):");
-                    System.out.println(result);
-                    System.out.println("\n\n");
-                    System.out.println("AFTER ENCODE:");
-                    System.out.println(codec.encode(result));
-                    System.out.println("\n\n");
-                }
-            } catch (Exception pe) {
-                pe.printStackTrace();
-                //System.exit(0);
-            }
         }
     }
 

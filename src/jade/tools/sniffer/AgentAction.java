@@ -36,7 +36,8 @@ import jade.gui.AgentTree;
  * This class is useful to represent the actions that must perform
  * with the agents.
  * see    FixedAction
- * @see    SnifferAction
+ *
+ * @see SnifferAction
  */
 
 abstract class AgentAction extends SnifferAction {

@@ -24,9 +24,14 @@ import jade.util.Logger;
  **/
 public class GatewayAgent extends Agent {
 
+    private final Logger myLogger = Logger.getMyLogger(this.getClass().getName());
     private GatewayBehaviour myB = null;
     private GatewayListener listener;
-    private final Logger myLogger = Logger.getMyLogger(this.getClass().getName());
+
+    public GatewayAgent() {
+        // enable object2agent communication with queue of infinite length
+        setEnabledO2ACommunication(true, 0);
+    }
 
     /**
      * subclasses may implement this method.
@@ -61,7 +66,6 @@ public class GatewayAgent extends Agent {
         }
     }
 
-
     /**
      * notify that the command has been processed and remove the command from the queue
      *
@@ -69,11 +73,6 @@ public class GatewayAgent extends Agent {
      **/
     final public void releaseCommand(Object command) {
         myB.releaseCommand(command);
-    }
-
-    public GatewayAgent() {
-        // enable object2agent communication with queue of infinite length
-        setEnabledO2ACommunication(true, 0);
     }
 
     /*

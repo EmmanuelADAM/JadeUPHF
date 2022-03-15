@@ -44,27 +44,21 @@ import java.util.*;
  */
 
 class FrontEndContainer implements FrontEnd, AgentToolkit, Runnable {
-    Logger logger = Logger.getMyLogger(this.getClass().getName());
-
     // The table of local agents
     private final Hashtable<String, Agent> localAgents = new Hashtable<>(1);
     // Maps local agent names containing wildcards with their actual names
     private final Hashtable<String, String> actualNames = new Hashtable<>(1);
-
     // The table of locally installed services
     private final Hashtable<String, FEService> localServices = new Hashtable<>(1);
-
     //#MIDP_EXCLUDE_BEGIN
     // The list of FELister
     private final Vector<FEListener> feListeners = new Vector<>();
+    Logger logger = Logger.getMyLogger(this.getClass().getName());
     //#MIDP_EXCLUDE_END
-
-    // The ID of this container
-    private ContainerID myId;
-
     // The addresses of the platform this container belongs to
     Vector<Object> platformAddresses;
-
+    // The ID of this container
+    private ContainerID myId;
     // The AID of the AMS
     private AID amsAID;
 

@@ -44,18 +44,15 @@ import java.util.Iterator;
  */
 
 class MsgIndication {
-    private static final int TYPE_LEN = 20;
     public static final int INCOMING = 0;
     public static final int OUTGOING = 1;
-
+    private static final int TYPE_LEN = 20;
+    //logging
+    private static final Logger logger = Logger.getMyLogger(MsgIndication.class.getName());
+    private static final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
     public ACLMessage msg;
     public int direction;
     public Date date;
-
-    //logging
-    private static final Logger logger = Logger.getMyLogger(MsgIndication.class.getName());
-
-    private static final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
     MsgIndication() {
         msg = new ACLMessage(ACLMessage.NOT_UNDERSTOOD);
@@ -67,61 +64,6 @@ class MsgIndication {
         msg = (ACLMessage) m.clone();
         direction = dir;
         date = d;
-    }
-
-    String getIndication() {
-        int perf = msg.getPerformative();
-        StringBuilder tmpType = new StringBuilder(ACLMessage.getPerformative(perf));
-        int blancCharCnt = TYPE_LEN - tmpType.length();
-        while (blancCharCnt-- > 0)
-            tmpType.append(" ");
-
-        // Put the destination agent group in form of a string
-        StringBuilder dest = new StringBuilder();
-        Iterator<AID> destAG = msg.getAllReceiver();
-
-        while (destAG.hasNext())
-            dest.append((destAG.next()).getName()).append(" ");
-
-        String tmpDir = (direction == OUTGOING ? "sent to  " : "recv from");
-
-        String tmpPeer = (direction == OUTGOING ? dest.toString() : msg.getSender().getName());
-        return (df.format(date) + ":  " + tmpType + " " + tmpDir + "   " + tmpPeer);
-    }
-
-    void setMessage(ACLMessage m) {
-        msg = (ACLMessage) m.clone();
-    }
-
-    ACLMessage getMessage() {
-        return (msg);
-    }
-
-    public String toString() {
-        return (df.format(date) + "\n" + direction + "\n" + msg.toString());
-    }
-
-    void toText(BufferedWriter w) {
-        try {
-            // Date
-            w.write(df.format(date));
-            w.newLine();
-            // Direction
-            w.write(String.valueOf(direction));
-            w.newLine();
-            // Message length
-            String tmp = msg.toString();
-            w.write(String.valueOf(tmp.length()));
-            w.newLine();
-            // Message
-            w.write(tmp);
-            w.newLine();
-
-            w.flush();
-        } catch (IOException e) {
-            if (logger.isLoggable(Logger.WARNING))
-                logger.log(Logger.WARNING, "IO Exception in MsgIndication.toText()");
-        }
     }
 
     static MsgIndication fromText(BufferedReader r) {
@@ -161,6 +103,61 @@ class MsgIndication {
         } //Exception thrown by ACLMessage.fromText()
 
         return (mi);
+    }
+
+    String getIndication() {
+        int perf = msg.getPerformative();
+        StringBuilder tmpType = new StringBuilder(ACLMessage.getPerformative(perf));
+        int blancCharCnt = TYPE_LEN - tmpType.length();
+        while (blancCharCnt-- > 0)
+            tmpType.append(" ");
+
+        // Put the destination agent group in form of a string
+        StringBuilder dest = new StringBuilder();
+        Iterator<AID> destAG = msg.getAllReceiver();
+
+        while (destAG.hasNext())
+            dest.append((destAG.next()).getName()).append(" ");
+
+        String tmpDir = (direction == OUTGOING ? "sent to  " : "recv from");
+
+        String tmpPeer = (direction == OUTGOING ? dest.toString() : msg.getSender().getName());
+        return (df.format(date) + ":  " + tmpType + " " + tmpDir + "   " + tmpPeer);
+    }
+
+    ACLMessage getMessage() {
+        return (msg);
+    }
+
+    void setMessage(ACLMessage m) {
+        msg = (ACLMessage) m.clone();
+    }
+
+    public String toString() {
+        return (df.format(date) + "\n" + direction + "\n" + msg.toString());
+    }
+
+    void toText(BufferedWriter w) {
+        try {
+            // Date
+            w.write(df.format(date));
+            w.newLine();
+            // Direction
+            w.write(String.valueOf(direction));
+            w.newLine();
+            // Message length
+            String tmp = msg.toString();
+            w.write(String.valueOf(tmp.length()));
+            w.newLine();
+            // Message
+            w.write(tmp);
+            w.newLine();
+
+            w.flush();
+        } catch (IOException e) {
+            if (logger.isLoggable(Logger.WARNING))
+                logger.log(Logger.WARNING, "IO Exception in MsgIndication.toText()");
+        }
     }
 }
 

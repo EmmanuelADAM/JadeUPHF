@@ -73,17 +73,6 @@ public class SearchConstraints implements Concept {
         }
     }
 
-
-    /**
-     * Set the <code>search-id</code> slot of this object.
-     *
-     * @param searchId The unique identifier associated with this
-     *                 search operation.
-     */
-    public void setSearchId(String searchId) {
-        search_id = searchId;
-    }
-
     /**
      * Retrieve the <code>search-id</code> slot of this object. This
      * slot uniquely identifies a search operation.
@@ -95,15 +84,14 @@ public class SearchConstraints implements Concept {
         return search_id;
     }
 
-
     /**
-     * Set the <code>max-depth</code> slot of this object.
+     * Set the <code>search-id</code> slot of this object.
      *
-     * @param l The value of the maximum recursion depth of this
-     *          search over the DF federation graph.
+     * @param searchId The unique identifier associated with this
+     *                 search operation.
      */
-    public void setMaxDepth(Long l) {
-        max_depth = l;
+    public void setSearchId(String searchId) {
+        search_id = searchId;
     }
 
     /**
@@ -119,13 +107,13 @@ public class SearchConstraints implements Concept {
     }
 
     /**
-     * Set the <code>max-results</code> slot of this object.
+     * Set the <code>max-depth</code> slot of this object.
      *
-     * @param l The maximum number of results to retrieve
-     *          in response to this search operation.
+     * @param l The value of the maximum recursion depth of this
+     *          search over the DF federation graph.
      */
-    public void setMaxResults(Long l) {
-        max_results = l;
+    public void setMaxDepth(Long l) {
+        max_depth = l;
     }
 
     /**
@@ -138,6 +126,16 @@ public class SearchConstraints implements Concept {
      */
     public Long getMaxResults() {
         return max_results;
+    }
+
+    /**
+     * Set the <code>max-results</code> slot of this object.
+     *
+     * @param l The maximum number of results to retrieve
+     *          in response to this search operation.
+     */
+    public void setMaxResults(Long l) {
+        max_results = l;
     }
 
 }

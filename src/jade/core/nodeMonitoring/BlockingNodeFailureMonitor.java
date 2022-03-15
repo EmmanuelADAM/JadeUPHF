@@ -42,10 +42,9 @@ import jade.util.Logger;
 public class BlockingNodeFailureMonitor extends NodeFailureMonitor
         implements Runnable {
 
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
     private boolean nodeExited = false;
     private boolean stopped = false;
-
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
 
     public void start(Node n, NodeEventListener nel) {
         super.start(n, nel);

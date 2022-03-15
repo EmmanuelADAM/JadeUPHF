@@ -64,15 +64,6 @@ public class ResumedAgent implements Event {
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
-     *
-     * @param id The agent identifier of the newly resumed agent.
-     */
-    public void setAgent(AID id) {
-        agent = id;
-    }
-
-    /**
      * Retrieve the value of the <code>agent</code> slot of this
      * event, containing the agent identifier of the newly resumed
      * agent.
@@ -85,13 +76,12 @@ public class ResumedAgent implements Event {
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
+     * Set the <code>agent</code> slot of this event.
      *
-     * @param id The container identifier of the container where the
-     *           newly resumed agent was deployed.
+     * @param id The agent identifier of the newly resumed agent.
      */
-    public void setWhere(ContainerID id) {
-        where = id;
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     /**
@@ -104,6 +94,16 @@ public class ResumedAgent implements Event {
      */
     public ContainerID getWhere() {
         return where;
+    }
+
+    /**
+     * Set the <code>where</code> slot of this event.
+     *
+     * @param id The container identifier of the container where the
+     *           newly resumed agent was deployed.
+     */
+    public void setWhere(ContainerID id) {
+        where = id;
     }
 
 

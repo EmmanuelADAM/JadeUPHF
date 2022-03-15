@@ -41,11 +41,16 @@ public class BIFEDispatcher implements FEConnectionManager, Dispatcher, TimerLis
     protected static final byte INP = (byte) 1;
     protected static final byte OUT = (byte) 0;
     private static final int RESPONSE_TIMEOUT = 30000;
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
     protected String myMediatorClass = "jade.imtp.leap.JICP.BIBEDispatcher";
-    private MicroSkeleton mySkel = null;
-    private BackEndStub myStub = null;
     // Variables related to the connection with the Mediator
     protected TransportAddress mediatorTA;
+    protected Connection outConnection;
+    protected InputManager myInputManager;
+    protected boolean refreshingInput = false;
+    protected boolean refreshingOutput = false;
+    private MicroSkeleton mySkel = null;
+    private BackEndStub myStub = null;
     private String myMediatorID;
     private long retryTime = JICPProtocol.DEFAULT_RETRY_TIME;
     private long maxDisconnectionTime = JICPProtocol.DEFAULT_MAX_DISCONNECTION_TIME;
@@ -53,24 +58,24 @@ public class BIFEDispatcher implements FEConnectionManager, Dispatcher, TimerLis
     private long connectionDropDownTime = -1;
     private Timer kaTimer, cdTimer;
     private Properties props;
-    protected Connection outConnection;
-    protected InputManager myInputManager;
     private ConnectionListener myConnectionListener;
     private boolean active = true;
     private boolean connectionDropped = false;
     private boolean waitingForFlush = false;
-    protected boolean refreshingInput = false;
-    protected boolean refreshingOutput = false;
     private byte lastSid = 0x0f;
     private int outCnt = 0;
     private Thread terminator;
     private String beAddrsText;
     private String[] backEndAddresses;
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
 
     //////////////////////////////////////////////
     // FEConnectionManager interface implementation
     //////////////////////////////////////////////
+    // These variables are only used within the InputManager class,
+    // but are declared externally since they must "survive" when
+    // an InputManager is replaced
+    private JICPPacket lastResponse = null;
+    private int cnt = 0;
 
     /**
      * Connect to a remote BackEnd and return a stub to communicate with it
@@ -185,6 +190,9 @@ public class BIFEDispatcher implements FEConnectionManager, Dispatcher, TimerLis
         }
     }
 
+    //////////////////////////////////////////////
+    // Dispatcher interface implementation
+    //////////////////////////////////////////////
 
     /**
      * Make this BIFEDispatcher terminate.
@@ -282,10 +290,6 @@ public class BIFEDispatcher implements FEConnectionManager, Dispatcher, TimerLis
         throw new IMTPException("Error creating the BackEnd.");
     }
 
-    //////////////////////////////////////////////
-    // Dispatcher interface implementation
-    //////////////////////////////////////////////
-
     /**
      * Deliver a serialized command to the BackEnd.
      *
@@ -347,106 +351,6 @@ public class BIFEDispatcher implements FEConnectionManager, Dispatcher, TimerLis
             }
         }
     }
-
-    // These variables are only used within the InputManager class,
-    // but are declared externally since they must "survive" when
-    // an InputManager is replaced
-    private JICPPacket lastResponse = null;
-    private int cnt = 0;
-
-    /**
-     * Inner class InputManager.
-     * This class is responsible for serving incoming commands
-     */
-    private class InputManager extends Thread {
-
-        private int myId;
-        private Connection myConnection = null;
-
-        public void run() {
-            myId = cnt++;
-            if (myLogger.isLoggable(Logger.INFO)) {
-                myLogger.log(Logger.INFO, "IM-" + myId + " started");
-            }
-
-            int status = 0;
-            connectInp();
-            //connect(INP);
-            try {
-                while (isConnected()) {
-                    status = 0;
-                    JICPPacket pkt = myConnection.readPacket();
-                    // HACK!: For some misterious reason just after a BE re-creation it
-                    // may happen that we get a RESPONSE packet here. Waiting for a cleaner
-                    // solution, we just ignore it and go back reading the next incoming
-                    // command
-                    if (pkt.getType() == JICPProtocol.RESPONSE_TYPE) {
-                        myLogger.log(Logger.WARNING, "Unexpected response packet received on INP connection. Ignore it");
-                        continue;
-                    }
-                    status = 1;
-                    byte sid = pkt.getSessionID();
-                    if (sid == lastSid) {
-                        // Duplicated packet
-                        if (myLogger.isLoggable(Logger.WARNING)) {
-                            myLogger.log(Logger.WARNING, "Duplicated packet from BE: pkt-type=" + pkt.getType() + " info=" + pkt.getInfo() + " SID=" + sid);
-                        }
-                        pkt = lastResponse;
-                    } else {
-                        if (pkt.getType() == JICPProtocol.KEEP_ALIVE_TYPE) {
-                            // Keep-alive
-                            pkt = new JICPPacket(JICPProtocol.RESPONSE_TYPE, JICPProtocol.DEFAULT_INFO, null);
-                        } else {
-                            // Incoming command
-                            if (myLogger.isLoggable(Logger.FINE)) {
-                                myLogger.log(Logger.FINE, "Incoming command received " + sid + " pkt-type=" + pkt.getType());
-                            }
-                            byte[] rspData = mySkel.handleCommand(pkt.getData());
-                            if (myLogger.isLoggable(Logger.FINER)) {
-                                myLogger.log(Logger.FINER, "Incoming command served " + sid);
-                            }
-                            pkt = new JICPPacket(JICPProtocol.RESPONSE_TYPE, JICPProtocol.DEFAULT_INFO, rspData);
-                        }
-                        pkt.setSessionID(sid);
-                        if (Thread.currentThread() == terminator) {
-                            // Attach the TERMINATED_INFO flag to the response
-                            pkt.setTerminatedInfo(true);
-                        }
-                        lastSid = sid;
-                        lastResponse = pkt;
-                    }
-                    status = 2;
-                    writePacket(pkt, myConnection);
-                    status = 3;
-                }
-            } catch (IOException ioe) {
-                if (active) {
-                    myLogger.log(Logger.WARNING, "IOException IC[" + status + "]" + ioe);
-                    refreshInp();
-                }
-            }
-
-            if (myLogger.isLoggable(Logger.INFO)) {
-                myLogger.log(Logger.INFO, "IM-" + myId + " terminated");
-            }
-        }
-
-        private void close() {
-            try {
-                myConnection.close();
-            } catch (Exception e) {
-            }
-            myConnection = null;
-        }
-
-        private final void setConnection(Connection c) {
-            myConnection = c;
-        }
-
-        private final boolean isConnected() {
-            return myConnection != null;
-        }
-    } // END of inner class InputManager
 
     /**
      * Close the current InputManager (if any) and start a new one
@@ -787,10 +691,6 @@ public class BIFEDispatcher implements FEConnectionManager, Dispatcher, TimerLis
         }
     }
 
-    ////////////////////////////////////////////////////////////////
-    // Keep-alive and connection drop-down mechanism management
-    ////////////////////////////////////////////////////////////////
-
     /**
      * Refresh the keep-alive timer.
      * Mutual exclusion with doTimeOut()
@@ -804,6 +704,10 @@ public class BIFEDispatcher implements FEConnectionManager, Dispatcher, TimerLis
             kaTimer = td.add(new Timer(System.currentTimeMillis() + keepAliveTime, this));
         }
     }
+
+    ////////////////////////////////////////////////////////////////
+    // Keep-alive and connection drop-down mechanism management
+    ////////////////////////////////////////////////////////////////
 
     /**
      * Refresh the connection drop-down timer.
@@ -1000,5 +904,99 @@ public class BIFEDispatcher implements FEConnectionManager, Dispatcher, TimerLis
             myConnectionListener.handleConnectionEvent(ConnectionListener.BE_NOT_FOUND, null);
         }
     }
+
+    /**
+     * Inner class InputManager.
+     * This class is responsible for serving incoming commands
+     */
+    private class InputManager extends Thread {
+
+        private int myId;
+        private Connection myConnection = null;
+
+        public void run() {
+            myId = cnt++;
+            if (myLogger.isLoggable(Logger.INFO)) {
+                myLogger.log(Logger.INFO, "IM-" + myId + " started");
+            }
+
+            int status = 0;
+            connectInp();
+            //connect(INP);
+            try {
+                while (isConnected()) {
+                    status = 0;
+                    JICPPacket pkt = myConnection.readPacket();
+                    // HACK!: For some misterious reason just after a BE re-creation it
+                    // may happen that we get a RESPONSE packet here. Waiting for a cleaner
+                    // solution, we just ignore it and go back reading the next incoming
+                    // command
+                    if (pkt.getType() == JICPProtocol.RESPONSE_TYPE) {
+                        myLogger.log(Logger.WARNING, "Unexpected response packet received on INP connection. Ignore it");
+                        continue;
+                    }
+                    status = 1;
+                    byte sid = pkt.getSessionID();
+                    if (sid == lastSid) {
+                        // Duplicated packet
+                        if (myLogger.isLoggable(Logger.WARNING)) {
+                            myLogger.log(Logger.WARNING, "Duplicated packet from BE: pkt-type=" + pkt.getType() + " info=" + pkt.getInfo() + " SID=" + sid);
+                        }
+                        pkt = lastResponse;
+                    } else {
+                        if (pkt.getType() == JICPProtocol.KEEP_ALIVE_TYPE) {
+                            // Keep-alive
+                            pkt = new JICPPacket(JICPProtocol.RESPONSE_TYPE, JICPProtocol.DEFAULT_INFO, null);
+                        } else {
+                            // Incoming command
+                            if (myLogger.isLoggable(Logger.FINE)) {
+                                myLogger.log(Logger.FINE, "Incoming command received " + sid + " pkt-type=" + pkt.getType());
+                            }
+                            byte[] rspData = mySkel.handleCommand(pkt.getData());
+                            if (myLogger.isLoggable(Logger.FINER)) {
+                                myLogger.log(Logger.FINER, "Incoming command served " + sid);
+                            }
+                            pkt = new JICPPacket(JICPProtocol.RESPONSE_TYPE, JICPProtocol.DEFAULT_INFO, rspData);
+                        }
+                        pkt.setSessionID(sid);
+                        if (Thread.currentThread() == terminator) {
+                            // Attach the TERMINATED_INFO flag to the response
+                            pkt.setTerminatedInfo(true);
+                        }
+                        lastSid = sid;
+                        lastResponse = pkt;
+                    }
+                    status = 2;
+                    writePacket(pkt, myConnection);
+                    status = 3;
+                }
+            } catch (IOException ioe) {
+                if (active) {
+                    myLogger.log(Logger.WARNING, "IOException IC[" + status + "]" + ioe);
+                    refreshInp();
+                }
+            }
+
+            if (myLogger.isLoggable(Logger.INFO)) {
+                myLogger.log(Logger.INFO, "IM-" + myId + " terminated");
+            }
+        }
+
+        private void close() {
+            try {
+                myConnection.close();
+            } catch (Exception e) {
+            }
+            myConnection = null;
+        }
+
+        private final void setConnection(Connection c) {
+            myConnection = c;
+        }
+
+        private final boolean isConnected() {
+            return myConnection != null;
+        }
+    } // END of inner class InputManager
 }
 

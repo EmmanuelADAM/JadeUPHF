@@ -46,16 +46,26 @@ import java.util.*;
  */
 class KBSubscriptionManager implements SubscriptionResponder.SubscriptionManager {
     private final Logger myLogger = Logger.getMyLogger(getClass().getName());
-
-    private Map<String, SubscriptionInfo> subscriptionsCache = new HashMap<>();
-    private SubscriptionInfo[] subscriptions = null;
-
     KB kBase;
     ContentManager cm;
+    private Map<String, SubscriptionInfo> subscriptionsCache = new HashMap<>();
+    private SubscriptionInfo[] subscriptions = null;
 
     public KBSubscriptionManager(KB k) {
         super();
         kBase = k;
+    }
+
+    private static SubscriptionInfo[] toArray(Map<String, SubscriptionInfo> m) {
+        Collection<SubscriptionInfo> c = m.values();
+        SubscriptionInfo[] result = new SubscriptionInfo[c.size()];
+        Iterator<SubscriptionInfo> it = c.iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            result[i] = it.next();
+            ++i;
+        }
+        return result;
     }
 
     public void setContentManager(ContentManager c) {
@@ -112,7 +122,6 @@ class KBSubscriptionManager implements SubscriptionResponder.SubscriptionManager
         return false;
     }
 
-
     public boolean deregister(SubscriptionResponder.Subscription sub) throws FailureException {
         if (myLogger.isLoggable(Logger.CONFIG)) {
             ACLMessage subMessage = sub.getMessage();
@@ -129,7 +138,6 @@ class KBSubscriptionManager implements SubscriptionResponder.SubscriptionManager
         }
         return false;
     }
-
 
     /**
      * Handle registrations/deregistrations/modifications by notifying
@@ -160,7 +168,7 @@ class KBSubscriptionManager implements SubscriptionResponder.SubscriptionManager
     }
 
     private Map<String, SubscriptionInfo> loadSubscriptionsCache() {
-        Map<String, SubscriptionInfo> m = new HashMap<String, SubscriptionInfo>();
+        Map<String, SubscriptionInfo> m = new HashMap<>();
         Enumeration<?> e = kBase.getSubscriptions();
         while (e.hasMoreElements()) {
             SubscriptionResponder.Subscription sub = (SubscriptionResponder.Subscription) e.nextElement();
@@ -198,18 +206,6 @@ class KBSubscriptionManager implements SubscriptionResponder.SubscriptionManager
             e.printStackTrace();
             //FIXME: Check whether a FAILURE message should be sent back.
         }
-    }
-
-    private static SubscriptionInfo[] toArray(Map<String, SubscriptionInfo> m) {
-        Collection<SubscriptionInfo> c = m.values();
-        SubscriptionInfo[] result = new SubscriptionInfo[c.size()];
-        Iterator<SubscriptionInfo> it = c.iterator();
-        int i = 0;
-        while (it.hasNext()) {
-            result[i] = it.next();
-            ++i;
-        }
-        return result;
     }
 
     /**

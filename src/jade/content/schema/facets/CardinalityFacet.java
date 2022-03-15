@@ -33,8 +33,9 @@ import jade.content.schema.Facet;
 import jade.content.schema.ObjectSchema;
 
 /**
- * This facet forces an AbsAggregate to contain a number of 
+ * This facet forces an AbsAggregate to contain a number of
  * elements that is comprised between a given min and a given max.
+ *
  * @author Giovanni Caire - TILAB
  */
 public class CardinalityFacet implements Facet {
@@ -42,11 +43,12 @@ public class CardinalityFacet implements Facet {
     private final int cardMax;
 
     /**
-     Construct a <code>CardinalityFacet</code> that forces
-     the number of elements in an AbsAggregate to be within
-     a given range
-     @param cardMin The range lower bound
-     @param cardMax The range upper bound
+     * Construct a <code>CardinalityFacet</code> that forces
+     * the number of elements in an AbsAggregate to be within
+     * a given range
+     *
+     * @param cardMin The range lower bound
+     * @param cardMax The range upper bound
      */
     public CardinalityFacet(int cardMin, int cardMax) {
         this.cardMin = cardMin;
@@ -62,11 +64,12 @@ public class CardinalityFacet implements Facet {
     }
 
     /**
-     Check that
-     the number of elements in an AbsAggregate is within
-     a given range
-     @param value The value to be checked
-     @throws OntologyException If the value is not valid
+     * Check that
+     * the number of elements in an AbsAggregate is within
+     * a given range
+     *
+     * @param value The value to be checked
+     * @throws OntologyException If the value is not valid
      */
     public void validate(AbsObject value, Ontology onto) throws OntologyException {
         if (value instanceof AbsVariable) {

@@ -549,22 +549,6 @@ public class DFGUI extends JFrame implements DFGUIInterface {
 
     }
 
-    class tabListener implements ChangeListener {
-        public void stateChanged(ChangeEvent event) {
-            Object object = event.getSource();
-            if (object == tabbedPane)
-                tabStateChanged(event);
-
-        }
-
-        public void tabStateChanged(ChangeEvent event) {
-            int index = tabbedPane.getSelectedIndex();
-            setButton(index);
-
-        }
-
-    }
-
     /*
     This method must be used after the constructor of the gui
     to set the object implementing the DFGUIAdapter interface.
@@ -582,7 +566,6 @@ public class DFGUI extends JFrame implements DFGUIInterface {
 
 
     }
-
 
     /**
      * Use this method to show a message on the DF GUI.
@@ -616,7 +599,6 @@ public class DFGUI extends JFrame implements DFGUIInterface {
 
     }
 
-
     private void setModify(boolean value) {
         modifyB.setEnabled(value);
         dfModifyAction.setEnabled(value);
@@ -628,6 +610,11 @@ public class DFGUI extends JFrame implements DFGUIInterface {
         dfDeregAction.setEnabled(value);
 
     }
+
+    private void setDFfed(boolean value) {
+        fedDFB.setEnabled(value);
+        dfFedAction.setEnabled(value);
+    }
 		
 	/*private void setSearch(boolean value)
 	{
@@ -635,11 +622,6 @@ public class DFGUI extends JFrame implements DFGUIInterface {
 		dfSearchAction.setEnabled(value);
 
 	}*/
-
-    private void setDFfed(boolean value) {
-        fedDFB.setEnabled(value);
-        dfFedAction.setEnabled(value);
-    }
 
     /**
      * This method permits to set the tabben pane to show.
@@ -860,7 +842,6 @@ public class DFGUI extends JFrame implements DFGUIInterface {
         parentTable.clearSelection();
     }
 
-
     /**
      * Shows DF GUI properly
      */
@@ -899,7 +880,6 @@ public class DFGUI extends JFrame implements DFGUIInterface {
         EventQueue.invokeLater(new disposeIt(this));
     }
 
-
     /**
      * This method returns the <code>DFAgentDescription</code> of an agent found in a search operation.
      *
@@ -918,6 +898,22 @@ public class DFGUI extends JFrame implements DFGUIInterface {
     public void enableRefreshButton() {
         refreshB.setVisible(true);
         refreshItem.setVisible(true);
+    }
+
+    class tabListener implements ChangeListener {
+        public void stateChanged(ChangeEvent event) {
+            Object object = event.getSource();
+            if (object == tabbedPane)
+                tabStateChanged(event);
+
+        }
+
+        public void tabStateChanged(ChangeEvent event) {
+            int index = tabbedPane.getSelectedIndex();
+            setButton(index);
+
+        }
+
     }
 
 }

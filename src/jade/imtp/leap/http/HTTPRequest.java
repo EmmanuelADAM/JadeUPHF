@@ -73,6 +73,7 @@ public class HTTPRequest extends HTTPPacket {
 
     /**
      * Method declaration
+     *
      * @see
      */
     public void readFrom(InputStream is) throws IOException {
@@ -85,6 +86,7 @@ public class HTTPRequest extends HTTPPacket {
 
     /**
      * Method declaration
+     *
      * @see
      */
     protected void writeTo(OutputStream os) throws IOException {
@@ -94,6 +96,7 @@ public class HTTPRequest extends HTTPPacket {
 
     /**
      * Method declaration
+     *
      * @see
      */
     public String toString() {

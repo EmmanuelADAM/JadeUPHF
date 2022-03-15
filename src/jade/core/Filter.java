@@ -62,18 +62,14 @@ public abstract class Filter {
      * A constant indicating a filter for outgoing commands
      */
     public static final boolean OUTGOING = true;
-
-    private boolean blocking = false;
-    private boolean skipping = false;
-
-    // The next filter in the filter chain
-    private Filter next;
-
-    private String myServiceName;
-
     // The preferred position in the filter chain. Package scoped since
     // it can be directly accessed by the CommandProcessor
     int preferredPosition = LAST - 10;
+    private boolean blocking = false;
+    private boolean skipping = false;
+    // The next filter in the filter chain
+    private Filter next;
+    private String myServiceName;
 
     /**
      * Receive a command object for processing.
@@ -138,17 +134,6 @@ public abstract class Filter {
     }
 
     /**
-     * Sets the blocking state of this filter. A blocked filter does
-     * not process commands, and also prevents subsequent filters to
-     * process them.
-     *
-     * @param newState The boolean value to set the blocking state to.
-     */
-    public void setBlocking(boolean newState) {
-        blocking = newState;
-    }
-
-    /**
      * Inquires the blocking state of this filter. A blocked fliter
      * does not process commands, and also prevents subsequent filters
      * to process them.
@@ -160,14 +145,14 @@ public abstract class Filter {
     }
 
     /**
-     * Sets the skipping state of this filter. A skipped filter does
-     * not process commands, but passes them directly to subsequent
-     * filters.
+     * Sets the blocking state of this filter. A blocked filter does
+     * not process commands, and also prevents subsequent filters to
+     * process them.
      *
-     * @param newState The boolean value to set the skipping state to.
+     * @param newState The boolean value to set the blocking state to.
      */
-    public void setSkipping(boolean newState) {
-        skipping = newState;
+    public void setBlocking(boolean newState) {
+        blocking = newState;
     }
 
     /**
@@ -181,6 +166,17 @@ public abstract class Filter {
         return skipping;
     }
 
+    /**
+     * Sets the skipping state of this filter. A skipped filter does
+     * not process commands, but passes them directly to subsequent
+     * filters.
+     *
+     * @param newState The boolean value to set the skipping state to.
+     */
+    public void setSkipping(boolean newState) {
+        skipping = newState;
+    }
+
     ////////////////////////////////////////////////////
     // These methods are called by the CommandProcessor
     // and ServiceManager when installing the filter
@@ -189,11 +185,11 @@ public abstract class Filter {
         myServiceName = s;
     }
 
-    final void setNext(Filter f) {
-        next = f;
-    }
-
     final Filter getNext() {
         return next;
+    }
+
+    final void setNext(Filter f) {
+        next = f;
     }
 }

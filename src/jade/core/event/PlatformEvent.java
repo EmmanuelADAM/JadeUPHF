@@ -314,7 +314,7 @@ public class PlatformEvent extends JADEEvent implements jade.wrapper.PlatformEve
      * @return A sring representation of this event.
      */
     public String toString() {
-        StringBuffer buf = new StringBuffer(128);
+        StringBuilder buf = new StringBuilder(128);
 
         buf.append("PlatformEvent[");
         switch (type) {

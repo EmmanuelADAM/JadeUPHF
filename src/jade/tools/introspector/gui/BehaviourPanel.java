@@ -39,11 +39,11 @@ import java.awt.*;
  */
 public class BehaviourPanel extends JSplitPane {
     private final JTree behaviourTree;
+    private final TreeMouseListener treeListener;
     private JTextArea text;
     private JScrollPane behaviourScroll;
     private JScrollPane textScroll;
     private JPanel treePanel;
-    private final TreeMouseListener treeListener;
     private Icon readyIcon;
     private Icon runningIcon;
     private Icon blockedIcon;

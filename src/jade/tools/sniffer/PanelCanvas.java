@@ -39,6 +39,7 @@ import java.awt.*;
  * Makes the two canvas.One is the agent canvas  which is useful
  * for drawing the agent's box and other is the message canvas
  * which useful for drawing the message with blue arrows.
+ *
  * @see MainPanel
  */
 
@@ -50,8 +51,6 @@ public class PanelCanvas
 	extends Panel
 	#DOTNET_INCLUDE_END*/ {
 
-    protected MMCanvas canvAgent;
-    protected MMCanvas canvMess;
     //#DOTNET_EXCLUDE_BEGIN
     private final PopMouserMessage popMess;
     private final PopMouserAgent popAgent;
@@ -62,6 +61,8 @@ public class PanelCanvas
   private PopupMessage popMess;
   #DOTNET_INCLUDE_END*/
     private final Sniffer mySniffer;
+    protected MMCanvas canvAgent;
+    protected MMCanvas canvMess;
 
     public PanelCanvas(MainWindow mWnd, MainPanel mPan, Sniffer mySniffer) {
    /*#DOTNET_INCLUDE_BEGIN

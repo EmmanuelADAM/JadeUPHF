@@ -32,24 +32,24 @@ import jade.content.onto.OntologyException;
 
 /**
  * This class represents the schema of a variable.
+ *
  * @author Federico Bergenti - Universita` di Parma
  */
 public class VariableSchema extends TermSchema {
     public static final String BASE_NAME = "Variable";
-    private static final VariableSchema baseSchema = new VariableSchema();
-
     public static final String NAME = "Name";
     public static final String VALUE_TYPE = "ValueType";
+    private static final VariableSchema baseSchema = new VariableSchema();
 
     /**
      * Construct a schema that vinculates an entity to be a generic
      * variable.
-     * Note that there are no different types of variable as it 
+     * Note that there are no different types of variable as it
      * happens for concepts (e.g. Person, Address...), IREs (e.g. IOTA,
      * ANY, ALL...) and the like. Therefore there is no VariableSchema
      * constructor that takes a String parameter.
      * Not also that the type of the values that can be assumed by
-     * the variable is another story and is defined by the 
+     * the variable is another story and is defined by the
      * VARIABLE_VALUE_TYPE slot of the VariableSchema
      */
     private VariableSchema() {
@@ -80,11 +80,12 @@ public class VariableSchema extends TermSchema {
     }
 
     /**
-     Check whether a given abstract descriptor complies with this
-     schema.
-     @param abs The abstract descriptor to be checked
-     @throws OntologyException If the abstract descriptor does not
-     complies with this schema
+     * Check whether a given abstract descriptor complies with this
+     * schema.
+     *
+     * @param abs The abstract descriptor to be checked
+     * @throws OntologyException If the abstract descriptor does not
+     *                           complies with this schema
      */
     public void validate(AbsObject abs, Ontology onto) throws OntologyException {
         // Check the type of the abstract descriptor
@@ -97,9 +98,9 @@ public class VariableSchema extends TermSchema {
     }
 
     /**
-     A variable can be put whereever a term of whatever type is
-     required --> A VariableSchema is
-     compatible with s if s descends from TermSchema.getBaseSchema()
+     * A variable can be put whereever a term of whatever type is
+     * required --> A VariableSchema is
+     * compatible with s if s descends from TermSchema.getBaseSchema()
      */
     public boolean isCompatibleWith(ObjectSchema s) {
         if (s != null) {
@@ -110,13 +111,13 @@ public class VariableSchema extends TermSchema {
     }
 
     /**
-     Return true if
-     - s is the base schema for the XXXSchema class this schema is
-     an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
-     schema is an instance of ConceptSchema)
-     - s is the base schema for a super-class of the XXXSchema class
-     this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
-     and this schema is an instance of ConceptSchema)
+     * Return true if
+     * - s is the base schema for the XXXSchema class this schema is
+     * an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
+     * schema is an instance of ConceptSchema)
+     * - s is the base schema for a super-class of the XXXSchema class
+     * this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
+     * and this schema is an instance of ConceptSchema)
      */
     protected boolean descendsFrom(ObjectSchema s) {
         if (s != null) {

@@ -45,11 +45,10 @@ import jade.mtp.MTPException;
  */
 public class ContainerController {
 
+    protected PlatformController myPlatformController;
     private AgentContainer myImpl;
     private ContainerProxy myProxy;
     private String myPlatformName;
-
-    protected PlatformController myPlatformController;
 
     /**
      * This constructor requires a concrete

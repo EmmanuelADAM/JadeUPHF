@@ -32,6 +32,7 @@ import jade.content.onto.OntologyException;
 /**
  * This class represent the schema of primitive entities in
  * an ontology.
+ *
  * @author Federico Bergenti - Universita` di Parma
  */
 public class PrimitiveSchema extends TermSchema {
@@ -73,11 +74,12 @@ public class PrimitiveSchema extends TermSchema {
     }
 
     /**
-     Check whether a given abstract descriptor complies with this
-     schema.
-     @param abs The abstract descriptor to be checked
-     @throws OntologyException If the abstract descriptor does not
-     complies with this schema
+     * Check whether a given abstract descriptor complies with this
+     * schema.
+     *
+     * @param abs The abstract descriptor to be checked
+     * @throws OntologyException If the abstract descriptor does not
+     *                           complies with this schema
      */
     public void validate(AbsObject abs, Ontology onto) throws OntologyException {
         // Check the type of the abstract descriptor
@@ -87,13 +89,13 @@ public class PrimitiveSchema extends TermSchema {
     }
 
     /**
-     Return true if
-     - s is the base schema for the XXXSchema class this schema is
-     an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
-     schema is an instance of ConceptSchema)
-     - s is the base schema for a super-class of the XXXSchema class
-     this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
-     and this schema is an instance of ConceptSchema)
+     * Return true if
+     * - s is the base schema for the XXXSchema class this schema is
+     * an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
+     * schema is an instance of ConceptSchema)
+     * - s is the base schema for a super-class of the XXXSchema class
+     * this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
+     * and this schema is an instance of ConceptSchema)
      */
     protected boolean descendsFrom(ObjectSchema s) {
         if (s != null) {

@@ -40,23 +40,18 @@ import java.io.Serializable;
 /**
  * Adds properties and methods for representing
  * agents on the Agent Canvas as rectangles.
- *
  */
 
 
 public class Agent implements Serializable {
 
-    public static int i = 0;
     public static final int hRet = 30;
     public static final int bRet = 50;
     public static final int yRet = 20;
-
-
-    public String agentName;
+    public static int i = 0;
     private final AID myAID;
-
     private final int pos = 0;
-
+    public String agentName;
     /**
      * This flag is <em>true</em> for agents on canvas and <em>false</em> for agents
      * out of the canvas.

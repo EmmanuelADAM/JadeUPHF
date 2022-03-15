@@ -66,35 +66,6 @@ public interface AgentReplicationHelper extends ServiceHelper {
     String VIRTUAL_RECEIVER = "JADE-virtual-receiver";
 
     /**
-     * The interface to be implemented by a replicated agent for the master replica
-     * to be notified about replica addition/removal and master replica changes.
-     * If a replicated agent does not implement this interface such events will not be
-     * notified.
-     */
-    interface Listener {
-        /**
-         * Notify the master replica that a new replica has just been added
-         */
-        void replicaAdded(AID replicaAid, Location where);
-
-        /**
-         * Notify the master replica that a replica has just been removed
-         */
-        void replicaRemoved(AID replicaAid, Location where);
-
-        /**
-         * Notify the master replica that a replica failed to start
-         */
-        void replicaCreationFailed(AID replicaAid, Location where);
-
-        /**
-         * Notify a replica that it became the new master replica
-         */
-        void becomeMaster();
-    }
-
-
-    /**
      * Define a virtual agent and sets the agent that invokes this method as
      * its master replica.
      *
@@ -155,4 +126,32 @@ public interface AgentReplicationHelper extends ServiceHelper {
      * directly. AgentReplicationHanlde.replicate() should be used instead.
      */
     void invokeReplicatedMethod(String methodName, Object[] arguments);
+
+    /**
+     * The interface to be implemented by a replicated agent for the master replica
+     * to be notified about replica addition/removal and master replica changes.
+     * If a replicated agent does not implement this interface such events will not be
+     * notified.
+     */
+    interface Listener {
+        /**
+         * Notify the master replica that a new replica has just been added
+         */
+        void replicaAdded(AID replicaAid, Location where);
+
+        /**
+         * Notify the master replica that a replica has just been removed
+         */
+        void replicaRemoved(AID replicaAid, Location where);
+
+        /**
+         * Notify the master replica that a replica failed to start
+         */
+        void replicaCreationFailed(AID replicaAid, Location where);
+
+        /**
+         * Notify a replica that it became the new master replica
+         */
+        void becomeMaster();
+    }
 }

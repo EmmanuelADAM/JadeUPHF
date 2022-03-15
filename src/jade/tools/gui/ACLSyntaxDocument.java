@@ -40,6 +40,9 @@ import javax.swing.text.Segment;
  * @since June 14, 2002
  */
 public class ACLSyntaxDocument extends PlainDocument {
+    // protected members
+    protected ACLSLTokenMarker tokenMarker;
+
     /**
      * Returns the token marker that is to be used to split lines of this
      * document up into tokens. May return null if this document is not to be
@@ -50,7 +53,6 @@ public class ACLSyntaxDocument extends PlainDocument {
     public ACLSLTokenMarker getTokenMarker() {
         return tokenMarker;
     }
-
 
     /**
      * Sets the token marker that is to be used to split lines of this document
@@ -69,7 +71,6 @@ public class ACLSyntaxDocument extends PlainDocument {
         tokenizeLines();
     }
 
-
     /**
      * Reparses the document, by passing all lines to the token marker. This
      * should be called after the document is first loaded.
@@ -77,7 +78,6 @@ public class ACLSyntaxDocument extends PlainDocument {
     public void tokenizeLines() {
         tokenizeLines(0, getDefaultRootElement().getElementCount());
     }
-
 
     /**
      * Reparses the document, by passing the specified lines to the token
@@ -109,7 +109,6 @@ public class ACLSyntaxDocument extends PlainDocument {
         }
     }
 
-
     /**
      * We overwrite this method to update the token marker state immediately so
      * that any event listeners get a consistent token marker.
@@ -131,7 +130,6 @@ public class ACLSyntaxDocument extends PlainDocument {
         super.fireInsertUpdate(evt);
     }
 
-
     /**
      * We overwrite this method to update the token marker state immediately so
      * that any event listeners get a consistent token marker.
@@ -152,9 +150,6 @@ public class ACLSyntaxDocument extends PlainDocument {
 
         super.fireRemoveUpdate(evt);
     }
-
-    // protected members
-    protected ACLSLTokenMarker tokenMarker;
 
 }
 //  ***EOF***

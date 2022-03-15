@@ -141,15 +141,6 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Set the <code>from</code> slot of this object.
-     *
-     * @param id The agent identifier for the envelope sender.
-     */
-    public void setFrom(AID id) {
-        from = id;
-    }
-
-    /**
      * Retrieve the <code>from</code> slot of this object.
      *
      * @return The value of the <code>from</code> slot of this
@@ -160,12 +151,12 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Set the <code>comments</code> slot of this object.
+     * Set the <code>from</code> slot of this object.
      *
-     * @param c The string for the envelope comments.
+     * @param id The agent identifier for the envelope sender.
      */
-    public void setComments(String c) {
-        comments = c;
+    public void setFrom(AID id) {
+        from = id;
     }
 
     /**
@@ -179,12 +170,12 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Set the <code>acl-representation</code> slot of this object.
+     * Set the <code>comments</code> slot of this object.
      *
-     * @param r The string for the ACL representation.
+     * @param c The string for the envelope comments.
      */
-    public void setAclRepresentation(String r) {
-        aclRepresentation = r;
+    public void setComments(String c) {
+        comments = c;
     }
 
     /**
@@ -199,12 +190,12 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Set the <code>payload-length</code> slot of this object.
+     * Set the <code>acl-representation</code> slot of this object.
      *
-     * @param l The payload length, in bytes.
+     * @param r The string for the ACL representation.
      */
-    public void setPayloadLength(Long l) {
-        payloadLength = l;
+    public void setAclRepresentation(String r) {
+        aclRepresentation = r;
     }
 
     /**
@@ -215,6 +206,25 @@ public class Envelope implements Concept, Serializable {
      */
     public Long getPayloadLength() {
         return payloadLength;
+    }
+
+    /**
+     * Set the <code>payload-length</code> slot of this object.
+     *
+     * @param l The payload length, in bytes.
+     */
+    public void setPayloadLength(Long l) {
+        payloadLength = l;
+    }
+
+    /**
+     * Retrieve the <code>payload-encoding</code> slot of this object.
+     *
+     * @return The value of the <code>payload-encoding</code> slot of
+     * this envelope, or <code>null</code> if no value was set.
+     */
+    public String getPayloadEncoding() {
+        return payloadEncoding;
     }
 
     /**
@@ -231,13 +241,13 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Retrieve the <code>payload-encoding</code> slot of this object.
+     * Retrieve the <code>date</code> slot of this object.
      *
-     * @return The value of the <code>payload-encoding</code> slot of
-     * this envelope, or <code>null</code> if no value was set.
+     * @return The value of the <code>date</code> slot of this
+     * envelope, or <code>null</code> if no value was set.
      */
-    public String getPayloadEncoding() {
-        return payloadEncoding;
+    public Date getDate() {
+        return date;
     }
 
     /**
@@ -247,16 +257,6 @@ public class Envelope implements Concept, Serializable {
      */
     public void setDate(Date d) {
         date = d;
-    }
-
-    /**
-     * Retrieve the <code>date</code> slot of this object.
-     *
-     * @return The value of the <code>date</code> slot of this
-     * envelope, or <code>null</code> if no value was set.
-     */
-    public Date getDate() {
-        return date;
     }
 
     /**
@@ -300,16 +300,6 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Set the <code>received</code> slot of this object.
-     *
-     * @param ro The received object for the <code>received</code>
-     *           slot.
-     */
-    public void setReceived(ReceivedObject ro) {
-        addStamp(ro);
-    }
-
-    /**
      * Retrieve the <code>received</code> slot of this object.
      *
      * @return The value of the <code>received</code> slot of this
@@ -320,6 +310,16 @@ public class Envelope implements Concept, Serializable {
             return null;
         else
             return stamps.get(stamps.size() - 1);
+    }
+
+    /**
+     * Set the <code>received</code> slot of this object.
+     *
+     * @param ro The received object for the <code>received</code>
+     *           slot.
+     */
+    public void setReceived(ReceivedObject ro) {
+        addStamp(ro);
     }
 
     /**
@@ -491,20 +491,14 @@ public class Envelope implements Concept, Serializable {
 
     //#MIDP_EXCLUDE_BEGIN
 
-
-    // For persistence service
-    private void setTo(ArrayList<AID> al) {
-        to = al;
-    }
-
     // For persistence service
     private ArrayList<AID> getTo() {
         return to;
     }
 
     // For persistence service
-    private void setIntendedReceivers(ArrayList<AID> al) {
-        intendedReceiver = al;
+    private void setTo(ArrayList<AID> al) {
+        to = al;
     }
 
     // For persistence service
@@ -513,13 +507,18 @@ public class Envelope implements Concept, Serializable {
     }
 
     // For persistence service
-    private void setProperties(ArrayList<Property> al) {
-        properties = al;
+    private void setIntendedReceivers(ArrayList<AID> al) {
+        intendedReceiver = al;
     }
 
     // For persistence service
     private ArrayList<Property> getProperties() {
         return properties;
+    }
+
+    // For persistence service
+    private void setProperties(ArrayList<Property> al) {
+        properties = al;
     }
 
     //#MIDP_EXCLUDE_END

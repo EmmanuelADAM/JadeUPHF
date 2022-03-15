@@ -42,23 +42,22 @@ public class TreeHelp extends JDialog {
     /**
      * @serial
      */
-    private JEditorPane htmlPane;
-
+    private final boolean playWithLineStyle = false;
     /**
      * @serial
      */
-    private URL helpURL;
+    private final String lineStyle = "Angled";
 
     //Optionally play with line styles.  Possible values are
     //"Angled", "Horizontal", and "None" (the default).
     /**
      * @serial
      */
-    private final boolean playWithLineStyle = false;
+    private JEditorPane htmlPane;
     /**
      * @serial
      */
-    private final String lineStyle = "Angled";
+    private URL helpURL;
 
     public TreeHelp(Frame owner, String title, String url) {
 

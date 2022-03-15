@@ -35,85 +35,8 @@ import java.util.Map;
  */
 class LADT {
 
-    // Rows of the LADT are protected by a recursive mutex lock
-    private static class Row {
-        private Agent value;
-        // DEBUG private Agent bakValue;
-        // DEBUG private String target = "ma";
-        private Thread owner;
-        private long depth;
-
-        public Row(Agent a) {
-            value = a;
-            // DEBUG bakValue = value;
-            depth = 0;
-        }
-
-        public synchronized Agent get() {
-            return value;
-        }
-
-        public synchronized void clear() {
-            value = null;
-        }
-
-        public synchronized void lock() {
-            if (value != null) {
-                try {
-                    Thread me = Thread.currentThread();
-                    while ((owner != null) && (owner != me)) {
-                        // DEBUG boolean b = false;
-                        // DEBUG if (bakValue.getLocalName().equals(target)) {
-                        // DEBUG 	System.out.println("Thread "+Thread.currentThread().getName()+" start waiting on "+target);
-                        // DEBUG 	b = true;
-                        // DEBUG }
-                        wait();
-                        // DEBUG if (b) {
-                        // DEBUG 	System.out.println("Thread "+Thread.currentThread().getName()+" stop waiting on "+target);
-                        // DEBUG }
-                        if (value == null) {
-                            return;
-                        }
-                    }
-
-                    owner = me;
-                    ++depth;
-                } catch (InterruptedException ie) {
-                    return;
-                }
-            }
-        }
-
-        public synchronized void unlock() {
-            // Must be owner to unlock
-            if (owner != Thread.currentThread())
-                return;
-            --depth;
-            if (depth == 0 || value == null) {
-                // Note that if the row has just been cleared we must wake up 
-                // hanging threads even if depth is > 0, otherwise they will 
-                // hang forever
-                owner = null;
-                // DEBUG try {
-                // DEBUG 	if (bakValue.getLocalName().equals(target)) {
-                // DEBUG 		System.out.println("Thread "+Thread.currentThread().getName()+" notifying all on "+target);
-                // DEBUG 	}
-                // DEBUG }
-                // DEBUG catch (Exception e) {}
-                notifyAll();
-            }
-        }
-
-        // For debugging purpose
-        public String toString() {
-            if (value != null) {
-                return "(" + value.getName() + " :owner " + (owner != null ? owner.toString() : "null") + ")";
-            } else {
-                return "null";
-            }
-        }
-
-    } // End of Row class
+    //private Map agents = new HashMap(MAP_SIZE, MAP_LOAD_FACTOR);
+    private final Map<AID, Row> agents;
 
 
     // Initial size of agent hash table
@@ -122,9 +45,6 @@ class LADT {
     // Load factor of agent hash table
     //private static final float MAP_LOAD_FACTOR = 0.50f;
 
-
-    //private Map agents = new HashMap(MAP_SIZE, MAP_LOAD_FACTOR);
-    private final Map<AID, Row> agents;
 
     public LADT(int size) {
         agents = new HashMap<>(size);
@@ -239,4 +159,84 @@ class LADT {
             return status;
         }
     }
+
+    // Rows of the LADT are protected by a recursive mutex lock
+    private static class Row {
+        private Agent value;
+        // DEBUG private Agent bakValue;
+        // DEBUG private String target = "ma";
+        private Thread owner;
+        private long depth;
+
+        public Row(Agent a) {
+            value = a;
+            // DEBUG bakValue = value;
+            depth = 0;
+        }
+
+        public synchronized Agent get() {
+            return value;
+        }
+
+        public synchronized void clear() {
+            value = null;
+        }
+
+        public synchronized void lock() {
+            if (value != null) {
+                try {
+                    Thread me = Thread.currentThread();
+                    while ((owner != null) && (owner != me)) {
+                        // DEBUG boolean b = false;
+                        // DEBUG if (bakValue.getLocalName().equals(target)) {
+                        // DEBUG 	System.out.println("Thread "+Thread.currentThread().getName()+" start waiting on "+target);
+                        // DEBUG 	b = true;
+                        // DEBUG }
+                        wait();
+                        // DEBUG if (b) {
+                        // DEBUG 	System.out.println("Thread "+Thread.currentThread().getName()+" stop waiting on "+target);
+                        // DEBUG }
+                        if (value == null) {
+                            return;
+                        }
+                    }
+
+                    owner = me;
+                    ++depth;
+                } catch (InterruptedException ie) {
+                    return;
+                }
+            }
+        }
+
+        public synchronized void unlock() {
+            // Must be owner to unlock
+            if (owner != Thread.currentThread())
+                return;
+            --depth;
+            if (depth == 0 || value == null) {
+                // Note that if the row has just been cleared we must wake up
+                // hanging threads even if depth is > 0, otherwise they will
+                // hang forever
+                owner = null;
+                // DEBUG try {
+                // DEBUG 	if (bakValue.getLocalName().equals(target)) {
+                // DEBUG 		System.out.println("Thread "+Thread.currentThread().getName()+" notifying all on "+target);
+                // DEBUG 	}
+                // DEBUG }
+                // DEBUG catch (Exception e) {}
+                notifyAll();
+            }
+        }
+
+        // For debugging purpose
+        public String toString() {
+            if (value != null) {
+                return "(" + value.getName() + " :owner " + (owner != null ? owner.toString() : "null") + ")";
+            } else {
+                return "null";
+            }
+        }
+
+    } // End of Row class
 }

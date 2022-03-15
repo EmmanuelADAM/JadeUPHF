@@ -48,30 +48,18 @@ public abstract class AMSSubscriber extends SimpleBehaviour {
     public static final String AMS_SUBSCRIPTION = "tool-subscription";
     public static final String AMS_CANCELLATION = "tool-cancellation";
     public static final String PLATFORM_EVENTS = "platform-events";
-
-    private AID ams = null;
     private final ACLMessage AMSSubscription = new ACLMessage(ACLMessage.SUBSCRIBE);
     private final ACLMessage AMSCancellation = new ACLMessage(ACLMessage.CANCEL);
-
-    private MessageTemplate listenTemplate;
-    private boolean active = true;
-
     // Ignore case for event names
     //#DOTNET_EXCLUDE_BEGIN
     private final Map<String, EventHandler> handlers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    private AID ams = null;
+    private MessageTemplate listenTemplate;
+    private boolean active = true;
     //#DOTNET_EXCLUDE_END
 	/*#DOTNET_INCLUDE_BEGIN
 	 private Map handlers = new TreeMap(new CaseInsensitiveComparator() );
 	 #DOTNET_INCLUDE_END*/
-
-    /**
-     * This interface must be implemented by concrete event handlers
-     * installed by this AMSSubscriber.
-     */
-    public interface EventHandler extends Serializable {
-        void handle(Event ev);
-    }
-
 
     /**
      * Construct an AMSSubscriber behaviour to receive notifications about platform events
@@ -93,6 +81,7 @@ public abstract class AMSSubscriber extends SimpleBehaviour {
         // Fill the event handler table, using a deferred operation.
         installHandlers(handlers);
     }
+
 
     /**
      * Construct an AMSSubscriber behaviour to receive notifications about platform events
@@ -204,6 +193,14 @@ public abstract class AMSSubscriber extends SimpleBehaviour {
      */
     public final ACLMessage getCancel() {
         return AMSCancellation;
+    }
+
+    /**
+     * This interface must be implemented by concrete event handlers
+     * installed by this AMSSubscriber.
+     */
+    public interface EventHandler extends Serializable {
+        void handle(Event ev);
     }
 	
 	/*#DOTNET_INCLUDE_BEGIN

@@ -35,7 +35,7 @@ package jade.tools.sniffer;
 
 
 /**
- Invokes the agent Sniffer to delete itself, closing the Gui and unregistering.
+ * Invokes the agent Sniffer to delete itself, closing the Gui and unregistering.
  * see FixedAction
  */
 

@@ -26,14 +26,13 @@ public class SSLHelper {
      */
     public static final List<String> supportedKeys =
             Collections.singletonList("TLS_ECDH_anon_WITH_AES_128_CBC_SHA");
-
-    public static String[] getSupportedKeys() {
-        return supportedKeys.toArray(new String[0]);
-    }
-
     private static final Logger logger = Logger.getJADELogger(SSLHelper.class.getName());
 
     private SSLHelper() {
+    }
+
+    public static String[] getSupportedKeys() {
+        return supportedKeys.toArray(new String[0]);
     }
 
     /**

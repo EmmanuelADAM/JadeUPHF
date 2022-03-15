@@ -28,6 +28,7 @@ import jade.core.AID;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -39,6 +40,7 @@ import java.util.Properties;
  */
 
 public class AIDGui extends JDialog {
+    private final Component parentGUI;
     private boolean editable, checkSlots;
     private AID agentAID;
     private JTextField nameText;
@@ -47,8 +49,6 @@ public class AIDGui extends JDialog {
     private VisualAIDList resolverListPanel;
     private VisualPropertiesList propertiesListPanel;
     private AID out;
-
-    private final Component parentGUI;
 
 
     /**
@@ -81,10 +81,7 @@ public class AIDGui extends JDialog {
         this.editable = ed;
         this.checkSlots = checkMandatorySlots;
 
-        if (agentIdentifier == null)
-            this.agentAID = new AID();
-        else
-            this.agentAID = agentIdentifier;
+        this.agentAID = Objects.requireNonNullElseGet(agentIdentifier, AID::new);
 
         JLabel label;
 

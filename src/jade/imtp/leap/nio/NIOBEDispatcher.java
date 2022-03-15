@@ -21,6 +21,11 @@ import java.util.Properties;
 public class NIOBEDispatcher implements NIOMediator, BEConnectionManager, Dispatcher {
 
     private static final long RESPONSE_TIMEOUT = 60000;
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    // Local variable only used in the kill() method
+    private final Object shutdownLock = new Object();
+    protected InputManager inpManager;
+    protected OutputManager outManager;
     private long keepAliveTime;
     private boolean enableServerKeepAlive;
     private long lastReceivedTime;
@@ -31,9 +36,6 @@ public class NIOBEDispatcher implements NIOMediator, BEConnectionManager, Dispat
     private String myID;
     private Properties myProperties;
     private BackEndContainer myContainer = null;
-    protected InputManager inpManager;
-    protected OutputManager outManager;
-    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
 
     /**
      * Retrieve the ID of this mediator. Returns null if this mediator
@@ -130,9 +132,6 @@ public class NIOBEDispatcher implements NIOMediator, BEConnectionManager, Dispat
             throw new ICPException("Error creating profile");
         }
     }
-
-    // Local variable only used in the kill() method
-    private final Object shutdownLock = new Object();
 
     /**
      * Kill the above container.
@@ -442,21 +441,46 @@ public class NIOBEDispatcher implements NIOMediator, BEConnectionManager, Dispat
         myProperties.put(BEManagementHelper.CONNECTED, (isConnected() ? "true" : "false"));
     }
 
+    private byte getReconnectInfo() {
+        byte info = JICPProtocol.DEFAULT_INFO;
+        // If the inpConnection is null request the FrontEnd to reconnect
+        if (!inpManager.isConnected()) {
+            info |= JICPProtocol.RECONNECT_INFO;
+        }
+        return info;
+    }
+
+    private void checkTerminatedInfo(JICPPacket pkt) {
+        if ((pkt.getInfo() & JICPProtocol.TERMINATED_INFO) != 0) {
+            peerActive = false;
+            if (myLogger.isLoggable(Logger.INFO)) {
+                myLogger.log(Logger.INFO, myID + ": Peer termination notification received");
+            }
+        }
+    }
+
+    private void close(Connection c) {
+        try {
+            c.close();
+        } catch (IOException ioe) {
+        }
+    }
+
     /**
      * Inner class InputManager.
      * This class manages the delivery of commands to the FrontEnd
      */
     protected class InputManager {
 
+        private final Object dispatchLock = new Object();
+        private final FrontEndStub myStub;
         private NIOJICPConnection myConnection;
         private boolean dispatching = false;
         private boolean connectionRefreshed;
         private boolean waitingForFlush;
         private long readStartTime = -1;
         private JICPPacket currentReply;
-        private final Object dispatchLock = new Object();
         private int inpCnt;
-        private final FrontEndStub myStub;
 
         InputManager(int c, FrontEndStub s) {
             inpCnt = c;
@@ -651,11 +675,11 @@ public class NIOBEDispatcher implements NIOMediator, BEConnectionManager, Dispat
      */
     protected class OutputManager {
 
+        private final BackEndSkel mySkel;
+        private final long maxDisconnectionTime;
         private Connection myConnection;
         private JICPPacket lastResponse;
         private int lastSid;
-        private final BackEndSkel mySkel;
-        private final long maxDisconnectionTime;
         private long expirationDeadline;
 
         OutputManager(int n, BackEndSkel s, long t) {
@@ -738,30 +762,5 @@ public class NIOBEDispatcher implements NIOMediator, BEConnectionManager, Dispat
             return (!isConnected()) && (currentTime > expirationDeadline);
         }
     } // END of inner class OutputManager
-
-    private byte getReconnectInfo() {
-        byte info = JICPProtocol.DEFAULT_INFO;
-        // If the inpConnection is null request the FrontEnd to reconnect
-        if (!inpManager.isConnected()) {
-            info |= JICPProtocol.RECONNECT_INFO;
-        }
-        return info;
-    }
-
-    private void checkTerminatedInfo(JICPPacket pkt) {
-        if ((pkt.getInfo() & JICPProtocol.TERMINATED_INFO) != 0) {
-            peerActive = false;
-            if (myLogger.isLoggable(Logger.INFO)) {
-                myLogger.log(Logger.INFO, myID + ": Peer termination notification received");
-            }
-        }
-    }
-
-    private void close(Connection c) {
-        try {
-            c.close();
-        } catch (IOException ioe) {
-        }
-    }
 }
 

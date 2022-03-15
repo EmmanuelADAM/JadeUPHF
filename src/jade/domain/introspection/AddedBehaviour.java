@@ -54,16 +54,6 @@ public class AddedBehaviour implements Event {
     }
 
     /**
-     * Set the <code>agent</code> of this event.
-     *
-     * @param id The agent identifier of the agent the behaviour was
-     *           added to.
-     */
-    public void setAgent(AID id) {
-        agent = id;
-    }
-
-    /**
      * Retrieve the value of the <code>agent</code> slot of this
      * event, containing the agent identifier of the agent the
      * behaviour was added to.
@@ -76,13 +66,13 @@ public class AddedBehaviour implements Event {
     }
 
     /**
-     * Set the <code>behaviour</code> of this event.
+     * Set the <code>agent</code> of this event.
      *
-     * @param id The behaviour identifier of the newly added
-     *           behaviour.
+     * @param id The agent identifier of the agent the behaviour was
+     *           added to.
      */
-    public void setBehaviour(BehaviourID id) {
-        behaviour = id;
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     /**
@@ -95,6 +85,16 @@ public class AddedBehaviour implements Event {
      */
     public BehaviourID getBehaviour() {
         return behaviour;
+    }
+
+    /**
+     * Set the <code>behaviour</code> of this event.
+     *
+     * @param id The behaviour identifier of the newly added
+     *           behaviour.
+     */
+    public void setBehaviour(BehaviourID id) {
+        behaviour = id;
     }
 
     /**

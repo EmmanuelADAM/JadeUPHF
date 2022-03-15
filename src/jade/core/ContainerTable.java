@@ -34,28 +34,6 @@ class ContainerTable {
     private static final int CONTAINERS_SIZE = 10;
 
     private final Logger myLogger = Logger.getMyLogger(getClass().getName());
-
-    private static class Entry {
-        private final List<MTPDescriptor> mtps = new LinkedList<>();
-
-        public Entry() {
-        }
-
-        public void addMTP(MTPDescriptor mtp) {
-            mtps.add(mtp);
-        }
-
-        public void removeMTP(MTPDescriptor mtp) {
-            mtps.remove(mtp);
-        }
-
-        public List<MTPDescriptor> getMTPs() {
-            return mtps;
-        }
-
-    } // End of Entry class
-
-
     private final Map<ContainerID, Entry> entries = new HashMap<>(CONTAINERS_SIZE);
 
     public synchronized void addContainer(ContainerID cid) {
@@ -140,5 +118,25 @@ class ContainerTable {
         }
         return entries.isEmpty();
     }
+
+    private static class Entry {
+        private final List<MTPDescriptor> mtps = new LinkedList<>();
+
+        public Entry() {
+        }
+
+        public void addMTP(MTPDescriptor mtp) {
+            mtps.add(mtp);
+        }
+
+        public void removeMTP(MTPDescriptor mtp) {
+            mtps.remove(mtp);
+        }
+
+        public List<MTPDescriptor> getMTPs() {
+            return mtps;
+        }
+
+    } // End of Entry class
 
 }

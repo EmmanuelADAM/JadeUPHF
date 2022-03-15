@@ -25,91 +25,92 @@ import java.util.List;
 class SLParser implements SLParserConstants {
 
     private static final String META_EXCEPTION_MESSAGE = "Meta SL expressions are not allowed";
+    static private int[] jj_la1_0;
+    static private int[] jj_la1_1;
+
+    static {
+        jj_la1_init_0();
+        jj_la1_init_1();
+    }
+
     /**
      * This variable is true, when meta symbols are allowed (metas are a semantics-specific extension to the SL Grammar)
      **/
     private final boolean metaAllowed = true; //FIXME to do set/unset this variable
-
-    /* Take a quoted FIPA SL0 String and convert to a
-     * normal Java-style String.  Remove the
-     * leading/trailing quotation marks, and
-     * un-escape any included quotation marks.
-     * This must be the exact inverse of the
-     * escape() procedure in the SLEncoder.
+    final private int[] jj_la1 = new int[23];
+    private final List<int[]> jj_expentries = new ArrayList<>();
+    /**
+     * Generated Token Manager.
      */
-    private String unescape(String s) {
-        StringBuilder result = new StringBuilder(s.length());
-        for (int i = 1; i < s.length() - 1; i++)
-            if (s.charAt(i) == '\u005c\u005c' && s.charAt(i + 1) == '\u005c"') {
-                result.append("\u005c"");
-                i++;
-            } else
-                result.append(s.charAt(i));
-        return result.toString();
-    }
-
-
+    public SLParserTokenManager token_source;
     /**
-     * When an ActionExpression is parsed, if it is an AbsConcept then
-     * it must be casted upto an AbsAgentAction.
-     **/
-    private AbsTerm toAbsAgentAction(AbsTerm t) {
-        if ((t instanceof AbsConcept) && (!(t instanceof AbsAgentAction))) {
-            AbsAgentAction act = new AbsAgentAction(t.getTypeName());
-            String[] slotNames = t.getNames();
-            if (slotNames != null) {
-                for (String slotName : slotNames) act.set(slotName, (AbsTerm) t.getAbsObject(slotName));
-            }
-            return act;
-        } else
-            return t;
-    }
-
+     * Current token.
+     */
+    public Token token;
     /**
-     * By default an object of this type implements a Full SLParser.
-     * This method allows to change this default.
-     *
-     * @param slType (0 for FIPa-SL0, 1 for SL1, 2 for SL2, >2 for full SL)
-     **/
-    void setSLType(int slType) {
-        this.slType = slType;
-    }
+     * Next token.
+     */
+    public Token jj_nt;
 
-
+    /*   P R O D U C T I O N    R U L E S  */
     Ontology curOntology = null;
-
-    /**
-     * Reinitialize the parser such as it is ready to parse a new expression.
-     *
-     * @param content the content to be parsed
-     * @param o       the ontology, null if no ontology (this parameter is used to get the names of the slots
-     *                when they are encoded as unnamed slots.
-     */
-    void reinit(Ontology o, String content) {
-        curOntology = o;
-        if (content == null) content = "";
-        ReInit(new StringReader(content));
-    }
-
-    /**
-     * @param content the content to be parsed
-     * @param o       the ontology, null if no ontology (this parameter is used to get the names of the slots
-     *                when they are encoded as unnamed slots.
-     * @deprecated since JADE 3.4 it is preferrable to use reinit() and then call directly the method corresponding to the production rule (e.g. Content())
-     */
-    AbsContentElement parse(Ontology o, String content) throws ParseException, TokenMgrError {
-        reinit(o, content);
-        AbsContentElementList tuple = Content();
-        if (tuple.size() > 1)
-            return tuple;
-        else  // if there is a single ContentExpression than return just it, not the tuple
-            return tuple.get(0);
-    }
-
     /**
      * (0 for FIPa-SL0, 1 for SL1, 2 for SL2, >2 for full SL)
      **/
     int slType = 3;
+
+    // lbrace2 in the OperatorState of the Token Manager
+    SimpleCharStream jj_input_stream;
+    private int jj_ntk;
+    private int jj_gen;
+    private int[] jj_expentry;
+    private int jj_kind = -1;
+
+    /**
+     * Constructor with InputStream.
+     */
+    public SLParser(java.io.InputStream stream) {
+        this(stream, null);
+    }
+
+    /**
+     * Constructor with InputStream and supplied encoding
+     */
+    public SLParser(java.io.InputStream stream, String encoding) {
+        try {
+            jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+        token_source = new SLParserTokenManager(jj_input_stream);
+        token = new Token();
+        jj_ntk = -1;
+        jj_gen = 0;
+        for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    }
+
+    /**
+     * Constructor.
+     */
+    public SLParser(java.io.Reader stream) {
+        jj_input_stream = new SimpleCharStream(stream, 1, 1);
+        token_source = new SLParserTokenManager(jj_input_stream);
+        token = new Token();
+        jj_ntk = -1;
+        jj_gen = 0;
+        for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    }
+
+    /**
+     * Constructor with generated Token Manager.
+     */
+    public SLParser(SLParserTokenManager tm) {
+        token_source = tm;
+        token = new Token();
+        jj_ntk = -1;
+        jj_gen = 0;
+        for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    }
 
     public static void main(String[] args) {
 
@@ -147,7 +148,85 @@ class SLParser implements SLParserConstants {
         }
     }
 
-    /*   P R O D U C T I O N    R U L E S  */
+    private static void jj_la1_init_0() {
+        jj_la1_0 = new int[]{0x843020, 0x800020, 0x1000040, 0x843020, 0xee003000, 0x56003000, 0x873fa0, 0x33f00, 0x87ffa0, 0x10003000, 0x873fa0, 0xc000, 0x87ffa0, 0xc000, 0x42000000, 0x840020, 0x843020, 0x843020, 0x873fa0, 0xa8003000, 0xf00, 0x3000, 0x40000,};
+    }
+
+    private static void jj_la1_init_1() {
+        jj_la1_1 = new int[]{0x1c, 0x0, 0x0, 0x1c, 0xf, 0xc, 0x1c, 0xc, 0x1c, 0xc, 0x1c, 0x0, 0x1c, 0x0, 0x0, 0x10, 0x1c, 0x1c, 0x1c, 0xf, 0x0, 0xc, 0x10,};
+    }
+
+    /* Take a quoted FIPA SL0 String and convert to a
+     * normal Java-style String.  Remove the
+     * leading/trailing quotation marks, and
+     * un-escape any included quotation marks.
+     * This must be the exact inverse of the
+     * escape() procedure in the SLEncoder.
+     */
+    private String unescape(String s) {
+        StringBuilder result = new StringBuilder(s.length());
+        for (int i = 1; i < s.length() - 1; i++)
+            if (s.charAt(i) == '\u005c\u005c' && s.charAt(i + 1) == '\u005c"') {
+                result.append("\u005c"");
+                i++;
+            } else
+                result.append(s.charAt(i));
+        return result.toString();
+    }
+
+    /**
+     * When an ActionExpression is parsed, if it is an AbsConcept then
+     * it must be casted upto an AbsAgentAction.
+     **/
+    private AbsTerm toAbsAgentAction(AbsTerm t) {
+        if ((t instanceof AbsConcept) && (!(t instanceof AbsAgentAction))) {
+            AbsAgentAction act = new AbsAgentAction(t.getTypeName());
+            String[] slotNames = t.getNames();
+            if (slotNames != null) {
+                for (String slotName : slotNames) act.set(slotName, (AbsTerm) t.getAbsObject(slotName));
+            }
+            return act;
+        } else
+            return t;
+    }
+
+    /**
+     * By default an object of this type implements a Full SLParser.
+     * This method allows to change this default.
+     *
+     * @param slType (0 for FIPa-SL0, 1 for SL1, 2 for SL2, >2 for full SL)
+     **/
+    void setSLType(int slType) {
+        this.slType = slType;
+    }
+
+    /**
+     * Reinitialize the parser such as it is ready to parse a new expression.
+     *
+     * @param content the content to be parsed
+     * @param o       the ontology, null if no ontology (this parameter is used to get the names of the slots
+     *                when they are encoded as unnamed slots.
+     */
+    void reinit(Ontology o, String content) {
+        curOntology = o;
+        if (content == null) content = "";
+        ReInit(new StringReader(content));
+    }
+
+    /**
+     * @param content the content to be parsed
+     * @param o       the ontology, null if no ontology (this parameter is used to get the names of the slots
+     *                when they are encoded as unnamed slots.
+     * @deprecated since JADE 3.4 it is preferrable to use reinit() and then call directly the method corresponding to the production rule (e.g. Content())
+     */
+    AbsContentElement parse(Ontology o, String content) throws ParseException, TokenMgrError {
+        reinit(o, content);
+        AbsContentElementList tuple = Content();
+        if (tuple.size() > 1)
+            return tuple;
+        else  // if there is a single ContentExpression than return just it, not the tuple
+            return tuple.get(0);
+    }
 
     /**
      * This production rule represents the more general expression that can
@@ -200,8 +279,6 @@ class SLParser implements SLParserConstants {
             }
         }
     }
-
-    // lbrace2 in the OperatorState of the Token Manager
 
     /**
      * Right Brace in all of the possible states of the Token Manager
@@ -925,61 +1002,6 @@ class SLParser implements SLParserConstants {
     }
 
     /**
-     * Generated Token Manager.
-     */
-    public SLParserTokenManager token_source;
-    SimpleCharStream jj_input_stream;
-    /**
-     * Current token.
-     */
-    public Token token;
-    /**
-     * Next token.
-     */
-    public Token jj_nt;
-    private int jj_ntk;
-    private int jj_gen;
-    final private int[] jj_la1 = new int[23];
-    static private int[] jj_la1_0;
-    static private int[] jj_la1_1;
-
-    static {
-        jj_la1_init_0();
-        jj_la1_init_1();
-    }
-
-    private static void jj_la1_init_0() {
-        jj_la1_0 = new int[]{0x843020, 0x800020, 0x1000040, 0x843020, 0xee003000, 0x56003000, 0x873fa0, 0x33f00, 0x87ffa0, 0x10003000, 0x873fa0, 0xc000, 0x87ffa0, 0xc000, 0x42000000, 0x840020, 0x843020, 0x843020, 0x873fa0, 0xa8003000, 0xf00, 0x3000, 0x40000,};
-    }
-
-    private static void jj_la1_init_1() {
-        jj_la1_1 = new int[]{0x1c, 0x0, 0x0, 0x1c, 0xf, 0xc, 0x1c, 0xc, 0x1c, 0xc, 0x1c, 0x0, 0x1c, 0x0, 0x0, 0x10, 0x1c, 0x1c, 0x1c, 0xf, 0x0, 0xc, 0x10,};
-    }
-
-    /**
-     * Constructor with InputStream.
-     */
-    public SLParser(java.io.InputStream stream) {
-        this(stream, null);
-    }
-
-    /**
-     * Constructor with InputStream and supplied encoding
-     */
-    public SLParser(java.io.InputStream stream, String encoding) {
-        try {
-            jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-        token_source = new SLParserTokenManager(jj_input_stream);
-        token = new Token();
-        jj_ntk = -1;
-        jj_gen = 0;
-        for (int i = 0; i < 23; i++) jj_la1[i] = -1;
-    }
-
-    /**
      * Reinitialise.
      */
     public void ReInit(java.io.InputStream stream) {
@@ -1003,34 +1025,11 @@ class SLParser implements SLParserConstants {
     }
 
     /**
-     * Constructor.
-     */
-    public SLParser(java.io.Reader stream) {
-        jj_input_stream = new SimpleCharStream(stream, 1, 1);
-        token_source = new SLParserTokenManager(jj_input_stream);
-        token = new Token();
-        jj_ntk = -1;
-        jj_gen = 0;
-        for (int i = 0; i < 23; i++) jj_la1[i] = -1;
-    }
-
-    /**
      * Reinitialise.
      */
     public void ReInit(java.io.Reader stream) {
         jj_input_stream.ReInit(stream, 1, 1);
         token_source.ReInit(jj_input_stream);
-        token = new Token();
-        jj_ntk = -1;
-        jj_gen = 0;
-        for (int i = 0; i < 23; i++) jj_la1[i] = -1;
-    }
-
-    /**
-     * Constructor with generated Token Manager.
-     */
-    public SLParser(SLParserTokenManager tm) {
-        token_source = tm;
         token = new Token();
         jj_ntk = -1;
         jj_gen = 0;
@@ -1062,7 +1061,6 @@ class SLParser implements SLParserConstants {
         throw generateParseException();
     }
 
-
     /**
      * Get the next Token.
      */
@@ -1092,10 +1090,6 @@ class SLParser implements SLParserConstants {
         else
             return (jj_ntk = jj_nt.kind);
     }
-
-    private final List<int[]> jj_expentries = new ArrayList<>();
-    private int[] jj_expentry;
-    private int jj_kind = -1;
 
     /**
      * Generate ParseException.

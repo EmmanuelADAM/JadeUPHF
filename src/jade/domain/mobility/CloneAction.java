@@ -43,16 +43,6 @@ public class CloneAction extends MoveAction {
     }
 
     /**
-     * Set the <code>new-name</code> slot of this action.
-     *
-     * @param nn The new local name (i.e. without the platform ID) for the
-     *           new, cloned agent.
-     */
-    public void setNewName(String nn) {
-        newName = nn;
-    }
-
-    /**
      * Retrieve the value of the <code>new-name</code> slot of this
      * event, containing the new local name (i.e. without the platform ID)
      * for the new, cloned agent.
@@ -62,6 +52,16 @@ public class CloneAction extends MoveAction {
      */
     public String getNewName() {
         return newName;
+    }
+
+    /**
+     * Set the <code>new-name</code> slot of this action.
+     *
+     * @param nn The new local name (i.e. without the platform ID) for the
+     *           new, cloned agent.
+     */
+    public void setNewName(String nn) {
+        newName = nn;
     }
 
 }

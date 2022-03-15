@@ -16,12 +16,12 @@ public class SetLevel implements AgentAction {
         this.level = level;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
     public int getLevel() {
         return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public String getLogger() {

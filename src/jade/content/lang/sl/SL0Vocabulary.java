@@ -26,6 +26,7 @@ package jade.content.lang.sl;
 
 /**
  * The vocabulary of the simbols used in the FIPA SL0 language
+ *
  * @author Giovanni Caire - TILAB
  */
 public interface SL0Vocabulary {
@@ -69,7 +70,9 @@ public interface SL0Vocabulary {
     String RESULT = "result";
     String RESULT_ACTION = "action";
     String RESULT_VALUE = "value";
-    /** @deprecated Use <code>RESULT_VALUE</code> instead */
+    /**
+     * @deprecated Use <code>RESULT_VALUE</code> instead
+     */
     String RESULT_ITEMS = RESULT_VALUE;
 
     String ACTION = "action";

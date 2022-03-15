@@ -40,6 +40,7 @@ import java.util.*;
  * from the argument properties. The class Profile defines
  * a similar collection of keys which are used to access profile
  * properties.
+ *
  * @author Dick Cowan - HP Labs
  * @version $Date: 2011-03-21 14:10:30 +0100(lun, 21 mar 2011) $ $Revision: 6395 $
  */
@@ -59,8 +60,7 @@ public class BootProfileImpl extends ProfileImpl {
     public static final String SMPORT_KEY = "smport";
     public static final String VERSION_KEY = "version";
     public static final String NOMOBILITY_KEY = "nomobility";
-
-
+    private static final String ARGUMENT_SEPARATOR = ";";
     ExtendedProperties argProp;
     BootHelper helper = new BootHelper();
 
@@ -75,6 +75,7 @@ public class BootProfileImpl extends ProfileImpl {
 
     /**
      * Construct profile with specified arguments
+     *
      * @param args Boot arguments
      */
     public BootProfileImpl(String[] args) throws PropertiesException {
@@ -88,6 +89,7 @@ public class BootProfileImpl extends ProfileImpl {
      * Return the properties collection which resulted from the arguments.
      * This collection is used to create/modify the underlying profile's
      * properties.
+     *
      * @return ExtendedProperties The argument property collection.
      */
     public ExtendedProperties getArgProperties() {
@@ -99,9 +101,10 @@ public class BootProfileImpl extends ProfileImpl {
      * argument properties and then into the profile properties.
      * When moving between the argument properties and profile
      * properties different keys are required.
+     *
      * @param source A collection of argument properties. The
-     * keys to this collection are from the XXX_KEY strings
-     * defined in this class.
+     *               keys to this collection are from the XXX_KEY strings
+     *               defined in this class.
      */
     public void setArgProperties(ExtendedProperties source) {
         argProp.copyProperties(source);
@@ -124,7 +127,7 @@ public class BootProfileImpl extends ProfileImpl {
         } else {
             profileProp.setProperty(Profile.MAIN, "false");
             // Since the value is false, we cancel the default done in ProfileImpl's constructor
-            setSpecifiers(Profile.MTPS, new ArrayList<Specifier>(0)); // remove default MTP
+            setSpecifiers(Profile.MTPS, new ArrayList<>(0)); // remove default MTP
         }
 
         String sm = argProp.getProperty(LOCAL_SERVICE_MANAGER);
@@ -337,6 +340,7 @@ public class BootProfileImpl extends ProfileImpl {
 
     /**
      * Fetch and verify a boolean attribute.
+     *
      * @param aKey The property key to check.
      * @return True or false depending on the attributes setting. False if attribute doesn't exist.
      * @throws PropertiesException if there is a value but its not either "true" or "false".
@@ -354,8 +358,6 @@ public class BootProfileImpl extends ProfileImpl {
         }
         return false;
     }
-
-    private static final String ARGUMENT_SEPARATOR = ";";
 
     /**
      * Parse a String reading for a set of

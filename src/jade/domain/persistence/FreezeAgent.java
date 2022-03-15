@@ -41,35 +41,35 @@ import jade.core.ContainerID;
  */
 public class FreezeAgent implements AgentAction {
 
-    public FreezeAgent() {
-    }
+    private AID agent;
+    private String repository;
+    private ContainerID bufferContainer;
 
-    public void setAgent(AID id) {
-        agent = id;
+    public FreezeAgent() {
     }
 
     public AID getAgent() {
         return agent;
     }
 
-    public void setRepository(String r) {
-        repository = r;
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     public String getRepository() {
         return repository;
     }
 
-    public void setBufferContainer(ContainerID cid) {
-        bufferContainer = cid;
+    public void setRepository(String r) {
+        repository = r;
     }
 
     public ContainerID getBufferContainer() {
         return bufferContainer;
     }
 
-    private AID agent;
-    private String repository;
-    private ContainerID bufferContainer;
+    public void setBufferContainer(ContainerID cid) {
+        bufferContainer = cid;
+    }
 
 }

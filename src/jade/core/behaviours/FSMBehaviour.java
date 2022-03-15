@@ -65,22 +65,19 @@ import java.util.*;
 public class FSMBehaviour extends SerialBehaviour {
 
     private final Map<String, Behaviour> mapStates = new HashMap<>();
-    private Behaviour current = null;
+    private final TransitionTable theTransitionTable = new TransitionTable();
+    //#J2ME_EXCLUDE_BEGIN
+    private final Logger myLogger = Logger.getMyLogger(FSMBehaviour.class.getName());
     // Protected for debugging purposes only
     protected List<String> lastStates = new ArrayList<>();
     protected String currentName = null;
+    private Behaviour current = null;
     private String previousName = null;
     private String firstName = null;
     private int lastExitValue;
-
     // These variables are used to force a transition on a given state at runtime
     private boolean transitionForced = false;
     private String forcedTransitionDest = null;
-
-    private final TransitionTable theTransitionTable = new TransitionTable();
-
-    //#J2ME_EXCLUDE_BEGIN
-    private final Logger myLogger = Logger.getMyLogger(FSMBehaviour.class.getName());
     //#J2ME_EXCLUDE_END
 
     /**
@@ -483,98 +480,24 @@ public class FSMBehaviour extends SerialBehaviour {
         }
     }
 
-
-    /**
-     * Inner class implementing the FSM transition table
-     */
-    class TransitionTable implements Serializable {
-        private final Hashtable<String, TransitionsFromState> transitions = new Hashtable<>();
-        @Serial
-        private static final long serialVersionUID = 3487495895819003L;
-
-        void clear() {
-            transitions.clear();
-        }
-
-        void addTransition(Transition t) {
-            String key1 = t.getFromState();
-
-            TransitionsFromState tfs = transitions.get(key1);
-
-            if (tfs == null) {
-                tfs = new TransitionsFromState();
-                transitions.put(key1, tfs);
-            }
-
-            if (t.isDefault()) {
-                tfs.setDefaultTransition(t);
-            } else {
-                Integer key2 = t.getTrigger();
-                tfs.put(key2, t);
-            }
-        }
-
-        void removeTransition(String s1, int event) {
-            TransitionsFromState tfs = transitions.get(s1);
-            if (tfs != null) {
-                Transition t = (Transition) tfs.remove(event);
-                if (t != null) {
-
-                    if ((tfs.isEmpty() && (tfs.getDefaultTransition() == null))) {
-                        transitions.remove(s1);
-                    }
-                }
-            }
-        }
-
-        void removeTransition(String s1) {
-            TransitionsFromState tfs = transitions.get(s1);
-            if (tfs != null) {
-                tfs.setDefaultTransition(null);
-
-                if (tfs.isEmpty()) {
-                    transitions.remove(s1);
-                }
-            }
-        }
-
-        Transition getTransition(String s, int event) {
-            TransitionsFromState tfs = transitions.get(s);
-            if (tfs != null) {
-                return (Transition) tfs.get(event);
-            } else {
-                return null;
-            }
-        }
-
-        Transition getTransition(String s) {
-            TransitionsFromState tfs = transitions.get(s);
-            if (tfs != null) {
-                return tfs.getDefaultTransition();
-            } else {
-                return null;
-            }
-        }
-
-        void removeTransitionsFromState(String stateName) {
-            transitions.remove(stateName);
-        }
+    //#MIDP_EXCLUDE_BEGIN
+    public String stringifyTransitionTable() {
+        return theTransitionTable.transitions.toString();
     }
-
 
     /**
      * Inner class Transition
      */
     static class Transition implements Serializable {
 
+        @Serial
+        private static final long serialVersionUID = 3487495895819004L;
         private FSMBehaviour fsm;
         private String src;
         private String dest;
         private int trigger;
         private boolean def;
         private String[] toBeReset;
-        @Serial
-        private static final long serialVersionUID = 3487495895819004L;
 
         public Transition() {
         }
@@ -652,21 +575,97 @@ public class FSMBehaviour extends SerialBehaviour {
         //#MIDP_EXCLUDE_END
     } // END of inner class Transition
 
+    /**
+     * Inner class implementing the FSM transition table
+     */
+    class TransitionTable implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 3487495895819003L;
+        private final Hashtable<String, TransitionsFromState> transitions = new Hashtable<>();
+
+        void clear() {
+            transitions.clear();
+        }
+
+        void addTransition(Transition t) {
+            String key1 = t.getFromState();
+
+            TransitionsFromState tfs = transitions.get(key1);
+
+            if (tfs == null) {
+                tfs = new TransitionsFromState();
+                transitions.put(key1, tfs);
+            }
+
+            if (t.isDefault()) {
+                tfs.setDefaultTransition(t);
+            } else {
+                Integer key2 = t.getTrigger();
+                tfs.put(key2, t);
+            }
+        }
+
+        void removeTransition(String s1, int event) {
+            TransitionsFromState tfs = transitions.get(s1);
+            if (tfs != null) {
+                Transition t = (Transition) tfs.remove(event);
+                if (t != null) {
+
+                    if ((tfs.isEmpty() && (tfs.getDefaultTransition() == null))) {
+                        transitions.remove(s1);
+                    }
+                }
+            }
+        }
+
+        void removeTransition(String s1) {
+            TransitionsFromState tfs = transitions.get(s1);
+            if (tfs != null) {
+                tfs.setDefaultTransition(null);
+
+                if (tfs.isEmpty()) {
+                    transitions.remove(s1);
+                }
+            }
+        }
+
+        Transition getTransition(String s, int event) {
+            TransitionsFromState tfs = transitions.get(s);
+            if (tfs != null) {
+                return (Transition) tfs.get(event);
+            } else {
+                return null;
+            }
+        }
+
+        Transition getTransition(String s) {
+            TransitionsFromState tfs = transitions.get(s);
+            if (tfs != null) {
+                return tfs.getDefaultTransition();
+            } else {
+                return null;
+            }
+        }
+
+        void removeTransitionsFromState(String stateName) {
+            transitions.remove(stateName);
+        }
+    }
 
     /**
      * Inner class TransitionsFromState
      */
     class TransitionsFromState extends Hashtable<Object, Object> {
-        private Transition defaultTransition = null;
         @Serial
         private static final long serialVersionUID = 3487495895819005L;
-
-        void setDefaultTransition(Transition dt) {
-            defaultTransition = dt;
-        }
+        private Transition defaultTransition = null;
 
         Transition getDefaultTransition() {
             return defaultTransition;
+        }
+
+        void setDefaultTransition(Transition dt) {
+            defaultTransition = dt;
         }
 
         public Object get(Object key) {
@@ -689,10 +688,5 @@ public class FSMBehaviour extends SerialBehaviour {
         }
         //#MIDP_EXCLUDE_END
     } // END of inner class TransitionsFromState
-
-    //#MIDP_EXCLUDE_BEGIN
-    public String stringifyTransitionTable() {
-        return theTransitionTable.transitions.toString();
-    }
     //#MIDP_EXCLUDE_END
 }

@@ -54,6 +54,8 @@ import java.security.cert.X509Certificate;
  */
 public class StrongAuthentication implements HTTPSTrustManager {
 
+    private X509TrustManager _tm;
+
     public X509Certificate[] getAcceptedIssuers() {
         return _tm.getAcceptedIssuers();
     }
@@ -79,6 +81,4 @@ public class StrongAuthentication implements HTTPSTrustManager {
         tmf.init(ks);
         _tm = (X509TrustManager) tmf.getTrustManagers()[0];
     }
-
-    private X509TrustManager _tm;
 }

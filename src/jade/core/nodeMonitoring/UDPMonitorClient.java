@@ -47,12 +47,10 @@ import java.nio.channels.DatagramChannel;
  */
 class UDPMonitorClient {
 
-    private boolean running = false;
-    private boolean terminating = false;
-    private boolean sendTerminationFlag = false;
-
-    //#DOTNET_EXCLUDE_BEGIN
-    private DatagramChannel channel;
+    private final String serverHost;
+    private final int serverPort;
+    private final Node node;
+    private final long key;
 
     //#DOTNET_EXCLUDE_END
 
@@ -60,91 +58,15 @@ class UDPMonitorClient {
 	 private UdpClient channel;
 	 private IPEndPoint receivePoint;
 	 #DOTNET_INCLUDE_END*/
-
-    private final String serverHost;
-    private final int serverPort;
+    private final Logger logger;
+    private boolean running = false;
+    private boolean terminating = false;
+    private boolean sendTerminationFlag = false;
+    //#DOTNET_EXCLUDE_BEGIN
+    private DatagramChannel channel;
     private ByteBuffer ping;
     private int pingDelay;
-    private final Node node;
-    private final long key;
     private Thread sender;
-
-    private final Logger logger;
-
-    /**
-     * Private class which sends ping messages in regular time intervals
-     *
-     * @author Roland Mungenast - Profactor
-     * @author Federico Pieri - ERXA
-     * @since JADE 3.3
-     * @since JADE 3.3.NET
-     */
-    private class Sender implements Runnable {
-
-        public void run() {
-
-            while (running) {
-                updatePing();
-                //#DOTNET_EXCLUDE_BEGIN
-                try {
-                    try {
-                        channel.send(ping, new InetSocketAddress(serverHost, serverPort));
-                    } catch (Exception e) {
-                        logger.log(Logger.WARNING, "Error sending UDP ping message to " + serverHost + ":" + serverPort + " for node " + node.getName());
-                    }
-                    Thread.sleep(pingDelay - 5);
-                } catch (InterruptedException e) {
-                    // ignore --> the ping with the termination flag has to be sent immediately
-                }
-                //#DOTNET_EXCLUDE_END
-				/*#DOTNET_INCLUDE_BEGIN
-				try {
-				channel.Send(ping.getUByte(), ping.capacity(), serverHost, serverPort);
-				Thread.sleep(pingDelay - 5);
-				} 
-				catch (Exception e) 
-				{
-				logger.log(Logger.WARNING,"Error sending UDP ping message to "+serverHost+":"+serverPort+" for node " + node.getName());
-				}
-				#DOTNET_INCLUDE_END*/
-            }
-
-            try {
-                //#DOTNET_EXCLUDE_BEGIN
-                channel.close();
-            } catch (IOException e) {
-                //#DOTNET_EXCLUDE_END
-				/*#DOTNET_INCLUDE_BEGIN
-				 channel.Close();
-				 } 
-				 catch (Exception e) 
-				 {
-				 #DOTNET_INCLUDE_END*/
-                if (logger.isLoggable(Logger.FINER))
-                    logger.log(Logger.FINER, "Error closing UDP channel");
-            }
-        }
-
-        private void updatePing() {
-            String nodeName = node.getName();
-            ping = ByteBuffer.allocate(4 + nodeName.length() + 1);
-            ping.position(0);
-            ping.putInt(nodeName.length());
-            ping.put(nodeName.getBytes());
-
-            if (terminating && sendTerminationFlag) {
-                ping.put((byte) 1);
-            } else {
-                ping.put((byte) 0);
-            }
-
-            if (terminating) {
-                running = false;
-            }
-
-            ping.position(0);
-        }
-    }
 
     /**
      * Constructor
@@ -210,5 +132,80 @@ class UDPMonitorClient {
 
     boolean isActive() {
         return sender != null && sender.isAlive();
+    }
+
+    /**
+     * Private class which sends ping messages in regular time intervals
+     *
+     * @author Roland Mungenast - Profactor
+     * @author Federico Pieri - ERXA
+     * @since JADE 3.3
+     * @since JADE 3.3.NET
+     */
+    private class Sender implements Runnable {
+
+        public void run() {
+
+            while (running) {
+                updatePing();
+                //#DOTNET_EXCLUDE_BEGIN
+                try {
+                    try {
+                        channel.send(ping, new InetSocketAddress(serverHost, serverPort));
+                    } catch (Exception e) {
+                        logger.log(Logger.WARNING, "Error sending UDP ping message to " + serverHost + ":" + serverPort + " for node " + node.getName());
+                    }
+                    Thread.sleep(pingDelay - 5);
+                } catch (InterruptedException e) {
+                    // ignore --> the ping with the termination flag has to be sent immediately
+                }
+                //#DOTNET_EXCLUDE_END
+				/*#DOTNET_INCLUDE_BEGIN
+				try {
+				channel.Send(ping.getUByte(), ping.capacity(), serverHost, serverPort);
+				Thread.sleep(pingDelay - 5);
+				}
+				catch (Exception e)
+				{
+				logger.log(Logger.WARNING,"Error sending UDP ping message to "+serverHost+":"+serverPort+" for node " + node.getName());
+				}
+				#DOTNET_INCLUDE_END*/
+            }
+
+            try {
+                //#DOTNET_EXCLUDE_BEGIN
+                channel.close();
+            } catch (IOException e) {
+                //#DOTNET_EXCLUDE_END
+				/*#DOTNET_INCLUDE_BEGIN
+				 channel.Close();
+				 }
+				 catch (Exception e)
+				 {
+				 #DOTNET_INCLUDE_END*/
+                if (logger.isLoggable(Logger.FINER))
+                    logger.log(Logger.FINER, "Error closing UDP channel");
+            }
+        }
+
+        private void updatePing() {
+            String nodeName = node.getName();
+            ping = ByteBuffer.allocate(4 + nodeName.length() + 1);
+            ping.position(0);
+            ping.putInt(nodeName.length());
+            ping.put(nodeName.getBytes());
+
+            if (terminating && sendTerminationFlag) {
+                ping.put((byte) 1);
+            } else {
+                ping.put((byte) 0);
+            }
+
+            if (terminating) {
+                running = false;
+            }
+
+            ping.position(0);
+        }
     }
 }

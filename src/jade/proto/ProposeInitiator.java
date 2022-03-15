@@ -94,31 +94,6 @@ public class ProposeInitiator extends FSMBehaviour {
 
     // Private data store keys (can't be static since if we register another instance of this class as stare of the FSM
     //using the same data store the new values overrides the old one.
-    /**
-     * key to retrieve from the HashMap of the behaviour the ACLMessage
-     * object passed in the constructor of the class.
-     **/
-    protected final String INITIATION_K = "__initiation" + hashCode();
-
-    /**
-     * key to retrieve from the HashMap of the behaviour the vector of
-     * PROPOSE ACLMessage objects that have to be sent.
-     **/
-    protected final String ALL_INITIATIONS_K = "__all-initiations" + hashCode();
-
-    /**
-     * key to retrieve from the HashMap of the behaviour the last
-     * ACLMessage object that has been received (null if the timeout
-     * expired).
-     **/
-    public final String REPLY_KEY = "__reply" + hashCode();
-
-    /**
-     * key to retrieve from the HashMap of the behaviour the vector of
-     * ACLMessage objects that have been received as responses.
-     **/
-    public final String ALL_RESPONSES_KEY = "__all-responses" + hashCode();
-
     // FSM states names
     protected static final String PREPARE_INITIATIONS = "Prepare-initiations";
     protected static final String SEND_INITIATIONS = "Send-initiations";
@@ -129,32 +104,46 @@ public class ProposeInitiator extends FSMBehaviour {
     protected static final String HANDLE_ALL_RESPONSES = "Handle-all-responses";
     protected static final String HANDLE_REJECT_PROPOSAL = "Handle-reject-proposal";
     protected static final String HANDLE_ACCEPT_PROPOSAL = "Handle-accept-proposal";
-    private static final String CHECK_AGAIN = "Check-again";
     protected static final String CHECK_SESSIONS = "Check-sessions";
     protected static final String DUMMY_FINAL = "Dummy-final";
+    private static final String CHECK_AGAIN = "Check-again";
+    // States exit values
+    private static final int ALL_RESPONSES_RECEIVED = 1;
+    private static final int TERMINATED = 2;
+    /**
+     * key to retrieve from the HashMap of the behaviour the last
+     * ACLMessage object that has been received (null if the timeout
+     * expired).
+     **/
+    public final String REPLY_KEY = "__reply" + hashCode();
+    /**
+     * key to retrieve from the HashMap of the behaviour the vector of
+     * ACLMessage objects that have been received as responses.
+     **/
+    public final String ALL_RESPONSES_KEY = "__all-responses" + hashCode();
 
 
     //#APIDOC_EXCLUDE_BEGIN
-
+    /**
+     * key to retrieve from the HashMap of the behaviour the ACLMessage
+     * object passed in the constructor of the class.
+     **/
+    protected final String INITIATION_K = "__initiation" + hashCode();
+    /**
+     * key to retrieve from the HashMap of the behaviour the vector of
+     * PROPOSE ACLMessage objects that have to be sent.
+     **/
+    protected final String ALL_INITIATIONS_K = "__all-initiations" + hashCode();
     // This maps the AID of each responder to a Session object
     // holding the status of the protocol as far as that responder
     // is concerned. Sessions are protocol-specific
     protected Map<String, Session> sessions = new HashMap<>();
+
+    //#APIDOC_EXCLUDE_END
     // The MsgReceiver behaviour used to receive replies
     protected MsgReceiver replyReceiver;
     // The MessageTemplate used by the replyReceiver
     protected MessageTemplate replyTemplate = null;
-
-    //#APIDOC_EXCLUDE_END
-
-    private ACLMessage initiation;
-
-    // States exit values
-    private static final int ALL_RESPONSES_RECEIVED = 1;
-    private static final int TERMINATED = 2;
-
-    //#APIDOC_EXCLUDE_BEGIN
-
     // These states must be reset before they are visited again.
     // Note that resetting a state before visiting it again is required
     // only if
@@ -169,9 +158,10 @@ public class ProposeInitiator extends FSMBehaviour {
             HANDLE_OUT_OF_SEQ
     };
 
+    //#APIDOC_EXCLUDE_BEGIN
+    private ACLMessage initiation;
+
     //#APIDOC_EXCLUDE_END
-
-
     // If set to true all expected responses have been received
     private boolean allResponsesReceived = false;
 
@@ -266,9 +256,9 @@ public class ProposeInitiator extends FSMBehaviour {
 
         // CHECK_IN_SEQ
         b = new OneShotBehaviour(myAgent) {
-            int ret;
             @Serial
             private static final long serialVersionUID = 3487495895818002L;
+            int ret;
 
             public void action() {
                 ACLMessage reply = getMapMessages().get(REPLY_KEY);
@@ -339,9 +329,9 @@ public class ProposeInitiator extends FSMBehaviour {
 
         // CHECK_SESSIONS
         b = new OneShotBehaviour(myAgent) {
-            int ret;
             @Serial
             private static final long serialVersionUID = 3487495895818009L;
+            int ret;
 
             public void action() {
                 ACLMessage reply = getMapMessages().get(REPLY_KEY);
@@ -463,9 +453,9 @@ public class ProposeInitiator extends FSMBehaviour {
 
         // CHECK_IN_SEQ
         b = new OneShotBehaviour(myAgent) {
-            int ret;
             @Serial
             private static final long serialVersionUID = 3487495895818002L;
+            int ret;
 
             public void action() {
                 ACLMessage reply = getMapMessages().get(REPLY_KEY);
@@ -536,9 +526,9 @@ public class ProposeInitiator extends FSMBehaviour {
 
         // CHECK_SESSIONS
         b = new OneShotBehaviour(myAgent) {
-            int ret;
             @Serial
             private static final long serialVersionUID = 3487495895818009L;
+            int ret;
 
             public void action() {
                 ACLMessage reply = getMapMessages().get(REPLY_KEY);

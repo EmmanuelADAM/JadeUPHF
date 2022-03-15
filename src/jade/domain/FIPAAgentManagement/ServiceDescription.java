@@ -28,6 +28,7 @@ import jade.content.Concept;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class models a service data type.
@@ -37,28 +38,19 @@ import java.util.List;
  */
 public class ServiceDescription implements Concept {
 
-    private String name;
-    private String type;
-    private String ownership;
     private final List<String> interactionProtocols = new ArrayList<>();
     private final List<String> ontology = new ArrayList<>();
     private final List<String> language = new ArrayList<>();
     private final List<Property> properties = new ArrayList<>();
+    private String name;
+    private String type;
+    private String ownership;
 
     /**
      * Default constructor. A default constructor is necessary for
      * JADE ontological classes.
      */
     public ServiceDescription() {
-    }
-
-    /**
-     * Set the <code>name</code> slot of this object.
-     *
-     * @param n The name of the described service.
-     */
-    public void setName(String n) {
-        name = n;
     }
 
     /**
@@ -72,12 +64,12 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Set the <code>type</code> slot of this object.
+     * Set the <code>name</code> slot of this object.
      *
-     * @param t The type of the described service.
+     * @param n The name of the described service.
      */
-    public void setType(String t) {
-        type = t;
+    public void setName(String n) {
+        name = n;
     }
 
     /**
@@ -88,6 +80,15 @@ public class ServiceDescription implements Concept {
      */
     public String getType() {
         return type;
+    }
+
+    /**
+     * Set the <code>type</code> slot of this object.
+     *
+     * @param t The type of the described service.
+     */
+    public void setType(String t) {
+        type = t;
     }
 
     /**
@@ -212,15 +213,6 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Set the <code>ownership</code> slot of this object.
-     *
-     * @param o The name of the entity owning the described service.
-     */
-    public void setOwnership(String o) {
-        ownership = o;
-    }
-
-    /**
      * Retrieve the <code>ownership</code> slot of this object.
      *
      * @return The value of the <code>ownership</code> slot of this
@@ -228,6 +220,15 @@ public class ServiceDescription implements Concept {
      */
     public String getOwnership() {
         return ownership;
+    }
+
+    /**
+     * Set the <code>ownership</code> slot of this object.
+     *
+     * @param o The name of the entity owning the described service.
+     */
+    public void setOwnership(String o) {
+        ownership = o;
     }
 
     /**
@@ -277,12 +278,12 @@ public class ServiceDescription implements Concept {
 
         ServiceDescription that = (ServiceDescription) o;
 
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        return type != null ? type.equals(that.type) : that.type == null;
+        if (!Objects.equals(name, that.name)) return false;
+        return Objects.equals(type, that.type);
     }
 
     @Override
     public String toString() {
-        return "Service{" + name + '\''  + type + '}';
+        return "Service{" + name + '\'' + type + '}';
     }
 }

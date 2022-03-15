@@ -37,6 +37,7 @@ import java.util.Vector;
 
 /**
  * This class create the gui for the jade configuration
+ *
  * @author Tiziana Trucco - CSELT S.p.A.
  * @author Dick Cowan - HP Labs
  * @author Dominic Greenwood - Whitestein Technologies AG
@@ -59,6 +60,7 @@ public class BootGUI extends JDialog {
 
     /**
      * Constructor - launches the GUI configurator.
+     *
      * @param theBooter The Boot class.
      */
     public BootGUI(Boot3 theBooter) {

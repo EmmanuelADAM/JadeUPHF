@@ -58,6 +58,12 @@ import java.util.List;
  **/
 public class AchieveREResponder extends FSMBehaviour implements FIPANames.InteractionProtocol {
 
+    // FSM states names
+    private static final String RECEIVE_REQUEST = "Receive-request";
+    private static final String HANDLE_REQUEST = "Handle-request";
+    private static final String SEND_RESPONSE = "Send-response";
+    private static final String PREPARE_RESULT_NOTIFICATION = "Prepare-result-notification";
+    private static final String SEND_RESULT_NOTIFICATION = "Send-result-notification";
     /**
      * key to retrieve from the HashMap of the behaviour the ACLMessage
      * object sent by the initiator.
@@ -73,128 +79,8 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
      * object sent as a result notification to the initiator.
      **/
     public final String RESULT_NOTIFICATION_KEY = "__result-notification" + hashCode();
-
-    // FSM states names
-    private static final String RECEIVE_REQUEST = "Receive-request";
-    private static final String HANDLE_REQUEST = "Handle-request";
-    private static final String SEND_RESPONSE = "Send-response";
-    private static final String PREPARE_RESULT_NOTIFICATION = "Prepare-result-notification";
-    private static final String SEND_RESULT_NOTIFICATION = "Send-result-notification";
-
-
     // The MsgReceiver behaviour used to receive request messages
     MsgReceiver rec = null;
-
-    /**
-     * This static method can be used
-     * to set the proper message Template (based on the interaction protocol
-     * and the performative)
-     * into the constructor of this behaviour.
-     *
-     * @see FIPANames.InteractionProtocol
-     **/
-    public static MessageTemplate createMessageTemplate(String iprotocol) {
-
-        if (CaseInsensitiveString.equalsIgnoreCase(FIPA_REQUEST, iprotocol))
-            return MessageTemplate.and(MessageTemplate.MatchProtocol(FIPA_REQUEST), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-        else if (CaseInsensitiveString.equalsIgnoreCase(FIPA_QUERY, iprotocol))
-            return MessageTemplate.and(MessageTemplate.MatchProtocol(FIPA_QUERY), MessageTemplate.or(MessageTemplate.MatchPerformative(ACLMessage.QUERY_IF), MessageTemplate.MatchPerformative(ACLMessage.QUERY_REF)));
-        else
-            return MessageTemplate.MatchProtocol(iprotocol);
-    }
-
-
-    // Inner classes for the FSM states
-
-    private static class HandleRequest extends OneShotBehaviour {
-
-        public HandleRequest(Agent a) {
-            super(a);
-        }
-
-        public void action() {
-            var ds = getMapMessages();
-            AchieveREResponder fsm = (AchieveREResponder) getParent();
-            ACLMessage request = ds.get(fsm.REQUEST_KEY);
-
-            ACLMessage response;
-            try {
-                response = fsm.handleRequest(request);
-            } catch (NotUnderstoodException | RefuseException nue) {
-                response = nue.getACLMessage();
-            }
-            ds.put(fsm.RESPONSE_KEY, response);
-        }
-    } // End of HandleRequest class
-
-
-    private static class SendResponse extends ReplySender {
-
-        public SendResponse(Agent a, String replyKey, String msgKey, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
-            super(a, replyKey, msgKey, mapMessagesList, mapMessages);
-        }
-
-        // For persistence service
-        private SendResponse() {
-        }
-
-        public int onEnd() {
-            int ret = super.onEnd();
-            if (ret != ACLMessage.AGREE && ret != ReplySender.NO_REPLY_SENT) {
-                AchieveREResponder fsm = (AchieveREResponder) getParent();
-                fsm.reset();
-            }
-            return ret;
-        }
-
-    } // End of SendResponse class
-
-
-    private static class PrepareResult extends OneShotBehaviour {
-
-        public PrepareResult(Agent a) {
-            super(a);
-        }
-
-        // For persistence service
-        private PrepareResult() {
-        }
-
-        public void action() {
-            var ds = getMapMessages();
-            AchieveREResponder fsm = (AchieveREResponder) getParent();
-            ACLMessage request = ds.get(fsm.REQUEST_KEY);
-            ACLMessage response = ds.get(fsm.RESPONSE_KEY);
-            ACLMessage resNotification;
-            try {
-                resNotification = fsm.prepareResultNotification(request, response);
-            } catch (FailureException fe) {
-                resNotification = fe.getACLMessage();
-            }
-            ds.put(fsm.RESULT_NOTIFICATION_KEY, resNotification);
-        }
-
-    } // End of PrepareResult class
-
-
-    private static class SendResult extends ReplySender {
-
-        public SendResult(Agent a, String replyKey, String msgKey, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
-            super(a, replyKey, msgKey, mapMessagesList, mapMessages);
-        }
-
-        // For persistence service
-        private SendResult() {
-        }
-
-        public int onEnd() {
-            AchieveREResponder fsm = (AchieveREResponder) getParent();
-            fsm.reset();
-            return super.onEnd();
-        }
-
-    } // End of SendResult class
-
 
     /**
      * Constructor of the behaviour that creates a new empty HashMap
@@ -205,58 +91,9 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
         this(a, mt, new HashMap<>(), new HashMap<>());
     }
 
-    /**
-     * Constructor.
-     *
-     * @param a               is the reference to the Agent object
-     * @param mt              is the MessageTemplate that must be used to match
-     *                        the initiator message. Take care that
-     *                        if mt is null every message is consumed by this protocol.
-     * @param mapMessagesList the HashMap of messages list for this protocol
-     * deprecated use the constructor with 2 hashmap
 
-    public AchieveREResponder(Agent a, MessageTemplate mt, HashMap<String, List<ACLMessage>> mapMessagesList) {
-        super(a);
+    // Inner classes for the FSM states
 
-        setMapMessagesList(mapMessagesList);
-
-        // Register the FSM transitions
-        registerDefaultTransition(RECEIVE_REQUEST, HANDLE_REQUEST);
-        registerDefaultTransition(HANDLE_REQUEST, SEND_RESPONSE);
-        registerTransition(SEND_RESPONSE, PREPARE_RESULT_NOTIFICATION, ACLMessage.AGREE);
-        registerTransition(SEND_RESPONSE, PREPARE_RESULT_NOTIFICATION, ReplySender.NO_REPLY_SENT);
-        registerDefaultTransition(SEND_RESPONSE, RECEIVE_REQUEST);
-        registerDefaultTransition(PREPARE_RESULT_NOTIFICATION, SEND_RESULT_NOTIFICATION);
-        registerDefaultTransition(SEND_RESULT_NOTIFICATION, RECEIVE_REQUEST);
-
-        // Create and register the states that make up the FSM
-        Behaviour b;
-
-        // RECEIVE_REQUEST
-        rec = new MsgReceiver(myAgent, mt, -1, getMapMessagesList(), getMapMessages(), REQUEST_KEY);
-        registerFirstState(rec, RECEIVE_REQUEST);
-
-        // HANDLE_REQUEST
-        b = new HandleRequest(myAgent);
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, HANDLE_REQUEST);
-
-        // SEND_RESPONSE
-        b = new SendResponse(myAgent, RESPONSE_KEY, REQUEST_KEY);
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, SEND_RESPONSE);
-
-        // PREPARE_RESULT_NOTIFICATION
-        b = new PrepareResult(myAgent);
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, PREPARE_RESULT_NOTIFICATION);
-
-        // SEND_RESULT_NOTIFICATION
-        b = new SendResult(myAgent, RESULT_NOTIFICATION_KEY, REQUEST_KEY);
-        b.setMapMessagesList(getMapMessagesList());
-        registerState(b, SEND_RESULT_NOTIFICATION);
-    }
-*/
     /**
      * Constructor.
      *
@@ -313,10 +150,28 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
         registerState(b, SEND_RESULT_NOTIFICATION);
     }
 
+
     // For persistence service
     private AchieveREResponder() {
     }
 
+    /**
+     * This static method can be used
+     * to set the proper message Template (based on the interaction protocol
+     * and the performative)
+     * into the constructor of this behaviour.
+     *
+     * @see FIPANames.InteractionProtocol
+     **/
+    public static MessageTemplate createMessageTemplate(String iprotocol) {
+
+        if (CaseInsensitiveString.equalsIgnoreCase(FIPA_REQUEST, iprotocol))
+            return MessageTemplate.and(MessageTemplate.MatchProtocol(FIPA_REQUEST), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+        else if (CaseInsensitiveString.equalsIgnoreCase(FIPA_QUERY, iprotocol))
+            return MessageTemplate.and(MessageTemplate.MatchProtocol(FIPA_QUERY), MessageTemplate.or(MessageTemplate.MatchPerformative(ACLMessage.QUERY_IF), MessageTemplate.MatchPerformative(ACLMessage.QUERY_REF)));
+        else
+            return MessageTemplate.MatchProtocol(iprotocol);
+    }
 
     /**
      * Reset this behaviour using the same MessageTemplate.
@@ -338,6 +193,58 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
         rec.reset(mt, -1, getMapMessagesList(), getMapMessages(), REQUEST_KEY);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param a               is the reference to the Agent object
+     * @param mt              is the MessageTemplate that must be used to match
+     *                        the initiator message. Take care that
+     *                        if mt is null every message is consumed by this protocol.
+     * @param mapMessagesList the HashMap of messages list for this protocol
+     * deprecated use the constructor with 2 hashmap
+
+    public AchieveREResponder(Agent a, MessageTemplate mt, HashMap<String, List<ACLMessage>> mapMessagesList) {
+    super(a);
+
+    setMapMessagesList(mapMessagesList);
+
+    // Register the FSM transitions
+    registerDefaultTransition(RECEIVE_REQUEST, HANDLE_REQUEST);
+    registerDefaultTransition(HANDLE_REQUEST, SEND_RESPONSE);
+    registerTransition(SEND_RESPONSE, PREPARE_RESULT_NOTIFICATION, ACLMessage.AGREE);
+    registerTransition(SEND_RESPONSE, PREPARE_RESULT_NOTIFICATION, ReplySender.NO_REPLY_SENT);
+    registerDefaultTransition(SEND_RESPONSE, RECEIVE_REQUEST);
+    registerDefaultTransition(PREPARE_RESULT_NOTIFICATION, SEND_RESULT_NOTIFICATION);
+    registerDefaultTransition(SEND_RESULT_NOTIFICATION, RECEIVE_REQUEST);
+
+    // Create and register the states that make up the FSM
+    Behaviour b;
+
+    // RECEIVE_REQUEST
+    rec = new MsgReceiver(myAgent, mt, -1, getMapMessagesList(), getMapMessages(), REQUEST_KEY);
+    registerFirstState(rec, RECEIVE_REQUEST);
+
+    // HANDLE_REQUEST
+    b = new HandleRequest(myAgent);
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, HANDLE_REQUEST);
+
+    // SEND_RESPONSE
+    b = new SendResponse(myAgent, RESPONSE_KEY, REQUEST_KEY);
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, SEND_RESPONSE);
+
+    // PREPARE_RESULT_NOTIFICATION
+    b = new PrepareResult(myAgent);
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, PREPARE_RESULT_NOTIFICATION);
+
+    // SEND_RESULT_NOTIFICATION
+    b = new SendResult(myAgent, RESULT_NOTIFICATION_KEY, REQUEST_KEY);
+    b.setMapMessagesList(getMapMessagesList());
+    registerState(b, SEND_RESULT_NOTIFICATION);
+    }
+     */
 
     /**
      * This method is called when the protocol initiation message (matching the
@@ -380,7 +287,6 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
         System.out.println("prepareResultNotification() method not re-defined");
         return null;
     }
-
 
     /**
      * This method allows to register a user defined <code>Behaviour</code>
@@ -425,6 +331,92 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
         b.setMapMessagesList(getMapMessagesList());
         b.setMapMessages(getMapMessages());
     }
+
+    private static class HandleRequest extends OneShotBehaviour {
+
+        public HandleRequest(Agent a) {
+            super(a);
+        }
+
+        public void action() {
+            var ds = getMapMessages();
+            AchieveREResponder fsm = (AchieveREResponder) getParent();
+            ACLMessage request = ds.get(fsm.REQUEST_KEY);
+
+            ACLMessage response;
+            try {
+                response = fsm.handleRequest(request);
+            } catch (NotUnderstoodException | RefuseException nue) {
+                response = nue.getACLMessage();
+            }
+            ds.put(fsm.RESPONSE_KEY, response);
+        }
+    } // End of HandleRequest class
+
+    private static class SendResponse extends ReplySender {
+
+        public SendResponse(Agent a, String replyKey, String msgKey, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
+            super(a, replyKey, msgKey, mapMessagesList, mapMessages);
+        }
+
+        // For persistence service
+        private SendResponse() {
+        }
+
+        public int onEnd() {
+            int ret = super.onEnd();
+            if (ret != ACLMessage.AGREE && ret != ReplySender.NO_REPLY_SENT) {
+                AchieveREResponder fsm = (AchieveREResponder) getParent();
+                fsm.reset();
+            }
+            return ret;
+        }
+
+    } // End of SendResponse class
+
+    private static class PrepareResult extends OneShotBehaviour {
+
+        public PrepareResult(Agent a) {
+            super(a);
+        }
+
+        // For persistence service
+        private PrepareResult() {
+        }
+
+        public void action() {
+            var ds = getMapMessages();
+            AchieveREResponder fsm = (AchieveREResponder) getParent();
+            ACLMessage request = ds.get(fsm.REQUEST_KEY);
+            ACLMessage response = ds.get(fsm.RESPONSE_KEY);
+            ACLMessage resNotification;
+            try {
+                resNotification = fsm.prepareResultNotification(request, response);
+            } catch (FailureException fe) {
+                resNotification = fe.getACLMessage();
+            }
+            ds.put(fsm.RESULT_NOTIFICATION_KEY, resNotification);
+        }
+
+    } // End of PrepareResult class
+
+    private static class SendResult extends ReplySender {
+
+        public SendResult(Agent a, String replyKey, String msgKey, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
+            super(a, replyKey, msgKey, mapMessagesList, mapMessages);
+        }
+
+        // For persistence service
+        private SendResult() {
+        }
+
+        public int onEnd() {
+            AchieveREResponder fsm = (AchieveREResponder) getParent();
+            fsm.reset();
+            return super.onEnd();
+        }
+
+    } // End of SendResult class
 
 }
 

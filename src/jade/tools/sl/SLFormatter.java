@@ -39,36 +39,15 @@ import java.io.InputStreamReader;
  * @version 1.0
  */
 public class SLFormatter {
-    static String spacing = "\n                                                                   ";
     private static final int INDENT_EXPRESSION = 2;
     private static final int INDENT_ARGUMENT = 2;
     private static final int SHORT_EXPRESSION_LENGTH = 40;
+    static String spacing = "\n                                                                   ";
 
     /**
-     * Private class to iterate over a string.
-     * This has a next() and hasNext() inspired by the standard Iterator
-     * interface.
-     * (It might appear that java.text.StringCharacterIterator would
-     * work, but its implementation of next() doesn't match the
-     * standard iterator - it returns the value after incrementing
-     * the index, and so always skips the first character).
+     * Default constructor.
      */
-    private static class myStringIterator {
-        public String string;
-        public int index;
-
-        myStringIterator(String s) {
-            string = s;
-            index = 0;
-        }
-
-        char next() {
-            return string.charAt(index++);
-        }
-
-        boolean hasNext() {
-            return index < string.length();
-        }
+    public SLFormatter() {
     }
 
     /**
@@ -112,7 +91,7 @@ public class SLFormatter {
     }
 
     private static String format(myStringIterator src, int indentation) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         char current, previous = 0;
         int indentStep = INDENT_EXPRESSION;
         boolean insideQuote = false;
@@ -173,9 +152,30 @@ public class SLFormatter {
     }
 
     /**
-     * Default constructor.
+     * Private class to iterate over a string.
+     * This has a next() and hasNext() inspired by the standard Iterator
+     * interface.
+     * (It might appear that java.text.StringCharacterIterator would
+     * work, but its implementation of next() doesn't match the
+     * standard iterator - it returns the value after incrementing
+     * the index, and so always skips the first character).
      */
-    public SLFormatter() {
+    private static class myStringIterator {
+        public String string;
+        public int index;
+
+        myStringIterator(String s) {
+            string = s;
+            index = 0;
+        }
+
+        char next() {
+            return string.charAt(index++);
+        }
+
+        boolean hasNext() {
+            return index < string.length();
+        }
     }
 
 }

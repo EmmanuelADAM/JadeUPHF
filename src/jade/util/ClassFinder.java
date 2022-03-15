@@ -44,6 +44,16 @@ import java.util.jar.JarFile;
  * @author Daniel Le Berre, Elliott Wade, Paolo Cancedda
  */
 public class ClassFinder {
+    private final static FileFilter DIRECTORIES_ONLY = f -> f.exists() && f.isDirectory();
+    private final static FileFilter CLASSES_ONLY = f -> {
+        if (f.exists() && f.isFile() && f.canRead())
+            return f.getName().endsWith(".class");
+        else
+            return false;
+    };
+    private final static Comparator<Object> URL_COMPARATOR = Comparator.comparing(String::valueOf);
+    private final static Comparator<Object> CLASS_COMPARATOR = Comparator.comparing(String::valueOf);
+    private final boolean useClassPathLocations;
     private Class<?> searchClass = null;
     private Map<URL, String> locations = new HashMap<>();
     private Map<Class<?>, URL> results = new HashMap<>();
@@ -51,11 +61,6 @@ public class ClassFinder {
     private boolean working = false;
     private ClassFinderListener listener;
     private ClassFinderFilter filter;
-    private final boolean useClassPathLocations;
-
-    public boolean isWorking() {
-        return working;
-    }
 
     public ClassFinder() {
         useClassPathLocations = true;
@@ -71,6 +76,25 @@ public class ClassFinder {
                 includeJar(jarFile, locations);
             }
         }
+    }
+
+    private static String packageNameFor(JarEntry entry) {
+        if (entry == null)
+            return "";
+        String s = entry.getName();
+        if (s == null)
+            return "";
+        if (s.length() == 0)
+            return s;
+        if (s.startsWith("/"))
+            s = s.substring(1);
+        if (s.endsWith("/"))
+            s = s.substring(0, s.length() - 1);
+        return s.replace('/', '.');
+    }
+
+    public boolean isWorking() {
+        return working;
     }
 
     /**
@@ -170,19 +194,6 @@ public class ClassFinder {
         return map;
     }
 
-    private final static FileFilter DIRECTORIES_ONLY = f -> f.exists() && f.isDirectory();
-
-    private final static FileFilter CLASSES_ONLY = f -> {
-        if (f.exists() && f.isFile() && f.canRead())
-            return f.getName().endsWith(".class");
-        else
-            return false;
-    };
-
-    private final static Comparator<Object> URL_COMPARATOR = (u1, u2) -> String.valueOf(u1).compareTo(String.valueOf(u2));
-
-    private final static Comparator<Object> CLASS_COMPARATOR = (c1, c2) -> String.valueOf(c1).compareTo(String.valueOf(c2));
-
     private void include(String name, File file, Map<URL, String> map) {
         if (!file.exists())
             return;
@@ -254,21 +265,6 @@ public class ClassFinder {
                 }
             }
         }
-    }
-
-    private static String packageNameFor(JarEntry entry) {
-        if (entry == null)
-            return "";
-        String s = entry.getName();
-        if (s == null)
-            return "";
-        if (s.length() == 0)
-            return s;
-        if (s.startsWith("/"))
-            s = s.substring(1);
-        if (s.endsWith("/"))
-            s = s.substring(0, s.length() - 1);
-        return s.replace('/', '.');
     }
 
     private Vector<Class<?>> findSubclasses(Class<?> superClass, Map<URL, String> locations) {

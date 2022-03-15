@@ -9,9 +9,84 @@ import java.io.IOException;
 public class SLParserTokenManager implements SLParserConstants {
 
     /**
+     * Token literal values.
+     */
+    public static final String[] jjstrLiteralImages = {
+            "", null, null, null, null, "\50", "\51", null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, "\50", "\51", null, null,
+            null, null, null, null, null, null, null, null, null, null,};
+    /**
+     * Lexer state names.
+     */
+    public static final String[] lexStateNames = {
+            "DEFAULT",
+            "OPERATORSTATE",
+    };
+    /**
+     * Lex State array.
+     */
+    public static final int[] jjnewLexState = {
+            -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    };
+    static final long[] jjbitVec0 = {
+            0xfffffffffffffffeL, 0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffffffffffffffL
+    };
+    static final long[] jjbitVec2 = {
+            0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
+    };
+    static final int[] jjnextStates = {
+            14, 16, 17, 55, 60, 46, 48, 50, 38, 43, 25, 31, 32, 38, 39, 41,
+            3, 33, 34, 43, 62, 64, 11, 13, 14, 24, 26, 32, 0, 3, 33, 37,
+            27, 29, 30, 38, 39, 41, 3, 65, 67, 68, 6, 7, 35, 36,
+    };
+    static final long[] jjtoToken = {
+            0x1fff87ffe1L,
+    };
+    static final long[] jjtoSkip = {
+            0x78001eL,
+    };
+    private final int[] jjrounds = new int[69];
+    private final int[] jjstateSet = new int[138];
+    private final StringBuffer jjimage = new StringBuffer();
+    /**
      * Debug output.
      */
     public java.io.PrintStream debugStream = System.out;
+    protected SimpleCharStream input_stream;
+    protected char curChar;
+    int curLexState = 0;
+    int defaultLexState = 0;
+    int jjnewStateCnt;
+    int jjround;
+    int jjmatchedPos;
+    int jjmatchedKind;
+    private StringBuffer image = jjimage;
+    private int jjimageLen;
+    private int lengthOfMatch;
+
+    /**
+     * Constructor.
+     */
+    public SLParserTokenManager(SimpleCharStream stream) {
+        if (SimpleCharStream.staticFlag)
+            throw new Error("ERROR: Cannot use a static CharStream class with a non-static lexical analyzer.");
+        input_stream = stream;
+    }
+    /**
+     * Constructor.
+     */
+    public SLParserTokenManager(SimpleCharStream stream, int lexState) {
+        this(stream);
+        SwitchTo(lexState);
+    }
+
+    private static boolean jjCanMove_0(int hiByte, int i1, int i2, long l1, long l2) {
+        if (hiByte == 0) {
+            return ((jjbitVec2[i2] & l2) != 0L);
+        }
+        return (jjbitVec0[i1] & l1) != 0L;
+    }
 
     /**
      * Set debug output.
@@ -117,13 +192,13 @@ public class SLParserTokenManager implements SLParserConstants {
             return 2;
         }
         switch (curChar) {
-            case 84:
-            case 116:
+            case 84, 116 -> {
                 if ((active0 & 0x80000000L) != 0L)
                     return jjStartNfaWithStates_1(2, 31, 12);
                 return jjMoveStringLiteralDfa3_1(active0, 0x2000000L);
-            default:
-                break;
+            }
+            default -> {
+            }
         }
         return jjStartNfa_1(1, active0);
     }
@@ -197,13 +272,6 @@ public class SLParserTokenManager implements SLParserConstants {
         }
         return jjMoveNfa_1(state, pos + 1);
     }
-
-    static final long[] jjbitVec0 = {
-            0xfffffffffffffffeL, 0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffffffffffffffL
-    };
-    static final long[] jjbitVec2 = {
-            0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
-    };
 
     private int jjMoveNfa_1(int startState, int curPos) {
         int startsAt = 0;
@@ -1092,74 +1160,6 @@ public class SLParserTokenManager implements SLParserConstants {
         }
     }
 
-    static final int[] jjnextStates = {
-            14, 16, 17, 55, 60, 46, 48, 50, 38, 43, 25, 31, 32, 38, 39, 41,
-            3, 33, 34, 43, 62, 64, 11, 13, 14, 24, 26, 32, 0, 3, 33, 37,
-            27, 29, 30, 38, 39, 41, 3, 65, 67, 68, 6, 7, 35, 36,
-    };
-
-    private static boolean jjCanMove_0(int hiByte, int i1, int i2, long l1, long l2) {
-        if (hiByte == 0) {
-            return ((jjbitVec2[i2] & l2) != 0L);
-        }
-        return (jjbitVec0[i1] & l1) != 0L;
-    }
-
-    /**
-     * Token literal values.
-     */
-    public static final String[] jjstrLiteralImages = {
-            "", null, null, null, null, "\50", "\51", null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, "\50", "\51", null, null,
-            null, null, null, null, null, null, null, null, null, null,};
-
-    /**
-     * Lexer state names.
-     */
-    public static final String[] lexStateNames = {
-            "DEFAULT",
-            "OPERATORSTATE",
-    };
-
-    /**
-     * Lex State array.
-     */
-    public static final int[] jjnewLexState = {
-            -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    };
-    static final long[] jjtoToken = {
-            0x1fff87ffe1L,
-    };
-    static final long[] jjtoSkip = {
-            0x78001eL,
-    };
-    protected SimpleCharStream input_stream;
-    private final int[] jjrounds = new int[69];
-    private final int[] jjstateSet = new int[138];
-    private final StringBuffer jjimage = new StringBuffer();
-    private StringBuffer image = jjimage;
-    private int jjimageLen;
-    private int lengthOfMatch;
-    protected char curChar;
-
-    /**
-     * Constructor.
-     */
-    public SLParserTokenManager(SimpleCharStream stream) {
-        if (SimpleCharStream.staticFlag)
-            throw new Error("ERROR: Cannot use a static CharStream class with a non-static lexical analyzer.");
-        input_stream = stream;
-    }
-
-    /**
-     * Constructor.
-     */
-    public SLParserTokenManager(SimpleCharStream stream, int lexState) {
-        this(stream);
-        SwitchTo(lexState);
-    }
-
     /**
      * Reinitialise parser.
      */
@@ -1219,13 +1219,6 @@ public class SLParserTokenManager implements SLParserConstants {
 
         return t;
     }
-
-    int curLexState = 0;
-    int defaultLexState = 0;
-    int jjnewStateCnt;
-    int jjround;
-    int jjmatchedPos;
-    int jjmatchedKind;
 
     /**
      * Get the next Token.

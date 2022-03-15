@@ -43,6 +43,9 @@ import java.util.Observer;
 
 public class EnvCommentsTextArea extends JTextArea implements Observer {
 
+    private Object theObj;
+    private String fieldName;
+
     /**
      * register an ACLMessage with the accompagnied membername
      *
@@ -66,7 +69,6 @@ public class EnvCommentsTextArea extends JTextArea implements Observer {
 
     }
 
-
     /**
      * unregister ACLMessage
      *
@@ -76,7 +78,6 @@ public class EnvCommentsTextArea extends JTextArea implements Observer {
     public void unregister(Object arg, String str) {
 
     }
-
 
     /**
      * update textField
@@ -99,7 +100,6 @@ public class EnvCommentsTextArea extends JTextArea implements Observer {
 
     }
 
-
     /**
      * triggered when focus lossed
      *
@@ -117,7 +117,6 @@ public class EnvCommentsTextArea extends JTextArea implements Observer {
         }
     }
 
-
     /**
      * processFocusEvent listener
      *
@@ -130,9 +129,5 @@ public class EnvCommentsTextArea extends JTextArea implements Observer {
         }
 
     }
-
-
-    private Object theObj;
-    private String fieldName;
 }
 //  ***EOF***

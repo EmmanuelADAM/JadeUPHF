@@ -10,7 +10,7 @@ import java.util.Set;
 public class ThreadDumpManager {
     public static String dumpAllThreads() {
         ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         java.util.Map<Thread, StackTraceElement[]> allStackTraces = Thread.getAllStackTraces();
         Set<Thread> threads = allStackTraces.keySet();
         for (Thread thread : threads) {
@@ -36,7 +36,7 @@ public class ThreadDumpManager {
     }
 
     public static String dumpThread(String prefix, Thread t, ThreadInfo threadInfo) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(prefix).append("\"").append(t.getName()).append("\"");
         if (t.isDaemon()) {
             sb.append(" daemon");

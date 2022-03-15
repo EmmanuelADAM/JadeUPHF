@@ -30,8 +30,9 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 
 /**
- * The class to be used to define schemas of concepts in 
+ * The class to be used to define schemas of concepts in
  * an ontology.
+ *
  * @author Federico Bergenti - Universita` di Parma
  */
 public class ConceptSchema extends TermSchema {
@@ -49,6 +50,7 @@ public class ConceptSchema extends TermSchema {
     /**
      * Creates a <code>ConceptSchema</code> with a given type-name,
      * e.g. PERSON, ADDRESS...
+     *
      * @param typeName The name of this <code>ConceptSchema</code>.
      */
     public ConceptSchema(String typeName) {
@@ -57,6 +59,7 @@ public class ConceptSchema extends TermSchema {
 
     /**
      * Retrieve the generic base schema for all concepts.
+     *
      * @return the generic base schema for all concepts.
      */
     public static ObjectSchema getBaseSchema() {
@@ -66,7 +69,8 @@ public class ConceptSchema extends TermSchema {
     /**
      * Add a mandatory slot to the schema. The schema for this slot must
      * be a <code>TermSchema</code>.
-     * @param name The name of the slot.
+     *
+     * @param name       The name of the slot.
      * @param slotSchema The schema of the slot.
      */
     public void add(String name, TermSchema slotSchema) {
@@ -76,10 +80,11 @@ public class ConceptSchema extends TermSchema {
     /**
      * Add a slot to the schema. The schema for this slot must
      * be a <code>TermSchema</code>.
-     * @param name The name of the slot.
-     * @param slotSchema The schema of the slot.
+     *
+     * @param name        The name of the slot.
+     * @param slotSchema  The schema of the slot.
      * @param optionality The optionality, i.e., <code>OPTIONAL</code>
-     * or <code>MANDATORY</code>
+     *                    or <code>MANDATORY</code>
      */
     public void add(String name, TermSchema slotSchema, int optionality) {
         super.add(name, slotSchema, optionality);
@@ -95,12 +100,13 @@ public class ConceptSchema extends TermSchema {
      * aggregate contains at least <code>cardMin</code> elements and
      * at most <code>cardMax</code> elements. By default the Aggregate
      * is of type <code>BasicOntology.SEQUENCE</code>.
-     * @param name The name of the slot.
+     *
+     * @param name           The name of the slot.
      * @param elementsSchema The schema for the elements of this slot.
-     * @param cardMin This slot must get at least <code>cardMin</code>
-     * values
-     * @param cardMax This slot can get at most <code>cardMax</code>
-     * values
+     * @param cardMin        This slot must get at least <code>cardMin</code>
+     *                       values
+     * @param cardMax        This slot can get at most <code>cardMax</code>
+     *                       values
      */
     public void add(String name, TermSchema elementsSchema, int cardMin, int cardMax) {
         super.add(name, elementsSchema, cardMin, cardMax);
@@ -110,13 +116,14 @@ public class ConceptSchema extends TermSchema {
      * Add a slot with cardinality between <code>cardMin</code>
      * and <code>cardMax</code> to this schema and allow specifying the type
      * of Aggregate to be used for this slot.
-     * @param name The name of the slot.
+     *
+     * @param name           The name of the slot.
      * @param elementsSchema The schema for the elements of this slot.
-     * @param cardMin This slot must get at least <code>cardMin</code>
-     * values
-     * @param cardMax This slot can get at most <code>cardMax</code>
-     * values
-     * @param aggType The type of Aggregate to be used
+     * @param cardMin        This slot must get at least <code>cardMin</code>
+     *                       values
+     * @param cardMax        This slot can get at most <code>cardMax</code>
+     *                       values
+     * @param aggType        The type of Aggregate to be used
      * @see #add(String, TermSchema, int, int)
      */
     public void add(String name, TermSchema elementsSchema, int cardMin, int cardMax, String aggType) {
@@ -127,14 +134,15 @@ public class ConceptSchema extends TermSchema {
      * Add a slot with optionality and cardinality between <code>cardMin</code>
      * and <code>cardMax</code> to this schema and allow specifying the type
      * of Aggregate to be used for this slot.
-     * @param name The name of the slot.
+     *
+     * @param name           The name of the slot.
      * @param elementsSchema The schema for the elements of this slot.
-     * @param cardMin This slot must get at least <code>cardMin</code>
-     * values
-     * @param cardMax This slot can get at most <code>cardMax</code>
-     * values
-     * @param aggType The type of Aggregate to be used
-     * @param optionality The optionality, i.e., <code>OPTIONAL</code>
+     * @param cardMin        This slot must get at least <code>cardMin</code>
+     *                       values
+     * @param cardMax        This slot can get at most <code>cardMax</code>
+     *                       values
+     * @param aggType        The type of Aggregate to be used
+     * @param optionality    The optionality, i.e., <code>OPTIONAL</code>
      * @see #add(String, ObjectSchema, int, int)
      */
     public void add(String name, ObjectSchema elementsSchema, int cardMin, int cardMax, String aggType, int optionality) {
@@ -155,12 +163,13 @@ public class ConceptSchema extends TermSchema {
     }
 
     /**
-     Add a <code>Facet</code> on a slot of this schema
-     @param slotName the name of the slot the <code>Facet</code>
-     must be added to.
-     @param f the <code>Facet</code> to be added.
-     @throws OntologyException if slotName does not identify
-     a valid slot in this schema
+     * Add a <code>Facet</code> on a slot of this schema
+     *
+     * @param slotName the name of the slot the <code>Facet</code>
+     *                 must be added to.
+     * @param f        the <code>Facet</code> to be added.
+     * @throws OntologyException if slotName does not identify
+     *                           a valid slot in this schema
      */
     public void addFacet(String slotName, Facet f) throws OntologyException {
         super.addFacet(slotName, f);
@@ -175,11 +184,12 @@ public class ConceptSchema extends TermSchema {
     }
 
     /**
-     Check whether a given abstract descriptor complies with this
-     schema.
-     @param abs The abstract descriptor to be checked
-     @throws OntologyException If the abstract descriptor does not
-     complies with this schema
+     * Check whether a given abstract descriptor complies with this
+     * schema.
+     *
+     * @param abs The abstract descriptor to be checked
+     * @throws OntologyException If the abstract descriptor does not
+     *                           complies with this schema
      */
     public void validate(AbsObject abs, Ontology onto) throws OntologyException {
         // Check the type of the abstract descriptor
@@ -192,13 +202,13 @@ public class ConceptSchema extends TermSchema {
     }
 
     /**
-     Return true if
-     - s is the base schema for the XXXSchema class this schema is
-     an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
-     schema is an instance of ConceptSchema)
-     - s is the base schema for a super-class of the XXXSchema class
-     this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
-     and this schema is an instance of ConceptSchema)
+     * Return true if
+     * - s is the base schema for the XXXSchema class this schema is
+     * an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
+     * schema is an instance of ConceptSchema)
+     * - s is the base schema for a super-class of the XXXSchema class
+     * this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
+     * and this schema is an instance of ConceptSchema)
      */
     protected boolean descendsFrom(ObjectSchema s) {
         if (s != null) {

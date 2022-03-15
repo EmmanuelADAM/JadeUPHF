@@ -63,6 +63,23 @@ public class ISO8601 {
 
     private static final Calendar localCal = Calendar.getInstance();
     private static final Calendar utcCal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+    // set of constants used by the next method
+    private static final char plus = '+';
+    private static final char minus = '-';
+    private static final String z = "Z";
+    private static final char t = 'T';
+    //
+    private final static long year = 365 * 24 * 60 * 60 * 1000L;
+    private final static long month = 30 * 24 * 60 * 60 * 1000L;
+    private final static long day = 24 * 60 * 60 * 1000;
+    private final static long hour = 60 * 60 * 1000;
+    private final static long minute = 60 * 1000;
+    private final static long sec = 1000;
+    /**
+     * Default constructor.
+     */
+    public ISO8601() {
+    }
 
     /**
      * parse a date time token in UTC format (i.e. ending with a Z)
@@ -103,7 +120,6 @@ public class ISO8601 {
         return subFormatDate(localCal);
     }
 
-
     private static String formatutcDate(Date d) {
         utcCal.setTime(d);
         return subFormatDate(utcCal) + z;
@@ -111,37 +127,16 @@ public class ISO8601 {
 
     private static String subFormatDate(Calendar cal) {
         // Format time
-        StringBuffer formatedDate = new StringBuffer();
 
-        formatedDate.append(zeroPaddingNumber(cal.get(Calendar.YEAR), 4));
-        formatedDate.append(zeroPaddingNumber(cal.get(Calendar.MONTH) + 1, 2));
-        formatedDate.append(zeroPaddingNumber(cal.get(Calendar.DATE), 2));
-        formatedDate.append(t);
-        formatedDate.append(zeroPaddingNumber(cal.get(Calendar.HOUR_OF_DAY), 2));
-        formatedDate.append(zeroPaddingNumber(cal.get(Calendar.MINUTE), 2));
-        formatedDate.append(zeroPaddingNumber(cal.get(Calendar.SECOND), 2));
-        formatedDate.append(zeroPaddingNumber(cal.get(Calendar.MILLISECOND), 3));
-        return formatedDate.toString();
-    }
-
-
-    // set of constants used by the next method
-    private static final char plus = '+';
-    private static final char minus = '-';
-    private static final String z = "Z";
-    private static final char t = 'T';
-    // 
-    private final static long year = 365 * 24 * 60 * 60 * 1000L;
-    private final static long month = 30 * 24 * 60 * 60 * 1000L;
-    private final static long day = 24 * 60 * 60 * 1000;
-    private final static long hour = 60 * 60 * 1000;
-    private final static long minute = 60 * 1000;
-    private final static long sec = 1000;
-
-    /**
-     * Default constructor.
-     */
-    public ISO8601() {
+        String formatedDate = zeroPaddingNumber(cal.get(Calendar.YEAR), 4) +
+                zeroPaddingNumber(cal.get(Calendar.MONTH) + 1, 2) +
+                zeroPaddingNumber(cal.get(Calendar.DATE), 2) +
+                t +
+                zeroPaddingNumber(cal.get(Calendar.HOUR_OF_DAY), 2) +
+                zeroPaddingNumber(cal.get(Calendar.MINUTE), 2) +
+                zeroPaddingNumber(cal.get(Calendar.SECOND), 2) +
+                zeroPaddingNumber(cal.get(Calendar.MILLISECOND), 3);
+        return formatedDate;
     }
 
     /**
@@ -221,7 +216,7 @@ public class ISO8601 {
      * from now
      */
     public static String toRelativeTimeString(long millisec) {
-        StringBuffer str = new StringBuffer();
+        StringBuilder str = new StringBuilder();
 
         if (millisec > 0)
             str.append(plus);

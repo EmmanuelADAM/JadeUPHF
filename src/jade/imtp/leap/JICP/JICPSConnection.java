@@ -50,13 +50,14 @@ import java.net.Socket;
 
 /**
  * Class declaration
+ *
  * @author Steffen Rusitschka - Siemens
  * @author Giosue Vitaglione - TILAB
  */
 public class JICPSConnection extends JICPConnection {
 
-    private static SSLSocketFactory scsf = null;
     protected static Logger myLogger = Logger.getMyLogger(JICPSConnection.class.getName());
+    private static SSLSocketFactory scsf = null;
 
     protected JICPSConnection() {
         super();
@@ -80,6 +81,13 @@ public class JICPSConnection extends JICPConnection {
             constructJICPSConnectionNoAuth(ta, timeout, bindHost, bindPort);
         }
     } // end constructor
+
+    /**
+     * Constructor declaration
+     */
+    public JICPSConnection(Socket s) {
+        super(s);
+    }
 
     private void constructJICPSConnectionNoAuth(TransportAddress ta, int timeout, String bindHost, int bindPort) throws IOException {
         myLogger.log(Logger.INFO, "Creating JICPSConnection with NO-AUTHENTICATION (only confidentiality).");
@@ -169,13 +177,6 @@ public class JICPSConnection extends JICPConnection {
                 // Do nothing and try again
             }
         }// end while
-    }
-
-    /**
-     * Constructor declaration
-     */
-    public JICPSConnection(Socket s) {
-        super(s);
     }
 }
 

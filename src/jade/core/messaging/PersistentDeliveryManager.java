@@ -46,6 +46,35 @@ import java.util.Map;
  */
 class PersistentDeliveryManager {
 
+    // How often to check for expired deliveries
+    private static final long DEFAULT_SENDFAILUREPERIOD = 60 * 1000; // One minute
+    private static final String FILE_STORAGE_SHORTCUT = "file";
+    // Default storage class
+    private static final String DEFAULT_STORAGE = "jade.core.messaging.PersistentDeliveryManager$DummyStorage";
+    private static final String FILE_STORAGE = "jade.core.messaging.FileMessageStorage";
+    // A shared instance to have a single thread pool
+    private static PersistentDeliveryManager theInstance; // FIXME: Maybe a table, indexed by a profile subset, would be better?
+    // The table of undelivered messages to send
+    private final Map<AID, Object> pendingMessages = new HashMap<>();
+    // The component managing asynchronous message delivery and retries
+    private MessageManager myMessageManager;
+    // The actual channel over which messages will be sent
+    private MessageManager.Channel deliveryChannel;
+    // How often pending messages due date will be checked (the
+    // message will be sent out if expired)
+    private long sendFailurePeriod;
+    // How many containers are sharing this active component
+    private long users;
+    // The active object that periodically checks the due date of ACL
+    // messages and sends them after it expired
+    private ExpirationChecker failureSender;
+    // The component performing the actual storage and retrieval from
+    // a persistent support
+    private MessageStorage storage;
+
+    private PersistentDeliveryManager() {
+    }
+
     public static synchronized PersistentDeliveryManager instance(Profile p, MessageManager.Channel ch) {
         if (theInstance == null) {
             theInstance = new PersistentDeliveryManager();
@@ -54,114 +83,6 @@ class PersistentDeliveryManager {
 
         return theInstance;
     }
-
-    // How often to check for expired deliveries
-    private static final long DEFAULT_SENDFAILUREPERIOD = 60 * 1000; // One minute
-
-    private static final String FILE_STORAGE_SHORTCUT = "file";
-
-    // Default storage class
-    private static final String DEFAULT_STORAGE = "jade.core.messaging.PersistentDeliveryManager$DummyStorage";
-    private static final String FILE_STORAGE = "jade.core.messaging.FileMessageStorage";
-
-    private static class DeliveryItem {
-
-        public DeliveryItem(GenericMessage msg, AID id, MessageManager.Channel ch, String sid) {
-            toDeliver = msg;
-            receiver = id;
-            channel = ch;
-            storeName = sid;
-        }
-
-        public GenericMessage getMessage() {
-            return toDeliver;
-        }
-
-        public AID getReceiver() {
-            return receiver;
-        }
-
-        public MessageManager.Channel getChannel() {
-            return channel;
-        }
-
-        public String getStoreName() {
-            return storeName;
-        }
-
-        private final GenericMessage toDeliver;
-        private final AID receiver;
-        private final MessageManager.Channel channel;
-        private final String storeName;
-
-
-    } // End of DeliveryItem class
-
-
-    private class ExpirationChecker implements Runnable {
-
-        public ExpirationChecker(long t) {
-            period = t;
-            myThread = new Thread(this, "Persistent Delivery Service -- Expiration Checker Thread");
-        }
-
-        public void run() {
-            while (active) {
-                try {
-                    Thread.sleep(period);
-                    synchronized (pendingMessages) {
-                        // Try to send all stored messages...
-                        // If the receiver still not exists and the due date has elapsed
-                        // the sender will get back a FAILURE
-                        Object[] keys = pendingMessages.keySet().toArray();
-                        for (Object key : keys) {
-                            flushMessages((AID) key);
-                        }
-                    }
-                } catch (InterruptedException ie) {
-                    // Just do nothing
-                }
-            }
-        }
-
-        public void start() {
-            active = true;
-            myThread.start();
-        }
-
-        public void stop() {
-            active = false;
-            myThread.interrupt();
-        }
-
-        private boolean active = false;
-        private final long period;
-        private final Thread myThread;
-
-    } // End of ExpirationChecker class
-
-
-    public static class DummyStorage implements MessageStorage {
-
-        public void init(Profile p) {
-            // Do nothing
-        }
-
-        public String store(GenericMessage msg, AID receiver) throws IOException {
-            // Do nothing
-            return null;
-        }
-
-        public void delete(String storeName, AID receiver) throws IOException {
-            // Do nothing
-        }
-
-        public void loadAll(LoadListener il) {
-            // Do nothing
-        }
-
-    } // End of DummyStorage class
-
 
     public void initialize(Profile p, MessageManager.Channel ch) {
 
@@ -273,14 +194,6 @@ class PersistentDeliveryManager {
         }
     }
 
-
-    // A shared instance to have a single thread pool
-    private static PersistentDeliveryManager theInstance; // FIXME: Maybe a table, indexed by a profile subset, would be better?
-
-
-    private PersistentDeliveryManager() {
-    }
-
     private void retry(DeliveryItem item) {
         // Remove the message from the storage
         try {
@@ -292,28 +205,99 @@ class PersistentDeliveryManager {
         myMessageManager.deliver(item.getMessage(), item.getReceiver(), item.getChannel());
     }
 
+    private static class DeliveryItem {
 
-    // The component managing asynchronous message delivery and retries
-    private MessageManager myMessageManager;
+        private final GenericMessage toDeliver;
+        private final AID receiver;
+        private final MessageManager.Channel channel;
+        private final String storeName;
 
-    // The actual channel over which messages will be sent
-    private MessageManager.Channel deliveryChannel;
+        public DeliveryItem(GenericMessage msg, AID id, MessageManager.Channel ch, String sid) {
+            toDeliver = msg;
+            receiver = id;
+            channel = ch;
+            storeName = sid;
+        }
 
-    // How often pending messages due date will be checked (the
-    // message will be sent out if expired)
-    private long sendFailurePeriod;
+        public GenericMessage getMessage() {
+            return toDeliver;
+        }
 
-    // How many containers are sharing this active component
-    private long users;
+        public AID getReceiver() {
+            return receiver;
+        }
 
-    // The table of undelivered messages to send
-    private final Map<AID, Object> pendingMessages = new HashMap<>();
+        public MessageManager.Channel getChannel() {
+            return channel;
+        }
 
-    // The active object that periodically checks the due date of ACL
-    // messages and sends them after it expired
-    private ExpirationChecker failureSender;
+        public String getStoreName() {
+            return storeName;
+        }
 
-    // The component performing the actual storage and retrieval from
-    // a persistent support
-    private MessageStorage storage;
+
+    } // End of DeliveryItem class
+
+    public static class DummyStorage implements MessageStorage {
+
+        public void init(Profile p) {
+            // Do nothing
+        }
+
+        public String store(GenericMessage msg, AID receiver) throws IOException {
+            // Do nothing
+            return null;
+        }
+
+        public void delete(String storeName, AID receiver) throws IOException {
+            // Do nothing
+        }
+
+        public void loadAll(LoadListener il) {
+            // Do nothing
+        }
+
+    } // End of DummyStorage class
+
+    private class ExpirationChecker implements Runnable {
+
+        private final long period;
+        private final Thread myThread;
+        private boolean active = false;
+
+        public ExpirationChecker(long t) {
+            period = t;
+            myThread = new Thread(this, "Persistent Delivery Service -- Expiration Checker Thread");
+        }
+
+        public void run() {
+            while (active) {
+                try {
+                    Thread.sleep(period);
+                    synchronized (pendingMessages) {
+                        // Try to send all stored messages...
+                        // If the receiver still not exists and the due date has elapsed
+                        // the sender will get back a FAILURE
+                        Object[] keys = pendingMessages.keySet().toArray();
+                        for (Object key : keys) {
+                            flushMessages((AID) key);
+                        }
+                    }
+                } catch (InterruptedException ie) {
+                    // Just do nothing
+                }
+            }
+        }
+
+        public void start() {
+            active = true;
+            myThread.start();
+        }
+
+        public void stop() {
+            active = false;
+            myThread.interrupt();
+        }
+
+    } // End of ExpirationChecker class
 }

@@ -42,27 +42,13 @@ import java.util.Vector;
  * @author Giovanni Caire - TILAB
  */
 class ObjectSchemaImpl extends ObjectSchema {
-    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
-
     static final String RESULT_SLOT_NAME = "__Result_SLOT_123";
 
-    private class SlotDescriptor implements Serializable {
-        private final String name;
-        private final ObjectSchema schema;
-        private final int optionality;
-
-        /**
-         * Construct a SlotDescriptor
-         */
-        private SlotDescriptor(String name, ObjectSchema schema, int optionality) {
-            this.name = name;
-            this.schema = schema;
-            this.optionality = optionality;
-        }
-
+    static {
+        baseSchema = new ObjectSchemaImpl();
     }
 
-
+    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
     private String typeName = null;
     private Hashtable<CaseInsensitiveString, SlotDescriptor> slots;
     private Vector<CaseInsensitiveString> slotNames;
@@ -78,10 +64,6 @@ class ObjectSchemaImpl extends ObjectSchema {
     // an instance of A both f1 and f2 must be applied.
 
     private Hashtable<CaseInsensitiveString, Vector<Facet>> facets;
-
-    static {
-        baseSchema = new ObjectSchemaImpl();
-    }
 
     /**
      * Construct a schema that vinculates an entity to be a generic
@@ -727,6 +709,22 @@ class ObjectSchemaImpl extends ObjectSchema {
         } catch (OntologyException e) {
             return false;
         }
+    }
+
+    private class SlotDescriptor implements Serializable {
+        private final String name;
+        private final ObjectSchema schema;
+        private final int optionality;
+
+        /**
+         * Construct a SlotDescriptor
+         */
+        private SlotDescriptor(String name, ObjectSchema schema, int optionality) {
+            this.name = name;
+            this.schema = schema;
+            this.optionality = optionality;
+        }
+
     }
 
 }

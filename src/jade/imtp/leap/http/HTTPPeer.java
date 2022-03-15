@@ -46,19 +46,20 @@ import java.net.Socket;
 
 /**
  * Class declaration
+ *
  * @author Giovanni Caire - TILAB
  */
 public class HTTPPeer extends JICPPeer {
 
     /**
-     Re-define the getProtocol() method to return the HTTPProtocol
+     * Re-define the getProtocol() method to return the HTTPProtocol
      */
     public TransportProtocol getProtocol() {
         return HTTPProtocol.getInstance();
     }
 
     /**
-     Re-define the getConnectionFactory
+     * Re-define the getConnectionFactory
      */
     public ConnectionFactory getConnectionFactory() {
         return new ConnectionFactory() {

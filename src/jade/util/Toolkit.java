@@ -50,7 +50,7 @@ public class Toolkit {
         }
 
         // Expression is != null and parameters is NOT empty --> Do the substitution
-        StringBuffer sbuf = new StringBuffer();
+        StringBuilder sbuf = new StringBuilder();
         int position = 0;
         while (true) {
             int paramStart = expression.indexOf(startDelim, position);

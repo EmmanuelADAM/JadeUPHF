@@ -34,13 +34,13 @@ public interface PDPContextManager {
     String PASSWORD = "pdp-context-password";
     String LOCATION = "location";
 
-    interface Listener {
-        void handlePDPContextClosed(String msisdn);
-    }
-
     void init(Properties p) throws Exception;
 
     void registerListener(Listener l);
 
     Properties getPDPContextInfo(InetAddress addr, String owner) throws JADESecurityException;
+
+    interface Listener {
+        void handlePDPContextClosed(String msisdn);
+    }
 }

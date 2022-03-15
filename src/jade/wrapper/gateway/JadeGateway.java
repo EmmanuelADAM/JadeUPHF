@@ -54,6 +54,10 @@ public class JadeGateway {
     private static boolean splitContainer;
     //#DOTNET_EXCLUDE_END
 
+    // Private constructor to avoid creating instances of the JadeGateway class directly
+    private JadeGateway() {
+    }
+
     private synchronized static DynamicJadeGateway getGateway() {
         if (jadeGateway == null) {
             //#DOTNET_EXCLUDE_BEGIN
@@ -92,7 +96,7 @@ public class JadeGateway {
      * is called by the executor agent)
      *
      * @throws StaleProxyException if the method was not able to execute the Command
-     *  see jade.wrapper.AgentController#putO2AObject(Object, boolean)
+     *                             see jade.wrapper.AgentController#putO2AObject(Object, boolean)
      **/
     public final static void execute(Object command) throws ControllerException, InterruptedException {
         getGateway().execute(command);
@@ -109,7 +113,7 @@ public class JadeGateway {
      * @throws InterruptedException if the timeout expires or the Thread
      *                              executing this method is interrupted.
      * @throws StaleProxyException  if the method was not able to execute the Command
-     *  see jade.wrapper.AgentController#putO2AObject(Object, boolean)
+     *                              see jade.wrapper.AgentController#putO2AObject(Object, boolean)
      **/
     public final static void execute(Object command, long timeout) throws ControllerException, InterruptedException {
         getGateway().execute(command, timeout);
@@ -177,18 +181,14 @@ public class JadeGateway {
     public static void addListener(GatewayListener l) {
         getGateway().addListener(l);
     }
-
-    public void removeListener(GatewayListener l) {
-        getGateway().removeListener(l);
-    }
     //#DOTNET_EXCLUDE_END
 
     public static final DynamicJadeGateway getDefaultGateway() {
         return getGateway();
     }
 
-    // Private constructor to avoid creating instances of the JadeGateway class directly
-    private JadeGateway() {
+    public void removeListener(GatewayListener l) {
+        getGateway().removeListener(l);
     }
 
 }

@@ -66,16 +66,6 @@ public class BornAgent implements Event {
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
-     *
-     * @param id The container identifier of the container where the
-     *           newly added agent was born.
-     */
-    public void setWhere(ContainerID id) {
-        where = id;
-    }
-
-    /**
      * Retrieve the value of the <code>where</code> slot of this
      * event, containing the container identifier of the container
      * where the newly added agent was born.
@@ -88,12 +78,13 @@ public class BornAgent implements Event {
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
+     * Set the <code>where</code> slot of this event.
      *
-     * @param id The agent identifier of the newly born agent.
+     * @param id The container identifier of the container where the
+     *           newly added agent was born.
      */
-    public void setAgent(AID id) {
-        agent = id;
+    public void setWhere(ContainerID id) {
+        where = id;
     }
 
     /**
@@ -108,13 +99,12 @@ public class BornAgent implements Event {
     }
 
     /**
-     * Set the <code>state</code> slot of this event.
+     * Set the <code>agent</code> slot of this event.
      *
-     * @param as The name of the initial state of the newly born
-     *           agent.
+     * @param id The agent identifier of the newly born agent.
      */
-    public void setState(String as) {
-        state = as;
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     /**
@@ -129,12 +119,13 @@ public class BornAgent implements Event {
     }
 
     /**
-     * Set the <code>ownership</code> slot of this event.
+     * Set the <code>state</code> slot of this event.
      *
-     * @param o The name of the entity owning the newly born agent.
+     * @param as The name of the initial state of the newly born
+     *           agent.
      */
-    public void setOwnership(String o) {
-        ownership = o;
+    public void setState(String as) {
+        state = as;
     }
 
     /**
@@ -147,12 +138,12 @@ public class BornAgent implements Event {
     }
 
     /**
-     * Set the <code>className</code> slot of this event.
+     * Set the <code>ownership</code> slot of this event.
      *
-     * @param c The class name of the newly born agent.
+     * @param o The name of the entity owning the newly born agent.
      */
-    public void setClassName(String c) {
-        className = c;
+    public void setOwnership(String o) {
+        ownership = o;
     }
 
     /**
@@ -162,5 +153,14 @@ public class BornAgent implements Event {
      */
     public String getClassName() {
         return className;
+    }
+
+    /**
+     * Set the <code>className</code> slot of this event.
+     *
+     * @param c The class name of the newly born agent.
+     */
+    public void setClassName(String c) {
+        className = c;
     }
 }

@@ -36,6 +36,7 @@ import jade.domain.FIPANames;
  */
 public class PlatformID implements Location {
     private static final String NO_NAME = "__NO_NAME__";
+    private AID _amsAID;
 
     public PlatformID() {
         _amsAID = new AID(FIPANames.AMS + '@' + NO_NAME, AID.ISGUID);
@@ -52,12 +53,20 @@ public class PlatformID implements Location {
         return _amsAID.getName();
     }
 
+    public void setID(String id) {
+        _amsAID.setName(id);
+    }
+
     /* (non-Javadoc)
      * @see jade.core.Location#getName()
      */
     public String getName() {
         String name = _amsAID.getName();
         return name.substring(name.lastIndexOf('@') + 1);
+    }
+
+    public void setName(String name) {
+        _amsAID.setName(FIPANames.AMS + '@' + name);
     }
 
     /* (non-Javadoc)
@@ -75,6 +84,10 @@ public class PlatformID implements Location {
         return protocol;
     }
 
+    public void setProtocol(String protocol) {
+        // Do nothing: this is just for ontology support
+    }
+
     /* (non-Javadoc)
      * @see jade.core.Location#getAddress()
      */
@@ -82,30 +95,16 @@ public class PlatformID implements Location {
         return _amsAID.getAllAddresses().next();
     }
 
-    public AID getAmsAID() {
-        return _amsAID;
-    }
-
-    public void setID(String id) {
-        _amsAID.setName(id);
-    }
-
-    public void setName(String name) {
-        _amsAID.setName(FIPANames.AMS + '@' + name);
-    }
-
-    public void setProtocol(String protocol) {
-        // Do nothing: this is just for ontology support
-    }
-
     public void setAddress(String address) {
         _amsAID.clearAllAddresses();
         _amsAID.addAddresses(address);
     }
 
+    public AID getAmsAID() {
+        return _amsAID;
+    }
+
     public void setAmsAID(AID amsAID) {
         _amsAID = amsAID;
     }
-
-    private AID _amsAID;
 }

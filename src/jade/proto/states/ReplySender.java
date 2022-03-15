@@ -56,10 +56,9 @@ public class ReplySender extends OneShotBehaviour {
      * @param replyKey        HashMap's key where to read the reply message
      * @param msgKey          HashMap's key where to read the message to reply to.
      * @param mapMessagesList the HashMap of messages list for this bheaviour
-     * @deprecated
-    public ReplySender(Agent a, String replyKey, String msgKey, HashMap<String, List<ACLMessage>> mapMessagesList) {
-        this(a, replyKey, msgKey);
-        setMapMessagesList(mapMessagesList);
+     * @deprecated public ReplySender(Agent a, String replyKey, String msgKey, HashMap<String, List<ACLMessage>> mapMessagesList) {
+    this(a, replyKey, msgKey);
+    setMapMessagesList(mapMessagesList);
     }
      **/
 
@@ -70,7 +69,7 @@ public class ReplySender extends OneShotBehaviour {
      * @param replyKey        HashMap's key where to read the reply message
      * @param msgKey          HashMap's key where to read the message to reply to.
      * @param mapMessagesList the HashMap of messages list for this behaviour
-     * @param mapMessages the HashMap of messages  for this behaviour
+     * @param mapMessages     the HashMap of messages  for this behaviour
      **/
     public ReplySender(Agent a, String replyKey, String msgKey, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a);
@@ -93,32 +92,9 @@ public class ReplySender extends OneShotBehaviour {
     }
      **/
 
-    public void action() {
-        ret = NO_REPLY_SENT;
-        //TODO: VERIFIER ICI LA map a utiliser selon la clef
-        //CAR LA MAP EST VIDE !!!!!!!
-        var ds = getMapMessages();
-        ACLMessage reply =  ds.get(replyKey);
-        if (reply != null) {
-            ACLMessage msg = ds.get(msgKey);
-            if (msg != null) {
-                adjustReply(myAgent, reply, msg);
-                myAgent.send(reply);
-                ret = reply.getPerformative();
-            }
-        }
-    }
-
-    public int onEnd() {
-        return ret;
-    }
-
-    public void setMsgKey(String msgKey) {
-        this.msgKey = msgKey;
-    }
-
-    public void setReplyKey(String replyKey) {
-        this.replyKey = replyKey;
+    //#APIDOC_EXCLUDE_BEGIN
+    // For persistence service
+    protected ReplySender() {
     }
 
     /**
@@ -150,9 +126,32 @@ public class ReplySender extends OneShotBehaviour {
         }
     }
 
-    //#APIDOC_EXCLUDE_BEGIN
-    // For persistence service
-    protected ReplySender() {
+    public void action() {
+        ret = NO_REPLY_SENT;
+        //TODO: VERIFIER ICI LA map a utiliser selon la clef
+        //CAR LA MAP EST VIDE !!!!!!!
+        var ds = getMapMessages();
+        ACLMessage reply = ds.get(replyKey);
+        if (reply != null) {
+            ACLMessage msg = ds.get(msgKey);
+            if (msg != null) {
+                adjustReply(myAgent, reply, msg);
+                myAgent.send(reply);
+                ret = reply.getPerformative();
+            }
+        }
+    }
+
+    public int onEnd() {
+        return ret;
+    }
+
+    public void setMsgKey(String msgKey) {
+        this.msgKey = msgKey;
+    }
+
+    public void setReplyKey(String replyKey) {
+        this.replyKey = replyKey;
     }
     //#APIDOC_EXCLUDE_END
 }

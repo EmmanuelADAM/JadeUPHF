@@ -28,6 +28,7 @@ import java.util.Date;
 
 /**
  * This class is not intended to be used by programmers.
+ *
  * @author Giovanni Caire - TILAB
  */
 public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
@@ -35,8 +36,9 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
     /**
      * Construct an Abstract descriptor to hold an object of
      * the proper type.
-     * @param typeName The name of the type of the object held by 
-     * this abstract descriptor.
+     *
+     * @param typeName The name of the type of the object held by
+     *                 this abstract descriptor.
      */
     protected AbsPrimitiveSlotsHolder(String typeName) {
         super(typeName);
@@ -46,7 +48,8 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
      * Utility method that allows setting attributes of type
      * <code>String</code> without the need of wrapping the new value
      * into an <code>AbsPrimitive</code>.
-     * @param name The name of the attribute to be set.
+     *
+     * @param name  The name of the attribute to be set.
      * @param value The new value of the attribute.
      */
     public void set(String name, String value) {
@@ -61,7 +64,8 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
      * Utility method that allows setting attributes of type
      * <code>boolean</code> without the need of wrapping the new value
      * into an <code>AbsPrimitive</code>.
-     * @param name The name of the attribute to be set.
+     *
+     * @param name  The name of the attribute to be set.
      * @param value The new value of the attribute.
      */
     public void set(String name, boolean value) {
@@ -72,7 +76,8 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
      * Utility method that allows setting attributes of type
      * <code>int</code> without the need of wrapping the new value
      * into an <code>AbsPrimitive</code>.
-     * @param name The name of the attribute to be set.
+     *
+     * @param name  The name of the attribute to be set.
      * @param value The new value of the attribute.
      */
     public void set(String name, int value) {
@@ -83,7 +88,8 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
      * Utility method that allows setting attributes of type
      * <code>long</code> without the need of wrapping the new value
      * into an <code>AbsPrimitive</code>.
-     * @param name The name of the attribute to be set.
+     *
+     * @param name  The name of the attribute to be set.
      * @param value The new value of the attribute.
      */
     public void set(String name, long value) {
@@ -96,7 +102,8 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
      * Utility method that allows setting attributes of type
      * <code>float</code> without the need of wrapping the new value
      * into an <code>AbsPrimitive</code>.
-     * @param name The name of the attribute to be set.
+     *
+     * @param name  The name of the attribute to be set.
      * @param value The new value of the attribute.
      */
     public void set(String name, float value) {
@@ -107,7 +114,8 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
      * Utility method that allows setting attributes of type
      * <code>double</code> without the need of wrapping the new value
      * into an <code>AbsPrimitive</code>.
-     * @param name The name of the attribute to be set.
+     *
+     * @param name  The name of the attribute to be set.
      * @param value The new value of the attribute.
      */
     public void set(String name, double value) {
@@ -119,7 +127,8 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
      * Utility method that allows setting attributes of type
      * <code>Date</code> without the need of wrapping the new value
      * into an <code>AbsPrimitive</code>.
-     * @param name The name of the attribute to be set.
+     *
+     * @param name  The name of the attribute to be set.
      * @param value The new value of the attribute.
      */
     public void set(String name, Date value) {
@@ -130,7 +139,8 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
      * Utility method that allows setting attributes of type
      * <code>byte[]</code> without the need of wrapping the new value
      * into an <code>AbsPrimitive</code>.
-     * @param name The name of the attribute to be set.
+     *
+     * @param name  The name of the attribute to be set.
      * @param value The new value of the attribute.
      */
     public void set(String name, byte[] value) {
@@ -138,9 +148,10 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
     }
 
     /**
-     * Utility method that allows getting the value of attributes 
+     * Utility method that allows getting the value of attributes
      * of type <code>String</code> directly as a <code>String</code>
      * i.e. not wrapped into an <code>AbsPrimitive/code>.
+     *
      * @param name The name of the attribute to be retrieved.
      */
     public String getString(String name) {
@@ -153,9 +164,10 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
     }
 
     /**
-     * Utility method that allows getting the value of attributes 
+     * Utility method that allows getting the value of attributes
      * of type <code>boolean</code> directly as a <code>boolean</code>
      * i.e. not wrapped into an <code>AbsPrimitive/code>.
+     *
      * @param name The name of the attribute to be retrieved.
      */
     public boolean getBoolean(String name) {
@@ -163,9 +175,10 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
     }
 
     /**
-     * Utility method that allows getting the value of attributes 
+     * Utility method that allows getting the value of attributes
      * of type <code>int</code> directly as an <code>int</code>
      * i.e. not wrapped into an <code>AbsPrimitive/code>.
+     *
      * @param name The name of the attribute to be retrieved.
      */
     public int getInteger(String name) {
@@ -173,9 +186,10 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
     }
 
     /**
-     * Utility method that allows getting the value of attributes 
+     * Utility method that allows getting the value of attributes
      * of type <code>long</code> directly as a <code>long</code>
      * i.e. not wrapped into an <code>AbsPrimitive/code>.
+     *
      * @param name The name of the attribute to be retrieved.
      */
     public long getLong(String name) {
@@ -185,9 +199,10 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
     //#MIDP_EXCLUDE_BEGIN
 
     /**
-     * Utility method that allows getting the value of attributes 
+     * Utility method that allows getting the value of attributes
      * of type <code>float</code> directly as a <code>float</code>
      * i.e. not wrapped into an <code>AbsPrimitive/code>.
+     *
      * @param name The name of the attribute to be retrieved.
      */
     public float getFloat(String name) {
@@ -195,9 +210,10 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
     }
 
     /**
-     * Utility method that allows getting the value of attributes 
+     * Utility method that allows getting the value of attributes
      * of type <code>double</code> directly as a <code>double</code>
      * i.e. not wrapped into an <code>AbsPrimitive/code>.
+     *
      * @param name The name of the attribute to be retrieved.
      */
     public double getDouble(String name) {
@@ -206,9 +222,10 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
     //#MIDP_EXCLUDE_END
 
     /**
-     * Utility method that allows getting the value of attributes 
+     * Utility method that allows getting the value of attributes
      * of type <code>Date</code> directly as a <code>Date</code>
      * i.e. not wrapped into an <code>AbsPrimitive/code>.
+     *
      * @param name The name of the attribute to be retrieved.
      */
     public Date getDate(String name) {
@@ -221,9 +238,10 @@ public class AbsPrimitiveSlotsHolder extends AbsObjectImpl {
     }
 
     /**
-     * Utility method that allows getting the value of attributes 
+     * Utility method that allows getting the value of attributes
      * of type <code>byte[]</code> directly as a <code>byte[]</code>
      * i.e. not wrapped into an <code>AbsPrimitive/code>.
+     *
      * @param name The name of the attribute to be retrieved.
      */
     public byte[] getByteSequence(String name) {

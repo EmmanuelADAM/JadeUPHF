@@ -41,6 +41,8 @@ import java.rmi.RemoteException;
  */
 class NodeAdapter extends BaseNode {
 
+    private NodeRMI adaptee;
+
     public NodeAdapter(String name, boolean hasSM, int port, RMIIMTPManager mgr) throws RemoteException {
         super(name, hasSM);
         try {
@@ -99,7 +101,5 @@ class NodeAdapter extends BaseNode {
             }
         }
     }
-
-    private NodeRMI adaptee;
 
 }

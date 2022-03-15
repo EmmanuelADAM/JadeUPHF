@@ -38,27 +38,26 @@ import jade.content.AgentAction;
  */
 public class SaveAgentGroup implements AgentAction {
 
-    public SaveAgentGroup() {
-    }
+    private AgentGroup group;
+    private String repository;
 
-    public void setGroup(AgentGroup ag) {
-        group = ag;
+    public SaveAgentGroup() {
     }
 
     public AgentGroup getGroup() {
         return group;
     }
 
-    public void setRepository(String r) {
-        repository = r;
+    public void setGroup(AgentGroup ag) {
+        group = ag;
     }
 
     public String getRepository() {
         return repository;
     }
 
-
-    private AgentGroup group;
-    private String repository;
+    public void setRepository(String r) {
+        repository = r;
+    }
 
 }

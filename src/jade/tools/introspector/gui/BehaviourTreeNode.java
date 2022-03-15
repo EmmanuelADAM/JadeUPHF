@@ -49,24 +49,24 @@ public class BehaviourTreeNode {
         state = s;
     }
 
+    public String getState() {
+        return state;
+    }
+
     /*public BehaviourTreeNode(BehaviourID beh, boolean bl) {
         behaviour = beh;
         blocked = bl;
     }
-      
+
     public void setBlocked(boolean b) {
         blocked = b;
     }
-      
+
     public boolean isBlocked() {
         return blocked;
     }*/
     public void setState(String s) {
         state = s;
-    }
-
-    public String getState() {
-        return state;
     }
 
     public String toString() {

@@ -66,16 +66,6 @@ public class ChangedAgentState implements Event {
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
-     *
-     * @param id The agent identifier of the agent whose state
-     *           changed.
-     */
-    public void setAgent(AID id) {
-        agent = id;
-    }
-
-    /**
      * Retrieve the value of the <code>agent</code> slot of this
      * event, containing the agent identifier of the agent whose
      * state changed.
@@ -88,13 +78,13 @@ public class ChangedAgentState implements Event {
     }
 
     /**
-     * Set the <code>from</code> slot of this event.
+     * Set the <code>agent</code> slot of this event.
      *
-     * @param as The name of the entity the state the agent was in
-     *           before this event occurred.
+     * @param id The agent identifier of the agent whose state
+     *           changed.
      */
-    public void setFrom(AgentState as) {
-        from = as;
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     /**
@@ -110,13 +100,13 @@ public class ChangedAgentState implements Event {
     }
 
     /**
-     * Set the <code>to</code> slot of this event.
+     * Set the <code>from</code> slot of this event.
      *
-     * @param as The name of the state the agent was in after this
-     *           event occurred.
+     * @param as The name of the entity the state the agent was in
+     *           before this event occurred.
      */
-    public void setTo(AgentState as) {
-        to = as;
+    public void setFrom(AgentState as) {
+        from = as;
     }
 
     /**
@@ -129,6 +119,16 @@ public class ChangedAgentState implements Event {
      */
     public AgentState getTo() {
         return to;
+    }
+
+    /**
+     * Set the <code>to</code> slot of this event.
+     *
+     * @param as The name of the state the agent was in after this
+     *           event occurred.
+     */
+    public void setTo(AgentState as) {
+        to = as;
     }
 
 }

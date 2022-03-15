@@ -29,8 +29,17 @@ package jade.wrapper;
  * @author David Bell, Dick Cowan: Hewlett-Packard
  */
 public class PlatformState extends StateBase {
+    public static final int cPLATFORM_STATE_VOID = 0;
+    public static final int cPLATFORM_STATE_INITIALIZING = 1;
+    public static final int cPLATFORM_STATE_INITIALIZED = 2;
+    public static final int cPLATFORM_STATE_STARTING = 3;
+    public static final int cPLATFORM_STATE_READY = 4;
+    public static final int cPLATFORM_STATE_SUSPENDING = 5;
+    public static final int cPLATFORM_STATE_SUSPENDED = 6;
+    public static final int cPLATFORM_STATE_KILLING = 7;
+    public static final int cPLATFORM_STATE_KILLED = 8;
+    public static final int cPLATFORM_STATE_FAILED = 9;
     static final int LOWEST_STATE = 0;
-
     /**
      * An array of string names, one for each of the valid state this object
      * can represent. This array MUST be initialized before the other static
@@ -48,18 +57,6 @@ public class PlatformState extends StateBase {
             "Killed",       //  8
             "Failed"        //  9
     };
-
-    public static final int cPLATFORM_STATE_VOID = 0;
-    public static final int cPLATFORM_STATE_INITIALIZING = 1;
-    public static final int cPLATFORM_STATE_INITIALIZED = 2;
-    public static final int cPLATFORM_STATE_STARTING = 3;
-    public static final int cPLATFORM_STATE_READY = 4;
-    public static final int cPLATFORM_STATE_SUSPENDING = 5;
-    public static final int cPLATFORM_STATE_SUSPENDED = 6;
-    public static final int cPLATFORM_STATE_KILLING = 7;
-    public static final int cPLATFORM_STATE_KILLED = 8;
-    public static final int cPLATFORM_STATE_FAILED = 9;
-
     static final State PLATFORM_STATE_VOID = new PlatformState(cPLATFORM_STATE_VOID);
     static final State PLATFORM_STATE_INITIALIZING = new PlatformState(cPLATFORM_STATE_INITIALIZING);
     static final State PLATFORM_STATE_INITIALIZED = new PlatformState(cPLATFORM_STATE_INITIALIZED);

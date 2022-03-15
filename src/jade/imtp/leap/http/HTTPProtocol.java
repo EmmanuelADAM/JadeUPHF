@@ -42,6 +42,7 @@ import java.util.Vector;
 
 /**
  * Class declaration
+ *
  * @author Giovanni Caire - TILAB
  * @author Ronnie Taib - Motorola
  * @author Steffen Rusitschka - Siemens
@@ -61,6 +62,7 @@ public class HTTPProtocol extends TransportProtocol {
     }
 
     /**
+     *
      */
     public String addrToString(TransportAddress ta) throws ICPException {
 
@@ -77,6 +79,7 @@ public class HTTPProtocol extends TransportProtocol {
     }
 
     /**
+     *
      */
     public TransportAddress stringToAddr(String s) throws ICPException {
         Vector<String> addressFields = parseURL(s);
@@ -95,6 +98,7 @@ public class HTTPProtocol extends TransportProtocol {
     }
 
     /**
+     *
      */
     public TransportAddress buildAddress(String host, String port, String file, String anchor) {
         return new HTTPAddress(host, port, file, anchor);
@@ -102,6 +106,7 @@ public class HTTPProtocol extends TransportProtocol {
 
     /**
      * Method declaration
+     *
      * @return
      * @see
      */

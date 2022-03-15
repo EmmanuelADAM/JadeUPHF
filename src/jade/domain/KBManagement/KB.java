@@ -39,7 +39,9 @@ import java.util.List;
  */
 
 
-/** Base class for AMS and DF Knowledge Base*/
+/**
+ * Base class for AMS and DF Knowledge Base
+ */
 public abstract class KB {
     protected LeaseManager lm;
     protected SubscriptionResponder sr;

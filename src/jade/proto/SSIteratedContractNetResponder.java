@@ -17,14 +17,12 @@ public class SSIteratedContractNetResponder extends SSContractNetResponder {
      * by the reception of a given initiation CFP message and uses
      * a given HashMap of messages list.
      *
-     * @deprecated
+     * @deprecated public SSIteratedContractNetResponder(Agent a, ACLMessage cfp, HashMap<String, List<ACLMessage>> mapMessagesList) {
+    super(a, cfp, mapMessagesList);
 
-    public SSIteratedContractNetResponder(Agent a, ACLMessage cfp, HashMap<String, List<ACLMessage>> mapMessagesList) {
-        super(a, cfp, mapMessagesList);
-
-        registerTransition(CHECK_IN_SEQ, HANDLE_CFP, ACLMessage.CFP, new String[]{HANDLE_CFP, SEND_REPLY, RECEIVE_NEXT});
+    registerTransition(CHECK_IN_SEQ, HANDLE_CFP, ACLMessage.CFP, new String[]{HANDLE_CFP, SEND_REPLY, RECEIVE_NEXT});
     }
-*/
+     */
     /**
      * Construct a SSIteratedContractNetResponder that is activated
      * by the reception of a given initiation CFP message and uses

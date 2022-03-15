@@ -40,6 +40,20 @@ import java.awt.event.ActionEvent;
  */
 
 public class ACLFrame extends JFrame {
+    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final JPanel buttonPanel = new JPanel();
+    private final JButton closeButton = new JButton();
+    private final JMenuBar theMenuBar = new JMenuBar();
+    private final JMenu fileMenu = new JMenu();
+    private final JMenuItem saveMenuItem = new JMenuItem();
+    private final JMenuItem exitMenuItem = new JMenuItem();
+    private final JMenu toolsMenu = new JMenu();
+    private final JMenuItem systemoutMenuItem = new JMenuItem();
+    private final Agent agent;
+    private ACLPanel aclPanel;
+    private ACLMessage msg;
+
+
     /**
      * Constructor for the ACLFrame object
      *
@@ -62,7 +76,6 @@ public class ACLFrame extends JFrame {
         }
     }
 
-
     /**
      * show the ACLMessage, disabled
      *
@@ -74,7 +87,6 @@ public class ACLFrame extends JFrame {
         theFrame.setMsg(theMsg);
         theFrame.disableACLPanel();
     }
-
 
     /**
      * Sets the ACLMessage of the Frame
@@ -97,14 +109,12 @@ public class ACLFrame extends JFrame {
         this.setVisible(true);
     }
 
-
     /**
      * disable editing of ACLmessage
      */
     public void disableACLPanel() {
         aclPanel.setReadOnly();
     }
-
 
     /**
      * Description of the Method
@@ -115,7 +125,6 @@ public class ACLFrame extends JFrame {
         doExit();
     }
 
-
     /**
      * Description of the Method
      *
@@ -125,14 +134,12 @@ public class ACLFrame extends JFrame {
         doExit();
     }
 
-
     /**
      * Description of the Method
      */
     void doExit() {
         this.setVisible(false);
     }
-
 
     /**
      * Description of the Method
@@ -143,14 +150,12 @@ public class ACLFrame extends JFrame {
         doSystemOut();
     }
 
-
     /**
      * Description of the Method
      */
     void doSystemOut() {
         aclPanel.doSystemOut();
     }
-
 
     /**
      * Description of the Method
@@ -161,7 +166,6 @@ public class ACLFrame extends JFrame {
         aclPanel.saveACL();
     }
 
-
     /**
      * Sets the FrameIcon attribute of the ACLFrame object
      *
@@ -171,7 +175,6 @@ public class ACLFrame extends JFrame {
         ImageIcon image = new ImageIcon(this.getClass().getResource(iconpath));
         setIconImage(image.getImage());
     }
-
 
     /**
      * Description of the Method
@@ -224,20 +227,6 @@ public class ACLFrame extends JFrame {
         fileMenu.add(exitMenuItem);
         toolsMenu.add(systemoutMenuItem);
     }
-
-
-    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
-    private final JPanel buttonPanel = new JPanel();
-    private final JButton closeButton = new JButton();
-    private final JMenuBar theMenuBar = new JMenuBar();
-    private final JMenu fileMenu = new JMenu();
-    private final JMenuItem saveMenuItem = new JMenuItem();
-    private final JMenuItem exitMenuItem = new JMenuItem();
-    private final JMenu toolsMenu = new JMenu();
-    private final JMenuItem systemoutMenuItem = new JMenuItem();
-    private ACLPanel aclPanel;
-    private ACLMessage msg;
-    private final Agent agent;
 
 }
 //  ***EOF***

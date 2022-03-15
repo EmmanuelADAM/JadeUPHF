@@ -48,6 +48,12 @@ public class Boot {
     private static final Logger logger = Logger.getMyLogger("jade.Boot");
 
     /**
+     * Default constructor.
+     */
+    public Boot() {
+    }
+
+    /**
      * Fires up the <b><em>JADE</em></b> system.
      * This method initializes the Profile Manager and then starts the
      * bootstrap process for the <B><em>JADE</em></b>
@@ -104,13 +110,6 @@ public class Boot {
             System.exit(-1);
         }
     }
-
-    /**
-     * Default constructor.
-     */
-    public Boot() {
-    }
-
 
     public static Properties parseCmdLineArgs(String[] args) throws IllegalArgumentException {
         Properties props = new ExtendedProperties();

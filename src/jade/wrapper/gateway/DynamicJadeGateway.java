@@ -22,24 +22,20 @@ public class DynamicJadeGateway {
     static final int UNKNOWN = -1;
     static final int ACTIVE = 1;
     static final int NOT_ACTIVE = 2;
-
+    private static final Logger myLogger = Logger.getMyLogger(DynamicJadeGateway.class.getName());
+    //#DOTNET_EXCLUDE_BEGIN
+    private final List<GatewayListener> listeners = new ArrayList<>();
     ContainerController myContainer = null;
     AgentController myAgent = null;
     String agentType = GatewayAgent.class.getName();
     String agentName = null;
     // jade profile properties
     ProfileImpl profile;
-    private Properties jadeProps;
     Object[] agentArguments;
-
     int gatewayAgentState = UNKNOWN;
-    //#DOTNET_EXCLUDE_BEGIN
-    private final List<GatewayListener> listeners = new ArrayList<>();
-    private volatile GatewayListener[] listenersArray = new GatewayListener[0];
+    private Properties jadeProps;
     //#DOTNET_EXCLUDE_END
-
-    private static final Logger myLogger = Logger.getMyLogger(DynamicJadeGateway.class.getName());
-
+    private volatile GatewayListener[] listenersArray = new GatewayListener[0];
 
     /**
      * Searches for the property with the specified key in the JADE Platform Profile.
@@ -63,7 +59,7 @@ public class DynamicJadeGateway {
      * is called by the executor agent)
      *
      * @throws StaleProxyException if the method was not able to execute the Command
-     *  see AgentController#putO2AObject(Object, boolean)
+     *                             see AgentController#putO2AObject(Object, boolean)
      **/
     public final void execute(Object command) throws ControllerException, InterruptedException {
         execute(command, 0);
@@ -80,7 +76,7 @@ public class DynamicJadeGateway {
      * @throws InterruptedException if the timeout expires or the Thread
      *                              executing this method is interrupted.
      * @throws StaleProxyException  if the method was not able to execute the Command
-     *  see AgentController#putO2AObject(Object, boolean)
+     *                              see AgentController#putO2AObject(Object, boolean)
      **/
     public final void execute(Object command, long timeout) throws ControllerException, InterruptedException {
         Event e = null;

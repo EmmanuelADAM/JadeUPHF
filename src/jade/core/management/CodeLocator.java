@@ -45,6 +45,9 @@ import java.util.Vector;
 
 public class CodeLocator {
 
+    private final HashMap<AID, ClassLoader> _agents;
+    private final Vector<CodeLocatorListener> _subscriptions;
+
     public CodeLocator() {
         _agents = new HashMap<>();
         _subscriptions = new Vector<>();
@@ -215,9 +218,6 @@ public class CodeLocator {
     public synchronized boolean unSubscribeToEvents(CodeLocatorListener cle) {
         return _subscriptions.remove(cle);
     }
-
-    private final HashMap<AID, ClassLoader> _agents;
-    private final Vector<CodeLocatorListener> _subscriptions;
 
 
 }

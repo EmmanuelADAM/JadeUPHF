@@ -33,6 +33,19 @@ import java.awt.*;
  */
 class InstallMTPDialog extends JDialog {
 
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private JPanel topPanel;
+    private JLabel containerLabel;
+    private DefaultComboBoxModel<String> containerList;
+    private JComboBox<String> containerChoice;
+    private JLabel classLabel;
+    private JTextField classField;
+    private JLabel addressLabel;
+    private JTextField addressField;
+    private JPanel bottomPanel;
+    private JButton buttonOK;
+    private JButton buttonCancel;
+    private boolean confirmed = false;
     /**
      * Creates new form InstallMTPDialog
      */
@@ -192,26 +205,11 @@ class InstallMTPDialog extends JDialog {
         confirmed = false;
         destroy();
     }//GEN-LAST:event_closeDialog
+    // End of variables declaration//GEN-END:variables
 
     private void destroy() {
         setVisible(false);
         dispose();
     }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JPanel topPanel;
-    private JLabel containerLabel;
-    private DefaultComboBoxModel<String> containerList;
-    private JComboBox<String> containerChoice;
-    private JLabel classLabel;
-    private JTextField classField;
-    private JLabel addressLabel;
-    private JTextField addressField;
-    private JPanel bottomPanel;
-    private JButton buttonOK;
-    private JButton buttonCancel;
-    // End of variables declaration//GEN-END:variables
-
-    private boolean confirmed = false;
 
 }

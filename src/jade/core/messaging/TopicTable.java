@@ -105,8 +105,8 @@ class TopicTable {
      */
     private class RegistrationInfo {
         private final AID aid;
-        private boolean template = false;
         private final StringTokenizer st;
+        private boolean template = false;
 
         private RegistrationInfo(AID aid, AID topic) {
             st = new StringTokenizer(topic.getLocalName(), ".");

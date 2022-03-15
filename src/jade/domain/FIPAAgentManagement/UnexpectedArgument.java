@@ -34,28 +34,28 @@ import jade.content.Predicate;
 
 public class UnexpectedArgument extends RefuseException implements Predicate {
 
+    /**
+     * @serial
+     */
+    String s1;
+
     public UnexpectedArgument() {
         this("Unknown-argument-name");
     }
+
 
     public UnexpectedArgument(String argumentName) {
         super("(unexpected-argument " + argumentName + ")");
         s1 = argumentName;
     }
 
-
-    /**
-     * @serial
-     */
-    String s1;
+    public String getArgumentName() {
+        return s1;
+    }
 
     public void setArgumentName(String a) {
         s1 = a;
         setMessage("(unexpected-argument " + s1 + ")");
-    }
-
-    public String getArgumentName() {
-        return s1;
     }
 
 }

@@ -40,12 +40,11 @@ import java.util.List;
  * @see GuiAgent
  */
 public class GuiEvent {
+    private final List<Object> parameters;
     //#APIDOC_EXCLUDE_BEGIN
     protected Object source;
-    protected int type;
     //#APIDOC_EXCLUDE_END
-
-    private final List<Object> parameters;
+    protected int type;
 
     /**
      * Create a GUI event.

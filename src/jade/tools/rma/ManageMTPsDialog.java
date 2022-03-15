@@ -19,8 +19,12 @@ import java.util.Map;
 public class ManageMTPsDialog extends JDialog {
 
     private static final Object[] EMPTY_LIST = new Object[0];
-
-
+    private final rma myRMA;
+    private final Frame owner;
+    private Map<String, List<String>> data;
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private JPanel lists;
+    private JList<Object> containers;
     private final AbstractAction addMTPAction = new AbstractAction("Add MTP...") {
 
         public void actionPerformed(ActionEvent ev) {
@@ -28,7 +32,7 @@ public class ManageMTPsDialog extends JDialog {
             myRMA.installMTP(name);
         }
     };
-
+    private JList<Object> addresses;
     private final AbstractAction removeMTPAction = new AbstractAction("Remove MTP") {
 
         public void actionPerformed(ActionEvent ev) {
@@ -41,8 +45,10 @@ public class ManageMTPsDialog extends JDialog {
         }
 
     };
-
-
+    private JPanel buttons;
+    private JButton addMTP;
+    private JButton removeMTP;
+    private JButton closeDlg;
     /**
      * Creates new form ManageMTPsDialog
      */
@@ -194,20 +200,6 @@ public class ManageMTPsDialog extends JDialog {
         setVisible(false);
         dispose();
     }//GEN-LAST:event_closeDialog
-
-
-    private final rma myRMA;
-    private final Frame owner;
-    private Map<String, List<String>> data;
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JPanel lists;
-    private JList<Object> containers;
-    private JList<Object> addresses;
-    private JPanel buttons;
-    private JButton addMTP;
-    private JButton removeMTP;
-    private JButton closeDlg;
     // End of variables declaration//GEN-END:variables
 
 }

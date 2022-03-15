@@ -56,14 +56,22 @@ public class BEAgentManagementService extends BaseService {
             AgentManagementSlice.INFORM_STATE_CHANGED,
             AgentManagementSlice.KILL_CONTAINER
     };
-
+    // The local slice for this service
+    private final ServiceComponent localSlice = new ServiceComponent();
+    // The command sink, source side
+    private final CommandSourceSink senderSink = new CommandSourceSink();
+    // The command sink, target side
+    private final CommandTargetSink receiverSink = new CommandTargetSink();
+    // Service specific data
+    private final Map<AID, AgentImage> pendingImages = new HashMap<>(1);
+    // The concrete agent container, providing access to LADT, etc.
+    private BackEndContainer myContainer;
 
     public void init(AgentContainer ac, Profile p) throws ProfileException {
         super.init(ac, p);
 
         myContainer = (BackEndContainer) ac;
     }
-
 
     public String getName() {
         return AgentManagementSlice.NAME;
@@ -85,7 +93,6 @@ public class BEAgentManagementService extends BaseService {
         return null;
     }
 
-
     public Sink getCommandSink(boolean side) {
         if (side == Sink.COMMAND_SOURCE) {
             return senderSink;
@@ -97,7 +104,6 @@ public class BEAgentManagementService extends BaseService {
     public String[] getOwnedCommands() {
         return OWNED_COMMANDS;
     }
-
 
     // This inner class handles the messaging commands on the command
     // issuer side, turning them into horizontal commands and
@@ -280,7 +286,6 @@ public class BEAgentManagementService extends BaseService {
 
     } // End of CommandSourceSink class
 
-
     private class CommandTargetSink implements Sink {
 
         public void consume(VerticalCommand cmd) {
@@ -458,7 +463,6 @@ public class BEAgentManagementService extends BaseService {
 
     } // End of CommandTargetSink class
 
-
     /**
      * Inner mix-in class for this service: this class receives
      * commands from the service <code>Sink</code> and serves them,
@@ -501,7 +505,6 @@ public class BEAgentManagementService extends BaseService {
                         gCmd.addParam(ownership);
                         gCmd.addParam(certs);
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_KILLAGENT -> {
                         GenericCommand gCmd = new GenericCommand(AgentManagementSlice.REQUEST_KILL, AgentManagementSlice.NAME, null);
@@ -509,7 +512,6 @@ public class BEAgentManagementService extends BaseService {
                         gCmd.addParam(agentID);
 
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_CHANGEAGENTSTATE -> {
                         GenericCommand gCmd = new GenericCommand(AgentManagementSlice.REQUEST_STATE_CHANGE, AgentManagementSlice.NAME, null);
@@ -519,7 +521,6 @@ public class BEAgentManagementService extends BaseService {
                         gCmd.addParam(newState);
 
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_BORNAGENT -> {
                         GenericCommand gCmd = new GenericCommand(AgentManagementSlice.INFORM_CREATED, AgentManagementSlice.NAME, null);
@@ -531,7 +532,6 @@ public class BEAgentManagementService extends BaseService {
                         gCmd.addParam(ownership);
 
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_DEADAGENT -> {
                         GenericCommand gCmd = new GenericCommand(AgentManagementSlice.INFORM_KILLED, AgentManagementSlice.NAME, null);
@@ -539,7 +539,6 @@ public class BEAgentManagementService extends BaseService {
                         gCmd.addParam(agentID);
 
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_SUSPENDEDAGENT -> {
                         GenericCommand gCmd = new GenericCommand(AgentManagementSlice.INFORM_STATE_CHANGED, AgentManagementSlice.NAME, null);
@@ -548,7 +547,6 @@ public class BEAgentManagementService extends BaseService {
                         gCmd.addParam(jade.domain.FIPAAgentManagement.AMSAgentDescription.SUSPENDED);
 
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_RESUMEDAGENT -> {
                         GenericCommand gCmd = new GenericCommand(AgentManagementSlice.INFORM_STATE_CHANGED, AgentManagementSlice.NAME, null);
@@ -557,7 +555,6 @@ public class BEAgentManagementService extends BaseService {
                         gCmd.addParam(jade.domain.FIPAAgentManagement.AMSAgentDescription.ACTIVE);
 
                         result = gCmd;
-                        break;
                     }
                     case AgentManagementSlice.H_EXITCONTAINER -> result = new GenericCommand(AgentManagementSlice.KILL_CONTAINER, AgentManagementSlice.NAME, null);
                 }
@@ -569,21 +566,5 @@ public class BEAgentManagementService extends BaseService {
         }
 
     } // End of AgentManagementSlice class
-
-
-    // The concrete agent container, providing access to LADT, etc.
-    private BackEndContainer myContainer;
-
-    // The local slice for this service
-    private final ServiceComponent localSlice = new ServiceComponent();
-
-    // The command sink, source side
-    private final CommandSourceSink senderSink = new CommandSourceSink();
-
-    // The command sink, target side
-    private final CommandTargetSink receiverSink = new CommandTargetSink();
-
-    // Service specific data
-    private final Map<AID, AgentImage> pendingImages = new HashMap<>(1);
 
 }

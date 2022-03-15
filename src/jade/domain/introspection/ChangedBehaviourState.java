@@ -58,16 +58,6 @@ public class ChangedBehaviourState implements Event {
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
-     *
-     * @param id The agent identifier of the agent whose behaviour
-     *           state changed.
-     */
-    public void setAgent(AID id) {
-        agent = id;
-    }
-
-    /**
      * Retrieve the value of the <code>agent</code> slot of this
      * event, containing the agent identifier of the agent whose
      * behaviour state changed.
@@ -80,13 +70,13 @@ public class ChangedBehaviourState implements Event {
     }
 
     /**
-     * Set the <code>behaviour</code> slot of this event.
+     * Set the <code>agent</code> slot of this event.
      *
-     * @param id The behaviour identifier of the behaviour whose state
-     *           changed.
+     * @param id The agent identifier of the agent whose behaviour
+     *           state changed.
      */
-    public void setBehaviour(BehaviourID id) {
-        behaviour = id;
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     /**
@@ -102,13 +92,13 @@ public class ChangedBehaviourState implements Event {
     }
 
     /**
-     * Set the <code>from</code> slot of this event.
+     * Set the <code>behaviour</code> slot of this event.
      *
-     * @param s The name of the state the behaviour was in before this
-     *          event occurred.
+     * @param id The behaviour identifier of the behaviour whose state
+     *           changed.
      */
-    public void setFrom(String s) {
-        from = s;
+    public void setBehaviour(BehaviourID id) {
+        behaviour = id;
     }
 
     /**
@@ -124,13 +114,13 @@ public class ChangedBehaviourState implements Event {
     }
 
     /**
-     * Set the <code>to</code> slot of this event.
+     * Set the <code>from</code> slot of this event.
      *
-     * @param s The name of the state the behaviour was in after this
+     * @param s The name of the state the behaviour was in before this
      *          event occurred.
      */
-    public void setTo(String s) {
-        to = s;
+    public void setFrom(String s) {
+        from = s;
     }
 
     /**
@@ -143,6 +133,16 @@ public class ChangedBehaviourState implements Event {
      */
     public String getTo() {
         return to;
+    }
+
+    /**
+     * Set the <code>to</code> slot of this event.
+     *
+     * @param s The name of the state the behaviour was in after this
+     *          event occurred.
+     */
+    public void setTo(String s) {
+        to = s;
     }
 
     /**

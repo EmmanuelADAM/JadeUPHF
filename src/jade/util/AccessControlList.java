@@ -95,15 +95,16 @@ public class AccessControlList {
 
 
     private static final Logger logger = Logger.getMyLogger(AccessControlList.class.getName());
+    // Set black and white list
+    private String blackFileName = null;
+    private String whiteFileName = null;
+    // internal representation (optimized for speed)
+    private InternalACL black_iacl;
+    private InternalACL white_iacl;
 
     // constructor
     public AccessControlList() {
     } // end constructor
-
-
-    // Set black and white list
-    private String blackFileName = null;
-    private String whiteFileName = null;
 
     public void setBlack(String blackFileName) {
         this.blackFileName = blackFileName;
@@ -114,11 +115,6 @@ public class AccessControlList {
         this.whiteFileName = whiteFileName;
         refresh_white();
     }
-
-    // internal representation (optimized for speed)
-    private InternalACL black_iacl;
-    private InternalACL white_iacl;
-
 
     /**
      * A specific client is allowed if:

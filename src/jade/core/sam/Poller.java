@@ -33,12 +33,11 @@ import java.util.Date;
 
 class Poller extends Thread {
     private final SAMService myService;
-    private volatile SAMInfoHandler[] handlers;
     private final long period;
-    private boolean active;
-
-    private Timer watchDogTimer = null;
     private final Logger myLogger = Logger.getMyLogger(getClass().getName());
+    private volatile SAMInfoHandler[] handlers;
+    private boolean active;
+    private Timer watchDogTimer = null;
 
     Poller(SAMService service, long p, SAMInfoHandler[] hh) {
         super();

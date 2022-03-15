@@ -38,27 +38,26 @@ import jade.content.AgentAction;
  */
 public class LoadAgentGroup implements AgentAction {
 
-    public LoadAgentGroup() {
-    }
+    private AgentGroup group;
+    private String repository;
 
-    public void setGroup(AgentGroup ag) {
-        group = ag;
+    public LoadAgentGroup() {
     }
 
     public AgentGroup getGroup() {
         return group;
     }
 
-    public void setRepository(String r) {
-        repository = r;
+    public void setGroup(AgentGroup ag) {
+        group = ag;
     }
 
     public String getRepository() {
         return repository;
     }
 
-
-    private AgentGroup group;
-    private String repository;
+    public void setRepository(String r) {
+        repository = r;
+    }
 
 }

@@ -44,6 +44,10 @@ public class SearchOn implements AgentAction {
     private DFAgentDescription description;
     private SearchConstraints constraints;
 
+    public AID getDf() {
+        return df;
+    }
+
     /**
      * The df on which the search will be made.
      */
@@ -51,23 +55,19 @@ public class SearchOn implements AgentAction {
         df = parent;
     }
 
-    public AID getDf() {
-        return df;
+    public DFAgentDescription getDescription() {
+        return description;
     }
 
     public void setDescription(DFAgentDescription desc) {
         description = desc;
     }
 
-    public DFAgentDescription getDescription() {
-        return description;
+    public SearchConstraints getConstraints() {
+        return constraints;
     }
 
     public void setConstraints(SearchConstraints c) {
         constraints = c;
-    }
-
-    public SearchConstraints getConstraints() {
-        return constraints;
     }
 }

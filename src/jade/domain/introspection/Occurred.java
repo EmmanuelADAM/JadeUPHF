@@ -46,16 +46,6 @@ public class Occurred implements Predicate {
     }
 
     /**
-     * Set the <code>what</code> slot of this event.
-     *
-     * @param er The record of the occurred event, along with location
-     *           and timestamp information.
-     */
-    public void setWhat(EventRecord er) {
-        arg = er;
-    }
-
-    /**
      * Retrieve the value of the <code>what</code> slot of this event,
      * containing the record of the occurred event, along with
      * location and timestamp information.
@@ -65,6 +55,16 @@ public class Occurred implements Predicate {
      */
     public EventRecord getWhat() {
         return arg;
+    }
+
+    /**
+     * Set the <code>what</code> slot of this event.
+     *
+     * @param er The record of the occurred event, along with location
+     *           and timestamp information.
+     */
+    public void setWhat(EventRecord er) {
+        arg = er;
     }
 
 

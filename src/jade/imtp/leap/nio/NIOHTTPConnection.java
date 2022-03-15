@@ -15,6 +15,7 @@ import java.util.logging.Logger;
  */
 public class NIOHTTPConnection extends NIOJICPConnection {
 
+    private static final Logger log = Logger.getLogger(NIOHTTPConnection.class.getName());
     private NIOHTTPHelper helper;
 
     @Override
@@ -23,7 +24,5 @@ public class NIOHTTPConnection extends NIOJICPConnection {
         helper = new NIOHTTPHelper(this);
         addBufferTransformer(helper);
     }
-
-    private static final Logger log = Logger.getLogger(NIOHTTPConnection.class.getName());
 
 }

@@ -86,6 +86,12 @@ public class AMSService extends FIPAService {
     }
 
     /**
+     * Default constructor.
+     */
+    public AMSService() {
+    }
+
+    /**
      * check that the <code>AMSAgentDescription</code> contains the mandatory
      * slots, i.e. the agent name and the agent state.
      *
@@ -146,7 +152,6 @@ public class AMSService extends FIPAService {
         // Send message and collect reply
         doFipaRequestClient(a, request);
     }
-
 
     /**
      * registers a <code>AMSAgentDescription</code> with the default AMS
@@ -231,7 +236,6 @@ public class AMSService extends FIPAService {
         amsd.setName(a.getAID());
         deregister(a, amsd);
     }
-
 
     /**
      * Modifies data contained within a <b>AMS</b>
@@ -379,7 +383,6 @@ public class AMSService extends FIPAService {
         return search(a, AMSName, amsd, constraints);
     }
 
-
     /**
      * In some cases it is more convenient to execute this tasks in a non-blocking way.
      * This method returns a non-blocking behaviour that can be added to the queue of the agent behaviours, as usual, by using <code>Agent.addBehaviour()</code>.
@@ -459,6 +462,7 @@ public class AMSService extends FIPAService {
         SearchConstraints constraints = new SearchConstraints();
         return getNonBlockingBehaviour(a, a.getAMS(), actionName, amsd, constraints);
     }
+    //#MIDP_EXCLUDE_END
 
     /**
      * the default AMS is used.
@@ -471,8 +475,6 @@ public class AMSService extends FIPAService {
         SearchConstraints constraints = new SearchConstraints();
         return getNonBlockingBehaviour(a, amsName, actionName, amsd, constraints);
     }
-    //#MIDP_EXCLUDE_END
-
 
     /**
      * Extracts the receiver a message could not be delivered to from
@@ -528,12 +530,6 @@ public class AMSService extends FIPAService {
         } catch (Exception e) {
             throw new FIPAException("Invalid content. " + e);
         }
-    }
-
-    /**
-     * Default constructor.
-     */
-    public AMSService() {
     }
 }
 

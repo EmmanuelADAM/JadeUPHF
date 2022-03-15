@@ -59,300 +59,15 @@ public class AgentTree extends JPanel {
     public static final String DAFAULT_LOCAL_PLATFORM_NAME = "ThisPlatform";
     public static final String REMOTE_PLATFORMS_FOLDER_NAME = "RemotePlatforms";
     public static final String FROZEN_AGENTS_FOLDER_NAME = "Frozen Agents";
-
-    public JTree tree;
     private final Map<String, NodeDescriptor> mapDescriptor;
+    public JTree tree;
     private String localPlatformName = DAFAULT_LOCAL_PLATFORM_NAME;
-
-
-    /**
-     * Inner class Node
-     * Common base class for all AgentTree nodes
-     */
-    public abstract class Node extends DefaultMutableTreeNode {
-
-        protected Icon img;
-        protected String name;
-        protected String state;
-        protected String ownership;
-        protected boolean greyOut = false;
-
-        public Node(String name) {
-            this.name = name;
-        }
-
-        public Icon getIcon(String typeAgent) {
-            Image image = getToolkit().getImage(getClass().getResource(getIconAgent(typeAgent)));
-            if (greyOut) {
-                ImageFilter colorfilter = new MyFilterImage();
-                Image imageFiltered = createImage(new FilteredImageSource(image.getSource(), colorfilter));
-                return new ImageIcon(imageFiltered);
-            } else
-                return new ImageIcon(image);
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getState() {
-            return state != null ? state : "";
-        }
-
-        public void setState(String state) {
-            this.state = state;
-        }
-
-        public String getOwnership() {
-            return ownership != null ? ownership : "";
-        }
-
-        public void setOwnership(String ownership) {
-            this.ownership = ownership;
-        }
-
-        public void changeIcon(String agentState) {
-            if (agentState.equalsIgnoreCase("suspended")) {
-                greyOut = true;
-                setType(AGENT_TYPE);
-            } else if (agentState.equalsIgnoreCase("active")) {
-                greyOut = false;
-                setType(AGENT_TYPE);
-            } else if (agentState.equalsIgnoreCase("frozen")) {
-                greyOut = false;
-                setType(FROZEN_AGENT_TYPE);
-            }
-        }
-
-        public abstract String getType();
-
-        public abstract void setType(String type);
-
-        public abstract String getToolTipText();
-
-        public String toString() {
-            return (getType() != null ? getType() + "-" + name : name);
-        }
-
-        public int compareTo(Node n) {
-            return name.compareTo(n.getName());
-        }
-    } // END of inner class Node
-
-
-    /**
-     * Inner class AgentNode
-     */
-    public class AgentNode extends Node {
-        private String agentType;
-        private String agentAddress;
-
-        public AgentNode(String name) {
-            super(name);
-            agentType = AGENT_TYPE;
-        }
-
-        public String getAddress() {
-            return agentAddress;
-        }
-
-        public void setAddress(String address) {
-            agentAddress = address;
-        }
-
-        public void setType(String type) {
-            agentType = type;
-        }
-
-        public String getType() {
-            return agentType;
-        }
-
-        public String getToolTipText() {
-            return ("Local Agent");
-        }
-    }  // END of inner class AgentNode
-
-
-    /**
-     * Inner class ContainerNode
-     */
-    public class ContainerNode extends Node {
-        private InetAddress addressmachine;
-        private String containerType;
-
-        public ContainerNode(String name) {
-            super(name);
-            containerType = CONTAINER_TYPE;
-        }
-
-        public void setAddress(InetAddress addr) {
-            addressmachine = addr;
-        }
-
-        public void setType(String type) {
-            containerType = type;
-        }
-
-        public String getType() {
-            return containerType;
-        }
-
-        public String getToolTipText() {
-            if (addressmachine != null)
-                return name + " " + "[" + addressmachine.getHostAddress() + "]";
-            else
-                return name + " " + "[???:???:???:???]";
-        }
-    } // END of inner class ContainerNode
-
-
-    /**
-     * Inner class SuperContainer
-     */
-    public class SuperContainer extends Node {
-
-        public SuperContainer(String name) {
-            super(name);
-        }
-
-        public String getToolTipText() {
-            return ("Java Agent DEvelopment Framework");
-        }
-
-        public String getType() {
-            return TREE_ROOT_TYPE;
-        }
-
-        public void setType(String noType) {
-        }
-    } // END of inner class SuperContainer
-
-
-    /**
-     * Inner class RemotePlatformsFolderNode
-     */
-    public class RemotePlatformsFolderNode extends Node {
-
-        public RemotePlatformsFolderNode(String name) {
-            super(name);
-        }
-
-        public String getToolTipText() {
-            return ("List of RemotePlatforms");
-        }
-
-        public void setType(String noType) {
-        }
-
-        public String getType() {
-            return (REMOTE_PLATFORMS_FOLDER_TYPE);
-        }
-    } // END of inner class RemotePlatformsFolderNode
-
-
-    /**
-     * Inner class localPlatformFolderNode
-     */
-    public class LocalPlatformFolderNode extends Node {
-
-        public LocalPlatformFolderNode(String name) {
-            super(name);
-        }
-
-        public String getToolTipText() {
-            return ("Local JADE Platform");
-        }
-
-        public void setType(String noType) {
-        }
-
-        public String getType() {
-            return ("LOCALPLATFORM");
-        }
-    } // END of inner class LocalPlatformFolderNode
-
-
-    /**
-     * Inner class RemotePlatformNode
-     */
-    public class RemotePlatformNode extends Node {
-
-        private APDescription AP_Profile;
-        private AID amsAID;
-
-        public RemotePlatformNode(String name) {
-            super(name);
-        }
-
-        public String getToolTipText() {
-            return ("Remote Platform");
-        }
-
-        public void setType(String noType) {
-        }
-
-        public String getType() {
-            return ("REMOTEPLATFORM");
-        }
-
-        public void setAPDescription(APDescription desc) {
-            AP_Profile = desc;
-        }
-
-        public APDescription getAPDescription() {
-            return AP_Profile;
-        }
-
-        public void setAmsAID(AID id) {
-            amsAID = id;
-        }
-
-        public AID getAmsAID() {
-            return amsAID;
-        }
-    } // END of inner class RemotePlatformNode
-
-
-    /**
-     * Inner class RemoteAgentNode
-     */
-    public class RemoteAgentNode extends AgentNode {
-
-        private AMSAgentDescription amsd;
-
-        public RemoteAgentNode(String name) {
-            super(name);
-        }
-
-        public String getToolTipText() {
-            return ("Remote Agent");
-        }
-
-        public void setType(String noType) {
-        }
-
-        public String getType() {
-            return ("REMOTEAGENT");
-        }
-
-        public void setAMSDescription(AMSAgentDescription id) {
-            amsd = id;
-        }
-
-        public AMSAgentDescription getAMSDescription() {
-            return amsd;
-        }
-    } // END of inner class RemoteAgentNode
 
 
     public AgentTree() {
         this(null);
     }
+
 
     public AgentTree(Font f) {
         mapDescriptor = new HashMap<>();
@@ -389,10 +104,6 @@ public class AgentTree extends JPanel {
 
         tree.addMouseListener(new AgentTreePopupManager(this));
     }
-
-    //public void listenerTree(TreeSelectionListener panel) {
-    //	tree.addTreeSelectionListener(panel);
-    //}
 
     public AgentNode createAgentNode(String name) {
         return new AgentNode(name);
@@ -507,6 +218,10 @@ public class AgentTree extends JPanel {
             }
         }
     }
+
+    //public void listenerTree(TreeSelectionListener panel) {
+    //	tree.addTreeSelectionListener(panel);
+    //}
 
     public void addRemotePlatformsFolderNode() {
         AgentTreeModel model = getModel();
@@ -984,4 +699,281 @@ public class AgentTree extends JPanel {
 
         return null;
     }
+
+    /**
+     * Inner class Node
+     * Common base class for all AgentTree nodes
+     */
+    public abstract class Node extends DefaultMutableTreeNode {
+
+        protected Icon img;
+        protected String name;
+        protected String state;
+        protected String ownership;
+        protected boolean greyOut = false;
+
+        public Node(String name) {
+            this.name = name;
+        }
+
+        public Icon getIcon(String typeAgent) {
+            Image image = getToolkit().getImage(getClass().getResource(getIconAgent(typeAgent)));
+            if (greyOut) {
+                ImageFilter colorfilter = new MyFilterImage();
+                Image imageFiltered = createImage(new FilteredImageSource(image.getSource(), colorfilter));
+                return new ImageIcon(imageFiltered);
+            } else
+                return new ImageIcon(image);
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getState() {
+            return state != null ? state : "";
+        }
+
+        public void setState(String state) {
+            this.state = state;
+        }
+
+        public String getOwnership() {
+            return ownership != null ? ownership : "";
+        }
+
+        public void setOwnership(String ownership) {
+            this.ownership = ownership;
+        }
+
+        public void changeIcon(String agentState) {
+            if (agentState.equalsIgnoreCase("suspended")) {
+                greyOut = true;
+                setType(AGENT_TYPE);
+            } else if (agentState.equalsIgnoreCase("active")) {
+                greyOut = false;
+                setType(AGENT_TYPE);
+            } else if (agentState.equalsIgnoreCase("frozen")) {
+                greyOut = false;
+                setType(FROZEN_AGENT_TYPE);
+            }
+        }
+
+        public abstract String getType();
+
+        public abstract void setType(String type);
+
+        public abstract String getToolTipText();
+
+        public String toString() {
+            return (getType() != null ? getType() + "-" + name : name);
+        }
+
+        public int compareTo(Node n) {
+            return name.compareTo(n.getName());
+        }
+    } // END of inner class Node
+
+    /**
+     * Inner class AgentNode
+     */
+    public class AgentNode extends Node {
+        private String agentType;
+        private String agentAddress;
+
+        public AgentNode(String name) {
+            super(name);
+            agentType = AGENT_TYPE;
+        }
+
+        public String getAddress() {
+            return agentAddress;
+        }
+
+        public void setAddress(String address) {
+            agentAddress = address;
+        }
+
+        public String getType() {
+            return agentType;
+        }
+
+        public void setType(String type) {
+            agentType = type;
+        }
+
+        public String getToolTipText() {
+            return ("Local Agent");
+        }
+    }  // END of inner class AgentNode
+
+    /**
+     * Inner class ContainerNode
+     */
+    public class ContainerNode extends Node {
+        private InetAddress addressmachine;
+        private String containerType;
+
+        public ContainerNode(String name) {
+            super(name);
+            containerType = CONTAINER_TYPE;
+        }
+
+        public void setAddress(InetAddress addr) {
+            addressmachine = addr;
+        }
+
+        public String getType() {
+            return containerType;
+        }
+
+        public void setType(String type) {
+            containerType = type;
+        }
+
+        public String getToolTipText() {
+            if (addressmachine != null)
+                return name + " " + "[" + addressmachine.getHostAddress() + "]";
+            else
+                return name + " " + "[???:???:???:???]";
+        }
+    } // END of inner class ContainerNode
+
+    /**
+     * Inner class SuperContainer
+     */
+    public class SuperContainer extends Node {
+
+        public SuperContainer(String name) {
+            super(name);
+        }
+
+        public String getToolTipText() {
+            return ("Java Agent DEvelopment Framework");
+        }
+
+        public String getType() {
+            return TREE_ROOT_TYPE;
+        }
+
+        public void setType(String noType) {
+        }
+    } // END of inner class SuperContainer
+
+    /**
+     * Inner class RemotePlatformsFolderNode
+     */
+    public class RemotePlatformsFolderNode extends Node {
+
+        public RemotePlatformsFolderNode(String name) {
+            super(name);
+        }
+
+        public String getToolTipText() {
+            return ("List of RemotePlatforms");
+        }
+
+        public String getType() {
+            return (REMOTE_PLATFORMS_FOLDER_TYPE);
+        }
+
+        public void setType(String noType) {
+        }
+    } // END of inner class RemotePlatformsFolderNode
+
+    /**
+     * Inner class localPlatformFolderNode
+     */
+    public class LocalPlatformFolderNode extends Node {
+
+        public LocalPlatformFolderNode(String name) {
+            super(name);
+        }
+
+        public String getToolTipText() {
+            return ("Local JADE Platform");
+        }
+
+        public String getType() {
+            return ("LOCALPLATFORM");
+        }
+
+        public void setType(String noType) {
+        }
+    } // END of inner class LocalPlatformFolderNode
+
+    /**
+     * Inner class RemotePlatformNode
+     */
+    public class RemotePlatformNode extends Node {
+
+        private APDescription AP_Profile;
+        private AID amsAID;
+
+        public RemotePlatformNode(String name) {
+            super(name);
+        }
+
+        public String getToolTipText() {
+            return ("Remote Platform");
+        }
+
+        public String getType() {
+            return ("REMOTEPLATFORM");
+        }
+
+        public void setType(String noType) {
+        }
+
+        public APDescription getAPDescription() {
+            return AP_Profile;
+        }
+
+        public void setAPDescription(APDescription desc) {
+            AP_Profile = desc;
+        }
+
+        public AID getAmsAID() {
+            return amsAID;
+        }
+
+        public void setAmsAID(AID id) {
+            amsAID = id;
+        }
+    } // END of inner class RemotePlatformNode
+
+    /**
+     * Inner class RemoteAgentNode
+     */
+    public class RemoteAgentNode extends AgentNode {
+
+        private AMSAgentDescription amsd;
+
+        public RemoteAgentNode(String name) {
+            super(name);
+        }
+
+        public String getToolTipText() {
+            return ("Remote Agent");
+        }
+
+        public String getType() {
+            return ("REMOTEAGENT");
+        }
+
+        public void setType(String noType) {
+        }
+
+        public AMSAgentDescription getAMSDescription() {
+            return amsd;
+        }
+
+        public void setAMSDescription(AMSAgentDescription id) {
+            amsd = id;
+        }
+    } // END of inner class RemoteAgentNode
 }

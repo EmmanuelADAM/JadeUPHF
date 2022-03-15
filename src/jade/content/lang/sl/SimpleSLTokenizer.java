@@ -34,6 +34,7 @@ import jade.content.lang.Codec;
  */
 public class SimpleSLTokenizer {
     private static final String msg = "Parse error: unexpected end of content at #";
+    private static final String illegalFirstChar = "#0123456789:-?";
     private final String content;
     private int current = 0;
 
@@ -42,6 +43,51 @@ public class SimpleSLTokenizer {
      */
     public SimpleSLTokenizer(String s) {
         content = s;
+    }
+
+    /**
+     * Test if the given string is a legal SL word using the FIPA XC00008D spec.
+     * In addition to FIPA's restrictions, place the additional restriction
+     * that a Word can not contain a '\"', that would confuse the parser at
+     * the other end.
+     */
+    public final static boolean isAWord(String s) {
+        // This should permit strings of length 0 to be encoded.
+        if (s == null || s.length() == 0) {
+            return false; // words must have at least one character
+        }
+
+        if (illegalFirstChar.indexOf(s.charAt(0)) >= 0) {
+            return false;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '"' || c == '(' || c == ')' || c <= 0x20 || c >= 0x80) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Take a java String and quote it to form a legal FIPA SL0 string.
+     * Add quotation marks to the beginning/end and escape any
+     * quotation marks inside the string.
+     */
+    public static String quoteString(String s) {
+        // Make the stringBuffer a little larger than strictly
+        // necessary in case we need to insert any additional
+        // characters.  (If our size estimate is wrong, the
+        // StringBuffer will automatically grow as needed).
+        StringBuilder result = new StringBuilder(s.length() + 20);
+        result.append("\"");
+        for (int i = 0; i < s.length(); i++)
+            if (s.charAt(i) == '"')
+                result.append("\\\"");
+            else
+                result.append(s.charAt(i));
+        result.append("\"");
+        return result.toString();
     }
 
     /**
@@ -156,6 +202,8 @@ public class SimpleSLTokenizer {
         }
         return content.substring(start, current);
     }
+    //FIXME We might improve performance if we merged isAWord and quoteString into a single method
+    // infact they both have to loop over the chars of the String.
 
     private void skipSpaces() {
         while (isSpace(content.charAt(current))) {
@@ -165,54 +213,5 @@ public class SimpleSLTokenizer {
 
     private boolean isSpace(char c) {
         return (c == ' ' || c == '\t' || c == '\n');
-    }
-
-    private static final String illegalFirstChar = "#0123456789:-?";
-    //FIXME We might improve performance if we merged isAWord and quoteString into a single method
-    // infact they both have to loop over the chars of the String.
-
-    /**
-     * Test if the given string is a legal SL word using the FIPA XC00008D spec.
-     * In addition to FIPA's restrictions, place the additional restriction
-     * that a Word can not contain a '\"', that would confuse the parser at
-     * the other end.
-     */
-    public final static boolean isAWord(String s) {
-        // This should permit strings of length 0 to be encoded.
-        if (s == null || s.length() == 0) {
-            return false; // words must have at least one character
-        }
-
-        if (illegalFirstChar.indexOf(s.charAt(0)) >= 0) {
-            return false;
-        }
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (c == '"' || c == '(' || c == ')' || c <= 0x20 || c >= 0x80) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Take a java String and quote it to form a legal FIPA SL0 string.
-     * Add quotation marks to the beginning/end and escape any
-     * quotation marks inside the string.
-     */
-    public static String quoteString(String s) {
-        // Make the stringBuffer a little larger than strictly
-        // necessary in case we need to insert any additional
-        // characters.  (If our size estimate is wrong, the
-        // StringBuffer will automatically grow as needed).
-        StringBuilder result = new StringBuilder(s.length() + 20);
-        result.append("\"");
-        for (int i = 0; i < s.length(); i++)
-            if (s.charAt(i) == '"')
-                result.append("\\\"");
-            else
-                result.append(s.charAt(i));
-        result.append("\"");
-        return result.toString();
     }
 }

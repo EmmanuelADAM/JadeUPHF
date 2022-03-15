@@ -47,16 +47,13 @@ import java.util.List;
  */
 public abstract class BaseInitiator extends AchieveREInitiator {
     private static final long serialVersionUID = -6505544004754497428L;
-
-    private AID target;
-    private String defaultTargetDescription;
-
+    private static int conversationCnt = 0;
     protected OutcomeManager outcome;
     protected ConversationList conversations;
-    private String convId;
-    private static int conversationCnt = 0;
-
     protected Logger myLogger = Logger.getJADELogger(getClass().getName());
+    private AID target;
+    private String defaultTargetDescription;
+    private String convId;
 
     public BaseInitiator() {
         this(null);

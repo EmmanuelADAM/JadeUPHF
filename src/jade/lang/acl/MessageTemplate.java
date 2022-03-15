@@ -68,6 +68,299 @@ public class MessageTemplate implements Serializable {
     private static final int CONTENT = 12;
     private static final int SENDER = 13;
     private static final int REPLY_BY_DATE = 14;
+    /**
+     * @serial
+     */
+    private final MatchExpression toMatch;
+
+    /**
+     * Public constructor to use when the user needs to define
+     * an application specific pattern.
+     */
+
+    public MessageTemplate(MatchExpression e) {
+        toMatch = e;
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message.
+     *
+     * @return A new <code>MessageTemplate</code> matching any given
+     * value.
+     */
+
+    public static MessageTemplate MatchAll() {
+        return new MessageTemplate(new MatchAllLiteral());
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message with a given <code>:sender</code> slot.
+     *
+     * @param value The value the message slot will be matched against.
+     * @return A new <code>MessageTemplate</code> matching the given
+     * value.
+     */
+    public static MessageTemplate MatchSender(AID value) {
+        return new MessageTemplate(new Literal(value));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message with a given <code>:receiver</code> slot.
+     *
+     * @param values An array of Agent IDs against which the
+     *               value of the message slot will be matched.
+     * @return A new <code>MessageTemplate</code> matching the given
+     * value.
+     */
+    public static MessageTemplate MatchReceiver(AID[] values) {
+        return new MessageTemplate(new Literal(values, RECEIVER));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message about a given topic.
+     *
+     * @param topic An AID representing the topic to be matched
+     * @return A new <code>MessageTemplate</code> matching messages about the given topic
+     */
+    public static MessageTemplate MatchTopic(AID topic) {
+        return new MessageTemplate(new MatchTopic(topic));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message with a given <code>:content</code> slot.
+     *
+     * @param value The value the message slot will be matched against.
+     * @return A new <code>MessageTemplate</code> matching the given
+     * value.
+     */
+    public static MessageTemplate MatchContent(String value) {
+        return new MessageTemplate(new Literal(value, CONTENT));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message with a given <code>:reply-with</code> slot.
+     *
+     * @param value The value the message slot will be matched against.
+     * @return A new <code>MessageTemplate</code> matching the given
+     * value.
+     */
+    public static MessageTemplate MatchReplyWith(String value) {
+        return new MessageTemplate(new Literal(value, REPLY_WITH));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message with a given <code>:in-reply-to</code> slot.
+     *
+     * @param value The value the message slot will be matched against.
+     * @return A new <code>MessageTemplate</code> matching the given
+     * value.
+     */
+    public static MessageTemplate MatchInReplyTo(String value) {
+        return new MessageTemplate(new Literal(value, IN_REPLY_TO));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message with a given <code>:reply-to</code> slot.
+     *
+     * @param values An array of Agent IDs against which the
+     *               value of the message slot will be matched.
+     * @return A new <code>MessageTemplate</code> matching the given
+     * value.
+     */
+    public static MessageTemplate MatchReplyTo(AID[] values) {
+        return new MessageTemplate(new Literal(values, REPLY_TO));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message with a given <code>:language</code> slot.
+     *
+     * @param value The value the message slot will be matched against.
+     * @return A new <code>MessageTemplate</code> matching the given
+     * value.
+     */
+    public static MessageTemplate MatchLanguage(String value) {
+        return new MessageTemplate(new Literal(value, LANGUAGE));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message with a given <code>:encoding</code> slot.
+     *
+     * @param value The value the message slot will be matched against.
+     * @return A new <code>MessageTemplate</code> matching the given
+     * value.
+     */
+    public static MessageTemplate MatchEncoding(String value) {
+        return new MessageTemplate(new Literal(value, ENCODING));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message with a given <code>:ontology</code> slot.
+     *
+     * @param value The value the message slot will be matched against.
+     * @return A new <code>MessageTemplate</code> matching the given
+     * value.
+     */
+    public static MessageTemplate MatchOntology(String value) {
+        return new MessageTemplate(new Literal(value, ONTOLOGY));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message with a given <code>:reply-by</code> slot.
+     *
+     * @param value The <code>Date</code> the message slot will be matched against.
+     * @return A new <code>MessageTemplate</code> matching the given
+     * value.
+     **/
+    public static MessageTemplate MatchReplyByDate(Date value) {
+        return new MessageTemplate(new Literal(value));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message with a given <code>:protocol</code> slot.
+     *
+     * @param value The value the message slot will be matched against.
+     * @return A new <code>MessageTemplate</code> matching the given
+     * value.
+     */
+    public static MessageTemplate MatchProtocol(String value) {
+        return new MessageTemplate(new Literal(value, PROTOCOL));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message with a given <code>:conversation-id</code> slot.
+     *
+     * @param value The value the message slot will be matched against.
+     * @return A new <code>MessageTemplate</code> matching the given
+     * value.
+     */
+    public static MessageTemplate MatchConversationId(String value) {
+        return new MessageTemplate(new Literal(value, CONVERSATION_ID));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches any message with a given performative.
+     *
+     * @param value The value the message slot will be matched against.
+     * @return A new <code>MessageTenplate</code>matching the given
+     * value.
+     */
+    public static MessageTemplate MatchPerformative(int value) {
+        return new MessageTemplate(new Literal(value));
+    }
+
+    /**
+     * This <em>Factory Method</em> returns a message template that
+     * matches ACL messages against a given one, passed as
+     * parameter. The following algorithm is used:
+     * When the given <code>ACLMessage</code> has a non
+     * <code>null</code> slot, subsequent messages must have the same
+     * slot value in that slot to have a match.
+     * When the given <code>ACLMessage</code> has a <code>null</code>
+     * slot, subsequent messages can have any value for that slot and
+     * still match the template.
+     * In short, a <code>null</code> value for a slot means <em>don't
+     * care</em>.
+     *
+     * @param msg               The <code>ACLMessage</code> used to build a custom
+     *                          message template.
+     * @param matchPerformative a <code>bool</code> value. When
+     *                          <code>true</code>, the performative of the <code>msg</code> will
+     *                          be considered as a part of the template (i.e. the message
+     *                          template will match only ACL messages with the same performativa
+     *                          as <code>msg</code>).
+     *                          When <false>, the performative of <code>msg</code> is ignored and
+     *                          the resulting message template will not consider it when matching
+     *                          messages.
+     * @return A new <code>MessageTemplate</code>, matching the given
+     * message according to the above algorithm.
+     */
+    public static MessageTemplate MatchCustom(ACLMessage msg, boolean matchPerformative) {
+        ACLMessage message = (ACLMessage) msg.clone();
+        return new MessageTemplate(new CustomMsgLiteral(message, matchPerformative));
+    }
+
+    /**
+     * Logical <b>and</b> between two <code>MessageTemplate</code>
+     * objects. This method creates a new message template that is
+     * matched by those ACL messages matching <b><em>both</b></em>
+     * message templates given as operands.
+     *
+     * @param op1 The first <em>and</em> operand.
+     * @param op2 The second <em>and</em> operand.
+     * @return A new <code>MessageTemplate</code> object.
+     * @see MessageTemplate#or(MessageTemplate op1, MessageTemplate op2)
+     */
+    public static MessageTemplate and(MessageTemplate op1, MessageTemplate op2) {
+        AndExpression e = new AndExpression(op1.toMatch, op2.toMatch);
+        return new MessageTemplate(e);
+    }
+
+    /**
+     * Logical <b>or</b> between two <code>MessageTemplate</code>
+     * objects. This method creates a new message template that is
+     * matched by those ACL messages matching <b><em>any</b></em> of the
+     * two message templates given as operands.
+     *
+     * @param op1 The first <em>or</em> operand.
+     * @param op2 The second <em>or</em> operand.
+     * @return A new <code>MessageTemplate</code> object.
+     * @see MessageTemplate#and(MessageTemplate op1, MessageTemplate op2)
+     */
+    public static MessageTemplate or(MessageTemplate op1, MessageTemplate op2) {
+        OrExpression e = new OrExpression(op1.toMatch, op2.toMatch);
+        return new MessageTemplate(e);
+    }
+
+    /**
+     * Logical <b>not</b> of a <code>MessageTemplate</code> object. This
+     * method creates a new message template that is matched by those
+     * ACL messages <b><em>not</em></b> matching the message template
+     * given as operand.
+     *
+     * @param op The <em>not</em> operand.
+     * @return A new <code>MessageTemplate</code> object.
+     */
+    public static MessageTemplate not(MessageTemplate op) {
+        NotExpression e = new NotExpression(op.toMatch);
+        return new MessageTemplate(e);
+    }
+
+    /**
+     * Matches an ACL message against this <code>MessageTemplate</code>
+     * object.
+     *
+     * @param msg The <code>ACLMessage</code> to check for matching.
+     * @return <code>true</code> if the ACL message matches this
+     * template, <code>false</code> otherwise.
+     */
+    public boolean match(ACLMessage msg) {
+        return toMatch.match(msg);
+    }
+
+    /**
+     * Retrieve a string representation of this message template.
+     *
+     * @return A string describing the syntactic structure of this
+     * message template.
+     */
+    public String toString() {
+        return toMatch.toString();
+    }
 
     /**
      * This interface must be overriden in order to define an application
@@ -492,299 +785,5 @@ public class MessageTemplate implements Serializable {
             String name = (matchAll ? TopicManagementHelper.TOPIC_TEMPLATE_WILDCARD : (isTemplate ? topicName + '.' + TopicManagementHelper.TOPIC_TEMPLATE_WILDCARD : topicName));
             return "( Topic: " + name + " )";
         }
-    }
-
-    /**
-     * @serial
-     */
-    private final MatchExpression toMatch;
-
-    /**
-     * Public constructor to use when the user needs to define
-     * an application specific pattern.
-     */
-
-    public MessageTemplate(MatchExpression e) {
-        toMatch = e;
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message.
-     *
-     * @return A new <code>MessageTemplate</code> matching any given
-     * value.
-     */
-
-    public static MessageTemplate MatchAll() {
-        return new MessageTemplate(new MatchAllLiteral());
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:sender</code> slot.
-     *
-     * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
-     * value.
-     */
-    public static MessageTemplate MatchSender(AID value) {
-        return new MessageTemplate(new Literal(value));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:receiver</code> slot.
-     *
-     * @param values An array of Agent IDs against which the
-     *               value of the message slot will be matched.
-     * @return A new <code>MessageTemplate</code> matching the given
-     * value.
-     */
-    public static MessageTemplate MatchReceiver(AID[] values) {
-        return new MessageTemplate(new Literal(values, RECEIVER));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message about a given topic.
-     *
-     * @param topic An AID representing the topic to be matched
-     * @return A new <code>MessageTemplate</code> matching messages about the given topic
-     */
-    public static MessageTemplate MatchTopic(AID topic) {
-        return new MessageTemplate(new MatchTopic(topic));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:content</code> slot.
-     *
-     * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
-     * value.
-     */
-    public static MessageTemplate MatchContent(String value) {
-        return new MessageTemplate(new Literal(value, CONTENT));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:reply-with</code> slot.
-     *
-     * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
-     * value.
-     */
-    public static MessageTemplate MatchReplyWith(String value) {
-        return new MessageTemplate(new Literal(value, REPLY_WITH));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:in-reply-to</code> slot.
-     *
-     * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
-     * value.
-     */
-    public static MessageTemplate MatchInReplyTo(String value) {
-        return new MessageTemplate(new Literal(value, IN_REPLY_TO));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:reply-to</code> slot.
-     *
-     * @param values An array of Agent IDs against which the
-     *               value of the message slot will be matched.
-     * @return A new <code>MessageTemplate</code> matching the given
-     * value.
-     */
-    public static MessageTemplate MatchReplyTo(AID[] values) {
-        return new MessageTemplate(new Literal(values, REPLY_TO));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:language</code> slot.
-     *
-     * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
-     * value.
-     */
-    public static MessageTemplate MatchLanguage(String value) {
-        return new MessageTemplate(new Literal(value, LANGUAGE));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:encoding</code> slot.
-     *
-     * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
-     * value.
-     */
-    public static MessageTemplate MatchEncoding(String value) {
-        return new MessageTemplate(new Literal(value, ENCODING));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:ontology</code> slot.
-     *
-     * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
-     * value.
-     */
-    public static MessageTemplate MatchOntology(String value) {
-        return new MessageTemplate(new Literal(value, ONTOLOGY));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:reply-by</code> slot.
-     *
-     * @param value The <code>Date</code> the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
-     * value.
-     **/
-    public static MessageTemplate MatchReplyByDate(Date value) {
-        return new MessageTemplate(new Literal(value));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:protocol</code> slot.
-     *
-     * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
-     * value.
-     */
-    public static MessageTemplate MatchProtocol(String value) {
-        return new MessageTemplate(new Literal(value, PROTOCOL));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:conversation-id</code> slot.
-     *
-     * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
-     * value.
-     */
-    public static MessageTemplate MatchConversationId(String value) {
-        return new MessageTemplate(new Literal(value, CONVERSATION_ID));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given performative.
-     *
-     * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTenplate</code>matching the given
-     * value.
-     */
-    public static MessageTemplate MatchPerformative(int value) {
-        return new MessageTemplate(new Literal(value));
-    }
-
-    /**
-     * This <em>Factory Method</em> returns a message template that
-     * matches ACL messages against a given one, passed as
-     * parameter. The following algorithm is used:
-     * When the given <code>ACLMessage</code> has a non
-     * <code>null</code> slot, subsequent messages must have the same
-     * slot value in that slot to have a match.
-     * When the given <code>ACLMessage</code> has a <code>null</code>
-     * slot, subsequent messages can have any value for that slot and
-     * still match the template.
-     * In short, a <code>null</code> value for a slot means <em>don't
-     * care</em>.
-     *
-     * @param msg               The <code>ACLMessage</code> used to build a custom
-     *                          message template.
-     * @param matchPerformative a <code>bool</code> value. When
-     *                          <code>true</code>, the performative of the <code>msg</code> will
-     *                          be considered as a part of the template (i.e. the message
-     *                          template will match only ACL messages with the same performativa
-     *                          as <code>msg</code>).
-     *                          When <false>, the performative of <code>msg</code> is ignored and
-     *                          the resulting message template will not consider it when matching
-     *                          messages.
-     * @return A new <code>MessageTemplate</code>, matching the given
-     * message according to the above algorithm.
-     */
-    public static MessageTemplate MatchCustom(ACLMessage msg, boolean matchPerformative) {
-        ACLMessage message = (ACLMessage) msg.clone();
-        return new MessageTemplate(new CustomMsgLiteral(message, matchPerformative));
-    }
-
-    /**
-     * Logical <b>and</b> between two <code>MessageTemplate</code>
-     * objects. This method creates a new message template that is
-     * matched by those ACL messages matching <b><em>both</b></em>
-     * message templates given as operands.
-     *
-     * @param op1 The first <em>and</em> operand.
-     * @param op2 The second <em>and</em> operand.
-     * @return A new <code>MessageTemplate</code> object.
-     * @see MessageTemplate#or(MessageTemplate op1, MessageTemplate op2)
-     */
-    public static MessageTemplate and(MessageTemplate op1, MessageTemplate op2) {
-        AndExpression e = new AndExpression(op1.toMatch, op2.toMatch);
-        return new MessageTemplate(e);
-    }
-
-    /**
-     * Logical <b>or</b> between two <code>MessageTemplate</code>
-     * objects. This method creates a new message template that is
-     * matched by those ACL messages matching <b><em>any</b></em> of the
-     * two message templates given as operands.
-     *
-     * @param op1 The first <em>or</em> operand.
-     * @param op2 The second <em>or</em> operand.
-     * @return A new <code>MessageTemplate</code> object.
-     * @see MessageTemplate#and(MessageTemplate op1, MessageTemplate op2)
-     */
-    public static MessageTemplate or(MessageTemplate op1, MessageTemplate op2) {
-        OrExpression e = new OrExpression(op1.toMatch, op2.toMatch);
-        return new MessageTemplate(e);
-    }
-
-    /**
-     * Logical <b>not</b> of a <code>MessageTemplate</code> object. This
-     * method creates a new message template that is matched by those
-     * ACL messages <b><em>not</em></b> matching the message template
-     * given as operand.
-     *
-     * @param op The <em>not</em> operand.
-     * @return A new <code>MessageTemplate</code> object.
-     */
-    public static MessageTemplate not(MessageTemplate op) {
-        NotExpression e = new NotExpression(op.toMatch);
-        return new MessageTemplate(e);
-    }
-
-    /**
-     * Matches an ACL message against this <code>MessageTemplate</code>
-     * object.
-     *
-     * @param msg The <code>ACLMessage</code> to check for matching.
-     * @return <code>true</code> if the ACL message matches this
-     * template, <code>false</code> otherwise.
-     */
-    public boolean match(ACLMessage msg) {
-        return toMatch.match(msg);
-    }
-
-    /**
-     * Retrieve a string representation of this message template.
-     *
-     * @return A string describing the syntactic structure of this
-     * message template.
-     */
-    public String toString() {
-        return toMatch.toString();
     }
 }

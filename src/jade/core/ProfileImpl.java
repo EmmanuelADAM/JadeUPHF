@@ -29,10 +29,7 @@ package jade.core;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * This class allows the JADE core to retrieve configuration-dependent classes
@@ -49,14 +46,11 @@ import java.util.Vector;
  */
 public class ProfileImpl extends Profile {
 
-    private final Properties props;
-    protected Properties bootProps = null;
-
-
     // Keys to retrieve the implementation classes for configurable
     // functionalities among the bootstrap properties.
     private static final String RESOURCE = "resource";
-
+    private final Properties props;
+    protected Properties bootProps = null;
     //#MIDP_EXCLUDE_BEGIN
     private MainContainerImpl myMain = null;
     //#MIDP_EXCLUDE_END
@@ -214,11 +208,7 @@ public class ProfileImpl extends Profile {
             // the default port if also the local port is null.
             if (isMasterMain()) {
 
-                if (localPort != null) {
-                    p = localPort;
-                } else {
-                    p = Integer.toString(DEFAULT_PORT);
-                }
+                p = Objects.requireNonNullElseGet(localPort, () -> Integer.toString(DEFAULT_PORT));
             } else {
                 // All other cases: use the default port.
                 p = Integer.toString(DEFAULT_PORT);
@@ -560,10 +550,7 @@ public class ProfileImpl extends Profile {
 
 
     private void setPropertyIfNot(String key, String value) {
-        Object old = props.get(key);
-        if (old == null) {
-            props.put(key, value);
-        }
+        props.putIfAbsent(key, value);
     }
 
     private void setIntProperty(String aKey, int aValue) {

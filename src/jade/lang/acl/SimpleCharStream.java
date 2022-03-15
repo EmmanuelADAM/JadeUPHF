@@ -8,24 +8,55 @@ package jade.lang.acl;
 
 public class SimpleCharStream {
     public static final boolean staticFlag = false;
-    int bufsize;
-    int available;
-    int tokenBegin;
     public int bufpos = -1;
     protected int[] bufline;
     protected int[] bufcolumn;
-
     protected int column = 0;
     protected int line = 1;
-
     protected boolean prevCharIsCR = false;
     protected boolean prevCharIsLF = false;
-
     protected java.io.Reader inputStream;
-
     protected char[] buffer;
     protected int maxNextCharInd = 0;
     protected int inBuf = 0;
+    int bufsize;
+    int available;
+    int tokenBegin;
+
+    public SimpleCharStream(java.io.Reader dstream, int startline,
+                            int startcolumn, int buffersize) {
+        inputStream = dstream;
+        line = startline;
+        column = startcolumn - 1;
+
+        available = bufsize = buffersize;
+        buffer = new char[buffersize];
+        bufline = new int[buffersize];
+        bufcolumn = new int[buffersize];
+    }
+
+    public SimpleCharStream(java.io.Reader dstream, int startline,
+                            int startcolumn) {
+        this(dstream, startline, startcolumn, 4096);
+    }
+
+    public SimpleCharStream(java.io.Reader dstream) {
+        this(dstream, 1, 1, 4096);
+    }
+
+    public SimpleCharStream(java.io.InputStream dstream, int startline,
+                            int startcolumn, int buffersize) {
+        this(new java.io.InputStreamReader(dstream), startline, startcolumn, 4096);
+    }
+
+    public SimpleCharStream(java.io.InputStream dstream, int startline,
+                            int startcolumn) {
+        this(dstream, startline, startcolumn, 4096);
+    }
+
+    public SimpleCharStream(java.io.InputStream dstream) {
+        this(dstream, 1, 1, 4096);
+    }
 
     protected void ExpandBuff(boolean wrapAround) {
         char[] newbuffer = new char[bufsize + 2048];
@@ -129,18 +160,14 @@ public class SimpleCharStream {
         }
 
         switch (c) {
-            case '\r':
-                prevCharIsCR = true;
-                break;
-            case '\n':
-                prevCharIsLF = true;
-                break;
-            case '\t':
+            case '\r' -> prevCharIsCR = true;
+            case '\n' -> prevCharIsLF = true;
+            case '\t' -> {
                 column--;
                 column += (8 - (column & 07));
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
 
         bufline[bufpos] = line;
@@ -207,27 +234,6 @@ public class SimpleCharStream {
             bufpos += bufsize;
     }
 
-    public SimpleCharStream(java.io.Reader dstream, int startline,
-                            int startcolumn, int buffersize) {
-        inputStream = dstream;
-        line = startline;
-        column = startcolumn - 1;
-
-        available = bufsize = buffersize;
-        buffer = new char[buffersize];
-        bufline = new int[buffersize];
-        bufcolumn = new int[buffersize];
-    }
-
-    public SimpleCharStream(java.io.Reader dstream, int startline,
-                            int startcolumn) {
-        this(dstream, startline, startcolumn, 4096);
-    }
-
-    public SimpleCharStream(java.io.Reader dstream) {
-        this(dstream, 1, 1, 4096);
-    }
-
     public void ReInit(java.io.Reader dstream, int startline,
                        int startcolumn, int buffersize) {
         inputStream = dstream;
@@ -252,20 +258,6 @@ public class SimpleCharStream {
 
     public void ReInit(java.io.Reader dstream) {
         ReInit(dstream, 1, 1, 4096);
-    }
-
-    public SimpleCharStream(java.io.InputStream dstream, int startline,
-                            int startcolumn, int buffersize) {
-        this(new java.io.InputStreamReader(dstream), startline, startcolumn, 4096);
-    }
-
-    public SimpleCharStream(java.io.InputStream dstream, int startline,
-                            int startcolumn) {
-        this(dstream, startline, startcolumn, 4096);
-    }
-
-    public SimpleCharStream(java.io.InputStream dstream) {
-        this(dstream, 1, 1, 4096);
     }
 
     public void ReInit(java.io.InputStream dstream, int startline,

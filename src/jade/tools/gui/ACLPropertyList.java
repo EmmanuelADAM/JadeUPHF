@@ -45,6 +45,20 @@ import java.util.StringTokenizer;
 
 public class ACLPropertyList extends JPanel {
 
+    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final JList<String> contentList = new JList<>();
+    private final JButton viewButton = new JButton();
+    private final JButton addButton = new JButton();
+    private final JButton deleteButton = new JButton();
+    private final ACLPropertyListCellRenderer aclPropertyListCellRenderer = new ACLPropertyListCellRenderer();
+    private final ACLPropertyListener theDataListener = new ACLPropertyListener();
+    private final JScrollPane contentScrollPane = new JScrollPane();
+    private boolean editable = true;
+    private DefaultListModel<String> listModel = new DefaultListModel<>();
+    private String fieldName = "";
+    private ACLMessage msg;
+
+
     /**
      * Constructor for the ACLPropertyList object
      */
@@ -55,7 +69,6 @@ public class ACLPropertyList extends JPanel {
             e.printStackTrace();
         }
     }
-
 
     /**
      * Sets the Editable attribute of the ACLPropertyList object
@@ -69,7 +82,6 @@ public class ACLPropertyList extends JPanel {
             this.deleteButton.setEnabled(false);
         }
     }
-
 
     /**
      * Register ACLMessage
@@ -92,7 +104,6 @@ public class ACLPropertyList extends JPanel {
         theDataListener.register(msg, fieldName);
         listModel.addListDataListener(theDataListener);
     }
-
 
     /**
      * show a property
@@ -118,7 +129,6 @@ public class ACLPropertyList extends JPanel {
         }
     }
 
-
     /**
      * Description of the Method
      *
@@ -127,7 +137,6 @@ public class ACLPropertyList extends JPanel {
     void deleteButton_actionPerformed(ActionEvent e) {
         doDelete();
     }
-
 
     /**
      * delete a property
@@ -140,7 +149,6 @@ public class ACLPropertyList extends JPanel {
         }
     }
 
-
     /**
      * Adds a feature to the Button_actionPerformed attribute of the
      * ACLPropertyList object
@@ -151,7 +159,6 @@ public class ACLPropertyList extends JPanel {
     void addButton_actionPerformed(ActionEvent e) {
         doAdd();
     }
-
 
     /**
      * Add an property
@@ -168,7 +175,6 @@ public class ACLPropertyList extends JPanel {
         this.validate();
     }
 
-
     /**
      * Description of the Method
      *
@@ -177,7 +183,6 @@ public class ACLPropertyList extends JPanel {
     void viewButton_actionPerformed(ActionEvent e) {
         doView();
     }
-
 
     /**
      * Description of the Method
@@ -190,7 +195,6 @@ public class ACLPropertyList extends JPanel {
         }
 
     }
-
 
     /**
      * Description of the Method
@@ -208,7 +212,6 @@ public class ACLPropertyList extends JPanel {
         }
         return result;
     }
-
 
     /**
      * Description of the Method
@@ -232,7 +235,6 @@ public class ACLPropertyList extends JPanel {
         }
 
     }
-
 
     /**
      * Description of the Method
@@ -297,8 +299,10 @@ public class ACLPropertyList extends JPanel {
                 , GridBagConstraints.CENTER, GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
     }
 
-
     private class ACLPropertyListCellRenderer extends JLabel implements ListCellRenderer<Object> {
+        private ACLMessage msg;
+
+
         /**
          * Constructor for the ACLPropertyListCellRenderer object
          */
@@ -306,7 +310,6 @@ public class ACLPropertyList extends JPanel {
             setOpaque(true);
             setFont(new Font("Dialog", Font.PLAIN, 11));
         }
-
 
         /**
          * Gets the ListCellRendererComponent attribute of the
@@ -329,7 +332,6 @@ public class ACLPropertyList extends JPanel {
             return this;
         }
 
-
         /**
          * register the ACLMessage
          *
@@ -338,14 +340,24 @@ public class ACLPropertyList extends JPanel {
         public void register(ACLMessage msg) {
             this.msg = msg;
         }
-
-
-        private ACLMessage msg;
     }
-
 
     private class ACLPropertyDialog extends JDialog {
 
+        private final String CANCELLED = "cancelled";
+        private final String CLOSED = "closed";
+        private final GridBagLayout gridBagLayout1 = new GridBagLayout();
+        private final JTextField keyTextField = new JTextField();
+        private final JLabel jLabel1 = new JLabel();
+        private final JButton okButton = new JButton();
+        private final JButton cancelButton = new JButton();
+        private final JLabel jLabel2 = new JLabel();
+        private final JTextField valueTextField = new JTextField();
+        private String OK = "ok";
+        private String userAction;
+        private String itsAddress;
+        private String itskey;
+        private String itsvalue;
         /**
          * Constructor for the ACLPropertyDialog object
          */
@@ -359,7 +371,6 @@ public class ACLPropertyList extends JPanel {
             }
         }
 
-
         /**
          * Gets the UserAction attribute of the ACLPropertyDialog object
          *
@@ -369,6 +380,14 @@ public class ACLPropertyList extends JPanel {
             return userAction;
         }
 
+        /**
+         * Sets the UserAction attribute of the ACLPropertyDialog object
+         *
+         * @param newUserAction The new UserAction value
+         */
+        public void setUserAction(String newUserAction) {
+            userAction = newUserAction;
+        }
 
         /**
          * Gets the OK attribute of the ACLPropertyDialog object
@@ -379,7 +398,6 @@ public class ACLPropertyList extends JPanel {
             return userAction.equals(OK);
         }
 
-
         /**
          * Gets the Itskey attribute of the ACLPropertyDialog object
          *
@@ -389,6 +407,15 @@ public class ACLPropertyList extends JPanel {
             return itskey;
         }
 
+        /**
+         * Sets the Itskey attribute of the ACLPropertyDialog object
+         *
+         * @param newItskey The new Itskey value
+         */
+        public void setItskey(String newItskey) {
+            keyTextField.setText(newItskey);
+            itskey = newItskey;
+        }
 
         /**
          * Gets the Itsvalue attribute of the ACLPropertyDialog object
@@ -399,6 +426,15 @@ public class ACLPropertyList extends JPanel {
             return itsvalue;
         }
 
+        /**
+         * Sets the Itsvalue attribute of the ACLPropertyDialog object
+         *
+         * @param newItsvalue The new Itsvalue value
+         */
+        public void setItsvalue(String newItsvalue) {
+            valueTextField.setText(newItsvalue);
+            itsvalue = newItsvalue;
+        }
 
         /**
          * Sets the Editable attribute of the ACLPropertyDialog object
@@ -413,46 +449,12 @@ public class ACLPropertyList extends JPanel {
             }
         }
 
-
-        /**
-         * Sets the UserAction attribute of the ACLPropertyDialog object
-         *
-         * @param newUserAction The new UserAction value
-         */
-        public void setUserAction(String newUserAction) {
-            userAction = newUserAction;
-        }
-
-
-        /**
-         * Sets the Itskey attribute of the ACLPropertyDialog object
-         *
-         * @param newItskey The new Itskey value
-         */
-        public void setItskey(String newItskey) {
-            keyTextField.setText(newItskey);
-            itskey = newItskey;
-        }
-
-
         /**
          * Sets the Edit attribute of the ACLPropertyDialog object
          */
         public void setEdit() {
             keyTextField.setEditable(false);
         }
-
-
-        /**
-         * Sets the Itsvalue attribute of the ACLPropertyDialog object
-         *
-         * @param newItsvalue The new Itsvalue value
-         */
-        public void setItsvalue(String newItsvalue) {
-            valueTextField.setText(newItsvalue);
-            itsvalue = newItsvalue;
-        }
-
 
         /**
          * Description of the Method
@@ -490,7 +492,6 @@ public class ACLPropertyList extends JPanel {
                     , GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, -16, 0, 0), 0, 0));
         }
 
-
         /**
          * Description of the Method
          *
@@ -500,7 +501,6 @@ public class ACLPropertyList extends JPanel {
             setUserAction(CANCELLED);
             setVisible(false);
         }
-
 
         /**
          * Description of the Method
@@ -514,25 +514,7 @@ public class ACLPropertyList extends JPanel {
             setVisible(false);
         }
 
-
-        private String OK = "ok";
-        private final String CANCELLED = "cancelled";
-        private final String CLOSED = "closed";
-
-        private final GridBagLayout gridBagLayout1 = new GridBagLayout();
-        private final JTextField keyTextField = new JTextField();
-        private final JLabel jLabel1 = new JLabel();
-        private final JButton okButton = new JButton();
-        private final JButton cancelButton = new JButton();
-        private final JLabel jLabel2 = new JLabel();
-        private final JTextField valueTextField = new JTextField();
-        private String userAction;
-        private String itsAddress;
-        private String itskey;
-        private String itsvalue;
-
     }
-
 
     /**
      * This class is the ListDataListener of the ACLPropertyList.
@@ -542,6 +524,10 @@ public class ACLPropertyList extends JPanel {
      */
 
     private class ACLPropertyListener implements ListDataListener {
+        private String fieldName = "";
+        private String theRemovedKey, theChangedKey, theChangedValue;
+        private ACLMessage itsMsg;
+
         /**
          * Description of the Method
          *
@@ -552,7 +538,6 @@ public class ACLPropertyList extends JPanel {
             itsMsg = (ACLMessage) obj;
             this.fieldName = fieldName;
         }
-
 
         /**
          * Description of the Method
@@ -566,7 +551,6 @@ public class ACLPropertyList extends JPanel {
             itsMsg.addUserDefinedParameter(theChangedKey, theChangedValue);
         }
 
-
         /**
          * Description of the Method
          *
@@ -578,7 +562,6 @@ public class ACLPropertyList extends JPanel {
             this.theChangedValue = theChangedValue;
         }
 
-
         /**
          * Description of the Method
          *
@@ -587,7 +570,6 @@ public class ACLPropertyList extends JPanel {
         public void registerRemovedKey(String theRemovedKey) {
             this.theRemovedKey = theRemovedKey;
         }
-
 
         /**
          * Description of the Method
@@ -600,7 +582,6 @@ public class ACLPropertyList extends JPanel {
             itsMsg.removeUserDefinedParameter(theRemovedKey);
         }
 
-
         /**
          * Description of the Method
          *
@@ -612,29 +593,7 @@ public class ACLPropertyList extends JPanel {
             itsMsg.removeUserDefinedParameter(theChangedKey);
             itsMsg.addUserDefinedParameter(theChangedKey, theChangedValue);
         }
-
-
-        private String fieldName = "";
-        private String theRemovedKey, theChangedKey, theChangedValue;
-        private ACLMessage itsMsg;
     }
-
-
-    private boolean editable = true;
-
-    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
-    private final JList<String> contentList = new JList<>();
-    private final JButton viewButton = new JButton();
-    private final JButton addButton = new JButton();
-    private final JButton deleteButton = new JButton();
-
-    private DefaultListModel<String> listModel = new DefaultListModel<>();
-    private final ACLPropertyListCellRenderer aclPropertyListCellRenderer = new ACLPropertyListCellRenderer();
-    private final ACLPropertyListener theDataListener = new ACLPropertyListener();
-    private final JScrollPane contentScrollPane = new JScrollPane();
-
-    private String fieldName = "";
-    private ACLMessage msg;
 
 }
 //  ***EOF***

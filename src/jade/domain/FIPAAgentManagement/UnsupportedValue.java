@@ -47,13 +47,13 @@ public class UnsupportedValue extends NotUnderstoodException implements Predicat
         s = value;
     }
 
+    public String getValue() {
+        return s;
+    }
+
     public void setValue(String a) {
         s = a;
         setMessage("(Unsupported-value \"" + a + "\")");
-    }
-
-    public String getValue() {
-        return s;
     }
 
 }

@@ -41,6 +41,58 @@ public class FrontEndStub extends MicroStub implements FrontEnd {
         super(d);
     }
 
+    public static final String encodeCreateMediatorResponse(Properties pp) {
+        StringBuffer sb = new StringBuffer();
+        appendProp(sb, Profile.PLATFORM_ID, pp);
+        appendProp(sb, MicroRuntime.PLATFORM_ADDRESSES_KEY, pp);
+        appendProp(sb, JICPProtocol.MEDIATOR_ID_KEY, pp);
+        appendProp(sb, JICPProtocol.LOCAL_HOST_KEY, pp);
+        appendProp(sb, Profile.AGENTS, pp, false);
+        return sb.toString();
+    }
+
+    public static final String encodeProperties(Properties pp) {
+        StringBuffer sb = new StringBuffer();
+        Enumeration<Object> en = pp.keys();
+        while (en.hasMoreElements()) {
+            String key = (String) en.nextElement();
+            appendProp(sb, key, pp, en.hasMoreElements());
+        }
+        return sb.toString();
+    }
+
+    private static void appendProp(StringBuffer sb, String key, Properties pp) {
+        appendProp(sb, key, pp, true);
+    }
+
+    private static void appendProp(StringBuffer sb, String key, Properties pp, boolean appendHash) {
+        Object val = pp.get(key);
+        if (val != null) {
+            String strVal = val.toString();
+            if (strVal.length() > 0) {
+                sb.append(key);
+                sb.append('=');
+                sb.append(val);
+                if (appendHash) {
+                    sb.append('#');
+                }
+            }
+        }
+    }
+
+    public static final Properties parseCreateMediatorRequest(String s) throws ICPException {
+        StringTokenizer st = new StringTokenizer(s, "=#");
+        Properties p = new Properties();
+        while (st.hasMoreTokens()) {
+            String key = st.nextToken();
+            if (!st.hasMoreTokens()) {
+                throw new ICPException("Wrong initialization properties format.");
+            }
+            p.setProperty(key, st.nextToken());
+        }
+        return p;
+    }
+
     /**
      *
      */
@@ -168,58 +220,6 @@ public class FrontEndStub extends MicroStub implements FrontEnd {
             // Return the list of matching messages
             return messages;
         }
-    }
-
-    public static final String encodeCreateMediatorResponse(Properties pp) {
-        StringBuffer sb = new StringBuffer();
-        appendProp(sb, Profile.PLATFORM_ID, pp);
-        appendProp(sb, MicroRuntime.PLATFORM_ADDRESSES_KEY, pp);
-        appendProp(sb, JICPProtocol.MEDIATOR_ID_KEY, pp);
-        appendProp(sb, JICPProtocol.LOCAL_HOST_KEY, pp);
-        appendProp(sb, Profile.AGENTS, pp, false);
-        return sb.toString();
-    }
-
-    public static final String encodeProperties(Properties pp) {
-        StringBuffer sb = new StringBuffer();
-        Enumeration<Object> en = pp.keys();
-        while (en.hasMoreElements()) {
-            String key = (String) en.nextElement();
-            appendProp(sb, key, pp, en.hasMoreElements());
-        }
-        return sb.toString();
-    }
-
-    private static void appendProp(StringBuffer sb, String key, Properties pp) {
-        appendProp(sb, key, pp, true);
-    }
-
-    private static void appendProp(StringBuffer sb, String key, Properties pp, boolean appendHash) {
-        Object val = pp.get(key);
-        if (val != null) {
-            String strVal = val.toString();
-            if (strVal.length() > 0) {
-                sb.append(key);
-                sb.append('=');
-                sb.append(val);
-                if (appendHash) {
-                    sb.append('#');
-                }
-            }
-        }
-    }
-
-    public static final Properties parseCreateMediatorRequest(String s) throws ICPException {
-        StringTokenizer st = new StringTokenizer(s, "=#");
-        Properties p = new Properties();
-        while (st.hasMoreTokens()) {
-            String key = st.nextToken();
-            if (!st.hasMoreTokens()) {
-                throw new ICPException("Wrong initialization properties format.");
-            }
-            p.setProperty(key, st.nextToken());
-        }
-        return p;
     }
 }
 

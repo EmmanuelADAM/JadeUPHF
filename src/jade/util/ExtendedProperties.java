@@ -51,21 +51,10 @@ import java.util.*;
  */
 public class ExtendedProperties extends Properties {
     public static final String IMPORT_KEY = "import";
-
+    private final Logger logger = Logger.getMyLogger(getClass().getName());
     boolean CRState = false;
     Hashtable<String, String> keyNames = new Hashtable<>();  // for detecting circular definitions
     Vector<String> sortVector = null;   // only used by sortedKeys
-
-    private final Logger logger = Logger.getMyLogger(getClass().getName());
-
-    /**
-     * For testing. Simply pass command line arguments to constructor then display
-     * all key=value pairs using sorted enumeration.
-     */
-    public static void main(String[] args) {
-        ExtendedProperties prop = new ExtendedProperties(args);
-        prop.list(System.out);
-    }
 
     /**
      * Construct empty property collection.
@@ -82,6 +71,15 @@ public class ExtendedProperties extends Properties {
     public ExtendedProperties(String[] propesStr) {
         this();
         addProperties(propesStr);
+    }
+
+    /**
+     * For testing. Simply pass command line arguments to constructor then display
+     * all key=value pairs using sorted enumeration.
+     */
+    public static void main(String[] args) {
+        ExtendedProperties prop = new ExtendedProperties(args);
+        prop.list(System.out);
     }
 
     /**
@@ -276,28 +274,25 @@ public class ExtendedProperties extends Properties {
      */
     public Object get(Object aKey) {
         Object value = null;
-        if (aKey instanceof String) {
-            String strKey = (String) aKey;
-            String testKey = strKey;
+        if (aKey instanceof String strKey) {
             // Try WITHOUT the '!' for sure
-            value = super.get(testKey);
+            value = super.get(strKey);
             if (value == null) {
                 // Not found --> Try WITH the '!' for sure
-                value = super.get(testKey + "!");
+                value = super.get(strKey + "!");
             }
 
-            if (value != null && value instanceof String) {
-                String strValue = (String) value;
+            if (value instanceof String strValue) {
                 // This synchronized block prevents a "Circular argument substitution key" error in case two threads
                 // search for the same key in parallel
                 synchronized (keyNames) {
-                    if (keyNames.put(testKey, "x") != null) {  // value doesn't matter
+                    if (keyNames.put(strKey, "x") != null) {  // value doesn't matter
                         throw new PropertiesException("Circular argument substitution with key: " + aKey);
                     }
                     if (strValue.length() >= 4) {    // shortest possible value: ${x}
                         strValue = doSubstitutions(strValue);
                     }
-                    keyNames.remove(testKey);
+                    keyNames.remove(strKey);
                 }
                 strValue = valueFilter(strKey, strValue);
                 value = strValue;
@@ -322,9 +317,8 @@ public class ExtendedProperties extends Properties {
             String actualKey = doSubstitutions((String) aKey);
 
             // aKey may have the form kkk or kkk!. In both cases if a property with key = kkk! exists throws an exception
-            String testKey = actualKey;
-            if (super.containsKey(testKey + "!")) {
-                throw new PropertiesException("Attempt to alter read only property:" + testKey);
+            if (super.containsKey(actualKey + "!")) {
+                throw new PropertiesException("Attempt to alter read only property:" + actualKey);
             }
 
             // If the key to be inserted is the "import" key, do not insert it, but add all properties
@@ -583,7 +577,7 @@ public class ExtendedProperties extends Properties {
         if (anInputString == null) {
             return null;
         }
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         int si = 0;    // source index
         int oi = 0;    // opening index
         int ci = 0;    // closing index
@@ -687,7 +681,7 @@ public class ExtendedProperties extends Properties {
      * @throws IOException if anything goes wrong.
      */
     protected String getOneLine(Reader reader) throws IOException {
-        StringBuffer sb = null;
+        StringBuilder sb = null;
         String line = null;
         boolean continued;
 
@@ -711,7 +705,7 @@ public class ExtendedProperties extends Properties {
                         line = line.substring(0, line.length() - 1);
                     }
                     if (sb == null) {
-                        sb = new StringBuffer();
+                        sb = new StringBuilder();
                     }
                     sb.append(line);
                 }
@@ -732,7 +726,7 @@ public class ExtendedProperties extends Properties {
      * @throws IOException if anything goes wrong.
      */
     protected String readLine(Reader aReader) throws IOException {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         while (true) {
             int result = aReader.read();

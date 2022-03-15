@@ -58,6 +58,60 @@ public class BackEndStub extends MicroStub implements BackEnd {
         }
     }
 
+    public static final void parseCreateMediatorResponse(String responseMessage, Properties pp) {
+        Vector<Object> v = Specifier.parseList(responseMessage, '#');
+        for (int i = 0; i < v.size(); ++i) {
+            String s = (String) v.elementAt(i);
+            if (s.length() > 0) {
+                try {
+                    int index = s.indexOf('=');
+                    String key = s.substring(0, index);
+                    String value = s.substring(index + 1);
+                    pp.setProperty(key, value);
+                } catch (Exception e) {
+                    Logger.println("Property format error: " + s);
+                    e.printStackTrace();
+                }
+                String mediatorId = pp.getProperty(JICPProtocol.MEDIATOR_ID_KEY);
+                if (mediatorId != null) {
+                    pp.setProperty(MicroRuntime.CONTAINER_NAME_KEY, mediatorId);
+                }
+            }
+        }
+    }
+
+    /**
+     * The method encodes the create mediator request, setting all the common properties
+     * retrived in the passed property parameter.
+     *
+     * @param pp
+     * @return a StringBuffer to allow the dispatcher to add dispatcher specific properties.
+     */
+    public static final StringBuffer encodeCreateMediatorRequest(Properties pp) {
+        StringBuffer sb = new StringBuffer();
+        appendProp(sb, JICPProtocol.MEDIATOR_CLASS_KEY, pp.getProperty(JICPProtocol.MEDIATOR_CLASS_KEY));
+        appendProp(sb, JICPProtocol.MAX_DISCONNECTION_TIME_KEY, pp.getProperty(JICPProtocol.MAX_DISCONNECTION_TIME_KEY));
+        appendProp(sb, FrontEnd.REMOTE_BACK_END_ADDRESSES, pp.getProperty(FrontEnd.REMOTE_BACK_END_ADDRESSES));
+        appendProp(sb, MicroRuntime.OWNER_KEY, pp.getProperty(MicroRuntime.OWNER_KEY));
+        appendProp(sb, MicroRuntime.AGENTS_KEY, pp.getProperty(MicroRuntime.AGENTS_KEY));
+        appendProp(sb, MicroRuntime.BE_REQUIRED_SERVICES_KEY, pp.getProperty(MicroRuntime.BE_REQUIRED_SERVICES_KEY));
+        appendProp(sb, JICPProtocol.KEEP_ALIVE_TIME_KEY, pp.getProperty(JICPProtocol.KEEP_ALIVE_TIME_KEY));
+        appendProp(sb, MicroRuntime.PLATFORM_KEY, pp.getProperty(MicroRuntime.PLATFORM_KEY));
+        appendProp(sb, JICPProtocol.MSISDN_KEY, pp.getProperty(JICPProtocol.MSISDN_KEY));
+        appendProp(sb, JICPProtocol.VERSION_KEY, pp.getProperty(JICPProtocol.VERSION_KEY));
+        appendProp(sb, JICPProtocol.GET_SERVER_TIME_KEY, pp.getProperty(JICPProtocol.GET_SERVER_TIME_KEY));
+        return sb;
+    }
+
+    public static void appendProp(StringBuffer sb, String key, String val) {
+        if ((val != null) && (val.length() != 0)) {
+            sb.append(key);
+            sb.append('=');
+            sb.append(val);
+            sb.append('#');
+        }
+    }
+
     /**
      *
      */
@@ -190,60 +244,6 @@ public class BackEndStub extends MicroStub implements BackEnd {
                 cause = cause.substring(0, kCl + 1);
             }
             MicroRuntime.notifyFailureToSender(msg, sender, "Cannot deliver message in due time" + cause);
-        }
-    }
-
-    public static final void parseCreateMediatorResponse(String responseMessage, Properties pp) {
-        Vector<Object> v = Specifier.parseList(responseMessage, '#');
-        for (int i = 0; i < v.size(); ++i) {
-            String s = (String) v.elementAt(i);
-            if (s.length() > 0) {
-                try {
-                    int index = s.indexOf('=');
-                    String key = s.substring(0, index);
-                    String value = s.substring(index + 1);
-                    pp.setProperty(key, value);
-                } catch (Exception e) {
-                    Logger.println("Property format error: " + s);
-                    e.printStackTrace();
-                }
-                String mediatorId = pp.getProperty(JICPProtocol.MEDIATOR_ID_KEY);
-                if (mediatorId != null) {
-                    pp.setProperty(MicroRuntime.CONTAINER_NAME_KEY, mediatorId);
-                }
-            }
-        }
-    }
-
-    /**
-     * The method encodes the create mediator request, setting all the common properties
-     * retrived in the passed property parameter.
-     *
-     * @param pp
-     * @return a StringBuffer to allow the dispatcher to add dispatcher specific properties.
-     */
-    public static final StringBuffer encodeCreateMediatorRequest(Properties pp) {
-        StringBuffer sb = new StringBuffer();
-        appendProp(sb, JICPProtocol.MEDIATOR_CLASS_KEY, pp.getProperty(JICPProtocol.MEDIATOR_CLASS_KEY));
-        appendProp(sb, JICPProtocol.MAX_DISCONNECTION_TIME_KEY, pp.getProperty(JICPProtocol.MAX_DISCONNECTION_TIME_KEY));
-        appendProp(sb, FrontEnd.REMOTE_BACK_END_ADDRESSES, pp.getProperty(FrontEnd.REMOTE_BACK_END_ADDRESSES));
-        appendProp(sb, MicroRuntime.OWNER_KEY, pp.getProperty(MicroRuntime.OWNER_KEY));
-        appendProp(sb, MicroRuntime.AGENTS_KEY, pp.getProperty(MicroRuntime.AGENTS_KEY));
-        appendProp(sb, MicroRuntime.BE_REQUIRED_SERVICES_KEY, pp.getProperty(MicroRuntime.BE_REQUIRED_SERVICES_KEY));
-        appendProp(sb, JICPProtocol.KEEP_ALIVE_TIME_KEY, pp.getProperty(JICPProtocol.KEEP_ALIVE_TIME_KEY));
-        appendProp(sb, MicroRuntime.PLATFORM_KEY, pp.getProperty(MicroRuntime.PLATFORM_KEY));
-        appendProp(sb, JICPProtocol.MSISDN_KEY, pp.getProperty(JICPProtocol.MSISDN_KEY));
-        appendProp(sb, JICPProtocol.VERSION_KEY, pp.getProperty(JICPProtocol.VERSION_KEY));
-        appendProp(sb, JICPProtocol.GET_SERVER_TIME_KEY, pp.getProperty(JICPProtocol.GET_SERVER_TIME_KEY));
-        return sb;
-    }
-
-    public static void appendProp(StringBuffer sb, String key, String val) {
-        if ((val != null) && (val.length() != 0)) {
-            sb.append(key);
-            sb.append('=');
-            sb.append(val);
-            sb.append('#');
         }
     }
 }

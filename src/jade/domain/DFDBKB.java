@@ -73,136 +73,16 @@ public class DFDBKB extends DBKB {
     private static final String AGENTRESOLVER = "agentresolver";
     private static final String AGENTADDRESS = "agentaddress";
     private static final String DFAGENTDESCR = "dfagentdescr";
-
-    // Number of registrations after the last lease-time-cleanup
-    private int regsCnt = 0;
-
-    private boolean tablesReady = false;
-
+    private final StringACLCodec codec = new StringACLCodec();
     /**
      * Default data type for very long strings
      */
     protected String DEFAULT_LONGVARCHAR_TYPE = "LONGVARCHAR";
-
+    // Number of registrations after the last lease-time-cleanup
+    private int regsCnt = 0;
+    private boolean tablesReady = false;
     // This is used to generate unique IDs
     private String localIPAddress;
-
-    private static class PreparedStatements {
-        // prepared SQL statements
-        private final PreparedStatement stm_selNrOfPropForKey;
-        private final PreparedStatement stm_selNrOfDescrForAID;
-        private final PreparedStatement stm_selAgentAddresses;
-        private final PreparedStatement stm_selAgentResolverAIDs;
-        private final PreparedStatement stm_selAgentUserDefSlot;
-        private final PreparedStatement stm_selLease;
-        private final PreparedStatement stm_selProtocols;
-        private final PreparedStatement stm_selLanguages;
-        private final PreparedStatement stm_selOntologies;
-        private final PreparedStatement stm_selServices;
-        private final PreparedStatement stm_selServiceProtocols;
-        private final PreparedStatement stm_selServiceLanguages;
-        private final PreparedStatement stm_selServiceOntologies;
-        private final PreparedStatement stm_selServiceProperties;
-        private final PreparedStatement stm_selExpiredDescr;
-        private final PreparedStatement stm_selSubscriptions;
-
-        private final PreparedStatement stm_selAllProtocols;
-        private final PreparedStatement stm_selCountAllProtocols;
-        private final PreparedStatement stm_selAllLanguages;
-        private final PreparedStatement stm_selCountAllLanguages;
-        private final PreparedStatement stm_selAllOntologies;
-        private final PreparedStatement stm_selCountAllOntologies;
-
-        private final PreparedStatement stm_insAgentDescr;
-        private final PreparedStatement stm_insAgentAddress;
-        private final PreparedStatement stm_insAgentUserDefSlot;
-        private final PreparedStatement stm_insAgentResolverAID;
-        private final PreparedStatement stm_insLanguage;
-        private final PreparedStatement stm_insOntology;
-        private final PreparedStatement stm_insProtocol;
-        private final PreparedStatement stm_insService;
-        private final PreparedStatement stm_insServiceProtocol;
-        private final PreparedStatement stm_insServiceOntology;
-        private final PreparedStatement stm_insServiceLanguage;
-        private final PreparedStatement stm_insServiceProperty;
-        private final PreparedStatement stm_insSubscription;
-        private final PreparedStatement stm_delAgentDescr;
-        private final PreparedStatement stm_delAgentUserDefSlot;
-        private final PreparedStatement stm_delAgentResolver;
-        private final PreparedStatement stm_delAgentAddress;
-
-        private final PreparedStatement stm_selDescrId;
-        private final PreparedStatement stm_selServiceId;
-        private final PreparedStatement stm_delService;
-        private final PreparedStatement stm_delLanguage;
-        private final PreparedStatement stm_delProtocol;
-        private final PreparedStatement stm_delOntology;
-
-        private final PreparedStatement stm_delServiceLanguage;
-        private final PreparedStatement stm_delServiceOntology;
-        private final PreparedStatement stm_delServiceProtocol;
-        private final PreparedStatement stm_delServiceProperty;
-        private final PreparedStatement stm_delSubscription;
-
-        private PreparedStatements(Connection conn) throws SQLException {
-            // select statements
-            stm_selNrOfPropForKey = conn.prepareStatement("SELECT COUNT(*) FROM SERVICEPROPERTY  where PROPKEY = ?");
-            stm_selNrOfDescrForAID = conn.prepareStatement("SELECT COUNT(*) FROM dfagentdescr WHERE aid = ?");
-            stm_selAgentAddresses = conn.prepareStatement("SELECT address FROM agentaddress WHERE aid = ?");
-            stm_selAgentResolverAIDs = conn.prepareStatement("SELECT resolveraid FROM agentresolver WHERE aid = ?");
-            stm_selAgentUserDefSlot = conn.prepareStatement("SELECT slotkey, slotval FROM agentuserdefslot WHERE aid = ?");
-            stm_selLease = conn.prepareStatement("SELECT id, lease FROM dfagentdescr WHERE aid = ?");
-            stm_selProtocols = conn.prepareStatement("SELECT protocol FROM protocol WHERE descrid = ?");
-            stm_selLanguages = conn.prepareStatement("SELECT language FROM language WHERE descrid = ?");
-            stm_selOntologies = conn.prepareStatement("SELECT ontology FROM ontology WHERE descrid = ?");
-            stm_selServices = conn.prepareStatement("SELECT id, sname, stype, sownership FROM service WHERE descrid = ?");
-            stm_selServiceProtocols = conn.prepareStatement("SELECT protocol FROM serviceprotocol WHERE serviceid = ?");
-            stm_selServiceLanguages = conn.prepareStatement("SELECT ontology FROM serviceontology WHERE serviceid = ?");
-            stm_selServiceOntologies = conn.prepareStatement("SELECT language FROM servicelanguage WHERE serviceid = ?");
-            stm_selServiceProperties = conn.prepareStatement("SELECT propkey, propval_str, propval_obj FROM serviceproperty WHERE serviceid = ?");
-            stm_selDescrId = conn.prepareStatement("SELECT id FROM dfagentdescr WHERE aid = ?");
-            stm_selServiceId = conn.prepareStatement("SELECT id FROM service WHERE descrid = ?");
-            stm_selExpiredDescr = conn.prepareStatement("SELECT aid FROM dfagentdescr WHERE lease < ? AND lease <> '-1'");
-            stm_selSubscriptions = conn.prepareStatement("SELECT * FROM subscription");
-
-            stm_selAllProtocols = conn.prepareStatement("SELECT descrid, protocol FROM protocol ORDER BY descrid");
-            stm_selCountAllProtocols = conn.prepareStatement("SELECT COUNT(*) FROM protocol");
-            stm_selAllLanguages = conn.prepareStatement("SELECT descrid, language FROM language ORDER BY descrid");
-            stm_selCountAllLanguages = conn.prepareStatement("SELECT COUNT(*) FROM language");
-            stm_selAllOntologies = conn.prepareStatement("SELECT descrid, ontology FROM ontology ORDER BY descrid");
-            stm_selCountAllOntologies = conn.prepareStatement("SELECT COUNT(*) FROM ontology");
-
-            stm_insAgentDescr = conn.prepareStatement("INSERT INTO dfagentdescr VALUES (?, ?, ?)");
-            stm_insAgentAddress = conn.prepareStatement("INSERT INTO agentaddress VALUES (?, ?, ?)");
-            stm_insAgentUserDefSlot = conn.prepareStatement("INSERT INTO agentuserdefslot VALUES (?, ?, ?, ?)");
-            stm_insAgentResolverAID = conn.prepareStatement("INSERT INTO agentresolver VALUES (?, ?, ?)");
-            stm_insLanguage = conn.prepareStatement("INSERT INTO language VALUES (?, ?)");
-            stm_insOntology = conn.prepareStatement("INSERT INTO ontology VALUES (?, ?)");
-            stm_insProtocol = conn.prepareStatement("INSERT INTO protocol VALUES (?, ?)");
-            stm_insService = conn.prepareStatement("INSERT INTO service VALUES (?, ?, ?, ?, ?)");
-            stm_insServiceProtocol = conn.prepareStatement("INSERT INTO serviceprotocol VALUES (?, ?)");
-            stm_insServiceOntology = conn.prepareStatement("INSERT INTO serviceontology VALUES (?, ?)");
-            stm_insServiceLanguage = conn.prepareStatement("INSERT INTO servicelanguage VALUES (?, ?)");
-            stm_insServiceProperty = conn.prepareStatement("INSERT INTO serviceproperty VALUES (?, ?, ?, ?, ?)");
-            stm_insSubscription = conn.prepareStatement("INSERT INTO subscription VALUES (?, ?)");
-
-
-            // delete statements
-            stm_delAgentDescr = conn.prepareStatement("DELETE FROM dfagentdescr WHERE id = ?");
-            stm_delAgentUserDefSlot = conn.prepareStatement("DELETE FROM agentuserdefslot WHERE aid = ?");
-            stm_delAgentResolver = conn.prepareStatement("DELETE FROM agentresolver WHERE aid = ?");
-            stm_delAgentAddress = conn.prepareStatement("DELETE FROM agentaddress WHERE aid = ?");
-            stm_delLanguage = conn.prepareStatement("DELETE FROM language WHERE descrid = ?");
-            stm_delProtocol = conn.prepareStatement("DELETE FROM protocol WHERE descrid = ?");
-            stm_delOntology = conn.prepareStatement("DELETE FROM ontology WHERE descrid = ?");
-            stm_delService = conn.prepareStatement("DELETE FROM service WHERE descrid = ?");
-            stm_delServiceLanguage = conn.prepareStatement("DELETE FROM servicelanguage WHERE serviceid = ?");
-            stm_delServiceOntology = conn.prepareStatement("DELETE FROM serviceontology WHERE serviceid = ?");
-            stm_delServiceProtocol = conn.prepareStatement("DELETE FROM serviceprotocol WHERE serviceid = ?");
-            stm_delServiceProperty = conn.prepareStatement("DELETE FROM serviceproperty WHERE serviceid = ?");
-            stm_delSubscription = conn.prepareStatement("DELETE FROM subscription WHERE id = ?");
-        }
-    }
 
     /**
      * Constructor
@@ -217,6 +97,10 @@ public class DFDBKB extends DBKB {
      */
     public DFDBKB(int maxResultLimit, String drv, String url, String user, String passwd, boolean cleanTables) throws SQLException {
         super(drv, url, user, passwd, maxResultLimit, cleanTables);
+    }
+
+    private static boolean needSerialization(Object value) {
+        return !((value instanceof String) && (((String) value).length() <= MAX_PROP_LENGTH));
     }
 
     /**
@@ -455,7 +339,6 @@ public class DFDBKB extends DBKB {
             }
         }
     }
-
 
     /**
      * Creates the proper DB tables.
@@ -791,10 +674,6 @@ public class DFDBKB extends DBKB {
         pss.stm_insServiceProperty.addBatch();
     }
 
-    private static boolean needSerialization(Object value) {
-        return !((value instanceof String) && (((String) value).length() <= MAX_PROP_LENGTH));
-    }
-
     /**
      * Insert a new DFD object.
      *
@@ -919,7 +798,7 @@ public class DFDBKB extends DBKB {
         Statement s = null;
 
         try {
-            select = createSelect((DFAgentDescription) template);
+            select = createSelect(template);
 
             s = getConnectionWrapper().getConnection().createStatement();
             if (maxResult >= 0) {
@@ -1022,54 +901,6 @@ public class DFDBKB extends DBKB {
             throw new SQLException("Error creating SQL SELECT statement. " + e.getMessage());
         }
     }
-
-
-    /**
-     * Inner class DFDBKBIterator
-     */
-    private class DFDBKBIterator implements KBIterator {
-        private Statement s = null;
-        private ResultSet rs = null;
-        private boolean hasMoreElements = false;
-
-        public DFDBKBIterator(Statement s, ResultSet rs) throws SQLException {
-            this.s = s;
-            this.rs = rs;
-            if (rs != null) {
-                // Move to the first row
-                hasMoreElements = rs.next();
-            }
-        }
-
-        public boolean hasNext() {
-            return hasMoreElements;
-        }
-
-        public Object next() {
-            if (hasMoreElements) {
-                try {
-                    String name = rs.getString("aid");
-                    DFAgentDescription dfd = getDFD(name);
-                    hasMoreElements = rs.next();
-                    return dfd;
-                } catch (SQLException sqle) {
-                    hasMoreElements = false;
-                    throw new NoSuchElementException("DB Error. " + sqle.getMessage());
-                }
-            }
-            throw new NoSuchElementException("");
-        }
-
-        public void remove() {
-            // Not implemented
-        }
-
-        public void close() {
-            closeResultSet(rs);
-            closeStatement(s);
-        }
-    } // END of inner class DFDBKBIterator
-
 
     /**
      * Reconstructs an AID object corresponding to the given AID name
@@ -1232,7 +1063,6 @@ public class DFDBKB extends DBKB {
         return dfd;
     }
 
-
     private void loadOntologies(String descrId, DFAgentDescription dfd, Map<String, List<String>> allOntologies) throws SQLException {
         if (allOntologies != null) {
             List<String> ontos = allOntologies.get(descrId);
@@ -1369,7 +1199,6 @@ public class DFDBKB extends DBKB {
         }
     }
 
-
     /**
      * Delete the DFD object corresponding to the indicated agent name.
      */
@@ -1425,7 +1254,6 @@ public class DFDBKB extends DBKB {
             closeResultSet(rs);
         }
     }
-
 
     /**
      * Convert a template DFAgentDescription into the SQL SELECT
@@ -1605,10 +1433,6 @@ public class DFDBKB extends DBKB {
         return found > 0;
     }
 
-    ////////////////////////////////////////
-    // DB cleaning methods
-    ////////////////////////////////////////
-
     /**
      * Removes DF registrations and subscriptions whose lease time
      * has expired.
@@ -1619,6 +1443,10 @@ public class DFDBKB extends DBKB {
         cleanExpiredRegistrations();
         cleanExpiredSubscriptions();
     }
+
+    ////////////////////////////////////////
+    // DB cleaning methods
+    ////////////////////////////////////////
 
     /**
      * Removes DF registrations whose lease time has expired.
@@ -1650,8 +1478,6 @@ public class DFDBKB extends DBKB {
     private void cleanExpiredSubscriptions() {
         //FIXME: To be implemented
     }
-
-    private final StringACLCodec codec = new StringACLCodec();
 
     @Override
     protected void subscribeSingle(Object dfd, SubscriptionResponder.Subscription s) throws SQLException {
@@ -1723,7 +1549,6 @@ public class DFDBKB extends DBKB {
         return subscriptions.elements();
     }
 
-
     @Override
     protected void unsubscribeSingle(SubscriptionResponder.Subscription sub) throws SQLException {
         ACLMessage aclM = sub.getMessage();
@@ -1733,7 +1558,6 @@ public class DFDBKB extends DBKB {
             if (logger.isLoggable(Logger.WARNING))
                 logger.log(Logger.WARNING, "No subscription to delete.");
     }
-
 
     /**
      * Removes a registration from the database.
@@ -1762,12 +1586,6 @@ public class DFDBKB extends DBKB {
             throw sqle;
         }
     }
-
-
-    ////////////////////////////////////////////////
-    // Helper methods
-    ////////////////////////////////////////////////
-
 
     /**
      * Closes an open result set and logs an appropriate error message
@@ -1799,6 +1617,11 @@ public class DFDBKB extends DBKB {
                 logger.log(Logger.WARNING, "Closing SQL statement failed.");
         }
     }
+
+
+    ////////////////////////////////////////////////
+    // Helper methods
+    ////////////////////////////////////////////////
 
     /**
      * Serializes any serializable object to a Base64 encoded string
@@ -1899,4 +1722,167 @@ public class DFDBKB extends DBKB {
         result.append(str.substring(s));
         return result.toString();
     }
+
+    private static class PreparedStatements {
+        // prepared SQL statements
+        private final PreparedStatement stm_selNrOfPropForKey;
+        private final PreparedStatement stm_selNrOfDescrForAID;
+        private final PreparedStatement stm_selAgentAddresses;
+        private final PreparedStatement stm_selAgentResolverAIDs;
+        private final PreparedStatement stm_selAgentUserDefSlot;
+        private final PreparedStatement stm_selLease;
+        private final PreparedStatement stm_selProtocols;
+        private final PreparedStatement stm_selLanguages;
+        private final PreparedStatement stm_selOntologies;
+        private final PreparedStatement stm_selServices;
+        private final PreparedStatement stm_selServiceProtocols;
+        private final PreparedStatement stm_selServiceLanguages;
+        private final PreparedStatement stm_selServiceOntologies;
+        private final PreparedStatement stm_selServiceProperties;
+        private final PreparedStatement stm_selExpiredDescr;
+        private final PreparedStatement stm_selSubscriptions;
+
+        private final PreparedStatement stm_selAllProtocols;
+        private final PreparedStatement stm_selCountAllProtocols;
+        private final PreparedStatement stm_selAllLanguages;
+        private final PreparedStatement stm_selCountAllLanguages;
+        private final PreparedStatement stm_selAllOntologies;
+        private final PreparedStatement stm_selCountAllOntologies;
+
+        private final PreparedStatement stm_insAgentDescr;
+        private final PreparedStatement stm_insAgentAddress;
+        private final PreparedStatement stm_insAgentUserDefSlot;
+        private final PreparedStatement stm_insAgentResolverAID;
+        private final PreparedStatement stm_insLanguage;
+        private final PreparedStatement stm_insOntology;
+        private final PreparedStatement stm_insProtocol;
+        private final PreparedStatement stm_insService;
+        private final PreparedStatement stm_insServiceProtocol;
+        private final PreparedStatement stm_insServiceOntology;
+        private final PreparedStatement stm_insServiceLanguage;
+        private final PreparedStatement stm_insServiceProperty;
+        private final PreparedStatement stm_insSubscription;
+        private final PreparedStatement stm_delAgentDescr;
+        private final PreparedStatement stm_delAgentUserDefSlot;
+        private final PreparedStatement stm_delAgentResolver;
+        private final PreparedStatement stm_delAgentAddress;
+
+        private final PreparedStatement stm_selDescrId;
+        private final PreparedStatement stm_selServiceId;
+        private final PreparedStatement stm_delService;
+        private final PreparedStatement stm_delLanguage;
+        private final PreparedStatement stm_delProtocol;
+        private final PreparedStatement stm_delOntology;
+
+        private final PreparedStatement stm_delServiceLanguage;
+        private final PreparedStatement stm_delServiceOntology;
+        private final PreparedStatement stm_delServiceProtocol;
+        private final PreparedStatement stm_delServiceProperty;
+        private final PreparedStatement stm_delSubscription;
+
+        private PreparedStatements(Connection conn) throws SQLException {
+            // select statements
+            stm_selNrOfPropForKey = conn.prepareStatement("SELECT COUNT(*) FROM SERVICEPROPERTY  where PROPKEY = ?");
+            stm_selNrOfDescrForAID = conn.prepareStatement("SELECT COUNT(*) FROM dfagentdescr WHERE aid = ?");
+            stm_selAgentAddresses = conn.prepareStatement("SELECT address FROM agentaddress WHERE aid = ?");
+            stm_selAgentResolverAIDs = conn.prepareStatement("SELECT resolveraid FROM agentresolver WHERE aid = ?");
+            stm_selAgentUserDefSlot = conn.prepareStatement("SELECT slotkey, slotval FROM agentuserdefslot WHERE aid = ?");
+            stm_selLease = conn.prepareStatement("SELECT id, lease FROM dfagentdescr WHERE aid = ?");
+            stm_selProtocols = conn.prepareStatement("SELECT protocol FROM protocol WHERE descrid = ?");
+            stm_selLanguages = conn.prepareStatement("SELECT language FROM language WHERE descrid = ?");
+            stm_selOntologies = conn.prepareStatement("SELECT ontology FROM ontology WHERE descrid = ?");
+            stm_selServices = conn.prepareStatement("SELECT id, sname, stype, sownership FROM service WHERE descrid = ?");
+            stm_selServiceProtocols = conn.prepareStatement("SELECT protocol FROM serviceprotocol WHERE serviceid = ?");
+            stm_selServiceLanguages = conn.prepareStatement("SELECT ontology FROM serviceontology WHERE serviceid = ?");
+            stm_selServiceOntologies = conn.prepareStatement("SELECT language FROM servicelanguage WHERE serviceid = ?");
+            stm_selServiceProperties = conn.prepareStatement("SELECT propkey, propval_str, propval_obj FROM serviceproperty WHERE serviceid = ?");
+            stm_selDescrId = conn.prepareStatement("SELECT id FROM dfagentdescr WHERE aid = ?");
+            stm_selServiceId = conn.prepareStatement("SELECT id FROM service WHERE descrid = ?");
+            stm_selExpiredDescr = conn.prepareStatement("SELECT aid FROM dfagentdescr WHERE lease < ? AND lease <> '-1'");
+            stm_selSubscriptions = conn.prepareStatement("SELECT * FROM subscription");
+
+            stm_selAllProtocols = conn.prepareStatement("SELECT descrid, protocol FROM protocol ORDER BY descrid");
+            stm_selCountAllProtocols = conn.prepareStatement("SELECT COUNT(*) FROM protocol");
+            stm_selAllLanguages = conn.prepareStatement("SELECT descrid, language FROM language ORDER BY descrid");
+            stm_selCountAllLanguages = conn.prepareStatement("SELECT COUNT(*) FROM language");
+            stm_selAllOntologies = conn.prepareStatement("SELECT descrid, ontology FROM ontology ORDER BY descrid");
+            stm_selCountAllOntologies = conn.prepareStatement("SELECT COUNT(*) FROM ontology");
+
+            stm_insAgentDescr = conn.prepareStatement("INSERT INTO dfagentdescr VALUES (?, ?, ?)");
+            stm_insAgentAddress = conn.prepareStatement("INSERT INTO agentaddress VALUES (?, ?, ?)");
+            stm_insAgentUserDefSlot = conn.prepareStatement("INSERT INTO agentuserdefslot VALUES (?, ?, ?, ?)");
+            stm_insAgentResolverAID = conn.prepareStatement("INSERT INTO agentresolver VALUES (?, ?, ?)");
+            stm_insLanguage = conn.prepareStatement("INSERT INTO language VALUES (?, ?)");
+            stm_insOntology = conn.prepareStatement("INSERT INTO ontology VALUES (?, ?)");
+            stm_insProtocol = conn.prepareStatement("INSERT INTO protocol VALUES (?, ?)");
+            stm_insService = conn.prepareStatement("INSERT INTO service VALUES (?, ?, ?, ?, ?)");
+            stm_insServiceProtocol = conn.prepareStatement("INSERT INTO serviceprotocol VALUES (?, ?)");
+            stm_insServiceOntology = conn.prepareStatement("INSERT INTO serviceontology VALUES (?, ?)");
+            stm_insServiceLanguage = conn.prepareStatement("INSERT INTO servicelanguage VALUES (?, ?)");
+            stm_insServiceProperty = conn.prepareStatement("INSERT INTO serviceproperty VALUES (?, ?, ?, ?, ?)");
+            stm_insSubscription = conn.prepareStatement("INSERT INTO subscription VALUES (?, ?)");
+
+
+            // delete statements
+            stm_delAgentDescr = conn.prepareStatement("DELETE FROM dfagentdescr WHERE id = ?");
+            stm_delAgentUserDefSlot = conn.prepareStatement("DELETE FROM agentuserdefslot WHERE aid = ?");
+            stm_delAgentResolver = conn.prepareStatement("DELETE FROM agentresolver WHERE aid = ?");
+            stm_delAgentAddress = conn.prepareStatement("DELETE FROM agentaddress WHERE aid = ?");
+            stm_delLanguage = conn.prepareStatement("DELETE FROM language WHERE descrid = ?");
+            stm_delProtocol = conn.prepareStatement("DELETE FROM protocol WHERE descrid = ?");
+            stm_delOntology = conn.prepareStatement("DELETE FROM ontology WHERE descrid = ?");
+            stm_delService = conn.prepareStatement("DELETE FROM service WHERE descrid = ?");
+            stm_delServiceLanguage = conn.prepareStatement("DELETE FROM servicelanguage WHERE serviceid = ?");
+            stm_delServiceOntology = conn.prepareStatement("DELETE FROM serviceontology WHERE serviceid = ?");
+            stm_delServiceProtocol = conn.prepareStatement("DELETE FROM serviceprotocol WHERE serviceid = ?");
+            stm_delServiceProperty = conn.prepareStatement("DELETE FROM serviceproperty WHERE serviceid = ?");
+            stm_delSubscription = conn.prepareStatement("DELETE FROM subscription WHERE id = ?");
+        }
+    }
+
+    /**
+     * Inner class DFDBKBIterator
+     */
+    private class DFDBKBIterator implements KBIterator {
+        private Statement s = null;
+        private ResultSet rs = null;
+        private boolean hasMoreElements = false;
+
+        public DFDBKBIterator(Statement s, ResultSet rs) throws SQLException {
+            this.s = s;
+            this.rs = rs;
+            if (rs != null) {
+                // Move to the first row
+                hasMoreElements = rs.next();
+            }
+        }
+
+        public boolean hasNext() {
+            return hasMoreElements;
+        }
+
+        public Object next() {
+            if (hasMoreElements) {
+                try {
+                    String name = rs.getString("aid");
+                    DFAgentDescription dfd = getDFD(name);
+                    hasMoreElements = rs.next();
+                    return dfd;
+                } catch (SQLException sqle) {
+                    hasMoreElements = false;
+                    throw new NoSuchElementException("DB Error. " + sqle.getMessage());
+                }
+            }
+            throw new NoSuchElementException("");
+        }
+
+        public void remove() {
+            // Not implemented
+        }
+
+        public void close() {
+            closeResultSet(rs);
+            closeStatement(s);
+        }
+    } // END of inner class DFDBKBIterator
 }

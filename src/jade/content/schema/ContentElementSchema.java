@@ -30,6 +30,7 @@ import jade.content.onto.OntologyException;
 /**
  * This class represents the schema of a generic content element in
  * an ontology.
+ *
  * @author Federico Bergenti - Universita` di Parma
  */
 public class ContentElementSchema extends ObjectSchemaImpl {
@@ -46,6 +47,7 @@ public class ContentElementSchema extends ObjectSchemaImpl {
 
     /**
      * Creates a <code>ContentElementSchema</code> with a given type-name.
+     *
      * @param typeName The name of this <code>ContentElementSchema</code>.
      */
     protected ContentElementSchema(String typeName) {
@@ -54,6 +56,7 @@ public class ContentElementSchema extends ObjectSchemaImpl {
 
     /**
      * Retrieve the generic base schema for all content elements.
+     *
      * @return the generic base schema for all content elements.
      */
     public static ObjectSchema getBaseSchema() {
@@ -69,13 +72,13 @@ public class ContentElementSchema extends ObjectSchemaImpl {
     }
 
     /**
-     Return true if
-     - s is the base schema for the XXXSchema class this schema is
-     an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
-     schema is an instance of ConceptSchema)
-     - s is the base schema for a super-class of the XXXSchema class
-     this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
-     and this schema is an instance of ConceptSchema)
+     * Return true if
+     * - s is the base schema for the XXXSchema class this schema is
+     * an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
+     * schema is an instance of ConceptSchema)
+     * - s is the base schema for a super-class of the XXXSchema class
+     * this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
+     * and this schema is an instance of ConceptSchema)
      */
     protected boolean descendsFrom(ObjectSchema s) {
         if (s != null) {

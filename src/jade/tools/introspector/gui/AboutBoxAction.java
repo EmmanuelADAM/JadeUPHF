@@ -41,11 +41,9 @@ import java.util.Objects;
 public class AboutBoxAction extends AbstractAction {
 
     private final JFrame gui;
-    private JLabel label;
     private final String imageFile = "images/jadelogo.jpg";
-
-
     Color dark_blue = new Color(0, 0, 160);
+    private JLabel label;
 
     public AboutBoxAction(JFrame gui) {
         super("About Introspector");

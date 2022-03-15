@@ -38,27 +38,26 @@ import jade.core.AID;
  */
 public class SaveAgent implements AgentAction {
 
-    public SaveAgent() {
-    }
+    private AID agent;
+    private String repository;
 
-    public void setAgent(AID id) {
-        agent = id;
+    public SaveAgent() {
     }
 
     public AID getAgent() {
         return agent;
     }
 
-    public void setRepository(String r) {
-        repository = r;
+    public void setAgent(AID id) {
+        agent = id;
     }
 
     public String getRepository() {
         return repository;
     }
 
-
-    private AID agent;
-    private String repository;
+    public void setRepository(String r) {
+        repository = r;
+    }
 
 }

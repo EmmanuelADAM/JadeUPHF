@@ -69,231 +69,10 @@ import java.util.Map;
  */
 public class rma extends ToolAgent {
 
-    private APDescription myPlatformProfile;
-
-    // Sends requests to the AMS
-    private class AMSClientBehaviour extends SimpleAchieveREInitiator {
-
-        private final String actionName;
-
-
-        public AMSClientBehaviour(String an, ACLMessage request) {
-            super(rma.this, request);
-            actionName = an;
-        }
-
-
-        protected void handleNotUnderstood(ACLMessage reply) {
-            myGUI.showErrorDialog("NOT-UNDERSTOOD received by RMA during " + actionName, reply);
-        }
-
-        protected void handleRefuse(ACLMessage reply) {
-            myGUI.showErrorDialog("REFUSE received during " + actionName, reply);
-        }
-
-        protected void handleAgree(ACLMessage reply) {
-            if (logger.isLoggable(Logger.FINE))
-                logger.log(Logger.FINE, "AGREE received" + reply);
-        }
-
-        protected void handleFailure(ACLMessage reply) {
-            myGUI.showErrorDialog("FAILURE received during " + actionName, reply);
-        }
-
-        protected void handleInform(ACLMessage reply) {
-            if (logger.isLoggable(Logger.FINE))
-                logger.log(Logger.FINE, "INFORM received" + reply);
-        }
-
-    } // End of AMSClientBehaviour class
-
-
-    private class handleAddRemotePlatformBehaviour extends AMSClientBehaviour {
-
-        public handleAddRemotePlatformBehaviour(String an, ACLMessage request) {
-            super(an, request);
-
-        }
-
-        protected void handleInform(ACLMessage msg) {
-            if (logger.isLoggable(Logger.FINE))
-                logger.log(Logger.FINE, "arrived a new APDescription");
-            try {
-                AID sender = msg.getSender();
-                Result r = (Result) getContentManager().extractContent(msg);
-                Iterator<Object> i = r.getItems().iterator();
-                Object APDesc = i.next();
-                if (APDesc != null) {
-                    myGUI.addRemotePlatformFolder();
-                    myGUI.addRemotePlatform(sender, (APDescription) APDesc);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-    }//end handleAddRemotePlatformBehaviour
-
-    private class handleRefreshRemoteAgentBehaviour extends AMSClientBehaviour {
-
-        private final APDescription platform;
-
-        public handleRefreshRemoteAgentBehaviour(String an, ACLMessage request, APDescription ap) {
-            super(an, request);
-            platform = ap;
-
-        }
-
-        protected void handleInform(ACLMessage msg) {
-            if (logger.isLoggable(Logger.FINE))
-                logger.log(Logger.FINE, "arrived a new agents from a remote platform");
-            try {
-                AID sender = msg.getSender();
-                Result r = (Result) getContentManager().extractContent(msg);
-                Iterator<Object> i = r.getItems().iterator();
-                myGUI.refreshRemoteAgentsInRemotePlatform(platform, i);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-    }//end handleAddRemotePlatformBehaviour
-
-
     private final SequentialBehaviour AMSSubscribe = new SequentialBehaviour();
-
+    private APDescription myPlatformProfile;
     private transient MainWindow myGUI;
-
     private String myContainerName;
-
-    class RMAAMSListenerBehaviour extends AMSListenerBehaviour {
-        protected void installHandlers(Map<String, EventHandler> handlersTable) {
-
-            // Fill the event handler table.
-
-            handlersTable.put(IntrospectionVocabulary.META_RESETEVENTS, (EventHandler) ev -> {
-                ResetEvents re = (ResetEvents) ev;
-                myGUI.resetTree();
-            });
-
-            handlersTable.put(IntrospectionVocabulary.ADDEDCONTAINER, (EventHandler) ev -> {
-                AddedContainer ac = (AddedContainer) ev;
-                ContainerID cid = ac.getContainer();
-                String name = cid.getName();
-                String address = cid.getAddress();
-                try {
-                    InetAddress addr = InetAddress.getByName(address);
-                    myGUI.addContainer(name, addr);
-                } catch (UnknownHostException uhe) {
-                    myGUI.addContainer(name, null);
-                }
-            });
-
-
-            handlersTable.put(IntrospectionVocabulary.REMOVEDCONTAINER, (EventHandler) ev -> {
-                RemovedContainer rc = (RemovedContainer) ev;
-                ContainerID cid = rc.getContainer();
-                String name = cid.getName();
-                myGUI.removeContainer(name);
-            });
-
-            handlersTable.put(IntrospectionVocabulary.BORNAGENT, (EventHandler) ev -> {
-                BornAgent ba = (BornAgent) ev;
-                ContainerID cid = ba.getWhere();
-                // ContainerID is null in case of foreign agents registered with the local AMS or virtual agents
-                // FIXME: Such agents should be shown somewhere
-                if (cid != null) {
-                    String container = cid.getName();
-                    AID agent = ba.getAgent();
-                    myGUI.addAgent(container, agent, ba.getState(), ba.getOwnership());
-                    if (agent.equals(getAID()))
-                        myContainerName = container;
-                }
-            });
-
-            handlersTable.put(IntrospectionVocabulary.DEADAGENT, (EventHandler) ev -> {
-                DeadAgent da = (DeadAgent) ev;
-                ContainerID cid = da.getWhere();
-                // ContainerID is null in case of foreign agents registered with the local AMS or virtual agents
-                if (cid != null) {
-                    String container = cid.getName();
-                    AID agent = da.getAgent();
-                    myGUI.removeAgent(container, agent);
-                }
-            });
-
-            handlersTable.put(IntrospectionVocabulary.SUSPENDEDAGENT, (EventHandler) ev -> {
-                SuspendedAgent sa = (SuspendedAgent) ev;
-                ContainerID cid = sa.getWhere();
-                String container = cid.getName();
-                AID agent = sa.getAgent();
-                myGUI.modifyAgent(container, agent, AMSAgentDescription.SUSPENDED, null);
-            });
-
-            handlersTable.put(IntrospectionVocabulary.RESUMEDAGENT, (EventHandler) ev -> {
-                ResumedAgent ra = (ResumedAgent) ev;
-                ContainerID cid = ra.getWhere();
-                String container = cid.getName();
-                AID agent = ra.getAgent();
-                myGUI.modifyAgent(container, agent, AMSAgentDescription.ACTIVE, null);
-            });
-
-            handlersTable.put(IntrospectionVocabulary.FROZENAGENT, (EventHandler) ev -> {
-                FrozenAgent fa = (FrozenAgent) ev;
-                String oldContainer = fa.getWhere().getName();
-                String newContainer = fa.getBufferContainer().getName();
-                AID agent = fa.getAgent();
-                myGUI.modifyFrozenAgent(oldContainer, newContainer, agent);
-            });
-
-            handlersTable.put(IntrospectionVocabulary.THAWEDAGENT, (EventHandler) ev -> {
-                ThawedAgent ta = (ThawedAgent) ev;
-                String oldContainer = ta.getWhere().getName();
-                String newContainer = ta.getBufferContainer().getName();
-                AID agent = ta.getAgent();
-                myGUI.modifyThawedAgent(oldContainer, newContainer, agent);
-            });
-
-            handlersTable.put(IntrospectionVocabulary.CHANGEDAGENTOWNERSHIP, (EventHandler) ev -> {
-                ChangedAgentOwnership cao = (ChangedAgentOwnership) ev;
-                ContainerID cid = cao.getWhere();
-                String container = cid.getName();
-                AID agent = cao.getAgent();
-                myGUI.modifyAgent(container, agent, null, cao.getTo());
-            });
-
-            handlersTable.put(IntrospectionVocabulary.MOVEDAGENT, (EventHandler) ev -> {
-                MovedAgent ma = (MovedAgent) ev;
-                AID agent = ma.getAgent();
-                ContainerID from = ma.getFrom();
-                ContainerID to = ma.getTo();
-                myGUI.moveAgent(from.getName(), to.getName(), agent);
-            });
-
-            handlersTable.put(IntrospectionVocabulary.ADDEDMTP, (EventHandler) ev -> {
-                AddedMTP amtp = (AddedMTP) ev;
-                String address = amtp.getAddress();
-                ContainerID where = amtp.getWhere();
-                myGUI.addAddress(address, where.getName());
-            });
-
-            handlersTable.put(IntrospectionVocabulary.REMOVEDMTP, (EventHandler) ev -> {
-                RemovedMTP rmtp = (RemovedMTP) ev;
-                String address = rmtp.getAddress();
-                ContainerID where = rmtp.getWhere();
-                myGUI.removeAddress(address, where.getName());
-            });
-
-            //handle the APDescription provided by the AMS
-            handlersTable.put(IntrospectionVocabulary.PLATFORMDESCRIPTION, (EventHandler) ev -> {
-                PlatformDescription pd = (PlatformDescription) ev;
-                myPlatformProfile = pd.getPlatform();
-                myGUI.refreshLocalPlatformName(myPlatformProfile.getName());
-            });
-
-        }
-    } // END of inner class RMAAMSListenerBehaviour
-
 
     /**
      * This method starts the <em>RMA</em> behaviours to allow the agent
@@ -423,7 +202,6 @@ public class rma extends ToolAgent {
         send(getSubscribe());
     }
 
-
     /**
      * Callback method for platform management <em>GUI</em>.
      */
@@ -538,7 +316,6 @@ public class rma extends ToolAgent {
             fe.printStackTrace();
         }
     }
-
 
     /**
      * Callback method for platform management <em>GUI</em>.
@@ -670,7 +447,6 @@ public class rma extends ToolAgent {
             fe.printStackTrace();
         }
     }
-
 
     /**
      * Callback method for platform management <em>GUI</em>.
@@ -947,7 +723,6 @@ public class rma extends ToolAgent {
         }
     }
 
-
     public void addRemotePlatformFromURL(String url) {
 
         try {
@@ -1020,7 +795,6 @@ public class rma extends ToolAgent {
         myGUI.removeRemotePlatform(platform.getName());
     }
 
-
     //make a search on a specified ams in order to return
     //all the agents registered with that ams.
     public void refreshRemoteAgent(APDescription platform, AID ams) {
@@ -1077,4 +851,219 @@ public class rma extends ToolAgent {
             e.printStackTrace();
         }
     }
+
+    // Sends requests to the AMS
+    private class AMSClientBehaviour extends SimpleAchieveREInitiator {
+
+        private final String actionName;
+
+
+        public AMSClientBehaviour(String an, ACLMessage request) {
+            super(rma.this, request);
+            actionName = an;
+        }
+
+
+        protected void handleNotUnderstood(ACLMessage reply) {
+            myGUI.showErrorDialog("NOT-UNDERSTOOD received by RMA during " + actionName, reply);
+        }
+
+        protected void handleRefuse(ACLMessage reply) {
+            myGUI.showErrorDialog("REFUSE received during " + actionName, reply);
+        }
+
+        protected void handleAgree(ACLMessage reply) {
+            if (logger.isLoggable(Logger.FINE))
+                logger.log(Logger.FINE, "AGREE received" + reply);
+        }
+
+        protected void handleFailure(ACLMessage reply) {
+            myGUI.showErrorDialog("FAILURE received during " + actionName, reply);
+        }
+
+        protected void handleInform(ACLMessage reply) {
+            if (logger.isLoggable(Logger.FINE))
+                logger.log(Logger.FINE, "INFORM received" + reply);
+        }
+
+    } // End of AMSClientBehaviour class
+
+    private class handleAddRemotePlatformBehaviour extends AMSClientBehaviour {
+
+        public handleAddRemotePlatformBehaviour(String an, ACLMessage request) {
+            super(an, request);
+
+        }
+
+        protected void handleInform(ACLMessage msg) {
+            if (logger.isLoggable(Logger.FINE))
+                logger.log(Logger.FINE, "arrived a new APDescription");
+            try {
+                AID sender = msg.getSender();
+                Result r = (Result) getContentManager().extractContent(msg);
+                Iterator<Object> i = r.getItems().iterator();
+                Object APDesc = i.next();
+                if (APDesc != null) {
+                    myGUI.addRemotePlatformFolder();
+                    myGUI.addRemotePlatform(sender, (APDescription) APDesc);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }//end handleAddRemotePlatformBehaviour
+
+    private class handleRefreshRemoteAgentBehaviour extends AMSClientBehaviour {
+
+        private final APDescription platform;
+
+        public handleRefreshRemoteAgentBehaviour(String an, ACLMessage request, APDescription ap) {
+            super(an, request);
+            platform = ap;
+
+        }
+
+        protected void handleInform(ACLMessage msg) {
+            if (logger.isLoggable(Logger.FINE))
+                logger.log(Logger.FINE, "arrived a new agents from a remote platform");
+            try {
+                AID sender = msg.getSender();
+                Result r = (Result) getContentManager().extractContent(msg);
+                Iterator<Object> i = r.getItems().iterator();
+                myGUI.refreshRemoteAgentsInRemotePlatform(platform, i);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }//end handleAddRemotePlatformBehaviour
+
+    class RMAAMSListenerBehaviour extends AMSListenerBehaviour {
+        protected void installHandlers(Map<String, EventHandler> handlersTable) {
+
+            // Fill the event handler table.
+
+            handlersTable.put(IntrospectionVocabulary.META_RESETEVENTS, (EventHandler) ev -> {
+                ResetEvents re = (ResetEvents) ev;
+                myGUI.resetTree();
+            });
+
+            handlersTable.put(IntrospectionVocabulary.ADDEDCONTAINER, (EventHandler) ev -> {
+                AddedContainer ac = (AddedContainer) ev;
+                ContainerID cid = ac.getContainer();
+                String name = cid.getName();
+                String address = cid.getAddress();
+                try {
+                    InetAddress addr = InetAddress.getByName(address);
+                    myGUI.addContainer(name, addr);
+                } catch (UnknownHostException uhe) {
+                    myGUI.addContainer(name, null);
+                }
+            });
+
+
+            handlersTable.put(IntrospectionVocabulary.REMOVEDCONTAINER, (EventHandler) ev -> {
+                RemovedContainer rc = (RemovedContainer) ev;
+                ContainerID cid = rc.getContainer();
+                String name = cid.getName();
+                myGUI.removeContainer(name);
+            });
+
+            handlersTable.put(IntrospectionVocabulary.BORNAGENT, (EventHandler) ev -> {
+                BornAgent ba = (BornAgent) ev;
+                ContainerID cid = ba.getWhere();
+                // ContainerID is null in case of foreign agents registered with the local AMS or virtual agents
+                // FIXME: Such agents should be shown somewhere
+                if (cid != null) {
+                    String container = cid.getName();
+                    AID agent = ba.getAgent();
+                    myGUI.addAgent(container, agent, ba.getState(), ba.getOwnership());
+                    if (agent.equals(getAID()))
+                        myContainerName = container;
+                }
+            });
+
+            handlersTable.put(IntrospectionVocabulary.DEADAGENT, (EventHandler) ev -> {
+                DeadAgent da = (DeadAgent) ev;
+                ContainerID cid = da.getWhere();
+                // ContainerID is null in case of foreign agents registered with the local AMS or virtual agents
+                if (cid != null) {
+                    String container = cid.getName();
+                    AID agent = da.getAgent();
+                    myGUI.removeAgent(container, agent);
+                }
+            });
+
+            handlersTable.put(IntrospectionVocabulary.SUSPENDEDAGENT, (EventHandler) ev -> {
+                SuspendedAgent sa = (SuspendedAgent) ev;
+                ContainerID cid = sa.getWhere();
+                String container = cid.getName();
+                AID agent = sa.getAgent();
+                myGUI.modifyAgent(container, agent, AMSAgentDescription.SUSPENDED, null);
+            });
+
+            handlersTable.put(IntrospectionVocabulary.RESUMEDAGENT, (EventHandler) ev -> {
+                ResumedAgent ra = (ResumedAgent) ev;
+                ContainerID cid = ra.getWhere();
+                String container = cid.getName();
+                AID agent = ra.getAgent();
+                myGUI.modifyAgent(container, agent, AMSAgentDescription.ACTIVE, null);
+            });
+
+            handlersTable.put(IntrospectionVocabulary.FROZENAGENT, (EventHandler) ev -> {
+                FrozenAgent fa = (FrozenAgent) ev;
+                String oldContainer = fa.getWhere().getName();
+                String newContainer = fa.getBufferContainer().getName();
+                AID agent = fa.getAgent();
+                myGUI.modifyFrozenAgent(oldContainer, newContainer, agent);
+            });
+
+            handlersTable.put(IntrospectionVocabulary.THAWEDAGENT, (EventHandler) ev -> {
+                ThawedAgent ta = (ThawedAgent) ev;
+                String oldContainer = ta.getWhere().getName();
+                String newContainer = ta.getBufferContainer().getName();
+                AID agent = ta.getAgent();
+                myGUI.modifyThawedAgent(oldContainer, newContainer, agent);
+            });
+
+            handlersTable.put(IntrospectionVocabulary.CHANGEDAGENTOWNERSHIP, (EventHandler) ev -> {
+                ChangedAgentOwnership cao = (ChangedAgentOwnership) ev;
+                ContainerID cid = cao.getWhere();
+                String container = cid.getName();
+                AID agent = cao.getAgent();
+                myGUI.modifyAgent(container, agent, null, cao.getTo());
+            });
+
+            handlersTable.put(IntrospectionVocabulary.MOVEDAGENT, (EventHandler) ev -> {
+                MovedAgent ma = (MovedAgent) ev;
+                AID agent = ma.getAgent();
+                ContainerID from = ma.getFrom();
+                ContainerID to = ma.getTo();
+                myGUI.moveAgent(from.getName(), to.getName(), agent);
+            });
+
+            handlersTable.put(IntrospectionVocabulary.ADDEDMTP, (EventHandler) ev -> {
+                AddedMTP amtp = (AddedMTP) ev;
+                String address = amtp.getAddress();
+                ContainerID where = amtp.getWhere();
+                myGUI.addAddress(address, where.getName());
+            });
+
+            handlersTable.put(IntrospectionVocabulary.REMOVEDMTP, (EventHandler) ev -> {
+                RemovedMTP rmtp = (RemovedMTP) ev;
+                String address = rmtp.getAddress();
+                ContainerID where = rmtp.getWhere();
+                myGUI.removeAddress(address, where.getName());
+            });
+
+            //handle the APDescription provided by the AMS
+            handlersTable.put(IntrospectionVocabulary.PLATFORMDESCRIPTION, (EventHandler) ev -> {
+                PlatformDescription pd = (PlatformDescription) ev;
+                myPlatformProfile = pd.getPlatform();
+                myGUI.refreshLocalPlatformName(myPlatformProfile.getName());
+            });
+
+        }
+    } // END of inner class RMAAMSListenerBehaviour
 }

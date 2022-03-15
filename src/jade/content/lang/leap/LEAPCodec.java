@@ -35,35 +35,20 @@ import java.util.Vector;
 
 /**
  * Content language codec for the LEAP language
+ *
  * @author Federico Bergenti - Universita` di Parma
  */
 public class LEAPCodec extends ByteArrayCodec {
     public static final String NAME = "LEAP";
-
-    private transient ByteArrayOutputStream outBuffer = new ByteArrayOutputStream();
-    private transient DataOutputStream outStream = new DataOutputStream(outBuffer);
-    private transient Vector<String> stringReferences = new Vector<>();
-
-    //#MIDP_EXCLUDE_BEGIN
-    @Serial
-    private void readObject(ObjectInputStream oin) throws IOException, ClassNotFoundException {
-        oin.defaultReadObject();
-        outBuffer = new ByteArrayOutputStream();
-        outStream = new DataOutputStream(outBuffer);
-        stringReferences = new Vector<>();
-    }
-    //#MIDP_EXCLUDE_END
-
     // Types
     private static final byte PRIMITIVE = 0;
     private static final byte AGGREGATE = 1;
     private static final byte CONTENT_ELEMENT_LIST = 2;
     private static final byte OBJECT = 3;
-
+    //#MIDP_EXCLUDE_END
     // Markers for structured types
     private static final byte ELEMENT = 4;
     private static final byte END = 5;
-
     // Primitive types
     private static final byte STRING = 6;
     private static final byte BOOLEAN = 7;
@@ -74,10 +59,18 @@ public class LEAPCodec extends ByteArrayCodec {
     private static final byte DATE = 12;
     private static final byte BYTE_SEQUENCE = 13;
     private static final byte BIG_STRING = 14;
-
     // Modifiers
     private static final byte MODIFIER = (byte) 0x10; // Only bit five set to 1
     private static final byte UNMODIFIER = (byte) 0xEF; // Only bit five cleared to 1
+    private transient ByteArrayOutputStream outBuffer = new ByteArrayOutputStream();
+    private transient DataOutputStream outStream = new DataOutputStream(outBuffer);
+    private transient Vector<String> stringReferences = new Vector<>();
+    /**
+     * Construct a LEAPCodec object i.e. a Codec for the LEAP language
+     */
+    public LEAPCodec() {
+        super(NAME);
+    }
 
 	/* LEAP Language operators
     public static final String INSTANCEOF = "INSTANCEOF";
@@ -87,16 +80,19 @@ public class LEAPCodec extends ByteArrayCodec {
     public static final String IOTA = "IOTA";
 	 */
 
-    /**
-     * Construct a LEAPCodec object i.e. a Codec for the LEAP language
-     */
-    public LEAPCodec() {
-        super(NAME);
+    //#MIDP_EXCLUDE_BEGIN
+    @Serial
+    private void readObject(ObjectInputStream oin) throws IOException, ClassNotFoundException {
+        oin.defaultReadObject();
+        outBuffer = new ByteArrayOutputStream();
+        outStream = new DataOutputStream(outBuffer);
+        stringReferences = new Vector<>();
     }
 
     /**
      * Encodes an abstract descriptor holding a content element
      * into a byte array.
+     *
      * @param content the content as an abstract descriptor.
      * @return the content as a byte array.
      * @throws CodecException
@@ -115,8 +111,9 @@ public class LEAPCodec extends ByteArrayCodec {
 
     /**
      * Encodes a content into a byte array.
+     *
      * @param ontology the ontology
-     * @param content the content as an abstract descriptor.
+     * @param content  the content as an abstract descriptor.
      * @return the content as a byte array.
      * @throws CodecException
      */
@@ -126,6 +123,7 @@ public class LEAPCodec extends ByteArrayCodec {
 
     /**
      * Decodes the content to an abstract descriptor.
+     *
      * @param content the content as a byte array.
      * @return the content as an abstract description.
      * @throws CodecException
@@ -136,8 +134,9 @@ public class LEAPCodec extends ByteArrayCodec {
 
     /**
      * Decodes the content to an abstract description.
+     *
      * @param ontology the ontology.
-     * @param content the content as a byte array.
+     * @param content  the content as a byte array.
      * @return the content as an abstract description.
      * @throws CodecException
      */

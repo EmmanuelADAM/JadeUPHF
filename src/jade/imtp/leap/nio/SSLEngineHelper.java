@@ -25,15 +25,11 @@ import java.util.logging.Logger;
 public final class SSLEngineHelper implements BufferTransformer {
 
     public static final ByteBuffer EMPTY_BUFFER = NIOHelper.EMPTY_BUFFER;
-
+    private static final Logger log = Logger.getLogger(SSLEngineHelper.class.getName());
     private SSLEngine ssle = null;
-
     private ByteBuffer wrapData;
     private ByteBuffer unwrapData;
-
     private NIOJICPConnection connection = null;
-
-    private static final Logger log = Logger.getLogger(SSLEngineHelper.class.getName());
 
     /**
      * Creates and initializes ByteBuffers and SSLEngine necessary for ssl/nio.

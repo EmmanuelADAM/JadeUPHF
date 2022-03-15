@@ -49,15 +49,6 @@ public class Search implements AgentAction {
     }
 
     /**
-     * Set the <code>description</code> slot of this object.
-     *
-     * @param desc An AMS or DF description for this action.
-     */
-    public void setDescription(Object desc) {
-        description = desc;
-    }
-
-    /**
      * Retrieve the <code>description</code> slot of this object.
      *
      * @return The value of the <code>description</code> slot of this
@@ -68,12 +59,12 @@ public class Search implements AgentAction {
     }
 
     /**
-     * Set the <code>constraints</code> slot of this object.
+     * Set the <code>description</code> slot of this object.
      *
-     * @param s The search constraints for this action.
+     * @param desc An AMS or DF description for this action.
      */
-    public void setConstraints(SearchConstraints s) {
-        constraints = s;
+    public void setDescription(Object desc) {
+        description = desc;
     }
 
     /**
@@ -84,6 +75,15 @@ public class Search implements AgentAction {
      */
     public SearchConstraints getConstraints() {
         return constraints;
+    }
+
+    /**
+     * Set the <code>constraints</code> slot of this object.
+     *
+     * @param s The search constraints for this action.
+     */
+    public void setConstraints(SearchConstraints s) {
+        constraints = s;
     }
 
 }

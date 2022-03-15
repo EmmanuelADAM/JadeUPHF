@@ -40,6 +40,7 @@ import jade.content.schema.ConceptSlotFunctionSchema;
  * (iota ?x (= (age (Person :name John)) ?x))
  * In order to exploit this feature it is necessary to instruct an ontology to use concept slots as functions by means of the
  * <code>useConceptSlotsAsFunctions</code> method of the <code>Ontology</code> class.
+ *
  * @since JADE 3.7
  */
 public class ConceptSlotFunction extends AbsConceptSlotFunction {

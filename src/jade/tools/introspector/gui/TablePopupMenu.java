@@ -60,11 +60,11 @@ public class TablePopupMenu extends JPopupMenu {
 
     }
 
-    public void setTable(JTable t) {
-        table = t;
-    }
-
     public JTable getTable() {
         return table;
+    }
+
+    public void setTable(JTable t) {
+        table = t;
     }
 }

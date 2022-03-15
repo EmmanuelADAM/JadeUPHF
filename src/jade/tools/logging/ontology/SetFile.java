@@ -20,12 +20,12 @@ public class SetFile implements AgentAction {
         setFile(file);
     }
 
-    public void setFile(String file) {
-        this.file = file;
-    }
-
     public String getFile() {
         return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public String getLogger() {

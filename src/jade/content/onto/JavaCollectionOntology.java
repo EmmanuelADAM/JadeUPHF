@@ -37,21 +37,23 @@ public class JavaCollectionOntology extends Ontology {
 
     private final Introspector introspector = new CFReflectiveIntrospector();
 
+    private JavaCollectionOntology() {
+        super("Java-Collection-ontology", (Ontology) null, null);
+    }
+
     /**
      * Returns the singleton instance of the <code>JavaCollectionOntology</code>.
+     *
      * @return the singleton instance of the <code>JavaCollectionOntology</code>
      */
     public static Ontology getInstance() {
         return theInstance;
     }
 
-    private JavaCollectionOntology() {
-        super("Java-Collection-ontology", (Ontology) null, null);
-    }
-
     //#APIDOC_EXCLUDE_BEGIN
 
     /**
+     *
      */
     protected Object toObject(AbsObject abs, String lcType, Ontology globalOnto) throws OntologyException {
         if (abs instanceof AbsAggregate) {
@@ -61,6 +63,7 @@ public class JavaCollectionOntology extends Ontology {
     }
 
     /**
+     *
      */
     protected AbsObject fromObject(Object obj, Ontology globalOnto) throws OntologyException {
         try {

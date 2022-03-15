@@ -58,20 +58,14 @@ import java.util.*;
 public class RequestFIPAServiceBehaviour extends SimpleAchieveREInitiator {
 
     /**
-     * Exception class for timeouts. This exception is thrown when trying
-     * to obtain an <code>ACLMessage</code> from an <code>Handle</code>
-     * and no message has been yet received and the timeout limit is not yet
-     * elapsed.
-     *
-     * @see jade.core.behaviours.ReceiverBehaviour.Handle#getMessage()
+     * @serial
      */
-    public static class NotYetReady extends Exception {
-        NotYetReady() {
-            super("Requested message is not ready yet.");
-        }
-    }
-
-
+    //to set a timeout for the search request: 5 minutes.
+    private final long timeout = 300000;
+    /**
+     * @serial
+     */
+    private final FIPAException outcome = null;
     /**
      * @serial
      */
@@ -80,11 +74,6 @@ public class RequestFIPAServiceBehaviour extends SimpleAchieveREInitiator {
      * @serial
      */
     private boolean notYetReady;
-    /**
-     * @serial
-     */
-    //to set a timeout for the search request: 5 minutes.
-    private final long timeout = 300000;
 
 
     /**
@@ -242,10 +231,6 @@ public class RequestFIPAServiceBehaviour extends SimpleAchieveREInitiator {
 
     // This exception object records last outcome. When it is
     // 'null', all went OK.
-    /**
-     * @serial
-     */
-    private final FIPAException outcome = null;
 
     /**
      * This public method allows to get the INFORM message received in the final
@@ -265,8 +250,6 @@ public class RequestFIPAServiceBehaviour extends SimpleAchieveREInitiator {
         return lastMsg;
     }
 
-    //#ALL_EXCLUDE_BEGIN
-
     /**
      * This public method allows to get the results of a search operation.
      *
@@ -283,7 +266,8 @@ public class RequestFIPAServiceBehaviour extends SimpleAchieveREInitiator {
         Collections.addAll(l, r);
         return l;
     }
-    //#ALL_EXCLUDE_END
+
+    //#ALL_EXCLUDE_BEGIN
 
     /**
      * This public method allows to get the results of a search operation.
@@ -311,6 +295,21 @@ public class RequestFIPAServiceBehaviour extends SimpleAchieveREInitiator {
         }
         return l.toArray();
 
+    }
+    //#ALL_EXCLUDE_END
+
+    /**
+     * Exception class for timeouts. This exception is thrown when trying
+     * to obtain an <code>ACLMessage</code> from an <code>Handle</code>
+     * and no message has been yet received and the timeout limit is not yet
+     * elapsed.
+     *
+     * @see jade.core.behaviours.ReceiverBehaviour.Handle#getMessage()
+     */
+    public static class NotYetReady extends Exception {
+        NotYetReady() {
+            super("Requested message is not ready yet.");
+        }
     }
 
 }

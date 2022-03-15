@@ -46,17 +46,18 @@ import java.io.IOException;
 
 /**
  * Class declaration
+ *
  * @author Giovanni Caire - TILAB
  * @author Ronnie Taib - Motorola
  * @author Steffen Rusitschka - Siemens
  */
 class JICPClient {
 
+    private static final Logger log = Logger.getMyLogger(JICPClient.class.getName());
     private final TransportProtocol protocol;
     private final ConnectionFactory connFactory;
     private final ConnectionPool pool;
     private final int readTimeout;
-    private static final Logger log = Logger.getMyLogger(JICPClient.class.getName());
 
     /**
      * Constructor declaration
@@ -70,11 +71,11 @@ class JICPClient {
 
     /**
      * Send a command to this transport address
-     * @param ta the address to send the command to
-     * @param dataType the type of data as defined in the JICPPeer
-     * @param data the command
-     * @return a byte array corresponding to the answer
      *
+     * @param ta       the address to send the command to
+     * @param dataType the type of data as defined in the JICPPeer
+     * @param data     the command
+     * @return a byte array corresponding to the answer
      * @throws ICPException
      */
     public byte[] send(TransportAddress ta, byte dataType, byte[] data, boolean requireFreshConnection) throws ICPException {
@@ -175,7 +176,7 @@ class JICPClient {
     }
 
     /**
-     Called by the JICPPeer ticker at each tick
+     * Called by the JICPPeer ticker at each tick
      */
     public void tick(long currentTime) {
         pool.clearExpiredConnections(currentTime);

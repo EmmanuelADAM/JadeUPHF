@@ -34,9 +34,15 @@ import jade.content.Predicate;
 
 public class MissingParameter extends RefuseException implements Predicate {
 
+    /**
+     * @serial
+     */
+    String s1, s2;
+
     public MissingParameter() {
         this("Unkown-object", "Unknown-parameter-name");
     }
+
 
     public MissingParameter(String objectName, String parameterName) {
         super("(missing-parameter " + objectName + " " + parameterName + ")");
@@ -44,28 +50,22 @@ public class MissingParameter extends RefuseException implements Predicate {
         s2 = parameterName;
     }
 
-
-    /**
-     * @serial
-     */
-    String s1, s2;
+    public String getObjectName() {
+        return s1;
+    }
 
     public void setObjectName(String a) {
         s1 = a;
         setMessage("(missing-parameter " + s1 + " " + s2 + ")");
     }
 
-    public String getObjectName() {
-        return s1;
+    public String getParameterName() {
+        return s2;
     }
 
     public void setParameterName(String a) {
         s2 = a;
         setMessage("(missing-parameter " + s1 + " " + s2 + ")");
-    }
-
-    public String getParameterName() {
-        return s2;
     }
 
 

@@ -34,6 +34,9 @@ import jade.content.AgentAction;
  */
 public class AbsAgentAction extends AbsConcept implements AbsContentElement, AgentAction {
 
+    // Easy way to access the Java class representing AbsAgentAction.
+    // Useful in MIDP where XXX.class is not available
+    private static Class<AbsConcept> absAgentActionClass = null;
     private boolean isAContentExpression = false;
 
     /**
@@ -47,21 +50,6 @@ public class AbsAgentAction extends AbsConcept implements AbsContentElement, Age
         super(typeName);
     }
 
-    /**
-     * Set an attribute of the agent action held by this
-     * abstract descriptor.
-     *
-     * @param name  The name of the attribute to be set.
-     * @param value The new value of the attribute.
-     */
-    public void set(String name, AbsPredicate value) {
-        super.set(name, value);
-    }
-
-    // Easy way to access the Java class representing AbsAgentAction.
-    // Useful in MIDP where XXX.class is not available
-    private static Class<AbsConcept> absAgentActionClass = null;
-
     public static Class<AbsConcept> getJavaClass() {
         if (absAgentActionClass == null) {
             try {
@@ -72,6 +60,17 @@ public class AbsAgentAction extends AbsConcept implements AbsContentElement, Age
             }
         }
         return absAgentActionClass;
+    }
+
+    /**
+     * Set an attribute of the agent action held by this
+     * abstract descriptor.
+     *
+     * @param name  The name of the attribute to be set.
+     * @param value The new value of the attribute.
+     */
+    public void set(String name, AbsPredicate value) {
+        super.set(name, value);
     }
 
     /**

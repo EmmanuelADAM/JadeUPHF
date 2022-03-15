@@ -27,41 +27,39 @@ package jade.util;
 //#APIDOC_EXCLUDE_FILE
 
 /**
- * This class provides support for  
- * synchronizing threads acting on a generic resource in such a way that 
- * - If a thread is writing the resource no other thread can act on it 
+ * This class provides support for
+ * synchronizing threads acting on a generic resource in such a way that
+ * - If a thread is writing the resource no other thread can act on it
  * in any way
  * - Several threads can read the resource at the same time
  * - If one or more threads are reading the resource no thread can write it
- * @author Giovanni Caire - TILab 
+ *
+ * @author Giovanni Caire - TILab
  */
 public class RWLock {
+    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
     // The counter of threads currently reading the resource
     private int readersCnt = 0;
-
     // The Thread currently writing the resource (there can only be
     // one such a therad at a given time)
     private Thread currentWriter = null;
-
     // writeLock()/unlock() can be nested. This indicates the current
     // depth
     private int writeLockDepth = 0;
 
-    private final Logger logger = Logger.getMyLogger(this.getClass().getName());
-
     /**
-     Default constructor.
+     * Default constructor.
      */
     public RWLock() {
     }
 
     /**
-     Acquire the protected resource with writing privileges. Only
-     one writer at a time can access the protected resource, and no
-     readers can access it at the same time. The locking is
-     recursive (i.e. the same thread can acquire the lock multiple
-     times, but must unlock it a matching number of times to
-     actually free the protected resource).
+     * Acquire the protected resource with writing privileges. Only
+     * one writer at a time can access the protected resource, and no
+     * readers can access it at the same time. The locking is
+     * recursive (i.e. the same thread can acquire the lock multiple
+     * times, but must unlock it a matching number of times to
+     * actually free the protected resource).
      */
     public synchronized void writeLock() {
         Thread me = Thread.currentThread();
@@ -84,8 +82,8 @@ public class RWLock {
     }
 
     /**
-     Release the protected resource, previously acquired with
-     writing privileges.
+     * Release the protected resource, previously acquired with
+     * writing privileges.
      */
     public synchronized void writeUnlock() {
         if (Thread.currentThread() == currentWriter) {
@@ -100,12 +98,12 @@ public class RWLock {
     }
 
     /**
-     Acquire the protected resource with reading privileges. Many
-     readers can access the protected resource at the same time, but
-     no writer can access it while at least one reader is
-     present. The locking is recursive (i.e. the same thread can
-     acquire the lock multiple times, but must unlock it a matching
-     number of times to actually free the protected resource).
+     * Acquire the protected resource with reading privileges. Many
+     * readers can access the protected resource at the same time, but
+     * no writer can access it while at least one reader is
+     * present. The locking is recursive (i.e. the same thread can
+     * acquire the lock multiple times, but must unlock it a matching
+     * number of times to actually free the protected resource).
      */
     public synchronized void readLock() {
         while (currentWriter != null) {
@@ -122,8 +120,8 @@ public class RWLock {
 
 
     /**
-     Release the protected resource, previously acquired with
-     reading privileges.
+     * Release the protected resource, previously acquired with
+     * reading privileges.
      */
     public synchronized void readUnlock() {
         readersCnt--;
@@ -135,23 +133,23 @@ public class RWLock {
     }
 
     /**
-     This placeholder method is called every time a thread actually
-     acquires the protected resource with writing privileges (this
-     means that, in case of multiple recursive locking by the same
-     thread, this method is called only the first time). Subclasses
-     can exploit this to transparently trigger a resource
-     acquisition prolog.
+     * This placeholder method is called every time a thread actually
+     * acquires the protected resource with writing privileges (this
+     * means that, in case of multiple recursive locking by the same
+     * thread, this method is called only the first time). Subclasses
+     * can exploit this to transparently trigger a resource
+     * acquisition prolog.
      */
     protected void onWriteStart() {
     }
 
     /**
-     This placeholder method is called every time a thread actually
-     releases the protected resource with writing privileges (this
-     means that, in case of multiple recursive unlocking by the same
-     thread, this method is called only the last time). Subclasses
-     can exploit this to transparently trigger a resource release
-     epilog.
+     * This placeholder method is called every time a thread actually
+     * releases the protected resource with writing privileges (this
+     * means that, in case of multiple recursive unlocking by the same
+     * thread, this method is called only the last time). Subclasses
+     * can exploit this to transparently trigger a resource release
+     * epilog.
      */
     protected void onWriteEnd() {
     }

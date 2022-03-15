@@ -38,12 +38,12 @@ import java.util.Iterator;
 
 /**
  * MIDP implementation of the SLCodec. Actually the MIDP version of the SLCodec just extends SimpleSLCodec
+ *
  * @version $Date: 2013-02-25 11:10:22 +0100 (lun, 25 feb 2013) $ $Revision: 6642 $
  **/
 public class SimpleSLCodec extends StringCodec {
-    private int indent = 0;
-
     private final Logger logger = Logger.getMyLogger(this.getClass().getName());
+    private int indent = 0;
 
     public SimpleSLCodec() {
         super(jade.domain.FIPANames.ContentLanguage.FIPA_SL);
@@ -51,8 +51,9 @@ public class SimpleSLCodec extends StringCodec {
 
     /**
      * Encodes a content into a string using a given ontology.
+     *
      * @param ontology the ontology
-     * @param content the content as an abstract descriptor.
+     * @param content  the content as an abstract descriptor.
      * @return the content as a string.
      * @throws CodecException
      */
@@ -174,8 +175,9 @@ public class SimpleSLCodec extends StringCodec {
     /**
      * Decodes a content expression to an abstract description using a
      * given ontology.
+     *
      * @param ontology the ontology.
-     * @param content the content as a string.
+     * @param content  the content as a string.
      * @return the content as an abstract description.
      * @throws CodecException
      */
@@ -332,12 +334,14 @@ public class SimpleSLCodec extends StringCodec {
     }
 
     /**
+     *
      */
     public AbsContentElement decode(String content) throws CodecException {
         throw new CodecException("Unsupported operation");
     }
 
     /**
+     *
      */
     public String encode(AbsContentElement content) throws CodecException {
         throw new CodecException("Unsupported operation");

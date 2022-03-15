@@ -91,6 +91,15 @@ public class DFService extends FIPAService {
     private static final long OFFSET = 10000; // 10 sec
     private static final String SPACE_COLON = " :";
     private static final String SPACE_BRACKET = " (";
+    // constant used to set max results of SearchConstraints
+    private static final Long MINUSONE = -1L;
+
+
+    /**
+     * Default constructor.
+     */
+    public DFService() {
+    }
 
     /**
      * check that the <code>DFAgentDescription</code> contains the mandatory
@@ -111,7 +120,7 @@ public class DFService extends FIPAService {
         if (checkServices) {
 //            Iterator<ServiceDescription> i = dfd.getAllServices();
 //            ServiceDescription sd;
-            for(ServiceDescription sd:dfd.getAllServices()) {
+            for (ServiceDescription sd : dfd.getAllServices()) {
                 if (sd.getName() == null)
                     throw new MissingParameter(FIPAManagementVocabulary.SERVICEDESCRIPTION, FIPAManagementVocabulary.SERVICEDESCRIPTION_NAME);
                 if (sd.getType() == null)
@@ -119,7 +128,6 @@ public class DFService extends FIPAService {
             }
         }
     }
-
 
     /**
      * Register a new DF-Description with a <b>DF</b> agent.
@@ -163,7 +171,6 @@ public class DFService extends FIPAService {
 
         return decodeDone(reply.getContent());
     }
-
 
     /**
      * Registers a <code>DFAgentDescription</code> with the default DF
@@ -244,7 +251,6 @@ public class DFService extends FIPAService {
     public static void deregister(Agent a) throws FIPAException {
         deregister(a, a.getDefaultDF());
     }
-
 
     /**
      * Modifies a previously registered DF-Description within a <b>DF</b>
@@ -345,9 +351,6 @@ public class DFService extends FIPAService {
         }
     }
 
-    // constant used to set max results of SearchConstraints
-    private static final Long MINUSONE = -1L;
-
     /**
      * Searches for data contained within a <b>DF</b> agent.
      *
@@ -428,6 +431,10 @@ public class DFService extends FIPAService {
         return search(a, dfName, dfd, null);
     }
 
+    ///////////////////////////////////
+    // Message preparation methods
+    ///////////////////////////////////
+
     /**
      * Searches the DF and remains blocked until a result is found or the
      * specified timeout has expired.
@@ -463,10 +470,6 @@ public class DFService extends FIPAService {
         }
         return result;
     }
-
-    ///////////////////////////////////
-    // Message preparation methods
-    ///////////////////////////////////
 
     /**
      * Utility method that creates a suitable message to be used
@@ -546,6 +549,10 @@ public class DFService extends FIPAService {
         return createSubscriptionMessage(a, dfName, template, constraints);
     }
 
+    ///////////////////////////////////
+    // Decoding methods
+    ///////////////////////////////////
+
     /**
      * Utility method that creates a suitable message to be used
      * to CANCEL a subscription to a DF agent.
@@ -568,10 +575,6 @@ public class DFService extends FIPAService {
         cancel.setContent(encodeCancel(dfName, subscribe));
         return cancel;
     }
-
-    ///////////////////////////////////
-    // Decoding methods
-    ///////////////////////////////////
 
     /**
      * Process the content of the final <code>inform (Done)</code> message
@@ -694,7 +697,6 @@ public class DFService extends FIPAService {
         parser.consumeChar(')');
         return dfd;
     }
-
 
     /**
      * The parser content has the form:
@@ -875,6 +877,10 @@ public class DFService extends FIPAService {
         return items;
     }
 
+    ///////////////////////////////////
+    // Encoding methods
+    ///////////////////////////////////
+
     /**
      * Start indicates the index of the first char after the open parenthesis
      */
@@ -902,10 +908,6 @@ public class DFService extends FIPAService {
         }
         return cnt - start;
     }
-
-    ///////////////////////////////////
-    // Encoding methods
-    ///////////////////////////////////
 
     /**
      * This is package scoped as it is used by DFUpdateBehaviour and
@@ -1056,6 +1058,9 @@ public class DFService extends FIPAService {
         }
     }
 
+
+    //#MIDP_EXCLUDE_BEGIN
+
     private static void encodeString(StringBuffer sb, String s) {
         if (SimpleSLTokenizer.isAWord(s)) {
             sb.append(s);
@@ -1063,9 +1068,6 @@ public class DFService extends FIPAService {
             sb.append(SimpleSLTokenizer.quoteString(s));
         }
     }
-
-
-    //#MIDP_EXCLUDE_BEGIN
 
     /**
      * In some cases it is more convenient to execute this tasks in a non-blocking way.
@@ -1123,7 +1125,6 @@ public class DFService extends FIPAService {
         return getNonBlockingBehaviour(a, a.getDefaultDF(), actionName, dfd, constraints);
     }
 
-
     /**
      * the default SearchContraints are used.
      * a default AgentDescription is used, where only the agent AID is set.
@@ -1139,7 +1140,6 @@ public class DFService extends FIPAService {
         return getNonBlockingBehaviour(a, dfName, actionName, dfd, constraints);
     }
 
-
     /**
      * The defautl DF is used.
      * the default SearchContraints are used.
@@ -1152,6 +1152,7 @@ public class DFService extends FIPAService {
         constraints.setMaxResults(MINUSONE);
         return getNonBlockingBehaviour(a, a.getDefaultDF(), actionName, dfd, constraints);
     }
+    //#MIDP_EXCLUDE_END
 
     /**
      * the default SearchContraints are used.
@@ -1163,13 +1164,6 @@ public class DFService extends FIPAService {
         SearchConstraints constraints = new SearchConstraints();
         constraints.setMaxResults(MINUSONE);
         return getNonBlockingBehaviour(a, dfName, actionName, dfd, constraints);
-    }
-    //#MIDP_EXCLUDE_END
-
-    /**
-     * Default constructor.
-     */
-    public DFService() {
     }
 
 }

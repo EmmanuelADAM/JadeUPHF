@@ -45,17 +45,6 @@ public class LogManagementOntology extends Ontology implements LogManagementVoca
     // The singleton instance of this ontology
     private static final Ontology theInstance = new LogManagementOntology();
 
-    /**
-     * This method returns the unique instance (according to the singleton
-     * pattern) of the Log-Management-ontology.
-     *
-     * @return The singleton <code>Ontology</code> object, containing the
-     * schemas for the elements of the Log-Management-ontology.
-     */
-    public static Ontology getInstance() {
-        return theInstance;
-    }
-
     private LogManagementOntology() {
         super(NAME, ExceptionOntology.getInstance(), new ReflectiveIntrospector());
 
@@ -91,5 +80,16 @@ public class LogManagementOntology extends Ontology implements LogManagementVoca
         } catch (OntologyException oe) {
             oe.printStackTrace();
         }
+    }
+
+    /**
+     * This method returns the unique instance (according to the singleton
+     * pattern) of the Log-Management-ontology.
+     *
+     * @return The singleton <code>Ontology</code> object, containing the
+     * schemas for the elements of the Log-Management-ontology.
+     */
+    public static Ontology getInstance() {
+        return theInstance;
     }
 }

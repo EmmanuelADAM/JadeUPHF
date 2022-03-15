@@ -36,9 +36,9 @@ import java.awt.event.ActionListener;
 
 
 class TreeAgentPopupMenu extends JPopupMenu {
+    private final AgentTree tree;
     Introspector debugger;
     String agentName;
-    private final AgentTree tree;
 
     public TreeAgentPopupMenu(Introspector d, AgentTree t) {
         debugger = d;

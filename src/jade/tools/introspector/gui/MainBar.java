@@ -32,10 +32,10 @@ import javax.swing.*;
  * @version $Date: 2002-08-28 16:50:19 +0200 (mer, 28 ago 2002) $ $Revision: 3351 $
  */
 public class MainBar extends JMenuBar {
+    private final MainBarListener listener;
     private JMenu stateMenu;
     private JMenu viewMenu;
     private JMenu debugMenu;
-
     private JCheckBoxMenuItem viewMessageItem;
     private JCheckBoxMenuItem vewBehaviourItem;
     private JMenuItem exitItem;
@@ -47,8 +47,6 @@ public class MainBar extends JMenuBar {
     private JMenuItem breakItem;
     private JMenuItem slowItem;
     private JMenuItem goItem;
-
-    private final MainBarListener listener;
 
 
     public MainBar(MainBarListener list) {

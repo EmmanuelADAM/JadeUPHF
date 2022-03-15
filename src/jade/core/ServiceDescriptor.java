@@ -40,6 +40,12 @@ import java.io.Serializable;
  */
 public class ServiceDescriptor implements Serializable {
 
+    private String myName;
+    private boolean myIsMandatory;
+    private transient Service myService;
+    //#MIDP_EXCLUDE_BEGIN
+    private String serviceClass;
+
     /**
      * Builds a new service descriptor, describing the given service
      * with the given name and properties.
@@ -64,15 +70,6 @@ public class ServiceDescriptor implements Serializable {
     }
 
     /**
-     * Change the name (if any) of the described service.
-     *
-     * @param sn The name to assign to the described service.
-     */
-    public void setName(String sn) {
-        myName = sn;
-    }
-
-    /**
      * Retrieve the name (if any) of the described service.
      *
      * @return The name of the described service, or <code>null</code>
@@ -83,13 +80,12 @@ public class ServiceDescriptor implements Serializable {
     }
 
     /**
-     * Change the described service (if any).
+     * Change the name (if any) of the described service.
      *
-     * @param svc The <code>Service</code> object that is to be
-     *            described by this service descriptor.
+     * @param sn The name to assign to the described service.
      */
-    public void setService(Service svc) {
-        myService = svc;
+    public void setName(String sn) {
+        myName = sn;
     }
 
     /**
@@ -102,20 +98,23 @@ public class ServiceDescriptor implements Serializable {
         return myService;
     }
 
-    public void setMandatory(boolean isMandatory) {
-        myIsMandatory = isMandatory;
+    /**
+     * Change the described service (if any).
+     *
+     * @param svc The <code>Service</code> object that is to be
+     *            described by this service descriptor.
+     */
+    public void setService(Service svc) {
+        myService = svc;
     }
 
     public boolean isMandatory() {
         return myIsMandatory;
     }
 
-    private String myName;
-    private boolean myIsMandatory;
-    private transient Service myService;
-
-    //#MIDP_EXCLUDE_BEGIN
-    private String serviceClass;
+    public void setMandatory(boolean isMandatory) {
+        myIsMandatory = isMandatory;
+    }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
         if (myService != null) {

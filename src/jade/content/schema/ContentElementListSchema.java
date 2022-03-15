@@ -40,9 +40,9 @@ public class ContentElementListSchema extends ContentElementSchema {
     private static final ContentElementListSchema baseSchema = new ContentElementListSchema();
 
     /**
-     * Construct a schema that vinculates an entity to be a content element 
-     * list. Note that there are no different types of content element 
-     * list as it 
+     * Construct a schema that vinculates an entity to be a content element
+     * list. Note that there are no different types of content element
+     * list as it
      * happens for concepts (e.g. Person, Address...), IREs (e.g. IOTA,
      * ANY, ALL...) and the like. Therefore there is no ContentElementListSchema
      * constructor that takes a String parameter.
@@ -53,6 +53,7 @@ public class ContentElementListSchema extends ContentElementSchema {
 
     /**
      * Retrieve the generic base schema for all content element lists.
+     *
      * @return the generic base schema for all content element lists.
      */
     public static ObjectSchema getBaseSchema() {
@@ -60,18 +61,19 @@ public class ContentElementListSchema extends ContentElementSchema {
     }
 
     /**
-     * Creates an Abstract descriptor to hold a content element list 
+     * Creates an Abstract descriptor to hold a content element list
      */
     public AbsObject newInstance() throws OntologyException {
         return new AbsContentElementList();
     }
 
     /**
-     Check whether a given abstract descriptor complies with this
-     schema.
-     @param abs The abstract descriptor to be checked
-     @throws OntologyException If the abstract descriptor does not
-     complies with this schema
+     * Check whether a given abstract descriptor complies with this
+     * schema.
+     *
+     * @param abs The abstract descriptor to be checked
+     * @throws OntologyException If the abstract descriptor does not
+     *                           complies with this schema
      */
     public void validate(AbsObject abs, Ontology onto) throws OntologyException {
         // Check the type of the abstract descriptor
@@ -93,13 +95,13 @@ public class ContentElementListSchema extends ContentElementSchema {
     }
 
     /**
-     Return true if
-     - s is the base schema for the XXXSchema class this schema is
-     an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
-     schema is an instance of ConceptSchema)
-     - s is the base schema for a super-class of the XXXSchema class
-     this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
-     and this schema is an instance of ConceptSchema)
+     * Return true if
+     * - s is the base schema for the XXXSchema class this schema is
+     * an instance of (e.g. s is ConceptSchema.getBaseSchema() and this
+     * schema is an instance of ConceptSchema)
+     * - s is the base schema for a super-class of the XXXSchema class
+     * this schema is an instance of (e.g. s is TermSchema.getBaseSchema()
+     * and this schema is an instance of ConceptSchema)
      */
     protected boolean descendsFrom(ObjectSchema s) {
         if (s != null) {
