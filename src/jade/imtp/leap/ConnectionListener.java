@@ -29,11 +29,11 @@ package jade.imtp.leap;
  * specific events happen on the device.
  * Application developers wishing to handle these events may provide
  * a class implementing this interface and set the
- * <code>connection-listener</code> property to the fully qualified name
+ *  connection-listener   property to the fully qualified name
  * of that class. ConnectionListener implementation classes must have
  * an accessible default constructor;<br>
  * Alternatively an object implementing the ConnectionListener interface
- * may be put in the activation <code>Properties</code> specified at
+ * may be put in the activation  Properties   specified at
  * JADE runtime activation.
  *
  * @author Giovanni Caire - TILAB
@@ -63,7 +63,7 @@ public interface ConnectionListener {
      * This event is raised whenever a the FrontEnd drops down the
      * connection with the BackEnd since no data has been transferred
      * over the connection since a while. This can only happen if the
-     * <code>drop-down-time</code> option is set to a value > 0.
+     *  drop-down-time   option is set to a value > 0.
      */
     int DROPPED = 4;
 

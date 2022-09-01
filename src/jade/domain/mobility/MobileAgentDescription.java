@@ -28,7 +28,7 @@ import jade.core.AID;
 import jade.core.Location;
 
 /**
- * This class represents the <code>mobile-agent-description</code>
+ * This class represents the  mobile-agent-description
  * concept.
  *
  * @author Giovanni Rimassa -  Universita' di Parma
@@ -51,18 +51,18 @@ public class MobileAgentDescription implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>name</code> slot of this event,
+     * Retrieve the value of the  name   slot of this event,
      * containing the agent identifier of the described agent.
      *
-     * @return The value of the <code>name</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  name   slot, or
+     *  null   if no value was set.
      */
     public AID getName() {
         return name;
     }
 
     /**
-     * Set the <code>name</code> slot of this action.
+     * Set the  name   slot of this action.
      *
      * @param id The agent identifier of the described agent.
      */
@@ -71,19 +71,19 @@ public class MobileAgentDescription implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>destination</code> slot of this
+     * Retrieve the value of the  destination   slot of this
      * event, containing the destination of the mobility operation
      * performed by the described agent.
      *
-     * @return The value of the <code>destination</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  destination   slot, or
+     *  null   if no value was set.
      */
     public Location getDestination() {
         return destination;
     }
 
     /**
-     * Set the <code>destination</code> slot of this action.
+     * Set the  destination   slot of this action.
      *
      * @param d The destination of the mobility operation performed by
      *          the described agent.
@@ -93,18 +93,18 @@ public class MobileAgentDescription implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>agent-profile</code> slot of
+     * Retrieve the value of the  agent-profile   slot of
      * this event, containing the profile for the descrbed agent.
      *
-     * @return The value of the <code>agent-profile</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  agent-profile   slot, or
+     *  null   if no value was set.
      */
     public MobileAgentProfile getAgentProfile() {
         return agentProfile;
     }
 
     /**
-     * Set the <code>agent-profile</code> slot of this action.
+     * Set the  agent-profile   slot of this action.
      *
      * @param ap The profile for the described agent.
      */
@@ -113,19 +113,19 @@ public class MobileAgentDescription implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>agent-version</code> slot of
+     * Retrieve the value of the  agent-version   slot of
      * this event, containing the version string for the described
      * agent.
      *
-     * @return The value of the <code>agent-version</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  agent-version   slot, or
+     *  null   if no value was set.
      */
     public String getAgentVersion() {
         return agentVersion;
     }
 
     /**
-     * Set the <code>agent-version</code> slot of this action.
+     * Set the  agent-version   slot of this action.
      *
      * @param v The version string for the described agent.
      */
@@ -134,18 +134,18 @@ public class MobileAgentDescription implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>signature</code> slot of this
+     * Retrieve the value of the  signature   slot of this
      * event, containing the signature string for the described agent.
      *
-     * @return The value of the <code>signature</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  signature   slot, or
+     *  null   if no value was set.
      */
     public String getSignature() {
         return signature;
     }
 
     /**
-     * Set the <code>signature</code> slot of this action.
+     * Set the  signature   slot of this action.
      *
      * @param s The signature string for the described agent.
      */

@@ -31,8 +31,8 @@ import jade.util.Event;
  * Invoking methods on instances of this class, it is possible to
  * trigger state transition of the agent life cycle.  This class must
  * not be instantiated by applications. Instead, use the
- * <code>createAgent()</code> method in class
- * <code>AgentContainer</code>.
+ *  createAgent()   method in class
+ *  AgentContainer  .
  * <br>
  * <b>NOT available in MIDP</b>
  * <br>
@@ -107,7 +107,7 @@ public interface AgentController {
      * agent that keeps on executing elsewhere (i.e., no proxy
      * remotization is performed).
      *
-     * @param where A <code>Location</code> object, representing the
+     * @param where A  Location   object, representing the
      *              container the agent should move to.
      * @throws StaleProxyException If the underlying agent is dead or
      *                             gone.
@@ -120,7 +120,7 @@ public interface AgentController {
      * lifecycle. Rather, it creates another agent on the given
      * location, that is just a copy of this agent.
      *
-     * @param where   The <code>Location</code> object, representing the
+     * @param where   The  Location   object, representing the
      *                container where the new agent copy will start.
      * @param newName The new nickname to give to the copy.
      * @throws StaleProxyException If the underlying agent is dead or
@@ -132,15 +132,15 @@ public interface AgentController {
      * Passes an application-specific object to a local agent, created
      * using JADE In-Process Interface. The object will be put into an
      * internal agent queue, from where it can be picked using the
-     * <code>jade.core.Agent.getO2AObject()</code> method. The agent
+     *  jade.core.Agent.getO2AObject()   method. The agent
      * must first declare its will to accept passed objects, using the
-     * <code>jade.core.Agent.setEnabledO2ACommunication()</code> method.
+     *  jade.core.Agent.setEnabledO2ACommunication()   method.
      *
      * @param o        The object to put in the private agent queue.
      * @param blocking A flag, stating the desired rendez-vous policy;
-     *                 it can be <code>ASYNC</code>, for a non-blocking call, returning
+     *                 it can be  ASYNC  , for a non-blocking call, returning
      *                 right after putting the object in the quque, or
-     *                 <code>SYNC</code>, for a blocking call that does not return until
+     *                  SYNC  , for a blocking call that does not return until
      *                 the agent picks the object from the private queue.
      * @see jade.core.Agent#getO2AObject()
      * @see jade.core.Agent#setEnabledO2ACommunication(boolean enabled, int queueSize)

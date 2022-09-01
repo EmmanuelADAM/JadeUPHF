@@ -28,12 +28,12 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * This class defines the object type <code>GuiEvent</code> used to notify
+ * This class defines the object type  GuiEvent   used to notify
  * an event to a GuiAgent. It has two mandatory attributes:the source of the event
  * and an integer identifying the type of event and an optional list of parameters
  * than can be added to the event object.The type of each parameter must extends
- * <code>java.lang.Object</code>; therefore primitive object (e.g.int) should be wrapped
- * into appropriate objects(e.g <code>java.lang.Integer</code>).
+ *  java.lang.Object  ; therefore primitive object (e.g.int) should be wrapped
+ * into appropriate objects(e.g  java.lang.Integer  ).
  *
  * @author Giovanni Caire - CSELT S.p.A.
  * @version $Date: 2003-11-20 11:55:37 +0100 (gio, 20 nov 2003) $ $Revision: 4572 $
@@ -71,7 +71,7 @@ public class GuiEvent {
     /**
      * Retrieve the logical source of this GUI event.
      *
-     * @return The event source, or <code>null</code> if no source was
+     * @return The event source, or  null   if no source was
      * set.
      */
     public Object getSource() {

@@ -26,8 +26,8 @@ package jade.domain.introspection;
 import jade.core.ContainerID;
 
 /**
- * This class represents the <code>kill-container-requested</code> concept in the
- * <code>jade-introspection</code> ontology.
+ * This class represents the  kill-container-requested   concept in the
+ *  jade-introspection   ontology.
  *
  * @author Giovanni Caire - TILAB
  * @since JADE 3.4
@@ -57,19 +57,19 @@ public class KillContainerRequested implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>container</code> slot of this
+     * Retrieve the value of the  container   slot of this
      * event, containing the identifier of the container that is requested
      * to be killed.
      *
-     * @return The value of the <code>container</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  container   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getContainer() {
         return container;
     }
 
     /**
-     * Set the <code>container</code> of this event.
+     * Set the  container   of this event.
      *
      * @param id The container identifier of the container that is requested to be killed.
      */

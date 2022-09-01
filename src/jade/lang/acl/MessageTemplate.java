@@ -35,14 +35,14 @@ import java.util.Iterator;
 /**
  * A pattern for matching incoming ACL messages. This class allows to
  * build complex slot patterns to select ACL messages. These patterns
- * can then be used in <code>receive()</code> operations.
+ * can then be used in  receive()   operations.
  * <p>
  * This class provide one method for each attribute of an ACLMessage,
  * that can be combined using the logic operators to create more complex
  * patterns.
  * A user can also create an application-specific pattern.
  * In this case he has to implement the MatchExpression interface,
- * writing the application specific <code>match()</code> method.
+ * writing the application specific  match()   method.
  * Then an instance of that class can be used as parameter of the MessageTemplate
  * constructor to define the application specific MessageTemaplate.
  *
@@ -86,7 +86,7 @@ public class MessageTemplate implements Serializable {
      * This <em>Factory Method</em> returns a message template that
      * matches any message.
      *
-     * @return A new <code>MessageTemplate</code> matching any given
+     * @return A new  MessageTemplate   matching any given
      * value.
      */
 
@@ -96,10 +96,10 @@ public class MessageTemplate implements Serializable {
 
     /**
      * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:sender</code> slot.
+     * matches any message with a given  :sender   slot.
      *
      * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
+     * @return A new  MessageTemplate   matching the given
      * value.
      */
     public static MessageTemplate MatchSender(AID value) {
@@ -108,11 +108,11 @@ public class MessageTemplate implements Serializable {
 
     /**
      * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:receiver</code> slot.
+     * matches any message with a given  :receiver   slot.
      *
      * @param values An array of Agent IDs against which the
      *               value of the message slot will be matched.
-     * @return A new <code>MessageTemplate</code> matching the given
+     * @return A new  MessageTemplate   matching the given
      * value.
      */
     public static MessageTemplate MatchReceiver(AID[] values) {
@@ -124,7 +124,7 @@ public class MessageTemplate implements Serializable {
      * matches any message about a given topic.
      *
      * @param topic An AID representing the topic to be matched
-     * @return A new <code>MessageTemplate</code> matching messages about the given topic
+     * @return A new  MessageTemplate   matching messages about the given topic
      */
     public static MessageTemplate MatchTopic(AID topic) {
         return new MessageTemplate(new MatchTopic(topic));
@@ -132,10 +132,10 @@ public class MessageTemplate implements Serializable {
 
     /**
      * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:content</code> slot.
+     * matches any message with a given  :content   slot.
      *
      * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
+     * @return A new  MessageTemplate   matching the given
      * value.
      */
     public static MessageTemplate MatchContent(String value) {
@@ -144,10 +144,10 @@ public class MessageTemplate implements Serializable {
 
     /**
      * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:reply-with</code> slot.
+     * matches any message with a given  :reply-with   slot.
      *
      * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
+     * @return A new  MessageTemplate   matching the given
      * value.
      */
     public static MessageTemplate MatchReplyWith(String value) {
@@ -156,10 +156,10 @@ public class MessageTemplate implements Serializable {
 
     /**
      * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:in-reply-to</code> slot.
+     * matches any message with a given  :in-reply-to   slot.
      *
      * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
+     * @return A new  MessageTemplate   matching the given
      * value.
      */
     public static MessageTemplate MatchInReplyTo(String value) {
@@ -168,11 +168,11 @@ public class MessageTemplate implements Serializable {
 
     /**
      * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:reply-to</code> slot.
+     * matches any message with a given  :reply-to   slot.
      *
      * @param values An array of Agent IDs against which the
      *               value of the message slot will be matched.
-     * @return A new <code>MessageTemplate</code> matching the given
+     * @return A new  MessageTemplate   matching the given
      * value.
      */
     public static MessageTemplate MatchReplyTo(AID[] values) {
@@ -181,10 +181,10 @@ public class MessageTemplate implements Serializable {
 
     /**
      * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:language</code> slot.
+     * matches any message with a given  :language   slot.
      *
      * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
+     * @return A new  MessageTemplate   matching the given
      * value.
      */
     public static MessageTemplate MatchLanguage(String value) {
@@ -193,10 +193,10 @@ public class MessageTemplate implements Serializable {
 
     /**
      * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:encoding</code> slot.
+     * matches any message with a given  :encoding   slot.
      *
      * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
+     * @return A new  MessageTemplate   matching the given
      * value.
      */
     public static MessageTemplate MatchEncoding(String value) {
@@ -205,10 +205,10 @@ public class MessageTemplate implements Serializable {
 
     /**
      * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:ontology</code> slot.
+     * matches any message with a given  :ontology   slot.
      *
      * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
+     * @return A new  MessageTemplate   matching the given
      * value.
      */
     public static MessageTemplate MatchOntology(String value) {
@@ -217,10 +217,10 @@ public class MessageTemplate implements Serializable {
 
     /**
      * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:reply-by</code> slot.
+     * matches any message with a given  :reply-by   slot.
      *
-     * @param value The <code>Date</code> the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
+     * @param value The  Date   the message slot will be matched against.
+     * @return A new  MessageTemplate   matching the given
      * value.
      **/
     public static MessageTemplate MatchReplyByDate(Date value) {
@@ -229,10 +229,10 @@ public class MessageTemplate implements Serializable {
 
     /**
      * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:protocol</code> slot.
+     * matches any message with a given  :protocol   slot.
      *
      * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
+     * @return A new  MessageTemplate   matching the given
      * value.
      */
     public static MessageTemplate MatchProtocol(String value) {
@@ -241,10 +241,10 @@ public class MessageTemplate implements Serializable {
 
     /**
      * This <em>Factory Method</em> returns a message template that
-     * matches any message with a given <code>:conversation-id</code> slot.
+     * matches any message with a given  :conversation-id   slot.
      *
      * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTemplate</code> matching the given
+     * @return A new  MessageTemplate   matching the given
      * value.
      */
     public static MessageTemplate MatchConversationId(String value) {
@@ -256,7 +256,7 @@ public class MessageTemplate implements Serializable {
      * matches any message with a given performative.
      *
      * @param value The value the message slot will be matched against.
-     * @return A new <code>MessageTenplate</code>matching the given
+     * @return A new  MessageTenplate  matching the given
      * value.
      */
     public static MessageTemplate MatchPerformative(int value) {
@@ -267,26 +267,26 @@ public class MessageTemplate implements Serializable {
      * This <em>Factory Method</em> returns a message template that
      * matches ACL messages against a given one, passed as
      * parameter. The following algorithm is used:
-     * When the given <code>ACLMessage</code> has a non
-     * <code>null</code> slot, subsequent messages must have the same
+     * When the given  ACLMessage   has a non
+     *  null   slot, subsequent messages must have the same
      * slot value in that slot to have a match.
-     * When the given <code>ACLMessage</code> has a <code>null</code>
+     * When the given  ACLMessage   has a  null  
      * slot, subsequent messages can have any value for that slot and
      * still match the template.
-     * In short, a <code>null</code> value for a slot means <em>don't
+     * In short, a  null   value for a slot means <em>don't
      * care</em>.
      *
-     * @param msg               The <code>ACLMessage</code> used to build a custom
+     * @param msg               The  ACLMessage   used to build a custom
      *                          message template.
-     * @param matchPerformative a <code>bool</code> value. When
-     *                          <code>true</code>, the performative of the <code>msg</code> will
+     * @param matchPerformative a  bool   value. When
+     *                           true  , the performative of the  msg   will
      *                          be considered as a part of the template (i.e. the message
      *                          template will match only ACL messages with the same performativa
-     *                          as <code>msg</code>).
-     *                          When <false>, the performative of <code>msg</code> is ignored and
+     *                          as  msg  ).
+     *                          When <false>, the performative of  msg   is ignored and
      *                          the resulting message template will not consider it when matching
      *                          messages.
-     * @return A new <code>MessageTemplate</code>, matching the given
+     * @return A new  MessageTemplate  , matching the given
      * message according to the above algorithm.
      */
     public static MessageTemplate MatchCustom(ACLMessage msg, boolean matchPerformative) {
@@ -295,14 +295,14 @@ public class MessageTemplate implements Serializable {
     }
 
     /**
-     * Logical <b>and</b> between two <code>MessageTemplate</code>
+     * Logical <b>and</b> between two  MessageTemplate  
      * objects. This method creates a new message template that is
      * matched by those ACL messages matching <b><em>both</b></em>
      * message templates given as operands.
      *
      * @param op1 The first <em>and</em> operand.
      * @param op2 The second <em>and</em> operand.
-     * @return A new <code>MessageTemplate</code> object.
+     * @return A new  MessageTemplate   object.
      * @see MessageTemplate#or(MessageTemplate op1, MessageTemplate op2)
      */
     public static MessageTemplate and(MessageTemplate op1, MessageTemplate op2) {
@@ -311,14 +311,14 @@ public class MessageTemplate implements Serializable {
     }
 
     /**
-     * Logical <b>or</b> between two <code>MessageTemplate</code>
+     * Logical <b>or</b> between two  MessageTemplate  
      * objects. This method creates a new message template that is
      * matched by those ACL messages matching <b><em>any</b></em> of the
      * two message templates given as operands.
      *
      * @param op1 The first <em>or</em> operand.
      * @param op2 The second <em>or</em> operand.
-     * @return A new <code>MessageTemplate</code> object.
+     * @return A new  MessageTemplate   object.
      * @see MessageTemplate#and(MessageTemplate op1, MessageTemplate op2)
      */
     public static MessageTemplate or(MessageTemplate op1, MessageTemplate op2) {
@@ -327,13 +327,13 @@ public class MessageTemplate implements Serializable {
     }
 
     /**
-     * Logical <b>not</b> of a <code>MessageTemplate</code> object. This
+     * Logical <b>not</b> of a  MessageTemplate   object. This
      * method creates a new message template that is matched by those
      * ACL messages <b><em>not</em></b> matching the message template
      * given as operand.
      *
      * @param op The <em>not</em> operand.
-     * @return A new <code>MessageTemplate</code> object.
+     * @return A new  MessageTemplate   object.
      */
     public static MessageTemplate not(MessageTemplate op) {
         NotExpression e = new NotExpression(op.toMatch);
@@ -341,12 +341,12 @@ public class MessageTemplate implements Serializable {
     }
 
     /**
-     * Matches an ACL message against this <code>MessageTemplate</code>
+     * Matches an ACL message against this  MessageTemplate  
      * object.
      *
-     * @param msg The <code>ACLMessage</code> to check for matching.
-     * @return <code>true</code> if the ACL message matches this
-     * template, <code>false</code> otherwise.
+     * @param msg The  ACLMessage   to check for matching.
+     * @return  true   if the ACL message matches this
+     * template,  false   otherwise.
      */
     public boolean match(ACLMessage msg) {
         return toMatch.match(msg);
@@ -365,7 +365,7 @@ public class MessageTemplate implements Serializable {
     /**
      * This interface must be overriden in order to define an application
      * specific MessageTemplate.
-     * In particular in the method <code> match()</code> the programmer
+     * In particular in the method   match()   the programmer
      * should realize the necessary checks on the ACLMessage in order
      * to return <b>true</b> if the message match with the application
      * specific requirements <b>false</b> otherwise.
@@ -379,8 +379,8 @@ public class MessageTemplate implements Serializable {
          * @param msg The ACL message to match against this message
          *            template.
          * @return A compliant implementation will return
-         * <code>true</code> if the parameter ACL message matches the
-         * template, and <code>false</code> otherwise.
+         *  true   if the parameter ACL message matches the
+         * template, and  false   otherwise.
          */
         boolean match(ACLMessage msg);
     }

@@ -64,19 +64,19 @@ public class SentMessage implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>sender</code> slot of this
+     * Retrieve the value of the  sender   slot of this
      * event, containing the agent identifier of the agent that sent
      * the message.
      *
-     * @return The value of the <code>sender</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  sender   slot, or
+     *  null   if no value was set.
      */
     public AID getSender() {
         return sender;
     }
 
     /**
-     * Set the <code>sender</code> slot of this event.
+     * Set the  sender   slot of this event.
      *
      * @param id The agent identifier of the agent that sent the
      *           message.
@@ -86,18 +86,18 @@ public class SentMessage implements Event {
     }
 
     /**
-     * Retrieve the value of the unicast <code>receiver</code> slot of this
+     * Retrieve the value of the unicast  receiver   slot of this
      * event.
      *
-     * @return The value of the unicast <code>receiver</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the unicast  receiver   slot, or
+     *  null   if no value was set.
      */
     public AID getReceiver() {
         return receiver;
     }
 
     /**
-     * Set the unicast <code>receiver</code> slot of this event.
+     * Set the unicast  receiver   slot of this event.
      *
      * @param id The agent identifier of the unicast receiver of the
      *           sent message.
@@ -107,18 +107,18 @@ public class SentMessage implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>message</code> slot of this
+     * Retrieve the value of the  message   slot of this
      * event, containing the ACL message that was sent.
      *
-     * @return The value of the <code>message</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  message   slot, or
+     *  null   if no value was set.
      */
     public ACLMessage getMessage() {
         return message;
     }
 
     /**
-     * Set the <code>message</code> slot of this event.
+     * Set the  message   slot of this event.
      *
      * @param msg The ACL message that was sent.
      */

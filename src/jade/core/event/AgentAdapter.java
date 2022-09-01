@@ -1,7 +1,7 @@
 package jade.core.event;
 
 /**
- * Adapter class for the <code>AgentListener</code> interface
+ * Adapter class for the  AgentListener   interface
  */
 public class AgentAdapter implements AgentListener {
 

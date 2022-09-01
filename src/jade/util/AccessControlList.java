@@ -39,18 +39,18 @@ import java.util.regex.PatternSyntaxException;
  * //#APIDOC_EXCLUDE_BEGIN
  * <p>
  * Example, a ACL object is initialized as follows:
- * <code>
+ *
  * ACL myacl = new ACL();
  * acl.setBlack( new File("black.txt") );
  * acl.setWhite( new File("white.txt") );
  * Properties client = new Property();
  * client.setProperty();
  * boolean ok = acl.isAllowed();
- * </code>
+ *
  * <p>
  * and the two files look as follows:
  * <strong>white.txt</strong>
- * <code>
+ *
  * # this is a commant
  * # the section 'user' (allowed usernames)
  * user:
@@ -61,30 +61,27 @@ import java.util.regex.PatternSyntaxException;
  * msisdn:
  * # all business customers
  * 39335.+?
- * </code>
+ *
  * <strong>black.txt</strong>
- * <code>
+ *
  * user:
  * # specific users denied
  * badboy
  * goodgirl
- * <p>
+ *
  * msisdn:
  * # specific numbers denied
  * 3933555.+?
  * 39333444111
- * </code>
+ *
  * <p>
- * <p>
+ * </p>
  * //#APIDOC_EXCLUDE_END
- * <p>
  * Into each file, multiple sections are allowed.
- * <p>
  * A specific client is allowed if:
  * <ul><li>it is not present into the black list, AND </li>
  *     <li>it is present into the white list. </li>
  * </ul>
- * <p>
  * More about regular expressions: <br>
  *  http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html
  *  http://java.sun.com/docs/books/tutorial/extra/regex/
@@ -122,7 +119,7 @@ public class AccessControlList {
      *     <li>it is present into the white list. </li>
      * </ul>
      *
-     * <code>isAllow("section", value)</code> returns is the client
+     *  isAllow("section", value)   returns is the client
      * having that specific value for that property is allowed.
      */
     public boolean isAllowed(String section, String value) {
@@ -284,7 +281,7 @@ public class AccessControlList {
 
 
     // internal representation of a acl file
-    private class InternalACL {
+    private static class InternalACL {
         public Pattern[] pat; // compiled pattern at line i-th
         public String[] sectionName;  // name of the section header at line i-th
         public int size;

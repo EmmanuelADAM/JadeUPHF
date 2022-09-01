@@ -37,7 +37,7 @@ import java.util.List;
 
 /**
  * This class provides a set of basic and static methods to perform the FIPA Agent Management actions.
- * However, developers should use <code>DFService</code> and <code>AMSService</code>
+ * However, developers should use  DFService   and  AMSService
  * which provide specialized methods to communicate with the DF and the AMS.
  *
  * @author Fabio Bellifemine - CSELT S.p.A.
@@ -54,10 +54,10 @@ public class FIPAService {
 
     /**
      * create a REQUEST message with the following slots:
-     * <code> (REQUEST :sender sender.getAID() :receiver receiver
+     *   (REQUEST :sender sender.getAID() :receiver receiver
      * :protocol fipa-request :language FIPA-SL0 :ontology fipa-agent-management
-     * :reply-with xxx :conversation-id xxx) </code>
-     * where <code>xxx</code> are unique words generated on the basis of
+     * :reply-with xxx :conversation-id xxx)
+     * where  xxx   are unique words generated on the basis of
      * the sender's name and the current time.
      *
      * @param sender   is the Agent sending the message
@@ -82,18 +82,18 @@ public class FIPAService {
      * This method plays the initiator role in the Fipa-Request
      * interaction protocol and performs all the steps of the
      * protocol. The method uses the
-     * <code>:reply-with</code>/<code>:in-reply-to</code> ACL message
+     *  :reply-with  / :in-reply-to   ACL message
      * slots as a mechanism to match the protocol replies.
      * Take care because the method blocks until all the response messages are received.
      * Under error conditions, or if the responder does not wish to respond, that
      * might block for ever the execution of the agent.
-     * For this reason, the <code>FipaRequestInitiatorBehaviour</code> is the preferred
+     * For this reason, the  FipaRequestInitiatorBehaviour   is the preferred
      * way to play the protocol.
      *
      * @param a       is the Agent playing the initiator role
      * @param request is the ACLMessage to be sent. Notice that all the
      *                slots of the message must have already been filled by the
-     *                caller. If the <code>:reply-with</code> message slot is not set,
+     *                caller. If the  :reply-with   message slot is not set,
      *                a default one will be generated automatically.
      * @return the INFORM message received in the final state of the protocol, if
      * the protocol succeeded, otherwise it throws an Exception
@@ -106,18 +106,18 @@ public class FIPAService {
      * This method plays the initiator role in the Fipa-Request
      * interaction protocol and performs all the steps of the protocol,
      * and additionally sets a conversation timeout. The method uses the
-     * <code>:reply-with</code>/<code>:in-reply-to</code> ACL message
+     *  :reply-with  / :in-reply-to   ACL message
      * slots as a mechanism to match the protocol replies.  Under error
      * conditions, or if the responder does not wish to respond, that
      * might block the execution of the agent until the conversation
      * timeout expires.  For this reason, the
-     * <code>FipaRequestInitiatorBehaviour</code> is the preferred way
+     *  FipaRequestInitiatorBehaviour   is the preferred way
      * to play the protocol.
      *
      * @param a       is the Agent playing the initiator role
      * @param request is the ACLMessage to be sent. Notice that all the
      *                slots of the message must have already been filled by the
-     *                caller. If the <code>:reply-with</code> message slot is not set,
+     *                caller. If the  :reply-with   message slot is not set,
      *                a default one will be generated automatically.
      * @param timeout The maximum time to wait for the conversation to finish, in milliseconds.
      * @return the INFORM message received in the final state of the protocol, if

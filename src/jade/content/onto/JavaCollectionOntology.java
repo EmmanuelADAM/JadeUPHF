@@ -42,9 +42,9 @@ public class JavaCollectionOntology extends Ontology {
     }
 
     /**
-     * Returns the singleton instance of the <code>JavaCollectionOntology</code>.
+     * Returns the singleton instance of the  JavaCollectionOntology  .
      *
-     * @return the singleton instance of the <code>JavaCollectionOntology</code>
+     * @return the singleton instance of the  JavaCollectionOntology  
      */
     public static Ontology getInstance() {
         return theInstance;

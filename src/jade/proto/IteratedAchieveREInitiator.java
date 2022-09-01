@@ -45,7 +45,7 @@ import java.util.List;
  * or FAILURE
  * ii) The responder attaches a termination flag to an INFORM result notification.
  * That termination flag can be detected using the
- * <code>isSessionTerminated()</code> method.
+ *  isSessionTerminated()   method.
  *
  * @author Giovanni Caire - TILab
  */
@@ -58,23 +58,23 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
     public final String ALL_NEXT_REQUESTS_KEY = "__all-next-requests" + hashCode();
 
     /**
-     * Construct an <code>IteratedAchieveREInitiator</code> with an empty HashMap
+     * Construct an  IteratedAchieveREInitiator   with an empty HashMap
      */
     public IteratedAchieveREInitiator(Agent a, ACLMessage msg) {
         this(a, msg, new HashMap<>(), new HashMap<>());
     }
 
     /**
-     * Construct an <code>IteratedAchieveREInitiator</code> with a given HashMap
+     * Construct an  IteratedAchieveREInitiator   with a given HashMap
      *
      * @param a               The agent performing the protocol
      * @param msg             The message that must be used to initiate the protocol.
      *                        Notice that the default implementation of the
-     *                        <code>prepareRequest()</code> method returns an array composed of
+     *                         prepareRequest()   method returns an array composed of
      *                        only this message. The values of the slot
-     *                        <code>reply-with</code> is ignored and a different value is assigned
+     *                         reply-with   is ignored and a different value is assigned
      *                        automatically by this class for each receiver.
-     * @param mapMessagesList The <code>HashMap</code> that will be used by this <code>AchieveREInitiator</code>
+     * @param mapMessagesList The  HashMap   that will be used by this  AchieveREInitiator
      * deprecated use the constructor with 2 hashmap
 
     public IteratedAchieveREInitiator(Agent a, ACLMessage msg, HashMap<String, List<ACLMessage>> mapMessagesList) {
@@ -100,17 +100,17 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
     }*/
 
     /**
-     * Construct an <code>IteratedAchieveREInitiator</code> with a given HashMap
+     * Construct an  IteratedAchieveREInitiator   with a given HashMap
      *
      * @param a               The agent performing the protocol
      * @param msg             The message that must be used to initiate the protocol.
      *                        Notice that the default implementation of the
-     *                        <code>prepareRequest()</code> method returns an array composed of
+     *                         prepareRequest()   method returns an array composed of
      *                        only this message. The values of the slot
-     *                        <code>reply-with</code> is ignored and a different value is assigned
+     *                         reply-with   is ignored and a different value is assigned
      *                        automatically by this class for each receiver.
-     * @param mapMessagesList The <code>HashMap</code> of messages list that will be used by this <code>AchieveREInitiator</code>
-     * @param mapMessages     The <code>HashMap</code> of messages that will be used by this <code>AchieveREInitiator</code>
+     * @param mapMessagesList The  HashMap   of messages list that will be used by this  AchieveREInitiator
+     * @param mapMessages     The  HashMap   of messages that will be used by this  AchieveREInitiator
      */
     public IteratedAchieveREInitiator(Agent a, ACLMessage msg, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a, msg, mapMessagesList, mapMessages);
@@ -137,7 +137,7 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
     }
 
     /**
-     * Check if the responder has closed the session just after sending this <code>inform</code> message.
+     * Check if the responder has closed the session just after sending this  inform   message.
      */
     public static boolean isSessionTerminated(ACLMessage inform) {
         String terminatedStr = inform.getUserDefinedParameter(SSIteratedAchieveREResponder.ACL_USERDEF_TERMINATED_SESSION);
@@ -171,7 +171,7 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
     }
 
     /**
-     * This method is called every time an <code>inform</code>
+     * This method is called every time an  inform
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -195,8 +195,8 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
     /**
      * This method is called when all the result notification messages
      * of the current round have been collected.
-     * By result notification message we intend here all the <code>inform,
-     * failure</code> received messages, which are not out-of-sequence
+     * By result notification message we intend here all the  inform,
+     * failure   received messages, which are not out-of-sequence
      * according to the protocol rules.
      * This default implementation does nothing; programmers might
      * wish to override this method in case they need to react to this event
@@ -218,16 +218,16 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_REFUSE state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
-     * The registered behaviour can retrieve the received <code>inform</code>
-     * ACLMessage object from the HashMap at the <code>REPLY_KEY</code>
+     * The registered behaviour can retrieve the received  inform
+     * ACLMessage object from the HashMap at the  REPLY_KEY
      * key and the Vector of ACLMessage objects to be sent at next round
-     * at the <code>ALL_NEXT_REQUESTS_KEY</code>.
+     * at the  ALL_NEXT_REQUESTS_KEY  .
      *
      * @param b the Behaviour that will handle this state
      */
@@ -237,17 +237,17 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_ALL_RESULT_NOTIFICATIONS state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
      * the Vector of ACLMessage objects, received as a result notification,
-     * from the HashMap at the <code>ALL_RESULT_NOTIFICATIONS_KEY</code>
+     * from the HashMap at the  ALL_RESULT_NOTIFICATIONS_KEY
      * key and the Vector of ACLMessage objects to be sent at next round
-     * at the <code>ALL_NEXT_REQUESTS_KEY</code>.
+     * at the  ALL_NEXT_REQUESTS_KEY  .
      *
      * @param b the Behaviour that will handle this state
      */

@@ -55,42 +55,42 @@ import java.util.*;
  * reconnections) at the agent level.
  * <br><br>
  * This service accepts the following configuration parameters:<br>
- * <code>jade_imtp_leap_nio_BEManagementService_servers</code>: list of of IOEventServer ids separated by ';'<br>
+ *  jade_imtp_leap_nio_BEManagementService_servers  : list of of IOEventServer ids separated by ';'<br>
  * Actually this service is a collection of IOEventServer objects.
  * Each IOEventServer opens and manages a server socket, accepts
  * BackEnd creation/connection requests and passes incoming data to BEDispatchers
  * independently from the others.
  * If the above parameter is not specified a single IOEventServer will
- * be started and its ID will be <code>jade_imtp_leap_nio_BEManagementService</code>.
+ * be started and its ID will be  jade_imtp_leap_nio_BEManagementService  .
  * All other parameters are related to a single IOEventServer and must
  * be specified in the form<br>
  * serverid_parametername<br>
  * They are:
  * <ul>
  * <li>
- * <code>serverid_local-host</code>: Specifies the local network interface
+ *  serverid_local-host  : Specifies the local network interface
  * for the server socket managed by this server (defaults to localhost).
  * </li>
  * <li>
- * <code>serverid_local-port</code>: Specifies the local port for the server
+ *  serverid_local-port  : Specifies the local port for the server
  * socket managed by this server (defaults to 2099)
  * </li>
  * <li>
- * <code>serverid_protocol</code>: Specifies the protocol used by this
- * server in the form of <code>jade.imtp.leap.JICP.ProtocolManager<code>
+ *  serverid_protocol  : Specifies the protocol used by this
+ * server in the form of  jade.imtp.leap.JICP.ProtocolManager
  * class
  * </li>
  * <li>
- * <code>serverid_additional-services</code>: Specifies additional services
+ *  serverid_additional-services  : Specifies additional services
  * that have to be activated in each BackEnd Container started by the indicated
  * server
  * </li>
  * <li>
- * <code>serverid_leap-property-file</code>: Specifies the leap-property
+ *  serverid_leap-property-file  : Specifies the leap-property
  * file to be used by this server.
  * </li>
  * <li>
- * <ode>serverid_poolsize</code>: Specifies the number of threads used by
+ * <ode>serverid_poolsize  : Specifies the number of threads used by
  * this server to manage IO events.
  * </li>
  * <ul>

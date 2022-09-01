@@ -29,12 +29,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The abstract class <code>NodeFailureMonitor</code> provides a basic implementation for classes
+ * The abstract class  NodeFailureMonitor   provides a basic implementation for classes
  * that are used to monitor the availability of nodes and detect node failures. In addition to that it provides
  * static methods to initialize and create instances of monitors depending on the current
  * settings in the profile.
  * <p>
- * An instance of a subclass of the <code>NodeFailureMonitor</code> can only supervise
+ * An instance of a subclass of the  NodeFailureMonitor   can only supervise
  * a single node. If there are additional nodes in the same JVM, you can add these as child nodes.
  * A child node is not supervised directly. Instead it has always the same state than its parent node.
  * So if the parent node gets unreachable automatically all its child nodes will turn to the state unreachable.
@@ -52,7 +52,7 @@ import java.util.Map;
  * The failure monitoring can be configured through the following profile parameter:
  *
  * <p>
- * <table border="1" cellspacing="0">
+ * <table style="border:1; cellspacing:0;">
  *  <tr>
  *    <th>Parameter</th>
  *    <th>Description</th>
@@ -60,40 +60,40 @@ import java.util.Map;
  *    <th>MC</th>
  *  </tr>
  *  <tr>
- *    <td><code>jade_core_NodeFailureMonitor_udp</code> (*)</td>
- *    <td>If <code>true</code>, indicates that the UDP based failure monitoring has to be used.
- *        If <code>false</code> or not specified the default RMI based failure monitoring is activated.
+ *    <td> jade_core_NodeFailureMonitor_udp   (*)</td>
+ *    <td>If  true  , indicates that the UDP based failure monitoring has to be used.
+ *        If  false   or not specified the default RMI based failure monitoring is activated.
  *    </td>
  *    <td>X</td>
  *    <td>X</td>
  *  </tr>
  *  <tr>
- *    <td><code>jade_core_NodeFailureMonitor_udp-port</code></td>
+ *    <td> jade_core_NodeFailureMonitor_udp-port  </td>
  *    <td>Specifies the port number where the main container will listen for UDP pings.
- *     The default value is <code>28000</code>. (This parameter is only used in combination with (*)</td>
+ *     The default value is  28000  . (This parameter is only used in combination with (*)</td>
  *    <td>X</td>
  *    <td>X</td>
  *  </tr>
  * <tr>
- *    <td><code>jade_core_NodeFailureMonitor_udp-ping-delay-limit</code></td>
+ *    <td> jade_core_NodeFailureMonitor_udp-ping-delay-limit  </td>
  *    <td>Defines the maximum time (in milliseconds) the main container will wait for
- *        incoming ping messages. The default value is <code>3000</code>. (This parameter is only used in combination with (*)</td>
+ *        incoming ping messages. The default value is  3000  . (This parameter is only used in combination with (*)</td>
  *    <td>&nbsp;</td>
  *    <td>X</td>
  *  </tr>
  *
  * <tr>
- *    <td><code>jade_core_NodeFailureMonitor_udp-unreachable-limit</code></td>
+ *    <td> jade_core_NodeFailureMonitor_udp-unreachable-limit  </td>
  *    <td>Defines the maximum time (in milliseconds) a node can be temporarily unreachable
- *    until it gets removed from the platform. The default value is <code>10.000</code>. (This parameter is only used in combination with (*)</td>
+ *    until it gets removed from the platform. The default value is  10.000  . (This parameter is only used in combination with (*)</td>
  *    <td>&nbsp;</td>
  *    <td>X</td>
  * </tr>
  * <tr>
- *    <td><code>jade_core_NodeFailureMonitor_udp-ping-delay</code></td>
+ *    <td> jade_core_NodeFailureMonitor_udp-ping-delay  </td>
  *    <td>Defines the time interval (in milliseconds) in which a peripheral
  *        container sends UDP ping messages to the main container.
- *        The default value is <code>1.000</code>. (This parameter is only used in combination with (*)</td>
+ *        The default value is  1.000  . (This parameter is only used in combination with (*)</td>
  *    <td>X</td>
  *    <td>&nbsp;</td>
  * </tr>
@@ -116,7 +116,7 @@ public abstract class NodeFailureMonitor {
     /**
      * Factory method to create NodeFailureMonitor objects
      *
-     * @return a new instance of a <code>NodeFailureMonitor</code>.
+     * @return a new instance of a  NodeFailureMonitor  .
      */
     public static NodeFailureMonitor getFailureMonitor() {
         NodeFailureMonitor nfm = null;

@@ -38,8 +38,8 @@ import java.nio.channels.Selector;
 import java.util.*;
 
 /**
- * The <code>UDPMonitorServer</code> is used by any instance of the class
- * <code>UDPNodeFailureMonitor</code> to receive UDP ping messages from nodes.
+ * The  UDPMonitorServer   is used by any instance of the class
+ *  UDPNodeFailureMonitor   to receive UDP ping messages from nodes.
  * <p>
  * The server is only running if there are nodes to supervise. By default it
  * waits at port 28000 for incomming UDP datagrams. The maximum time between
@@ -232,9 +232,9 @@ class UDPMonitorServer {
     }
 
     /**
-     * Registers a <code>UDPNodeFailureMonitor</code>.
+     * Registers a  UDPNodeFailureMonitor  .
      * All nodes targeted by this monitor are now supervised
-     * by the <code>UDPMonitorServer</code>. Its listener
+     * by the  UDPMonitorServer  . Its listener
      * gets informed about any state changes.
      */
     public void register(UDPNodeFailureMonitor m) {
@@ -244,7 +244,7 @@ class UDPMonitorServer {
     }
 
     /**
-     * Deregisters a <code>UDPNodeFailureMonitor</code> and all
+     * Deregisters a  UDPNodeFailureMonitor   and all
      * its targeted nodes from monitoring.
      */
     public void deregister(UDPNodeFailureMonitor m) {

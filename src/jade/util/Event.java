@@ -31,13 +31,13 @@ import java.util.Vector;
 
 /**
  * This class represents a generic event carrying some information
- * (accessible in the form of <code>Object</code> parameters) and
+ * (accessible in the form of  Object   parameters) and
  * provides support for synchronous processing through the
- * <code>waitUntilProcessed()</code> and <code>notifyProcessed()</code>
+ *  waitUntilProcessed()   and  notifyProcessed()
  * methods.
  * This class can be effectively used in combination with the
- * <code>InputQueue</code> class to support a synchronization between an
- * external therad (posting events in the <code>InputQueue</code>)
+ *  InputQueue   class to support a synchronization between an
+ * external therad (posting events in the  InputQueue  )
  * and the Agent thread (processing the events).
  *
  * @author Giovanni Caire - TILab
@@ -65,7 +65,7 @@ public class Event
 
 
     /**
-     * Construct an <code>Event</code> of a given type produced by
+     * Construct an  Event   of a given type produced by
      * the indicated source
      *
      * @param type   The type of the event
@@ -82,14 +82,14 @@ public class Event
     }
 
     /**
-     * Construct an <code>Event</code> of a given type produced by
+     * Construct an  Event   of a given type produced by
      * the indicated source and carrying a given information.
      *
      * @param type   The type of the event
      * @param source The source that generated the event
      * @param info   The information associated to the event. This value
      *               is handled as the first parameter of the event and can be
-     *               accessed using the <code>getParameter(0)</code> method
+     *               accessed using the  getParameter(0)   method
      */
     public Event(int type, Object source, Object info) {
         this(type, source);
@@ -105,14 +105,14 @@ public class Event
     /**
      * Retrieve the type of this event.
      *
-     * @return the type of this <code>Event</code> object
+     * @return the type of this  Event   object
      */
     public int getType() {
         return type;
     }
 
     /**
-     * Add a parameter to this <code>Event</code> object
+     * Add a parameter to this  Event   object
      *
      * @param obj The parameter to be added
      */
@@ -127,7 +127,7 @@ public class Event
      * Retrieve an element of the event parameter list.
      *
      * @param index The index of the parameter to retrieve.
-     * @return the index-th parameter of this <code>Event</code>
+     * @return the index-th parameter of this  Event
      * object.
      */
     public Object getParameter(int index) {
@@ -139,22 +139,22 @@ public class Event
     }
 
     /**
-     * Blocks the calling thread until the <code>notifyProcessed()</code>
+     * Blocks the calling thread until the  notifyProcessed()
      * method is called.
      *
-     * @return the result of the processing of this <code>Event</code>
-     * object as set by the <code>notifyProcessed()</code> method.
+     * @return the result of the processing of this  Event
+     * object as set by the  notifyProcessed()   method.
      */
     public synchronized Object waitUntilProcessed() throws InterruptedException {
         return waitUntilProcessed(0);
     }
 
     /**
-     * Blocks the calling thread until the <code>notifyProcessed()</code>
+     * Blocks the calling thread until the  notifyProcessed()
      * method is called.
      *
-     * @return the result of the processing of this <code>Event</code>
-     * object as set by the <code>notifyProcessed()</code> method.
+     * @return the result of the processing of this  Event
+     * object as set by the  notifyProcessed()   method.
      * @throws InterruptedException if the timeout expires or the Thread
      *                              executing this method is interrupted.
      */
@@ -170,11 +170,11 @@ public class Event
     }
 
     /**
-     * Wakes up threads waiting for the processing of this <code>Event</code>
-     * object within the <code>waitUntilProcessed()</code> method.
+     * Wakes up threads waiting for the processing of this  Event
+     * object within the  waitUntilProcessed()   method.
      *
      * @param result The result of the processing. This value is passed
-     *               to the waked threads as the result of the <code>waitUntilProcessed()</code>
+     *               to the waked threads as the result of the  waitUntilProcessed()
      *               method.
      */
     public synchronized void notifyProcessed(Object result) {
@@ -186,7 +186,7 @@ public class Event
     }
 
     /**
-     * Reset the status of this <code>Event</code>
+     * Reset the status of this  Event
      */
     public synchronized void reset() {
         processed = false;
@@ -199,9 +199,9 @@ public class Event
     //#MIDP_EXCLUDE_BEGIN
 
     /**
-     * Reset the status of this <code>Event</code>
+     * Reset the status of this  Event
      *
-     * @deprecated Use <code>reset()</code> instead
+     * @deprecated Use  reset()   instead
      */
     public void resetProcessed() {
         reset();

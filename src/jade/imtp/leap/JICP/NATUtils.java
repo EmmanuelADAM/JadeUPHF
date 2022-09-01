@@ -6,15 +6,7 @@ import jade.mtp.TransportAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-public class NATUtils {
-
-    private final String serverAddr;
-    private final int serverPort;
-
-    public NATUtils(String serverAddr, int serverPort) {
-        this.serverAddr = serverAddr;
-        this.serverPort = serverPort;
-    }
+public record NATUtils(String serverAddr, int serverPort) {
 
     public static void main(String[] args) {
 //		TransportAddress ta = new JICPAddress(args[0], args[1], null, null);

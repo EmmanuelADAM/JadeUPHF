@@ -24,7 +24,7 @@ Boston, MA  02111-1307, USA.
 package jade.security;
 
 /**
- * The <code>SDSIName</code> interface represents a wrapper for
+ * The  SDSIName   interface represents a wrapper for
  * public key used in asymmetric cryptographic operations.
  * <p>
  * It is also used as unique identifier for JADE principals.

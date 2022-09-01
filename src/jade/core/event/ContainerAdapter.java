@@ -1,7 +1,7 @@
 package jade.core.event;
 
 /**
- * Adapter class for the <code>ContainerListener</code> interface
+ * Adapter class for the  ContainerListener   interface
  */
 public class ContainerAdapter implements ContainerListener {
 

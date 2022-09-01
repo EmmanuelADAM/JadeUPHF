@@ -34,7 +34,7 @@ import jade.util.WrapperException;
 public class FrameException extends WrapperException {
 
     /**
-     * Construct a <code>FrameException</code> with a given message.
+     * Construct a  FrameException   with a given message.
      *
      * @param message the message
      */
@@ -44,7 +44,7 @@ public class FrameException extends WrapperException {
 
 
     /**
-     * Construct a <code>FrameException</code> with a given message
+     * Construct a  FrameException   with a given message
      * and a given nested Throwable.
      *
      * @param message The message

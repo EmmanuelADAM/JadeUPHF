@@ -119,10 +119,10 @@ public class JICPPeer implements ICP, ProtocolManager {
      * Pings the specified transport address in order to obtain
      * the local hostname or IP address.
      *
-     * @param pingURL The <code>URL</code> to ping (usually the
+     * @param pingURL The  URL   to ping (usually the
      *                main container).
      * @return The local IP address of the local container as a
-     * <code>String</code>.
+     *  String  .
      * @throws ICPException
      */
     String getAddress(String pingURL) throws ICPException {

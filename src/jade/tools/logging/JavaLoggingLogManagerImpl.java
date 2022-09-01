@@ -221,9 +221,9 @@ public class JavaLoggingLogManagerImpl implements LogManager {
     }
 
     /**
-     * Returns  a list of <code>LevelInfo</code> object each one describing a level valid for the selected logging system.
+     * Returns  a list of  LevelInfo   object each one describing a level valid for the selected logging system.
      *
-     * @return a list of <code>LevelInfo</code> object each one describing a level valid for the selected logging system.
+     * @return a list of  LevelInfo   object each one describing a level valid for the selected logging system.
      */
     public List<LevelInfo> getLogLevels() {
         return levels;

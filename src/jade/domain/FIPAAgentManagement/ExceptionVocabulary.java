@@ -3,7 +3,7 @@ package jade.domain.FIPAAgentManagement;
 /**
  * This interface contains all the string constants for frame and slot
  * names of exceptions defined in the
- * <code>fipa-agent-management</code> ontology.
+ *  fipa-agent-management   ontology.
  */
 public interface ExceptionVocabulary {
 

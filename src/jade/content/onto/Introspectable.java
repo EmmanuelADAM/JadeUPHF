@@ -30,7 +30,7 @@ import jade.content.abs.AbsObject;
 
 /**
  * This interface must be implemented by ontological classes that
- * belong to an ontology using the <code>MicroIntrospector</code>.
+ * belong to an ontology using the  MicroIntrospector  .
  * It includes methods by means of which an object can be converted
  * into/from an abstract descriptor.
  * see MicroIntrospector

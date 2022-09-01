@@ -759,9 +759,9 @@ public class AgentManagementService extends BaseService {
 
     /**
      * Inner mix-in class for this service: this class receives
-     * commands from the service <code>Sink</code> and serves them,
+     * commands from the service  Sink   and serves them,
      * coordinating with remote parts of this service through the
-     * <code>Service.Slice</code> interface.
+     *  Service.Slice   interface.
      */
     private class ServiceComponent implements Slice {
 

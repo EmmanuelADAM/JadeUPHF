@@ -32,15 +32,12 @@ import jade.content.schema.Facet;
 /**
  * This facet set the default value of an AbsObject.
  */
-public class DefaultValueFacet implements Facet {
-    private final Object defaultValue;
-
+public record DefaultValueFacet(Object defaultValue) implements Facet {
     /**
-     * Construct a <code>DefaultValueFacet</code> that
+     * Construct a  DefaultValueFacet   that
      * set the default value of an AbsObject
      */
-    public DefaultValueFacet(Object defaultValue) {
-        this.defaultValue = defaultValue;
+    public DefaultValueFacet {
     }
 
     /**

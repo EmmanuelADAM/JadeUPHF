@@ -161,13 +161,13 @@ public class SSContractNetResponder extends SSResponder {
      * a message different than PROPOSE (or returning null) terminates the protocol.
      * @throws RefuseException        if the CFP is refused. Throwing a
      *                                RefuseException has the same effect as returning a REFUSE message,
-     *                                but automatically manages the <code>:content</code> slot.
+     *                                but automatically manages the  :content   slot.
      * @throws FailureException       if there is an error serving the CFP.
      *                                Throwing a FailureException has the same effect as returning a FAILURE
-     *                                message, but automatically manages the <code>:content</code> slot.
+     *                                message, but automatically manages the  :content   slot.
      * @throws NotUnderstoodException if the CFP content is not understood.
      *                                Throwing a NotUnderstoodException has the same effect as returning a NOT_UNDERSTOOD
-     *                                message, but automatically manages the <code>:content</code> slot.
+     *                                message, but automatically manages the  :content   slot.
      */
     protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException, FailureException, NotUnderstoodException {
         return null;
@@ -186,7 +186,7 @@ public class SSContractNetResponder extends SSResponder {
      * @return the reply message to be sent back to the initiator.
      * @throws FailureException if there is an error serving the ACCEPT_PROPOSAL.
      *                          Throwing a FailureException has the same effect as returning a FAILURE
-     *                          message, but automatically manages the <code>:content</code> slot.
+     *                          message, but automatically manages the  :content   slot.
      */
     protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
         return null;
@@ -203,7 +203,7 @@ public class SSContractNetResponder extends SSResponder {
      *                CFP message.
      * @param reject  the received REJECT_PROPOSAL message or null if no
      *                acceptance message is received from the initiator within the timeout
-     *                specified in the <code>:reply-by</code> slot of the PROPOSE message.
+     *                specified in the  :reply-by   slot of the PROPOSE message.
      */
     protected void handleRejectProposal(ACLMessage cfp, ACLMessage propose, ACLMessage reject) {
     }
@@ -223,19 +223,19 @@ public class SSContractNetResponder extends SSResponder {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_CFP state.
      * This behaviour would override the homonymous method.
      * This method also sets the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * <br>
-     * The registered behaviour can retrieve the initial <code>CFP</code>
-     * message from the HashMap at the <code>CFP_KEY</code> key.
+     * The registered behaviour can retrieve the initial  CFP
+     * message from the HashMap at the  CFP_KEY   key.
      * <br>
      * It is responsibility of the registered behaviour to put the
      * reply to be sent back to the initiator into the HashMap at the
-     * <code>REPLY_KEY</code> key. Putting a message defferent from PROPOSE
+     *  REPLY_KEY   key. Putting a message defferent from PROPOSE
      * (or putting no message) terminates the protocol.
      *
      * @param b the Behaviour that will handle this state
@@ -246,22 +246,22 @@ public class SSContractNetResponder extends SSResponder {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_ACCEPT_PROPOSAL state.
      * This behaviour would override the homonymous method.
      * This method also sets the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * <br>
-     * The registered behaviour can retrieve the received <code>ACCEPT_PROPOSAL</code>
-     * message from the HashMap at the <code>ACCEPT_PROPOSAL_KEY</code>
-     * key, the initial <code>CFP</code> message at the <code>CFP_KEY</code>
-     * and the previously sent <code>PROPOSE</code> message at the
-     * <code>PROPOSE_KEY</code>.
+     * The registered behaviour can retrieve the received  ACCEPT_PROPOSAL
+     * message from the HashMap at the  ACCEPT_PROPOSAL_KEY
+     * key, the initial  CFP   message at the  CFP_KEY
+     * and the previously sent  PROPOSE   message at the
+     *  PROPOSE_KEY  .
      * <br>
      * It is responsibility of the registered behaviour to put the
      * reply to be sent back to the initiator into the HashMap at the
-     * <code>REPLY_KEY</code> key.
+     *  REPLY_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -270,18 +270,18 @@ public class SSContractNetResponder extends SSResponder {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_REJECT_PROPOSAL state.
      * This behaviour would override the homonymous method.
      * This method also sets the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * <br>
-     * The registered behaviour can retrieve the received <code>REJECT_PROPOSAL</code>
-     * message from the HashMap at the <code>REJECT_PROPOSAL_KEY</code>
-     * key, the initial <code>CFP</code> message at the <code>CFP_KEY</code>
-     * and the previously sent <code>PROPOSE</code> message at the
-     * <code>PROPOSE_KEY</code>.
+     * The registered behaviour can retrieve the received  REJECT_PROPOSAL
+     * message from the HashMap at the  REJECT_PROPOSAL_KEY
+     * key, the initial  CFP   message at the  CFP_KEY
+     * and the previously sent  PROPOSE   message at the
+     *  PROPOSE_KEY  .
      *
      * @param b the Behaviour that will handle this state
      */

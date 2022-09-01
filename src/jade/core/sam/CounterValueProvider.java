@@ -26,10 +26,10 @@ package jade.core.sam;
 //#DOTNET_EXCLUDE_FILE
 
 /**
- * A provider of values for a given counter. The <code>isDifferential()<code> method
+ * A provider of values for a given counter. The  isDifferential()  method
  * indicates whether provided values are differential or total. In the former case
- * if the counter value is now H and was K when <code>getValue()</code> was invoked at
- * previous round, <code>getValue()</code> must return H-K.
+ * if the counter value is now H and was K when  getValue()   was invoked at
+ * previous round,  getValue()   must return H-K.
  */
 public interface CounterValueProvider extends Provider {
     long getValue();

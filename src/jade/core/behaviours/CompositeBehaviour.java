@@ -31,7 +31,7 @@ import java.util.Collection;
 /**
  * An abstract superclass for behaviours composed by many parts. This
  * class holds inside a number of <b><em>children behaviours</em></b>.
- * When a <code>CompositeBehaviour</code> receives it execution quantum
+ * When a  CompositeBehaviour   receives it execution quantum
  * from the agent scheduler, it executes one of its children according
  * to some policy. This class must be extended to provide the actual
  * scheduling policy to apply when running children behaviours.
@@ -77,10 +77,10 @@ public abstract class CompositeBehaviour extends Behaviour {
     }
 
     /**
-     * Executes this <code>CompositeBehaviour</code>. This method
+     * Executes this  CompositeBehaviour  . This method
      * executes children according to the scheduling policy
      * defined by concrete subclasses that implements
-     * the <code>scheduleFirst()</code> and <code>scheduleNext()</code>
+     * the  scheduleFirst()   and  scheduleNext()
      * methods.
      */
     public final void action() {
@@ -129,8 +129,8 @@ public abstract class CompositeBehaviour extends Behaviour {
     /**
      * Checks whether this behaviour has terminated.
      *
-     * @return <code>true</code> if this <code>CompositeBehaviour</code>
-     * has finished executing, <code>false</code>otherwise.
+     * @return  true   if this  CompositeBehaviour
+     * has finished executing,  false  otherwise.
      */
     public final boolean done() {
         return (finished);
@@ -147,22 +147,22 @@ public abstract class CompositeBehaviour extends Behaviour {
      * @param currentDone   a flag indicating whether the just executed
      *                      child has completed or not.
      * @param currentResult the termination value (as returned by
-     *                      <code>onEnd()</code>) of the just executed child in the case this
+     *                       onEnd()  ) of the just executed child in the case this
      *                      child has completed (otherwise this parameter is meaningless)
      */
     protected abstract void scheduleNext(boolean currentDone, int currentResult);
 
     /**
      * This methods is called after the execution of each child
-     * in order to check whether the <code>CompositeBehaviour</code>
+     * in order to check whether the  CompositeBehaviour
      * should terminate.
      *
      * @param currentDone   a flag indicating whether the just executed
      *                      child has completed or not.
      * @param currentResult the termination value (as returned by
-     *                      <code>onEnd()</code>) of the just executed child in the case this
+     *                       onEnd()  ) of the just executed child in the case this
      *                      child has completed (otherwise this parameter is meaningless)
-     * @return true if the <code>CompositeBehaviour</code>
+     * @return true if the  CompositeBehaviour
      * should terminate. false otherwise.
      */
     protected abstract boolean checkTermination(boolean currentDone, int currentResult);
@@ -175,7 +175,7 @@ public abstract class CompositeBehaviour extends Behaviour {
 
     /**
      * This method returns a Collection view of the children of
-     * this <code>CompositeBehaviour</code>
+     * this  CompositeBehaviour
      */
     public abstract Collection<Behaviour> getChildren();
 
@@ -207,8 +207,8 @@ public abstract class CompositeBehaviour extends Behaviour {
     //#APIDOC_EXCLUDE_END
 
     /**
-     * Puts a <code>CompositeBehaviour</code> back in initial state. The
-     * internal state is cleaned up and <code>reset()</code> is
+     * Puts a  CompositeBehaviour   back in initial state. The
+     * internal state is cleaned up and  reset()   is
      * recursively called for each child behaviour.
      */
     public void reset() {

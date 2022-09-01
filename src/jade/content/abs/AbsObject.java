@@ -69,7 +69,7 @@ public interface AbsObject extends Serializable {
      * Tests if the object is grounded, i.e., if no one of its attributes
      * is associated with a variable
      *
-     * @return <code>true</code> if the object is grounded.
+     * @return  true   if the object is grounded.
      */
     boolean isGrounded();
 

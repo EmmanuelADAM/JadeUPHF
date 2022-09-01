@@ -37,16 +37,13 @@ import jade.content.schema.Facet;
  * This facet forces an AbsPrimitive to contain a specific set of values
  * expressed as a regular expression.
  */
-public class RegexFacet implements Facet {
-    private final String regex;
-
+public record RegexFacet(String regex) implements Facet {
     /**
-     * Construct a <code>PermittedValuesFacet</code> that
+     * Construct a  PermittedValuesFacet   that
      * forces an AbsPrimitive to contain a specific set of values
      * expressed as a regular expression
      */
-    public RegexFacet(String regex) {
-        this.regex = regex;
+    public RegexFacet {
     }
 
     /**

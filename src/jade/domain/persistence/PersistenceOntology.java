@@ -40,9 +40,9 @@ import jade.domain.FIPAAgentManagement.ExceptionOntology;
  * Persistence Service features that can be accessed through the JADE
  * AMS.
  * <p>
- * The actual <code>Ontology</code> object representing the
+ * The actual  Ontology   object representing the
  * JADE-Persistence ontology is a singleton and is accessible through
- * the static method <code>getInstance()</code>
+ * the static method  getInstance()  
  *
  * @author Giovanni Rimassa -  FRAMeTech s.r.l.
  */
@@ -187,7 +187,7 @@ public class PersistenceOntology extends Ontology implements PersistenceVocabula
      * This method returns the unique instance (according to the singleton
      * pattern) of the JADE-Persistence ontology.
      *
-     * @return The singleton <code>Ontology</code> object, containing the
+     * @return The singleton  Ontology   object, containing the
      * schemas for the elements of the JADE-Persistence ontology.
      */
     public static Ontology getInstance() {

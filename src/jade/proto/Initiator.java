@@ -72,12 +72,12 @@ abstract class Initiator extends FSMBehaviour {
     private ACLMessage initiation;
 
     /**
-     * Constructs an <code>Initiator</code> behaviour
+     * Constructs an  Initiator   behaviour
      *
      * @param a               The agent performing the protocol
      * @param initiation      The message that must be used to initiate the protocol.
-     * @param mapMessagesList The <code>HashMap</code> of list of messages that will be used by this
-     *                        <code>Initiator</code>
+     * @param mapMessagesList The  HashMap   of list of messages that will be used by this
+     *                         Initiator
      * deprecated
 
     protected Initiator(Agent a, ACLMessage initiation, HashMap<String, List<ACLMessage>> mapMessagesList) {
@@ -224,7 +224,7 @@ abstract class Initiator extends FSMBehaviour {
      }
      */
     /**
-     * Constructs an <code>Initiator</code> behaviour
+     * Constructs an  Initiator   behaviour
      * see #AchieveREInitiator(Agent, ACLMessage, HashMap)
      **/
     protected Initiator(Agent a, ACLMessage initiation) {
@@ -232,13 +232,13 @@ abstract class Initiator extends FSMBehaviour {
     }
 
     /**
-     * Constructs an <code>Initiator</code> behaviour
+     * Constructs an  Initiator   behaviour
      *
      * @param a               The agent performing the protocol
      * @param initiation      The message that must be used to initiate the protocol.
-     * @param mapMessagesList The <code>HashMap</code> of list of messages that will be used by this
-     * @param mapMessages     The <code>HashMap</code> of messages that will be used by this
-     *                        <code>Initiator</code>
+     * @param mapMessagesList The  HashMap   of list of messages that will be used by this
+     * @param mapMessages     The  HashMap   of messages that will be used by this
+     *                         Initiator
      */
     protected Initiator(Agent a, ACLMessage initiation, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a);
@@ -497,7 +497,7 @@ abstract class Initiator extends FSMBehaviour {
     }
 
     /**
-     * This method is called every time a <code>not-understood</code>
+     * This method is called every time a  not-understood
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -511,7 +511,7 @@ abstract class Initiator extends FSMBehaviour {
     //#APIDOC_EXCLUDE_BEGIN
 
     /**
-     * This method is called every time a <code>failure</code>
+     * This method is called every time a  failure
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -536,11 +536,11 @@ abstract class Initiator extends FSMBehaviour {
     }
 
     /**
-     * Attach a behaviour to the <code>Prepare-initiations</code>
+     * Attach a behaviour to the  Prepare-initiations
      * protocol state.
      *
      * @param b The behaviour object to be executed in the
-     *          <code>Prepare-initiations</code> state.
+     *           Prepare-initiations   state.
      */
     protected void registerPrepareInitiations(Behaviour b) {
         registerState(b, PREPARE_INITIATIONS);
@@ -548,15 +548,15 @@ abstract class Initiator extends FSMBehaviour {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_NOT_UNDERSTOOD state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>not-understood</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
+     * the  not-understood   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -567,15 +567,15 @@ abstract class Initiator extends FSMBehaviour {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_FAILURE state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>failure</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
+     * the  failure   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -586,15 +586,15 @@ abstract class Initiator extends FSMBehaviour {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_OUT_OF_SEQ state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>out of sequence</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
+     * the  out of sequence   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -669,7 +669,7 @@ abstract class Initiator extends FSMBehaviour {
      * interaction.
      *
      * @param msgs A list of ACL messages. If the first one has a
-     *             non-empty <code>:conversation-id</code> slot, its value is
+     *             non-empty  :conversation-id   slot, its value is
      *             used, else a new conversation identifier is generated.
      */
     protected String createConvId(List<ACLMessage> msgs) {

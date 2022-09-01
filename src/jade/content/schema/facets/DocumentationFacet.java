@@ -29,15 +29,12 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.schema.Facet;
 
-public class DocumentationFacet implements Facet {
-    private final String documentation;
-
+public record DocumentationFacet(String documentation) implements Facet {
     /**
-     * Construct a <code>DocumentationFacet</code> that
+     * Construct a  DocumentationFacet   that
      * set the documentation of an AbsObject
      */
-    public DocumentationFacet(String documentation) {
-        this.documentation = documentation;
+    public DocumentationFacet {
     }
 
     /**

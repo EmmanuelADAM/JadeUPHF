@@ -31,8 +31,8 @@ import jade.core.ContainerID;
 
 
 /**
- * This class represents the <code>freeze-agent</code> action of the
- * <code>JADE-Persistence</code> ontology.  This action can be
+ * This class represents the  freeze-agent   action of the
+ *  JADE-Persistence   ontology.  This action can be
  * requested to the JADE AMS to freeze an agent so that its state is
  * moved to a persistent storage, but the agent appears as alive and
  * its messages are buffered by the platform.

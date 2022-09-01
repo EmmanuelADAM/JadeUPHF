@@ -68,12 +68,12 @@ import javax.microedition.rms.RecordStore;
  * For instance, in order to log the warning message  "Attention!", the
  * following code can be used, independently of the target environment: <br><br>
  *
- * <code>Logger logger = Logger.getJADELogger(this.getClass().getName());</code><br>
- * <code>logger.log(Logger.WARNING,"Attention!"); </code>
+ *  Logger logger = Logger.getJADELogger(this.getClass().getName());  <br>
+ *  logger.log(Logger.WARNING,"Attention!");   
  * <p>
  * <p> <b>J2SE</b><br>
  * The J2SE implementation is a pure
- * extension of the <code>java.util.logging.Logger</code> class and
+ * extension of the  java.util.logging.Logger   class and
  * it provides the whole set of
  * functionalities of java.util.logging.
  * <p> In the J2SE environment, the logging configuration can be initialized by using a logging
@@ -82,25 +82,25 @@ import javax.microedition.rms.RecordStore;
  * that is part of the JRE distribution,
  * can be overridden by setting the java.util.logging.config.file
  * system property, like the following example: <br>
- * <code>java -Djava.util.logging.config.file=mylogging.properties jade.Boot ...</code>
+ *  java -Djava.util.logging.config.file=mylogging.properties jade.Boot ...  
  *
  * <p><b>PersonaJava</b><br>
- * In the PJava implementation of the <code>Logger</code> class calls to the
- * <code>log()</code> method result in calls to <code>System.out.println()</code>.
+ * In the PJava implementation of the  Logger   class calls to the
+ *  log()   method result in calls to  System.out.println()  .
  * Alternatively it is possible to redirect logging printouts to a text file
- * by setting the <code>-jade_util_Logger_logfile</code> option. Note that,
+ * by setting the  -jade_util_Logger_logfile   option. Note that,
  * in order to face resource limitations, it is not possible to redirect
  * logging printouts produced by different Logger objects to different files.
  *
  * <p><b>MIDP</b><br>
- * In the MIDP implementation of the <code>Logger</code> class logging printouts
+ * In the MIDP implementation of the  Logger   class logging printouts
  * are redirected to a MIDP RecordStore so that they can be later viewed
- * by means of the <code>jade.util.leap.OutputViewer</code> MIDlet included
+ * by means of the  jade.util.leap.OutputViewer   MIDlet included
  * in the LEAP add-on.<br>
  *
  * <p><b>Android</b><br>
- * In the Android implementation of the <code>Logger</code> class logging printouts
- * are redirected to the Android logging system implemented by the <code>android.util.Log</code>
+ * In the Android implementation of the  Logger   class logging printouts
+ * are redirected to the Android logging system implemented by the  android.util.Log  
  * class. <br>
  *
  * <p>
@@ -108,8 +108,8 @@ import javax.microedition.rms.RecordStore;
  * will be logged by default.
  * In MIDP, PJava and Android environments, the logging level for a Logger object
  * registered with name x.y.z can be configured by setting the configuration option
- * <code>x_y_z_loglevel</code> to one of <code>severe, warning, info, config,
- * fine, finer, finest, all</code>. See the LEAP user guide for details about
+ *  x_y_z_loglevel   to one of  severe, warning, info, config,
+ * fine, finer, finest, all  . See the LEAP user guide for details about
  * how to set JADE configuration options in MIDP and PJava.
  *
  * @author Rosalba Bochicchio - TILAB

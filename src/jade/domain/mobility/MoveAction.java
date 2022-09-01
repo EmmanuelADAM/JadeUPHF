@@ -26,7 +26,7 @@ package jade.domain.mobility;
 import jade.content.AgentAction;
 
 /**
- * This class represents the <code>move-agent</code> action, requesting
+ * This class represents the  move-agent   action, requesting
  * to move an agent within the platform.
  *
  * @author Giovanni Rimassa -  Universita' di Parma
@@ -45,19 +45,19 @@ public class MoveAction implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>mobile-agent-description</code>
+     * Retrieve the value of the  mobile-agent-description  
      * slot of this event, containing the description of the agent to
      * migrate.
      *
-     * @return The value of the <code>mobile-agent-description</code>
-     * slot, or <code>null</code> if no value was set.
+     * @return The value of the  mobile-agent-description  
+     * slot, or  null   if no value was set.
      */
     public MobileAgentDescription getMobileAgentDescription() {
         return agentToMove;
     }
 
     /**
-     * Set the <code>mobile-agent-description</code> slot of this
+     * Set the  mobile-agent-description   slot of this
      * action.
      *
      * @param desc The description of the agent to migrate.

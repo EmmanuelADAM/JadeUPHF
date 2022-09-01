@@ -57,9 +57,9 @@ public class AgentActionSchema extends ConceptSchema {
     }
 
     /**
-     * Creates an <code>AgentActionSchema</code> with a given type-name.
+     * Creates an  AgentActionSchema   with a given type-name.
      *
-     * @param typeName The name of this <code>AgentActionSchema</code>.
+     * @param typeName The name of this  AgentActionSchema  .
      */
     public AgentActionSchema(String typeName) {
         super(typeName);
@@ -89,8 +89,8 @@ public class AgentActionSchema extends ConceptSchema {
      *
      * @param name        The name of the slot.
      * @param slotSchema  The schema of the slot.
-     * @param optionality The optionality, i.e. <code>OPTIONAL</code>
-     *                    or <code>MANDATORY</code>
+     * @param optionality The optionality, i.e.  OPTIONAL
+     *                    or  MANDATORY
      */
     public void add(String name, PredicateSchema slotSchema, int optionality) {
         super.add(name, slotSchema, optionality);
@@ -168,8 +168,8 @@ public class AgentActionSchema extends ConceptSchema {
      * a structure conforming to a given term schema.
      *
      * @param elementsSchema the schema of the elements in the result aggregate
-     * @param cardMin        the result must include at least <code>cardMin</code> elements
-     * @param cardMax        the result must include at most <code>cardMax</code> elements
+     * @param cardMin        the result must include at least  cardMin   elements
+     * @param cardMax        the result must include at most  cardMax   elements
      */
     public void setResult(TermSchema elementsSchema, int cardMin, int cardMax) {
         add(RESULT_SLOT_NAME, elementsSchema, cardMin, cardMax);

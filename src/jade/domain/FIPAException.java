@@ -29,7 +29,7 @@ import jade.lang.acl.ACLMessage;
 /**
  * This class represents a generic FIPAException, i.e. one of
  * NotUnderstood,Failure,Refuse, as defined in
- * <code>jade.domain.FIPAAgentManagement</code>.  It has two
+ *  jade.domain.FIPAAgentManagement  .  It has two
  * constructors, one based on an ACLMessage, and the second based on its
  * content, i.e. the exception message.
  *
@@ -44,8 +44,8 @@ public class FIPAException extends Exception implements Predicate {
     private String content;
 
     /**
-     * Constructs a generic <code>FIPAException</code>. The ACL message
-     * performative is defaulted to <code>not-understood</code>.
+     * Constructs a generic  FIPAException  . The ACL message
+     * performative is defaulted to  not-understood  .
      *
      * @param message is the content of the ACLMessage
      **/
@@ -55,7 +55,7 @@ public class FIPAException extends Exception implements Predicate {
     }
 
     /**
-     * Constructs a <code>FIPAException</code> from the given ACL
+     * Constructs a  FIPAException   from the given ACL
      * message.
      *
      * @param message is the ACL message representing this exception

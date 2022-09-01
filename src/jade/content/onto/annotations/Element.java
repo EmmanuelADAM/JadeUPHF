@@ -29,7 +29,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Allows to specify the ontological name of the <code>Concept</code> or <code>Predicate</code>,
+ * Allows to specify the ontological name of the  Concept   or  Predicate  ,
  * to be used in place of the default (the rightmost part of the fully qualified class name).<br>
  * The annotation is to be applied to the class.
  *

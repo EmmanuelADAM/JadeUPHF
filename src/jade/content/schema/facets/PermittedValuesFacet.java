@@ -36,15 +36,12 @@ import jade.content.schema.Facet;
 /**
  * This facet forces an AbsPrimitive to contain a specific set of values.
  */
-public class PermittedValuesFacet implements Facet {
-    private final Object[] permittedValues;
-
+public record PermittedValuesFacet(Object[] permittedValues) implements Facet {
     /**
-     * Construct a <code>PermittedValuesFacet</code> that
+     * Construct a  PermittedValuesFacet   that
      * forces an AbsPrimitive to contain a specific set of values
      */
-    public PermittedValuesFacet(Object[] permittedValues) {
-        this.permittedValues = permittedValues;
+    public PermittedValuesFacet {
     }
 
     /**

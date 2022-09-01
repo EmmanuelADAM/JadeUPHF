@@ -24,7 +24,7 @@
 package jade.core.event;
 
 /**
- * The interface to be implemented by classes that need to be notified about <code>ContainerEvent<code>-s
+ * The interface to be implemented by classes that need to be notified about  ContainerEvent -s
  * by the JADE Notification-Service
  *
  * @see NotificationHelper

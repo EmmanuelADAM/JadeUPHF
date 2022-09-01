@@ -25,8 +25,8 @@ package jade.domain.introspection;
 
 
 /**
- * This class represents the <code>meta-reset-events</code> concept in
- * the <code>jade-introspection</code> ontology.
+ * This class represents the  meta-reset-events   concept in
+ * the  jade-introspection   ontology.
  *
  * @author Giovanni Rimassa - FRAMeTech s.r.l.
  */

@@ -60,7 +60,7 @@ public class QualifiedFrame extends Hashtable<Object, Object> implements Frame {
      * setting a null value for a given key is interpreted as
      * removing the entry.
      *
-     * @throws ClassCastException if <code>key</code> is not a String
+     * @throws ClassCastException if  key   is not a String
      */
     public Object put(Object key, Object val) {
         if (val != null) {
@@ -71,7 +71,7 @@ public class QualifiedFrame extends Hashtable<Object, Object> implements Frame {
     }
 
     /**
-     * Utility method to put a value of type <code>int</code> in this
+     * Utility method to put a value of type  int   in this
      * Frame.
      */
     public Object putInteger(Object key, int val) {
@@ -79,7 +79,7 @@ public class QualifiedFrame extends Hashtable<Object, Object> implements Frame {
     }
 
     /**
-     * Utility method to retrieve a value of type <code>int</code> from this
+     * Utility method to retrieve a value of type  int   from this
      * Frame.
      */
     public int getInteger(Object key) {
@@ -87,7 +87,7 @@ public class QualifiedFrame extends Hashtable<Object, Object> implements Frame {
     }
 
     /**
-     * Utility method to put a value of type <code>boolean</code> in this
+     * Utility method to put a value of type  boolean   in this
      * Frame.
      */
     public Object putBoolean(Object key, boolean val) {
@@ -95,7 +95,7 @@ public class QualifiedFrame extends Hashtable<Object, Object> implements Frame {
     }
 
     /**
-     * Utility method to retrieve a value of type <code>boolean</code> from this
+     * Utility method to retrieve a value of type  boolean   from this
      * Frame.
      */
     public boolean getBoolean(Object key) {

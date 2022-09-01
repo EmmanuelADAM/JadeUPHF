@@ -146,9 +146,8 @@ class BeanOntologyBuilder {
     }
 
     private static String buildSetterNameFromBeanPropertyName(String beanPropertyName) {
-        String sb = SETTER_PREFIX + Character.toUpperCase(beanPropertyName.charAt(0)) +
+        return SETTER_PREFIX + Character.toUpperCase(beanPropertyName.charAt(0)) +
                 beanPropertyName.substring(1);
-        return sb;
     }
 
     private static boolean accessorsAreConsistent(Method getter, Method setter) {

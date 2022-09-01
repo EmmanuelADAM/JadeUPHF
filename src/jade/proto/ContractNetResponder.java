@@ -41,13 +41,13 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Behaviour class for <code>fipa-contract-net</code>
+ * Behaviour class for  fipa-contract-net  
  * <em>Responder</em> role. This  behaviour implements the
- * <code>fipa-contract-net</code> interaction protocol from the point
- * of view of a responder to a call for proposal (<code>cfp</code>)
+ *  fipa-contract-net   interaction protocol from the point
+ * of view of a responder to a call for proposal ( cfp  )
  * message.<p>
  * The API of this class is similar and homogeneous to the
- * <code>AchieveREResponder</code>.
+ *  AchieveREResponder  .
  * <p>
  * Read also the introduction to
  * <a href="ContractNetInitiator.html">ContractNetInitiator</a>
@@ -55,39 +55,35 @@ import java.util.List;
  * <p>
  * When a message arrives
  * that matches the message template passed to the constructor,
- * the callback method <code>prepareResponse</code> is executed
- * that must return the wished response, for instance the <code>PROPOSE</code>
+ * the callback method  prepareResponse   is executed
+ * that must return the wished response, for instance the  PROPOSE  
  * reply message. Any other type of returned communicative act
  * is sent and then closes the
  * protocol.
  * <p>
  * Then, if the initiator accepted the proposal, i.e. if
- * an <code>ACCEPT-PROPOSAL</code> message was received, the callback
- * method <code>prepareResultNotification</code> would be executed that
+ * an  ACCEPT-PROPOSAL   message was received, the callback
+ * method  prepareResultNotification   would be executed that
  * must return the message with the result notification, i.e.
- * <code>INFORM</code> or <code>FAILURE</code>.
+ *  INFORM   or  FAILURE  .
  * <br>
  * In alternative, if the initiator rejected the proposal, i.e. if
- * an <code>REJECT-PROPOSAL</code> message was received, the callback
- * method <code>handleRejectProposal</code> would be executed and
+ * an  REJECT-PROPOSAL   message was received, the callback
+ * method  handleRejectProposal   would be executed and
  * the protocol terminated.
  * <p>
  * If a message were received, with the same value of this
- * <code>conversation-id</code>, but that does not comply with the FIPA
- * protocol, than the method <code>handleOutOfSequence</code> would be called.
+ *  conversation-id  , but that does not comply with the FIPA
+ * protocol, than the method  handleOutOfSequence   would be called.
  * <p>
  * This class can be extended by the programmer by overriding all the needed
  * handle methods or, in alternative, appropriate behaviours can be
- * registered for each handle via the <code>registerHandle</code>-type
+ * registered for each handle via the  registerHandle  -type
  * of methods. This last case is more difficult to use and proper
- * care must be taken to properly use the <code>HashMap</code> of the
- * <code>Behaviour</code> as a shared memory mechanism with the
+ * care must be taken to properly use the  HashMap   of the
+ *  Behaviour   as a shared memory mechanism with the
  * registered behaviour.
  * <p>
- * Read carefully the section of the
- * <a href="..\..\..\programmersguide.pdf"> JADE programmer's guide </a>
- * that describes
- * the usage of this class.
  *
  * @author Fabio Bellifemine - TILAB
  * @author Giovanni Caire - TILAB
@@ -100,17 +96,17 @@ import java.util.List;
 public class ContractNetResponder extends SSContractNetResponder {
     public static final String RECEIVE_CFP = "Receive-Cfp";
     /**
-     * @deprecated Use <code>REPLY_KEY</code>
+     * @deprecated Use  REPLY_KEY  
      */
     public final String RESPONSE_KEY = REPLY_KEY;
     /**
-     * @deprecated Use either <code>ACCEPT_PROPOSAL_KEY</code> or
-     * <code>REJECT_PROPOSAL_KEY</code> according to the message
+     * @deprecated Use either  ACCEPT_PROPOSAL_KEY   or
+     *  REJECT_PROPOSAL_KEY   according to the message
      * that has been received
      */
     public final String PROPOSE_ACCEPTANCE_KEY = RECEIVED_KEY;
     /**
-     * @deprecated Use <code>REPLY_KEY</code>
+     * @deprecated Use  REPLY_KEY  
      */
     public final String RESULT_NOTIFICATION_KEY = REPLY_KEY;
 
@@ -132,7 +128,7 @@ public class ContractNetResponder extends SSContractNetResponder {
      *                        the initiator message. Take care that
      *                        if mt is null every message is consumed by this protocol.
      *                        The best practice is to have a MessageTemplate that matches
-     *                        the protocol slot; the static method <code>createMessageTemplate</code>
+     *                        the protocol slot; the static method  createMessageTemplate  
      *                        might be usefull.
      * @param mapMessagesList the HashMap of messages list for this protocol behaviour
      * @param mapMessages     the HashMap of messages  for this protocol behaviour
@@ -174,21 +170,21 @@ public class ContractNetResponder extends SSContractNetResponder {
     }
 
     /**
-     * @deprecated Use <code>handleCfp()</code> instead
+     * @deprecated Use  handleCfp()   instead
      */
     protected ACLMessage prepareResponse(ACLMessage cfp) throws NotUnderstoodException, RefuseException {
         return null;
     }
 
     /**
-     * @deprecated Use <code>handleAcceptProposal()</code> instead.
+     * @deprecated Use  handleAcceptProposal()   instead.
      */
     protected ACLMessage prepareResultNotification(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
         return null;
     }
 
     /**
-     * @deprecated Use <code>registerHandleCfp()</code> instead.
+     * @deprecated Use  registerHandleCfp()   instead.
      */
     public void registerPrepareResponse(Behaviour b) {
         registerHandleCfp(b);
@@ -198,7 +194,7 @@ public class ContractNetResponder extends SSContractNetResponder {
     //#APIDOC_EXCLUDE_BEGIN
 
     /**
-     * @deprecated Use <code>registerHandleAcceptProposal()</code> instead.
+     * @deprecated Use  registerHandleAcceptProposal()   instead.
      */
     public void registerPrepareResultNotification(Behaviour b) {
         registerHandleAcceptProposal(b);

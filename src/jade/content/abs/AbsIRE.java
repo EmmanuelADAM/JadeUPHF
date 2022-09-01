@@ -144,8 +144,8 @@ public class AbsIRE extends AbsObjectImpl implements AbsContentElement, AbsTerm 
     }
 
     /**
-     * Redefine the <code>isGrounded()</code> method in order to
-     * always return <code>false</code>. Infact an IRE always
+     * Redefine the  isGrounded()   method in order to
+     * always return  false  . Infact an IRE always
      * includes a variable.
      */
     public boolean isGrounded() {

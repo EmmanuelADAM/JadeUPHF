@@ -40,7 +40,7 @@ import java.util.Enumeration;
 
 /**
  * This class implements the gui to manipulate a
- * <code>DFAgentDescription</code>.
+ *  DFAgentDescription  .
  *
  * @author Tiziana Trucco - CSELT S.p.A
  * @author alessandro Chiarotto - TILAB
@@ -111,7 +111,7 @@ public class DFAgentDscDlg extends JDialog implements ActionListener {
     /**
      * Create a dialog with the given parent.
      *
-     * @param parent The <code>Frame</code> that is the parent window
+     * @param parent The  Frame   that is the parent window
      *               of this dialog.
      */
     public DFAgentDscDlg(Frame parent) {
@@ -125,7 +125,7 @@ public class DFAgentDscDlg extends JDialog implements ActionListener {
     /**
      * Create a dialog with the given parent.
      *
-     * @param parent The <code>Dialog</code> that is the parent window
+     * @param parent The  Dialog   that is the parent window
      *               of this dialog.
      */
     public DFAgentDscDlg(Dialog parent) {
@@ -137,7 +137,7 @@ public class DFAgentDscDlg extends JDialog implements ActionListener {
     }
 
     /**
-     * This method show a a giu for a <code>DFAgentDescription</code>.
+     * This method show a a giu for a  DFAgentDescription  .
      *
      * @param dfd                 the DFAgentDescrption to show
      * @param ed                  true if the fields of the gui must be editable, false otherwise.

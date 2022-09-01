@@ -66,7 +66,7 @@ public class BehaviourLoadingOntology extends Ontology implements BehaviourLoadi
      * This method returns the singleton instance of the
      * Behaviour-Loading ontology.
      *
-     * @return The singleton <code>Ontology</code> object, containing the
+     * @return The singleton  Ontology   object, containing the
      * schemas for the elements of the Behaviour-Loading ontology.
      */
     public static Ontology getInstance() {

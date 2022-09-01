@@ -50,9 +50,9 @@ public class OutcomeManager implements Serializable {
     }
 
     /**
-     * Retrieve the exit-code that indicates whether the behaviour holding this OutcomeManager succeeded (<code>OK</code>) or failed (<code>KO</code>)
+     * Retrieve the exit-code that indicates whether the behaviour holding this OutcomeManager succeeded ( OK  ) or failed ( KO  )
      *
-     * @return The exit-code that indicates whether the behaviour holding this OutcomeManager succeeded (<code>OK</code>) or failed (<code>KO</code>)
+     * @return The exit-code that indicates whether the behaviour holding this OutcomeManager succeeded ( OK  ) or failed ( KO  )
      */
     public int getExitCode() {
         return exitCode;
@@ -73,7 +73,7 @@ public class OutcomeManager implements Serializable {
 
     /**
      * Mark the behaviour holding this OutcomeManager as failed and store the error-message that can then be retrieved by means of the
-     * <code>getErrorMsg()</code> method
+     *  getErrorMsg()   method
      *
      * @param msg The error message.
      * @param e   The Exception, if any, that caused the behaviour to fail

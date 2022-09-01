@@ -50,7 +50,7 @@ import java.util.Properties;
  * container, providing runtime support to JADE agents.
  * <p>
  * This class cannot be instantiated from applications. Instead, the
- * <code>Runtime.createAgentContainer(Profile p)</code> method must be called.
+ *  Runtime.createAgentContainer(Profile p)   method must be called.
  *
  * @author Giovanni Rimassa - Universita' di Parma
  * @author Jerome Picault - Motorola Labs

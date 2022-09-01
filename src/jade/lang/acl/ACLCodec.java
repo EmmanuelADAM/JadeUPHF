@@ -41,7 +41,7 @@ public interface ACLCodec {
   #DOTNET_INCLUDE_END*/
 
     /**
-     * Encodes an <code>ACLMessage</code> object into a byte sequence,
+     * Encodes an  ACLMessage   object into a byte sequence,
      * according to the specific message representation.
      *
      * @param msg     The ACL message to encode.
@@ -51,13 +51,13 @@ public interface ACLCodec {
     byte[] encode(ACLMessage msg, String charset);
 
     /**
-     * Recovers an <code>ACLMessage</code> object back from raw data,
+     * Recovers an  ACLMessage   object back from raw data,
      * using the specific message representation to interpret the byte
      * sequence.
      *
      * @param data    The byte sequence containing the encoded message.
      * @param charset Charset encoding to use (e.g. US_ASCII, UTF-8, etc)
-     * @return A new <code>ACLMessage</code> object, built from the raw
+     * @return A new  ACLMessage   object, built from the raw
      * data.
      * @throws CodecException If some kind of syntax error occurs.
      */
@@ -65,8 +65,8 @@ public interface ACLCodec {
 
     /**
      * Query the name of the message representation handled by this
-     * <code>Codec</code> object. The FIPA standard representations have
-     * a name starting with <code><b>"fipa.acl.rep."</b></code>.
+     *  Codec   object. The FIPA standard representations have
+     * a name starting with  <b>"fipa.acl.rep."</b>  .
      *
      * @return The name of the handled ACL message representation.
      */
@@ -75,7 +75,7 @@ public interface ACLCodec {
     /**
      * This exception is thrown when some problem occurs in the concrete parsing
      * subsystem accessed through this interface. If an exception is thrown by the
-     * underlying parser, it is wrapped with a <code>Codec.CodecException</code>,
+     * underlying parser, it is wrapped with a  Codec.CodecException  ,
      * which is then rethrown.
      */
     class CodecException extends Exception {
@@ -85,7 +85,7 @@ public interface ACLCodec {
         private final Throwable nested;
 
         /**
-         * Construct a new <code>CodecException</code>
+         * Construct a new  CodecException
          *
          * @param msg The message for this exception.
          * @param t   The exception wrapped by this object.
@@ -99,7 +99,7 @@ public interface ACLCodec {
         /**
          * Reads the exception wrapped by this object.
          *
-         * @return the <code>Throwable</code> object that is the exception thrown by
+         * @return the  Throwable   object that is the exception thrown by
          * the concrete parsing subsystem.
          */
         public Throwable getNested() {

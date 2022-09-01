@@ -46,9 +46,9 @@ public class TermSchema extends ObjectSchemaImpl {
     }
 
     /**
-     * Creates a <code>TermSchema</code> with a given type-name.
+     * Creates a  TermSchema   with a given type-name.
      *
-     * @param typeName The name of this <code>TermSchema</code>.
+     * @param typeName The name of this  TermSchema  .
      */
     protected TermSchema(String typeName) {
         super(typeName);

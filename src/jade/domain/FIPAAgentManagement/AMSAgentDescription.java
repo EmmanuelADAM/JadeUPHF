@@ -39,37 +39,37 @@ import jade.core.AID;
 public class AMSAgentDescription implements Concept {
 
     /**
-     * String constant for the <code>initiated</code> agent life-cycle
+     * String constant for the  initiated   agent life-cycle
      * state.
      */
     public static final String INITIATED = "initiated";
 
     /**
-     * String constant for the <code>active</code> agent life-cycle
+     * String constant for the  active   agent life-cycle
      * state.
      */
     public static final String ACTIVE = "active";
 
     /**
-     * String constant for the <code>suspended</code> agent life-cycle
+     * String constant for the  suspended   agent life-cycle
      * state.
      */
     public static final String SUSPENDED = "suspended";
 
     /**
-     * String constant for the <code>waiting</code> agent life-cycle
+     * String constant for the  waiting   agent life-cycle
      * state.
      */
     public static final String WAITING = "waiting";
 
     /**
-     * String constant for the <code>transit</code> agent life-cycle
+     * String constant for the  transit   agent life-cycle
      * state.
      */
     public static final String TRANSIT = "transit";
 
     /**
-     * String constant for the <code>latent</code> agent life-cycle
+     * String constant for the  latent   agent life-cycle
      * state. JADE specific state indicating an agent waiting to be restored after a
      * crash of the main container
      */
@@ -86,17 +86,17 @@ public class AMSAgentDescription implements Concept {
     }
 
     /**
-     * Retrieve the <code>name</code> slot of this object.
+     * Retrieve the  name   slot of this object.
      *
-     * @return The value of the <code>name</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  name   slot, or
+     *  null   if no value was set.
      */
     public AID getName() {
         return name;
     }
 
     /**
-     * Set the <code>name</code> slot of this object.
+     * Set the  name   slot of this object.
      *
      * @param n The agent identifier for the name.
      */
@@ -105,17 +105,17 @@ public class AMSAgentDescription implements Concept {
     }
 
     /**
-     * Retrieve the <code>ownership</code> slot of this object.
+     * Retrieve the  ownership   slot of this object.
      *
-     * @return The value of the <code>ownership</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  ownership   slot, or
+     *  null   if no value was set.
      */
     public String getOwnership() {
         return ownership;
     }
 
     /**
-     * Set the <code>ownership</code> slot of this object.
+     * Set the  ownership   slot of this object.
      *
      * @param n The string for the ownership.
      */
@@ -124,17 +124,17 @@ public class AMSAgentDescription implements Concept {
     }
 
     /**
-     * Retrieve the <code>state</code> slot of this object.
+     * Retrieve the  state   slot of this object.
      *
-     * @return The value of the <code>state</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  state   slot, or
+     *  null   if no value was set.
      */
     public String getState() {
         return state;
     }
 
     /**
-     * Set the <code>state</code> slot of this object.
+     * Set the  state   slot of this object.
      *
      * @param n The string for the state.
      */

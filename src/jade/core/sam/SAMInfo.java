@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * An instance of this class is passed to all configured <code>SAMInfoHandler<code>-s
+ * An instance of this class is passed to all configured  SAMInfoHandler -s
  * at each polling time and groups together all information collected by the SAM Service at that
  * polling time.
  */

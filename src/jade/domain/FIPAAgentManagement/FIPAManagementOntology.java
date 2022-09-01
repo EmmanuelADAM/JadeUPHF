@@ -31,9 +31,9 @@ import jade.content.schema.*;
  * This class represents the ontology defined by FIPA Agent Management
  * specifications (document no. 23).
  * <p>
- * The actual <code>Ontology</code> object representing the
+ * The actual  Ontology   object representing the
  * FIPA-Agent-Management-ontology is a singleton and is accessible through
- * the static method <code>getInstance()</code>
+ * the static method  getInstance()
  *
  * @author Fabio Bellifemine - CSELT S.p.A.
  * @version $Date: 2014-06-03 15:12:45 +0200 (mar, 03 giu 2014) $ $Revision: 6713 $
@@ -182,7 +182,7 @@ public class FIPAManagementOntology extends Ontology implements FIPAManagementVo
      * This method returns the unique instance (according to the singleton
      * pattern) of the FIPA-Agent-Management-ontology.
      *
-     * @return The singleton <code>Ontology</code> object, containing the
+     * @return The singleton  Ontology   object, containing the
      * schemas for the elements of the FIPA-Agent-Management-ontology.
      */
     public static Ontology getInstance() {

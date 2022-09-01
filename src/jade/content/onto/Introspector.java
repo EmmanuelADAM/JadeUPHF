@@ -33,7 +33,7 @@ import java.io.Serializable;
 /**
  * This interface defines the methods to convert objects of
  * ontological classes into/from abstract descriptors. Each ontology
- * has an <code>Introspector</code> and delegates it the conversion.
+ * has an  Introspector   and delegates it the conversion.
  *
  * @author Federico Bergenti - Universita` di Parma
  */

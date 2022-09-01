@@ -38,21 +38,16 @@ import jade.content.schema.ObjectSchema;
  *
  * @author Giovanni Caire - TILAB
  */
-public class CardinalityFacet implements Facet {
-    private final int cardMin;
-    private final int cardMax;
-
+public record CardinalityFacet(int cardMin, int cardMax) implements Facet {
     /**
-     * Construct a <code>CardinalityFacet</code> that forces
+     * Construct a  CardinalityFacet   that forces
      * the number of elements in an AbsAggregate to be within
      * a given range
      *
      * @param cardMin The range lower bound
      * @param cardMax The range upper bound
      */
-    public CardinalityFacet(int cardMin, int cardMax) {
-        this.cardMin = cardMin;
-        this.cardMax = cardMax;
+    public CardinalityFacet {
     }
 
     public int getCardMin() {

@@ -25,7 +25,7 @@ package jade.core;
 
 
 /**
- * The <code>ServiceFinder</code> interface serves as an access point
+ * The  ServiceFinder   interface serves as an access point
  * for kernel-level service discovery. From a service finder object
  * one can look up a given service by name, or can directly ask for a
  * slice of the given service.
@@ -59,7 +59,7 @@ public interface ServiceFinder {
      *
      * @param serviceKey The name of the service. Concrete syntax for
      *                   service names is left up to concrete services.
-     * @return An array of <code>Service.Slice</code> objects,
+     * @return An array of  Service.Slice   objects,
      * containing all the slices of the requested service.
      */
     Service.Slice[] findAllSlices(String serviceKey) throws IMTPException, ServiceException;

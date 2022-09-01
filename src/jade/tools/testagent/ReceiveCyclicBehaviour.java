@@ -31,7 +31,7 @@ import jade.core.behaviours.CyclicBehaviour;
  * This behaviour is used for receiving ACLMessage and giving them to the TestAgent
  *
  * @author chris
- * @created May 21, 2002
+ * @since May 21, 2002
  */
 public class ReceiveCyclicBehaviour extends CyclicBehaviour {
     private final TestAgent agent;

@@ -45,7 +45,7 @@ import java.util.Iterator;
 
 /**
  * The codec class for the <b><i>FIPA-SL</i>n</b> languages. This class
- * implements the <code>Codec</code> interface and allows converting
+ * implements the  Codec   interface and allows converting
  * back and forth between strings and frames, according to the SL
  * grammar.
  * By default the class implements full SL grammar, otherwise the proper

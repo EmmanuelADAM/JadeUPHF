@@ -26,7 +26,7 @@ public class ObjectManager {
 
     /**
      * Convert a class-name, possibly with attached properties, into a Properties object
-     * The actual class-name will be available as the value of the <code>CLASS_NAME</code> property
+     * The actual class-name will be available as the value of the  CLASS_NAME   property
      */
     private static Properties getClassProperties(String str) {
         Properties pp = new Properties();
@@ -52,11 +52,11 @@ public class ObjectManager {
     }
 
     /**
-     * Register a <code>Loader</code> for a given type of object. Note that more than one <code>Loader</code>
+     * Register a  Loader   for a given type of object. Note that more than one  Loader  
      * can be associated to a given type of object.
      *
-     * @param type   The type of object the registered <code>Loader</code> is associated to
-     * @param loader The <code>Loader</code> instance.
+     * @param type   The type of object the registered  Loader   is associated to
+     * @param loader The  Loader   instance.
      */
     public synchronized static void addLoader(String type, Loader loader) {
         List<Loader> l = loaders.computeIfAbsent(type, k -> new ArrayList<>());

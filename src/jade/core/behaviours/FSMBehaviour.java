@@ -34,23 +34,23 @@ import java.util.*;
 
 /**
  * Composite behaviour with Finite State Machine based children scheduling.
- * It is a <code>CompositeBehaviour</code> that executes its children
+ * It is a  CompositeBehaviour   that executes its children
  * behaviours according to a FSM defined by the user. More specifically
  * each child represents a state in the FSM.
  * The class provides methods to register states (sub-behaviours) and
  * transitions that defines how sub-behaviours will be scheduled.
  * <p> At a minimum, the following steps are needed in order to properly
- * define a <code>FSMBehaviour</code>:
+ * define a  FSMBehaviour  :
  * <ul>
  * <li> register a single Behaviour as the initial state of the FSM by calling
- * the method <code>registerFirstState</code>;
+ * the method  registerFirstState  ;
  * <li> register one or more Behaviours as the final states of the FSM
- * by calling the method <code>registerLastState</code>;
+ * by calling the method  registerLastState  ;
  * <li> register one or more Behaviours as the intermediate states of the FSM
- * by calling the method <code>registerState</code>;
+ * by calling the method  registerState  ;
  * <li> for each state of the FSM, register the transitions to the other
- * states by calling the method <code>registerTransition</code>;
- * <li> the method <code>registerDefaultTransition</code> is also useful
+ * states by calling the method  registerTransition  ;
+ * <li> the method  registerDefaultTransition   is also useful
  * in order to register a default transition from a state to another state
  * independently on the termination event of the source state.
  * </ul>
@@ -97,11 +97,11 @@ public class FSMBehaviour extends SerialBehaviour {
     }
 
     /**
-     * Register a <code>Behaviour</code> as a state of this
-     * <code>FSMBehaviour</code>. When the FSM reaches this state
-     * the registered <code>Behaviour</code> will be executed.
+     * Register a  Behaviour   as a state of this
+     *  FSMBehaviour  . When the FSM reaches this state
+     * the registered  Behaviour   will be executed.
      *
-     * @param state The <code>Behaviour</code> representing the state
+     * @param state The  Behaviour   representing the state
      * @param name  The name identifying the state.
      */
     public void registerState(Behaviour state, String name) {
@@ -117,10 +117,10 @@ public class FSMBehaviour extends SerialBehaviour {
     }
 
     /**
-     * Register a <code>Behaviour</code> as the initial state of this
-     * <code>FSMBehaviour</code>.
+     * Register a  Behaviour   as the initial state of this
+     *  FSMBehaviour  .
      *
-     * @param state The <code>Behaviour</code> representing the state
+     * @param state The  Behaviour   representing the state
      * @param name  The name identifying the state.
      */
     public void registerFirstState(Behaviour state, String name) {
@@ -129,12 +129,12 @@ public class FSMBehaviour extends SerialBehaviour {
     }
 
     /**
-     * Register a <code>Behaviour</code> as a final state of this
-     * <code>FSMBehaviour</code>. When the FSM reaches this state
-     * the registered <code>Behaviour</code> will be executed and,
-     * when completed, the <code>FSMBehaviour</code> will terminate too.
+     * Register a  Behaviour   as a final state of this
+     *  FSMBehaviour  . When the FSM reaches this state
+     * the registered  Behaviour   will be executed and,
+     * when completed, the  FSMBehaviour   will terminate too.
      *
-     * @param state The <code>Behaviour</code> representing the state
+     * @param state The  Behaviour   representing the state
      * @param name  The name identifying the state.
      */
     public void registerLastState(Behaviour state, String name) {
@@ -145,7 +145,7 @@ public class FSMBehaviour extends SerialBehaviour {
     }
 
     /**
-     * Deregister a state of this <code>FSMBehaviour</code>.
+     * Deregister a state of this  FSMBehaviour  .
      *
      * @param name The name of the state to be deregistered.
      * @return the Behaviour if any that was registered as the
@@ -166,13 +166,13 @@ public class FSMBehaviour extends SerialBehaviour {
 
     /**
      * Register a transition in the FSM defining the policy for
-     * children scheduling of this <code>FSMBehaviour</code>.
+     * children scheduling of this  FSMBehaviour  .
      *
      * @param s1    The name of the state this transition starts from
      * @param s2    The name of the state this transition leads to
      * @param event The termination event that fires this transition
-     *              as returned by the <code>onEnd()</code> method of the
-     *              <code>Behaviour</code> representing state s1.
+     *              as returned by the  onEnd()   method of the
+     *               Behaviour   representing state s1.
      * @see Behaviour#onEnd()
      */
     public void registerTransition(String s1, String s2, int event) {
@@ -181,17 +181,17 @@ public class FSMBehaviour extends SerialBehaviour {
 
     /**
      * Register a transition in the FSM defining the policy for
-     * children scheduling of this <code>FSMBehaviour</code>.
+     * children scheduling of this  FSMBehaviour  .
      * When this transition is fired the states indicated in the
-     * <code>toBeReset</code> parameter are reset. This is
+     *  toBeReset   parameter are reset. This is
      * particularly useful for transitions that lead to states that
      * have already been visited.
      *
      * @param s1        The name of the state this transition starts from
      * @param s2        The name of the state this transition leads to
      * @param event     The termination event that fires this transition
-     *                  as returned by the <code>onEnd()</code> method of the
-     *                  <code>Behaviour</code> representing state s1.
+     *                  as returned by the  onEnd()   method of the
+     *                   Behaviour   representing state s1.
      * @param toBeReset An array of strings including the names of
      *                  the states to be reset.
      *                  see Behaviour#onEnd()
@@ -203,7 +203,7 @@ public class FSMBehaviour extends SerialBehaviour {
 
     /**
      * Register a default transition in the FSM defining the policy for
-     * children scheduling of this <code>FSMBehaviour</code>.
+     * children scheduling of this  FSMBehaviour  .
      * This transition will be fired when state s1 terminates with
      * an event that is not explicitly associated to any transition.
      *
@@ -216,11 +216,11 @@ public class FSMBehaviour extends SerialBehaviour {
 
     /**
      * Register a default transition in the FSM defining the policy for
-     * children scheduling of this <code>FSMBehaviour</code>.
+     * children scheduling of this  FSMBehaviour  .
      * This transition will be fired when state s1 terminates with
      * an event that is not explicitly associated to any transition.
      * When this transition is fired the states indicated in the
-     * <code>toBeReset</code> parameter are reset. This is
+     *  toBeReset   parameter are reset. This is
      * particularly useful for transitions that lead to states that
      * have already been visited.
      *
@@ -258,7 +258,7 @@ public class FSMBehaviour extends SerialBehaviour {
      * Check if a default transition exits from a given source state.
      *
      * @param source The name of the source state
-     * @return <code>true</code> if a default transition exits from the given source state. <code>false</code> otherwise.
+     * @return  true   if a default transition exits from the given source state.  false   otherwise.
      */
     public boolean hasDefaultTransition(String source) {
         return (theTransitionTable.getTransition(source) != null);
@@ -268,8 +268,8 @@ public class FSMBehaviour extends SerialBehaviour {
      * Retrieve the child behaviour associated to the FSM state with
      * the given name.
      *
-     * @return the <code>Behaviour</code> representing the state whose
-     * name is <code>name</code>, or <code>null</code> if no such
+     * @return the  Behaviour   representing the state whose
+     * name is  name  , or  null   if no such
      * behaviour exists.
      */
     public Behaviour getState(String name) {
@@ -285,7 +285,7 @@ public class FSMBehaviour extends SerialBehaviour {
      * behaviour.
      *
      * @return the name of the state represented by
-     * <code>Behaviour</code> state, or <code>null</code> if the given
+     *  Behaviour   state, or  null   if the given
      * behaviour is not a child of this FSM behaviour.
      */
     public String getName(Behaviour state) {
@@ -319,8 +319,8 @@ public class FSMBehaviour extends SerialBehaviour {
 
     /**
      * Prepare the first child for execution. The first child is the
-     * <code>Behaviour</code> registered as the first state of this
-     * <code>FSMBehaviour</code>
+     *  Behaviour   registered as the first state of this
+     *  FSMBehaviour
      * see CompositeBehaviour#scheduleFirst
      */
     protected void scheduleFirst() {
@@ -347,7 +347,7 @@ public class FSMBehaviour extends SerialBehaviour {
      * @param currentDone   a flag indicating whether the just executed
      *                      child has completed or not.
      * @param currentResult the termination value (as returned by
-     *                      <code>onEnd()</code>) of the just executed child in the case this
+     *                       onEnd()  ) of the just executed child in the case this
      *                      child has completed (otherwise this parameter is meaningless)
      *                      see CompositeBehaviour#scheduleNext(boolean, int)
      */
@@ -387,7 +387,7 @@ public class FSMBehaviour extends SerialBehaviour {
     }
 
     /**
-     * Check whether this <code>FSMBehaviour</code> must terminate.
+     * Check whether this  FSMBehaviour   must terminate.
      *
      * @return true when the last child has terminated and it
      * represents a final state. false otherwise
@@ -418,7 +418,7 @@ public class FSMBehaviour extends SerialBehaviour {
 
     /**
      * Return a Collection view of the children of
-     * this <code>SequentialBehaviour</code>
+     * this  SequentialBehaviour
      * see CompositeBehaviour#getChildren
      *
      * @return
@@ -429,7 +429,7 @@ public class FSMBehaviour extends SerialBehaviour {
 
     /**
      * Temporarily disregards the FSM structure, and jumps to the given
-     * state. This method acts as a sort of <code>GOTO</code> statement
+     * state. This method acts as a sort of  GOTO   statement
      * between states, and replaces the currently active state without
      * considering the trigger event or whether a transition was
      * registered. It should be used only to handle exceptional
@@ -467,7 +467,7 @@ public class FSMBehaviour extends SerialBehaviour {
 
     /**
      * Reset the children behaviours registered in the states indicated in
-     * the <code>states</code> parameter.
+     * the  states   parameter.
      *
      * @param states the names of the states that have to be reset
      */

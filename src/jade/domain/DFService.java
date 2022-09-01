@@ -50,17 +50,17 @@ import java.util.List;
  * the action (i.e. register/deregister/modify/search) has been successfully
  * executed or a jade.domain.FIPAException exception has been thrown
  * (e.g. because a FAILURE message has been received from the DF).
- * <p>
+ * </p>
  * In some cases, instead, it is more convenient to execute these tasks in a
- * non-blocking way. In these cases a <code>jade.proto.AchieveREInitiator</code>
- * or <code>jade.proto.SubscriptionInitiator</code> should be used in
- * conjunction with the <code>createRequestMessage(), createSubscriptionMessage(),
- * decodeDone(), decodeResult() and decodeNotification()</code> methods
+ * non-blocking way. In these cases a  jade.proto.AchieveREInitiator
+ * or  jade.proto.SubscriptionInitiator   should be used in
+ * conjunction with the  createRequestMessage(), createSubscriptionMessage(),
+ * decodeDone(), decodeResult() and decodeNotification()   methods
  * that facilitate the preparation and decoding of messages to be sent/received
  * to/from the DF. The following piece of code exemplifies that in the case
  * of an agent subscribing to the default DF.
  *
- * <pr><hr><blockquote><pre>
+ * <pre><hr><blockquote><pre>
  * DFAgentDescription template = // fill the template
  * Behaviour b = new SubscriptionInitiator(
  * this,
@@ -102,7 +102,7 @@ public class DFService extends FIPAService {
     }
 
     /**
-     * check that the <code>DFAgentDescription</code> contains the mandatory
+     * check that the  DFAgentDescription   contains the mandatory
      * slots, i.e. the agent name and, for each servicedescription, the
      * service name and the service type
      *
@@ -137,19 +137,19 @@ public class DFService extends FIPAService {
      * shorter than the requested one. This can be checked by looking
      * at the DF-Description actually registered by the DF that is made
      * available as the return value of this method.
-     * The <code>keepRegistered()</code> method can be used to keep
+     * The  keepRegistered()   method can be used to keep
      * the registration valid until a given time.
      *
      * @param a      is the Agent performing the registration (it is needed in order
      *               to send/receive messages)
      * @param dfName The AID of the <b>DF</b> agent to register with.
-     * @param dfd    A <code>DFAgentDescription</code> object containing all
+     * @param dfd    A  DFAgentDescription   object containing all
      *               data necessary to the registration. If the Agent name is empty, than
-     *               it is set according to the <code>a</code> parameter.
-     * @return the <code>DFAgentDescription</code> actually registered
+     *               it is set according to the  a   parameter.
+     * @return the  DFAgentDescription   actually registered
      * by the DF
-     * @throws FIPAException If a <code>REFUSE</code>,
-     *                       <code>FAILURE</code> or <code>NOT_UNDERSTOOD</code>
+     * @throws FIPAException If a  REFUSE  ,
+     *                        FAILURE   or  NOT_UNDERSTOOD
      *                       message is received from the DF (to indicate some error condition)
      *                       or if the supplied DF-Description is not valid.
      * @see #keepRegistered(Agent, AID, DFAgentDescription, Date)
@@ -173,7 +173,7 @@ public class DFService extends FIPAService {
     }
 
     /**
-     * Registers a <code>DFAgentDescription</code> with the default DF
+     * Registers a  DFAgentDescription   with the default DF
      *
      * @throws FIPAException
      * @see #register(Agent, AID, DFAgentDescription)
@@ -183,7 +183,7 @@ public class DFService extends FIPAService {
     }
 
     /**
-     * Registers a <code>DFAgentDescription</code> with the default DF
+     * Registers a  DFAgentDescription   with the default DF
      *
      * @throws FIPAException
      * @see #register(Agent, AID, DFAgentDescription)
@@ -197,10 +197,10 @@ public class DFService extends FIPAService {
      * Deregister a DFAgentDescription from a <b>DF</b> agent.
      *
      * @param dfName The AID of the <b>DF</b> agent to deregister from.
-     * @param dfd    A <code>DFAgentDescription</code> object containing all
+     * @param dfd    A  DFAgentDescription   object containing all
      *               data necessary to the deregistration.
-     * @throws FIPAException If a <code>REFUSE</code>,
-     *                       <code>FAILURE</code> or <code>NOT_UNDERSTOOD</code>
+     * @throws FIPAException If a  REFUSE  ,
+     *                        FAILURE   or  NOT_UNDERSTOOD
      *                       message is received from the DF (to indicate some error condition)
      *                       or if the supplied DF-Description is not valid.
      */
@@ -220,7 +220,7 @@ public class DFService extends FIPAService {
     }
 
     /**
-     * Deregisters a <code>DFAgentDescription</code> from the default DF
+     * Deregisters a  DFAgentDescription   from the default DF
      *
      * @throws FIPAException
      * @see #deregister(Agent a, AID dfName, DFAgentDescription dfd)
@@ -241,7 +241,7 @@ public class DFService extends FIPAService {
     }
 
     /**
-     * Deregisters a <code>DFAgentDescription</code> from the default DF.
+     * Deregisters a  DFAgentDescription   from the default DF.
      * A default DF-Description is used which contains only the AID
      * of this agent.
      *
@@ -261,18 +261,18 @@ public class DFService extends FIPAService {
      * shorter than the requested one. This can be checked by looking
      * at the DF-Description actually registered by the DF that is made
      * available as the return value of this method.
-     * The <code>keepRegistered()</code> method can be used to keep
+     * The  keepRegistered()   method can be used to keep
      * the registration valid until a given time.
      *
      * @param a      is the Agent performing the request of modification
      * @param dfName The AID of the <b>DF</b> agent holding the data
      *               to be changed.
-     * @param dfd    A <code>DFAgentDescription</code> object containing all
+     * @param dfd    A  DFAgentDescription   object containing all
      *               new data values;
-     * @return the <code>DFAgentDescription</code> actually registered
+     * @return the  DFAgentDescription   actually registered
      * (after the modification) by the DF
-     * @throws FIPAException If a <code>REFUSE</code>,
-     *                       <code>FAILURE</code> or <code>NOT_UNDERSTOOD</code>
+     * @throws FIPAException If a  REFUSE  ,
+     *                        FAILURE   or  NOT_UNDERSTOOD
      *                       message is received from the DF (to indicate some error condition)
      *                       or if the supplied DF-Description is not valid.
      * @see #keepRegistered(Agent, AID, DFAgentDescription, Date)
@@ -296,7 +296,7 @@ public class DFService extends FIPAService {
     }
 
     /**
-     * Modify a <code>DFAgentDescription</code> from the default DF.
+     * Modify a  DFAgentDescription   from the default DF.
      *
      * @throws FIPAException
      * @see #modify(Agent a, AID dfName, DFAgentDescription dfd)
@@ -356,17 +356,17 @@ public class DFService extends FIPAService {
      *
      * @param a           is the Agent requesting the search
      * @param dfName      The AID of the <b>DF</b> agent to start search from.
-     * @param dfd         A <code>DFAgentDescription</code> object containing
+     * @param dfd         A  DFAgentDescription   object containing
      *                    data to search for; this parameter is used as a template to match
      *                    data against.
      * @param constraints of the search
-     * @return An array of <code>DFAgentDescription</code>
+     * @return An array of  DFAgentDescription
      * containing all found
      * items matching the given
      * descriptor, subject to given search constraints for search depth
      * and result size.
-     * @throws FIPAException If a <code>REFUSE</code>,
-     *                       <code>FAILURE</code> or <code>NOT_UNDERSTOOD</code>
+     * @throws FIPAException If a  REFUSE  ,
+     *                        FAILURE   or  NOT_UNDERSTOOD
      *                       message is received from the DF (to indicate some error condition)
      */
     public static DFAgentDescription[] search(Agent a, AID dfName, DFAgentDescription dfd, SearchConstraints constraints) throws FIPAException {
@@ -441,16 +441,16 @@ public class DFService extends FIPAService {
      *
      * @param a           The agent that is performing the search
      * @param dfName      The AID of the <b>DF</b> agent where to search into.
-     * @param dfd         A <code>DFAgentDescription</code> object that is used
+     * @param dfd         A  DFAgentDescription   object that is used
      *                    as a template to identify the DF descriptions to search for.
      * @param constraints The constraints to limit the number of results to be
      *                    sent back.
      * @param timeout     The maximum amount of time that we want to remain blocked
      *                    waiting for results.
      * @return The DF agent descriptions matching the specified template or
-     * <code>null</code> if the timeout expires.
-     * @throws FIPAException If a <code>REFUSE</code>,
-     *                       <code>FAILURE</code> or <code>NOT_UNDERSTOOD</code>
+     *  null   if the timeout expires.
+     * @throws FIPAException If a  REFUSE  ,
+     *                        FAILURE   or  NOT_UNDERSTOOD
      *                       message is received from the DF (to indicate some error condition)
      *                       or if the supplied DF-Description template is not valid.
      */
@@ -477,20 +477,20 @@ public class DFService extends FIPAService {
      * FIPA-Management-ontology.
      * <p>
      * This method can be fruitfully used in combination with
-     * the <code>jade.proto.AchieveREInitiator</code> protocol and with
-     * the <code>decodeDone()</code> and <code>decodeResult()</code> methods
+     * the  jade.proto.AchieveREInitiator   protocol and with
+     * the  decodeDone()   and  decodeResult()   methods
      * to interact with a DF in a non-blocking way.
      *
      * @param a           The agent that is requesting the DF
      * @param dfName      The AID of the <b>DF</b> agent to send the request to.
      * @param action      The name of the requested action. This must be one of
      *                    <ul>
-     *                    <li><code>FIPAManagementVocabulary.REGISTER</code></li>
-     *                    <li><code>FIPAManagementVocabulary.DEREGISTER</code></li>
-     *                    <li><code>FIPAManagementVocabulary.MODIFY</code></li>
-     *                    <li><code>FIPAManagementVocabulary.SEARCH</code></li>
+     *                    <li> FIPAManagementVocabulary.REGISTER  </li>
+     *                    <li> FIPAManagementVocabulary.DEREGISTER  </li>
+     *                    <li> FIPAManagementVocabulary.MODIFY  </li>
+     *                    <li> FIPAManagementVocabulary.SEARCH  </li>
      *                    </ul>
-     * @param dfd         A <code>DFAgentDescription</code> object. Depending on the
+     * @param dfd         A  DFAgentDescription   object. Depending on the
      *                    requested action, this is the description to register/deregister/modify
      *                    or a template to match data against during a search.
      * @param constraints The constraints to limit the number of results to be
@@ -513,13 +513,13 @@ public class DFService extends FIPAService {
      * with that DF.
      * <p>
      * This method can be fruitfully used in combination with
-     * the <code>jade.proto.SubscriptionInitiator</code> protocol and with
-     * the <code>createCancelMessage()</code> and <code>decodeNotification()</code>
+     * the  jade.proto.SubscriptionInitiator   protocol and with
+     * the  createCancelMessage()   and  decodeNotification()
      * methods to interact with a DF in a non-blocking way.
      *
      * @param a           The agent that is subscribing to the DF
      * @param dfName      The AID of the <b>DF</b> agent to subscribe to.
-     * @param template    A <code>DFAgentDescription</code> object that is used
+     * @param template    A  DFAgentDescription   object that is used
      *                    as a template to identify DF description that will be notified
      * @param constraints The constraints to limit the number of results to be
      *                    notified.
@@ -543,7 +543,7 @@ public class DFService extends FIPAService {
     }
 
     /**
-     * @deprecated Use <code>createSubscriptionMessage()</code> instead
+     * @deprecated Use  createSubscriptionMessage()   instead
      */
     public static ACLMessage getSubscriptionMessage(Agent a, AID dfName, DFAgentDescription template, SearchConstraints constraints) throws FIPAException {
         return createSubscriptionMessage(a, dfName, template, constraints);
@@ -577,12 +577,12 @@ public class DFService extends FIPAService {
     }
 
     /**
-     * Process the content of the final <code>inform (Done)</code> message
-     * resulting from a <code>register</code> or <code>deregister</code>
+     * Process the content of the final  inform (Done)   message
+     * resulting from a  register   or  deregister
      * action requested to a DF agent, extracting the
-     * <code>df-agent-description</code> contained within.
+     *  df-agent-description   contained within.
      *
-     * @return The <code>DFAgentDescription</code> object included
+     * @return The  DFAgentDescription   object included
      * in the "done" expression used as the content of the INFORM message
      * send back by the DF in response to a REQUEST to perform a register,
      * deregister or modify action.
@@ -601,11 +601,11 @@ public class DFService extends FIPAService {
     }
 
     /**
-     * Process the content of the final <code>inform (result)</code> message resulting
-     * from a <code>search</code> action requested to a DF agent, extracting the array of
-     * <code>df-agent-description</code> contained within.
+     * Process the content of the final  inform (result)   message resulting
+     * from a  search   action requested to a DF agent, extracting the array of
+     *  df-agent-description   contained within.
      *
-     * @return The <code>DFAgentDescription</code> objects (as an array) included
+     * @return The  DFAgentDescription   objects (as an array) included
      * in the "result" expression used as the content of the INFORM message
      * send back by the DF in response to a REQUEST to perform a search action.
      * @throws FIPAException If some error occurs while decoding
@@ -624,11 +624,11 @@ public class DFService extends FIPAService {
     }
 
     /**
-     * Process the content of the <code>inform</code> message resulting
+     * Process the content of the  inform   message resulting
      * from a subscription with a DF agent, extracting the array of
-     * <code>df-agent-description</code> objects contained within.
+     *  df-agent-description   objects contained within.
      *
-     * @return The <code>DFAgentDescription</code> objects (as an array) included
+     * @return The  DFAgentDescription   objects (as an array) included
      * in the "(= (iota...) ...)" expression used as the content of an INFORM message
      * sent back by the DF as a subscription notification.
      * @throws FIPAException If some error occurs while decoding
@@ -1071,7 +1071,7 @@ public class DFService extends FIPAService {
 
     /**
      * In some cases it is more convenient to execute this tasks in a non-blocking way.
-     * This method returns a non-blocking behaviour that can be added to the queue of the agent behaviours, as usual, by using <code>Agent.addBehaviour()</code>.
+     * This method returns a non-blocking behaviour that can be added to the queue of the agent behaviours, as usual, by using  Agent.addBehaviour()  .
      * <p>
      * Several ways are available to get the result of this behaviour and the programmer can select one according to his preferred programming style:
      * <ul>
@@ -1093,7 +1093,7 @@ public class DFService extends FIPAService {
      *                       to indicate some error condition
      *                       locally discovered (e.g.the agentdescription is not valid.)
      * @see FIPAManagementOntology
-     * @deprecated Use <code>AchieveREInitiator</code> instead
+     * @deprecated Use  AchieveREInitiator   instead
      **/
     public static RequestFIPAServiceBehaviour getNonBlockingBehaviour(Agent a, AID dfName, String actionName, DFAgentDescription dfd, SearchConstraints constraints) throws FIPAException {
         return new RequestFIPAServiceBehaviour(a, dfName, actionName, dfd, constraints);
@@ -1103,7 +1103,7 @@ public class DFService extends FIPAService {
      * The default DF is used.
      *
      * @see #getNonBlockingBehaviour(Agent a, AID dfName, String actionName, DFAgentDescription dfd, SearchConstraints constraints)
-     * @deprecated Use <code>AchieveREInitiator</code> instead
+     * @deprecated Use  AchieveREInitiator   instead
      **/
     public static RequestFIPAServiceBehaviour getNonBlockingBehaviour(Agent a, String actionName, DFAgentDescription dfd, SearchConstraints constraints) throws FIPAException {
         return getNonBlockingBehaviour(a, a.getDefaultDF(), actionName, dfd, constraints);
@@ -1115,7 +1115,7 @@ public class DFService extends FIPAService {
      * a default AgentDescription is used, where only the agent AID is set.
      *
      * @see #getNonBlockingBehaviour(Agent a, AID dfName, String actionName, DFAgentDescription dfd, SearchConstraints constraints)
-     * @deprecated Use <code>AchieveREInitiator</code> instead
+     * @deprecated Use  AchieveREInitiator   instead
      **/
     public static RequestFIPAServiceBehaviour getNonBlockingBehaviour(Agent a, String actionName) throws FIPAException {
         DFAgentDescription dfd = new DFAgentDescription();
@@ -1130,7 +1130,7 @@ public class DFService extends FIPAService {
      * a default AgentDescription is used, where only the agent AID is set.
      *
      * @see #getNonBlockingBehaviour(Agent a, AID dfName, String actionName, DFAgentDescription dfd, SearchConstraints constraints)
-     * @deprecated Use <code>AchieveREInitiator</code> instead
+     * @deprecated Use  AchieveREInitiator   instead
      **/
     public static RequestFIPAServiceBehaviour getNonBlockingBehaviour(Agent a, AID dfName, String actionName) throws FIPAException {
         DFAgentDescription dfd = new DFAgentDescription();
@@ -1145,7 +1145,7 @@ public class DFService extends FIPAService {
      * the default SearchContraints are used.
      *
      * @see #getNonBlockingBehaviour(Agent a, AID dfName, String actionName, DFAgentDescription dfd, SearchConstraints constraints)
-     * @deprecated Use <code>AchieveREInitiator</code> instead
+     * @deprecated Use  AchieveREInitiator   instead
      **/
     public static RequestFIPAServiceBehaviour getNonBlockingBehaviour(Agent a, String actionName, DFAgentDescription dfd) throws FIPAException {
         SearchConstraints constraints = new SearchConstraints();
@@ -1158,7 +1158,7 @@ public class DFService extends FIPAService {
      * the default SearchContraints are used.
      *
      * @see #getNonBlockingBehaviour(Agent a, AID dfName, String actionName, DFAgentDescription dfd, SearchConstraints constraints)
-     * @deprecated Use <code>AchieveREInitiator</code> instead
+     * @deprecated Use  AchieveREInitiator   instead
      **/
     public static RequestFIPAServiceBehaviour getNonBlockingBehaviour(Agent a, AID dfName, String actionName, DFAgentDescription dfd) throws FIPAException {
         SearchConstraints constraints = new SearchConstraints();

@@ -29,9 +29,9 @@ import jade.security.JADEPrincipal;
 import java.io.Serializable;
 
 /**
- * The <code>NodeDescriptor</code> class serves as a meta-level
+ * The  NodeDescriptor   class serves as a meta-level
  * description of a kernel-level service.
- * Instances of this class contain a <code>Node</code> object,
+ * Instances of this class contain a  Node   object,
  * along with its name and properties, and are used in service
  * management operations, as well as in agent-level introspection of
  * platform-level entities.
@@ -55,7 +55,7 @@ public class NodeDescriptor implements Serializable {
      * Builds a new node descriptor, describing the given node with
      * the given name and properties.
      *
-     * @param node The described <code>Node</code> object.
+     * @param node The described  Node   object.
      */
     public NodeDescriptor(Node node) {
         myName = node.getName();
@@ -66,7 +66,7 @@ public class NodeDescriptor implements Serializable {
      * Builds a node descriptor for a node hosting an agent container.
      *
      * @param cid  The container ID for the hosted container.
-     * @param node The described <code>Node</code> object.
+     * @param node The described  Node   object.
      */
     public NodeDescriptor(ContainerID cid, Node node) {
         myName = cid.getName();
@@ -86,7 +86,7 @@ public class NodeDescriptor implements Serializable {
     /**
      * Retrieve the name (if any) of the described node.
      *
-     * @return The name of the described node, or <code>null</code>
+     * @return The name of the described node, or  null
      * if no name was set.
      */
     public String getName() {
@@ -105,8 +105,8 @@ public class NodeDescriptor implements Serializable {
     /**
      * Retrieve the described node.
      *
-     * @return The <code>Node</code> object described by this
-     * node descriptor, or <code>null</code> if no node was set.
+     * @return The  Node   object described by this
+     * node descriptor, or  null   if no node was set.
      */
     public Node getNode() {
         return myNode;
@@ -115,7 +115,7 @@ public class NodeDescriptor implements Serializable {
     /**
      * Change the described node (if any).
      *
-     * @param node The <code>Node</code> object that is to be
+     * @param node The  Node   object that is to be
      *             described by this node descriptor.
      */
     public void setNode(Node node) {
@@ -126,8 +126,8 @@ public class NodeDescriptor implements Serializable {
      * Retrieve the ID of the container (if any) hosted by the
      * described node.
      *
-     * @return The <code>ContainerID</code> of the hosted container,
-     * or <code>null</code> if no such container was set.
+     * @return The  ContainerID   of the hosted container,
+     * or  null   if no such container was set.
      */
     public ContainerID getContainer() {
         return myContainer;
@@ -187,7 +187,7 @@ public class NodeDescriptor implements Serializable {
      * Retrieve the principal of the owner of this node (if any)
      *
      * @return The principal of the owner of this node, or
-     * <code>null</code> if no principal was set.
+     *  null   if no principal was set.
      */
     public JADEPrincipal getOwnerPrincipal() {
         return ownerPrincipal;
@@ -204,7 +204,7 @@ public class NodeDescriptor implements Serializable {
      * Retrieve the credentials of the owner of this node (if any)
      *
      * @return The credentials of the owner of this node, or
-     * <code>null</code> if no credentials were set.
+     *  null   if no credentials were set.
      */
     public Credentials getOwnerCredentials() {
         return ownerCredentials;

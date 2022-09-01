@@ -31,8 +31,8 @@ import jade.core.Location;
 import java.util.Date;
 
 /**
- * This class represents the <code>event-record</code> concept in the
- * <code>jade-introspection</code> ontology.
+ * This class represents the  event-record   concept in the
+ *  jade-introspection   ontology.
  *
  * @author Giovanni Rimassa - Universita' di Parma
  * @version $Date: 2005-02-16 18:18:28 +0100 (mer, 16 feb 2005) $ $Revision: 5552 $
@@ -64,18 +64,18 @@ public class EventRecord implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>what</code> slot of this
+     * Retrieve the value of the  what   slot of this
      * event, containing the occurred event.
      *
-     * @return The value of the <code>what</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  what   slot, or
+     *  null   if no value was set.
      */
     public Event getWhat() {
         return what;
     }
 
     /**
-     * Set the <code>what</code> slot of this event.
+     * Set the  what   slot of this event.
      *
      * @param evt The occurred event.
      */
@@ -84,18 +84,18 @@ public class EventRecord implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>when</code> slot of this event,
+     * Retrieve the value of the  when   slot of this event,
      * containing the time instant when the event occurred.
      *
-     * @return The value of the <code>when</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  when   slot, or
+     *  null   if no value was set.
      */
     public Date getWhen() {
         return when;
     }
 
     /**
-     * Set the <code>when</code> slot of this event.
+     * Set the  when   slot of this event.
      *
      * @param d The time instant when the event occurred.
      */
@@ -104,18 +104,18 @@ public class EventRecord implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>where</code> slot of this
+     * Retrieve the value of the  where   slot of this
      * event, containing the location where the event occurred.
      *
-     * @return The value of the <code>where</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  where   slot, or
+     *  null   if no value was set.
      */
     public Location getWhere() {
         return where;
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
+     * Set the  where   slot of this event.
      *
      * @param l The location where the event occurred.
      */

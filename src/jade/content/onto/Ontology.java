@@ -47,13 +47,13 @@ import java.util.*;
  * relationships between the elements in such a vocabulary.
  * The relationships can be:
  * <ul>
- * <li>structural, e.g., the predicate <code>fatherOf</code> accepts two
+ * <li>structural, e.g., the predicate  fatherOf   accepts two
  *     parameters, a father and a set of children;
- * <li>semantic, e.g., a concept of class <code>Man</code> is also of class
- *     <code>Person</code>.
+ * <li>semantic, e.g., a concept of class  Man   is also of class
+ *      Person  .
  * </ul>
  * Application-specific ontologies are implemented through objects
- * of class <code>Ontology</code>.<br>
+ * of class  Ontology  .<br>
  * An ontology is characterized by:
  * <ul>
  * <li>one name;
@@ -62,81 +62,77 @@ import java.util.*;
  * </ul>
  * Element schemas are objects describing the structure of concepts, actions,
  * and predicates that are allowed in messages. For example,
- * <code>People</code> ontology contains an element schema called
- * <code>Person</code>. This schema states that a <code>Person</code> is
- * characterized by a <code>name</code> and by an <code>address</code>:
- * <code>
+ *  People   ontology contains an element schema called
+ *  Person  . This schema states that a  Person   is
+ * characterized by a  name   and by an  address  :
+ *
  * ConceptSchema personSchema = new ConceptSchema(PERSON);
  * personSchema.addSlot(NAME,    stringSchema);
  * personSchema.addSlot(ADDRESS, addressSchema, ObjectSchema.OPTIONAL);
- * </code>
- * where <code>PERSON<code>, <code>NAME</code> and <code>ADDRESS</code> are
+ *   
+ * where  PERSON  ,  NAME   and  ADDRESS   are
  * string constants. When you register your schema with the ontology, such
  * constants become part of the vocabulary of the ontology.<br>
  * Schemas that describe concepts support inheritance. You can define the
- * concept <code>Man</code> as a refinement of the concept <code>Person</code>:
- * <code>
+ * concept  Man   as a refinement of the concept  Person  :
+ *
  * ConceptSchema manSchema = new ConceptSchema(MAN);
  * manSchema.addSuperSchema(personSchema);
- * </code>
+ *   
  * Each element schema can be associated with a Java class to map elements of
  * the ontology that comply with a schema with Java objects of that class. The
- * following is a class that might be associated with the <code>Person</code>
+ * following is a class that might be associated with the  Person  
  * schema:
- * <code>
+ *
  * public class Person extends Concept {
  *       private String  name    = null;
  *       private Address address =  null;
- * <p>
  *       public void setName(String name) {
  *               this.name = name;
  *       }
- * <p>
  *       public void setAddress(Address address) {
  *               this.address = address;
  *       }
- * <p>
  *       public String getName() {
  *               return name;
  *       }
- * <p>
  *       public Address getAddress() {
  *               return address;
  *       }
  * }
- * </code>
+ *   
  * When sending/receiving messages you can represent your content in terms of
  * objects belonging to classes that the ontology associates with schemas.<br>
  * As the previous example suggests, you cannot use objects of class
- * <code>Person</code> when asking for the value of some attribute, e.g., when
- * asking for the value of <code>address</code>. Basically, the problem is that
+ *  Person   when asking for the value of some attribute, e.g., when
+ * asking for the value of  address  . Basically, the problem is that
  * you cannot 'assign' a variable to an attribute of an object, i.e.
  * you cannot write something like:
- * <code>person.setName(new Variable("X"))</code>.<br>
+ *  person.setName(new Variable("X"))  .<br>
  * In order to solve this problem, you can describe your content in terms of
  * <i>abstract descriptors</i>. An abstract descriptor is an
  * object that reifies an element of the ontology.
  * The following is the creation of an abstract
- * descriptor for a concept of type <code>Man</code>:
- * <code>
+ * descriptor for a concept of type  Man  :
+ *
  * AbsConcept absMan = new AbsConcept(MAN);
  * absMan.setSlot(NAME,    "John");
  * absMan.setSlot(ADDRESS, absAddress);
- * </code>
- * where <code>absAddress</code> is the abstract descriptor for John's
+ *   
+ * where  absAddress   is the abstract descriptor for John's
  * address:
- * <code>
+ *
  * AbsConcept absAddress = new AbsConcept(ADDRESS);
  * absAddress.setSlot(CITY, "London");
- * </code>
- * Objects of class <code>Ontology</code> allows you to:
+ *   
+ * Objects of class  Ontology   allows you to:
  * <ul>
  * <li>register schemas with associated (i) a mandatory term of the
- *     vocabulary e.g. <code>NAME</code> and (ii) an optional Java class,
- *     e.g. <code>Person</code>;
+ *     vocabulary e.g. `NAME` and (ii) an optional Java class,
+ *     e.g. `Person`;
  * <li>retrieve the registered information through various keys.
  * </ul>
- * The framework already provides the <code>BasicOntology</code> ontology
+ * The framework already provides the  BasicOntology   ontology
  * that provides all basic elements, i.e. primitive data types, aggregate
  * types, etc.
  * Application-specific ontologies should be implemented extending it.
@@ -174,9 +170,9 @@ public class Ontology implements Serializable {
     private Hashtable<String, String> conceptSlots;
 
     /**
-     * Construct an Ontology object with a given <code>name</code>
+     * Construct an Ontology object with a given  name  
      * that extends a given ontology.
-     * The <code>ReflectiveIntrospector</code> is used by default to
+     * The  ReflectiveIntrospector   is used by default to
      * convert between Java objects and abstract descriptors.
      *
      * @param name The identifier of the ontology.
@@ -192,7 +188,7 @@ public class Ontology implements Serializable {
     }
 
     /**
-     * Construct an Ontology object with a given <code>name</code>
+     * Construct an Ontology object with a given  name  
      * that uses a given Introspector to
      * convert between Java objects and abstract descriptors.
      *
@@ -204,7 +200,7 @@ public class Ontology implements Serializable {
     }
 
     /**
-     * Construct an Ontology object with a given <code>name</code>
+     * Construct an Ontology object with a given  name  
      * that extends a given ontology and that uses a given Introspector to
      * convert between Java objects and abstract descriptors.
      *
@@ -217,7 +213,7 @@ public class Ontology implements Serializable {
     }
 
     /**
-     * Construct an Ontology object with a given <code>name</code>
+     * Construct an Ontology object with a given  name  
      * that extends a given set of ontologies and that uses a given Introspector to
      * convert between Java objects and abstract descriptors.
      *
@@ -233,7 +229,7 @@ public class Ontology implements Serializable {
 
     /**
      * Check whether a given object is a valid term.
-     * If it is an Aggregate (i.e. a <code>List</code>) it also check
+     * If it is an Aggregate (i.e. a  List  ) it also check
      * the elements.
      *
      * @throws OntologyException if the given object is not a valid term
@@ -350,7 +346,7 @@ public class Ontology implements Serializable {
 
     /**
      * Adds a schema to the ontology and associates it to the class
-     * <code>javaClass</code>
+     *  javaClass  
      *
      * @param schema    the schema.
      * @param javaClass the concrete class.
@@ -383,12 +379,12 @@ public class Ontology implements Serializable {
     //#APIDOC_EXCLUDE_BEGIN
 
     /**
-     * Retrieves the schema of element <code>name</code> in this ontology.
+     * Retrieves the schema of element  name   in this ontology.
      * The search is extended to the base ontologies if the schema is not
      * found.
      *
      * @param name the name of the schema in the vocabulary.
-     * @return the schema or <code>null</code> if the schema is not found.
+     * @return the schema or  null   if the schema is not found.
      */
     public ObjectSchema getSchema(String name) throws OntologyException {
         if (name == null) {
@@ -429,7 +425,7 @@ public class Ontology implements Serializable {
      * found.
      *
      * @param clazz the class whose associated schema must be retrieved.
-     * @return the schema associated to the given class or <code>null</code> if the schema is not found.
+     * @return the schema associated to the given class or  null   if the schema is not found.
      */
     public ObjectSchema getSchema(Class<?> clazz) throws OntologyException {
         if (clazz == null) {
@@ -513,11 +509,11 @@ public class Ontology implements Serializable {
     }
 
     /**
-     * Retrieves the concrete class associated with element <code>name</code>
+     * Retrieves the concrete class associated with element  name  
      * in this ontology. The search is extended to the base ontologies
      *
      * @param name the name of the schema.
-     * @return the Java class or null if no schema called <code>name</code>
+     * @return the Java class or null if no schema called  name  
      * is found or if no class is associated to that schema.
      * @throws OntologyException if name is null
      */
@@ -544,7 +540,7 @@ public class Ontology implements Serializable {
      * This can be the ontology itself or one of its super-ontologies.
      *
      * @param lcName The lower-case version of the name of the schema whose defining ontology must be retrieved
-     * @return The ontology actually containing the definition of schema <code>lcName</code> or null if such schema
+     * @return The ontology actually containing the definition of schema  lcName   or null if such schema
      * is not defined neither in this ontology nor in one of its super-ontologies
      */
     private Ontology getDefiningOntology(String lcName) {
@@ -643,7 +639,7 @@ public class Ontology implements Serializable {
     }
 
     /**
-     * Internalize (abs --> obj) the slots defined in <code>schema</code> and its super-schemas
+     * Internalize (abs --> obj) the slots defined in  schema   and its super-schemas
      */
     protected void internalize(AbsObject abs, Object obj, ObjectSchema schema, Ontology globalOnto) throws OntologyException {
         // Let the proper ontology manage slots defined in super schemas if any
@@ -746,7 +742,7 @@ public class Ontology implements Serializable {
     }
 
     /**
-     * Externalize (obj --> abs) the slots defined in <code>schema</code> and its super-schemas
+     * Externalize (obj --> abs) the slots defined in  schema   and its super-schemas
      */
     protected void externalize(Object obj, AbsObject abs, ObjectSchema schema, Ontology globalOnto) throws OntologyException {
         // Let the proper ontology manage slots defined in super schemas if any
@@ -785,7 +781,7 @@ public class Ontology implements Serializable {
     //#J2ME_EXCLUDE_BEGIN
 
     /**
-     * Set the value of slot <code>slotName</code> as <code>slotValue</code> to object <code>obj</code>
+     * Set the value of slot  slotName   as  slotValue   to object  obj  
      */
     public void setSlotValue(String slotName, Object slotValue, Object obj) throws OntologyException {
         Class<?> javaClass = obj.getClass();
@@ -830,7 +826,7 @@ public class Ontology implements Serializable {
     }
 
     /**
-     * Retrieve the value of slot <code>slotName</code> from object <code>obj</code>
+     * Retrieve the value of slot  slotName   from object  obj  
      */
     public Object getSlotValue(String slotName, Object obj) throws OntologyException {
         Class<?> javaClass = obj.getClass();
@@ -983,7 +979,7 @@ public class Ontology implements Serializable {
     /**
      * Create a ConceptSlotFunction for a given slot of a given Concept.
      * The ConceptSlotFunction class allows treating the slots of an ontological concept as functions.
-     * For instance, if an ontology defines a concept <code>Person</code> with a slot <code>name</code> and a slot <code>age</code>,
+     * For instance, if an ontology defines a concept  Person   with a slot  name   and a slot  age  ,
      * it is possible to create expression such as<br>
      * (= (age (Person :name John)) 41) <br>
      * (> (age (Person :name John)) (age (Person :name Bill)))<br>
@@ -993,7 +989,7 @@ public class Ontology implements Serializable {
      * <br>
      *
      * @param slotName The name of the slot
-     * @param c        The concept a ConceptSlotFunction must be created for. This concept must have a slot called <code>slotName</code>
+     * @param c        The concept a ConceptSlotFunction must be created for. This concept must have a slot called  slotName  
      * @return A ConceptSlotFunction for the given slotName of the given Concept
      * @see ConceptSlotFunction
      * see useConceptSlotsAsFunctions()

@@ -32,7 +32,7 @@ import jade.core.ServiceHelper;
  * By means of this helper an agent can retrieve a number of properties
  * associated to the split containers attached to the underlying
  * BEManagementService.<br>
- * In particular the <code>FRONT_END_HOST</code> key maps to
+ * In particular the  FRONT_END_HOST   key maps to
  * the IP address of the device where the front end is running.
  *
  * @author Giovanni Caire - TILAB

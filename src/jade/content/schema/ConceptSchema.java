@@ -48,10 +48,10 @@ public class ConceptSchema extends TermSchema {
     }
 
     /**
-     * Creates a <code>ConceptSchema</code> with a given type-name,
+     * Creates a  ConceptSchema   with a given type-name,
      * e.g. PERSON, ADDRESS...
      *
-     * @param typeName The name of this <code>ConceptSchema</code>.
+     * @param typeName The name of this  ConceptSchema  .
      */
     public ConceptSchema(String typeName) {
         super(typeName);
@@ -68,7 +68,7 @@ public class ConceptSchema extends TermSchema {
 
     /**
      * Add a mandatory slot to the schema. The schema for this slot must
-     * be a <code>TermSchema</code>.
+     * be a  TermSchema  .
      *
      * @param name       The name of the slot.
      * @param slotSchema The schema of the slot.
@@ -79,33 +79,33 @@ public class ConceptSchema extends TermSchema {
 
     /**
      * Add a slot to the schema. The schema for this slot must
-     * be a <code>TermSchema</code>.
+     * be a  TermSchema  .
      *
      * @param name        The name of the slot.
      * @param slotSchema  The schema of the slot.
-     * @param optionality The optionality, i.e., <code>OPTIONAL</code>
-     *                    or <code>MANDATORY</code>
+     * @param optionality The optionality, i.e.,  OPTIONAL
+     *                    or  MANDATORY
      */
     public void add(String name, TermSchema slotSchema, int optionality) {
         super.add(name, slotSchema, optionality);
     }
 
     /**
-     * Add a slot with cardinality between <code>cardMin</code>
-     * and <code>cardMax</code> to this schema.
+     * Add a slot with cardinality between  cardMin
+     * and  cardMax   to this schema.
      * Adding such a slot corresponds to add a slot
      * of type Aggregate and then to add proper facets (constraints)
      * to check that the type of the elements in the aggregate are
-     * compatible with <code>elementsSchema</code> and that the
-     * aggregate contains at least <code>cardMin</code> elements and
-     * at most <code>cardMax</code> elements. By default the Aggregate
-     * is of type <code>BasicOntology.SEQUENCE</code>.
+     * compatible with  elementsSchema   and that the
+     * aggregate contains at least  cardMin   elements and
+     * at most  cardMax   elements. By default the Aggregate
+     * is of type  BasicOntology.SEQUENCE  .
      *
      * @param name           The name of the slot.
      * @param elementsSchema The schema for the elements of this slot.
-     * @param cardMin        This slot must get at least <code>cardMin</code>
+     * @param cardMin        This slot must get at least  cardMin
      *                       values
-     * @param cardMax        This slot can get at most <code>cardMax</code>
+     * @param cardMax        This slot can get at most  cardMax
      *                       values
      */
     public void add(String name, TermSchema elementsSchema, int cardMin, int cardMax) {
@@ -113,15 +113,15 @@ public class ConceptSchema extends TermSchema {
     }
 
     /**
-     * Add a slot with cardinality between <code>cardMin</code>
-     * and <code>cardMax</code> to this schema and allow specifying the type
+     * Add a slot with cardinality between  cardMin
+     * and  cardMax   to this schema and allow specifying the type
      * of Aggregate to be used for this slot.
      *
      * @param name           The name of the slot.
      * @param elementsSchema The schema for the elements of this slot.
-     * @param cardMin        This slot must get at least <code>cardMin</code>
+     * @param cardMin        This slot must get at least  cardMin
      *                       values
-     * @param cardMax        This slot can get at most <code>cardMax</code>
+     * @param cardMax        This slot can get at most  cardMax
      *                       values
      * @param aggType        The type of Aggregate to be used
      * @see #add(String, TermSchema, int, int)
@@ -131,18 +131,18 @@ public class ConceptSchema extends TermSchema {
     }
 
     /**
-     * Add a slot with optionality and cardinality between <code>cardMin</code>
-     * and <code>cardMax</code> to this schema and allow specifying the type
+     * Add a slot with optionality and cardinality between  cardMin
+     * and  cardMax   to this schema and allow specifying the type
      * of Aggregate to be used for this slot.
      *
      * @param name           The name of the slot.
      * @param elementsSchema The schema for the elements of this slot.
-     * @param cardMin        This slot must get at least <code>cardMin</code>
+     * @param cardMin        This slot must get at least  cardMin
      *                       values
-     * @param cardMax        This slot can get at most <code>cardMax</code>
+     * @param cardMax        This slot can get at most  cardMax
      *                       values
      * @param aggType        The type of Aggregate to be used
-     * @param optionality    The optionality, i.e., <code>OPTIONAL</code>
+     * @param optionality    The optionality, i.e.,  OPTIONAL
      * @see #add(String, ObjectSchema, int, int)
      */
     public void add(String name, ObjectSchema elementsSchema, int cardMin, int cardMax, String aggType, int optionality) {
@@ -153,8 +153,8 @@ public class ConceptSchema extends TermSchema {
      * Adds a super-schema to this schema. This allows defining
      * inheritance relationships between ontological concepts.
      * It must be noted that a concept always inherits from another
-     * concept --> A super-schema of a <code>ConceptSchema</code>
-     * must be a <code>ConceptSchema</code> too.
+     * concept --> A super-schema of a  ConceptSchema
+     * must be a  ConceptSchema   too.
      *
      * @param superClassSchema The super-schema to be added.
      */
@@ -163,11 +163,11 @@ public class ConceptSchema extends TermSchema {
     }
 
     /**
-     * Add a <code>Facet</code> on a slot of this schema
+     * Add a  Facet   on a slot of this schema
      *
-     * @param slotName the name of the slot the <code>Facet</code>
+     * @param slotName the name of the slot the  Facet
      *                 must be added to.
-     * @param f        the <code>Facet</code> to be added.
+     * @param f        the  Facet   to be added.
      * @throws OntologyException if slotName does not identify
      *                           a valid slot in this schema
      */

@@ -31,8 +31,8 @@ import jade.core.ContainerID;
 
 
 /**
- * This class represents the <code>delete-agent</code> action of
- * the <code>JADE-Persistence</code> ontology.
+ * This class represents the  delete-agent   action of
+ * the  JADE-Persistence   ontology.
  * This action can be requested to the JADE AMS to create a new agent
  * on a given container.
  *

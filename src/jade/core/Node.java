@@ -49,7 +49,7 @@ public interface Node extends Serializable {
 
     /**
      * Accepts a command. If this node is a proxy, the
-     * <code>accept()</code> method is a remote method, forwarding the
+     *  accept()   method is a remote method, forwarding the
      * command to the remote location it represents.
      *
      * @param cmd The horizontal command to process.
@@ -63,10 +63,10 @@ public interface Node extends Serializable {
      * Performs a ping operation on this node, to check whether it is
      * still alive.
      *
-     * @param hang If <code>true</code>, the call hangs until the node
+     * @param hang If  true  , the call hangs until the node
      *             exits or is interrupted.
-     * @return If the node is currently terminating, <code>true</code>
-     * is returned, else <code>false</code>
+     * @return If the node is currently terminating,  true
+     * is returned, else  false
      */
     boolean ping(boolean hang) throws IMTPException;
 

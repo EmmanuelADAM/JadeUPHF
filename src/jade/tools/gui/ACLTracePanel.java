@@ -829,7 +829,7 @@ public class ACLTracePanel extends JPanel {
         sortingButtonGroup.add(descRadioButton);
     }
 
-    private class ACLMessageNodeComparator implements Comparator<Object> {
+    private static class ACLMessageNodeComparator implements Comparator<Object> {
 
         final static int DATE = 0;
         final static int DIRECTION = 1;
@@ -891,7 +891,7 @@ public class ACLTracePanel extends JPanel {
 
     }
 
-    private class ACLTracePanel_sortComboBox_itemAdapter implements ItemListener {
+    private static class ACLTracePanel_sortComboBox_itemAdapter implements ItemListener {
 
         ACLTracePanel adaptee;
 
@@ -905,7 +905,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLTracePanel_ascRadioButton_itemAdapter implements ItemListener {
+    private static class ACLTracePanel_ascRadioButton_itemAdapter implements ItemListener {
 
         ACLTracePanel adaptee;
 
@@ -919,7 +919,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLTracePanel_descRadioButton_itemAdapter implements ItemListener {
+    private static class ACLTracePanel_descRadioButton_itemAdapter implements ItemListener {
 
         ACLTracePanel adaptee;
 
@@ -933,7 +933,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLTracePanel_sortButton_actionAdapter implements ActionListener {
+    private static class ACLTracePanel_sortButton_actionAdapter implements ActionListener {
 
         ACLTracePanel adaptee;
 
@@ -947,7 +947,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLFileFilter extends javax.swing.filechooser.FileFilter {
+    private static class ACLFileFilter extends javax.swing.filechooser.FileFilter {
 
         public ACLFileFilter() {
         }
@@ -972,7 +972,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class TraceFileFilter extends javax.swing.filechooser.FileFilter {
+    private static class TraceFileFilter extends javax.swing.filechooser.FileFilter {
 
         private final String[] extensions = {".trc"};
 
@@ -998,7 +998,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class AboutFrame extends JWindow {
+    private static class AboutFrame extends JWindow {
 
         GridBagLayout gridBagLayout1 = new GridBagLayout();
         JPanel contentPanel = new JPanel();
@@ -1219,7 +1219,7 @@ public class ACLTracePanel extends JPanel {
 
     }
 
-    private class ACLTreePanel_stasticsMenuItem_actionAdapter implements ActionListener {
+    private static class ACLTreePanel_stasticsMenuItem_actionAdapter implements ActionListener {
 
         ACLTracePanel adaptee;
 
@@ -1243,7 +1243,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLTreePanel_this_mouseAdapter extends MouseAdapter {
+    private static class ACLTreePanel_this_mouseAdapter extends MouseAdapter {
 
         ACLTracePanel adaptee;
 
@@ -1268,7 +1268,7 @@ public class ACLTracePanel extends JPanel {
 
     }
 
-    private class ACLTreePanel_aclTree_mouseAdapter extends MouseAdapter {
+    private static class ACLTreePanel_aclTree_mouseAdapter extends MouseAdapter {
 
         ACLTracePanel adaptee;
 
@@ -1292,7 +1292,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLTreePanel_systemMenuItem_actionAdapter implements ActionListener {
+    private static class ACLTreePanel_systemMenuItem_actionAdapter implements ActionListener {
 
         ACLTracePanel adaptee;
 
@@ -1316,7 +1316,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLTreePanel_zoomMenuItem_actionAdapter implements ActionListener {
+    private static class ACLTreePanel_zoomMenuItem_actionAdapter implements ActionListener {
 
         ACLTracePanel adaptee;
 
@@ -1340,7 +1340,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLTreePanel_saveMenuItem_actionAdapter implements ActionListener {
+    private static class ACLTreePanel_saveMenuItem_actionAdapter implements ActionListener {
 
         ACLTracePanel adaptee;
 
@@ -1364,7 +1364,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLTreePanel_aclTree_keyAdapter extends KeyAdapter {
+    private static class ACLTreePanel_aclTree_keyAdapter extends KeyAdapter {
 
         ACLTracePanel adaptee;
 
@@ -1388,7 +1388,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLTreePanel_deleteMenuItem_actionAdapter implements ActionListener {
+    private static class ACLTreePanel_deleteMenuItem_actionAdapter implements ActionListener {
 
         ACLTracePanel adaptee;
 
@@ -1419,7 +1419,7 @@ public class ACLTracePanel extends JPanel {
      * @since April 26, 2002
      */
 
-    private class ACLTreeRenderer extends JLabel implements TreeCellRenderer {
+    private static class ACLTreeRenderer extends JLabel implements TreeCellRenderer {
 
         public ImageIcon rootIcon = new ImageIcon(this.getClass().getResource("images/inbox.gif"));
         public ImageIcon nodeIcon = new ImageIcon(this.getClass().getResource("images/service.gif"));
@@ -1517,7 +1517,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class SortRenderer extends JLabel implements ListCellRenderer<Object> {
+    private static class SortRenderer extends JLabel implements ListCellRenderer<Object> {
 
         /**
          * Constructor for the ACLPerformativesRenderer object
@@ -1551,7 +1551,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLTracePanel_aboutMenuItem_mouseAdapter extends MouseAdapter {
+    private static class ACLTracePanel_aboutMenuItem_mouseAdapter extends MouseAdapter {
 
         ACLTracePanel adaptee;
 
@@ -1565,7 +1565,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLTracePanel_clearQMenuItem_actionAdapter implements ActionListener {
+    private static class ACLTracePanel_clearQMenuItem_actionAdapter implements ActionListener {
 
         ACLTracePanel adaptee;
 
@@ -1579,7 +1579,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLTracePanel_openQMenuItem_actionAdapter implements ActionListener {
+    private static class ACLTracePanel_openQMenuItem_actionAdapter implements ActionListener {
 
         ACLTracePanel adaptee;
 
@@ -1593,7 +1593,7 @@ public class ACLTracePanel extends JPanel {
         }
     }
 
-    private class ACLTracePanel_aboutMenuItem_actionAdapter implements ActionListener {
+    private static class ACLTracePanel_aboutMenuItem_actionAdapter implements ActionListener {
 
         ACLTracePanel adaptee;
 

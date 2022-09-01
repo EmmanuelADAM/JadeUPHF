@@ -40,7 +40,7 @@ public interface Location extends Serializable, Concept {
     /**
      * Read a unique ID for the location.
      *
-     * @return A <code>String</code> representing the location.
+     * @return A  String   representing the location.
      */
     String getID();
 

@@ -83,8 +83,8 @@ public class AID implements Comparable<Object>, Serializable {
      * Constructor for an Agent-identifier
      * This constructor (which is deprecated), examines the name
      * to see if the "@" chararcter is present.  If so, it calls
-     * <code> this(name, ISGUID)<code>
-     * otherwise it calls <code>this(name, ISLOCALNAME)</code>
+     *   this(name, ISGUID)
+     * otherwise it calls  this(name, ISLOCALNAME)
      * This ensures better compatibility with JADE2.2 code.
      *
      * @param guid is the Globally Unique identifer for the agent. The slot name
@@ -101,9 +101,9 @@ public class AID implements Comparable<Object>, Serializable {
      * Constructor for an Agent-identifier
      *
      * @param name   is the value for the slot name for the agent.
-     * @param isGUID indicates if the passed <code>name</code>
+     * @param isGUID indicates if the passed  name
      *               is already a globally unique identifier or not. Two
-     *               constants <code>ISGUID</code>, <code>ISLOCALNAME</code>
+     *               constants  ISGUID  ,  ISLOCALNAME
      *               have also been defined for setting a value for this parameter.
      *               If the name is a local name, then the HAP (Home Agent Platform)
      *               is concatenated to the name, separated by  "@".
@@ -342,7 +342,7 @@ public class AID implements Comparable<Object>, Serializable {
     /**
      * Returns the user-defined slots as properties.
      *
-     * @return all the user-defined slots as a <code>java.util.Properties</code> java Object.
+     * @return all the user-defined slots as a  java.util.Properties   java Object.
      * @see Properties
      */
     public Properties getAllUserDefinedSlot() {
@@ -452,17 +452,17 @@ public class AID implements Comparable<Object>, Serializable {
 
 
     /**
-     * Equality operation. This method compares an <code>AID</code> object with
-     * another or with a Java <code>String</code>. The comparison is case
+     * Equality operation. This method compares an  AID   object with
+     * another or with a Java  String  . The comparison is case
      * insensitive.
      *
-     * @param o The Java object to compare this <code>AID</code> to.
-     * @return <code>true</code> if one of the following holds:
+     * @param o The Java object to compare this  AID   to.
+     * @return  true   if one of the following holds:
      * <ul>
-     * <li> The argument <code>o</code> is an <code>AID</code> object
+     * <li> The argument  o   is an  AID   object
      * with the same <em>GUID</em> in its name slot (apart from
      * differences in case).
-     * <li> The argument <code>o</code> is a <code>String</code> that is
+     * <li> The argument  o   is a  String   that is
      * equal to the <em>GUID</em> contained in the name slot of this
      * Agent ID (apart from differences in case).
      * </ul>
@@ -485,8 +485,8 @@ public class AID implements Comparable<Object>, Serializable {
      * Comparison operation. This operation imposes a total order
      * relationship over Agent IDs.
      *
-     * @param o Another <code>AID</code> object, that will be compared
-     *          with the current <code>AID</code>.
+     * @param o Another  AID   object, that will be compared
+     *          with the current  AID  .
      * @return -1, 0 or 1 according to the lexicographical order of the
      * <em>GUID</em> of the two agent IDs, apart from differences in
      * case.
@@ -499,10 +499,10 @@ public class AID implements Comparable<Object>, Serializable {
 
     /**
      * Hash code. This method returns an hash code in such a way that two
-     * <code>AID</code> objects with equal names or with names differing
+     *  AID   objects with equal names or with names differing
      * only in case have the same hash code.
      *
-     * @return The hash code for this <code>AID</code> object.
+     * @return The hash code for this  AID   object.
      */
     public int hashCode() {
         return hashCode;
@@ -536,7 +536,7 @@ public class AID implements Comparable<Object>, Serializable {
 
     /**
      * Returns the HAP of the agent or null if the GUID of this
-     * <code>AID</code> is not of the form <local-name>@<platform-name>
+     *  AID   is not of the form <local-name>@<platform-name>
      */
     public String getHap() {
         int atPos = name.lastIndexOf('@');

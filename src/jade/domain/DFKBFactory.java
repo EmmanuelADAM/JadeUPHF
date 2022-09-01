@@ -31,14 +31,14 @@ import jade.domain.KBManagement.MemKB;
 import java.sql.SQLException;
 
 /**
- * The <code>DFKBFactory</code> class creates
+ * The  DFKBFactory   class creates
  * knowledge base objects used by the DF.
  *
  * <p>
  * To run JADE with your own knowledge base implementation a new
- * sub class of <code>DFKBFactory</code>, overriding the appropriate method(s),
+ * sub class of  DFKBFactory  , overriding the appropriate method(s),
  * has to be implemented and specified by the command line parameter
- * <code>-jade_domain_df_kb-factory</code>.
+ *  -jade_domain_df_kb-factory  .
  * </p>
  *
  * @author Roland Mungenast - Profactor

@@ -46,7 +46,7 @@ public class BackEndSkel extends MicroSkeleton {
     }
 
     /**
-     * Call the method of the local BackEnd corresponding to command <code>c</code>.
+     * Call the method of the local BackEnd corresponding to command  c  .
      */
     Command executeCommand(Command c) throws Throwable {
         switch (c.getCode()) {

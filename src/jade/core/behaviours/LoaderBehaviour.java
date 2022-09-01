@@ -55,7 +55,7 @@ import java.util.zip.ZipInputStream;
  * to load and execute completely new behaviours, i.e. behaviours
  * whose code is not included in the classpath of the JVM where the
  * agent lives.
- * Loading behaviour requests must have the <code>ACLMessage.REQUEST</code>
+ * Loading behaviour requests must have the  ACLMessage.REQUEST  
  * performative and must use the BehaviourLoading ontology and the
  * LEAP language.
  *
@@ -178,7 +178,7 @@ public class LoaderBehaviour extends Behaviour {
 
     /**
      * The done() method is redefined to make this behaviour terminate
-     * when its <code>stop()</code> method is called.
+     * when its  stop()   method is called.
      */
     public boolean done() {
         return finished;
@@ -197,9 +197,9 @@ public class LoaderBehaviour extends Behaviour {
      * Subclasses may redefine this method to handle the behaviour
      * addition operation in an application specific way.
      *
-     * @param b       The <code>Behaviour</code> to be added.
-     * @param request The <code>ACLMessage</code> carrying the
-     *                <code>LoadBehaviour</code> request.
+     * @param b       The  Behaviour   to be added.
+     * @param request The  ACLMessage   carrying the
+     *                 LoadBehaviour   request.
      */
     protected void addBehaviour(Behaviour b, ACLMessage request) {
         myAgent.addBehaviour(b);
@@ -208,7 +208,7 @@ public class LoaderBehaviour extends Behaviour {
     /**
      * Suclasses may redefine this method to prevent the behaviour
      * loading operation under specific conditions.
-     * This default implementation always returns <code>true</code>
+     * This default implementation always returns  true  
      */
     protected boolean accept(ACLMessage msg) {
         return true;

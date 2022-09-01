@@ -42,7 +42,7 @@ public interface FIPANames {
     /**
      * Set of constants that identifies the Codec of ACL Messages and
      * that can be assigned via
-     * <code> ACLMessage.getEnvelope().setAclRepresentation(FIPANames.ACLCodec.BITEFFICIENT); </code>
+     *   ACLMessage.getEnvelope().setAclRepresentation(FIPANames.ACLCodec.BITEFFICIENT);
      **/
     interface ACLCodec {
         /**
@@ -68,8 +68,8 @@ public interface FIPANames {
     /**
      * Set of constants that identifies the Interaction Protocols and that
      * can be assigned via
-     * <code>ACLMessage.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST)
-     * </code>
+     *  ACLMessage.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST)
+     *
      **/
     interface InteractionProtocol {
 
@@ -138,8 +138,8 @@ public interface FIPANames {
     /**
      * Set of constants that identifies the content languages and that
      * can be assigned via
-     * <code>ACLMessage.setLanguage(FIPANames.ContentLanguage.SL0)
-     * </code>
+     *  ACLMessage.setLanguage(FIPANames.ContentLanguage.SL0)
+     *
      **/
     interface ContentLanguage {
         /**
@@ -168,7 +168,7 @@ public interface FIPANames {
     /**
      * Set of constants that identifies the Ontology of ACL Messages and
      * that can be assigned via
-     * <code> ACLMessage.setOntology(FIPANames.Ontology.SL0_ONTOLOGY); </code>
+     *   ACLMessage.setOntology(FIPANames.Ontology.SL0_ONTOLOGY);
      **/
     interface Ontology {
         /**

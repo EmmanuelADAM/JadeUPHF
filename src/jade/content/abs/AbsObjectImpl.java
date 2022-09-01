@@ -78,8 +78,8 @@ public class AbsObjectImpl implements AbsObject {
      * abstract descriptor.
      *
      * @param name  The name of the attribute to be set.
-     * @param value The new value of the attribute. If <code>value</code>
-     *              is null the current mapping with <code>name</code> (if any) is
+     * @param value The new value of the attribute. If  value
+     *              is null the current mapping with  name   (if any) is
      *              removed.
      */
     protected void set(String name, AbsObject value) {
@@ -123,7 +123,7 @@ public class AbsObjectImpl implements AbsObject {
      * Tests if the object is grounded, i.e., if no one of its attributes
      * is associated with a variable
      *
-     * @return <code>true</code> if the object is grounded.
+     * @return  true   if the object is grounded.
      * @see AbsObject#isGrounded()
      */
     public boolean isGrounded() {

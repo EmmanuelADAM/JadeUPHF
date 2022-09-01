@@ -30,7 +30,7 @@ import java.util.Hashtable;
 
 /**
  * Composite behaviour with concurrent children scheduling.
- * It is a <code>CompositeBehaviour</code> that executes its children
+ * It is a  CompositeBehaviour   that executes its children
  * behaviours concurrently, and it terminates when a
  * particular condition on its sub-behaviours is met i.e. when
  * all children are done, <em>N</em> children are done or any
@@ -44,13 +44,13 @@ public class ParallelBehaviour extends CompositeBehaviour {
 
     /**
      * Predefined constant to be used in the constructor to create
-     * a <code>ParallelBehaviour</code> that terminates when all its
+     * a  ParallelBehaviour   that terminates when all its
      * children are done.
      */
     public static final int WHEN_ALL = 0;
     /**
      * Predefined constant to be used in the constructor to create
-     * a <code>ParallelBehaviour</code> that terminates when any of
+     * a  ParallelBehaviour   that terminates when any of
      * its child is done.
      */
     public static final int WHEN_ANY = 1;
@@ -61,7 +61,7 @@ public class ParallelBehaviour extends CompositeBehaviour {
     private final BehaviourList terminatedChildren = new BehaviourList();
 
     /**
-     * Construct a <code>ParallelBehaviour</code> without setting the
+     * Construct a  ParallelBehaviour   without setting the
      * owner agent, and using the default termination condition
      * (i.e. the parallel behaviour terminates as soon as all its
      * children behaviours terminate.
@@ -71,23 +71,23 @@ public class ParallelBehaviour extends CompositeBehaviour {
     }
 
     /**
-     * Construct a <code>ParallelBehaviour</code> without setting the
+     * Construct a  ParallelBehaviour   without setting the
      * owner agent.
      *
      * @param endCondition this value defines the termination condition
-     *                     for this <code>ParallelBehaviour</code>. Use
+     *                     for this  ParallelBehaviour  . Use
      *                     <ol>
      *                     <li>
-     *                     <code>WHEN_ALL</code> to terminate this <code>ParallelBehaviour</code>
+     *                      WHEN_ALL   to terminate this  ParallelBehaviour  
      *                     when all its children are done.
      *                     </li>
      *                     <li>
-     *                     <code>WHEN_ANY</code> to terminate this <code>ParallelBehaviour</code>
+     *                      WHEN_ANY   to terminate this  ParallelBehaviour  
      *                     when any of its child is done.
      *                     </li>
      *                     <li>
-     *                     a positive <code>int</code> value n to terminate this
-     *                     <code>ParallelBehaviour</code> when n of its children are done.
+     *                     a positive  int   value n to terminate this
+     *                      ParallelBehaviour   when n of its children are done.
      *                     </li>
      *                     </ol>
      */
@@ -96,25 +96,25 @@ public class ParallelBehaviour extends CompositeBehaviour {
     }
 
     /**
-     * Construct a <code>ParallelBehaviour</code> setting the
+     * Construct a  ParallelBehaviour   setting the
      * owner agent.
      *
-     * @param a            the agent this <code>ParallelBehaviour</code>
+     * @param a            the agent this  ParallelBehaviour  
      *                     belongs to.
      * @param endCondition this value defines the termination condition
-     *                     for this <code>ParallelBehaviour</code>. Use
+     *                     for this  ParallelBehaviour  . Use
      *                     <ol>
      *                     <li>
-     *                     <code>WHEN_ALL</code> to terminate this <code>ParallelBehaviour</code>
+     *                      WHEN_ALL   to terminate this  ParallelBehaviour  
      *                     when all its children are done.
      *                     </li>
      *                     <li>
-     *                     <code>WHEN_ANY</code> to terminate this <code>ParallelBehaviour</code>
+     *                      WHEN_ANY   to terminate this  ParallelBehaviour  
      *                     when any of its child is done.
      *                     </li>
      *                     <li>
-     *                     a positive <code>int</code> value n to terminate this
-     *                     <code>ParallelBehaviour</code> when n of its children are done.
+     *                     a positive  int   value n to terminate this
+     *                      ParallelBehaviour   when n of its children are done.
      *                     </li>
      *                     </ol>
      */
@@ -171,7 +171,7 @@ public class ParallelBehaviour extends CompositeBehaviour {
     }
 
     /**
-     * Check whether this <code>ParallelBehaviour</code> must terminate.
+     * Check whether this  ParallelBehaviour   must terminate.
      *
      * @see CompositeBehaviour#checkTermination
      */
@@ -212,7 +212,7 @@ public class ParallelBehaviour extends CompositeBehaviour {
 
     /**
      * Return a Collection view of the children of
-     * this <code>ParallelBehaviour</code>
+     * this  ParallelBehaviour  
      *
      * @return
      * @see CompositeBehaviour#getChildren
@@ -223,14 +223,14 @@ public class ParallelBehaviour extends CompositeBehaviour {
 
     /**
      * Return a Collection view of the children of
-     * this <code>ParallelBehaviour</code> that have already completed.
+     * this  ParallelBehaviour   that have already completed.
      */
     public BehaviourList getTerminatedChildren() {
         return terminatedChildren;
     }
 
     /**
-     * Add a sub behaviour to this <code>ParallelBehaviour</code>
+     * Add a sub behaviour to this  ParallelBehaviour  
      */
     public void addSubBehaviour(Behaviour b) {
         subBehaviours.addElement(b);
@@ -259,7 +259,7 @@ public class ParallelBehaviour extends CompositeBehaviour {
     }
 
     /**
-     * Remove a sub behaviour from this <code>ParallelBehaviour</code>
+     * Remove a sub behaviour from this  ParallelBehaviour  
      */
     public void removeSubBehaviour(Behaviour b) {
         terminatedChildren.removeElement(b);
@@ -284,8 +284,8 @@ public class ParallelBehaviour extends CompositeBehaviour {
 
     /**
      * Resets this behaviour. This methods puts a
-     * <code>ParallelBehaviour</code> back in initial state,
-     * besides calling <code>reset()</code> on each child behaviour
+     *  ParallelBehaviour   back in initial state,
+     * besides calling  reset()   on each child behaviour
      * recursively.
      */
     public void reset() {
@@ -312,7 +312,7 @@ public class ParallelBehaviour extends CompositeBehaviour {
 
     /**
      * Handle block/restart notifications. A
-     * <code>ParallelBehaviour</code> object is blocked
+     *  ParallelBehaviour   object is blocked
      * <em>only</em> when all its children behaviours are blocked and
      * becomes ready to run as soon as any of its children is
      * runnable. This method takes care of the various possibilities.

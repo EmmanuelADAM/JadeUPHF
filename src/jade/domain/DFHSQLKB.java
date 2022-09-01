@@ -32,7 +32,7 @@ import java.sql.Statement;
 import java.util.Properties;
 
 /**
- * <code>DFHSQLKB</code> realizes a knowledge base used by the DF which stores its content
+ *  DFHSQLKB   realizes a knowledge base used by the DF which stores its content
  * in an HSQL database, running in the same VM. The SQL commands are optimized for the HSQL database.
  *
  * @author Roland Mungenast - Profactor

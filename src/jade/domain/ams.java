@@ -258,28 +258,26 @@ public class ams extends Agent /*implements AgentManager.Listener*/ {
         final Credentials initialCredentials = ca.getInitialCredentials();
 
         // Do the job in a separated thread to avoid deadlock
-        Thread auxThread = new Thread() {
-            public void run() {
-                try {
-                    myPlatform.create(agentName, className, args, container, owner, initialCredentials, requesterPrincipal, requesterCredentials);
-                } catch (JADESecurityException ae) {
-                    if (logger.isLoggable(Logger.SEVERE))
-                        logger.log(Logger.SEVERE, "Agent " + requester.getName() + " does not have permission to perform action Create-agent: " + ae);
-                    // Send failure notification to the requester if any
-                    sendFailureNotification(ca, agentID, new Unauthorised());
-                } catch (NotFoundException nfe) {
-                    // Send failure notification to the requester if any
-                    sendFailureNotification(ca, agentID, new InternalError("Destination container not found. " + nfe.getMessage()));
-                } catch (NameClashException nce) {
-                    // Send failure notification to the requester if any
-                    sendFailureNotification(ca, agentID, new AlreadyRegistered());
-                } catch (Throwable ue) {
-                    // Send failure notification to the requester if any. Note that UnreachableException also wraps IMTPException that is not necessarily related to a real un-reachability problem
-                    sendFailureNotification(ca, agentID, new InternalError(ue.getMessage()));
-                }// Send failure notification to the requester if any
+        Thread auxThread = new Thread(() -> {
+            try {
+                myPlatform.create(agentName, className, args, container, owner, initialCredentials, requesterPrincipal, requesterCredentials);
+            } catch (JADESecurityException ae) {
+                if (logger.isLoggable(Logger.SEVERE))
+                    logger.log(Logger.SEVERE, "Agent " + requester.getName() + " does not have permission to perform action Create-agent: " + ae);
+                // Send failure notification to the requester if any
+                sendFailureNotification(ca, agentID, new Unauthorised());
+            } catch (NotFoundException nfe) {
+                // Send failure notification to the requester if any
+                sendFailureNotification(ca, agentID, new InternalError("Destination container not found. " + nfe.getMessage()));
+            } catch (NameClashException nce) {
+                // Send failure notification to the requester if any
+                sendFailureNotification(ca, agentID, new AlreadyRegistered());
+            } catch (Throwable ue) {
+                // Send failure notification to the requester if any. Note that UnreachableException also wraps IMTPException that is not necessarily related to a real un-reachability problem
+                sendFailureNotification(ca, agentID, new InternalError(ue.getMessage()));
+            }// Send failure notification to the requester if any
 
-            }
-        };
+        });
         auxThread.start();
     }
 
@@ -373,26 +371,24 @@ public class ams extends Agent /*implements AgentManager.Listener*/ {
             e.printStackTrace();
         }
 
-        Thread auxThread = new Thread() {
-            public void run() {
-                try {
-                    myPlatform.killContainer(cid, requesterPrincipal, requesterCredentials);
-                } catch (JADESecurityException ae) {
-                    logger.log(Logger.SEVERE, "Agent " + requester.getName() + " does not have permission to perform action Kill-container: " + ae);
-                    // Send failure notification to the requester if any
-                    sendFailureNotification(kc, cid, new Unauthorised());
-                } catch (NotFoundException nfe) {
-                    // Send failure notification to the requester if any
-                    sendFailureNotification(kc, cid, new InternalError("Container not found. " + nfe.getMessage()));
-                } catch (UnreachableException ue) {
-                    // Send failure notification to the requester if any
-                    sendFailureNotification(kc, cid, new InternalError("Container unreachable. " + ue.getMessage()));
-                } catch (Throwable t) {
-                    // Send failure notification to the requester if any
-                    sendFailureNotification(kc, cid, new InternalError(t.getMessage()));
-                }
+        Thread auxThread = new Thread(() -> {
+            try {
+                myPlatform.killContainer(cid, requesterPrincipal, requesterCredentials);
+            } catch (JADESecurityException ae) {
+                logger.log(Logger.SEVERE, "Agent " + requester.getName() + " does not have permission to perform action Kill-container: " + ae);
+                // Send failure notification to the requester if any
+                sendFailureNotification(kc, cid, new Unauthorised());
+            } catch (NotFoundException nfe) {
+                // Send failure notification to the requester if any
+                sendFailureNotification(kc, cid, new InternalError("Container not found. " + nfe.getMessage()));
+            } catch (UnreachableException ue) {
+                // Send failure notification to the requester if any
+                sendFailureNotification(kc, cid, new InternalError("Container unreachable. " + ue.getMessage()));
+            } catch (Throwable t) {
+                // Send failure notification to the requester if any
+                sendFailureNotification(kc, cid, new InternalError(t.getMessage()));
             }
-        };
+        });
 
         auxThread.start();
     }
@@ -405,16 +401,14 @@ public class ams extends Agent /*implements AgentManager.Listener*/ {
         notifyShutdownPlatformRequested();
 
         shuttingDown = true;
-        Thread auxThread = new Thread() {
-            public void run() {
-                try {
-                    myPlatform.shutdownPlatform(requesterPrincipal, requesterCredentials);
-                } catch (JADESecurityException ae) {
-                    logger.log(Logger.SEVERE, "Agent " + requester.getName() + " does not have permission to perform action Shutdown-Platform: " + ae);
-                    shuttingDown = false;
-                }
+        Thread auxThread = new Thread(() -> {
+            try {
+                myPlatform.shutdownPlatform(requesterPrincipal, requesterCredentials);
+            } catch (JADESecurityException ae) {
+                logger.log(Logger.SEVERE, "Agent " + requester.getName() + " does not have permission to perform action Shutdown-Platform: " + ae);
+                shuttingDown = false;
             }
-        };
+        });
         auxThread.setName("Platform-shutdown");
         auxThread.start();
     }

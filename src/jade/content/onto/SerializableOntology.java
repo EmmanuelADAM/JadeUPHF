@@ -71,9 +71,9 @@ public class SerializableOntology extends Ontology {
     }
 
     /**
-     * Returns the singleton instance of the <code>SerializableOntology</code>.
+     * Returns the singleton instance of the  SerializableOntology  .
      *
-     * @return the singleton instance of the <code>SerializableOntology</code>
+     * @return the singleton instance of the  SerializableOntology
      */
     public static Ontology getInstance() {
         return theInstance;

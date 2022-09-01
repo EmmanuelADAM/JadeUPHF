@@ -231,16 +231,16 @@ public class ACLParserTokenManager implements ACLParserConstants {
             return 5;
         }
         switch (curChar) {
-            case 45:
+            case 45://'-'
                 return jjMoveStringLiteralDfa6_4(active0, 0x2000000000000L);
-            case 69:
-            case 101:
+            case 69://'E'
+            case 101://'e'
                 return jjMoveStringLiteralDfa6_4(active0, 0x8000000000000L);
-            case 76:
-            case 108:
+            case 76://'L'
+            case 108://'l'
                 return jjMoveStringLiteralDfa6_4(active0, 0x10000000000000L);
-            case 78:
-            case 110:
+            case 78://'N'
+            case 110://'n'
                 return jjMoveStringLiteralDfa6_4(active0, 0x1000000000000L);
             default:
                 break;
@@ -258,17 +258,17 @@ public class ACLParserTokenManager implements ACLParserConstants {
             return 6;
         }
         switch (curChar) {
-            case 67:
-            case 99:
+            case 67://'C'
+            case 99://'c'
                 return jjMoveStringLiteralDfa7_4(active0, 0x1000000000000L);
-            case 73:
-            case 105:
+            case 73://'I'
+            case 105://'i'
                 return jjMoveStringLiteralDfa7_4(active0, 0x2000000000000L);
-            case 83:
-            case 115:
+            case 83://'S'
+            case 115://'s'
                 return jjMoveStringLiteralDfa7_4(active0, 0x8000000000000L);
-            case 86:
-            case 118:
+            case 86://'V'
+            case 118://'v'
                 return jjMoveStringLiteralDfa7_4(active0, 0x10000000000000L);
             default:
                 break;
@@ -286,16 +286,16 @@ public class ACLParserTokenManager implements ACLParserConstants {
             return 7;
         }
         switch (curChar) {
-            case 68:
-            case 100:
+            case 68://'D'
+            case 100://'d'
                 return jjMoveStringLiteralDfa8_4(active0, 0x2000000000000L);
-            case 69:
-            case 101:
+            case 69://'E'
+            case 101://'e'
                 if ((active0 & 0x1000000000000L) != 0L)
                     return jjStopAtPos(7, 48);
                 return jjMoveStringLiteralDfa8_4(active0, 0x10000000000000L);
-            case 83:
-            case 115:
+            case 83://'S'
+            case 115://'s'
                 return jjMoveStringLiteralDfa8_4(active0, 0x8000000000000L);
             default:
                 break;

@@ -158,7 +158,7 @@ public class MessagingService extends BaseService implements MessageManager.Chan
      * Service implementations should not use the Service Manager and
      * Service Finder facilities from within this method. A
      * distributed initialization protocol, if needed, should be
-     * exectuted within the <code>boot()</code> method.
+     * exectuted within the  boot()   method.
      *
      * @param ac The agent container this service is activated on.
      * @param p  The configuration profile for this service.
@@ -208,9 +208,9 @@ public class MessagingService extends BaseService implements MessageManager.Chan
     /**
      * Performs the active initialization step of a kernel-level
      * service: Activates the ACL codecs and MTPs as specified in the given
-     * <code>Profile</code> instance.
+     *  Profile   instance.
      *
-     * @param myProfile The <code>Profile</code> instance containing
+     * @param myProfile The  Profile   instance containing
      *                  the list of ACL codecs and MTPs to activate on this node.
      * @throws ServiceException If a problem occurs during service
      *                          initialization.
@@ -461,7 +461,7 @@ public class MessagingService extends BaseService implements MessageManager.Chan
      * slices will communicate, that is, the service <i>Horizontal
      * Interface</i>.
      *
-     * @return A <code>Class</code> object, representing the interface
+     * @return A  Class   object, representing the interface
      * that is implemented by the slices of this service.
      */
     public Class<MessagingSlice> getHorizontalInterface() {
@@ -679,10 +679,10 @@ public class MessagingService extends BaseService implements MessageManager.Chan
      * processing engine.
      *
      * @param direction One of the two constants
-     *                  <code>Filter.INCOMING</code> and <code>Filter.OUTGOING</code>,
+     *                   Filter.INCOMING   and  Filter.OUTGOING  ,
      *                  distinguishing between the two filter chains managed by the
      *                  command processor.
-     * @return A <code>Filter</code> object, used by this service to
+     * @return A  Filter   object, used by this service to
      * intercept and process kernel-level commands.
      */
     public Filter getCommandFilter(boolean direction) {
@@ -1824,9 +1824,9 @@ public class MessagingService extends BaseService implements MessageManager.Chan
 
     /**
      * Inner class for this service: this class receives commands from
-     * service <code>Sink</code> and serves them, coordinating with
-     * remote parts of this service through the <code>Slice</code>
-     * interface (that extends the <code>Service.Slice</code>
+     * service  Sink   and serves them, coordinating with
+     * remote parts of this service through the  Slice  
+     * interface (that extends the  Service.Slice  
      * interface).
      */
     private class ServiceComponent implements Slice {

@@ -32,8 +32,8 @@ import javax.swing.text.Segment;
  * ACL/SL token marker. The original file is written by Slava Pestov
  * (www.gjt.org) and altered to fit ACL/SL.
  *
- * @author Chris van Aart - Acklin B.V., the Netherlands & Slava Pestov
- * @created June 8, 2002
+ * @author Chris van Aart - Acklin B.V., the Netherlands and Slava Pestov
+ * @since June 8, 2002
  */
 
 public class ACLSLTokenMarker {
@@ -47,7 +47,7 @@ public class ACLSLTokenMarker {
     private final KeywordMap keywords;
     /**
      * The first token in the list. This should be used as the return value
-     * from <code>markTokens()</code>.
+     * from  markTokens()  .
      */
     protected ACLToken firstToken;
     /**
@@ -57,19 +57,19 @@ public class ACLSLTokenMarker {
     protected ACLToken lastToken;
     /**
      * An array for storing information about lines. It is enlarged and shrunk
-     * automatically by the <code>insertLines()</code> and <code>deleteLines()</code>
+     * automatically by the  insertLines()   and  deleteLines()
      * methods.
      */
     protected LineInfo[] lineInfo;
     /**
-     * The length of the <code>lineInfo</code> array.
+     * The length of the  lineInfo   array.
      */
     protected int length;
 
 
     /**
-     *  Creates a new <code>TokenMarker</code>. This DOES NOT create a lineInfo
-     *  array; an initial call to <code>insertLines()</code> does that.
+     *  Creates a new  TokenMarker  . This DOES NOT create a lineInfo
+     *  array; an initial call to  insertLines()   does that.
      *
      * @param  index  Description of Parameter
      */
@@ -225,7 +225,7 @@ public class ACLSLTokenMarker {
     /**
      * Returns if the token marker supports tokens that span multiple lines. If
      * this is true, the object using this token marker is required to pass all
-     * lines in the document to the <code>markTokens()</code> method (in turn).
+     * lines in the document to the  markTokens()   method (in turn).
      * <p>
      * <p>
      * The default implementation returns true; it should be overridden to
@@ -239,7 +239,7 @@ public class ACLSLTokenMarker {
 
     /**
      * Informs the token marker that lines have been inserted into the
-     * document. This inserts a gap in the <code>lineInfo</code> array.
+     * document. This inserts a gap in the  lineInfo   array.
      *
      * @param index The first line number
      * @param lines The number of lines
@@ -262,7 +262,7 @@ public class ACLSLTokenMarker {
 
     /**
      * Informs the token marker that line have been deleted from the document.
-     * This removes the lines in question from the <code>lineInfo</code> array.
+     * This removes the lines in question from the  lineInfo   array.
      *
      * @param index The first line number
      * @param lines The number of lines
@@ -724,34 +724,34 @@ public class ACLSLTokenMarker {
     }
 
     /**
-     * Creates a new <code>TokenMarker</code>. This DOES NOT create a lineInfo
-     * array; an initial call to <code>insertLines()</code> does that.
+     * Creates a new  TokenMarker  . This DOES NOT create a lineInfo
+     * array; an initial call to  insertLines()   does that.
      * <p>
-     * Creates a new <code>TokenMarker</code>. This DOES NOT create a lineInfo
-     * array; an initial call to <code>insertLines()</code> does that. Creates
-     * a new <code>TokenMarker</code>. This DOES NOT create a lineInfo array;
-     * an initial call to <code>insertLines()</code> does that. Creates a new
-     * <code>TokenMarker</code>. This DOES NOT create a lineInfo array; an
-     * initial call to <code>insertLines()</code> does that. Creates a new
-     * <code>TokenMarker</code>. This DOES NOT create a lineInfo array; an
-     * initial call to <code>insertLines()</code> does that. Creates a new
-     * <code>TokenMarker</code>. This DOES NOT create a lineInfo array; an
-     * initial call to <code>insertLines()</code> does that. Creates a new
-     * <code>TokenMarker</code>. This DOES NOT create a lineInfo array; an
-     * initial call to <code>insertLines()</code> does that. Creates a new
-     * <code>TokenMarker</code>. This DOES NOT create a lineInfo array; an
-     * initial call to <code>insertLines()</code> does that. Creates a new
-     * <code>TokenMarker</code>. This DOES NOT create a lineInfo array; an
-     * initial call to <code>insertLines()</code> does that. Creates a new
-     * <code>TokenMarker</code>. This DOES NOT create a lineInfo array; an
-     * initial call to <code>insertLines()</code> does that. Creates a new
-     * <code>TokenMarker</code>. This DOES NOT create a lineInfo array; an
-     * initial call to <code>insertLines()</code> does that. Ensures that the
-     * <code>lineInfo</code> array can contain the specified index. This
+     * Creates a new  TokenMarker  . This DOES NOT create a lineInfo
+     * array; an initial call to  insertLines()   does that. Creates
+     * a new  TokenMarker  . This DOES NOT create a lineInfo array;
+     * an initial call to  insertLines()   does that. Creates a new
+     *  TokenMarker  . This DOES NOT create a lineInfo array; an
+     * initial call to  insertLines()   does that. Creates a new
+     *  TokenMarker  . This DOES NOT create a lineInfo array; an
+     * initial call to  insertLines()   does that. Creates a new
+     *  TokenMarker  . This DOES NOT create a lineInfo array; an
+     * initial call to  insertLines()   does that. Creates a new
+     *  TokenMarker  . This DOES NOT create a lineInfo array; an
+     * initial call to  insertLines()   does that. Creates a new
+     *  TokenMarker  . This DOES NOT create a lineInfo array; an
+     * initial call to  insertLines()   does that. Creates a new
+     *  TokenMarker  . This DOES NOT create a lineInfo array; an
+     * initial call to  insertLines()   does that. Creates a new
+     *  TokenMarker  . This DOES NOT create a lineInfo array; an
+     * initial call to  insertLines()   does that. Creates a new
+     *  TokenMarker  . This DOES NOT create a lineInfo array; an
+     * initial call to  insertLines()   does that. Ensures that the
+     *  lineInfo   array can contain the specified index. This
      * enlarges it if necessary. No action is taken if the array is large
      * enough already.<p>
      * <p>
-     * It should be unnecessary to call this under normal circumstances; <code>insertLine()</code>
+     * It should be unnecessary to call this under normal circumstances;  insertLine()
      * should take care of enlarging the line info array automatically.
      *
      * @param index Description of Parameter
@@ -850,7 +850,7 @@ public class ACLSLTokenMarker {
 
 
         /**
-         * Creates a new <code>KeywordMap</code>.
+         * Creates a new  KeywordMap  .
          *
          * @param ignoreCase True if keys are case insensitive
          */
@@ -861,7 +861,7 @@ public class ACLSLTokenMarker {
 
 
         /**
-         * Creates a new <code>KeywordMap</code>.
+         * Creates a new  KeywordMap  .
          *
          * @param ignoreCase True if the keys are case insensitive
          * @param mapLength  The number of `buckets' to create. A value of 52
@@ -944,7 +944,7 @@ public class ACLSLTokenMarker {
         }
 
         // private members
-        class Keyword {
+        static class Keyword {
             public char[] keyword;
             public byte id;
             public Keyword next;
@@ -960,9 +960,9 @@ public class ACLSLTokenMarker {
      * Inner class for storing information about tokenized lines.
      *
      * @author chris
-     * @created June 8, 2002
+     * @since June 8, 2002
      */
-    public class LineInfo {
+    public static class LineInfo {
         /**
          * The id of the last token of the line.
          */

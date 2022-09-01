@@ -41,12 +41,12 @@ import jade.domain.FIPAAgentManagement.FIPAManagementOntology;
 
 /**
  * This class represents the ontology
- * <code>DFApplet-management</code>, containing all JADE extensions
+ *  DFApplet-management  , containing all JADE extensions
  * related to applet management. There is only a single instance of
  * this class.
  * <p>
  * The package contains one class for each Frame in the ontology.
- * <p>
+ * </p>
  */
 
 
@@ -100,7 +100,7 @@ public class DFAppletOntology extends Ontology implements DFAppletVocabulary {
      * This method grants access to the unique instance of the
      * ontology.
      *
-     * @return An <code>Ontology</code> object, containing the concepts
+     * @return An  Ontology   object, containing the concepts
      * of the ontology.
      */
     public static Ontology getInstance() {

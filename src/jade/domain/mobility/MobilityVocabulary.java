@@ -29,7 +29,7 @@ import jade.domain.JADEAgentManagement.JADEManagementVocabulary;
 /**
  * This interface contains all the string constants for frame and slot
  * names of exceptions defined in the
- * <code>jade-mobility-ontology</code> ontology.
+ *  jade-mobility-ontology   ontology.
  */
 public interface MobilityVocabulary extends JADEManagementVocabulary {
 

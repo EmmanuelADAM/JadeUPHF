@@ -47,18 +47,18 @@ import java.util.Vector;
  * What should be done, instead is one thread requesting the other to execute a
  * method, each thread in its one execution space.
  * Since its common to have an agent with a GUI, this class is for this purpose.
- * This class extends the <code>jade.core.Agent </code> class: at the start-up
+ * This class extends the  jade.core.Agent    class: at the start-up
  * it instantiate ad ad-hoc behaviour that manages a queue of
- * <code>jade.gui.GuiEvent</code>,event objects that can be received by other threads.
+ *  jade.gui.GuiEvent  ,event objects that can be received by other threads.
  * A thread (in particular a GUI)to notify an event to an Agent should create
- * a new Object of type <code>jade.gui.GuiEvent</code>and pass it as a parameter
- * to the call of the method <code>postGuiEvent</code> of the
- * <code>jade.gui.GuiAgent</code> object. Notice that an object of type
- * <code>GuiEvent</code> has two mandatory attributes and an optional
+ * a new Object of type  jade.gui.GuiEvent  and pass it as a parameter
+ * to the call of the method  postGuiEvent   of the
+ *  jade.gui.GuiAgent   object. Notice that an object of type
+ *  GuiEvent   has two mandatory attributes and an optional
  * list of parameters that can be added to the event object.
- * After the method <code>postGuiEvent</code> is called,the agent reacts
+ * After the method  postGuiEvent   is called,the agent reacts
  * by waking up all its active behaviours, and in particular the one that causes
- * the Agent thread to execute the method <code>onGuiEvent</code>.
+ * the Agent thread to execute the method  onGuiEvent  .
  *
  * @author Giovanni Caire - CSELT S.p.A.
  * @version $Date: 2005-04-15 17:45:02 +0200 (ven, 15 apr 2005) $ $Revision: 5669 $
@@ -105,7 +105,7 @@ public abstract class GuiAgent extends Agent {
 
     /**
      * Abstract method to handle posted GUI events. Subclasses of
-     * <code>GuiAgent</code> will implement their own reactions to
+     *  GuiAgent   will implement their own reactions to
      * GUI events starting with this method.
      *
      * @param ev The GUI event to handle.

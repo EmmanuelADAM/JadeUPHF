@@ -28,8 +28,8 @@ import jade.core.ContainerID;
 
 
 /**
- * This class represents the <code>uninstall-MTP</code> action of
- * the <code>JADE-agent-management ontology</code>.
+ * This class represents the  uninstall-MTP   action of
+ * the  JADE-agent-management ontology  .
  * This action can be requested to the JADE AMS to uninstall an MTP from
  * a given container.
  *
@@ -50,18 +50,18 @@ public class UninstallMTP implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>address</code> slot of this
+     * Retrieve the value of the  address   slot of this
      * action, containing the address URL of the MTP to uninstall.
      *
-     * @return The value of the <code>address</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  address   slot, or
+     *  null   if no value was set.
      */
     public String getAddress() {
         return address;
     }
 
     /**
-     * Set the <code>address</code> slot of this action.
+     * Set the  address   slot of this action.
      *
      * @param a The address URL of the MTP endpoint to uninstall.
      */
@@ -70,19 +70,19 @@ public class UninstallMTP implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>container</code> slot of this
+     * Retrieve the value of the  container   slot of this
      * action, containing the container identifier of the container
      * where the MTP to uninstall is deployed.
      *
-     * @return The value of the <code>container</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  container   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getContainer() {
         return container;
     }
 
     /**
-     * Set the <code>container</code> slot of this action.
+     * Set the  container   slot of this action.
      *
      * @param cid The container identifier of the container where the
      *            MTP to uninstall is deployed.

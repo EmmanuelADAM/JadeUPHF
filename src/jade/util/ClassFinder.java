@@ -36,7 +36,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * This utility class was based originally on Daniel Le Berre's <code>RTSI</code>
+ * This utility class was based originally on Daniel Le Berre's  RTSI
  * class. This class can be called in different modes, but the principal use is
  * to determine what subclasses/implementations of a given class/interface exist
  * in the current runtime environment.
@@ -160,7 +160,7 @@ public class ClassFinder {
      * The result of the last search is cached in this object, along with the
      * URL that corresponds to each class returned. This method may be called to
      * query the cache for the location at which the given class was found.
-     * <code>null</code> will be returned if the given class was not found
+     *  null   will be returned if the given class was not found
      * during the last search, or if the result cache has been cleared.
      */
     public final URL getLocationOf(Class<?> cls) {

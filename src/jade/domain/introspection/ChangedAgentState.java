@@ -66,19 +66,19 @@ public class ChangedAgentState implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>agent</code> slot of this
+     * Retrieve the value of the  agent   slot of this
      * event, containing the agent identifier of the agent whose
      * state changed.
      *
-     * @return The value of the <code>agent</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  agent   slot, or
+     *  null   if no value was set.
      */
     public AID getAgent() {
         return agent;
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
+     * Set the  agent   slot of this event.
      *
      * @param id The agent identifier of the agent whose state
      *           changed.
@@ -88,19 +88,19 @@ public class ChangedAgentState implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>from</code> slot of this event,
+     * Retrieve the value of the  from   slot of this event,
      * containing the name of the state the agent was in before this
      * event occurred.
      *
-     * @return The value of the <code>from</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  from   slot, or
+     *  null   if no value was set.
      */
     public AgentState getFrom() {
         return from;
     }
 
     /**
-     * Set the <code>from</code> slot of this event.
+     * Set the  from   slot of this event.
      *
      * @param as The name of the entity the state the agent was in
      *           before this event occurred.
@@ -110,19 +110,19 @@ public class ChangedAgentState implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>to</code> slot of this event,
+     * Retrieve the value of the  to   slot of this event,
      * containing the name of the state the agent was in after this
      * event occurred.
      *
-     * @return The value of the <code>to</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  to   slot, or
+     *  null   if no value was set.
      */
     public AgentState getTo() {
         return to;
     }
 
     /**
-     * Set the <code>to</code> slot of this event.
+     * Set the  to   slot of this event.
      *
      * @param as The name of the state the agent was in after this
      *           event occurred.

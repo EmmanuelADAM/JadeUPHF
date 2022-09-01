@@ -69,7 +69,7 @@ import java.util.*;
  * Standard <em>Directory Facilitator</em> agent. This class implements
  * <em><b>FIPA</b></em> <em>DF</em> agent. <b>JADE</b> applications
  * typically don't use this class directly, but interact with the DF agent through
- * <em>ACL</em> message passing. The <code>DFService</code> class provides
+ * <em>ACL</em> message passing. The  DFService   class provides
  * a number of static methods that facilitate this task.
  * More <em>DF</em> agents can be created
  * by application programmers to divide a platform into many
@@ -79,23 +79,23 @@ import java.util.*;
  * either as command line options or within a properties file (to be passed to
  * the DF as an argument).
  * </p>
- * <table border="1" cellspacing="0">
+ * <table border="1" borderpacing="0">
  * <tr>
  * <th>Parameter</th>
  * <th>Description</th>
  * </tr>
  * <tr>
  * <td>
- * <code>jade_domain_df_autocleanup</code>
+ *  jade_domain_df_autocleanup  
  * </td>
  * <td>
- * If set to <code>true</code>, indicates that the DF will automatically
- * clean up registrations as soon as an agent terminates. The default is <code>false</code>
+ * If set to  true  , indicates that the DF will automatically
+ * clean up registrations as soon as an agent terminates. The default is  false  
  * </td>
  * </tr>
  * <tr>
  * <td>
- * <code>jade_domain_df_maxleasetime</code>
+ *  jade_domain_df_maxleasetime  
  * </td>
  * <td>
  * Indicates the maximum lease time (in millisecond) that the DF will grant for agent
@@ -104,7 +104,7 @@ import java.util.*;
  * </tr>
  * <tr>
  * <td>
- * <code>jade_domain_df_maxresult</code>
+ *  jade_domain_df_maxresult  
  * </td>
  * <td>
  * Indicates the maximum number of items found in a search operation that the DF
@@ -113,7 +113,7 @@ import java.util.*;
  * </tr>
  * <tr>
  * <td>
- * <code>jade_domain_df_disablevalidation</code>
+ *  jade_domain_df_disablevalidation  
  * </td>
  * <td>
  * Turns off content validation on incoming/outgoing messages (defaults to false)
@@ -121,63 +121,64 @@ import java.util.*;
  * </tr>
  * <tr>
  * <td>
- * <code>jade_domain_df_db-default</code>
+ *  jade_domain_df_db-default  
  * </td>
  * <td>
- * If set to <code>true</code>, indicates that the DF will store its catalogue into an internal HSQL database,
+ * If set to  true  , indicates that the DF will store its catalogue into an internal HSQL database,
  * running within the same VM. (The HSQL jar files have to added to the Java CLASSPATH)
  * </td>
  * </tr>
  * <tr>
  * <td>
- * <code>jade_domain_df_db-url</code>
+ *  jade_domain_df_db-url  
  * </td>
  * <td>
  * Indicates the JDBC URL of the database the DF will store its catalogue into.
- * This parameter is ignored if <code>jade_domain_df_db-default</code> is set. If neither this parameter nor
- * <code>jade_domain_df_db-default</code> is specified the DF will keep its catalogue in memory.
+ * This parameter is ignored if  jade_domain_df_db-default   is set. If neither this parameter nor
+ *  jade_domain_df_db-default   is specified the DF will keep its catalogue in memory.
  * </td>
  * </tr>
  * <tr>
  * <td>
- * <code>jade_domain_df_db-driver</code>
+ *  jade_domain_df_db-driver  
  * </td>
  * <td>
  * Indicates the JDBC driver to be used to access the DF database (defaults to the ODBC-JDBC bridge). This parameter
- * is ignored if <code>jade_domain_df_db-url</code> is not set or <code>jade_domain_df_db-default</code> is set.
+ * is ignored if  jade_domain_df_db-url   is not set or  jade_domain_df_db-default   is set.
  * </td>
  * </tr>
  * <tr>
  * <td>
- * <code>jade_domain_df_db-username</code>,
- * <code>jade_domain_df_db-password</code>
+ *  jade_domain_df_db-username  ,
+ *  jade_domain_df_db-password  
  * </td>
  * <td>
  * Indicate the username and password to be used to access the DF database (default to null).
- * These parameters are ignored if <code>jade_domain_df_db-url</code> is not set or
- * <code>jade_domain_df_db-default</code> is set.
+ * These parameters are ignored if  jade_domain_df_db-url   is not set or
+ *  jade_domain_df_db-default   is set.
  * </td>
  * </tr>
+ * <tr>
  * <td>
- * <code>jade_domain_df_db-cleantables</code>
+ *  jade_domain_df_db-cleantables  
  * </td>
  * <td>
- * If set to <code>true</code>, indicates that the DF will clean the content of all pre-existing database tables,
+ * If set to  true  , indicates that the DF will clean the content of all pre-existing database tables,
  * used by the DF. This parameter is ignored if the catalogue is not stored in a database.
  * </td>
  * </tr>
  * <tr>
  * <td>
- * <code>jade_domain_df_db-abortonerror</code>
+ *  jade_domain_df_db-abortonerror  
  * </td>
  * <td>
- * If set to <code>true</code>, indicates that the DF will immediately terminate in case it cannot
+ * If set to  true  , indicates that the DF will immediately terminate in case it cannot
  * connect to the database. This parameter is ignored if the catalogue is not stored in a database.
  * </td>
  * </tr>
  * <tr>
  * <td>
- * <code>jade_domain_df_kb-factory</code>
+ *  jade_domain_df_kb-factory  
  * </td>
  * <td>
  * Indicates the name of the factory class that
@@ -187,11 +188,11 @@ import java.util.*;
  * </tr>
  * <tr>
  * <td>
- * <code>jade_domain_df_poolsize</code>
+ *  jade_domain_df_poolsize  
  * </td>
  * <td>
  * The dimension of the pool of thread dedicated to serving registration, deregistration and search
- * requests. If <code>0</code> (default) is specified then registration, deregistration and search
+ * requests. If  0   (default) is specified then registration, deregistration and search
  * requests are served directly by the df agent Thread. This parameter is ignored when using a
  * volatile (in-memory) knowledge base.
  * </td>
@@ -203,16 +204,16 @@ import java.util.*;
  * with a DF that will store its catalogue into a database accessible at
  * URL jdbc:odbc:dfdb and that will keep agent registrations for 1 hour at most.
  *
- * <code>
+ *  
  * java jade.Boot -gui -jade_domain_df_db-url jdbc:odbc:dfdb -jade_domain_df_maxleasetime 3600000
- * </code>
+ *   
  * p>
  * Each DF has a GUI but, by default, it is not visible. The GUI of the
  * agent platform includes a menu item that allows to show the GUI of the
  * default DF.
  * In order to show the GUI, you should simply send the following message
- * to each DF agent: <code>(request :content (action DFName (SHOWGUI))
- * :ontology JADE-Agent-Management :protocol fipa-request)</code>
+ * to each DF agent:  (request :content (action DFName (SHOWGUI))
+ * :ontology JADE-Agent-Management :protocol fipa-request)  
  *
  * @author Giovanni Rimassa - Universita' di Parma
  * @author Tiziana Trucco - TILAB S.p.A.

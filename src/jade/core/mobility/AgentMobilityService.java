@@ -984,10 +984,10 @@ public class AgentMobilityService extends BaseService {
 
     /**
      * Inner mix-in class for this service: this class receives
-     * commands through its <code>Filter</code> interface and serves
+     * commands through its  Filter   interface and serves
      * them, coordinating with remote parts of this service through
-     * the <code>Slice</code> interface (that extends the
-     * <code>Service.Slice</code> interface).
+     * the  Slice   interface (that extends the
+     *  Service.Slice   interface).
      */
     private class ServiceComponent implements Slice {
 

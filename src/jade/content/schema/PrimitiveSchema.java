@@ -48,9 +48,9 @@ public class PrimitiveSchema extends TermSchema {
     }
 
     /**
-     * Creates a <code>PrimitiveSchema</code> with a given type-name.
+     * Creates a  PrimitiveSchema   with a given type-name.
      *
-     * @param typeName The name of this <code>PrimitiveSchema</code>.
+     * @param typeName The name of this  PrimitiveSchema  .
      */
     public PrimitiveSchema(String typeName) {
         super(typeName);

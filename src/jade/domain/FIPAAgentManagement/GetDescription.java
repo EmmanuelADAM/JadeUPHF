@@ -27,8 +27,8 @@ package jade.domain.FIPAAgentManagement;
 import jade.content.AgentAction;
 
 /**
- * This class implements the <code>get-description</code> action of the
- * <code>fipa-agent-management ontology</code>.
+ * This class implements the  get-description   action of the
+ *  fipa-agent-management ontology  .
  * This action is supported by (and can be requested to) the AMS.
  *
  * @author Fabio Bellifemine - CSELT S.p.A.

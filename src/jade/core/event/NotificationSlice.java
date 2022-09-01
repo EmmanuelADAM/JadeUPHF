@@ -72,43 +72,43 @@ public interface NotificationSlice extends Service.Slice {
 
     /**
      * This command name represents the action of submitting to the
-     * Notification Service a <code>MessagePosted</code> event.
+     * Notification Service a  MessagePosted   event.
      */
     String NOTIFY_POSTED = "Notify-Posted";
 
     /**
      * This command name represents the action of submitting to the
-     * Notification Service a <code>MessageReceived</code> event.
+     * Notification Service a  MessageReceived   event.
      */
     String NOTIFY_RECEIVED = "Notify-Received";
 
     /**
      * This command name represents the action of submitting to the
-     * Notification Service a <code>ChangedAgentState</code> event.
+     * Notification Service a  ChangedAgentState   event.
      */
     String NOTIFY_CHANGED_AGENT_STATE = "Notify-Changed-Agent-State";
 
     /**
      * This command name represents the action of submitting to the
-     * Notification Service a <code>ChangedAgentPrincipal</code> event.
+     * Notification Service a  ChangedAgentPrincipal   event.
      */
     String NOTIFY_CHANGED_AGENT_PRINCIPAL = "Notify-Changed-Agent-Principal";
 
     /**
      * This command name represents the action of submitting to the
-     * Notification Service a <code>BehaviourAdded</code> event.
+     * Notification Service a  BehaviourAdded   event.
      */
     String NOTIFY_BEHAVIOUR_ADDED = "Notify-BehaviourAdded";
 
     /**
      * This command name represents the action of submitting to the
-     * Notification Service a <code>BehaviourRemoved</code> event.
+     * Notification Service a  BehaviourRemoved   event.
      */
     String NOTIFY_BEHAVIOUR_REMOVED = "Notify-Behaviour-Removed";
 
     /**
      * This command name represents the action of submitting to the
-     * Notification Service a <code>ChangedBehaviourState</code> event.
+     * Notification Service a  ChangedBehaviourState   event.
      */
     String NOTIFY_CHANGED_BEHAVIOUR_STATE = "Notify-Changed-Behaviour-State";
 

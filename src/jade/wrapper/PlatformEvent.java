@@ -34,32 +34,32 @@ public interface PlatformEvent {
     //int eventType;
 
     /**
-     * String constant for the name of the <code>born-agent</code> event.
+     * String constant for the name of the  born-agent   event.
      */
     int BORN_AGENT = 3;
 
     /**
-     * String constant for the name of the <code>dead-agent</code> event.
+     * String constant for the name of the  dead-agent   event.
      */
     int DEAD_AGENT = 4;
 
     /**
-     * String constant for the name of the <code>started-platform</code> event.
+     * String constant for the name of the  started-platform   event.
      */
     int STARTED_PLATFORM = 100;
 
     /**
-     * String constant for the name of the <code>suspended-platform</code> event.
+     * String constant for the name of the  suspended-platform   event.
      */
     int SUSPENDED_PLATFORM = 101;
 
     /**
-     * String constant for the name of the <code>resumed-platform</code> event.
+     * String constant for the name of the  resumed-platform   event.
      */
     int RESUMED_PLATFORM = 102;
 
     /**
-     * String constant for the name of the <code>killed-platform</code> event.
+     * String constant for the name of the  killed-platform   event.
      */
     int KILLED_PLATFORM = 103;
 

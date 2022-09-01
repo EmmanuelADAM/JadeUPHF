@@ -30,7 +30,7 @@ package jade.core.sam;
  */
 public interface AverageMeasureProvider extends Provider {
     /**
-     * @return the value of the measure in the form of an <code>AverageMeasure</code> instance
+     * @return the value of the measure in the form of an  AverageMeasure   instance
      */
     AverageMeasure getValue();
 }

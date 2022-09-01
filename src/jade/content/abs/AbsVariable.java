@@ -120,8 +120,8 @@ public class AbsVariable extends AbsObjectImpl implements AbsTerm {
     }
 
     /**
-     * Redefine the <code>isGrounded()</code> method in order to
-     * always return <code>false</code>.
+     * Redefine the  isGrounded()   method in order to
+     * always return  false  .
      */
     public boolean isGrounded() {
         return false;

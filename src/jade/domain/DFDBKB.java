@@ -445,7 +445,7 @@ public class DFDBKB extends DBKB {
     }
 
     /**
-     * Builds an error message for a <code>BatchUpdateException</code>
+     * Builds an error message for a  BatchUpdateException
      */
     private String getBatchUpdateErroMsg(BatchUpdateException e) {
         StringBuilder msg = new StringBuilder("SQLException: " + e.getMessage() + "\n");
@@ -524,7 +524,7 @@ public class DFDBKB extends DBKB {
     /**
      * Returns all resolver AIDs for the given AID
      *
-     * @return <code>Collection</code> of aid strings
+     * @return  Collection   of aid strings
      */
     private Collection<String> getResolverAIDs(String aid) throws SQLException {
         ArrayList<String> res = new ArrayList<>();
@@ -542,7 +542,7 @@ public class DFDBKB extends DBKB {
      * Stores a collection of services for a specific description Id in the database
      *
      * @param descrId id of the DFD these services belong to
-     * @param iter    iterator for a collection of <code>ServiceDescription</code> instances
+     * @param iter    iterator for a collection of  ServiceDescription   instances
      * @throws SQLException
      */
     private void saveServices(String descrId, Iterator<ServiceDescription> iter) throws SQLException {
@@ -1521,8 +1521,8 @@ public class DFDBKB extends DBKB {
     /**
      * Return all known subscriptions at the DF
      *
-     * @return <code>Enumeration</code> with instances of the class
-     * <code> jade.proto.SubscriptionResponder&Subscription</code>
+     * @return  Enumeration   with instances of the class
+     *   jade.proto.SubscriptionResponder&Subscription
      */
     @Override
     public Enumeration<SubscriptionResponder.Subscription> getSubscriptions() {
@@ -1563,8 +1563,8 @@ public class DFDBKB extends DBKB {
      * Removes a registration from the database.
      *
      * @param convID id for the subscription
-     * @return <code>true</code> if an entry has been found and removed
-     * - otherwise <code>false</code>
+     * @return  true   if an entry has been found and removed
+     * - otherwise  false
      */
     private boolean deregisterSubscription(String convID) throws SQLException {
 
@@ -1700,8 +1700,8 @@ public class DFDBKB extends DBKB {
     }
 
     /**
-     * Replaces all occurences of a <code>pattern</code> in <code>str</code>
-     * with <code>replaceWith</code>
+     * Replaces all occurences of a  pattern   in  str
+     * with  replaceWith
      *
      * @param str         source string
      * @param pattern     pattern string to search for

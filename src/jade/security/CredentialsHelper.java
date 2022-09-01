@@ -27,7 +27,7 @@ import jade.lang.acl.ACLMessage;
 
 /**
  * This interface includes the subset of methods of the
- * <code>SecurityHelper</code> class required by the JADE runtime
+ *  SecurityHelper   class required by the JADE runtime
  *
  * @author Giovanni Caire - TILAB
  */

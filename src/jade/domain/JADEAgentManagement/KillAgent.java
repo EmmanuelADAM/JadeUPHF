@@ -28,8 +28,8 @@ import jade.content.AgentAction;
 import jade.core.AID;
 
 /**
- * This class represents the <code>kill-agent</code> action of
- * the <code>JADE-agent-management ontology</code>.
+ * This class represents the  kill-agent   action of
+ * the  JADE-agent-management ontology  .
  * This action can be requested to the JADE AMS to kill an active agent.
  *
  * @author Giovanni Rimassa -  Universita' di Parma
@@ -50,19 +50,19 @@ public class KillAgent implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>agent</code> slot of this
+     * Retrieve the value of the  agent   slot of this
      * event, containing the agent identifier of the agent to
      * terminate.
      *
-     * @return The value of the <code>agent</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  agent   slot, or
+     *  null   if no value was set.
      */
     public AID getAgent() {
         return agent;
     }
 
     /**
-     * Set the <code>agent</code> slot of this action.
+     * Set the  agent   slot of this action.
      *
      * @param id The agent identifier of the agent to terminate.
      */
@@ -71,19 +71,19 @@ public class KillAgent implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>password</code> slot of this
+     * Retrieve the value of the  password   slot of this
      * event, containing the password to authenticate the principal
      * requesting the agent termination.
      *
-     * @return The value of the <code>password</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  password   slot, or
+     *  null   if no value was set.
      */
     public String getPassword() {
         return password;
     }
 
     /**
-     * Set the <code>password</code> slot of this action.
+     * Set the  password   slot of this action.
      *
      * @param p The password to authenticate the principal requesting
      *          the agent termination.

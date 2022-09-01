@@ -85,15 +85,15 @@ public class TwoPh0Initiator extends Initiator {
     private String[] toBeReset = null;
 
     /**
-     * Constructs a <code>TwoPh0Initiator</code> behaviour.
+     * Constructs a  TwoPh0Initiator   behaviour.
      *
      * @param a               The agent performing the protocol.
      * @param cfp             The message that must be used to initiate the protocol.
-     *                        Notice that the default implementation of the <code>prepareCfps</code> method
+     *                        Notice that the default implementation of the  prepareCfps   method
      *                        returns an array composed of that message only.
      * @param outputKey       Data store key where the behaviour will store the Vector
      *                        of messages to be sent to initiate the successive phase.
-     * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPh0Initiator</code>.
+     * @param mapMessagesList  HashMap   of messages list that will be used by this  TwoPh0Initiator  .
      * deprecated
 
     public TwoPh0Initiator(Agent a, ACLMessage cfp, String outputKey, HashMap<String, List<ACLMessage>> mapMessagesList) {
@@ -137,11 +137,11 @@ public class TwoPh0Initiator extends Initiator {
     }*/
 
     /**
-     * Constructs a <code>TwoPh0Initiator</code> behaviour.
+     * Constructs a  TwoPh0Initiator   behaviour.
      *
      * @param a         The agent performing the protocol.
      * @param cfp       The message that must be used to initiate the protocol.
-     *                  Notice that the default implementation of the <code>prepareCfps</code> method
+     *                  Notice that the default implementation of the  prepareCfps   method
      *                  returns an array composed of that message only.
      * @param outputKey Data store key where the behaviour will store the Vector
      *                  of messages to be sent to initiate the successive phase.
@@ -151,16 +151,16 @@ public class TwoPh0Initiator extends Initiator {
     }
 
     /**
-     * Constructs a <code>TwoPh0Initiator</code> behaviour.
+     * Constructs a  TwoPh0Initiator   behaviour.
      *
      * @param a               The agent performing the protocol.
      * @param cfp             The message that must be used to initiate the protocol.
-     *                        Notice that the default implementation of the <code>prepareCfps</code> method
+     *                        Notice that the default implementation of the  prepareCfps   method
      *                        returns an array composed of that message only.
      * @param outputKey       Data store key where the behaviour will store the Vector
      *                        of messages to be sent to initiate the successive phase.
-     * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPh0Initiator</code>.
-     * @param mapMessages     <code>HashMap</code> of messages  that will be used by this <code>TwoPh0Initiator</code>.
+     * @param mapMessagesList  HashMap   of messages list that will be used by this  TwoPh0Initiator  .
+     * @param mapMessages      HashMap   of messages  that will be used by this  TwoPh0Initiator  .
      */
     public TwoPh0Initiator(Agent a, ACLMessage cfp, String outputKey, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a, cfp, mapMessagesList, mapMessages);
@@ -205,7 +205,7 @@ public class TwoPh0Initiator extends Initiator {
     }
 
     public int onEnd() {
-        //TODO: EA. VERIFIER ce que peut être outpukey
+        //TODO: EA. VERIFIER ce que peut etre outpukey
         var nextPhMsgs = getMapMessagesList().get(outputKey);
         if (nextPhMsgs.size() != 0) {
             return (nextPhMsgs.get(0)).getPerformative();
@@ -224,9 +224,9 @@ public class TwoPh0Initiator extends Initiator {
      * to return a vector of CFP objects for 1:N conversations.
      *
      * @param cfp the ACLMessage object passed in the constructor
-     * @return a vector of ACLMessage objects. The value of the <code>reply-with</code>
+     * @return a vector of ACLMessage objects. The value of the  reply-with
      * slot is ignored and regenerated automatically by this
-     * class. Instead user can specify <code>reply-by</code> slot representing phase0
+     * class. Instead user can specify  reply-by   slot representing phase0
      * timeout.
      */
     protected List<ACLMessage> prepareCfps(ACLMessage cfp) {
@@ -236,7 +236,7 @@ public class TwoPh0Initiator extends Initiator {
     }
 
     /**
-     * This method is called every time a <code>propose</code> message is received,
+     * This method is called every time a  propose   message is received,
      * which is not out-of-sequence according to the protocol rules. This default
      * implementation does nothing; programmers might wish to override the method
      * in case they need to react to this event.
@@ -249,16 +249,16 @@ public class TwoPh0Initiator extends Initiator {
     /**
      * This method is called when all the responses have been collected or when
      * the timeout is expired. The used timeout is the minimum value of the slot
-     * <code>reply-By</code> of all the sent messages. By response message we
-     * intend here all the <code>propose, failure, not-understood</code> received messages, which
+     *  reply-By   of all the sent messages. By response message we
+     * intend here all the  propose, failure, not-understood   received messages, which
      * are not out-of-sequence according to the protocol rules.
      * This default implementation does nothing; programmers might
      * wish to override this method to modify the Vector of initiation messages
-     * (<code>nextPhMsgs</code>) for next phase. More in details this Vector
+     * ( nextPhMsgs  ) for next phase. More in details this Vector
      * already includes messages with the performative set according to the
      * default protocol rules i.e. QUERY_IF (if all responders replied with
      * PROPOSE) or REJECT_PROPOSAL (if at least one responder failed or didn't reply).
-     * In particular, by setting the <code>reply-by</code> slot, users can
+     * In particular, by setting the  reply-by   slot, users can
      * specify a timeout for next phase.
      *
      * @param responses  The Vector of all messages received as response
@@ -266,8 +266,8 @@ public class TwoPh0Initiator extends Initiator {
      * @param pendings   The Vector of CFP messages for which a response has not
      *                   been received yet
      * @param nextPhMsgs The Vector of initiation messages for next phase already
-     *                   filled with <code>QUERY_IF</code> messages (if all responders replied with
-     *                   <code>PROPOSE</code>) or <code>REJECT_PROPOSAL</code> (if at least one
+     *                   filled with  QUERY_IF   messages (if all responders replied with
+     *                    PROPOSE  ) or  REJECT_PROPOSAL   (if at least one
      *                   responder failed or didn't reply).
      */
     protected void handleAllResponses(List<ACLMessage> responses, List<ACLMessage> proposes,
@@ -275,12 +275,12 @@ public class TwoPh0Initiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user-defined <code>Behaviour</code> in the
+     * This method allows to register a user-defined  Behaviour   in the
      * PREPARE_CFPS state. This behaviour would override the homonymous method. This
-     * method also set the data store of the registered <code>Behaviour</code> to the
+     * method also set the data store of the registered  Behaviour   to the
      * HashMap of this current behaviour. It is responsibility of the registered
-     * behaviour to put the <code>Vector</code> of ACLMessage objects to be sent into
-     * the HashMap at the <code>ALL_CFPS_KEY</code> key.
+     * behaviour to put the  Vector   of ACLMessage objects to be sent into
+     * the HashMap at the  ALL_CFPS_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -289,12 +289,12 @@ public class TwoPh0Initiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code> in the
+     * This method allows to register a user defined  Behaviour   in the
      * HANDLE_PROPOSE state. This behaviour would override the homonymous method.
-     * This method also set the data store of the registered <code>Behaviour</code>
+     * This method also set the data store of the registered  Behaviour
      * to the HashMap of this current behaviour. The registered behaviour can retrieve
-     * the <code>propose</code> ACLMessage object received from the HashMap at the
-     * <code>REPLY_KEY</code> key.
+     * the  propose   ACLMessage object received from the HashMap at the
+     *  REPLY_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -304,13 +304,13 @@ public class TwoPh0Initiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code> in the
+     * This method allows to register a user defined  Behaviour   in the
      * HANDLE_ALL_RESPONSES state. This behaviour would override the homonymous method.
-     * This method also set the data store of the registered <code>Behaviour</code> to
+     * This method also set the data store of the registered  Behaviour   to
      * the HashMap of this current behaviour. The registered behaviour can retrieve
      * the vector of ACLMessage proposes, failures, pending and responses from the
-     * HashMap at <code>ALL_PROPOSES_KEY</code>, <code>ALL_FAILURES_KEY</code>,
-     * <code>ALL_PH0_PENDINGS_KEY</code> and <code>output</code> field.
+     * HashMap at  ALL_PROPOSES_KEY  ,  ALL_FAILURES_KEY  ,
+     *  ALL_PH0_PENDINGS_KEY   and  output   field.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -348,9 +348,9 @@ public class TwoPh0Initiator extends Initiator {
     }
 
     /**
-     * This method sets for all prepared cfps <code>conversation-id</code> slot (with
-     * value passed in the constructor), <code>protocol</code> slot and
-     * <code>reply-with</code> slot with a unique value
+     * This method sets for all prepared cfps  conversation-id   slot (with
+     * value passed in the constructor),  protocol   slot and
+     *  reply-with   slot with a unique value
      * constructed by concatenating receiver's agent name and phase number (i.e. 0).
      * After that it sends all cfps.
      *

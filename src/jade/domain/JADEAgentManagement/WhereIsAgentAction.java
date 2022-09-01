@@ -28,8 +28,8 @@ import jade.core.AID;
 
 
 /**
- * This class represents the <code>where-is-agent</code> action of
- * the <code>JADE-agent-management ontology</code>.
+ * This class represents the  where-is-agent   action of
+ * the  JADE-agent-management ontology  .
  * This action can be requested to the JADE AMS to know the container
  * a given agent is currently running on.
  *
@@ -50,19 +50,19 @@ public class WhereIsAgentAction implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>agent-identifier</code> slot of
+     * Retrieve the value of the  agent-identifier   slot of
      * this action, containing the agent identifier for the agent
      * whose location is requested.
      *
-     * @return The value of the <code>agent-identifier</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  agent-identifier   slot, or
+     *  null   if no value was set.
      */
     public AID getAgentIdentifier() {
         return agentName;
     }
 
     /**
-     * Set the <code>agent-identifier</code> slot of this action.
+     * Set the  agent-identifier   slot of this action.
      *
      * @param id The agent identifier for the agent whose location is
      *           requested.

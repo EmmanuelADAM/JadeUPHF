@@ -68,7 +68,7 @@ public class TwoPhResponder extends Responder {
      *                        the initiator message. Take care that if mt is null every message is
      *                        consumed by this protocol.
      *                        The best practice is to have a MessageTemplate that matches
-     *                        the protocol slot; the static method <code>createMessageTemplate</code>
+     *                        the protocol slot; the static method  createMessageTemplate  
      *                        might be usefull.
      * @param mapMessagesList the HashMap for this protocol behaviour
      * @deprecated
@@ -157,7 +157,7 @@ public class TwoPhResponder extends Responder {
      *                        the initiator message. Take care that if mt is null every message is
      *                        consumed by this protocol.
      *                        The best practice is to have a MessageTemplate that matches
-     *                        the protocol slot; the static method <code>createMessageTemplate</code>
+     *                        the protocol slot; the static method  createMessageTemplate  
      *                        might be usefull.
      * @param mapMessagesList the HashMap of messages list for this protocol behaviour
      * @param mapMessages     the HashMap of messages for this protocol behaviour
@@ -263,8 +263,8 @@ public class TwoPhResponder extends Responder {
      *
      * @param cfp the received message
      * @return the ACLMessage to be sent as a response (i.e. one of
-     * <code>PROPOSE, FAILURE</code>. <b>Remind</b> to
-     * use the method <code>createReply</code> of the class ACLMessage in order
+     *  PROPOSE, FAILURE  . <b>Remind</b> to
+     * use the method  createReply   of the class ACLMessage in order
      * to create a valid reply message
      * @see ACLMessage#createReply()
      **/
@@ -273,14 +273,14 @@ public class TwoPhResponder extends Responder {
     }
 
     /**
-     * This method is called after the <code>QUERY-IF</code> has been received.
+     * This method is called after the  QUERY-IF   has been received.
      * This default implementation return null which has
      * the effect of sending no result notification. Programmers should
      * override the method in case they need to react to this event.
      *
      * @param queryIf the received message
      * @return the ACLMessage to be sent as a result notification (i.e. one of
-     * <code>CONFIRM, INFORM, DISCONFIRM</code>. <b>Remind</b> to
+     *  CONFIRM, INFORM, DISCONFIRM  . <b>Remind</b> to
      * use the method createReply of the class ACLMessage in order
      * to create a valid reply message
      * @see ACLMessage#createReply()
@@ -290,13 +290,13 @@ public class TwoPhResponder extends Responder {
     }
 
     /**
-     * This method is called after the <code>REJECT-PROPOSAL</code> has been received.
+     * This method is called after the  REJECT-PROPOSAL   has been received.
      * This default implementation do nothing.
      * Programmers should override the method in case they need to react to this event.
      *
      * @param reject the received message
      * @return the ACLMessage to be sent as a result notification (i.e. an
-     * <code>INFORM</code>. <b>Remind</b> to
+     *  INFORM  . <b>Remind</b> to
      * use the method createReply of the class ACLMessage in order
      * to create a valid reply message
      * @see ACLMessage#createReply()
@@ -306,14 +306,14 @@ public class TwoPhResponder extends Responder {
     }
 
     /**
-     * This method is called after the <code>ACCEPT-PROPOSAL</code> has been received.
+     * This method is called after the  ACCEPT-PROPOSAL   has been received.
      * This default implementation return null which has
      * the effect of sending no result notification. Programmers should
      * override the method in case they need to react to this event.
      *
      * @param accept the received message
      * @return the ACLMessage to be sent as a result notification (i.e. an
-     * <code>INFORM</code>. <b>Remind</b> to use the method createReply of
+     *  INFORM  . <b>Remind</b> to use the method createReply of
      * the class ACLMessage in order to create a valid reply message
      * @see ACLMessage#createReply()
      **/
@@ -322,12 +322,12 @@ public class TwoPhResponder extends Responder {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the PREPARE_PROPOSE state. This behaviour would override the homonymous
      * method. This method also set the data store of the registered
-     * <code>Behaviour</code> to the HashMap of this current behaviour.
+     *  Behaviour   to the HashMap of this current behaviour.
      * It is responsibility of the registered behaviour to put the response
-     * to be sent into the HashMap at the <code>PROPOSE_KEY</code> key.
+     * to be sent into the HashMap at the  PROPOSE_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      **/
@@ -336,12 +336,12 @@ public class TwoPhResponder extends Responder {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the HANDLE_QUERY_IF state. This behaviour would override the homonymous
      * method. This method also set the data store of the registered
-     * <code>Behaviour</code> to the HashMap of this current behaviour.
+     *  Behaviour   to the HashMap of this current behaviour.
      * It is responsibility of the registered behaviour to put the response
-     * to be sent into the HashMap at the <code>REPLY_KEY</code> key.
+     * to be sent into the HashMap at the  REPLY_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      **/
@@ -350,12 +350,12 @@ public class TwoPhResponder extends Responder {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the HANDLE_REJECT state. This behaviour would override the homonymous
      * method. This method also set the data store of the registered
-     * <code>Behaviour</code> to the HashMap of this current behaviour.
+     *  Behaviour   to the HashMap of this current behaviour.
      * It is responsibility of the registered behaviour to put the response
-     * to be sent into the HashMap at the <code>REPLY_KEY</code> key.
+     * to be sent into the HashMap at the  REPLY_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      **/
@@ -366,12 +366,12 @@ public class TwoPhResponder extends Responder {
     /**todo@ Da rivedere il createMessageTemplate E I COMMENTI!!!! */
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the HANDLE_ACCEPTANCE state. This behaviour would override the homonymous
      * method. This method also set the data store of the registered
-     * <code>Behaviour</code> to the HashMap of this current behaviour.
+     *  Behaviour   to the HashMap of this current behaviour.
      * It is responsibility of the registered behaviour to put the response
-     * to be sent into the HashMap at the <code>REPLY_KEY</code> key.
+     * to be sent into the HashMap at the  REPLY_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      **/

@@ -25,6 +25,8 @@ package jade.core.behaviours;
 
 import jade.core.Agent;
 
+import java.util.function.Consumer;
+
 
 /**
  * An atomic behaviour. This abstract class models behaviours that are
@@ -32,6 +34,8 @@ import jade.core.Agent;
  *
  * @author Giovanni Rimassa - Universita` di Parma
  * @version $Date: 2000-10-09 09:03:44 +0200 (lun, 09 ott 2000) $ $Revision: 1919 $
+ * @author emmanuel adam - 22.07
+ * @version $Date: 2022-07-13  $
  */
 public abstract class SimpleBehaviour extends Behaviour {
 
@@ -53,7 +57,18 @@ public abstract class SimpleBehaviour extends Behaviour {
     }
 
     /**
-     * Resets a <code>SimpleBehaviour</code>.
+     * This constructor sets the owner agent for this behaviour.
+     *
+     * @param a The agent this behaviour belongs to.
+     * @param fAction The action launch by default by the agent.
+     * @author E. ADAM
+     * @since 22.07
+     */    public SimpleBehaviour(Agent a, Consumer<Agent> fAction) {
+        super(a, fAction);
+    }
+
+    /**
+     * Resets a  SimpleBehaviour  .
      */
     public void reset() {
         super.reset();

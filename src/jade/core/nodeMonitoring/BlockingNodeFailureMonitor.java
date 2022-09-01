@@ -31,7 +31,7 @@ import jade.util.Logger;
 
 
 /**
- * The <code>BlockingNodeFailureMonitor</code> class detects node failures and
+ * The  BlockingNodeFailureMonitor   class detects node failures and
  * notifies its registered listener using blocking calls to the ping()
  * remote method of the monitored Node.
  *

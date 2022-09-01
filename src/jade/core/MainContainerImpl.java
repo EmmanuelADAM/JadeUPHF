@@ -50,12 +50,12 @@ import java.util.*;
  * providing runtime support to JADE agents, and the special, front
  * end container where the AMS and the Default DF can run.
  * This class cannot be instantiated from applications. Instead, the
- * <code>Runtime.createMainContainer(Profile p)</code> method must be
+ *  Runtime.createMainContainer(Profile p)   method must be
  * called.
  *
  * @author Giovanni Rimassa - Universita' di Parma
  * @version $Date: 2015-03-28 00:03:37 +0100 (sab, 28 mar 2015) $ $Revision: 6751 $
- * @see Runtime#createMainContainer(Profile p);
+ * @see "Runtime createMainContainer(Profile p);"
  */
 public class MainContainerImpl implements MainContainer, AgentManager {
 
@@ -1383,7 +1383,7 @@ public class MainContainerImpl implements MainContainer, AgentManager {
         String templateName = template.getName();
         if (templateName != null) {
             String factName = fact.getName();
-            if ((factName == null) || (!templateName.equalsIgnoreCase(factName)))
+            if ((!templateName.equalsIgnoreCase(factName)))
                 return false;
         }
 

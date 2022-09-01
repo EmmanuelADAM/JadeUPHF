@@ -25,7 +25,7 @@ package jade.core;
 
 
 /**
- * The <code>Sink</code> interface has to be implemented by all the
+ * The  Sink   interface has to be implemented by all the
  * components that process JADE kernel-level commands in an exclusive
  * and terminal way.
  * <p>
@@ -46,7 +46,7 @@ public interface Sink {
      * the kernel when all incoming filters have been applied to the
      * incoming vertical command.
      *
-     * @param cmd A <code>VerticalCommand</code> describing what
+     * @param cmd A  VerticalCommand   describing what
      *            operation has been requested from previous layers (that can be
      *            the actual prime source of the command or members of the filter
      *            chain).

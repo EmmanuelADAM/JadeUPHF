@@ -29,7 +29,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Identifies the result slot of an <code>AgentAction</code>.<br>
+ * Identifies the result slot of an  AgentAction  .<br>
  * The annotation is to be applied to the getter method.
  *
  * @author Paolo Cancedda

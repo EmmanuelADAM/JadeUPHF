@@ -121,7 +121,7 @@ public class BrowserLauncher {
      * Caches whether any classes, methods, and fields that are not part of the JDK and need to
      * be dynamically loaded at runtime loaded successfully.
      * <p>
-     * Note that if this is <code>false</code>, <code>openURL()</code> will always return an
+     * Note that if this is  false  ,  openURL()   will always return an
      * IOException.
      */
     private static boolean loadedWithoutErrors;
@@ -249,8 +249,8 @@ public class BrowserLauncher {
      * Called by a static initializer to load any classes, fields, and methods required at runtime
      * to locate the user's web browser.
      *
-     * @return <code>true</code> if all intialization succeeded
-     * <code>false</code> if any portion of the initialization failed
+     * @return  true   if all intialization succeeded
+     *  false   if any portion of the initialization failed
      */
     private static boolean loadClasses() {
         switch (jvm) {

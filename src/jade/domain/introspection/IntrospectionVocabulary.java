@@ -28,7 +28,7 @@ package jade.domain.introspection;
 
 /**
  * This interface contains all the string constants for frame and slot
- * names of exceptions defined in the <code>jade-introspection</code>
+ * names of exceptions defined in the  jade-introspection  
  * ontology.
  */
 public interface IntrospectionVocabulary {

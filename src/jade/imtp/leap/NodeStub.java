@@ -111,10 +111,10 @@ class NodeStub extends Stub implements Node {
     /**
      * Performs a ping operation on the remote node.
      *
-     * @param hang If <code>true</code>, the call hangs until the node
+     * @param hang If  true  , the call hangs until the node
      *             exits or is interrupted.
-     * @return If the node is currently terminating, <code>true</code>
-     * is returned, else <code>false</code>
+     * @return If the node is currently terminating,  true  
+     * is returned, else  false  
      */
     public boolean ping(boolean hang) throws IMTPException {
         Command cmd;

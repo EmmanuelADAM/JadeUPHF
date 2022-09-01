@@ -37,9 +37,9 @@ import jade.content.schema.PredicateSchema;
  * representing generic exceptions. This allows reusing these
  * elements into other ontologies simply including tis Exception-ontology
  * <p>
- * The actual <code>Ontology</code> object representing the
+ * The actual  Ontology   object representing the
  * Exception-ontology is a singleton and is accessible through
- * the static method <code>getInstance()</code>
+ * the static method  getInstance()
  *
  * @author Giovanni Caire - CSELT S.p.A.
  * @version $Date: 2003-02-20 11:54:12 +0100 (gio, 20 feb 2003) $ $Revision: 3675 $
@@ -137,7 +137,7 @@ public class ExceptionOntology extends Ontology implements ExceptionVocabulary {
      * This method returns the unique instance (according to the singleton
      * pattern) of the Exception-ontology.
      *
-     * @return The singleton <code>Ontology</code> object, containing the
+     * @return The singleton  Ontology   object, containing the
      * schemas for the elements of the Exception-ontology.
      */
     public static Ontology getInstance() {

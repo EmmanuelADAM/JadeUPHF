@@ -48,7 +48,7 @@ public class ACLMessage implements Concept {
      * Retrieve the message envelope.
      *
      * @return The transport-level envelope attached to this ACL
-     * message, or <code>null</code> if no envelope was set.
+     * message, or  null   if no envelope was set.
      */
     public Envelope getEnvelope() {
         return env;

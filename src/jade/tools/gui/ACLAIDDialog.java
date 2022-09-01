@@ -40,7 +40,7 @@ import java.awt.event.ItemEvent;
  * This class is used to edit a particular AID.
  *
  * @author Chris van Aart - Acklin B.V., the Netherlands
- * @created April 26, 2002
+ * @since April 26, 2002
  */
 
 public class ACLAIDDialog extends JDialog {

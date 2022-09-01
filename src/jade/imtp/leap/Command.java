@@ -35,7 +35,7 @@ package jade.imtp.leap;
 import java.util.Vector;
 
 /**
- * The <code>Command</code> object is used to represent a platform command.
+ * The  Command   object is used to represent a platform command.
  *
  * @author Michael Watzke
  * @author Steffen Rusitschka
@@ -147,8 +147,8 @@ public class Command {
 
     /**
      * Add a deliverable parameter, i.e., an object implementing the
-     * <code>Deliverable</code> interface or a <code>java.lang.String</code> or a
-     * <code>java.lang.StringBuffer</code> object to the end of the
+     *  Deliverable   interface or a  java.lang.String   or a
+     *  java.lang.StringBuffer   object to the end of the
      * argument list of this command object.
      *
      * @param param the parameter object to be added at the end of the argument

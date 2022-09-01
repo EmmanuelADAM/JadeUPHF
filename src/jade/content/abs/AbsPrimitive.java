@@ -59,8 +59,8 @@ public class AbsPrimitive implements AbsTerm {
     }
 
     /**
-     * Create an AbsPrimitive of type <code>BasicOntology.STRING</code>
-     * containing a given <code>String</code> value.
+     * Create an AbsPrimitive of type  BasicOntology.STRING
+     * containing a given  String   value.
      */
     public static AbsPrimitive wrap(String value) {
         AbsPrimitive ret = null;
@@ -71,24 +71,24 @@ public class AbsPrimitive implements AbsTerm {
     }
 
     /**
-     * Create an AbsPrimitive of type <code>BasicOntology.BOOLEAN</code>
-     * containing a given <code>boolean</code> value.
+     * Create an AbsPrimitive of type  BasicOntology.BOOLEAN
+     * containing a given  boolean   value.
      */
     public static AbsPrimitive wrap(boolean value) {
         return new AbsPrimitive(BasicOntology.BOOLEAN, value);
     }
 
     /**
-     * Create an AbsPrimitive of type <code>BasicOntology.INTEGER</code>
-     * containing a given <code>int</code> value.
+     * Create an AbsPrimitive of type  BasicOntology.INTEGER
+     * containing a given  int   value.
      */
     public static AbsPrimitive wrap(int value) {
         return new AbsPrimitive(BasicOntology.INTEGER, value);
     }
 
     /**
-     * Create an AbsPrimitive of type <code>BasicOntology.INTEGER</code>
-     * containing a given <code>long</code> value.
+     * Create an AbsPrimitive of type  BasicOntology.INTEGER
+     * containing a given  long   value.
      */
     public static AbsPrimitive wrap(long value) {
         return new AbsPrimitive(BasicOntology.INTEGER, value);
@@ -97,16 +97,16 @@ public class AbsPrimitive implements AbsTerm {
     //#MIDP_EXCLUDE_BEGIN
 
     /**
-     * Create an AbsPrimitive of type <code>BasicOntology.FLOAT</code>
-     * containing a given <code>float</code> value.
+     * Create an AbsPrimitive of type  BasicOntology.FLOAT
+     * containing a given  float   value.
      */
     public static AbsPrimitive wrap(float value) {
         return new AbsPrimitive(BasicOntology.FLOAT, value);
     }
 
     /**
-     * Create an AbsPrimitive of type <code>BasicOntology.FLOAT</code>
-     * containing a given <code>double</code> value.
+     * Create an AbsPrimitive of type  BasicOntology.FLOAT
+     * containing a given  double   value.
      */
     public static AbsPrimitive wrap(double value) {
         return new AbsPrimitive(BasicOntology.FLOAT, value);
@@ -114,8 +114,8 @@ public class AbsPrimitive implements AbsTerm {
     //#MIDP_EXCLUDE_END
 
     /**
-     * Create an AbsPrimitive of type <code>BasicOntology.DATE</code>
-     * containing a given <code>Date</code> value.
+     * Create an AbsPrimitive of type  BasicOntology.DATE
+     * containing a given  Date   value.
      */
     public static AbsPrimitive wrap(Date value) {
         AbsPrimitive ret = null;
@@ -126,8 +126,8 @@ public class AbsPrimitive implements AbsTerm {
     }
 
     /**
-     * Create an AbsPrimitive of type <code>BasicOntology.BYTE_SEQUENCE</code>
-     * containing a given <code>byte[]</code> value.
+     * Create an AbsPrimitive of type  BasicOntology.BYTE_SEQUENCE
+     * containing a given  byte[]   value.
      */
     public static AbsPrimitive wrap(byte[] value) {
         AbsPrimitive ret = null;
@@ -143,7 +143,7 @@ public class AbsPrimitive implements AbsTerm {
      *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     *                                  is not <code>BasicOntology.STRING</code>
+     *                                  is not  BasicOntology.STRING
      */
     public void set(String value) {
         if (!getTypeName().equals(BasicOntology.STRING))
@@ -156,7 +156,7 @@ public class AbsPrimitive implements AbsTerm {
      *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     *                                  is not <code>BasicOntology.BOOLEAN</code>
+     *                                  is not  BasicOntology.BOOLEAN
      */
     public void set(boolean value) {
         if (!getTypeName().equals(BasicOntology.BOOLEAN))
@@ -169,7 +169,7 @@ public class AbsPrimitive implements AbsTerm {
      *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     *                                  is not <code>BasicOntology.INTEGER</code>
+     *                                  is not  BasicOntology.INTEGER
      */
     public void set(int value) {
         if (!getTypeName().equals(BasicOntology.INTEGER))
@@ -182,7 +182,7 @@ public class AbsPrimitive implements AbsTerm {
      *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     *                                  is not <code>BasicOntology.INTEGER</code>
+     *                                  is not  BasicOntology.INTEGER
      */
     public void set(long value) {
         if (!getTypeName().equals(BasicOntology.INTEGER))
@@ -197,7 +197,7 @@ public class AbsPrimitive implements AbsTerm {
      *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     *                                  is not <code>BasicOntology.FLOAT</code>
+     *                                  is not  BasicOntology.FLOAT
      */
     public void set(float value) {
         if (!getTypeName().equals(BasicOntology.FLOAT))
@@ -210,7 +210,7 @@ public class AbsPrimitive implements AbsTerm {
      *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     *                                  is not <code>BasicOntology.FLOAT</code>
+     *                                  is not  BasicOntology.FLOAT
      */
     public void set(double value) {
         if (!getTypeName().equals(BasicOntology.FLOAT))
@@ -224,7 +224,7 @@ public class AbsPrimitive implements AbsTerm {
      *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     *                                  is not <code>BasicOntology.DATE</code>
+     *                                  is not  BasicOntology.DATE
      */
     public void set(Date value) {
         if (!getTypeName().equals(BasicOntology.DATE))
@@ -237,7 +237,7 @@ public class AbsPrimitive implements AbsTerm {
      *
      * @param value The new value
      * @throws IllegalArgumentException If the type of this AbsPrimitive
-     *                                  is not <code>BasicOntology.BYTE_SEQUENCE</code>
+     *                                  is not  BasicOntology.BYTE_SEQUENCE
      */
     public void set(byte[] value) {
         if (!getTypeName().equals(BasicOntology.BYTE_SEQUENCE))
@@ -248,7 +248,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a String.
      * @throws ClassCastException If the type of this AbsPrimitive
-     *                            is not <code>BasicOntology.STRING</code>
+     *                            is not  BasicOntology.STRING
      */
     public String getString() {
         return (String) value;
@@ -257,7 +257,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a boolean.
      * @throws ClassCastException If the type of this AbsPrimitive
-     *                            is not <code>BasicOntology.BOOLEAN</code>
+     *                            is not  BasicOntology.BOOLEAN
      */
     public boolean getBoolean() {
         return (Boolean) value;
@@ -266,7 +266,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as an int.
      * @throws ClassCastException If the type of this AbsPrimitive
-     *                            is not <code>BasicOntology.INTEGER</code>
+     *                            is not  BasicOntology.INTEGER
      */
     public int getInteger() {
         try {
@@ -280,7 +280,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a long.
      * @throws ClassCastException If the type of this AbsPrimitive
-     *                            is not <code>BasicOntology.INTEGER</code>
+     *                            is not  BasicOntology.INTEGER
      */
     public long getLong() {
         try {
@@ -296,7 +296,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a float.
      * @throws ClassCastException If the type of this AbsPrimitive
-     *                            is not <code>BasicOntology.FLOAT</code>
+     *                            is not  BasicOntology.FLOAT
      */
     public float getFloat() {
         try {
@@ -310,7 +310,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a double.
      * @throws ClassCastException If the type of this AbsPrimitive
-     *                            is not <code>BasicOntology.FLOAT</code>
+     *                            is not  BasicOntology.FLOAT
      */
     public double getDouble() {
         try {
@@ -325,7 +325,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a Date.
      * @throws ClassCastException If the type of this AbsPrimitive
-     *                            is not <code>BasicOntology.DATE</code>
+     *                            is not  BasicOntology.DATE
      */
     public Date getDate() {
         return (Date) value;
@@ -334,7 +334,7 @@ public class AbsPrimitive implements AbsTerm {
     /**
      * @return the value of this AbsPrimitive as a byte[].
      * @throws ClassCastException If the type of this AbsPrimitive
-     *                            is not <code>BasicOntology.BYTE_SEQUENCE</code>
+     *                            is not  BasicOntology.BYTE_SEQUENCE
      */
     public byte[] getByteSequence() {
         return (byte[]) value;
@@ -342,9 +342,9 @@ public class AbsPrimitive implements AbsTerm {
 
     /**
      * @return the value of this AbsPrimitive as an Object.
-     * If the type of this AbsPrimitive is <code>BasicOntology.BOOLEAN
-     * BasicOntology.INTEGER or BasicOntology.FLOAT</code> a
-     * <code>Boolean, Integer or Float</code> object is returned.
+     * If the type of this AbsPrimitive is  BasicOntology.BOOLEAN
+     * BasicOntology.INTEGER or BasicOntology.FLOAT   a
+     *  Boolean, Integer or Float   object is returned.
      */
     public Object getObject() {
         return value;

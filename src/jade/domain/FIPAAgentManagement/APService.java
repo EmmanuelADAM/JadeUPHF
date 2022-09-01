@@ -62,10 +62,10 @@ public class APService implements Concept {
     }
 
     /**
-     * Retrieve the <code>name</code> slot of this object.
+     * Retrieve the  name   slot of this object.
      *
-     * @return The value of the <code>name</code> slot of this
-     * platform service description, or <code>null</code> if no value
+     * @return The value of the  name   slot of this
+     * platform service description, or  null   if no value
      * was set.
      */
     public String getName() {
@@ -73,7 +73,7 @@ public class APService implements Concept {
     }
 
     /**
-     * Set the <code>name</code> slot of this object.
+     * Set the  name   slot of this object.
      *
      * @param n The string for the platform service name.
      */
@@ -82,10 +82,10 @@ public class APService implements Concept {
     }
 
     /**
-     * Retrieve the <code>type</code> slot of this object.
+     * Retrieve the  type   slot of this object.
      *
-     * @return The value of the <code>type</code> slot of this
-     * platform service description, or <code>null</code> if no value
+     * @return The value of the  type   slot of this
+     * platform service description, or  null   if no value
      * was set.
      */
     public String getType() {
@@ -93,7 +93,7 @@ public class APService implements Concept {
     }
 
     /**
-     * Set the <code>type</code> slot of this object.
+     * Set the  type   slot of this object.
      *
      * @param t The string for the platform service type.
      */
@@ -102,7 +102,7 @@ public class APService implements Concept {
     }
 
     /**
-     * Add a service to the <code>addresses</code> slot collection
+     * Add a service to the  addresses   slot collection
      * of this object.
      *
      * @param address The address to add to the collection.
@@ -112,7 +112,7 @@ public class APService implements Concept {
     }
 
     /**
-     * Remove a service from the <code>addresses</code> slot
+     * Remove a service from the  addresses   slot
      * collection of this object.
      *
      * @param address The address to remove from the collection.
@@ -124,7 +124,7 @@ public class APService implements Concept {
     }
 
     /**
-     * Remove all addresses from the <code>addresses</code> slot
+     * Remove all addresses from the  addresses   slot
      * collection of this object.
      */
     public void clearAllAddresses() {
@@ -132,7 +132,7 @@ public class APService implements Concept {
     }
 
     /**
-     * Access all addresses from the <code>addresses</code> slot
+     * Access all addresses from the  addresses   slot
      * collection of this object.
      *
      * @return An iterator over the addresses collection.

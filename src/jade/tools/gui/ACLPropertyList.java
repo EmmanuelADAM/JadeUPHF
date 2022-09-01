@@ -299,7 +299,7 @@ public class ACLPropertyList extends JPanel {
                 , GridBagConstraints.CENTER, GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
     }
 
-    private class ACLPropertyListCellRenderer extends JLabel implements ListCellRenderer<Object> {
+    private static class ACLPropertyListCellRenderer extends JLabel implements ListCellRenderer<Object> {
         private ACLMessage msg;
 
 
@@ -342,7 +342,7 @@ public class ACLPropertyList extends JPanel {
         }
     }
 
-    private class ACLPropertyDialog extends JDialog {
+    private static class ACLPropertyDialog extends JDialog {
 
         private final String CANCELLED = "cancelled";
         private final String CLOSED = "closed";
@@ -520,10 +520,10 @@ public class ACLPropertyList extends JPanel {
      * This class is the ListDataListener of the ACLPropertyList.
      *
      * @author Chris van Aart - Acklin B.V., the Netherlands
-     * @created April 26, 2002
+     * @since April 26, 2002
      */
 
-    private class ACLPropertyListener implements ListDataListener {
+    private static class ACLPropertyListener implements ListDataListener {
         private String fieldName = "";
         private String theRemovedKey, theChangedKey, theChangedValue;
         private ACLMessage itsMsg;

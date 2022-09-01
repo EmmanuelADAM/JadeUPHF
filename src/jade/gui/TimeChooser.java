@@ -39,7 +39,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * The <code>TimeChooser</code> class can be used to let the user
+ * The  TimeChooser   class can be used to let the user
  * define a certain point in time by means of a dialog window.<p> <p>
  *
  * @author Giovanni Rimassa - Universita' di Parma

@@ -29,9 +29,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Allows to specify in the ontological schema the <code>cardMin</code>
- * (minimum cardinality), <code>cardMax</code> (maximum cardinality) and
- * <code>type</code> (class of the contained elements) attributes of the aggregate slot.<br>
+ * Allows to specify in the ontological schema the  cardMin
+ * (minimum cardinality),  cardMax   (maximum cardinality) and
+ *  type   (class of the contained elements) attributes of the aggregate slot.<br>
  * The annotation is to be applied to the getter method.
  *
  * @author Paolo Cancedda

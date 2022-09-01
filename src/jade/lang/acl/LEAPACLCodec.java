@@ -309,7 +309,7 @@ public class LEAPACLCodec implements ACLCodec {
     }
 
     /**
-     * Encodes an <code>ACLMessage</code> object into a byte sequence,
+     * Encodes an  ACLMessage   object into a byte sequence,
      * according to the specific message representation.
      *
      * @param msg     The ACL message to encode.
@@ -329,13 +329,13 @@ public class LEAPACLCodec implements ACLCodec {
     }
 
     /**
-     * Recovers an <code>ACLMessage</code> object back from raw data,
+     * Recovers an  ACLMessage   object back from raw data,
      * using the specific message representation to interpret the byte
      * sequence.
      *
      * @param data    The byte sequence containing the encoded message.
      * @param charset This parameter is not taken into account
-     * @return A new <code>ACLMessage</code> object, built from the raw
+     * @return A new  ACLMessage   object, built from the raw
      * data.
      * @throws CodecException If some kind of syntax error occurs.
      */
@@ -350,8 +350,8 @@ public class LEAPACLCodec implements ACLCodec {
 
     /**
      * Query the name of the message representation handled by this
-     * <code>Codec</code> object. The FIPA standard representations have
-     * a name starting with <code><b>"fipa.acl.rep."</b></code>.
+     *  Codec   object. The FIPA standard representations have
+     * a name starting with  <b>"fipa.acl.rep."</b>  .
      *
      * @return The name of the handled ACL message representation.
      */

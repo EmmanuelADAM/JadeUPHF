@@ -28,12 +28,12 @@ package jade.core;
  * Base class for command filters, that allow to
  * set up an open-ended chain of platform services to process commands
  * coming from the upper JADE layers. Filters process commands when
- * their <code>accept()</code> method and <code>postProcess</code>
+ * their  accept()   method and  postProcess
  * methods are invoked; Filters in the filter chain are nested.
- * The <code>accept()</code> method is called before the command is
+ * The  accept()   method is called before the command is
  * processed by successive filters in the chain. It should be used
  * to take proper actions before the command consumption. On the other hand
- * the <code>postProcess()</code> method is called after the command
+ * the  postProcess()   method is called after the command
  * has been processed by successive filters in the chain. It should be used
  * to take proper actions after the command consumption.
  *
@@ -74,7 +74,7 @@ public abstract class Filter {
     /**
      * Receive a command object for processing.
      *
-     * @param cmd A <code>VerticalCommand</code> describing what operation has
+     * @param cmd A  VerticalCommand   describing what operation has
      *            been requested from previous layers (that can be the actual
      *            prime source of the command or previous filters in the chain).
      */
@@ -91,12 +91,12 @@ public abstract class Filter {
      * Process a command before it is processed by successive
      * filters in the filter-chain.
      *
-     * @param cmd A <code>VerticalCommand</code> describing what operation has
+     * @param cmd A  VerticalCommand   describing what operation has
      *            been requested from previous layers (that can be the actual
      *            prime source of the command or previous filters in the chain).
      * @return A boolean value, telling whether the filtered command has
      * been accepted or not. A filter can veto a command by
-     * returning <code>false</code> from this method. A vetoed command
+     * returning  false   from this method. A vetoed command
      * is not propagated in the filter chain.
      */
     protected boolean accept(VerticalCommand cmd) {
@@ -107,7 +107,7 @@ public abstract class Filter {
      * Post-process a command object after it has been processed by the
      * successive filters in the filter chain.
      *
-     * @param cmd A <code>VerticalCommand</code> describing what operation has
+     * @param cmd A  VerticalCommand   describing what operation has
      *            been requested from previous layers (that can be the actual
      *            prime source of the command or previous filters in the chain).
      */

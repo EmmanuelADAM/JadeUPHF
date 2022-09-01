@@ -28,7 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * A generic implementation of the <code>Command</code> interface,
+ * A generic implementation of the  Command   interface,
  * operating at the meta-level to provide a generic transformation of
  * method invocations.
  * Generic commands can be used both as vertical and horizontal commands.
@@ -79,7 +79,7 @@ public class GenericCommand implements HorizontalCommand, VerticalCommand {
      * Add a new parameter to this command object.
      *
      * @param obj The parameter to add. The actual type of
-     *            <code>obj</code> must be such that can be delivered over the
+     *             obj   must be such that can be delivered over the
      *            network by the concrete platform IMTP.
      * @see IMTPManager
      */

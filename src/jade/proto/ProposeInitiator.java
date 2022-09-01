@@ -39,7 +39,7 @@ import java.util.*;
 
 /**
  * This class implements the Fipa-Propose interaction protocol
- * with an API similar and homogeneous to <code>AchieveREInitiator</code>.
+ * with an API similar and homogeneous to  AchieveREInitiator  .
  * <br>
  * This implementation works both for 1:1 and 1:N conversation and, of course,
  * implements the role of the initiator of the protocol.
@@ -49,39 +49,35 @@ import java.util.*;
  * <a href=http://www.fipa.org/specs/fipa00036/SC00036H.html>FIPA Spec</a>
  * for a complete description.
  * <p>
- * The initiator sends a <code>PROPOSE</code> message to the Participant
+ * The initiator sends a  PROPOSE   message to the Participant
  * indicating that it will perform some action if the Participant agrees.
- * The implementation of the callback method <code>prepareInitiations</code>
+ * The implementation of the callback method  prepareInitiations
  * must return the vector of messages to be sent (eventually a single message
  * with multiple receivers).
  * <p>
- * The responders can then reply by sending a <code>ACCEPT-PROPOSAL</code>
- * message. Alternatively, responders may send a <code>REJECT-PROPOSAL</code>,
- * to refuse the proposal or, eventually, a <code>NOT-UNDERSTOOD</code> to
+ * The responders can then reply by sending a  ACCEPT-PROPOSAL
+ * message. Alternatively, responders may send a  REJECT-PROPOSAL  ,
+ * to refuse the proposal or, eventually, a  NOT-UNDERSTOOD   to
  * communicate communication problems.
  * This category of reply messages has been here identified as a
- * response and can be handled via the <code>handleAllResponses</code>
+ * response and can be handled via the  handleAllResponses
  * callback method.
  * Specific handle callback methods for each type of communicative act are also
  * available when the programmer wishes to handle them separately:
- * <code>handleRejectProposal, handleAcceptProposal, handleNotUnderstood</code>
+ *  handleRejectProposal, handleAcceptProposal, handleNotUnderstood
  * <p>
  * If a message were received, with the same value of this
- * <code>conversation-id</code>, but that does not comply with the FIPA
- * protocol, than the method <code>handleOutOfSequence</code> would be called.
+ *  conversation-id  , but that does not comply with the FIPA
+ * protocol, than the method  handleOutOfSequence   would be called.
  * <p>
  * This class can be extended by the programmer by overriding all the needed
  * handle methods or, in alternative, appropriate behaviours can be
- * registered for each handle via the <code>registerHandle</code>-type
+ * registered for each handle via the  registerHandle  -type
  * of methods. This last case is more difficult to use and proper
- * care must be taken to properly use the <code>HashMap</code> of the
- * <code>Behaviour</code> as a shared memory mechanism with the
+ * care must be taken to properly use the  HashMap   of the
+ *  Behaviour   as a shared memory mechanism with the
  * registered behaviour.
  * <p>
- * Read carefully the section of the
- * <a href="..\..\..\programmersguide.pdf"> JADE programmer's guide </a>
- * that describes
- * the usage of this class.
  *
  * @author Jerome Picault - Motorola Labs
  * @version $Date: 2005-09-16 15:54:46 +0200 (ven, 16 set 2005) $ $Revision: 5780 $
@@ -166,7 +162,7 @@ public class ProposeInitiator extends FSMBehaviour {
     private boolean allResponsesReceived = false;
 
     /**
-     * Construct a <code>ProposeInitiator</code> with an empty HashMap
+     * Construct a  ProposeInitiator   with an empty HashMap
      *
      * @see #ProposeInitiator(Agent, ACLMessage, HashMap, HashMap)
      **/
@@ -175,17 +171,17 @@ public class ProposeInitiator extends FSMBehaviour {
     }
 
     /**
-     * Construct a <code>ProposeInitiator</code> with a given HashMap
+     * Construct a  ProposeInitiator   with a given HashMap
      *
      * @param a               The agent performing the protocol
      * @param initiation      The message that must be used to initiate the protocol.
      *                        Notice that the default implementation of the
-     *                        <code>prepareInitiations()</code> method returns
+     *                         prepareInitiations()   method returns
      *                        an array composed of only this message.
      *                        The values of the slot
-     *                        <code>reply-with</code> is ignored and a different value is assigned
+     *                         reply-with   is ignored and a different value is assigned
      *                        automatically by this class for each receiver.
-     * @param mapMessagesList The <code>HashMap</code> of messages List that will be used
+     * @param mapMessagesList The  HashMap   of messages List that will be used
      * @deprecated
      */
     public ProposeInitiator(Agent a, ACLMessage initiation, HashMap<String, List<ACLMessage>> mapMessagesList) {
@@ -371,18 +367,18 @@ public class ProposeInitiator extends FSMBehaviour {
 
 
     /**
-     * Construct a <code>ProposeInitiator</code> with a given HashMap
+     * Construct a  ProposeInitiator   with a given HashMap
      *
      * @param a               The agent performing the protocol
      * @param initiation      The message that must be used to initiate the protocol.
      *                        Notice that the default implementation of the
-     *                        <code>prepareInitiations()</code> method returns
+     *                         prepareInitiations()   method returns
      *                        an array composed of only this message.
      *                        The values of the slot
-     *                        <code>reply-with</code> is ignored and a different value is assigned
+     *                         reply-with   is ignored and a different value is assigned
      *                        automatically by this class for each receiver.
-     * @param mapMessagesList The <code>HashMap</code> of messages List that will be used
-     * @param mapMessages     The <code>HashMap</code> of messages  that will be used
+     * @param mapMessagesList The  HashMap   of messages List that will be used
+     * @param mapMessages     The  HashMap   of messages  that will be used
      */
     public ProposeInitiator(Agent a, ACLMessage initiation, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a);
@@ -719,7 +715,7 @@ public class ProposeInitiator extends FSMBehaviour {
      *
      * @param propose the ACLMessage object passed in the constructor
      * @return a Vector of ACLMessage objects. The value of the slot
-     * <code>reply-with</code> is ignored and regenerated automatically
+     *  reply-with   is ignored and regenerated automatically
      * by this class.
      **/
     protected List<ACLMessage> prepareInitiations(ACLMessage propose) {
@@ -729,7 +725,7 @@ public class ProposeInitiator extends FSMBehaviour {
     }
 
     /**
-     * This method is called every time an <code>accept-proposal</code>
+     * This method is called every time an  accept-proposal
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -741,7 +737,7 @@ public class ProposeInitiator extends FSMBehaviour {
     }
 
     /**
-     * This method is called every time an <code>reject-proposal</code>
+     * This method is called every time an  reject-proposal
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -753,7 +749,7 @@ public class ProposeInitiator extends FSMBehaviour {
     }
 
     /**
-     * This method is called every time a <code>not-understood</code>
+     * This method is called every time a  not-understood
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -777,15 +773,15 @@ public class ProposeInitiator extends FSMBehaviour {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_ALL_RESPONSES state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
      * the vector of ACLMessage objects, received as a response,
-     * from the HashMap at the <code>ALL_RESPONSES_KEY</code>
+     * from the HashMap at the  ALL_RESPONSES_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -796,15 +792,15 @@ public class ProposeInitiator extends FSMBehaviour {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_ACCEPT_PROPOSAL state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>inform</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code> key.
+     * the  inform   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -814,15 +810,15 @@ public class ProposeInitiator extends FSMBehaviour {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_REJECT_PROPOSAL state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>inform</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code> key.
+     * the  inform   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -833,15 +829,15 @@ public class ProposeInitiator extends FSMBehaviour {
 
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_NOT_UNDERSTOOD state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>not-understood</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
+     * the  not-understood   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -852,15 +848,15 @@ public class ProposeInitiator extends FSMBehaviour {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_OUT_OF_SEQ state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>out of sequence</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
+     * the  out of sequence   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -873,10 +869,10 @@ public class ProposeInitiator extends FSMBehaviour {
     /**
      * This method is called when all the responses have been
      * collected or when the timeout is expired.
-     * The used timeout is the minimum value of the slot <code>replyBy</code>
+     * The used timeout is the minimum value of the slot  replyBy
      * of all the sent messages.
-     * By response message we intend here all the <code>accept-proposal,
-     * reject-proposal, not-understood</code> received messages, which are not
+     * By response message we intend here all the  accept-proposal,
+     * reject-proposal, not-understood   received messages, which are not
      * not out-of-sequence according to the protocol rules.
      * This default implementation does nothing; programmers might
      * wish to override the method in case they need to react to this event
@@ -932,7 +928,7 @@ public class ProposeInitiator extends FSMBehaviour {
      * interaction.
      *
      * @param msgs A vector of ACL messages. If the first one has a
-     *             non-empty <code>:conversation-id</code> slot, its value is
+     *             non-empty  :conversation-id   slot, its value is
      *             used, else a new conversation identifier is generated.
      */
     protected String createConvId(List<ACLMessage> msgs) {

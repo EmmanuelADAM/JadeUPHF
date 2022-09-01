@@ -55,7 +55,7 @@ public class DynamicJadeGateway {
      * This method first check if the executor Agent is alive (if not it
      * creates container and agent), then it forwards the execution
      * request to the agent, finally it blocks waiting until the command
-     * has been executed (i.e. the method <code>releaseCommand</code>
+     * has been executed (i.e. the method  releaseCommand
      * is called by the executor agent)
      *
      * @throws StaleProxyException if the method was not able to execute the Command

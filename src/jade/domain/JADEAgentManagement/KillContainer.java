@@ -28,8 +28,8 @@ import jade.content.AgentAction;
 import jade.core.ContainerID;
 
 /**
- * This class represents the <code>kill-container</code> action of
- * the <code>JADE-agent-management ontology</code>.
+ * This class represents the  kill-container   action of
+ * the  JADE-agent-management ontology  .
  * This action can be requested to the JADE AMS to kill an active container.
  *
  * @author Giovanni Rimassa -  Universita' di Parma
@@ -50,19 +50,19 @@ public class KillContainer implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>container</code> slot of this
+     * Retrieve the value of the  container   slot of this
      * event, containing the container identifier of the container to
      * terminate.
      *
-     * @return The value of the <code>container</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  container   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getContainer() {
         return container;
     }
 
     /**
-     * Set the <code>container</code> slot of this action.
+     * Set the  container   slot of this action.
      *
      * @param cid The container identifier of the container to
      *            terminate.
@@ -72,19 +72,19 @@ public class KillContainer implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>password</code> slot of this
+     * Retrieve the value of the  password   slot of this
      * event, containing the password to authenticate the principal
      * requesting the container termination.
      *
-     * @return The value of the <code>password</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  password   slot, or
+     *  null   if no value was set.
      */
     public String getPassword() {
         return password;
     }
 
     /**
-     * Set the <code>password</code> slot of this action.
+     * Set the  password   slot of this action.
      *
      * @param p The password to authenticate the principal requesting
      *          the container termination.

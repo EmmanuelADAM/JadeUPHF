@@ -46,75 +46,75 @@ import java.util.List;
  * for a complete description.
  * <p>
  * The initiator solicits proposals from other agents by sending
- * a <code>CFP</code> message that specifies the action to be performed
+ * a  CFP   message that specifies the action to be performed
  * and, if needed, conditions upon its execution. The implementation of
- * the callback method <code>prepareCfps</code> must return the Vector of
+ * the callback method  prepareCfps   must return the Vector of
  * messages to be sent (eventually a single message with multiple receivers).
  * <p>
- * The responders can then reply by sending a <code>PROPOSE</code> message
+ * The responders can then reply by sending a  PROPOSE   message
  * including the preconditions that they set out for the action, for instance
  * the price or the time.
- * Alternatively, responders may send a <code>REFUSE</code>, to refuse
- * the proposal or, eventually, a <code>NOT-UNDERSTOOD</code> to communicate
+ * Alternatively, responders may send a  REFUSE  , to refuse
+ * the proposal or, eventually, a  NOT-UNDERSTOOD   to communicate
  * communication problems.
  * This first category of reply messages has been here identified as a
- * responses and can be handled via the <code>handleAllResponses()</code>
+ * responses and can be handled via the  handleAllResponses()
  * callback method.
  * Specific handle callback methods for each type of communicative act are also
  * available when the programmer wishes to handle them separately:
- * <code>handlePropose(), handleRefuse(), handleNotUnderstood()</code>.
+ *  handlePropose(), handleRefuse(), handleNotUnderstood()  .
  * <p>
  * The initiator can evaluate all the received proposals
  * and make its choice of which agent proposals will be accepted and
  * which will be rejected.
  * This class provides two ways for this evaluation. It can be done
- * progressively each time a new <code>PROPOSE</code> message is
- * received and a new call to the <code>handlePropose()</code> callback
+ * progressively each time a new  PROPOSE   message is
+ * received and a new call to the  handlePropose()   callback
  * method is executed
  * or,
- * in alternative, it can be done just once when all the <code>PROPOSE</code>
- * messages have been collected (or the <code>reply-by</code> deadline has
+ * in alternative, it can be done just once when all the  PROPOSE
+ * messages have been collected (or the  reply-by   deadline has
  * expired) and a single call to the
- * <code>handleAllResponses()</code> callback method is executed.
+ *  handleAllResponses()   callback method is executed.
  * In both cases, the second parameter of the method, i.e. the Vector
- * <code>acceptances</code>, must be filled with the appropriate
- * <code>ACCEPT/REJECT-PROPOSAL</code> messages.
- * Notice that, for the first case, the method <code>skipNextResponses()</code>
+ *  acceptances  , must be filled with the appropriate
+ *  ACCEPT/REJECT-PROPOSAL   messages.
+ * Notice that, for the first case, the method  skipNextResponses()
  * has been provided that, if called by the programmer
- * when waiting for <code>PROPOSE</code>
+ * when waiting for  PROPOSE
  * messages, allows to skip to the next state and ignore all the
  * responses and proposals that have not yet been received.
  * <p>
  * Once the responders whose proposal has been accepted (i.e. those that have
- * received a <code>ACCEPT-PROPOSAL</code> message) have completed
+ * received a  ACCEPT-PROPOSAL   message) have completed
  * the task, they can, finally,
  * respond with an
- * <code>INFORM</code> of the result of the action (eventually just that the
- * action has been done) or with a <code>FAILURE</code> if anything went wrong.
+ *  INFORM   of the result of the action (eventually just that the
+ * action has been done) or with a  FAILURE   if anything went wrong.
  * This second category of reply messages has been here identified as a
  * result notifications and can be handled via the
- * <code>handleAllResultNotifications()</code> callback method.
+ *  handleAllResultNotifications()   callback method.
  * Again, specific handle callback
  * methods for each type of communicative act are also
  * available when the programmer wishes to handle them separately:
- * <code>handleInform(), handleFailure()</code>.
+ *  handleInform(), handleFailure()  .
  * <p>
  * If a message were received, with the same value of this
- * <code>conversation-id</code>, but that does not comply with the FIPA
- * protocol, than the method <code>handleOutOfSequence()</code> would be called.
+ *  conversation-id  , but that does not comply with the FIPA
+ * protocol, than the method  handleOutOfSequence()   would be called.
  * <p>
  * This class can be extended by the programmer by overriding all the needed
  * handle methods or, in alternative, appropriate behaviours can be
- * registered for each handle via the <code>registerHandle</code>-type
+ * registered for each handle via the  registerHandle  -type
  * of methods. This last case is more difficult to use and proper
- * care must be taken to properly use the <code>HashMap</code> of the
- * <code>Behaviour</code> as a shared memory mechanism with the
+ * care must be taken to properly use the  HashMap   of the
+ *  Behaviour   as a shared memory mechanism with the
  * registered behaviour.
  * <p>
  * When needed this class can also be used to play the initiator role in an
  * Iterated-Fipa-Contract-Net protocol. To activate a new CFP-PROPOSE iteration it is
- * sufficient to invoke the <code>newIteration()</code> method from within the
- * <code>handleAllResponses()</code> method.
+ * sufficient to invoke the  newIteration()   method from within the
+ *  handleAllResponses()   method.
  *
  * @author Giovanni Caire - TILab
  * @author Fabio Bellifemine - TILab
@@ -182,16 +182,16 @@ public class ContractNetInitiator extends Initiator {
     private String[] toBeReset = null;
 
     /**
-     * Constructs a <code>ContractNetInitiator</code> behaviour
+     * Constructs a  ContractNetInitiator   behaviour
      *
      * @param a               The agent performing the protocol
      * @param cfp             The message that must be used to initiate the protocol.
      *                        Notice that the default implementation of the
-     *                        <code>prepareCfps</code>
+     *                         prepareCfps
      *                        method returns
      *                        an array composed of that message only.
-     * @param mapMessagesList The <code>HashMap</code> that will be used by this
-     *                        <code>ContractNetInitiator</code>
+     * @param mapMessagesList The  HashMap   that will be used by this
+     *                         ContractNetInitiator
      * deprecated
 
     public ContractNetInitiator(Agent a, ACLMessage cfp, HashMap<String, List<ACLMessage>> mapMessagesList) {
@@ -290,17 +290,17 @@ public class ContractNetInitiator extends Initiator {
     //#APIDOC_EXCLUDE_BEGIN
 
     /**
-     * Constructs a <code>ContractNetInitiator</code> behaviour
+     * Constructs a  ContractNetInitiator   behaviour
      *
      * @param a               The agent performing the protocol
      * @param cfp             The message that must be used to initiate the protocol.
      *                        Notice that the default implementation of the
-     *                        <code>prepareCfps</code>
+     *                         prepareCfps
      *                        method returns
      *                        an array composed of that message only.
-     * @param mapMessagesList The <code>HashMap</code> of messages list that will be used by this
-     * @param mapMessages     The <code>HashMap</code> of messages  that will be used by this
-     *                        <code>ContractNetInitiator</code>
+     * @param mapMessagesList The  HashMap   of messages list that will be used by this
+     * @param mapMessages     The  HashMap   of messages  that will be used by this
+     *                         ContractNetInitiator
      */
     public ContractNetInitiator(Agent a, ACLMessage cfp, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a, cfp, mapMessagesList, mapMessages);
@@ -490,7 +490,7 @@ public class ContractNetInitiator extends Initiator {
      *
      * @param cfp the ACLMessage object passed in the constructor
      * @return a Vector of ACLMessage objects. The value of the slot
-     * <code>reply-with</code> is ignored and regenerated automatically
+     *  reply-with   is ignored and regenerated automatically
      * by this class.
      **/
     protected List<ACLMessage> prepareCfps(ACLMessage cfp) {
@@ -500,7 +500,7 @@ public class ContractNetInitiator extends Initiator {
     }
 
     /**
-     * This method is called every time a <code>propose</code>
+     * This method is called every time a  propose
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -516,7 +516,7 @@ public class ContractNetInitiator extends Initiator {
     }
 
     /**
-     * This method is called every time a <code>refuse</code>
+     * This method is called every time a  refuse
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -528,7 +528,7 @@ public class ContractNetInitiator extends Initiator {
     }
 
     /**
-     * This method is called every time a <code>inform</code>
+     * This method is called every time a  inform
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -542,10 +542,10 @@ public class ContractNetInitiator extends Initiator {
     /**
      * This method is called when all the responses have been
      * collected or when the timeout is expired.
-     * The used timeout is the minimum value of the slot <code>replyBy</code>
+     * The used timeout is the minimum value of the slot  replyBy
      * of all the sent messages.
-     * By response message we intend here all the <code>propose, not-understood,
-     * refuse</code> received messages, which are not
+     * By response message we intend here all the  propose, not-understood,
+     * refuse   received messages, which are not
      * not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -564,8 +564,8 @@ public class ContractNetInitiator extends Initiator {
      * This method is called when all the result notification messages
      * have been
      * collected.
-     * By result notification message we intend here all the <code>inform,
-     * failure</code> received messages, which are not
+     * By result notification message we intend here all the  inform,
+     * failure   received messages, which are not
      * not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -579,15 +579,15 @@ public class ContractNetInitiator extends Initiator {
 
 
     /**
-     * This method allows to register a user-defined <code>Behaviour</code>
+     * This method allows to register a user-defined  Behaviour
      * in the PREPARE_CFPS state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * It is responsibility of the registered behaviour to put the
      * Vector of ACLMessage objects to be sent
-     * into the HashMap at the <code>ALL_CFPS_KEY</code>
+     * into the HashMap at the  ALL_CFPS_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -597,17 +597,17 @@ public class ContractNetInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_PROPOSE state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>propose</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
-     * key and the <code>Vector</code> of ACCEPT/REJECT_PROPOSAL to be
-     * sent back at the <code>ALL_ACCEPTANCES_KEY</code>
+     * the  propose   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY
+     * key and the  Vector   of ACCEPT/REJECT_PROPOSAL to be
+     * sent back at the  ALL_ACCEPTANCES_KEY
      *
      * @param b the Behaviour that will handle this state
      */
@@ -618,15 +618,15 @@ public class ContractNetInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_REFUSE state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>refuse</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
+     * the  refuse   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -638,15 +638,15 @@ public class ContractNetInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_INFORM state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>inform</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
+     * the  inform   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -658,17 +658,17 @@ public class ContractNetInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_ALL_RESPONSES state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
      * the vector of ACLMessage objects, received as a response,
-     * from the HashMap at the <code>ALL_RESPONSES_KEY</code>
-     * key and the <code>Vector</code> of ACCEPT/REJECT_PROPOSAL to be
-     * sent back at the <code>ALL_ACCEPTANCES_KEY</code>
+     * from the HashMap at the  ALL_RESPONSES_KEY
+     * key and the  Vector   of ACCEPT/REJECT_PROPOSAL to be
+     * sent back at the  ALL_ACCEPTANCES_KEY
      *
      * @param b the Behaviour that will handle this state
      */
@@ -679,15 +679,15 @@ public class ContractNetInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_ALL_RESULT_NOTIFICATIONS state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
      * the Vector of ACLMessage objects, received as a result notification,
-     * from the HashMap at the <code>ALL_RESULT_NOTIFICATIONS_KEY</code>
+     * from the HashMap at the  ALL_RESULT_NOTIFICATIONS_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state

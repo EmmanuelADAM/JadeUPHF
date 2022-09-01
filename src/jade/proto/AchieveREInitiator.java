@@ -53,15 +53,15 @@ import java.util.List;
  * The structure of these protocols is equal.
  * The initiator sends a message (in general it performs a communicative act).
  * <p>
- * The responder can then reply by sending a <code>not-understood</code>, or a
- * <code>refuse</code> to
+ * The responder can then reply by sending a  not-understood  , or a
+ *  refuse   to
  * achieve the rational effect of the communicative act, or also
- * an <code>agree</code> message to communicate the agreement to perform
+ * an  agree   message to communicate the agreement to perform
  * (possibly in the future) the communicative act.  This first category
  * of reply messages has been here identified as a response.
  * <p> The responder performs the action and, finally, must respond with an
- * <code>inform</code> of the result of the action (eventually just that the
- * action has been done) or with a <code>failure</code> if anything went wrong.
+ *  inform   of the result of the action (eventually just that the
+ * action has been done) or with a  failure   if anything went wrong.
  * This second category of reply messages has been here identified as a
  * result notification.
  * <p> Notice that we have extended the protocol to make optional the
@@ -71,13 +71,9 @@ import java.util.List;
  * communicative act is subsumed by the reception of the following message in
  * the protocol.
  * <p>
- * Read carefully the section of the
- * <a href="..\..\..\programmersguide.pdf"> JADE programmer's guide </a>
- * that describes
- * the usage of this class.
  * <p> <b>Known bugs:</b>
- * <i> The handler <code>handleAllResponses</code> is not called if the <code>
- * agree</code> message is skipped and the <code>inform</code> message
+ * <i> The handler  handleAllResponses   is not called if the  
+ * agree   message is skipped and the  inform   message
  * is received instead.
  * <br> One message for every receiver is sent instead of a single
  * message for all the receivers. </i>
@@ -132,7 +128,7 @@ public class AchieveREInitiator extends Initiator {
     private String[] toBeReset = null;
 
     /**
-     * Construct an <code>AchieveREInitiator</code> with an empty HashMap
+     * Construct an  AchieveREInitiator   with an empty HashMap
      * see #AchieveREInitiator(Agent, ACLMessage, HashMap)
      **/
     public AchieveREInitiator(Agent a, ACLMessage msg) {
@@ -140,19 +136,19 @@ public class AchieveREInitiator extends Initiator {
     }
 
     /**
-     * Construct an <code>AchieveREInitiator</code> with a given HashMap
+     * Construct an  AchieveREInitiator   with a given HashMap
      *
      * @param a     The agent performing the protocol
      * @param msg   The message that must be used to initiate the protocol.
      *              Notice that the default implementation of the
-     *              <code>prepareRequest()</code>
+     *               prepareRequest()  
      *              method returns
      *              an array composed of only this message.
      *              The values of the slot
-     *              <code>reply-with</code> is ignored and a different value is assigned
+     *               reply-with   is ignored and a different value is assigned
      *              automatically by this class for each receiver.
-     * @param store The <code>HashMap</code> that will be used by this
-     *              <code>AchieveREInitiator</code>
+     * @param store The  HashMap   that will be used by this
+     *               AchieveREInitiator  
      * deprecated
     public AchieveREInitiator(Agent a, ACLMessage msg, HashMap<String, List<ACLMessage>> msgList) {
     super(a, msg, msgList);
@@ -247,19 +243,19 @@ public class AchieveREInitiator extends Initiator {
     //#APIDOC_EXCLUDE_BEGIN
 
     /**
-     * Construct an <code>AchieveREInitiator</code> with a given HashMap
+     * Construct an  AchieveREInitiator   with a given HashMap
      *
      * @param a               The agent performing the protocol
      * @param msg             The message that must be used to initiate the protocol.
      *                        Notice that the default implementation of the
-     *                        <code>prepareRequest()</code>
+     *                         prepareRequest()  
      *                        method returns
      *                        an array composed of only this message.
      *                        The values of the slot
-     *                        <code>reply-with</code> is ignored and a different value is assigned
+     *                         reply-with   is ignored and a different value is assigned
      *                        automatically by this class for each receiver.
-     * @param mapMessagesList The <code>HashMap</code> that will be used by this <code>AchieveREInitiator</code> to store messages list
-     * @param mapMessages     The <code>HashMap</code> that will be used by this <code>AchieveREInitiator</code> to store messages
+     * @param mapMessagesList The  HashMap   that will be used by this  AchieveREInitiator   to store messages list
+     * @param mapMessages     The  HashMap   that will be used by this  AchieveREInitiator   to store messages
      * @deprecated
      */
     public AchieveREInitiator(Agent a, ACLMessage msg, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
@@ -468,7 +464,7 @@ public class AchieveREInitiator extends Initiator {
      * @param request the ACLMessage object passed in the constructor
      * @return a Vector of ACLMessage objects.
      * The values of the slot
-     * <code>reply-with</code> is ignored and a different value is assigned
+     *  reply-with   is ignored and a different value is assigned
      * automatically by this class for each receiver.
      **/
     protected List<ACLMessage> prepareRequests(ACLMessage request) {
@@ -478,7 +474,7 @@ public class AchieveREInitiator extends Initiator {
     }
 
     /**
-     * This method is called every time an <code>agree</code>
+     * This method is called every time an  agree  
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -490,7 +486,7 @@ public class AchieveREInitiator extends Initiator {
     }
 
     /**
-     * This method is called every time a <code>refuse</code>
+     * This method is called every time a  refuse  
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -502,7 +498,7 @@ public class AchieveREInitiator extends Initiator {
     }
 
     /**
-     * This method is called every time a <code>inform</code>
+     * This method is called every time a  inform  
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -516,10 +512,10 @@ public class AchieveREInitiator extends Initiator {
     /**
      * This method is called when all the responses have been
      * collected or when the timeout is expired.
-     * The used timeout is the minimum value of the slot <code>replyBy</code>
+     * The used timeout is the minimum value of the slot  replyBy  
      * of all the sent messages.
-     * By response message we intend here all the <code>agree, not-understood,
-     * refuse</code> received messages, which are not
+     * By response message we intend here all the  agree, not-understood,
+     * refuse   received messages, which are not
      * not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -535,8 +531,8 @@ public class AchieveREInitiator extends Initiator {
      * This method is called when all the result notification messages
      * have been
      * collected.
-     * By result notification message we intend here all the <code>inform,
-     * failure</code> received messages, which are not
+     * By result notification message we intend here all the  inform,
+     * failure   received messages, which are not
      * not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -550,18 +546,18 @@ public class AchieveREInitiator extends Initiator {
 
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the PREPARE_REQUESTS state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * It is responsibility of the registered behaviour to put the
      * Vector of ACLMessage objects to be sent
-     * into the HashMap at the <code>ALL_REQUESTS_KEY</code>
+     * into the HashMap at the  ALL_REQUESTS_KEY  
      * key.
      * The values of the slot
-     * <code>reply-with</code> is ignored and a different value is assigned
+     *  reply-with   is ignored and a different value is assigned
      * automatically by this class for each receiver.
      *
      * @param b the Behaviour that will handle this state
@@ -571,15 +567,15 @@ public class AchieveREInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the HANDLE_AGREE state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>agree</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
+     * the  agree   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY  
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -591,15 +587,15 @@ public class AchieveREInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the HANDLE_INFORM state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>inform</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
+     * the  inform   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY  
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -611,15 +607,15 @@ public class AchieveREInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the HANDLE_REFUSE state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>refuse</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
+     * the  refuse   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY  
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -631,15 +627,15 @@ public class AchieveREInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the HANDLE_ALL_RESPONSES state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
      * the vector of ACLMessage objects, received as a response,
-     * from the HashMap at the <code>ALL_RESPONSES_KEY</code>
+     * from the HashMap at the  ALL_RESPONSES_KEY  
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -651,15 +647,15 @@ public class AchieveREInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the HANDLE_ALL_RESULT_NOTIFICATIONS state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
      * the Vector of ACLMessage objects, received as a result notification,
-     * from the HashMap at the <code>ALL_RESULT_NOTIFICATIONS_KEY</code>
+     * from the HashMap at the  ALL_RESULT_NOTIFICATIONS_KEY  
      * key.
      *
      * @param b the Behaviour that will handle this state

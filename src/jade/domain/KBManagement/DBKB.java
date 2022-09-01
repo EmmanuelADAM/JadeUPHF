@@ -42,7 +42,7 @@ import java.util.NoSuchElementException;
 
 /**
  * This class provides an abstract implementation of the
- * <code>KB</code> interface where information are stored in
+ *  KB   interface where information are stored in
  * a database.
  *
  * @author Roland Mungenast - Profactor
@@ -67,8 +67,8 @@ public abstract class DBKB extends KB {
     private String url;
 
     /**
-     * Constructs a new <code>DFKB</code> and establishes a connection to the database
-     * at the given URL using the <code>sun.jdbc.odbc.JdbcOdbcDriver</code> driver.
+     * Constructs a new  DFKB   and establishes a connection to the database
+     * at the given URL using the  sun.jdbc.odbc.JdbcOdbcDriver   driver.
      *
      * @param maxResultLimit internal limit for the number of maximum search results.
      * @param url            database URL
@@ -81,7 +81,7 @@ public abstract class DBKB extends KB {
     }
 
     /**
-     * Constructs a new <code>DFKB</code> and establishes a connection to the database.
+     * Constructs a new  DFKB   and establishes a connection to the database.
      *
      * @param drv            database driver
      * @param url            database URL
@@ -94,7 +94,7 @@ public abstract class DBKB extends KB {
     }
 
     /**
-     * Constructs a new <code>DFKB</code> and establishes a connection to the database.
+     * Constructs a new  DFKB   and establishes a connection to the database.
      *
      * @param maxResultLimit internal limit for the number of maximum search results.
      * @param drv            database driver
@@ -138,7 +138,7 @@ public abstract class DBKB extends KB {
     /**
      * Loads an JDBC driver
      *
-     * @param drv driver name or <code>null</code> </ br>
+     * @param drv driver name or  null   </ br>
      *            if the default JDBC-ODBC driver should be used
      * @throws SQLException if the driver cannot be loaded
      */

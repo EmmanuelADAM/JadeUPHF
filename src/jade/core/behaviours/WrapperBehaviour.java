@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * This behaviour allows modifying on the fly the way an existing behaviour object works
- * The following piece of code provides an example where we modify the <code>done()</code>
+ * The following piece of code provides an example where we modify the  done()
  * method of an existing behaviour object to print on the standard output a proper message when the behaviour
  * is completing.
  *

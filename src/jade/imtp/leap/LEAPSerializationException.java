@@ -35,13 +35,13 @@
 package jade.imtp.leap;
 
 /**
- * A <code>LEAPSerializationException</code> is used as generic exception to ease
+ * A  LEAPSerializationException   is used as generic exception to ease
  * the handling of all exceptions that may occur during the LEAP surrogate
  * serialization mechanism. The LEAP surrogate serialization mechanism only throws
  * this type of exception and encapsulates an occurred exception. This way, all
  * possible exceptions during LEAP serialization can be handled by handling
- * this <code>LEAPSerializationException</code>. If the detailed exception
- * is needed, it is available in field <code>detail</code>.
+ * this  LEAPSerializationException  . If the detailed exception
+ * is needed, it is available in field  detail  .
  *
  * @author Michael Watzke
  * @version 1.0, 09/11/2000
@@ -54,14 +54,14 @@ public class LEAPSerializationException extends Exception {
     public Throwable detail;
 
     /**
-     * Constructs a <code>LEAPSerializationException</code> with no specified
+     * Constructs a  LEAPSerializationException   with no specified
      * detail message.
      */
     public LEAPSerializationException() {
     }
 
     /**
-     * Constructs a <code>LEAPSerializationException</code> with the specified
+     * Constructs a  LEAPSerializationException   with the specified
      * detail message.
      *
      * @param s the detail message
@@ -71,7 +71,7 @@ public class LEAPSerializationException extends Exception {
     }
 
     /**
-     * Constructs a <code>LEAPSerializationException</code> with the specified
+     * Constructs a  LEAPSerializationException   with the specified
      * detail message and nested exception.
      *
      * @param s  the detail message

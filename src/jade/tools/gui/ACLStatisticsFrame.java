@@ -164,7 +164,7 @@ public class ACLStatisticsFrame extends JFrame {
                 , GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
     }
 
-    private class ACLStatiscticsTableModel extends DefaultTableModel {
+    private static class ACLStatiscticsTableModel extends DefaultTableModel {
 
         HashMap<String, String> countTable = new HashMap<>();
         String theItem;
@@ -285,7 +285,7 @@ public class ACLStatisticsFrame extends JFrame {
 
     }
 
-    private class ACLStatisticsFrame_closeButton_actionAdapter implements ActionListener {
+    private static class ACLStatisticsFrame_closeButton_actionAdapter implements ActionListener {
 
         ACLStatisticsFrame adaptee;
 
@@ -310,7 +310,7 @@ public class ACLStatisticsFrame extends JFrame {
         }
     }
 
-    private class SomeLabelRenderer extends JLabel implements ListCellRenderer<Object> {
+    private static class SomeLabelRenderer extends JLabel implements ListCellRenderer<Object> {
         /**
          * Constructor for the SomeLabelRenderer object
          */

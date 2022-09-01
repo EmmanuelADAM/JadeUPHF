@@ -27,8 +27,8 @@ import jade.content.Concept;
 
 
 /**
- * This class represents the <code>agent-group</code> action of
- * the <code>JADE-persistence</code> ontology.
+ * This class represents the  agent-group   action of
+ * the  JADE-persistence   ontology.
  *
  * @author Giovanni Rimassa - FRAMeTech s.r.l.
  */

@@ -38,7 +38,7 @@ import java.util.List;
  * This class provides support for executing JADE Behaviours
  * in dedicated Java Threads. In order to do that it is sufficient
  * to add to an agent a normal JADE Behaviour "wrapped" into
- * a "threaded behaviour" as returned by the <code>wrap()</code> method
+ * a "threaded behaviour" as returned by the  wrap()   method
  * of this class (see the example below).
  *
  * <pr><hr><blockquote><pre>
@@ -72,8 +72,8 @@ public class ThreadedBehaviourFactory {
     private final Logger myLogger = Logger.getMyLogger(getClass().getName());
 
     /**
-     * Wraps a normal JADE Behaviour <code>b</code> into a "threaded behaviour". Adding the
-     * wrapper behaviour to an agent results in executing <code>b</code> in a dedicated Java Therad.
+     * Wraps a normal JADE Behaviour  b   into a "threaded behaviour". Adding the
+     * wrapper behaviour to an agent results in executing  b   in a dedicated Java Therad.
      */
     public Behaviour wrap(Behaviour b) {
         return new ThreadedBehaviourWrapper(b);
@@ -103,8 +103,8 @@ public class ThreadedBehaviourFactory {
      *
      * @param timeout The maximum timeout to wait for threaded behaviour
      *                termination.
-     * @return <code>true</code> if all threaded behaviour have actually
-     * completed, <code>false</code> otherwise.
+     * @return  true   if all threaded behaviour have actually
+     * completed,  false   otherwise.
      */
     public synchronized boolean waitUntilEmpty(long timeout) {
         long time = System.currentTimeMillis();
@@ -144,7 +144,7 @@ public class ThreadedBehaviourFactory {
     /**
      * Suspend a threaded behaviour. This method has only effect if called by the threaded behaviour
      * itself and has the effect of releasing its dedicated Java Thread. This can later be restored
-     * by means of the <code>resume()</code> method.
+     * by means of the  resume()   method.
      */
     public void suspend(Behaviour b) {
         ThreadedBehaviourWrapper wrapper = getWrapper(b);
@@ -165,7 +165,7 @@ public class ThreadedBehaviourFactory {
     }
 
     /**
-     * @return the Thread dedicated to the execution of the Behaviour <code>b</code>
+     * @return the Thread dedicated to the execution of the Behaviour  b
      */
     public Thread getThread(Behaviour b) {
         ThreadedBehaviourWrapper tb = getWrapper(b);
@@ -275,7 +275,7 @@ public class ThreadedBehaviourFactory {
 
         /**
          * Propagate the parent to the wrapped behaviour.
-         * NOTE that the <code>parent</code> member variable of the wrapped behaviour
+         * NOTE that the  parent   member variable of the wrapped behaviour
          * must point to the DummyParentBehaviour --> From the wrapped behaviour
          * accessing the actual parent must always be retrieved through the
          * getParent() method.

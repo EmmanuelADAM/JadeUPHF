@@ -32,7 +32,7 @@ import java.util.Collection;
 
 
 /**
- * The <code>UDPNodeFailureMonitor</code> class detects node failures and
+ * The  UDPNodeFailureMonitor   class detects node failures and
  * notifies its registered listener using the UDP protocol.
  *
  * @author Roland Mungenast - Profactor
@@ -99,7 +99,7 @@ class UDPNodeFailureMonitor extends NodeFailureMonitor {
     /**
      * Returns all child nodes of the targeted node
      *
-     * @return a <code>Collection</code> of <code>Node</code> instances
+     * @return a  Collection   of  Node   instances
      */
     public Collection<Node> getChildNodes() {
         return childNodes.values();

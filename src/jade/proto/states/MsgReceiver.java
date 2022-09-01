@@ -80,7 +80,7 @@ public class MsgReceiver extends SimpleBehaviour {
      *                        the first received message is returned by this behaviour
      * @param deadline        a timeout for waiting until a message arrives. It must
      *                        be expressed as an absolute time, as it would be returned by
-     *                        <code>System.currentTimeMillisec()</code>
+     *                         System.currentTimeMillisec()  
      * @param mapMessagesList the HashMap for this bheaviour
      * @param msgKey          the key where the behaviour must put the received  message into the HashMap.
      * @deprecated
@@ -104,7 +104,7 @@ public class MsgReceiver extends SimpleBehaviour {
      *                        the first received message is returned by this behaviour
      * @param deadline        a timeout for waiting until a message arrives. It must
      *                        be expressed as an absolute time, as it would be returned by
-     *                        <code>System.currentTimeMillisec()</code>
+     *                         System.currentTimeMillisec()  
      * @param mapMessagesList the HashMap of messages list for this bheaviour
      * @param mapMessages     the HashMap of messages  for this bheaviour
      * @param msgKey          the key where the beahviour must put the received
@@ -170,9 +170,9 @@ public class MsgReceiver extends SimpleBehaviour {
 
     /**
      * @return the performative if a message arrived,
-     * <code>TIMEOUT_EXPIRED</code> if the timeout expired or
-     * <code>INTERRUPTED</code> if this <code>MsgReceiver</code>
-     * was interrupted calling the <code>interrupt()</code> method.
+     *  TIMEOUT_EXPIRED   if the timeout expired or
+     *  INTERRUPTED   if this  MsgReceiver  
+     * was interrupted calling the  interrupt()   method.
      **/
     public int onEnd() {
         received = false;
@@ -184,7 +184,7 @@ public class MsgReceiver extends SimpleBehaviour {
 
     /**
      * This is invoked when a message matching the specified template
-     * is received or the timeout has expired (the <code>msg</code>
+     * is received or the timeout has expired (the  msg  
      * parameter is null in this case). Users may redefine this method
      * to react to this event. The default implementation of does nothing.
      */
@@ -198,7 +198,7 @@ public class MsgReceiver extends SimpleBehaviour {
      * @param mt              The template to match ACL messages against during the
      *                        receive operation.
      * @param deadline        The relative timeout of the receive
-     *                        operation. If the <code>INFINITE</code> constant is used, then
+     *                        operation. If the  INFINITE   constant is used, then
      *                        no deadline is set and the operation will wait until a matching
      *                        ACL message arrives.
      * @param mapMessagesList The HashMap where the received ACL message is to be put.
@@ -224,7 +224,7 @@ public class MsgReceiver extends SimpleBehaviour {
      * @param mt              The template to match ACL messages against during the
      *                        receive operation.
      * @param deadline        The relative timeout of the receive
-     *                        operation. If the <code>INFINITE</code> constant is used, then
+     *                        operation. If the  INFINITE   constant is used, then
      *                        no deadline is set and the operation will wait until a matching
      *                        ACL message arrives.
      * @param mapMessagesList The HashMap where the received ACL message list is to be put.

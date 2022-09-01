@@ -101,7 +101,7 @@ public class Envelope implements Concept, Serializable {
 
 
     /**
-     * Add an agent identifier to the <code>to</code> slot collection
+     * Add an agent identifier to the  to   slot collection
      * of this object.
      *
      * @param id The agent identifier to add to the collection.
@@ -111,7 +111,7 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Remove an agent identifier from the <code>to</code> slot
+     * Remove an agent identifier from the  to   slot
      * collection of this object.
      *
      * @param id The agent identifierto remove from the collection.
@@ -123,7 +123,7 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Remove all agent identifiers from the <code>to</code> slot
+     * Remove all agent identifiers from the  to   slot
      * collection of this object.
      */
     public void clearAllTo() {
@@ -131,7 +131,7 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Access all agent identifiers from the <code>to</code> slot
+     * Access all agent identifiers from the  to   slot
      * collection of this object.
      *
      * @return An iterator over the agent identifiers collection.
@@ -141,17 +141,17 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Retrieve the <code>from</code> slot of this object.
+     * Retrieve the  from   slot of this object.
      *
-     * @return The value of the <code>from</code> slot of this
-     * envelope, or <code>null</code> if no value was set.
+     * @return The value of the  from   slot of this
+     * envelope, or  null   if no value was set.
      */
     public AID getFrom() {
         return from;
     }
 
     /**
-     * Set the <code>from</code> slot of this object.
+     * Set the  from   slot of this object.
      *
      * @param id The agent identifier for the envelope sender.
      */
@@ -160,17 +160,17 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Retrieve the <code>comments</code> slot of this object.
+     * Retrieve the  comments   slot of this object.
      *
-     * @return The value of the <code>comments</code> slot of this
-     * envelope, or <code>null</code> if no value was set.
+     * @return The value of the  comments   slot of this
+     * envelope, or  null   if no value was set.
      */
     public String getComments() {
         return comments;
     }
 
     /**
-     * Set the <code>comments</code> slot of this object.
+     * Set the  comments   slot of this object.
      *
      * @param c The string for the envelope comments.
      */
@@ -179,18 +179,18 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Retrieve the <code>acl-representation</code> slot of this
+     * Retrieve the  acl-representation   slot of this
      * object.
      *
-     * @return The value of the <code>acl-representation</code> slot
-     * of this envelope, or <code>null</code> if no value was set.
+     * @return The value of the  acl-representation   slot
+     * of this envelope, or  null   if no value was set.
      */
     public String getAclRepresentation() {
         return aclRepresentation;
     }
 
     /**
-     * Set the <code>acl-representation</code> slot of this object.
+     * Set the  acl-representation   slot of this object.
      *
      * @param r The string for the ACL representation.
      */
@@ -199,17 +199,17 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Retrieve the <code>payload-length</code> slot of this object.
+     * Retrieve the  payload-length   slot of this object.
      *
-     * @return The value of the <code>payload-length</code> slot of
-     * this envelope, or <code>null</code> or a negative value if no value was set.
+     * @return The value of the  payload-length   slot of
+     * this envelope, or  null   or a negative value if no value was set.
      */
     public Long getPayloadLength() {
         return payloadLength;
     }
 
     /**
-     * Set the <code>payload-length</code> slot of this object.
+     * Set the  payload-length   slot of this object.
      *
      * @param l The payload length, in bytes.
      */
@@ -218,17 +218,17 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Retrieve the <code>payload-encoding</code> slot of this object.
+     * Retrieve the  payload-encoding   slot of this object.
      *
-     * @return The value of the <code>payload-encoding</code> slot of
-     * this envelope, or <code>null</code> if no value was set.
+     * @return The value of the  payload-encoding   slot of
+     * this envelope, or  null   if no value was set.
      */
     public String getPayloadEncoding() {
         return payloadEncoding;
     }
 
     /**
-     * Set the <code>payload-encoding</code> slot of this object.
+     * Set the  payload-encoding   slot of this object.
      * This slot can be used to specify a different charset than
      * the standard one (US-ASCII) in order for instance to support
      * accentuated characters in the content slot of the ACL message
@@ -241,17 +241,17 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Retrieve the <code>date</code> slot of this object.
+     * Retrieve the  date   slot of this object.
      *
-     * @return The value of the <code>date</code> slot of this
-     * envelope, or <code>null</code> if no value was set.
+     * @return The value of the  date   slot of this
+     * envelope, or  null   if no value was set.
      */
     public Date getDate() {
         return date;
     }
 
     /**
-     * Set the <code>date</code> slot of this object.
+     * Set the  date   slot of this object.
      *
      * @param d The envelope date.
      */
@@ -260,7 +260,7 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Add an agent identifier to the <code>intended-receiver</code>
+     * Add an agent identifier to the  intended-receiver
      * slot collection of this object.
      *
      * @param id The agent identifier to add to the collection.
@@ -271,7 +271,7 @@ public class Envelope implements Concept, Serializable {
 
     /**
      * Remove an agent identifier from the
-     * <code>intended-receiver</code> slot collection of this object.
+     *  intended-receiver   slot collection of this object.
      *
      * @param id The agent identifier to remove from the collection.
      * @return A boolean, telling whether the element was present in
@@ -283,15 +283,15 @@ public class Envelope implements Concept, Serializable {
 
     /**
      * Remove all agent identifiers from the
-     * <code>intended-receiver</code> slot collection of this object.
+     *  intended-receiver   slot collection of this object.
      */
     public void clearAllIntendedReceiver() {
         intendedReceiver.clear();
     }
 
     /**
-     * Access all agent identifiers from the <code>intended
-     * receiver</code> slot collection of this object.
+     * Access all agent identifiers from the  intended
+     * receiver   slot collection of this object.
      *
      * @return An iterator over the agent identifiers collection.
      */
@@ -300,10 +300,10 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Retrieve the <code>received</code> slot of this object.
+     * Retrieve the  received   slot of this object.
      *
-     * @return The value of the <code>received</code> slot of this
-     * envelope, or <code>null</code> if no value was set.
+     * @return The value of the  received   slot of this
+     * envelope, or  null   if no value was set.
      */
     public ReceivedObject getReceived() {
         if (stamps.isEmpty())
@@ -313,9 +313,9 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Set the <code>received</code> slot of this object.
+     * Set the  received   slot of this object.
      *
-     * @param ro The received object for the <code>received</code>
+     * @param ro The received object for the  received
      *           slot.
      */
     public void setReceived(ReceivedObject ro) {
@@ -323,11 +323,11 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Add a <code>received-object</code> stamp to this message
+     * Add a  received-object   stamp to this message
      * envelope. This method is used by the ACC to add a new stamp to
      * the envelope at every routing hop.
      *
-     * @param ro The <code>received-object</code> to add.
+     * @param ro The  received-object   to add.
      */
     public void addStamp(ReceivedObject ro) {
         stamps.add(ro);
@@ -335,7 +335,7 @@ public class Envelope implements Concept, Serializable {
 
     /**
      * Access the list of all the stamps. The
-     * <code>received-object</code> stamps are sorted according to the
+     *  received-object   stamps are sorted according to the
      * routing path, from the oldest to the newest.
      */
     public ReceivedObject[] getStamps() {
@@ -349,7 +349,7 @@ public class Envelope implements Concept, Serializable {
 
 
     /**
-     * Add a property to the <code>properties</code> slot collection
+     * Add a property to the  properties   slot collection
      * of this object.
      *
      * @param p The property to add to the collection.
@@ -359,7 +359,7 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Remove a property from the <code>properties</code> slot
+     * Remove a property from the  properties   slot
      * collection of this object.
      *
      * @param p The property to remove from the collection.
@@ -371,7 +371,7 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Remove all properties from the <code>properties</code> slot
+     * Remove all properties from the  properties   slot
      * collection of this object.
      */
     public void clearAllProperties() {
@@ -379,7 +379,7 @@ public class Envelope implements Concept, Serializable {
     }
 
     /**
-     * Access all properties from the <code>properties</code> slot
+     * Access all properties from the  properties   slot
      * collection of this object.
      *
      * @return An iterator over the properties collection.

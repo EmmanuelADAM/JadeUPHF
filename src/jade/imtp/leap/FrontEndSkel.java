@@ -49,7 +49,7 @@ public class FrontEndSkel extends MicroSkeleton {
     }
 
     /**
-     * Call the method of the local FrontEnd corresponding to command <code>c</code>.
+     * Call the method of the local FrontEnd corresponding to command  c  .
      */
     Command executeCommand(Command c) throws Throwable {
         try {

@@ -54,19 +54,19 @@ public class AddedBehaviour implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>agent</code> slot of this
+     * Retrieve the value of the  agent   slot of this
      * event, containing the agent identifier of the agent the
      * behaviour was added to.
      *
-     * @return The value of the <code>agent</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  agent   slot, or
+     *  null   if no value was set.
      */
     public AID getAgent() {
         return agent;
     }
 
     /**
-     * Set the <code>agent</code> of this event.
+     * Set the  agent   of this event.
      *
      * @param id The agent identifier of the agent the behaviour was
      *           added to.
@@ -76,19 +76,19 @@ public class AddedBehaviour implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>behaviour</code> slot of this
+     * Retrieve the value of the  behaviour   slot of this
      * event, containing the behaviour identifier of the newly added
      * behaviour.
      *
-     * @return The value of the <code>behaviour</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  behaviour   slot, or
+     *  null   if no value was set.
      */
     public BehaviourID getBehaviour() {
         return behaviour;
     }
 
     /**
-     * Set the <code>behaviour</code> of this event.
+     * Set the  behaviour   of this event.
      *
      * @param id The behaviour identifier of the newly added
      *           behaviour.

@@ -40,24 +40,24 @@ public interface AgentMobilityHelper extends ServiceHelper {
      */
     String NAME = "jade.core.mobility.AgentMobility";
     /**
-     * This command name represents the <code>move-agent</code>
+     * This command name represents the  move-agent
      * action.
      * This command object represents only the <i>first half</i> of
      * the complete agent migration process. Even if this command is
      * accepted by the kernel, there is no guarantee that the
      * requested migration will ever happen. Only when the
-     * <code>InformMoved</code> command is issued can one assume that
+     *  InformMoved   command is issued can one assume that
      * the agent migration has taken place.
      */
     String REQUEST_MOVE = "Request-Move";
     /**
-     * This command name represents the <code>clone-agent</code>
+     * This command name represents the  clone-agent
      * action.
      * This command object represents only the <i>first half</i> of
      * the complete agent clonation process. Even if this command is
      * accepted by the kernel, there is no guarantee that the
      * requested clonation will ever happen. Only when the
-     * <code>InformCloned</code> command is issued can one assume that
+     *  InformCloned   command is issued can one assume that
      * the agent clonation has taken place.
      */
     String REQUEST_CLONE = "Request-Clone";
@@ -65,7 +65,7 @@ public interface AgentMobilityHelper extends ServiceHelper {
      * This command is issued by an agent that has just migrated.
      * The agent migration can either be an autonomous move of the
      * agent or the outcome of a previously issued
-     * <code>RequestMove</code> command. In the second case, this
+     *  RequestMove   command. In the second case, this
      * command represents only the <i>second half</i> of the complete
      * agent migration process.
      */
@@ -75,7 +75,7 @@ public interface AgentMobilityHelper extends ServiceHelper {
      * This command is issued by an agent that has just cloned itself.
      * The agent clonation can either be an autonomous move of the
      * agent or the outcome of a previously issued
-     * <code>RequestClone</code> command. In the second case, this
+     *  RequestClone   command. In the second case, this
      * command represents only the <i>second half</i> of the complete
      * agent clonation process.
      */

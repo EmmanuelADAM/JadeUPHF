@@ -31,7 +31,7 @@ import java.util.Vector;
  * activate).
  * <p>
  * The general string format for a specifier is
- * <p><code>name<b>:</b>className<b>(</b><i>separated arglist</i><b>)</b></code></p>
+ * <p> name<b>:</b>className<b>(</b><i>separated arglist</i><b>)</b>  </p>
  * The separated argument list uses a separator character that can be configured when
  * invoking parsing-related utility methods.
  *
@@ -49,7 +49,7 @@ public class Specifier {
      * This static utility method can parse the string representation of
      * a list of specifiers. The general format of a specifier is used,
      * with a comma as argument separator, i.e.:
-     * <p><code>name<b>:</b>className<b>(</b><i>comma-separated arglist</i><b>)</b></code></p>
+     * <p> name<b>:</b>className<b>(</b><i>comma-separated arglist</i><b>)</b>  </p>
      * While comma is the separator character within a specifier
      * arguments, the semicolon is used to separate the different
      * specifiers in the list.
@@ -125,7 +125,7 @@ public class Specifier {
 
     /**
      * Utility method that parses a stringified object specifier in the form
-     * <p><code>name<b>:</b>className<b>(</b><i>separated arglist</i><b>)</b></code></p>
+     * <p> name<b>:</b>className<b>(</b><i>separated arglist</i><b>)</b>  </p>
      * a Specifier object.
      * Both the name and the list of arguments are optional.
      *
@@ -219,7 +219,7 @@ public class Specifier {
      * Retrieve the name for this specifier object.
      *
      * @return The name of the specifier, if one was set, or
-     * <code>null</code> otherwise.
+     *  null   otherwise.
      */
     public String getName() {
         return name;
@@ -238,7 +238,7 @@ public class Specifier {
      * Retrieve the class name of this specifier.
      *
      * @return The class name of the specifier, if one was set, or
-     * <code>null</code> otherwise.
+     *  null   otherwise.
      */
     public String getClassName() {
         return className;
@@ -257,7 +257,7 @@ public class Specifier {
      * Retrieve the argument list for this specifier.
      *
      * @return An object array containing the argument list, if one
-     * was set, or <code>null</code> otherwise.
+     * was set, or  null   otherwise.
      */
     public Object[] getArgs() {
         return args;
@@ -276,7 +276,7 @@ public class Specifier {
     /**
      * This method is used by Boot, ProfileImpl, and RMA in order
      * to have a String representation of this Specifier according to the
-     * format <code>name:className(arg1 arg2 argn)</code>
+     * format  name:className(arg1 arg2 argn)
      *
      * @return A string representation of this specifier, according to
      * the format above.

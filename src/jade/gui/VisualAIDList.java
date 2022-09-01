@@ -34,8 +34,8 @@ import java.util.Iterator;
 /**
  * This class extends the VisualStringList in order to show a list of AID (Agent-Identifer).
  * To show these items correctly, have been overridden the methods:
- * <code>getElementName</code> to return the name of the agent (shown in the list).
- * <code>editElement</code> to show the ADIGui when required.
+ *  getElementName   to return the name of the agent (shown in the list).
+ *  editElement   to show the ADIGui when required.
  *
  * @author Tiziana Trucco - CSELT S.p.A
  * @version $Date: 2003-11-20 11:55:37 +0100 (gio, 20 nov 2003) $ $Revision: 4572 $

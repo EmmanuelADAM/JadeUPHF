@@ -25,7 +25,7 @@ package jade.core;
 
 
 /**
- * The <code>Command</code> interface has to be implemented by all
+ * The  Command   interface has to be implemented by all
  * JADE kernel-level commands, used by the various platform services.
  *
  * @author Giovanni Rimassa - FRAMeTech s.r.l.
@@ -64,7 +64,7 @@ public interface Command {
      * Obtain the return value for this command.
      *
      * @return The value that is to be returned back to the issuer of
-     * this <code>Command</code> object.
+     * this  Command   object.
      */
     Object getReturnValue();
 

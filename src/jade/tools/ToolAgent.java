@@ -61,7 +61,7 @@ public abstract class ToolAgent extends Agent {
     /**
      * This method is invoked just after the generic agent
      * setup. Subclasses must use this method the same way ordinary
-     * agents use their <code>setup()</code> method.
+     * agents use their  setup()   method.
      */
     protected void toolSetup() {
 
@@ -70,14 +70,14 @@ public abstract class ToolAgent extends Agent {
     /**
      * This method is invoked just before the generic agent
      * takedown. Subclasses must use this method the same way ordinary
-     * agents use their <code>takeDown()</code> method.
+     * agents use their  takeDown()   method.
      */
     protected void toolTakeDown() {
 
     }
 
     /**
-     * Retrieve the <code>subscribe</code> ACL message with which this
+     * Retrieve the  subscribe   ACL message with which this
      * tool agent subscribed with the AMS.
      *
      * @return The subscription ACL message.
@@ -87,7 +87,7 @@ public abstract class ToolAgent extends Agent {
     }
 
     /**
-     * Retrieve the <code>cancel</code> ACL message with which this
+     * Retrieve the  cancel   ACL message with which this
      * tool agent removes its subscription with the AMS.
      *
      * @return The cancellation ACL message.
@@ -97,7 +97,7 @@ public abstract class ToolAgent extends Agent {
     }
 
     /**
-     * Retrieve the <code>request</code> ACL message with which this
+     * Retrieve the  request   ACL message with which this
      * tool agent requests the AMS tool-specific actions.
      *
      * @return The request ACL message.

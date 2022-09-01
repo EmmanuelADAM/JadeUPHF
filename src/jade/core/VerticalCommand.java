@@ -25,7 +25,7 @@ package jade.core;
 
 
 /**
- * The <code>VerticalCommand</code> interface represents those
+ * The  VerticalCommand   interface represents those
  * kernel-level commands that are sent to or through JADE kernel-level
  * services.
  *

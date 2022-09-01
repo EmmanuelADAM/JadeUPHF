@@ -73,7 +73,7 @@ public abstract class Profile {
      * main container host and port at startup time. The mechanism is based on IP multicast communication
      * and must be activated on both the main container, that publishes its host and port on a given
      * multicast address (by default 239.255.10.99, port 1199), and on peripheral containers.
-     * The default for this option is <code>true</code> on Main Containers and <code>false</code>
+     * The default for this option is  true   on Main Containers and  false  
      * on peripheral containers
      */
     public static final String DETECT_MAIN = "detect-main";
@@ -129,7 +129,7 @@ public abstract class Profile {
     public static final String DUMP_OPTIONS = "dump-options";
 
     /**
-     * This constant, when set to <code>true</code> tells the JADE runtime that it will be executed
+     * This constant, when set to  true   tells the JADE runtime that it will be executed
      * in an environment with no display available.
      */
     public static final String NO_DISPLAY = "no-display";
@@ -202,7 +202,7 @@ public abstract class Profile {
     /**
      * This constant is the key of the property whose value contains the
      * list of MTPs that have to be launched at bootstrap time.
-     * This list must be retrieved via the <code>getSpecifiers(MTPS)<code>
+     * This list must be retrieved via the  getSpecifiers(MTPS) 
      * method.
      */
     public static final String MTPS = "mtps";
@@ -234,7 +234,7 @@ public abstract class Profile {
     /**
      * This constant is the key of the property whose value contains the
      * list of ACLCODECSs that have to be launched at bootstrap time.
-     * This list must be retrieved via the <code>getSpecifiers(ACLCODECS)<code>
+     * This list must be retrieved via the  getSpecifiers(ACLCODECS) 
      * method.
      */
     public static final String ACLCODECS = "aclcodecs";
@@ -472,7 +472,7 @@ public abstract class Profile {
      * Obtain a reference to the platform <i>Service Manager</i>, with
      * which kernel-level services can be added and removed.
      *
-     * @return A <code>ServiceManager</code> object, representing the
+     * @return A  ServiceManager   object, representing the
      * platform service manager.
      */
     protected abstract ServiceManager getServiceManager() throws ProfileException;
@@ -482,7 +482,7 @@ public abstract class Profile {
      * Obtain a reference to the platform <i>Service Finder</i>, with
      * which kernel-level services can be looked up.
      *
-     * @return A <code>ServiceFinder</code> object, representing the
+     * @return A  ServiceFinder   object, representing the
      * platform service manager.
      */
     protected abstract ServiceFinder getServiceFinder() throws ProfileException;
@@ -492,7 +492,7 @@ public abstract class Profile {
      * which manages kernel-level commands dispatching them to the
      * proper platform services.
      *
-     * @return A <code>ServiceManager</code> object, representing the
+     * @return A  ServiceManager   object, representing the
      * platform service manager.
      */
     protected abstract CommandProcessor getCommandProcessor() throws ProfileException;
@@ -575,7 +575,7 @@ public abstract class Profile {
      * Provides a boolean indication about whether or not the container using this Profile
      * is a Main Container.
      *
-     * @return <code>true</code> if the container using this Profile is a Main Container. <code>false</code> otherwise
+     * @return  true   if the container using this Profile is a Main Container.  false   otherwise
      */
     public boolean isMain() {
         return getBooleanProperty(MAIN, false);
@@ -585,7 +585,7 @@ public abstract class Profile {
      * Provides a boolean indication about whether or not the container using this Profile
      * is the Master Main Container.
      *
-     * @return <code>true</code> if the container using this Profile is the Master Main Container. <code>false</code> otherwise
+     * @return  true   if the container using this Profile is the Master Main Container.  false   otherwise
      */
     public boolean isMasterMain() {
         return isMain() && !getBooleanProperty(LOCAL_SERVICE_MANAGER, false);
@@ -595,7 +595,7 @@ public abstract class Profile {
      * Provides a boolean indication about whether or not the container using this Profile
      * is a Backup Main Container.
      *
-     * @return <code>true</code> if the container using this Profile is a Backup Main Container. <code>false</code> otherwise
+     * @return  true   if the container using this Profile is a Backup Main Container.  false   otherwise
      */
     public boolean isBackupMain() {
         return isMain() && getBooleanProperty(LOCAL_SERVICE_MANAGER, false);

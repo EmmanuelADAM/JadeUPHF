@@ -118,11 +118,11 @@ public class UDPNodeMonitoringService extends NodeMonitoringService {
     public static final String MAX_TRACED_UNKNOWN_PINGS = PREFIX + "maxtracedunknownpings";
     /**
      * This constants is the name of the property whose value contains the fully qualified
-     * class name of a concrete implementation of the <code>NetworkChecker</code> interface.
+     * class name of a concrete implementation of the  NetworkChecker   interface.
      * If this property is set, before considering dead a monitored node that remains
-     * unreachable for more than the <code>unreachable-limit</code>, the specified
-     * <code>NetworkChecker</code> is activated to check if the lack of UDP ping packets depends
-     * on a network disconnection. If this is the case the node is kept in the <code>UNREACHABLE</code>
+     * unreachable for more than the  unreachable-limit  , the specified
+     *  NetworkChecker   is activated to check if the lack of UDP ping packets depends
+     * on a network disconnection. If this is the case the node is kept in the  UNREACHABLE  
      * state and is not removed.<br>
      * This property is only meaningful on a main container.
      *

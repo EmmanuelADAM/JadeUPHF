@@ -59,27 +59,27 @@ public interface MessagingSlice extends Service.Slice {
     String NOTIFY_FAILURE = "Notify-Failure";
 
     /**
-     * This command name represents the <code>install-mtp</code> action.
+     * This command name represents the  install-mtp   action.
      */
     String INSTALL_MTP = "Install-MTP";
 
     /**
-     * This command name represents the <code>uninstall-mtp</code> action.
+     * This command name represents the  uninstall-mtp   action.
      */
     String UNINSTALL_MTP = "Uninstall-MTP";
 
     /**
-     * This command name represents the <code>new-mtp</code> event.
+     * This command name represents the  new-mtp   event.
      */
     String NEW_MTP = "New-MTP";
 
     /**
-     * This command name represents the <code>dead-mtp</code> action.
+     * This command name represents the  dead-mtp   action.
      */
     String DEAD_MTP = "Dead-MTP";
 
     /**
-     * This command name represents the <code>set-platform-addresses</code> action.
+     * This command name represents the  set-platform-addresses   action.
      */
     String SET_PLATFORM_ADDRESSES = "Set-Platform-Addresses";
 

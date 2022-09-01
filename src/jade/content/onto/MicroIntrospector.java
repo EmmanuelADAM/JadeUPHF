@@ -35,7 +35,7 @@ import jade.content.schema.ObjectSchema;
  * themselves into/from abstract descriptors". It could be used
  * when working in Java environments where the reflection is not
  * supported (MIDP). All classes in an ontology using this introspector
- * must implement the <code>Introspectable</code> interface.
+ * must implement the  Introspectable   interface.
  *
  * @author Giovanni Caire - TILAB
  */
@@ -45,8 +45,8 @@ public class MicroIntrospector implements Introspector {
      * Check the structure of a java class associated to an ontological element
      * to ensure that translations to/from abstract descriptors and java objects
      * (instances of that class) can be accomplished by this introspector.
-     * This is the case if <code>javaClass</code> implements the
-     * <code>Introspectable</code>
+     * This is the case if  javaClass   implements the
+     *  Introspectable
      *
      * @param schema    The schema of the ontological element
      * @param javaClass The java class associated to the ontologcal element

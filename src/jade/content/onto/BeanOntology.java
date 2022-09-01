@@ -30,12 +30,12 @@ import java.io.Serial;
 //#J2ME_EXCLUDE_FILE
 
 /**
- * Extension of <code>Ontology</code> that allows to build the
+ * Extension of  Ontology   that allows to build the
  * ontological elements adding directly the classes of the
  * corresponding JavaBeans.
- * The <code>BeanOntology</code> internally needs to use its introspector
- * <code>BeanIntrospector</code>. A typical pattern to create an ontology
- * extending the <code>BeanOntology</code> is the following:
+ * The  BeanOntology   internally needs to use its introspector
+ *  BeanIntrospector  . A typical pattern to create an ontology
+ * extending the  BeanOntology   is the following:
  *
  * <p><blockquote><pre>
  * public class MyOntology extends BeanOntology {<br>
@@ -59,10 +59,10 @@ import java.io.Serial;
  * }
  * </pre></blockquote></p>
  * <p>
- * The ontology <code>MyOntology</code> will be built creating the hierarchy
- * of ontological items defined by the beans in package <code>com.acme.rocket.ontology</code>
- * plus the two beans <code>C1</code> and <code>C2</code>.
- * An ontological bean is a class implementing either <code>Concept</code> or <code>Predicate</code>
+ * The ontology  MyOntology   will be built creating the hierarchy
+ * of ontological items defined by the beans in package  com.acme.rocket.ontology  
+ * plus the two beans  C1   and  C2  .
+ * An ontological bean is a class implementing either  Concept   or  Predicate  
  * Example:
  * <p><blockquote><pre>
  * public class CD extends Item {
@@ -78,7 +78,7 @@ import java.io.Serial;
  *         title = t;
  *     }
  *
- *     <code>@</code>AggregateSlot(cardMin = 1)
+ *      @  AggregateSlot(cardMin = 1)
  *     public List getTracks() {
  *         return tracks;
  *     }
@@ -111,8 +111,8 @@ public class BeanOntology extends Ontology {
     private transient BeanOntologyBuilder bob;
 
     /**
-     * Create an Ontology with the given <code>name</code>.
-     * The <code>BasicOntology</code> is automatically added
+     * Create an Ontology with the given  name  .
+     * The  BasicOntology   is automatically added
      * as the base ontology.
      *
      * @param name The identifier of the ontology.
@@ -122,9 +122,9 @@ public class BeanOntology extends Ontology {
     }
 
     /**
-     * Create an Ontology with the given <code>name</code> that
-     * extends the ontology <code>base</code>, which must have
-     * <code>BasicOntology</code> in its hierarchy.
+     * Create an Ontology with the given  name   that
+     * extends the ontology  base  , which must have
+     *  BasicOntology   in its hierarchy.
      *
      * @param name The identifier of the ontology.
      * @param base The base ontology.
@@ -134,10 +134,10 @@ public class BeanOntology extends Ontology {
     }
 
     /**
-     * Create an Ontology with the given <code>name</code> that
-     * extends the <code>base</code> set of ontologies. At least
-     * one of the <code>base</code> ontologies must extend the
-     * ontology <code>BasicOntology</code>.
+     * Create an Ontology with the given  name   that
+     * extends the  base   set of ontologies. At least
+     * one of the  base   ontologies must extend the
+     * ontology  BasicOntology  .
      *
      * @param name The identifier of the ontology.
      * @param base The base ontologies
@@ -161,9 +161,9 @@ public class BeanOntology extends Ontology {
     }
 
     /**
-     * Adds to the ontology the schema built from the class <code>clazz</code>.
-     * The class must implement either <code>Concept</code>
-     * or <code>Predicate</code>.
+     * Adds to the ontology the schema built from the class  clazz  .
+     * The class must implement either  Concept  
+     * or  Predicate  .
      *
      * @param clazz class from which to build the ontological schema
      *              throws BeanOntologyException
@@ -174,7 +174,7 @@ public class BeanOntology extends Ontology {
 
     /**
      * Adds all the ontological beans (the ones which implement either
-     * <code>Concept</code> or <code>Predicate</code>) found in the
+     *  Concept   or  Predicate  ) found in the
      * specified package.
      *
      * @param pkgname name of the package containing the beans
@@ -185,12 +185,12 @@ public class BeanOntology extends Ontology {
     }
 
     /**
-     * Adds to the ontology the schema built from the class <code>clazz</code>.
-     * The class must implement either <code>Concept</code>
-     * or <code>Predicate</code>.
+     * Adds to the ontology the schema built from the class  clazz  .
+     * The class must implement either  Concept  
+     * or  Predicate  .
      *
      * @param clazz          class from which to build the ontological schema
-     * @param buildHierarchy if <code>true</code>, build the full hierarchy
+     * @param buildHierarchy if  true  , build the full hierarchy
      *                       ontological elements. Otherwise, build a set of
      *                       flat unrelated elements
      *                       throws BeanOntologyException
@@ -201,11 +201,11 @@ public class BeanOntology extends Ontology {
 
     /**
      * Adds all the ontological beans (the ones which implement either
-     * <code>Concept</code> or <code>Predicate</code>) found in the
+     *  Concept   or  Predicate  ) found in the
      * specified package.
      *
      * @param pkgname        name of the package containing the beans
-     * @param buildHierarchy if <code>true</code>, build the full hierarchy
+     * @param buildHierarchy if  true  , build the full hierarchy
      *                       ontological elements. Otherwise, build a set of
      *                       flat unrelated elements
      *                       throws BeanOntologyException

@@ -34,14 +34,14 @@ package jade.core;
 public class NotFoundException extends Exception {
 
     /**
-     * Construct a <code>NotFoundException</code> with no detail message
+     * Construct a  NotFoundException   with no detail message
      */
     public NotFoundException() {
         super();
     }
 
     /**
-     * Construct a <code>NotFoundException</code> with the given message.
+     * Construct a  NotFoundException   with the given message.
      *
      * @param msg The exception message.
      */

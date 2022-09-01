@@ -57,19 +57,19 @@ public class ChangedAgentOwnership implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>where</code> slot of this
+     * Retrieve the value of the  where   slot of this
      * event, containing the container identifier of the container
      * where the agent is deployed.
      *
-     * @return The value of the <code>where</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  where   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getWhere() {
         return where;
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
+     * Set the  where   slot of this event.
      *
      * @param id The container identifier of the container where the
      *           agent is deployed.
@@ -79,19 +79,19 @@ public class ChangedAgentOwnership implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>agent</code> slot of this
+     * Retrieve the value of the  agent   slot of this
      * event, containing the agent identifier of the agent whose
      * ownership changed.
      *
-     * @return The value of the <code>agent</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  agent   slot, or
+     *  null   if no value was set.
      */
     public AID getAgent() {
         return agent;
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
+     * Set the  agent   slot of this event.
      *
      * @param id The agent identifier of the agent whose ownership
      *           changed.
@@ -101,19 +101,19 @@ public class ChangedAgentOwnership implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>from</code> slot of this event,
+     * Retrieve the value of the  from   slot of this event,
      * containing the name of the entity that owned the agent before
      * this event occurred.
      *
-     * @return The value of the <code>from</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  from   slot, or
+     *  null   if no value was set.
      */
     public String getFrom() {
         return from;
     }
 
     /**
-     * Set the <code>from</code> slot of this event.
+     * Set the  from   slot of this event.
      *
      * @param o The name of the entity that owned the agent before
      *          this event occurred.
@@ -123,19 +123,19 @@ public class ChangedAgentOwnership implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>to</code> slot of this
+     * Retrieve the value of the  to   slot of this
      * event, containing the name of the entity owning the agent after this
      * event occurred.
      *
-     * @return The value of the <code>agent</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  agent   slot, or
+     *  null   if no value was set.
      */
     public String getTo() {
         return to;
     }
 
     /**
-     * Set the <code>to</code> slot of this event.
+     * Set the  to   slot of this event.
      *
      * @param o The name of the entity owning the agent after this
      *          event occurred.

@@ -30,7 +30,7 @@ import java.util.Vector;
 
 
 /**
- * The <code>ServiceManagerStub</code> class is the remote
+ * The  ServiceManagerStub   class is the remote
  * proxy of JADE platform <i>Service Manager</i> and
  * <i>Service Finder</i> components, running over LEAP transport layer.
  *

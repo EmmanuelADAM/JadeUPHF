@@ -42,7 +42,7 @@ import java.awt.event.MouseEvent;
  * This class is builds up the GUI of the TestAgent
  *
  * @author Chris van Aart - Acklin B.V., the Netherlands
- * @created May 6, 2002
+ * @since May 6, 2002
  */
 
 public class TestAgentFrame extends JFrame {

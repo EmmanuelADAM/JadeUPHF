@@ -46,9 +46,9 @@ public class ContentElementSchema extends ObjectSchemaImpl {
     }
 
     /**
-     * Creates a <code>ContentElementSchema</code> with a given type-name.
+     * Creates a  ContentElementSchema   with a given type-name.
      *
-     * @param typeName The name of this <code>ContentElementSchema</code>.
+     * @param typeName The name of this  ContentElementSchema  .
      */
     protected ContentElementSchema(String typeName) {
         super(typeName);

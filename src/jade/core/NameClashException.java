@@ -42,14 +42,14 @@ public class NameClashException extends Exception {
     public static final String KEYWORD = "Name-clash";
 
     /**
-     * Construct a <code>NameClashException</code> with no detail message
+     * Construct a  NameClashException   with no detail message
      */
     public NameClashException() {
         super(KEYWORD);
     }
 
     /**
-     * Construct a <code>NameClashException</code> with the given message.
+     * Construct a  NameClashException   with the given message.
      *
      * @param msg The exception message.
      */

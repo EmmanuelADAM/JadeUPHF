@@ -72,7 +72,7 @@ class CommandProcessor {
     }
 
     /**
-     * Insert a Filter in the chain started by <code>first</code>.
+     * Insert a Filter in the chain started by  first  .
      *
      * @return The Filter at the beginning of the chain (may have
      * changed)
@@ -116,7 +116,7 @@ class CommandProcessor {
     }
 
     /**
-     * Remove a Filter from the chain started by <code>first</code>.
+     * Remove a Filter from the chain started by  first  .
      *
      * @return The Filter at the beginning of the chain (may have
      * changed)
@@ -150,17 +150,17 @@ class CommandProcessor {
      * Register a command sink object to handle the given vertical commmand set.
      *
      * @param snk         A service-specific implementation of the
-     *                    <code>Sink</code> interface, managing a set of vertical
+     *                     Sink   interface, managing a set of vertical
      *                    commands.
      * @param side        One of the two constants
-     *                    <code>Sink.COMMAND_SOURCE</code> or
-     *                    <code>Sink.COMMAND_TARGET</code>, to state whether this sink
+     *                     Sink.COMMAND_SOURCE   or
+     *                     Sink.COMMAND_TARGET  , to state whether this sink
      *                    will handle locally issued commands or commands incoming from
      *                    remote nodes.
      * @param serviceName An array containing all the names of the
      *                    vertical commands the new sink wants to handle.
      * @throws ServiceException If some other sink is already
-     *                          registered for a member of the <code>commandNames</code> set.
+     *                          registered for a member of the  commandNames   set.
      */
     public synchronized void registerSink(Sink snk, boolean side, String serviceName) throws ServiceException {
 
@@ -177,14 +177,14 @@ class CommandProcessor {
      * Deregister a sink that is currently handling a given set of vertical commands.
      *
      * @param side        One of the two constants
-     *                    <code>Sink.COMMAND_SOURCE</code> or
-     *                    <code>Sink.COMMAND_TARGET</code>, to state whether the sink to
+     *                     Sink.COMMAND_SOURCE   or
+     *                     Sink.COMMAND_TARGET  , to state whether the sink to
      *                    be removed is handling locally issued commands or commands
      *                    incoming from remote nodes.
      * @param serviceName An array containing all the names of the
      *                    vertical commands currently handled by the sink to be removed.
      * @throws ServiceException If a member of the
-     *                          <code>commandNames</code> set has no associated command sink.
+     *                           commandNames   set has no associated command sink.
      */
     public synchronized void deregisterSink(boolean side, String serviceName) throws ServiceException {
 
@@ -204,7 +204,7 @@ class CommandProcessor {
      * reentrant and as fast as possible, because it is going to be a
      * bottleneck of the kernel call flow.
      *
-     * @param cmd The <code>VerticalCommand</code> object to process.
+     * @param cmd The  VerticalCommand   object to process.
      */
     public Object processOutgoing(VerticalCommand cmd) {
         firstDownFilter.filter(cmd);
@@ -217,7 +217,7 @@ class CommandProcessor {
      * reentrant and as fast as possible, because it is going to be a
      * bottleneck of the kernel call flow.
      *
-     * @param cmd The <code>VerticalCommand</code> object to process.
+     * @param cmd The  VerticalCommand   object to process.
      */
     public Object processIncoming(VerticalCommand cmd) {
         firstUpFilter.filter(cmd);
@@ -230,7 +230,7 @@ class CommandProcessor {
      * look like a single filter that always stands at the end of
      * the filter chain.
      */
-    private class SinksFilter extends Filter {
+    private static class SinksFilter extends Filter {
         private final Hashtable<String, Sink> mySinks;
 
         private SinksFilter(Hashtable<String, Sink> ht) {

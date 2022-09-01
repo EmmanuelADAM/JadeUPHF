@@ -32,7 +32,7 @@ import java.util.List;
 
 /**
  * Composite behaviour with sequential children scheduling. It is a
- * <code>CompositeBehaviour</code> that executes its children behaviours
+ *  CompositeBehaviour   that executes its children behaviours
  * in sequential order, and terminates when its last child has ended.
  *
  * @author Giovanni Rimassa - Universita` di Parma
@@ -84,7 +84,7 @@ public class SequentialBehaviour extends SerialBehaviour {
     }
 
     /**
-     * Check whether this <code>SequentialBehaviour</code> must terminate.
+     * Check whether this  SequentialBehaviour   must terminate.
      *
      * @return true when the last child has terminated. false otherwise
      * @see CompositeBehaviour#checkTermination
@@ -108,7 +108,7 @@ public class SequentialBehaviour extends SerialBehaviour {
 
     /**
      * Return a Collection view of the children of
-     * this <code>SequentialBehaviour</code>
+     * this  SequentialBehaviour
      *
      * @return
      * @see CompositeBehaviour#getChildren
@@ -118,7 +118,7 @@ public class SequentialBehaviour extends SerialBehaviour {
     }
 
     /**
-     * Add a sub behaviour to this <code>SequentialBehaviour</code>
+     * Add a sub behaviour to this  SequentialBehaviour
      */
     public void addSubBehaviour(Behaviour b) {
         subBehaviours.add(b);
@@ -127,7 +127,7 @@ public class SequentialBehaviour extends SerialBehaviour {
     }
 
     /**
-     * Remove a sub behaviour from this <code>SequentialBehaviour</code>
+     * Remove a sub behaviour from this  SequentialBehaviour
      */
     public void removeSubBehaviour(Behaviour b) {
         boolean rc = subBehaviours.remove(b);

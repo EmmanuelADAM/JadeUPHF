@@ -11,10 +11,10 @@ import jade.util.Logger;
 /**
  * This agent is the gateway able to execute all commands requests received via JadeGateway.
  * <p>
- * <code>JadeGateway</code> enables two alternative ways to implement a gateway
+ *  JadeGateway   enables two alternative ways to implement a gateway
  * that allows non-JADE code to communicate with JADE agents.
- * <br> The first one is to extend the <code>GatewayAgent</code>
- * <br> The second one is to extend this <code>GatewayBehaviour</code> and add an instance
+ * <br> The first one is to extend the  GatewayAgent
+ * <br> The second one is to extend this  GatewayBehaviour   and add an instance
  * of this Behaviour to your own agent that will have to function as a gateway (see its javadoc for reference).
  *
  * @author Fabio Bellifemine, Telecom Italia LAB
@@ -38,18 +38,18 @@ public class GatewayAgent extends Agent {
      * The method is called each time a request to process a command
      * is received from the JSP Gateway.
      * <p> The recommended pattern is the following implementation:
-     * <code>
+     *
      * if (c instanceof Command1)
      * exexCommand1(c);
      * else if (c instanceof Command2)
      * exexCommand2(c);
-     * </code>
+     *
      * </p>
      * <b> REMIND THAT WHEN THE COMMAND HAS BEEN PROCESSED,
-     * YOU MUST CALL THE METHOD <code>releaseCommand</code>.
+     * YOU MUST CALL THE METHOD  releaseCommand  .
      * <br>Sometimes, you might prefer launching a new Behaviour that processes
      * this command and release the command just when the Behaviour terminates,
-     * i.e. in its <code>onEnd()</code> method.
+     * i.e. in its  onEnd()   method.
      **/
     protected void processCommand(final Object command) {
         if (command instanceof Behaviour) {
@@ -77,7 +77,7 @@ public class GatewayAgent extends Agent {
 
     /*
      * Those classes that extends this setup method of the GatewayAgent
-     * MUST absolutely call <code>super.setup()</code> otherwise this
+     * MUST absolutely call  super.setup()   otherwise this
      * method is not executed and the system would not work.
      * @see jade.core.Agent#setup()
      */

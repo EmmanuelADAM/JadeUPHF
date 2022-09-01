@@ -34,7 +34,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * To show an <code>APService</code> object within a Swing dialog.
+ * To show an  APService   object within a Swing dialog.
  *
  * @author Tiziana Trucco - CSELT S.p.A.
  * @version $Date: 2010-04-15 11:26:09 +0200 (gio, 15 apr 2010) $ $Revision: 6311 $
@@ -122,7 +122,7 @@ public class APServicePanel extends JPanel {
     }
 
     /**
-     * To show an <code>APService</code> in A JDialog.
+     * To show an  APService   in A JDialog.
      */
     public static void viewAPServiceDialog(APService ap, Dialog parent, String title) {
 

@@ -51,11 +51,11 @@ public class TwoPhInitiator extends FSMBehaviour {
     private final boolean currentLogging = true; // @todo REMOVE IT!!!!!!!!!!!
 
     /**
-     * Constructs a <code>TwoPhInitiator</code> behaviour.
+     * Constructs a  TwoPhInitiator   behaviour.
      *
      * @param a   The agent performing the protocol.
      * @param cfp The message that must be used to initiate the protocol.
-     *            Notice that the default implementation of the <code>prepareCfps</code> method
+     *            Notice that the default implementation of the  prepareCfps   method
      *            returns an array composed of that message only.
      */
     public TwoPhInitiator(Agent a, ACLMessage cfp) {
@@ -63,13 +63,13 @@ public class TwoPhInitiator extends FSMBehaviour {
     }
 
     /**
-     * Constructs a <code>TwoPhInitiator</code> behaviour.
+     * Constructs a  TwoPhInitiator   behaviour.
      *
      * @param a               The agent performing the protocol.
      * @param cfp             The message that must be used to initiate the protocol.
-     *                        Notice that the default implementation of the <code>prepareCfps</code> method
+     *                        Notice that the default implementation of the  prepareCfps   method
      *                        returns an array composed of that message only.
-     * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPhInitiator</code>.
+     * @param mapMessagesList  HashMap   of messages list that will be used by this  TwoPhInitiator  .
      * deprecated
 
     public TwoPhInitiator(Agent a, ACLMessage cfp, HashMap<String, List<ACLMessage>> mapMessagesList) {
@@ -210,14 +210,14 @@ public class TwoPhInitiator extends FSMBehaviour {
     }
      */
     /**
-     * Constructs a <code>TwoPhInitiator</code> behaviour.
+     * Constructs a  TwoPhInitiator   behaviour.
      *
      * @param a               The agent performing the protocol.
      * @param cfp             The message that must be used to initiate the protocol.
-     *                        Notice that the default implementation of the <code>prepareCfps</code> method
+     *                        Notice that the default implementation of the  prepareCfps   method
      *                        returns an array composed of that message only.
-     * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPhInitiator</code>.
-     * @param mapMessages     <code>HashMap</code> of messages  that will be used by this <code>TwoPhInitiator</code>.
+     * @param mapMessagesList  HashMap   of messages list that will be used by this  TwoPhInitiator  .
+     * @param mapMessages      HashMap   of messages  that will be used by this  TwoPhInitiator  .
      */
     public TwoPhInitiator(Agent a, ACLMessage cfp, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a);
@@ -366,9 +366,9 @@ public class TwoPhInitiator extends FSMBehaviour {
      * to return a vector of CFP objects for 1:N conversations.
      *
      * @param cfp the ACLMessage object passed in the constructor
-     * @return a vector of ACLMessage objects. The values of the slot <code>reply-with</code>
-     * and <code>conversation-id</code> are ignored and regenerated automatically by this
-     * class. Instead user can specify <code>reply-by</code> slot representing phase0
+     * @return a vector of ACLMessage objects. The values of the slot  reply-with
+     * and  conversation-id   are ignored and regenerated automatically by this
+     * class. Instead user can specify  reply-by   slot representing phase0
      * timeout.
      */
     protected List<ACLMessage> prepareCfps(ACLMessage cfp) {
@@ -378,7 +378,7 @@ public class TwoPhInitiator extends FSMBehaviour {
     }
 
     /**
-     * This method is called every time a <code>propose</code> message is received,
+     * This method is called every time a  propose   message is received,
      * which is not out-of-sequence according to the protocol rules. This default
      * implementation does nothing; programmers might wish to override the method
      * in case they need to react to this event.
@@ -389,7 +389,7 @@ public class TwoPhInitiator extends FSMBehaviour {
     }
 
     /**
-     * This method is called every time a <code>failure</code> message is received,
+     * This method is called every time a  failure   message is received,
      * which is not out-of-sequence according to the protocol rules. This default
      * implementation does nothing; programmers might wish to override the method
      * in case they need to react to this event.
@@ -402,16 +402,16 @@ public class TwoPhInitiator extends FSMBehaviour {
     /**
      * This method is called when all the responses of phase 0 have been collected or when
      * the timeout is expired. The used timeout is the minimum value of the slot
-     * <code>reply-By</code> of all the CFP messages sent.By response message we
-     * intend here all the <code>propose, failure, not-understood</code> received messages, which
+     *  reply-By   of all the CFP messages sent.By response message we
+     * intend here all the  propose, failure, not-understood   received messages, which
      * are not out-of-sequence according to the protocol rules.
      * This default implementation does nothing; programmers might
      * wish to override this method to modify the Vector of initiation messages
-     * (<code>nextPhMsgs</code>) for next phase. More in details this Vector
+     * ( nextPhMsgs  ) for next phase. More in details this Vector
      * already includes messages with the performative set according to the
      * default protocol rules i.e. QUERY_IF (if all responders replied with
      * PROPOSE) or REJECT_PROPOSAL (if at least one responder failed or didn't reply).
-     * In particular, by setting the <code>reply-by</code> slot, users can
+     * In particular, by setting the  reply-by   slot, users can
      * specify a timeout for next phase.
      *
      * @param responses  The Vector of all messages received as response in phase 0
@@ -419,15 +419,15 @@ public class TwoPhInitiator extends FSMBehaviour {
      * @param pendings   The Vector of CFP messages for which a response has not
      *                   been received yet.
      * @param nextPhMsgs The Vector of initiation messages for next phase already
-     *                   filled with <code>QUERY_IF</code> messages (if all responders replied with
-     *                   <code>PROPOSE</code>) or <code>REJECT_PROPOSAL</code> (if at least one
+     *                   filled with  QUERY_IF   messages (if all responders replied with
+     *                    PROPOSE  ) or  REJECT_PROPOSAL   (if at least one
      *                   responder failed or didn't reply).
      */
     protected void handleAllPh0Responses(List<ACLMessage> responses, List<ACLMessage> proposes, List<ACLMessage> pendings, List<ACLMessage> nextPhMsgs) {
     }
 
     /**
-     * This method is called every time a <code>confirm</code> message is received,
+     * This method is called every time a  confirm   message is received,
      * which is not out-of-sequence according to the protocol rules. This default
      * implementation does nothing; programmers might wish to override the method
      * in case they need to react to this event.
@@ -438,7 +438,7 @@ public class TwoPhInitiator extends FSMBehaviour {
     }
 
     /**
-     * This method is called every time a <code>disconfirm</code> message is received,
+     * This method is called every time a  disconfirm   message is received,
      * which is not out-of-sequence according to the protocol rules. This default
      * implementation does nothing; programmers might wish to override the method
      * in case they need to react to this event.
@@ -449,7 +449,7 @@ public class TwoPhInitiator extends FSMBehaviour {
     }
 
     /**
-     * This method is called every time an <code>inform</code> message in phase 1
+     * This method is called every time an  inform   message in phase 1
      * is received, which is not out-of-sequence according to the protocol rules.
      * This default implementation does nothing; programmers might wish to override
      * the method in case they need to react to this event.
@@ -462,8 +462,8 @@ public class TwoPhInitiator extends FSMBehaviour {
     /**
      * This method is called in phase 1 when all the responses have been collected or when
      * the timeout is expired. The used timeout is the minimum value of the slot
-     * <code>reply-By</code> of all the sent messages. By response message we
-     * intend here all the <code>disconfirm, confirm, inform</code> received messages,
+     *  reply-By   of all the sent messages. By response message we
+     * intend here all the  disconfirm, confirm, inform   received messages,
      * which are not out-of-sequence according to the protocol rules. This default
      * implementation does nothing; programmers might wish to override the method
      * in case they need to react to this event by analysing all the messages in
@@ -473,14 +473,14 @@ public class TwoPhInitiator extends FSMBehaviour {
      * @param confirms    all confirms received
      * @param disconfirms all disconfirms received
      * @param pendings    all queryIfs still pending
-     * @param nextPhMsgs  prepared responses for next phase: <code>accept-proposal</code>
-     *                    or <code>reject-proposal</code>
+     * @param nextPhMsgs  prepared responses for next phase:  accept-proposal
+     *                    or  reject-proposal
      */
     protected void handleAllPh1Responses(List<ACLMessage> responses, List<ACLMessage> confirms, List<ACLMessage> disconfirms, List<ACLMessage> informs, List<ACLMessage> pendings, List<ACLMessage> nextPhMsgs) {
     }
 
     /**
-     * This method is called every time an <code>inform</code> message in phase 2
+     * This method is called every time an  inform   message in phase 2
      * is received, which is not out-of-sequence according to the protocol rules.
      * This default implementation does nothing; programmers might wish to override
      * the method in case they need to react to this event.
@@ -491,8 +491,8 @@ public class TwoPhInitiator extends FSMBehaviour {
     }
 
     /**
-     * This method is called every time a <code>failure</code>, a <code>disconfirm</code>
-     * or an <code>inform</code> message is received in phase 2, which is not out-of-sequence
+     * This method is called every time a  failure  , a  disconfirm
+     * or an  inform   message is received in phase 2, which is not out-of-sequence
      * according to the protocol rules. This default implementation does nothing;
      * programmers might wish to override the method in case they need to react
      * to this event.
@@ -504,9 +504,9 @@ public class TwoPhInitiator extends FSMBehaviour {
 
     /**
      * This method is called in phase 2 when all the responses have been collected.
-     * By response message we intend here all the <code>inform</code> (phase 2),
-     * <code>failure</code> (phase 0), <code>disconfirm</code> (phase 1) and
-     * <code>inform</code> (phase 1) received messages, which are not out-of-sequence
+     * By response message we intend here all the  inform   (phase 2),
+     *  failure   (phase 0),  disconfirm   (phase 1) and
+     *  inform   (phase 1) received messages, which are not out-of-sequence
      * according to the protocol rules. This default implementation does nothing;
      * programmers might wish to override the method in case they need to react to
      * this event by analysing all the messages in just one call.
@@ -518,7 +518,7 @@ public class TwoPhInitiator extends FSMBehaviour {
 
     /**
      * This method is called every time a message is received in phase n (use
-     * <code>getCurrentPhase</code> method to know the phase), which is
+     *  getCurrentPhase   method to know the phase), which is
      * out-of-sequence according to the protocol rules. This default implementation
      * does nothing; programmers might wish to override the method in case they need
      * to react to this event.

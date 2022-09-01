@@ -238,7 +238,7 @@ public class NIOBEDispatcher implements NIOMediator, BEConnectionManager, Dispat
 
     /**
      * Overloaded version of the handleJICPPacket() method including
-     * the <code>Connection</code> the incoming JICPPacket was received
+     * the  Connection   the incoming JICPPacket was received
      * from. This information is important since, unlike normal mediators,
      * a NIOMediator may not read packets from connections on its own (the
      * JICPMediatorManager does that in general).

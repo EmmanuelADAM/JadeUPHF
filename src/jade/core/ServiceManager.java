@@ -32,7 +32,7 @@ import java.util.Vector;
 
 
 /**
- * The <code>ServiceManager</code> interface serves as an access point
+ * The  ServiceManager   interface serves as an access point
  * for kernel-level service management. From a service manager object
  * one can add and remove a service, or perform service management
  * activities such as service suspension, resumption or parameter
@@ -87,7 +87,7 @@ public interface ServiceManager {
      *
      * @param desc     The description of the new node to add, containing
      *                 the node identifier and other node properties.
-     * @param services An array of <code>ServiceDescriptor</code>
+     * @param services An array of  ServiceDescriptor
      *                 objects, describing the various kernel-level services that are
      *                 to be activated on the newly created node.
      * @throws IMTPException    If an underlying network error forbids to
@@ -123,8 +123,8 @@ public interface ServiceManager {
      * the result can be the actual federation of this container and
      * other containers service slices.
      *
-     * @param desc The <code>ServiceDescriptor</code> object
-     *             specifying the <code>Service</code> object implementing the
+     * @param desc The  ServiceDescriptor   object
+     *             specifying the  Service   object implementing the
      *             service, along with the name and properties of the service.
      * @throws IMTPException    If an underlying network error forbids to
      *                          tell whether the requested operation was possible. In that

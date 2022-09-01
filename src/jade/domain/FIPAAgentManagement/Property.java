@@ -33,7 +33,7 @@ import java.util.Properties;
 
 
 /**
- * This class implements the <code>property</code> type, a pair of a
+ * This class implements the  property   type, a pair of a
  * name and value.
  *
  * @author Fabio Bellifemine - CSELT S.p.A.
@@ -79,7 +79,7 @@ public class Property implements Concept {
      * Retrieve the name of this property object.
      *
      * @return The string that is the name of this property, or
-     * <code>null</code> if no name was set.
+     *  null   if no name was set.
      */
     public String getName() {
         return name;
@@ -98,7 +98,7 @@ public class Property implements Concept {
      * Retrieve the value of this property object, associated with the
      * property name.
      *
-     * @return The value of this property, or <code>null</code> if no
+     * @return The value of this property, or  null   if no
      * value was set.
      */
     public Object getValue() {

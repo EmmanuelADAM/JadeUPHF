@@ -47,7 +47,7 @@ import java.util.Date;
  * A couple of message templates are included in the menu.
  *
  * @author Chris van Aart - Acklin B.V., the Netherlands
- * @created May 6, 2002
+ * @since May 6, 2002
  */
 
 public class TestAgent extends Agent {
@@ -349,7 +349,7 @@ public class TestAgent extends Agent {
      * Description of the Class
      *
      * @author chris
-     * @created May 21, 2002
+     * @since May 21, 2002
      */
     private class SplashScreen extends JWindow {
         GridBagLayout gridBagLayout1 = new GridBagLayout();

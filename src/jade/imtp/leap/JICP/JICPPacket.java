@@ -117,10 +117,10 @@ public class JICPPacket {
 
     /**
      * This static method reads from a given
-     * <code>DataInputStream</code> and returns the JICPPacket that
+     *  DataInputStream   and returns the JICPPacket that
      * it reads. The input stream is not opened nor closed by this method.
      *
-     * @param in The <code>InputStream</code> to read from
+     * @param in The  InputStream   to read from
      * @throws IOException May send a large bunch of exceptions, mainly in the IO
      *                     package.
      */
@@ -292,13 +292,13 @@ public class JICPPacket {
     }
 
     /**
-     * Writes the packet into the provided <code>OutputStream</code>.
+     * Writes the packet into the provided  OutputStream  .
      * The packet is serialized in an internal representation, so the
      * data should be retrieved and deserialized with the
-     * <code>readFrom()</code> static method below. The output stream is flushed
+     *  readFrom()   static method below. The output stream is flushed
      * but not opened nor closed by this method.
      *
-     * @param out The  <code>OutputStream</code> to write the data in
+     * @param out The   OutputStream   to write the data in
      * @throws IOException May send a large bunch of exceptions, mainly in the IO
      *                     package.
      */

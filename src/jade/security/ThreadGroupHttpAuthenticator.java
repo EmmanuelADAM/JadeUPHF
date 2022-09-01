@@ -76,8 +76,8 @@ public class ThreadGroupHttpAuthenticator extends Authenticator {
 
     /**
      * Set the list of host excluded from proxy.
-     * Use <code>|</code> to separate hosts.
-     * Permitted <code>*</code> as wildcards.
+     * Use  |   to separate hosts.
+     * Permitted  *   as wildcards.
      *
      * @param nonProxyHosts list of hosts
      */

@@ -54,9 +54,9 @@ public interface PersistentDeliveryFilter {
      *            against this filter and possibly buffered.
      * @return The delay, in milliseconds, within which the message is
      * to be delivered. If the message is still undelivered after that
-     * delay, the delivery process aborts and a <code>failure</code>
+     * delay, the delivery process aborts and a  failure
      * message is sent back to the message originator. The specially
-     * defined <code>NOW</code> and <code>NEVER</code> constants can
+     * defined  NOW   and  NEVER   constants can
      * be used to request immediate abort or message storage for
      * unlimited time.
      */

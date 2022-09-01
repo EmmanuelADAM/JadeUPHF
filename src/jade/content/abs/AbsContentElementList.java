@@ -69,7 +69,7 @@ public class AbsContentElementList implements AbsContentElement {
     }
 
     /**
-     * Retrieves the <code>i</code>-th element in this content element list.
+     * Retrieves the  i  -th element in this content element list.
      *
      * @param i The index of the element to retrieve.
      * @return The element.
@@ -79,7 +79,7 @@ public class AbsContentElementList implements AbsContentElement {
     }
 
     /**
-     * @return An <code>Iterator</code> over the elements of this
+     * @return An  Iterator   over the elements of this
      * content element list.
      */
     public Iterator<AbsContentElement> iterator() {
@@ -97,7 +97,7 @@ public class AbsContentElementList implements AbsContentElement {
      * Test if a given content element is contained in this
      * content element list.
      *
-     * @return <code>true</code> if the given content element is contained
+     * @return  true   if the given content element is contained
      * in this content element list.
      */
     public boolean contains(AbsContentElement element) {
@@ -128,7 +128,7 @@ public class AbsContentElementList implements AbsContentElement {
     /**
      * Test if the content element list is empty.
      *
-     * @return <code>true</code> if this content element list does
+     * @return  true   if this content element list does
      * not contain any element.
      */
     public boolean isEmpty() {
@@ -181,7 +181,7 @@ public class AbsContentElementList implements AbsContentElement {
      * Tests if this AbsContentElementList is grounded, i.e., if no one of its elements
      * is associated with a variable
      *
-     * @return <code>true</code> if the object is grounded.
+     * @return  true   if the object is grounded.
      */
     public boolean isGrounded() {
         for (AbsContentElement abs : elements) {
@@ -194,7 +194,7 @@ public class AbsContentElementList implements AbsContentElement {
 
     /**
      * Return the number of elements in the list. Is equivalent to
-     * <code>size()</code>
+     *  size()  
      */
     public int getCount() {
         return size();

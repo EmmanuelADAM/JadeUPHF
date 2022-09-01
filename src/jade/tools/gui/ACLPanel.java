@@ -807,7 +807,7 @@ public class ACLPanel extends JPanel {
                 "<b><it>ACC</it></b> for inter-platform messaging.</html>");
     }
 
-    private class ACLFileFilter extends javax.swing.filechooser.FileFilter {
+    private static class ACLFileFilter extends javax.swing.filechooser.FileFilter {
         private final String[] extensions = {".acl"};
 
 

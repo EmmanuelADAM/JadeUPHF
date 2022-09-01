@@ -28,12 +28,12 @@ package jade.tools.gui;
 /**
  * A linked list of tokens. Each token has three fields - a token identifier,
  * which is a byte value that can be looked up in the array returned by
- * <code>SyntaxDocument.getColors()</code> to get a color value, a length
+ *  SyntaxDocument.getColors()   to get a color value, a length
  * value which is the length of the token in the text, and a pointer to the
  * next token in the list. The original file is written by Slava Pestov
  * (www.gjt.org) and altered to fit ACL/SL.
  *
- * @author Chris van Aart - Acklin B.V., the Netherlands & Slava Pestov
+ * @author Chris van Aart - Acklin B.V., the Netherlands and Slava Pestov
  * @since June 14, 2002
  */
 public class ACLToken {

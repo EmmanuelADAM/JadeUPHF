@@ -37,7 +37,7 @@ import jade.util.WrapperException;
 public class IMTPException extends WrapperException {
 
     /**
-     * Constructs an <code>IMTPException</code> with the specified detail message.
+     * Constructs an  IMTPException   with the specified detail message.
      *
      * @param msg The detail message.
      */
@@ -46,8 +46,8 @@ public class IMTPException extends WrapperException {
     }
 
     /**
-     * Constructs an <code>IMTPException</code> with the specified detail message,
-     * wrapping the given <code>Throwable</code>object.
+     * Constructs an  IMTPException   with the specified detail message,
+     * wrapping the given  Throwable  object.
      *
      * @param msg The detail message.
      * @param t   The exception to wrap.

@@ -29,8 +29,8 @@ import jade.content.AgentAction;
 
 
 /**
- * This class represents the <code>load-agent-group</code> action of
- * the <code>JADE-Persistence</code> ontology.  This action can be
+ * This class represents the  load-agent-group   action of
+ * the  JADE-Persistence   ontology.  This action can be
  * requested to the JADE AMS to load a previously stored agent group on
  * a given container set.
  *

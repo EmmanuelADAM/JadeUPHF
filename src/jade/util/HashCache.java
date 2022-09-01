@@ -107,7 +107,7 @@ public class HashCache implements Map<Object, Object> {
      * the oldest element is deleted.
      *
      * @param o element to be added to this set.
-     * @return true if the haschcache contains the object <CODE>o</CODE>,
+     * @return true if the haschcache contains the object  o  ,
      * otherwise false
      */
     public synchronized boolean contains(Object o) {

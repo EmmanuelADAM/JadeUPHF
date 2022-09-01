@@ -27,8 +27,8 @@ package jade.core.sam;
 
 /**
  * A default ready-made implementation of the AverageMeasureProvider interface that offers
- * methods to add measure samples and automatically computes an  <code>AverageMeasure</code>
- * when the <code>getValue()</code> method is called.
+ * methods to add measure samples and automatically computes an   AverageMeasure  
+ * when the  getValue()   method is called.
  */
 public class AverageMeasureProviderImpl implements AverageMeasureProvider {
 

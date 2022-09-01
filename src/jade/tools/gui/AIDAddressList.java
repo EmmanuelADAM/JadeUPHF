@@ -270,7 +270,7 @@ public class AIDAddressList extends JPanel {
      * @since April 26, 2002
      */
 
-    private class AIDAddressListListener implements ListDataListener {
+    private static class AIDAddressListListener implements ListDataListener {
 
         private String theRemovedAddress, theChangedAddress;
         private AID itsAID;
@@ -350,10 +350,10 @@ public class AIDAddressList extends JPanel {
      * edited.
      *
      * @author Chris van Aart - Acklin B.V., the Netherlands
-     * @created April 26, 2002
+     * @since April 26, 2002
      */
 
-    private class AIDAddressDialog extends JDialog {
+    private static class AIDAddressDialog extends JDialog {
 
         private final String CANCELLED = "cancelled";
         GridBagLayout gridBagLayout1 = new GridBagLayout();

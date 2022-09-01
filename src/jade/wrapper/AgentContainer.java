@@ -28,7 +28,7 @@ package jade.wrapper;
  * This class is maintained for backward compatibility only.
  * It is not deprecated since, for backward compatibility
  * reasons, it is used internally by the framework.
- * Use <code>jade.wrapper.ContainerController</code> instead.
+ * Use  jade.wrapper.ContainerController   instead.
  *
  * @author Giovanni Caire - TILAB
  */

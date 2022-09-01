@@ -27,8 +27,8 @@ package jade;
 //#J2ME_EXCLUDE_FILE
 
 /**
- * This exception is thrown by the method <code>checkProperties</code>
- * in class <A HREF="Boot.html"><code>Boot</code></A>
+ * This exception is thrown by the method  checkProperties
+ * in class <A HREF="Boot.html"> Boot  </A>
  * when an inconsistency of the configuration parameters is found.
  *
  * @author Tiziana Trucco - CSELT S.p.A.

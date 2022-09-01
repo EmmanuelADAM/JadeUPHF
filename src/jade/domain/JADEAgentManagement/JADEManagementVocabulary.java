@@ -28,7 +28,7 @@ import jade.domain.FIPAAgentManagement.ExceptionVocabulary;
 /**
  * This interface contains all the string constants for frame and slot
  * names of exceptions defined in the
- * <code>jade-agent-management</code> ontology.
+ *  jade-agent-management   ontology.
  */
 public interface JADEManagementVocabulary extends ExceptionVocabulary {
     /**

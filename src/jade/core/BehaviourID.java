@@ -56,7 +56,7 @@ public class BehaviourID implements Concept {
      * given behaviour object. The various attributes of the behaviour
      * ID (behaviour name, behaviour class, etc.) are set accordingly.
      *
-     * @param b The <code>Behaviour</code> object that is to be
+     * @param b The  Behaviour   object that is to be
      *          described with this ID.
      */
     public BehaviourID(Behaviour b) {
@@ -99,7 +99,7 @@ public class BehaviourID implements Concept {
     /**
      * Retrieve the name of this behaviour ID.
      *
-     * @return The given name, or <code>null</code> if no name was set.
+     * @return The given name, or  null   if no name was set.
      */
     public String getName() {
         return name;
@@ -134,7 +134,7 @@ public class BehaviourID implements Concept {
      * Retrieve the class name implementing the agent behaviour
      * described by this ID.
      *
-     * @return The class name, or <code>null</code> if no class name
+     * @return The class name, or  null   if no class name
      * was set.
      */
     public String getClassName() {
@@ -155,7 +155,7 @@ public class BehaviourID implements Concept {
      * Retrieve the kind of behaviour described by this behaviour ID.
      *
      * @return A string describing the kind of behaviour, or
-     * <code>null</code> if no kind was set.
+     *  null   if no kind was set.
      */
     public String getKind() {
         return kind;
@@ -196,8 +196,8 @@ public class BehaviourID implements Concept {
     /**
      * Tells whether this behaviour ID has children.
      *
-     * @return If the children collection is empty, <code>true</code>
-     * is returned, and <code>false</code> otherwise.
+     * @return If the children collection is empty,  true
+     * is returned, and  false   otherwise.
      */
     public boolean isSimple() {
         return (children.size() == 0);
@@ -210,9 +210,9 @@ public class BehaviourID implements Concept {
      *
      * @param o The right hand side of the equality test (the left
      *          hand one being the current object).
-     * @return If the <code>o</code> parameter is a behaviour ID with
+     * @return If the  o   parameter is a behaviour ID with
      * the same name, class name and kind of the current object,
-     * <code>true</code>. Otherwise, <code>false</code> is returned.
+     *  true  . Otherwise,  false   is returned.
      */
     public boolean equals(Object o) {
         if (o instanceof BehaviourID b) {

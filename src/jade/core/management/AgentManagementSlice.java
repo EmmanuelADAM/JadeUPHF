@@ -44,26 +44,26 @@ public interface AgentManagementSlice extends Service.Slice {
     String NAME = "jade.core.management.AgentManagement";
 
     /**
-     * This command name represents the <code>create-agent</code>
+     * This command name represents the  create-agent
      * action. The target agent identifier in this command is set to
-     * <code>null</code>, because no agent exists yet.
+     *  null  , because no agent exists yet.
      * This command object represents only the <i>first half</i> of
      * the complete agent creation process. Even if this command is
      * accepted by the kernel, there is no guarantee that the
      * requested creation will ever happen. Only when the
-     * <code>InformCreated</code> command is issued can one assume
+     *  InformCreated   command is issued can one assume
      * that the agent creation has taken place.
      */
     String REQUEST_CREATE = "Request-Create";
 
     /**
-     * This command name represents the <code>kill-agent</code>
+     * This command name represents the  kill-agent
      * action.
      * This command object represents only the <i>first half</i> of
      * the complete agent destruction process. Even if this command is
      * accepted by the kernel, there is no guarantee that the
      * requested destruction will ever happen. Only when the
-     * <code>InformKilled</code> command is issued can one assume that
+     *  InformKilled   command is issued can one assume that
      * the agent destruction has taken place.
      */
     String REQUEST_KILL = "Request-Kill";
@@ -76,7 +76,7 @@ public interface AgentManagementSlice extends Service.Slice {
      * the complete agent state change process. Even if this command
      * is accepted by the kernel, there is no guarantee that the
      * requested state change will ever happen. Only when the
-     * <code>InformStateChanged</code> command is issued can one
+     *  InformStateChanged   command is issued can one
      * assume that the state change has taken place.
      */
     String REQUEST_STATE_CHANGE = "Request-State-Change";
@@ -85,7 +85,7 @@ public interface AgentManagementSlice extends Service.Slice {
      * This command is issued by an agent that has just been created,
      * and causes JADE runtime to actually start up the agent thread.
      * The agent creation can be the outcome of a previously issued
-     * <code>RequestCreate</code> command. In that case, this command
+     *  RequestCreate   command. In that case, this command
      * represents only the <i>second half</i> of the complete agent
      * creation process.
      */
@@ -96,7 +96,7 @@ public interface AgentManagementSlice extends Service.Slice {
      * and whose thread is terminating.
      * The agent destruction can either be an autonomous move of the
      * agent or the outcome of a previously issued
-     * <code>RequestKill</code> command. In the second case, this
+     *  RequestKill   command. In the second case, this
      * command represents only the <i>second half</i> of the complete
      * agent destruction process.
      */
@@ -107,21 +107,21 @@ public interface AgentManagementSlice extends Service.Slice {
      * life-cycle state.
      * The agent state change can either be an autonomous move of the
      * agent or the outcome of a previously issued
-     * <code>RequestStateChange</code> command. In that case, this
+     *  RequestStateChange   command. In that case, this
      * command represents only the <i>second half</i> of the complete
      * agent state tansition process.
      */
     String INFORM_STATE_CHANGED = "Inform-State-Changed";
 
     /**
-     * This command name represents the <code>shutdown-platform</code> action.
+     * This command name represents the  shutdown-platform   action.
      * This command has no effect but informing interested services that the platform
      * shutdown process is starting.
      */
     String SHUTDOWN_PLATFORM = "Shutdown-Platform";
 
     /**
-     * This command name represents the <code>kill-container</code> action.
+     * This command name represents the  kill-container   action.
      */
     String KILL_CONTAINER = "Kill-Container";
 

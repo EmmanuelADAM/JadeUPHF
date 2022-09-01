@@ -36,7 +36,7 @@ import javax.swing.text.Segment;
  * text area component. The original file is written by Slava Pestov
  * (www.gjt.org) and altered to fit ACL/SL.
  *
- * @author Chris van Aart - Acklin B.V., the Netherlands & Slava Pestov
+ * @author Chris van Aart - Acklin B.V., the Netherlands and Slava Pestov
  * @since June 14, 2002
  */
 public class ACLSyntaxDocument extends PlainDocument {

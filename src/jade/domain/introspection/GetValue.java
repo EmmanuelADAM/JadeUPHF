@@ -28,7 +28,7 @@ package jade.domain.introspection;
 import jade.content.AgentAction;
 
 /**
- * This class represents the <code>get-value</code> action of the Introspection Ontology.
+ * This class represents the  get-value   action of the Introspection Ontology.
  * This action allows querying an agent that is running an IntrospectionServer behaviour
  * for the value corresponding to a given key.
  *

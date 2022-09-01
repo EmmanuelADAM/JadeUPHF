@@ -64,18 +64,18 @@ public class MovedAgent implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>agent</code> slot of this
+     * Retrieve the value of the  agent   slot of this
      * event, containing the agent identifier of the newly moved agent.
      *
-     * @return The value of the <code>agent</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  agent   slot, or
+     *  null   if no value was set.
      */
     public AID getAgent() {
         return agent;
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
+     * Set the  agent   slot of this event.
      *
      * @param id The agent identifier of the newly moved agent.
      */
@@ -84,19 +84,19 @@ public class MovedAgent implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>from</code> slot of this event,
+     * Retrieve the value of the  from   slot of this event,
      * containing the container identifier of the container from where
      * the agent migrated.
      *
-     * @return The value of the <code>from</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  from   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getFrom() {
         return from;
     }
 
     /**
-     * Set the <code>from</code> slot of this event.
+     * Set the  from   slot of this event.
      *
      * @param id The container identifier of the container from where
      *           the agent migrated.
@@ -106,19 +106,19 @@ public class MovedAgent implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>to</code> slot of this
+     * Retrieve the value of the  to   slot of this
      * event, containing the container identifier of the container
      * where the agent migrated.
      *
-     * @return The value of the <code>to</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  to   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getTo() {
         return to;
     }
 
     /**
-     * Set the <code>to</code> slot of this event.
+     * Set the  to   slot of this event.
      *
      * @param id The container identifier of the container where the
      *           agent migrated.

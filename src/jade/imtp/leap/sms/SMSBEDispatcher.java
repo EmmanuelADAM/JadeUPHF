@@ -34,7 +34,7 @@ import java.net.InetAddress;
 import java.util.Properties;
 
 /**
- * BackEnd side dispatcher class that extends <code>NIOBEDispatcher</code>
+ * BackEnd side dispatcher class that extends  NIOBEDispatcher
  * and uses SMS to perform OUT-of-bound notifications to the FrontEnd
  * when the connection (currently dropped) must be re-established.
  * see SMSFEDispatcher

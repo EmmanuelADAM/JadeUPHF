@@ -27,8 +27,8 @@ package jade.domain.JADEAgentManagement;
 import jade.content.AgentAction;
 
 /**
- * This class represents the <code>shutdown-platform</code> action of
- * the <code>JADE-agent-management ontology</code>.
+ * This class represents the  shutdown-platform   action of
+ * the  JADE-agent-management ontology  .
  * This action can be requested to the JADE AMS to shutdown the whole
  * platform.
  *

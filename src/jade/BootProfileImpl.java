@@ -361,15 +361,15 @@ public class BootProfileImpl extends ProfileImpl {
 
     /**
      * Parse a String reading for a set of
-     * <code>parameter(arg)</code>
-     * each delimited by a <code>;</code> and no space in between.
+     *  parameter(arg)  
+     * each delimited by a  ;   and no space in between.
      * <p>
      * For instance
-     * <code>jade.mtp.iiop(50);http.mtp.http(8080)</code> is a valid
-     * string, while  <code>jade.mtp.iiop(50 80);http.mtp.http(8080)</code>
+     *  jade.mtp.iiop(50);http.mtp.http(8080)   is a valid
+     * string, while   jade.mtp.iiop(50 80);http.mtp.http(8080)  
      * is not valid
-     * For each object specifier, a new java object <code>Specifier</code>
-     * is added to the passed <code>out</code> List parameter.
+     * For each object specifier, a new java object  Specifier  
+     * is added to the passed  out   List parameter.
      */
     public List<Specifier> parseSpecifiers(String str) throws PropertiesException {
 

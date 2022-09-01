@@ -30,8 +30,8 @@ import jade.core.ContainerID;
 
 
 /**
- * This class represents the <code>save-container</code> action of the
- * <code>JADE-Persistence</code> ontology.  This action can be
+ * This class represents the  save-container   action of the
+ *  JADE-Persistence   ontology.  This action can be
  * requested to the JADE AMS to save an agent container on a persistent
  * storage.
  *

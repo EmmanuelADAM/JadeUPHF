@@ -146,7 +146,7 @@ public class DFMemKB extends MemKB {
         String t1 = template.getType();
         if (t1 != null) {
             String t2 = fact.getType();
-            if ((t2 == null) || (!t1.equalsIgnoreCase(t2)))
+            if ((!t1.equalsIgnoreCase(t2)))
                 return false;
         }
 
@@ -154,7 +154,7 @@ public class DFMemKB extends MemKB {
         String o1 = template.getOwnership();
         if (o1 != null) {
             String o2 = fact.getOwnership();
-            if ((o2 == null) || (!o1.equalsIgnoreCase(o2)))
+            if ((!o1.equalsIgnoreCase(o2)))
                 return false;
         }
 

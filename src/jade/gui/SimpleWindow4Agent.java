@@ -10,11 +10,12 @@ import java.awt.event.WindowEvent;
 
 
 /**
- * a simple window with a text area to display informations
+ * a simple window with a text area to display information
  * and a button
- * the window find automaticcaly its place in the screen
+ * the window find automatically its place in the screen
  *
- * @author emmanueladam
+ * @author Emmanuel Adam
+ * @version Date: 2022-07-13
  */
 public class SimpleWindow4Agent extends JFrame implements ActionListener {
     public final static int OK_EVENT = 1;
@@ -100,6 +101,16 @@ public class SimpleWindow4Agent extends JFrame implements ActionListener {
     public void println(String chaine) {
         String texte = jTextArea.getText();
         texte = texte + chaine + "\n";
+        jTextArea.setText(texte);
+        jTextArea.setCaretPosition(texte.length());
+    }
+
+    /**
+     * add a formatted string to the text area
+     */
+    public void printf(String format, Object[] tabO) {
+        String texte = jTextArea.getText();
+        texte = texte + format.formatted(tabO) + "\n";
         jTextArea.setText(texte);
         jTextArea.setCaretPosition(texte.length());
     }

@@ -588,9 +588,8 @@ public class MainReplicationService extends BaseService {
                 List<AMSAgentDescription> suspendedAgents = myMain.amsSearch(amsd, -1); // '-1' means 'all the results'
 
                 for (AMSAgentDescription suspendedAgent : suspendedAgents) {
-                    AMSAgentDescription desc = suspendedAgent;
                     try {
-                        slice.suspendedAgent(desc.getName());
+                        slice.suspendedAgent(suspendedAgent.getName());
                     } catch (NotFoundException nfe) {
                         // It should never happen...
                         nfe.printStackTrace();

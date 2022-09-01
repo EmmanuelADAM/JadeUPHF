@@ -26,16 +26,16 @@ import java.util.*;
 
 /**
  * Provides enhanced property management.<br>
- * 1) Allows specifying property values containing strings of the form <b><tt>${key}</tt></b>.
- * Such strings are properly replaced with the value of the <tt>key</tt> variable
+ * 1) Allows specifying property values containing strings of the form <pre>${key}</pre>.
+ * Such strings are properly replaced with the value of the <pre>key</pre> variable
  * that may represent another property, a system property or an environment variable.
  * <p>
- * 2) Allows specifying boolean properties in the form <tt>-key</tt>. Such format is
- * equivalent to <tt>key=true</tt>.
+ * 2) Allows specifying boolean properties in the form <pre>-key</pre>. Such format is
+ * equivalent to <pre>key=true</pre>.
  * <p>
  * 3) Allows importing properties from external property files by means of the special key
- * <tt>import</tt>. E.g. specifying the property<br>
- * <tt>import = a-property-file-name</tt><br>
+ * <pre>import</pre>. E.g. specifying the property<br>
+ * <pre>import = a-property-file-name</pre><br>
  * results in automatically adding all properties defined in the specified property file
  * <p>
  * 4) Allows declaring a property as read-only.
@@ -173,7 +173,7 @@ public class ExtendedProperties extends Properties {
 
     /**
      * Add to this Properties object a stringified property of the form
-     * <tt>key = value</tt> or <tt>-key</tt>
+     * <pre>key = value</pre> or <pre>-key</pre>
      *
      * @param propStr The string representation of the property to be parsed
      */
@@ -307,7 +307,7 @@ public class ExtendedProperties extends Properties {
      * Set property value to specified object.
      *
      * @param aKey   The key used to store the data. The key may contain strings of
-     *               the form <b><tt>${key}</tt></b> which will be evaluated first.
+     *               the form <b><pre>${key}</pre></b> which will be evaluated first.
      * @param aValue The object to be stored.
      * @return The previous value of the specified key, or null if it did not have one.
      */
@@ -347,7 +347,7 @@ public class ExtendedProperties extends Properties {
 
     /**
      * Override getProperty in base class so all occurances of
-     * the form <b><tt>${key}</tt></b> are replaced by their
+     * the form <b><pre>${key}</pre></b> are replaced by their
      * associated value.
      *
      * @param aKey Key for desired property.
@@ -379,7 +379,7 @@ public class ExtendedProperties extends Properties {
     /**
      * Set property value. If value is null the property (key and value) will be removed.
      * @param aKey The key used to store the data. The key may contain strings of
-     * the form <b><tt>${key}</tt></b> which will be evaluated first.
+     * the form <b><pre>${key}</pre></b> which will be evaluated first.
      * @param aValue The value to be stored, if null they property will be removed.
      * @return The previous value of the specified key, or null if it did not have one.
      */
@@ -402,7 +402,7 @@ public class ExtendedProperties extends Properties {
      * Set property value only if its not set already.
      *
      * @param aKey  The key used to store the data. The key may contain strings of
-     *              the form <b><tt>${key}</tt></b> which will be evaluated first.
+     *              the form <b><pre>${key}</pre></b> which will be evaluated first.
      * @param value The value to be stored.
      * @return Null if store was done, non-null indicates store not done and the
      * returned value in the current properties value.
@@ -417,7 +417,7 @@ public class ExtendedProperties extends Properties {
 
     /**
      * Fetch property value for key which may contain strings
-     * of the form <b><tt>${key}</tt></b>.
+     * of the form <b><pre>${key}</pre></b>.
      *
      * @param aKey Key for desired property.
      * @return The keys value with no substitutions done.

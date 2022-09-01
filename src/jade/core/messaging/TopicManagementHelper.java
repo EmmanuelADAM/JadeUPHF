@@ -30,7 +30,7 @@ import jade.core.ServiceHelper;
 /**
  * The TopicManagementHelper provides methods that allows creating topic objects and registering/deregistering
  * to topics.
- * Topics are represented by means of <code>AID</code> objects so that they can be used as receivers
+ * Topics are represented by means of  AID   objects so that they can be used as receivers
  * of ACLMessages. In this way sending a message to an agent or sending a message about a topic is
  * completely uniform.
  *
@@ -39,7 +39,7 @@ import jade.core.ServiceHelper;
 public interface TopicManagementHelper extends ServiceHelper {
     /**
      * This constant represents the name of the Topic Management Service and must be specified
-     * in the <code>getHelper()</code> method of the <code>Agent</code> class to retrieve the helper
+     * in the  getHelper()   method of the  Agent   class to retrieve the helper
      * of the local TopicManagementService.
      */
     String SERVICE_NAME = "jade.core.messaging.TopicManagement";
@@ -50,15 +50,15 @@ public interface TopicManagementHelper extends ServiceHelper {
      * Create a topic with a given name.
      *
      * @param topicName The name of the topic to be created
-     * @return The <code>AID</code> object representing the created topic
+     * @return The  AID   object representing the created topic
      */
     AID createTopic(String topicName);
 
     /**
-     * Checks if an <code>AID</code> represents a topic
+     * Checks if an  AID   represents a topic
      *
-     * @param id The <code>AID</code> to be checked
-     * @return <code>true</code> if the given <code>AID</code> represents a topic. <code>false</code> otherwise
+     * @param id The  AID   to be checked
+     * @return  true   if the given  AID   represents a topic.  false   otherwise
      */
     boolean isTopic(AID id);
 

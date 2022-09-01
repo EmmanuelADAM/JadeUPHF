@@ -81,7 +81,7 @@ public interface BackEnd {
      * @param serviceName  The name of the service
      * @param methodName   The name of the invoked method
      * @param methodParams The parameters of the invoked methods as an array of Objects
-     * @return the result of the invoked method or <code>null</code> if the method returns <code>void</code>
+     * @return the result of the invoked method or  null   if the method returns  void  
      */
     Object serviceInvokation(String actor, String serviceName, String methodName, Object[] methodParams) throws NotFoundException, ServiceException, IMTPException;
 }

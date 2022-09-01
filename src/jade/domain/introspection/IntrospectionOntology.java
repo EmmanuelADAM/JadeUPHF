@@ -37,7 +37,7 @@ import jade.domain.FIPAAgentManagement.ReceivedObject;
 
 
 /**
- * This class represents the ontology <code>jade-introspection</code>,
+ * This class represents the ontology  jade-introspection  ,
  * containing all JADE extensions related to agent and platform
  * monitoring. There is only a single instance of this class.
  *
@@ -288,7 +288,7 @@ public class IntrospectionOntology extends Ontology implements IntrospectionVoca
      * This method grants access to the unique instance of the
      * ontology.
      *
-     * @return An <code>Ontology</code> object, containing the concepts
+     * @return An  Ontology   object, containing the concepts
      * of the ontology.
      */
     public static Ontology getInstance() {

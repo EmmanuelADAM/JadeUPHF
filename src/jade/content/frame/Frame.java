@@ -28,13 +28,13 @@ package jade.content.frame;
  * Generic interface representing all non-primitive elements
  * that can appear in a content expression.
  * Each frame has a type-name accessible by means of the
- * <code>getTypeName()</code> method and a number of composing
+ *  getTypeName()   method and a number of composing
  * elements that can be primitive elements or frames themselves.
  * The way composing elements are stored within and retrieved
  * from a Frame depends on the specific type of Frame.
  *
  * @author Giovanni Caire - TILAB
- * @see OrderedFrame, QualifiedFrame
+ * @see "OrderedFrame, QualifiedFrame"
  */
 public interface Frame {
     /**

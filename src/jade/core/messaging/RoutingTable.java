@@ -54,7 +54,7 @@ class RoutingTable {
 
     /**
      * Adds a new locally installed MTP for the URL named
-     * <code>url</code>.
+     *  url  .
      */
     public synchronized void addLocalMTP(String url, MTP proto, MTPDescriptor dsc) {
         CaseInsensitiveString urlTmp = new CaseInsensitiveString(url);
@@ -74,7 +74,7 @@ class RoutingTable {
 
     /**
      * Removes a locally installed MTP for the URL named
-     * <code>url</code>.
+     *  url  .
      */
     public synchronized MTPInfo removeLocalMTP(String url) {
         // url = url.toLowerCase();
@@ -127,7 +127,7 @@ class RoutingTable {
     }
 
     /**
-     * Removes the MTP for the URL named <code>name</code>.
+     * Removes the MTP for the URL named  name  .
      */
     public synchronized void removeRemoteMTP(MTPDescriptor mtp, String sliceName, MessagingSlice where) {
         remoteMTPs.remove(mtp);
@@ -145,7 +145,7 @@ class RoutingTable {
 
     /**
      * Retrieves an outgoing channel object suitable for
-     * reaching the address <code>url</code>.
+     * reaching the address  url  .
      */
     public synchronized OutPort lookup(String url) {
         //url = url.toLowerCase();
@@ -302,14 +302,7 @@ class RoutingTable {
      * Inner class MTPInfo
      * This class just provides the association between a local MTP and its descriptor
      */
-    static class MTPInfo {
-        private final MTP mtp;
-        private final MTPDescriptor dsc;
-
-        public MTPInfo(MTP mtp, MTPDescriptor dsc) {
-            this.mtp = mtp;
-            this.dsc = dsc;
-        }
+    record MTPInfo(MTP mtp, MTPDescriptor dsc) {
 
         public MTP getMTP() {
             return mtp;

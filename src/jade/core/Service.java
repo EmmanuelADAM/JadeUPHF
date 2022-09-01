@@ -29,7 +29,7 @@ import jade.core.behaviours.Behaviour;
 import java.io.Serializable;
 
 /**
- * The <code>Service</code> interface represents a centralized view of
+ * The  Service   interface represents a centralized view of
  * a JADE kernel-level service. Most JADE services are actually
  * distributed, and each part of theirs, that is deployed at a given
  * network node (container), is called <em>service slice</em>. The various slices
@@ -112,9 +112,9 @@ public interface Service {
      *
      * @param name A name for the requested slice. The name must be
      *             unique within this service.
-     * @return The <code>Slice<code> object that is a part of this
+     * @return The  Slice  object that is a part of this
      * service and is identified by the given name, or
-     * <code>null</code> if no such slice exists.
+     *  null   if no such slice exists.
      * @throws ServiceException If some underlying error (e.g. a
      *                          network problem) occurs, that does not allow to decide whether
      *                          the requested slice exists or not.
@@ -126,17 +126,17 @@ public interface Service {
     /**
      * Retrieve the locally installed slice of this service. A service
      * without horizontal interfaces can safely return
-     * <code>null</code> from this method.
+     *  null   from this method.
      *
      * @return The slice of this service that resides on the local
-     * platform node, or <code>null</code> if no such slice exists.
+     * platform node, or  null   if no such slice exists.
      */
     Slice getLocalSlice();
 
     /**
      * Retrieve the whole array of slices that compose this service.
      *
-     * @return An array of <code>Service.Slice</code> objects, whose
+     * @return An array of  Service.Slice   objects, whose
      * elements are the slices of this service deployed at the
      * different platform nodes.
      * @throws ServiceException If some underlying error (e.g. a
@@ -150,15 +150,15 @@ public interface Service {
      * slices will communicate, that is, the service <i>Horizontal
      * Interface</i>.
      *
-     * @return A <code>Class</code> object, representing the interface
+     * @return A  Class   object, representing the interface
      * that is implemented by the slices of this service.  Let
-     * <code>s</code> be the <code>Class</code> object corresponding
-     * to the <code>Service.Slice</code> interface, and let
-     * <code>c</code> be the returned <code>Class</code> object. Then,
+     *  s   be the  Class   object corresponding
+     * to the  Service.Slice   interface, and let
+     *  c   be the returned  Class   object. Then,
      * the two following conditions must hold:
      * <ol>
-     * <li><code>c.isInterface() == true</code></li>
-     * <li><code>s.isAssignableFrom(c) == true</code></li>
+     * <li> c.isInterface() == true  </li>
+     * <li> s.isAssignableFrom(c) == true  </li>
      * </ol>
      */
     Class<?> getHorizontalInterface();
@@ -175,17 +175,17 @@ public interface Service {
      * Access the command filter this service needs to perform its
      * tasks. This filter will be installed within the local command
      * processing engine.
-     * Note that when called multiple times with the same value of the <code>direction</code>
+     * Note that when called multiple times with the same value of the  direction  
      * parameter this method MUST always return the same object!
      *
      * @param direction One of the two constants
-     *                  <code>Filter.INCOMING</code> and <code>Filter.OUTGOING</code>,
+     *                   Filter.INCOMING   and  Filter.OUTGOING  ,
      *                  distinguishing between the two filter chains managed by the
      *                  command processor.
-     * @return A <code>Filter</code> object, used by this service to
+     * @return A  Filter   object, used by this service to
      * intercept and process kernel-level commands. If the service
      * does not wish to install a command filter for one or both
-     * directions, it can just return <code>null</code> when
+     * directions, it can just return  null   when
      * appropriate.
      * @see CommandProcessor
      */
@@ -196,15 +196,15 @@ public interface Service {
      * vertical commands.
      *
      * @param side One of the two constants
-     *             <code>Sink.COMMAND_SOURCE</code> or
-     *             <code>Sink.COMMAND_TARGET</code>, to state whether this sink
+     *              Sink.COMMAND_SOURCE   or
+     *              Sink.COMMAND_TARGET  , to state whether this sink
      *             will handle locally issued commands or commands incoming from
      *             remote nodes.
      * @return Concrete services must return their own implementation
-     * of the <code>Sink</code> interface, that will be invoked by the
+     * of the  Sink   interface, that will be invoked by the
      * kernel in order to consume any incoming vertical command owned
      * by this service. If the service does not wish to install a
-     * command sink, it can just return <code>null</code>.
+     * command sink, it can just return  null  .
      * @see Service#getOwnedCommands()
      */
     Sink getCommandSink(boolean side);
@@ -219,7 +219,7 @@ public interface Service {
      * @return An array containing the names of all the vertical
      * commands this service wants to own. If this service has no such
      * commands (it acts purely as a command filter), it can return an
-     * empty array, or <code>null</code> as well.
+     * empty array, or  null   as well.
      * <p>
      * see Service#getCommandSink()
      */
@@ -241,8 +241,8 @@ public interface Service {
      * behaviour will be to handle a service-specific ontology and
      * actions.
      *
-     * @return A <code>Behaviour</code> object associated with this
-     * service, or <code>null</code> if no such behaviour exists.
+     * @return A  Behaviour   object associated with this
+     * service, or  null   if no such behaviour exists.
      */
     Behaviour getAMSBehaviour();
 
@@ -254,7 +254,7 @@ public interface Service {
      * Service implementations should not use the Service Manager and
      * Service Finder facilities from within this method. A
      * distributed initialization protocol, if needed, should be
-     * exectuted within the <code>boot()</code> method.
+     * exectuted within the  boot()   method.
      *
      * @param ac The agent container this service is activated on.
      * @param p  The configuration profile for this service.
@@ -285,11 +285,11 @@ public interface Service {
      * Allows submitting a vertical command for processing.
      * The given vertical command must be owned by this service
      * (i.e. its name must be one of the constants contained in the
-     * array returned by <code>getOwnedCommands()</code>, or an
+     * array returned by  getOwnedCommands()  , or an
      * exception is thrown
      *
      * @param cmd The command to submit to the service.
-     * @return The result of the command, or <code>null</code> if this
+     * @return The result of the command, or  null   if this
      * command produced no result. If an exception was produced, it
      * will not be thrown, but will be returned as well.
      * @throws ServiceException If the passed command does not belong
@@ -298,7 +298,7 @@ public interface Service {
     Object submit(VerticalCommand cmd) throws ServiceException;
 
     /**
-     * The <code>Slice</code> nested interface represents that part of
+     * The  Slice   nested interface represents that part of
      * a service that is deployed at a given network node.
      */
     interface Slice extends Serializable {
@@ -306,8 +306,8 @@ public interface Service {
         /**
          * Access the service object which this slice is a part of.
          *
-         * @return A <code>Service</code> object, that has
-         * <code>this</code> as one of its slices.
+         * @return A  Service   object, that has
+         *  this   as one of its slices.
          * @see Service#getSlice(String name)
          */
         Service getService();
@@ -331,7 +331,7 @@ public interface Service {
          * @param cmd The command that is to be served.
          * @return A vertical command, that will be processed by the
          * incoming filter chain of the receiving node. If
-         * <code>null</code> is returned, no filter/sink processing
+         *  null   is returned, no filter/sink processing
          * will happen. This feature can be used to decouple incoming
          * horizontal interaction patterns from vertical incoming
          * commands (e.g. no incoming vertical command is generated
@@ -344,7 +344,7 @@ public interface Service {
     }
 
     /**
-     * An implementation of the <code>Slice</code> interface,
+     * An implementation of the  Slice   interface,
      * supporting routed dispatching of horizontal commands.
      *
      * @deprecated use the class jade.core.SliceProxy instead of this inner class

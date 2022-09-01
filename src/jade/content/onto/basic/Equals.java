@@ -29,7 +29,7 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 
 /**
- * This class implements the <code>=</code> operator of the FIPA SL0 language.
+ * This class implements the  =   operator of the FIPA SL0 language.
  *
  * @author Giovanni Caire - TILAB
  */

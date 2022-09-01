@@ -38,8 +38,8 @@ import java.util.Properties;
  * This class extends the VisualStringList in order to show a list of user defined property.
  * To show these items correctly, have been overridden the methods:
  *
- * <code>editElement</code> to show the UserPropertyGui when required.
- * <code>removeElements</code> since the superclass only maintain the key values is necessary
+ *  editElement   to show the UserPropertyGui when required.
+ *  removeElements   since the superclass only maintain the key values is necessary
  * to update properties.
  *
  * @author Tiziana Trucco - CSELT S.p.A

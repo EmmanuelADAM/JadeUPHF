@@ -30,8 +30,8 @@ import jade.core.ContainerID;
 
 
 /**
- * This class represents the <code>load-container</code> action of the
- * <code>JADE-Persistence</code> ontology.  This action can be
+ * This class represents the  load-container   action of the
+ *  JADE-Persistence   ontology.  This action can be
  * requested to the JADE AMS to load the previously stored state of a
  * given container.
  *

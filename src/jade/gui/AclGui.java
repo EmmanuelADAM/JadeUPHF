@@ -51,7 +51,7 @@ import java.util.*;
 /**
  * The AclGui class extends the Swing JPanel class by adding all the controls
  * required to properly edit/show the fields of an an ACL message
- * compliant to the <b>FIPA 97</b> specs. <p>
+ * compliant to the <b>FIPA 97</b> specs.
  * <p>
  * There are basically two ways of using the AclGui class.
  * <ul>
@@ -66,7 +66,7 @@ import java.util.*;
  * E.g.<br>
  * This code creates an agent GUI with a panel (in the left part of the GUI) that displays each new
  * message received by the agent
- * <code>
+ *
  * .....<br>
  * AclGui acl;<br>
  * .....<br>
@@ -76,12 +76,12 @@ import java.util.*;
  * acl.setEnabled(false);<br>
  * agentGui.getContentPane().add("West", acl);<br>
  * .....<br>
- * </code>
+ *
  * Each time a new message is received (assuming the message has been stored
  * in the msg variable of type ACLMessage)
- * <code>
+ *
  * acl.setMsg(msg);<br>
- * </code>
+ *
  * </li>
  * <li> <b>Static Mode</b>. The AclGui class also provides the <em>editMsgInDialog()</em> and <em>showMsgInDlg()</em>
  * static methods that pop up a temporary dialog window (including an AclGui panel and the proper OK and
@@ -89,7 +89,7 @@ import java.util.*;
  * E.g.<br>
  * This code creates a button that allows the user to edit an ACL message
  * by means of a temporary dialog window
- * <code>
+ *
  * .....<br>
  * ACLMessage msg;<br>
  * .....<br>
@@ -101,7 +101,7 @@ import java.util.*;
  *      msg = AclGui.editMsgInDialog(new ACLMessage("", null);<br>
  *    }<br>
  * } );<br>
- * </code>
+ *
  * </li>
  * </ul>
  *
@@ -190,7 +190,7 @@ public class AclGui extends JPanel {
     private JTextField id;
 
     /**
-     * Ordinary <code>AclGui</code> constructor.
+     * Ordinary  AclGui   constructor.
      *
      * @see ACLMessage#ACLMessage(int)
      */

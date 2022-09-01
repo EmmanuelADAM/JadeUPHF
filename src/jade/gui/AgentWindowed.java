@@ -2,6 +2,8 @@ package jade.gui;
 
 import javax.swing.*;
 
+import static java.lang.System.out;
+
 
 /**
  * GuiAgent linked to a simple window to display text
@@ -27,6 +29,10 @@ public class AgentWindowed extends GuiAgent {
     protected void println(String msg) {
         SwingUtilities.invokeLater(() -> window.println(msg));
     }
+    /**print a text on the console*/
+
+    /**print a formatted text with values on the console*/
+    protected void printf(String format, Object[] tabO) {SwingUtilities.invokeLater(() ->window.printf(format, tabO));}
 
     /**
      * fonction a remplir pour repondre aux evenements de la fenetre

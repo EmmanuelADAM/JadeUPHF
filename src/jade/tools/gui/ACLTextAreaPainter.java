@@ -38,7 +38,7 @@ import java.awt.*;
  * lines of text.The original file is written by Slava Pestov (www.gjt.org)
  * and altered to fit ACL/SL.
  *
- * @author Chris van Aart - Acklin B.V., the Netherlands & Slava Pestov
+ * @author Chris van Aart - Acklin B.V., the Netherlands and Slava Pestov
  * @since June 14, 2002
  */
 public class ACLTextAreaPainter extends JComponent implements TabExpander {
@@ -335,8 +335,8 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
     }
 
     /**
-     * Repaints the specified line. This is equivalent to calling <code>_invalidateLine()</code>
-     * and <code>repaint()</code>.
+     * Repaints the specified line. This is equivalent to calling  _invalidateLine()
+     * and  repaint()  .
      *
      * @param line The line
      * @see #_invalidateLine(int)
@@ -347,8 +347,8 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
     }
 
     /**
-     * Repaints the specified line range. This is equivalent to calling <code>_invalidateLineRange()</code>
-     * then <code>repaint()</code>.
+     * Repaints the specified line range. This is equivalent to calling  _invalidateLineRange()
+     * then  repaint()  .
      *
      * @param firstLine The first line to repaint
      * @param lastLine  The last line to repaint
@@ -488,7 +488,7 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
     }
 
     /**
-     * Same as <code>update(g)</code>.
+     * Same as  update(g)  .
      *
      * @param g Description of Parameter
      */
@@ -498,7 +498,7 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
 
     /**
      * Marks a line as needing a repaint, but doesn't actually repaint it until
-     * <code>repaint()</code> is called manually.
+     *  repaint()   is called manually.
      *
      * @param line The line to invalidate
      */
@@ -524,7 +524,7 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
 
     /**
      * Marks a range of lines as needing a repaint, but doesn't actually
-     * repaint them until <code>repaint()</code> is called.
+     * repaint them until  repaint()   is called.
      *
      * @param firstLine The first line to invalidate
      * @param lastLine  The last line to invalidate
@@ -560,9 +560,9 @@ public class ACLTextAreaPainter extends JComponent implements TabExpander {
     }
 
     /**
-     * Simulates scrolling from <code>oldFirstLine</code> to <code>newFirstLine</code>
+     * Simulates scrolling from  oldFirstLine   to  newFirstLine
      * by shifting the offscreen graphics and repainting any revealed lines.
-     * This should not be called directly; use <code>JEditTextArea.setFirstLine()</code>
+     * This should not be called directly; use  JEditTextArea.setFirstLine()
      * instead.
      *
      * @param oldFirstLine The old first line

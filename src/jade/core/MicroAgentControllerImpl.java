@@ -39,7 +39,7 @@ class MicroAgentControllerImpl implements AgentController {
 
     /**
      * This constructor should not be called by applications.
-     * The method <code>MicroRuntime.startAgent()</code> should
+     * The method  MicroRuntime.startAgent()   should
      * be used instead.
      */
     MicroAgentControllerImpl(String an, FrontEndContainer fec) {

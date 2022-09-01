@@ -30,22 +30,22 @@ import java.util.LinkedList;
 
 /**
  * The singleton instance (accessible through the
- * <code>instance()</code> static method) of this class allows
+ *  instance()   static method) of this class allows
  * controlling the JADE runtime system from an external application.
  * Two different modalities of controlling the JADE runtime system exist:
  * <ul>
  * <li> Multiple-container: Several containers (belonging to the same
  * platform) can be executed in the local JVM. This modality is
- * activated by means of the <code>createAgentContainer()</code>
- * and <code>createMainContainer()</code> methods plus the classes
- * included in the <code>jade.wrapper</code> package.</li>
+ * activated by means of the  createAgentContainer()
+ * and  createMainContainer()   methods plus the classes
+ * included in the  jade.wrapper   package.</li>
  * <li> Single-container: Only one container can be executed in the
  * local JVM. This modality is activated by means of the
- * <code>startUp()</code> and <code>shutDown()</code> methods</li>
+ *  startUp()   and  shutDown()   methods</li>
  * </ul>
  * Once a modality has been activated (by calling one of the above
  * methods) calling one of the methods for the other modality cause
- * an <code>IllegalStateException</code> to be thrown.
+ * an  IllegalStateException   to be thrown.
  * <p>
  * It should be noted that the Single-container modality only provides
  * a limited control of the JADE runtime system (e.g. it does not allow
@@ -143,7 +143,7 @@ public class Runtime {
      * @return A proxy object, through which services can be requested
      * from the real JADE container.
      * @throws IllegalStateException if the Single-container modality
-     *                               was previously activated by calling the <code>startUp()</code>
+     *                               was previously activated by calling the  startUp()
      *                               method.
      */
     public jade.wrapper.AgentContainer createAgentContainer(Profile p) {
@@ -176,7 +176,7 @@ public class Runtime {
      * @return A proxy object, through which services can be requested
      * from the real JADE main container.
      * @throws IllegalStateException if the Single-container modality
-     *                               was previously activated by calling the <code>startUp()</code>
+     *                               was previously activated by calling the  startUp()
      *                               method.
      */
     public jade.wrapper.AgentContainer createMainContainer(Profile p) {
@@ -221,8 +221,8 @@ public class Runtime {
      * @param p the profile containing boostrap and configuration
      *          data for this container
      * @throws IllegalStateException if the Multiple-container modality
-     *                               was previously activated by calling the <code>createAgentContainer()</code>
-     *                               or <code>createMainContainer()</code> methods.
+     *                               was previously activated by calling the  createAgentContainer()
+     *                               or  createMainContainer()   methods.
      */
     public void startUp(Profile p) {
         if (mode == MULTIPLE_MODE) {
@@ -250,7 +250,7 @@ public class Runtime {
     //#APIDOC_EXCLUDE_BEGIN
 
     /**
-     * Allows setting a <code>Runnable</code> that is executed when
+     * Allows setting a  Runnable   that is executed when
      * the last container in this JVM terminates.
      */
     public void invokeOnTermination(Runnable r) {
@@ -259,7 +259,7 @@ public class Runtime {
     //#APIDOC_EXCLUDE_END
 
     /**
-     * Reset the list of <code>Runnable</code> objects to be executed on JADE termination
+     * Reset the list of  Runnable   objects to be executed on JADE termination
      * see invokeOnTermination()
      */
     public void resetTerminators() {

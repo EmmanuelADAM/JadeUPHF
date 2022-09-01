@@ -39,15 +39,15 @@ import java.util.List;
 /**
  * Backward Compatible reflective introspector. This Introspector
  * uses Java Reflection to translate java objects to/from abstract
- * descriptors as the <code>ReflectiveIntrospector</code> does, but
+ * descriptors as the  ReflectiveIntrospector   does, but
  * it assumes the accessors methods for aggregate slots to be in the
  * "old JADE style" i.e.
- * <i> For every aggregate <b>slot</b> named <code>XXX</code>,
- * with elements of type <code>T</code>, the Java class must have
+ * <i> For every aggregate <b>slot</b> named  XXX  ,
+ * with elements of type  T  , the Java class must have
  * two accessible methods, with the following signature:</i>
  * <ul>
- *  	<li> <code>Iterator getAllXXX()</code>
- *  	<li> <code>void addXXX(T t)</code>
+ *  	<li>  Iterator getAllXXX()
+ *  	<li>  void addXXX(T t)
  * </ul>
  * <br>
  * <b>NOT available in MIDP</b>

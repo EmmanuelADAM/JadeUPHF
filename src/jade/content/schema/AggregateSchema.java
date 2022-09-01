@@ -52,18 +52,18 @@ public class AggregateSchema extends TermSchema {
     }
 
     /**
-     * Creates an <code>AggregateSchema</code> with a given type-name.
+     * Creates an  AggregateSchema   with a given type-name.
      *
-     * @param typeName The name of this <code>AggregateSchema</code>.
+     * @param typeName The name of this  AggregateSchema  .
      */
     public AggregateSchema(String typeName) {
         super(typeName);
     }
 
     /**
-     * Creates an <code>AggregateSchema</code> with a given type-name.
+     * Creates an  AggregateSchema   with a given type-name.
      *
-     * @param typeName The name of this <code>AggregateSchema</code>.
+     * @param typeName The name of this  AggregateSchema  .
      */
     public AggregateSchema(String typeName, TermSchema elementsSchema) {
         super(typeName);

@@ -8,7 +8,7 @@ import java.util.HashSet;
 
 /**
  * This class represents a list of conversations that an agent is
- * currently carrying out and allows creating a <code>MessageTemplate</code>
+ * currently carrying out and allows creating a  MessageTemplate
  * that matches only messages that do not belong to any of these
  * conversations.
  */

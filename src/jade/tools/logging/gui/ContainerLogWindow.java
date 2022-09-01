@@ -146,13 +146,12 @@ public class ContainerLogWindow extends JInternalFrame implements InternalFrameL
         // Now sort log info in alphabetical order
         List<LoggerInfo> infos = new ArrayList<>(tmp.size());
         for (LoggerInfo o : tmp) {
-            LoggerInfo li = o;
-            String name = li.toString();
+            String name = o.toString();
             int i = 0;
             while (i < infos.size() && name.compareTo(infos.get(i).toString()) >= 0) {
                 ++i;
             }
-            infos.add(i, li);
+            infos.add(i, o);
         }
         return infos;
     }

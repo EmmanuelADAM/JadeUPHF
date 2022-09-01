@@ -24,7 +24,7 @@ Boston, MA  02111-1307, USA.
 package jade.core;
 
 /**
- * An implementation of the <code>Service.Slice</code> interface,
+ * An implementation of the  Service.Slice   interface,
  * supporting routed dispatching of horizontal commands.
  */
 public class SliceProxy implements Service.Slice {

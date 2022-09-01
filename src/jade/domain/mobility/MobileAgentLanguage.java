@@ -26,7 +26,7 @@ package jade.domain.mobility;
 import jade.content.Concept;
 
 /**
- * This class represents the <code>mobile-agent-language</code>
+ * This class represents the  mobile-agent-language
  * concept.
  *
  * @author Giovanni Rimassa -  Universita' di Parma
@@ -48,18 +48,18 @@ public class MobileAgentLanguage implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>name</code> slot of this action,
+     * Retrieve the value of the  name   slot of this action,
      * containing the language of the described agent.
      *
-     * @return The value of the <code>name</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  name   slot, or
+     *  null   if no value was set.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Set the <code>name</code> slot of this action.
+     * Set the  name   slot of this action.
      *
      * @param n The language of the described agent.
      */
@@ -68,19 +68,19 @@ public class MobileAgentLanguage implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>major-version</code> slot of
+     * Retrieve the value of the  major-version   slot of
      * this event, containing the major version number of the language
      * of the described agent.
      *
-     * @return The value of the <code>major-version</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  major-version   slot, or
+     *  null   if no value was set.
      */
     public Long getMajorVersion() {
         return majorVersion;
     }
 
     /**
-     * Set the <code>major-version</code> slot of this action.
+     * Set the  major-version   slot of this action.
      *
      * @param v The major version number of the language of the
      *          described agent.
@@ -90,19 +90,19 @@ public class MobileAgentLanguage implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>minor-version</code> slot of
+     * Retrieve the value of the  minor-version   slot of
      * this event, containing the minor version number of the language
      * of the described agent.
      *
-     * @return The value of the <code>minor-version</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  minor-version   slot, or
+     *  null   if no value was set.
      */
     public Long getMinorVersion() {
         return minorVersion;
     }
 
     /**
-     * Set the <code>minor-version</code> slot of this action.
+     * Set the  minor-version   slot of this action.
      *
      * @param v The minor version number of the language of the
      *          described agent.
@@ -112,19 +112,19 @@ public class MobileAgentLanguage implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>dependencies</code> slot of
+     * Retrieve the value of the  dependencies   slot of
      * this event, containing the language dependencies of the
      * described agent.
      *
-     * @return The value of the <code>dependencies</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  dependencies   slot, or
+     *  null   if no value was set.
      */
     public String getDependencies() {
         return dependencies;
     }
 
     /**
-     * Set the <code>dependencies</code> slot of this action.
+     * Set the  dependencies   slot of this action.
      *
      * @param d The language dependencies of the described agent.
      */

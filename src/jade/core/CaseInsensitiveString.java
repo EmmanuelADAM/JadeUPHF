@@ -30,7 +30,7 @@ import java.io.Serializable;
 
 /**
  * A name string, with case insensitive comparison and equality operations.
- * This class holds a <code>String</code> inside, preserving the case; however,
+ * This class holds a  String   inside, preserving the case; however,
  * all the equality and comparision operations are performed in a case
  * insensitive fashion.
  *
@@ -48,7 +48,7 @@ public class CaseInsensitiveString implements Serializable {
     private final int hashCode;
 
     /**
-     * Create a new <code>CaseInsensitiveString</code> object.
+     * Create a new  CaseInsensitiveString   object.
      *
      * @param name The string that will be kept inside this object.
      */
@@ -65,8 +65,8 @@ public class CaseInsensitiveString implements Serializable {
      * For comparasion used the regionMatches approach which
      * doesn't allocate any additional memory.
      *
-     * @param s1, s2 The <code>String</code> objects to compare
-     * @return <code>true</code> if the strings are equal, apart from case.
+     * @param s1, s2 The  String   objects to compare
+     * @return  true   if the strings are equal, apart from case.
      */
     public static final boolean equalsIgnoreCase(String s1, String s2) {
         if (s1 == null || s2 == null) {
@@ -78,7 +78,7 @@ public class CaseInsensitiveString implements Serializable {
     }
 
     /**
-     * Converts the <code>CaseInsensitiveString</code> object into a
+     * Converts the  CaseInsensitiveString   object into a
      * string.
      *
      * @return The string stored inside by the constructor.
@@ -89,12 +89,12 @@ public class CaseInsensitiveString implements Serializable {
 
     /**
      * Equality operation. This method compares a
-     * <code>CaseInsensitiveString</code> object with another or with
-     * a Java <code>String</code>. The comparison is case insensitive.
+     *  CaseInsensitiveString   object with another or with
+     * a Java  String  . The comparison is case insensitive.
      *
      * @param o The Java object to compare this
-     *          <code>CaseInsensitiveString</code> to.
-     * @return <code>true</code> if the strings contained within the two objects
+     *           CaseInsensitiveString   to.
+     * @return  true   if the strings contained within the two objects
      * are equal, apart from case.
      */
     public final boolean equals(Object o) {
@@ -112,11 +112,11 @@ public class CaseInsensitiveString implements Serializable {
 
     /**
      * Hash code. This method returns an hash code in such a way that
-     * two <code>CaseInsensitiveString</code> objects differing only
+     * two  CaseInsensitiveString   objects differing only
      * in case have the same hash code.
      *
      * @return The hash code for this
-     * <code>CaseInsensitiveString</code> object.
+     *  CaseInsensitiveString   object.
      */
     public final int hashCode() {
         return hashCode;

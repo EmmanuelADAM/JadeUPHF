@@ -42,39 +42,35 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Behaviour class for <code>fipa-propose</code>
+ * Behaviour class for  fipa-propose  
  * <em>Responder</em> role. This  behaviour implements the
- * <code>fipa-propose</code> interaction protocol from the point
- * of view of a responder to a propose (<code>propose</code>)
+ *  fipa-propose   interaction protocol from the point
+ * of view of a responder to a propose ( propose  )
  * message.<p>
  * The API of this class is similar and homogeneous to the
- * <code>AchieveREResponder</code>.
+ *  AchieveREResponder  .
  * <p>
  * When a message arrives
  * that matches the message template passed to the constructor,
- * the callback method <code>prepareResponse</code> is executed
+ * the callback method  prepareResponse   is executed
  * that must return the wished response, for instance the
- * <code>ACCEPT_PROPOSAL</code>
+ *  ACCEPT_PROPOSAL  
  * reply message. Any other type of returned communicative act
  * is sent and then closes the
  * protocol.
  * <p>
  * If a message were received, with the same value of this
- * <code>conversation-id</code>, but that does not comply with the FIPA
- * protocol, than the method <code>handleOutOfSequence</code> would be called.
+ *  conversation-id  , but that does not comply with the FIPA
+ * protocol, than the method  handleOutOfSequence   would be called.
  * <p>
  * This class can be extended by the programmer by overriding all the needed
  * handle methods or, in alternative, appropriate behaviours can be
- * registered for each handle via the <code>registerHandle</code>-type
+ * registered for each handle via the  registerHandle  -type
  * of methods. This last case is more difficult to use and proper
- * care must be taken to properly use the <code>HashMap</code> of the
- * <code>Behaviour</code> as a shared memory mechanism with the
+ * care must be taken to properly use the  HashMap   of the
+ *  Behaviour   as a shared memory mechanism with the
  * registered behaviour.
  * <p>
- * Read carefully the section of the
- * <a href="..\..\..\programmersguide.pdf"> JADE programmer's guide </a>
- * that describes
- * the usage of this class.
  *
  * @author Jerome Picault - Motorola Labs
  * @version $Date: 2005-09-16 15:54:46 +0200 (ven, 16 set 2005) $ $Revision: 5780 $
@@ -219,7 +215,7 @@ public class ProposeResponder extends FSMBehaviour implements FIPANames.Interact
     }
 
     /**
-     * This method allows to change the <code>MessageTemplate</code>
+     * This method allows to change the  MessageTemplate  
      * that defines what messages this ProposeResponder will react to
      * and reset the protocol.
      */
@@ -239,7 +235,7 @@ public class ProposeResponder extends FSMBehaviour implements FIPANames.Interact
      *
      * @param propose the received message
      * @return the ACLMessage to be sent as a response (i.e. one of
-     * <code>accept_proposal, reject_proposal, not-understood</code>.
+     *  accept_proposal, reject_proposal, not-understood  .
      * <b>Remind</b> to use the method createReply of the class ACLMessage
      * in order to create a good reply message
      * @see ACLMessage#createReply()
@@ -249,14 +245,14 @@ public class ProposeResponder extends FSMBehaviour implements FIPANames.Interact
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the PREPARE_RESPONSE state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * It is responsibility of the registered behaviour to put the
-     * response to be sent into the HashMap at the <code>RESPONSE_KEY</code>
+     * response to be sent into the HashMap at the  RESPONSE_KEY  
      * key.
      *
      * @param b the Behaviour that will handle this state

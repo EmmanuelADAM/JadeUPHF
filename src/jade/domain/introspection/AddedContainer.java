@@ -26,8 +26,8 @@ package jade.domain.introspection;
 import jade.core.ContainerID;
 
 /**
- * This class represents the <code>added-container</code> concept in the
- * <code>jade-introspection</code> ontology.
+ * This class represents the  added-container   concept in the
+ *  jade-introspection   ontology.
  *
  * @author Giovanni Rimassa - Universita' di Parma
  * @version $Date: 2005-08-24 17:21:34 +0200 (mer, 24 ago 2005) $ $Revision: 5758 $
@@ -59,19 +59,19 @@ public class AddedContainer implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>container</code> slot of this
+     * Retrieve the value of the  container   slot of this
      * event, containing the container identifier of the newly added
      * container.
      *
-     * @return The value of the <code>container</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  container   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getContainer() {
         return container;
     }
 
     /**
-     * Set the <code>container</code> of this event.
+     * Set the  container   of this event.
      *
      * @param id The container identifier of the newly added
      *           container.
@@ -81,19 +81,19 @@ public class AddedContainer implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>ownership</code> slot of this
+     * Retrieve the value of the  ownership   slot of this
      * event, containing the name of the entity owning the newly added
      * container.
      *
-     * @return The value of the <code>ownership</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  ownership   slot, or
+     *  null   if no value was set.
      */
     public String getOwnership() {
         return ownership;
     }
 
     /**
-     * Set the <code>ownership</code> of this event.
+     * Set the  ownership   of this event.
      *
      * @param o The name of the entity owning the newly added
      *          container.

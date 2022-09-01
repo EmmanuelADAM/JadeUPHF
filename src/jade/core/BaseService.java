@@ -31,12 +31,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The <code>BaseService</code> abstract class partially implements
- * the <code>Service</code> interface, providing a simple and uniform
+ * The  BaseService   abstract class partially implements
+ * the  Service   interface, providing a simple and uniform
  * mechanism for slice management and service discovery.
  * Developers interested in creating JADE kernel level services should
- * extend <code>BaseService</code> instead of directly implementing the
- * <code>Service</code> interface
+ * extend  BaseService   instead of directly implementing the
+ *  Service   interface
  *
  * @author Giovanni Rimassa - FRAMeTech s.r.l.
  */
@@ -87,7 +87,7 @@ public abstract class BaseService implements Service {
     }
 
     /**
-     * The <code>getSlice()</code> implementation of this class works
+     * The  getSlice()   implementation of this class works
      * as follows:
      * <ol>
      * <li><i>First, the name alias table is used to convert the given
@@ -98,7 +98,7 @@ public abstract class BaseService implements Service {
      * keeping the service slices</i></li>
      *
      * <li><i>If no slice was found, the</i>
-     * <code>ServiceFinder</code> <i>is asked to provide the slice,
+     *  ServiceFinder   <i>is asked to provide the slice,
      * which is then put into the local table.</i></li>
      * </ol>
      */
@@ -144,7 +144,7 @@ public abstract class BaseService implements Service {
     }
 
     /**
-     * The <code>getAllSlices()</code> implementation of this class
+     * The  getAllSlices()   implementation of this class
      * directly retrieves the current list of slices from the Service
      * Manager. Note that slices are retrieved directly from the Main and not
      * from the cache.
@@ -184,7 +184,7 @@ public abstract class BaseService implements Service {
     }
 
     /**
-     * This protected method is used by <code>getSlice()</code> to
+     * This protected method is used by  getSlice()   to
      * dereference aliases for slice names. Subclasses can override
      * this method to build their own service-specific naming schema.
      *
@@ -204,7 +204,7 @@ public abstract class BaseService implements Service {
     /**
      * This should be properly implemented
      * by the services that have filters.
-     * Note that when called multiple times with the same value of the <code>direction</code>
+     * Note that when called multiple times with the same value of the  direction
      * parameter this method MUST always return the same object!
      */
     public Filter getCommandFilter(boolean direction) {

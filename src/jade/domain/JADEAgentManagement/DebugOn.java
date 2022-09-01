@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * This class represents the <code>debug-on</code> action, requesting
+ * This class represents the  debug-on   action, requesting
  * a debugger to start observing a set of agents in the platform.
  *
  * @author Giovanni Rimassa -  Universita' di Parma
@@ -53,18 +53,18 @@ public class DebugOn implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>debugger</code> slot of this
+     * Retrieve the value of the  debugger   slot of this
      * action, containing the agent identifier of the debugger agent.
      *
-     * @return The value of the <code>debugger</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  debugger   slot, or
+     *  null   if no value was set.
      */
     public AID getDebugger() {
         return debugger;
     }
 
     /**
-     * Set the <code>debugger</code> slot of this action.
+     * Set the  debugger   slot of this action.
      *
      * @param id The agent identifier of the debugger agent.
      */
@@ -74,14 +74,14 @@ public class DebugOn implements AgentAction {
 
     /**
      * Remove all agent identifiers from the
-     * <code>debugged-agents</code> slot collection of this object.
+     *  debugged-agents   slot collection of this object.
      */
     public void clearAllDebuggedAgents() {
         debuggedAgents.clear();
     }
 
     /**
-     * Add an agent identifier to the <code>debugged-agents</code>
+     * Add an agent identifier to the  debugged-agents
      * slot collection of this object.
      *
      * @param id The agent identifier to add to the collection.
@@ -92,7 +92,7 @@ public class DebugOn implements AgentAction {
 
     /**
      * Remove an agent identifier from the
-     * <code>debugged-agents</code> slot collection of this object.
+     *  debugged-agents   slot collection of this object.
      *
      * @param id The agent identifier to remove from the collection.
      * @return A boolean, telling whether the element was present in
@@ -104,7 +104,7 @@ public class DebugOn implements AgentAction {
 
     /**
      * Access all agent identifiers from the
-     * <code>debugged-agents</code> slot collection of this object.
+     *  debugged-agents   slot collection of this object.
      *
      * @return An iterator over the properties collection.
      */
@@ -116,8 +116,8 @@ public class DebugOn implements AgentAction {
 
     /**
      * This method is called by the AMS in order to prepare an RMI call.
-     * The <code>getAllDebuggedAgents()</code> cannot be used as it returns
-     * an <code>Iterator</code> that is not serializable.
+     * The  getAllDebuggedAgents()   cannot be used as it returns
+     * an  Iterator   that is not serializable.
      */
     public ArrayList<AID> getCloneOfDebuggedAgents() {
         return (ArrayList<AID>) ((ArrayList<AID>) debuggedAgents).clone();
@@ -126,19 +126,19 @@ public class DebugOn implements AgentAction {
     //#APIDOC_EXCLUDE_END
 
     /**
-     * Retrieve the value of the <code>password</code> slot of this
+     * Retrieve the value of the  password   slot of this
      * action, containing the password used to authenticate the
      * principal requesting this action.
      *
-     * @return The value of the <code>password</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  password   slot, or
+     *  null   if no value was set.
      */
     public String getPassword() {
         return password;
     }
 
     /**
-     * Set the <code>password</code> slot of this action.
+     * Set the  password   slot of this action.
      *
      * @param p The password used to authenticate the principal
      *          requesting this action.

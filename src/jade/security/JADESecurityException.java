@@ -24,7 +24,7 @@ Boston, MA  02111-1307, USA.
 package jade.security;
 
 /**
- * The <code>JADESecurityException</code> is the base class for
+ * The  JADESecurityException   is the base class for
  * exceptions thrown for unauthorized access or for authentication
  * failures.
  *

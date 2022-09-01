@@ -34,7 +34,7 @@ import jade.content.ContentException;
 public class OntologyException extends ContentException {
 
     /**
-     * Construct an <code>OntologyException</code> with a given message.
+     * Construct an  OntologyException   with a given message.
      *
      * @param message the message
      */

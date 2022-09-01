@@ -359,7 +359,7 @@ public class ACLTextArea extends JComponent {
     }
 
     /**
-     * Returns the document's token marker. Equivalent to calling <code>getDocument().getTokenMarker()</code>
+     * Returns the document's token marker. Equivalent to calling  getDocument().getTokenMarker()  
      * .
      *
      * @return The TokenMarker value
@@ -369,7 +369,7 @@ public class ACLTextArea extends JComponent {
     }
 
     /**
-     * Sets the document's token marker. Equivalent to caling <code>getDocument().setTokenMarker()</code>
+     * Sets the document's token marker. Equivalent to caling  getDocument().setTokenMarker()  
      * .
      *
      * @param tokenMarker The token marker
@@ -379,7 +379,7 @@ public class ACLTextArea extends JComponent {
     }
 
     /**
-     * Returns the length of the document. Equivalent to calling <code>getDocument().getLength()</code>
+     * Returns the length of the document. Equivalent to calling  getDocument().getLength()  
      * .
      *
      * @return The DocumentLength value
@@ -1322,7 +1322,7 @@ public class ACLTextArea extends JComponent {
     }
 
     /**
-     * Similar to <code>setSelectedText()</code>, but overstrikes the
+     * Similar to  setSelectedText()  , but overstrikes the
      * appropriate number of characters if overwrite mode is enabled.
      *
      * @param str The string
@@ -1703,7 +1703,7 @@ public class ACLTextArea extends JComponent {
          * modifiers</i> +<i>shortcut</i> where <i>modifiers</i> is any
          * combination of A for Alt, C for Control, S for Shift or M for Meta,
          * and <i>shortcut </i> is either a single character, or a keycode name
-         * from the <code>KeyEvent</code> class, without the <code>VK_</code>
+         * from the  KeyEvent   class, without the  VK_  
          * prefix.
          *
          * @param keyStroke A string description of the key stroke
@@ -2016,14 +2016,7 @@ public class ACLTextArea extends JComponent {
             }
         }
 
-        public static class home implements ActionListener {
-
-            private final boolean select;
-
-
-            public home(boolean select) {
-                this.select = select;
-            }
+        public record home(boolean select) implements ActionListener {
 
             public void actionPerformed(ActionEvent evt) {
                 ACLTextArea textArea = getTextArea(evt);
@@ -2085,14 +2078,7 @@ public class ACLTextArea extends JComponent {
             }
         }
 
-        public static class next_char implements ActionListener {
-
-            private final boolean select;
-
-
-            public next_char(boolean select) {
-                this.select = select;
-            }
+        public record next_char(boolean select) implements ActionListener {
 
             public void actionPerformed(ActionEvent evt) {
                 ACLTextArea textArea = getTextArea(evt);
@@ -2112,14 +2098,7 @@ public class ACLTextArea extends JComponent {
             }
         }
 
-        public static class next_line implements ActionListener {
-
-            private final boolean select;
-
-
-            public next_line(boolean select) {
-                this.select = select;
-            }
+        public record next_line(boolean select) implements ActionListener {
 
             public void actionPerformed(ActionEvent evt) {
                 ACLTextArea textArea = getTextArea(evt);
@@ -2149,14 +2128,7 @@ public class ACLTextArea extends JComponent {
             }
         }
 
-        public static class next_page implements ActionListener {
-
-            private final boolean select;
-
-
-            public next_page(boolean select) {
-                this.select = select;
-            }
+        public record next_page(boolean select) implements ActionListener {
 
             public void actionPerformed(ActionEvent evt) {
                 ACLTextArea textArea = getTextArea(evt);
@@ -2185,14 +2157,7 @@ public class ACLTextArea extends JComponent {
             }
         }
 
-        public static class next_word implements ActionListener {
-
-            private final boolean select;
-
-
-            public next_word(boolean select) {
-                this.select = select;
-            }
+        public record next_word(boolean select) implements ActionListener {
 
             public void actionPerformed(ActionEvent evt) {
                 ACLTextArea textArea = getTextArea(evt);
@@ -2248,14 +2213,7 @@ public class ACLTextArea extends JComponent {
             }
         }
 
-        public static class prev_char implements ActionListener {
-
-            private final boolean select;
-
-
-            public prev_char(boolean select) {
-                this.select = select;
-            }
+        public record prev_char(boolean select) implements ActionListener {
 
             public void actionPerformed(ActionEvent evt) {
                 ACLTextArea textArea = getTextArea(evt);
@@ -2275,14 +2233,7 @@ public class ACLTextArea extends JComponent {
             }
         }
 
-        public static class prev_line implements ActionListener {
-
-            private final boolean select;
-
-
-            public prev_line(boolean select) {
-                this.select = select;
-            }
+        public record prev_line(boolean select) implements ActionListener {
 
             public void actionPerformed(ActionEvent evt) {
                 ACLTextArea textArea = getTextArea(evt);
@@ -2312,14 +2263,7 @@ public class ACLTextArea extends JComponent {
             }
         }
 
-        public static class prev_page implements ActionListener {
-
-            private final boolean select;
-
-
-            public prev_page(boolean select) {
-                this.select = select;
-            }
+        public record prev_page(boolean select) implements ActionListener {
 
             public void actionPerformed(ActionEvent evt) {
                 ACLTextArea textArea = getTextArea(evt);
@@ -2344,14 +2288,7 @@ public class ACLTextArea extends JComponent {
             }
         }
 
-        public static class prev_word implements ActionListener {
-
-            private final boolean select;
-
-
-            public prev_word(boolean select) {
-                this.select = select;
-            }
+        public record prev_word(boolean select) implements ActionListener {
 
             public void actionPerformed(ActionEvent evt) {
                 ACLTextArea textArea = getTextArea(evt);

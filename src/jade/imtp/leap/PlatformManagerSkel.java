@@ -28,7 +28,7 @@ import jade.core.*;
 import java.util.Vector;
 
 /**
- * The <code>ServiceManagerSkel</code> class is the remote
+ * The  ServiceManagerSkel   class is the remote
  * adapter for JADE platform <i>Service Manager</i> and
  * <i>Service Finder</i> components, running over LEAP transport layer.
  *

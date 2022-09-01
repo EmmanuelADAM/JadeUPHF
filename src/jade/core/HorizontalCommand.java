@@ -27,7 +27,7 @@ package jade.core;
 import java.io.Serializable;
 
 /**
- * The <code>HorizontalCommand</code> interface represents those
+ * The  HorizontalCommand   interface represents those
  * kernel-level commands that are exchanged among the slices of a
  * given JADE service, and they are sent across the network by the
  * platform IMTP.
@@ -41,7 +41,7 @@ public interface HorizontalCommand extends Command, Serializable {
      * Access the service object this command belongs to. A command
      * object belongs exactly to one single service.
      *
-     * @return The name of a <code>Service</code> object, such that
+     * @return The name of a  Service   object, such that
      * this command is one of the allowed commands for that service.
      */
     String getService();
@@ -51,9 +51,9 @@ public interface HorizontalCommand extends Command, Serializable {
      * command object is part of exactly one single interaction. Some
      * services can generate interactions made by many commands, which
      * can be grouped together because calling
-     * <code>getInteraction()</code> on them yields the same result.
+     *  getInteraction()   on them yields the same result.
      *
-     * @return A <code>String</code> serving as a service-unique
+     * @return A  String   serving as a service-unique
      * identifier for the interaction of this command object.
      */
     String getInteraction();

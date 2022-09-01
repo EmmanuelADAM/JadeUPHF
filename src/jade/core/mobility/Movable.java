@@ -30,7 +30,7 @@ import java.io.Serializable;
 /**
  * This interface provides callback methods that will be invoked
  * during the migration or cloning of an agent that had previously
- * registered this <code>Movable</code> object.
+ * registered this  Movable   object.
  *
  * @author Giovanni Caire - TILAB.
  * @see AgentMobilityHelper#registerMovable(Movable m)

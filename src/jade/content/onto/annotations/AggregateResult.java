@@ -30,8 +30,8 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * Indicates the aggregate result of an action, allowing at the same time
- * to specify its <code>cardMin</code> (minimum cardinality), <code>cardMax</code>
- * (maximum cardinality) and <code>type</code> (class of the contained elements).<br>
+ * to specify its  cardMin   (minimum cardinality),  cardMax  
+ * (maximum cardinality) and  type   (class of the contained elements).<br>
  * The annotation is to be applied to the getter method.
  *
  * @author Paolo Cancedda

@@ -57,10 +57,10 @@ public class IRESchema extends TermSchema {
     }
 
     /**
-     * Creates a <code>IRESchema</code> with a given type-name.
+     * Creates a  IRESchema   with a given type-name.
      * All ire-s have a variable and a proposition.
      *
-     * @param typeName The name of this <code>IRESchema</code>
+     * @param typeName The name of this  IRESchema
      *                 (e.g. IOTA, ANY, ALL).
      */
     public IRESchema(String typeName) {

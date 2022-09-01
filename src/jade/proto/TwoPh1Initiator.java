@@ -97,15 +97,15 @@ public class TwoPh1Initiator extends Initiator {
     private String[] toBeReset = null;
 
     /**
-     * Constructs a <code>TwoPh1Initiator</code> behaviour.
+     * Constructs a  TwoPh1Initiator   behaviour.
      *
      * @param a               The agent performing the protocol.
      * @param queryIf         msg
      * @param outputKey       Data store key where the behaviour prepares a vector of
-     *                        messages which will be send by a <code>TwoPh2Initiator</code> behaviour.
+     *                        messages which will be send by a  TwoPh2Initiator   behaviour.
      *                        If phase 1 ends with all confirm or inform than messages prepared are
-     *                        <code>accept-proposal</code>, otherwise they are <code>reject-proposal</code>.
-     * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPh1Initiator</code>.
+     *                         accept-proposal  , otherwise they are  reject-proposal  .
+     * @param mapMessagesList  HashMap   of messages list that will be used by this  TwoPh1Initiator  .
      * deprecated
 
     public TwoPh1Initiator(Agent a, ACLMessage queryIf, String outputKey, HashMap<String, List<ACLMessage>> mapMessagesList) {
@@ -183,30 +183,30 @@ public class TwoPh1Initiator extends Initiator {
     }
      */
     /**
-     * Constructs a <code>TwoPh1Initiator</code> behaviour.
+     * Constructs a  TwoPh1Initiator   behaviour.
      *
      * @param a         The agent performing the protocol.
      * @param queryIf   msg
      * @param outputKey Data store key where the behaviour prepares a vector of
-     *                  messages which will be send by a <code>TwoPh2Initiator</code> behaviour.
+     *                  messages which will be send by a  TwoPh2Initiator   behaviour.
      *                  If phase 1 ends with all confirm or inform than messages prepared are
-     *                  <code>accept-proposal</code>, otherwise they are <code>reject-proposal</code>.
+     *                   accept-proposal  , otherwise they are  reject-proposal  .
      */
     public TwoPh1Initiator(Agent a, ACLMessage queryIf, String outputKey) {
         this(a, queryIf, outputKey, new HashMap<>(), new HashMap<>());
     }
 
     /**
-     * Constructs a <code>TwoPh1Initiator</code> behaviour.
+     * Constructs a  TwoPh1Initiator   behaviour.
      *
      * @param a               The agent performing the protocol.
      * @param queryIf         msg
      * @param outputKey       Data store key where the behaviour prepares a vector of
-     *                        messages which will be send by a <code>TwoPh2Initiator</code> behaviour.
+     *                        messages which will be send by a  TwoPh2Initiator   behaviour.
      *                        If phase 1 ends with all confirm or inform than messages prepared are
-     *                        <code>accept-proposal</code>, otherwise they are <code>reject-proposal</code>.
-     * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPh1Initiator</code>.
-     * @param mapMessages     <code>HashMap</code> of messages  that will be used by this <code>TwoPh1Initiator</code>.
+     *                         accept-proposal  , otherwise they are  reject-proposal  .
+     * @param mapMessagesList  HashMap   of messages list that will be used by this  TwoPh1Initiator  .
+     * @param mapMessages      HashMap   of messages  that will be used by this  TwoPh1Initiator  .
      */
     public TwoPh1Initiator(Agent a, ACLMessage queryIf, String outputKey, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a, queryIf, mapMessagesList, mapMessages);
@@ -307,9 +307,9 @@ public class TwoPh1Initiator extends Initiator {
      * to return a vector of QUERY_IF objects for 1:N conversations.
      *
      * @param queryIf the ACLMessage object passed in the constructor
-     * @return a Vector of ACLMessage objects. The value of the <code>reply-with</code>
+     * @return a Vector of ACLMessage objects. The value of the  reply-with
      * slot is ignored and regenerated automatically by this
-     * class. Instead user can specify <code>reply-by</code> slot representing phase0
+     * class. Instead user can specify  reply-by   slot representing phase0
      * timeout.
      */
     protected List<ACLMessage> prepareQueryIfs(ACLMessage queryIf) {
@@ -319,7 +319,7 @@ public class TwoPh1Initiator extends Initiator {
     }
 
     /**
-     * This method is called every time a <code>confirm</code> message is received,
+     * This method is called every time a  confirm   message is received,
      * which is not out-of-sequence according to the protocol rules. This default
      * implementation does nothing; programmers might wish to override the method
      * in case they need to react to this event.
@@ -330,7 +330,7 @@ public class TwoPh1Initiator extends Initiator {
     }
 
     /**
-     * This method is called every time a <code>disconfirm</code> message is received,
+     * This method is called every time a  disconfirm   message is received,
      * which is not out-of-sequence according to the protocol rules. This default
      * implementation does nothing; programmers might wish to override the method
      * in case they need to react to this event.
@@ -341,7 +341,7 @@ public class TwoPh1Initiator extends Initiator {
     }
 
     /**
-     * This method is called every time a <code>inform</code> message is received,
+     * This method is called every time a  inform   message is received,
      * which is not out-of-sequence according to the protocol rules. This default
      * implementation does nothing; programmers might wish to override the method
      * in case they need to react to this event.
@@ -354,8 +354,8 @@ public class TwoPh1Initiator extends Initiator {
     /**
      * This method is called when all the responses have been collected or when
      * the timeout is expired. The used timeout is the minimum value of the slot
-     * <code>reply-By</code> of all the sent messages. By response message we
-     * intend here all the <code>disconfirm, confirm, inform</code> received messages,
+     *  reply-By   of all the sent messages. By response message we
+     * intend here all the  disconfirm, confirm, inform   received messages,
      * which are not out-of-sequence according to the protocol rules. This default
      * implementation does nothing; programmers might wish to override the method
      * in case they need to react to this event by analysing all the messages in
@@ -364,20 +364,20 @@ public class TwoPh1Initiator extends Initiator {
      * @param confirms    all confirms received
      * @param disconfirms all disconfirms received
      * @param pendings    all queryIfs still pending
-     * @param responses   prepared responses for next phase: <code>accept-proposal</code>
-     *                    or <code>reject-proposal</code>
+     * @param responses   prepared responses for next phase:  accept-proposal
+     *                    or  reject-proposal
      */
     protected void handleAllResponses(List<ACLMessage> responses, List<ACLMessage> confirms, List<ACLMessage> disconfirms,
                                       List<ACLMessage> informs, List<ACLMessage> pendings, List<ACLMessage> nextPhMsgs) {
     }
 
     /**
-     * This method allows to register a user-defined <code>Behaviour</code> in the
+     * This method allows to register a user-defined  Behaviour   in the
      * PREPARE_QUERYIFS state. This behaviour would override the homonymous method. This
-     * method also set the data store of the registered <code>Behaviour</code> to the
+     * method also set the data store of the registered  Behaviour   to the
      * HashMap of this current behaviour. It is responsibility of the registered
-     * behaviour to put the <code>Vector</code> of ACLMessage objects to be sent into
-     * the HashMap at the <code>ALL_QUERYIFS_KEY</code> key.
+     * behaviour to put the  Vector   of ACLMessage objects to be sent into
+     * the HashMap at the  ALL_QUERYIFS_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -386,12 +386,12 @@ public class TwoPh1Initiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code> in the
+     * This method allows to register a user defined  Behaviour   in the
      * HANDLE_CONFIRM state. This behaviour would override the homonymous method.
-     * This method also set the data store of the registered <code>Behaviour</code>
+     * This method also set the data store of the registered  Behaviour
      * to the HashMap of this current behaviour. The registered behaviour can retrieve
-     * the <code>confirm</code> ACLMessage object received from the HashMap at the
-     * <code>REPLY_KEY</code> key.
+     * the  confirm   ACLMessage object received from the HashMap at the
+     *  REPLY_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -401,12 +401,12 @@ public class TwoPh1Initiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code> in the
+     * This method allows to register a user defined  Behaviour   in the
      * HANDLE_DISCONFIRM state. This behaviour would override the homonymous method.
-     * This method also set the data store of the registered <code>Behaviour</code>
+     * This method also set the data store of the registered  Behaviour
      * to the HashMap of this current behaviour. The registered behaviour can retrieve
-     * the <code>disconfirm</code> ACLMessage object received from the HashMap at the
-     * <code>REPLY_KEY</code> key.
+     * the  disconfirm   ACLMessage object received from the HashMap at the
+     *  REPLY_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -416,12 +416,12 @@ public class TwoPh1Initiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code> in the
+     * This method allows to register a user defined  Behaviour   in the
      * HANDLE_INFORM state. This behaviour would override the homonymous method.
-     * This method also set the data store of the registered <code>Behaviour</code>
+     * This method also set the data store of the registered  Behaviour
      * to the HashMap of this current behaviour. The registered behaviour can retrieve
-     * the <code>inform</code> ACLMessage object received from the HashMap at the
-     * <code>REPLY_KEY</code> key.
+     * the  inform   ACLMessage object received from the HashMap at the
+     *  REPLY_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -431,14 +431,14 @@ public class TwoPh1Initiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code> in the
+     * This method allows to register a user defined  Behaviour   in the
      * HANDLE_ALL_RESPONSES state. This behaviour would override the homonymous method.
-     * This method also set the data store of the registered <code>Behaviour</code> to
+     * This method also set the data store of the registered  Behaviour   to
      * the HashMap of this current behaviour. The registered behaviour can retrieve
      * the vector of ACLMessage confirms, disconfirms, informs, pending and responses
-     * from the HashMap at <code>ALL_CONFIRMS_KEY</code>, <code>ALL_DISCONFIRMS_KEY</code>,
-     * <code>ALL_INFORMS_KEY</code>, <code>ALL_PH1_PENDINGS_KEY</code> and
-     * <code>output</code> field.
+     * from the HashMap at  ALL_CONFIRMS_KEY  ,  ALL_DISCONFIRMS_KEY  ,
+     *  ALL_INFORMS_KEY  ,  ALL_PH1_PENDINGS_KEY   and
+     *  output   field.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -478,9 +478,9 @@ public class TwoPh1Initiator extends Initiator {
     }
 
     /**
-     * This method sets for all prepared queryIfs <code>conversation-id</code> slot (with
-     * value passed in the constructor), <code>protocol</code> slot and
-     * <code>reply-with</code> slot with a unique value constructed by concatenating
+     * This method sets for all prepared queryIfs  conversation-id   slot (with
+     * value passed in the constructor),  protocol   slot and
+     *  reply-with   slot with a unique value constructed by concatenating
      * receiver's agent name and phase number (i.e. 1). After that it sends all cfps.
      *
      * @param initiations vector prepared in PREPARE_QUERYIFS state

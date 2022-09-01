@@ -28,7 +28,7 @@ package jade.core;
 
 /**
  * This is the interface that must be implemented by a class
- * managing Thread resources on a <code>Container</code>
+ * managing Thread resources on a  Container
  * see FullResourceManager
  *
  * @author Giovanni Caire - TILAB
@@ -44,10 +44,10 @@ public interface ResourceManager {
      * Return a Thread without starting it.
      *
      * @param type The type of the Thread that will be returned: valid
-     *             types are <code>USER_AGENTS</code>, <code>SYSTEM_AGENTS</code>,
-     *             <code>TIME_CRITICAL</code>.
-     * @param r    The <code>Runnable</code> object that will executed by the
-     *             returned <code>Thread</code>.
+     *             types are  USER_AGENTS  ,  SYSTEM_AGENTS  ,
+     *              TIME_CRITICAL  .
+     * @param r    The  Runnable   object that will executed by the
+     *             returned  Thread  .
      */
     Thread getThread(int type, String name, Runnable r);
 

@@ -28,9 +28,9 @@ package jade.core;
 import java.io.Serializable;
 
 /**
- * The <code>ServiceDescriptor</code> class serves as a meta-level
+ * The  ServiceDescriptor   class serves as a meta-level
  * description of a kernel-level service.
- * Instances of this class contain a <code>Service</code> object,
+ * Instances of this class contain a  Service   object,
  * along with its name and properties, and are used in service
  * management operations, as well as in agent-level introspection of
  * platform-level entities.
@@ -51,7 +51,7 @@ public class ServiceDescriptor implements Serializable {
      * with the given name and properties.
      *
      * @param sn  The name of the described service.
-     * @param svc The described <code>Service</code> object.
+     * @param svc The described  Service   object.
      */
     public ServiceDescriptor(String sn, Service svc) {
         myName = sn;
@@ -72,7 +72,7 @@ public class ServiceDescriptor implements Serializable {
     /**
      * Retrieve the name (if any) of the described service.
      *
-     * @return The name of the described service, or <code>null</code>
+     * @return The name of the described service, or  null  
      * if no name was set.
      */
     public String getName() {
@@ -91,8 +91,8 @@ public class ServiceDescriptor implements Serializable {
     /**
      * Retrieve the described service.
      *
-     * @return The <code>Service</code> object described by this
-     * service descriptor, or <code>null</code> if no service was set.
+     * @return The  Service   object described by this
+     * service descriptor, or  null   if no service was set.
      */
     public Service getService() {
         return myService;
@@ -101,7 +101,7 @@ public class ServiceDescriptor implements Serializable {
     /**
      * Change the described service (if any).
      *
-     * @param svc The <code>Service</code> object that is to be
+     * @param svc The  Service   object that is to be
      *            described by this service descriptor.
      */
     public void setService(Service svc) {

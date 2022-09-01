@@ -28,8 +28,8 @@ package jade.core;
 /**
  * JADE kernel services providing a service-helper and wishing this helper to be available in the
  * split execution mode too, need to provide a FEService class.
- * When starting a split container the <code>services</code> option works exactly as when starting a
- * normal container, but the indicated classes must be concrete implementations of the <code>FEService</code>
+ * When starting a split container the  services   option works exactly as when starting a
+ * normal container, but the indicated classes must be concrete implementations of the  FEService
  * abstract class.
  * <br>
  * It should be noticed that a Front-End service is only intended to provide access to the service helper
@@ -42,7 +42,7 @@ public abstract class FEService {
 
     /**
      * Subclasses must implement this method to return the name of this service.
-     * Such name must be specified by an agent in the <code>getHelper()</code>
+     * Such name must be specified by an agent in the  getHelper()
      * method when retrieving the helper for this service.
      *
      * @return The name of this service
@@ -76,7 +76,7 @@ public abstract class FEService {
      * <p>
      * In case the back-end side service helper method requires parameters different than those passed in the
      * methodParams argument, a suitable "BackEnd Codec" class must be provided to perform the necessary conversions.
-     * Such class must implement the <code>BECodec</code> interface and must be called "<service-name>BECodec"
+     * Such class must implement the  BECodec   interface and must be called "<service-name>BECodec"
      *
      * @param actor        The name of the agent invoking the service helper method
      * @param methodName   The name of the invoked method

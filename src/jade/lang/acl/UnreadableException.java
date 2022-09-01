@@ -34,7 +34,7 @@ package jade.lang.acl;
 
 public class UnreadableException extends Exception {
     /**
-     * Constructs an <code>UnreadableException</code> with the specified detail
+     * Constructs an  UnreadableException   with the specified detail
      * message.
      *
      * @param msg the detail message.

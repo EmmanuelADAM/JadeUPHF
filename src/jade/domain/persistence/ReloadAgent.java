@@ -30,8 +30,8 @@ import jade.core.AID;
 
 
 /**
- * This class represents the <code>reload-agent</code> action of the
- * <code>JADE-Persistence</code> ontology.  This action can be
+ * This class represents the  reload-agent   action of the
+ *  JADE-Persistence   ontology.  This action can be
  * requested to the JADE AMS to save an agent on a persistent storage.
  *
  * @author Giovanni Rimassa - FRAMeTech s.r.l.

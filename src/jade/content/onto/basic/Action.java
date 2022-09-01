@@ -36,7 +36,7 @@ import jade.content.onto.OntologyException;
 import jade.core.AID;
 
 /**
- * This class implements the <code>action</code> operator of the
+ * This class implements the  action   operator of the
  * FIPA SL0 action.
  *
  * @author Giovanni Caire - TILAB

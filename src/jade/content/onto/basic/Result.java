@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class implements the <code>result</code> operator of the
+ * This class implements the  result   operator of the
  * FIPA SL0 action.
  *
  * @author Giovanni Caire - TILAB

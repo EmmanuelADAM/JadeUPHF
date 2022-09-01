@@ -26,7 +26,7 @@ package jade.content.abs;
 
 /**
  * An extended abstract descriptor that can hold a generic primitive types
- * (eg. java.math.BigDecimal) not supported by <code>AbsPrimitive</code>.
+ * (eg. java.math.BigDecimal) not supported by  AbsPrimitive  .
  */
 public class AbsExtendedPrimitive implements AbsTerm {
 
@@ -55,7 +55,7 @@ public class AbsExtendedPrimitive implements AbsTerm {
     }
 
     /**
-     * Create an AbsExtendedPrimitive of type <code>value.getClass()</code>
+     * Create an AbsExtendedPrimitive of type  value.getClass()
      * containing a given value.
      */
     public static AbsExtendedPrimitive wrap(Object value) {

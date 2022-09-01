@@ -29,20 +29,20 @@ import java.util.Set;
 
 /**
  * Ready made behaviour that for each incoming message automatically invokes a corresponding method of the form<br>
- * <code>
+ *
  * public void serveCcccPppp(Cccc c, ACLMessage msg) throws Exception
- * </code>
+ *
  * <br>
  * where Cccc represents the key content-element referenced by the incoming message msg
  * and Pppp represents the performative of the message.<br>
- * ContentElement-s representing SL0 operators <code>action</code>, <code>done</code> and <code>result</code> are
+ * ContentElement-s representing SL0 operators  action  ,  done   and  result   are
  * automatically managed so that for instance if an incoming REQUEST message is received carrying a content of
  * type<br>
  * ((action (actor ...) (Sell ...)))<br>
  * a serving method with signature<br>
- * <code>
+ *
  * public void serveSellRequest(Sell s, ACLMessage msg) throws Exception
- * </code>
+ *
  * <br>
  * will be searched.<br>
  * Serving methods are responsible for sending back responses if any.
@@ -146,7 +146,7 @@ public class OntologyServer extends CyclicBehaviour {
     }
 
     /**
-     * Set the <code>ConversationList</code> used by this OntologyServer
+     * Set the  ConversationList   used by this OntologyServer
      * to determine which conversations to ignore (if any).
      * Note: calling this method after the behaviour started has no effect
      * see ignoreConversation(String)
@@ -163,7 +163,7 @@ public class OntologyServer extends CyclicBehaviour {
      * or REFUSE message if the incoming performative was one of REQUEST, CFP, PROPOSE, QUERY, SUBSCRIBE,
      * PROXY and PROPAGATE. In other cases the OntologyServer simply logs a suitable error message.
      * The above list of performatives can be customized by means of this method as well as the
-     * <code>addPerformativeRequiringReply(int)<code> one.
+     *  addPerformativeRequiringReply(int)  one.
      *
      * @param performative The performative to be added
      */

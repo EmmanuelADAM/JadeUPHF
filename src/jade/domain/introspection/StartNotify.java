@@ -31,7 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * This class represents the <code>start-notify</code> action,
+ * This class represents the  start-notify   action,
  * requesting to start a continuous notification of some events via ACL
  * messages.
  *
@@ -51,19 +51,19 @@ public class StartNotify implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>observed</code> slot of this
+     * Retrieve the value of the  observed   slot of this
      * event, containing the agent identifier of the agent whose
      * events will be notified from now on.
      *
-     * @return The value of the <code>observed</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  observed   slot, or
+     *  null   if no value was set.
      */
     public AID getObserved() {
         return observed;
     }
 
     /**
-     * Set the <code>observed</code> slot of this action.
+     * Set the  observed   slot of this action.
      *
      * @param id The agent identifier of the agent whose events will
      *           be notified from now on.
@@ -73,7 +73,7 @@ public class StartNotify implements AgentAction {
     }
 
     /**
-     * Add an event name to the <code>events</code> slot collection of
+     * Add an event name to the  events   slot collection of
      * this object.
      *
      * @param evName The event name to add to the collection.
@@ -83,7 +83,7 @@ public class StartNotify implements AgentAction {
     }
 
     /**
-     * Remove all event names from the <code>events</code> slot
+     * Remove all event names from the  events   slot
      * collection of this object.
      */
     public Iterator<String> getAllEvents() {

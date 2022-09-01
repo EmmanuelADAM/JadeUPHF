@@ -97,7 +97,7 @@ public class ProfileImpl extends Profile {
     }
 
     /**
-     * This is equivalent to <code>ProfileImpl(true)</code>
+     * This is equivalent to  ProfileImpl(true)
      */
     public ProfileImpl() {
         this(true);
@@ -140,7 +140,7 @@ public class ProfileImpl extends Profile {
 
     /**
      * This constructor creates a default Profile for launching a main (or non-main) container
-     * (depending on the value of <code>isMain</code>)
+     * (depending on the value of  isMain  )
      *
      * @param host       is the name of the host where the main-container should
      *                   be listen to. A null value means use the default (i.e. localhost)
@@ -248,7 +248,7 @@ public class ProfileImpl extends Profile {
             List<Specifier> agents = getSpecifiers(AGENTS);
             String isGui = props.getProperty("gui");
 
-            if (isGui != null && CaseInsensitiveString.equalsIgnoreCase(isGui, "true")) {
+            if (CaseInsensitiveString.equalsIgnoreCase(isGui, "true")) {
                 Specifier s = new Specifier();
 
                 s.setName("rma");
@@ -327,7 +327,7 @@ public class ProfileImpl extends Profile {
     /**
      * Retrieve a String value from the configuration properties.
      * If no parameter corresponding to the specified key is found,
-     * <code>aDefault</code> is returned.
+     *  aDefault   is returned.
      *
      * @param key      The key identifying the parameter to be retrieved
      *                 among the configuration properties.
@@ -409,7 +409,7 @@ public class ProfileImpl extends Profile {
     /**
      * Creates a string representation of this profile. The returned
      * string has the format
-     * <p><code>(profile name1=value1 name2=value2 ... )</code></p>
+     * <p> (profile name1=value1 name2=value2 ... )  </p>
      *
      * @return A string containing a readable representation of this
      * profile object.

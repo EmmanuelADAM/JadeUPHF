@@ -74,9 +74,9 @@ class ObjectSchemaImpl extends ObjectSchema {
     }
 
     /**
-     * Creates an <code>ObjectSchema</code> with a given type-name.
+     * Creates an  ObjectSchema   with a given type-name.
      *
-     * @param typeName The name of this <code>ObjectSchema</code>.
+     * @param typeName The name of this  ObjectSchema  .
      */
     protected ObjectSchemaImpl(String typeName) {
         this.typeName = typeName;
@@ -87,8 +87,8 @@ class ObjectSchemaImpl extends ObjectSchema {
      *
      * @param name        The name of the slot.
      * @param slotSchema  The schema defining the type of the slot.
-     * @param optionality The optionality, i.e., <code>OPTIONAL</code>
-     *                    or <code>MANDATORY</code>
+     * @param optionality The optionality, i.e.,  OPTIONAL
+     *                    or  MANDATORY
      */
     protected void add(String name, ObjectSchema slotSchema, int optionality) {
         CaseInsensitiveString ciName = new CaseInsensitiveString(name);
@@ -116,21 +116,21 @@ class ObjectSchemaImpl extends ObjectSchema {
     }
 
     /**
-     * Add a slot with cardinality between <code>cardMin</code>
-     * and <code>cardMax</code> to this schema.
+     * Add a slot with cardinality between  cardMin
+     * and  cardMax   to this schema.
      * Adding such a slot corresponds to add a slot
      * of type Aggregate and then to add proper facets (constraints)
      * to check that the type of the elements in the aggregate are
-     * compatible with <code>elementsSchema</code> and that the
-     * aggregate contains at least <code>cardMin</code> elements and
-     * at most <code>cardMax</code> elements. By default the Aggregate
-     * is of type <code>BasicOntology.SEQUENCE</code>.
+     * compatible with  elementsSchema   and that the
+     * aggregate contains at least  cardMin   elements and
+     * at most  cardMax   elements. By default the Aggregate
+     * is of type  BasicOntology.SEQUENCE  .
      *
      * @param name           The name of the slot.
      * @param elementsSchema The schema for the elements of this slot.
-     * @param cardMin        This slot must get at least <code>cardMin</code>
+     * @param cardMin        This slot must get at least  cardMin
      *                       values
-     * @param cardMax        This slot can get at most <code>cardMax</code>
+     * @param cardMax        This slot can get at most  cardMax
      *                       values
      */
     protected void add(String name, ObjectSchema elementsSchema, int cardMin, int cardMax) {
@@ -138,15 +138,15 @@ class ObjectSchemaImpl extends ObjectSchema {
     }
 
     /**
-     * Add a slot with cardinality between <code>cardMin</code>
-     * and <code>cardMax</code> to this schema and allow specifying the type
+     * Add a slot with cardinality between  cardMin
+     * and  cardMax   to this schema and allow specifying the type
      * of Aggregate to be used for this slot.
      *
      * @param name           The name of the slot.
      * @param elementsSchema The schema for the elements of this slot.
-     * @param cardMin        This slot must get at least <code>cardMin</code>
+     * @param cardMin        This slot must get at least  cardMin
      *                       values
-     * @param cardMax        This slot can get at most <code>cardMax</code>
+     * @param cardMax        This slot can get at most  cardMax
      *                       values
      * @param aggType        The type of Aggregate to be used
      * @see #add(String, ObjectSchema, int, int)
@@ -157,18 +157,18 @@ class ObjectSchemaImpl extends ObjectSchema {
     }
 
     /**
-     * Add a slot with optionality and cardinality between <code>cardMin</code>
-     * and <code>cardMax</code> to this schema and allow specifying the type
+     * Add a slot with optionality and cardinality between  cardMin
+     * and  cardMax   to this schema and allow specifying the type
      * of Aggregate to be used for this slot.
      *
      * @param name           The name of the slot.
      * @param elementsSchema The schema for the elements of this slot.
-     * @param cardMin        This slot must get at least <code>cardMin</code>
+     * @param cardMin        This slot must get at least  cardMin
      *                       values
-     * @param cardMax        This slot can get at most <code>cardMax</code>
+     * @param cardMax        This slot can get at most  cardMax
      *                       values
      * @param aggType        The type of Aggregate to be used
-     * @param optionality    The optionality, i.e., <code>OPTIONAL</code>
+     * @param optionality    The optionality, i.e.,  OPTIONAL
      * @see #add(String, ObjectSchema, int, int)
      */
     protected void add(String name, ObjectSchema elementsSchema, int cardMin, int cardMax, String aggType, int optionality) {
@@ -218,11 +218,11 @@ class ObjectSchemaImpl extends ObjectSchema {
     }
 
     /**
-     * Add a <code>Facet</code> on a slot of this schema
+     * Add a  Facet   on a slot of this schema
      *
-     * @param slotName the name of the slot the <code>Facet</code>
+     * @param slotName the name of the slot the  Facet
      *                 must be added to.
-     * @param f        the <code>Facet</code> to be added.
+     * @param f        the  Facet   to be added.
      * @throws OntologyException if slotName does not identify
      *                           a valid slot in this schema
      */
@@ -256,7 +256,7 @@ class ObjectSchemaImpl extends ObjectSchema {
     }
 
     /**
-     * Returns the names of all the slots in this <code>Schema</code>
+     * Returns the names of all the slots in this  Schema
      * (including slots defined in super schemas).
      *
      * @return the names of all slots.
@@ -276,10 +276,10 @@ class ObjectSchemaImpl extends ObjectSchema {
     }
 
     /**
-     * Returns the names of the slots defined in this <code>Schema</code>
+     * Returns the names of the slots defined in this  Schema
      * (excluding slots defined in super schemas).
      *
-     * @return the names of the slots defined in this <code>Schema</code>.
+     * @return the names of the slots defined in this  Schema  .
      */
     public String[] getOwnNames() {
         if (slotNames != null) {
@@ -295,10 +295,10 @@ class ObjectSchemaImpl extends ObjectSchema {
     }
 
     /**
-     * Retrieves the schema of a slot of this <code>Schema</code>.
+     * Retrieves the schema of a slot of this  Schema  .
      *
      * @param name The name of the slot.
-     * @return the <code>Schema</code> of slot <code>name</code>
+     * @return the  Schema   of slot  name
      * @throws OntologyException If no slot with this name is present
      *                           in this schema.
      */
@@ -311,12 +311,12 @@ class ObjectSchemaImpl extends ObjectSchema {
     }
 
     /**
-     * Indicate whether a given <code>String</code> is the name of a
-     * slot defined in this <code>Schema</code>
+     * Indicate whether a given  String   is the name of a
+     * slot defined in this  Schema
      *
-     * @param name The <code>String</code> to test.
-     * @return <code>true</code> if <code>name</code> is the name of a
-     * slot defined in this <code>Schema</code>.
+     * @param name The  String   to test.
+     * @return  true   if  name   is the name of a
+     * slot defined in this  Schema  .
      */
     public boolean containsSlot(String name) {
         SlotDescriptor slot = getSlot(new CaseInsensitiveString(name));
@@ -324,12 +324,12 @@ class ObjectSchemaImpl extends ObjectSchema {
     }
 
     /**
-     * Indicate whether a given <code>String</code> is the name of a
-     * slot actually defined in this <code>Schema</code> (excluding super-schemas)
+     * Indicate whether a given  String   is the name of a
+     * slot actually defined in this  Schema   (excluding super-schemas)
      *
-     * @param name The <code>String</code> to test.
-     * @return <code>true</code> if <code>name</code> is the name of a
-     * slot actually defined in this <code>Schema</code> (excluding super-schemas).
+     * @param name The  String   to test.
+     * @return  true   if  name   is the name of a
+     * slot actually defined in this  Schema   (excluding super-schemas).
      */
     public boolean isOwnSlot(String name) {
         SlotDescriptor slot = getOwnSlot(new CaseInsensitiveString(name));
@@ -340,7 +340,7 @@ class ObjectSchemaImpl extends ObjectSchema {
      * Indicate whether a slot of this schema is mandatory
      *
      * @param name The name of the slot.
-     * @return <code>true</code> if the slot is mandatory.
+     * @return  true   if the slot is mandatory.
      * @throws OntologyException If no slot with this name is present
      *                           in this schema.
      */
@@ -354,7 +354,7 @@ class ObjectSchemaImpl extends ObjectSchema {
 
     /**
      * Creates an Abstract descriptor to hold an object compliant to
-     * this <code>Schema</code>.
+     * this  Schema  .
      */
     public AbsObject newInstance() throws OntologyException {
         throw new OntologyException("AbsObject cannot be instantiated");

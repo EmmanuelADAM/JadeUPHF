@@ -81,9 +81,9 @@ public class BasicOntology extends Ontology implements SL0Vocabulary {
     }
 
     /**
-     * Returns the singleton instance of the <code>BasicOntology</code>.
+     * Returns the singleton instance of the  BasicOntology  .
      *
-     * @return the singleton instance of the <code>BasicOntology</code>
+     * @return the singleton instance of the  BasicOntology  
      */
     public static Ontology getInstance() {
         return theInstance;
@@ -514,11 +514,11 @@ public class BasicOntology extends Ontology implements SL0Vocabulary {
     }
 
     /**
-     * Redefine the <code>getSchema()</code> method to take into
+     * Redefine the  getSchema()   method to take into
      * account ACL performatives.
      *
      * @param name the name of the schema in the vocabulary.
-     * @return the schema or <code>null</code> if the schema is not found.
+     * @return the schema or  null   if the schema is not found.
      * @throws OntologyException
      */
     public ObjectSchema getSchema(String name) throws OntologyException {
@@ -535,11 +535,11 @@ public class BasicOntology extends Ontology implements SL0Vocabulary {
     //#MIDP_EXCLUDE_BEGIN
 
     /**
-     * Redefine the <code>getSchema()</code> method to take into
+     * Redefine the  getSchema()   method to take into
      * account java primitives.
      *
      * @param clazz the class whose associated schema must be retrieved.
-     * @return the schema associated to the given class or <code>null</code> if the schema is not found.
+     * @return the schema associated to the given class or  null   if the schema is not found.
      * @throws OntologyException
      */
     public ObjectSchema getSchema(Class<?> clazz) throws OntologyException {

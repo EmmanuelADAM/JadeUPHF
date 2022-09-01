@@ -28,7 +28,7 @@ package jade.content.onto;
 import java.io.Serial;
 
 /**
- * This class is used for reporting exceptions when adding beans to a <code>BeanOntology</code>.
+ * This class is used for reporting exceptions when adding beans to a  BeanOntology  .
  *
  * @see BeanOntology
  */

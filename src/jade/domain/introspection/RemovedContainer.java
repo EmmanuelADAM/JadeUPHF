@@ -60,19 +60,19 @@ public class RemovedContainer implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>container</code> slot of this
+     * Retrieve the value of the  container   slot of this
      * event, containing the container identifier of the newly removed
      * container.
      *
-     * @return The value of the <code>container</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  container   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getContainer() {
         return container;
     }
 
     /**
-     * Set the <code>container</code> slot of this event.
+     * Set the  container   slot of this event.
      *
      * @param id The container identifier of the newly removed
      *           container.

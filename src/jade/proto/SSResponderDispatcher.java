@@ -13,7 +13,7 @@ import java.io.Serial;
 /**
  * This behaviour is designed to be used together with the Single-Session responder protocol classes.
  * More in details it is aimed at dealing with protocol initiation messages and dispatching them to
- * responders. The latter are created by means of the <code>createResponder()</code> abstract method
+ * responders. The latter are created by means of the  createResponder()   abstract method
  * that developers must implement.
  *
  * @author Giovanni Caire
@@ -68,8 +68,8 @@ public abstract class SSResponderDispatcher extends CyclicBehaviour {
     }
 
     /**
-     * This method is responsible for creating a suitable <code>Behaviour</code> acting as responder
-     * in the interaction protocol initiated by message <code>initiationMsg</code>.
+     * This method is responsible for creating a suitable  Behaviour   acting as responder
+     * in the interaction protocol initiated by message  initiationMsg  .
      *
      * @param initiationMsg The message initiating the interaction protocol
      * @return the respondeur behaviour

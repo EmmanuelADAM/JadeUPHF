@@ -33,7 +33,7 @@ import jade.util.WrapperException;
 public class ProfileException extends WrapperException {
 
     /**
-     * Construct a <code>ProfileException</code> with the given message.
+     * Construct a  ProfileException   with the given message.
      *
      * @param msg The exception message.
      */
@@ -42,8 +42,8 @@ public class ProfileException extends WrapperException {
     }
 
     /**
-     * Constructs a <code>ProfileException</code> with the specified detail message,
-     * wrapping the given <code>Throwable</code>object.
+     * Constructs a  ProfileException   with the specified detail message,
+     * wrapping the given  Throwable  object.
      *
      * @param msg The detail message.
      * @param t   The exception to wrap.

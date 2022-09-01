@@ -29,7 +29,7 @@ import jade.core.AID;
 import java.util.Iterator;
 
 /**
- * Utility class that allow using an <code>AID</code> object
+ * Utility class that allow using an  AID   object
  * as an ontological concept.
  *
  * @author Giovanni Caire - TILAB
@@ -50,9 +50,9 @@ public class OntoAID extends AID implements Concept {
      * Constructor for an ontological Agent-identifier
      *
      * @param name   is the value for the slot name for the agent.
-     * @param isGUID indicates if the passed <code>name</code>
+     * @param isGUID indicates if the passed  name
      *               is already a globally unique identifier or not. Two
-     *               constants <code>ISGUID</code>, <code>ISLOCALNAME</code>
+     *               constants  ISGUID  ,  ISLOCALNAME
      *               have also been defined for setting a value for this parameter.
      *               If the name is a local name, then the HAP (Home Agent Platform)
      *               is concatenated to the name, separated by  "@".
@@ -64,11 +64,11 @@ public class OntoAID extends AID implements Concept {
 
     /**
      * Create an ontological Agent identifier that wraps an existing
-     * <code>AID</code>.
+     *  AID  .
      *
-     * @param id the <code>AID</code>to be wrapped. If <code>id</code>
+     * @param id the  AID  to be wrapped. If  id
      *           is already an ontological agent identifier no new object is
-     *           created and <code>id</code> is returned with the resolvers
+     *           created and  id   is returned with the resolvers
      *           (if any) properly wrapped.
      */
     public static OntoAID wrap(AID id) {

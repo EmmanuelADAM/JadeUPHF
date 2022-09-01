@@ -60,8 +60,8 @@ public class AgentState {
     /**
      * Default constructor. A default constructor is necessary for
      * this class because it is used in the
-     * <code>jade-introspection</code> ontology. Application code
-     * should use the static access method <code>getInstance()</code>,
+     *  jade-introspection   ontology. Application code
+     * should use the static access method  getInstance()  ,
      * however.
      */
     public AgentState() {
@@ -76,8 +76,8 @@ public class AgentState {
      * Static access method to retrieve a prototype object for an
      * agent life-cycle state.
      *
-     * @param value One of the <code>AP_XXX</code> constants defined
-     *              in the <code>Agent</code> class.
+     * @param value One of the  AP_XXX   constants defined
+     *              in the  Agent   class.
      * @return A prototype object for the requested state.
      */
     public static AgentState getInstance(int value) {
@@ -120,7 +120,7 @@ public class AgentState {
 
     /**
      * Retrieve the numeric value of this state, in agreement with the
-     * <code>AP_XXX</code> constants defined in the <code>Agent</code>
+     *  AP_XXX   constants defined in the  Agent
      * class.
      *
      * @return The numeric value set for this state.
@@ -131,7 +131,7 @@ public class AgentState {
 
     /**
      * Set the numeric value of this state, in agreement with the
-     * <code>AP_XXX</code> constants defined in the <code>Agent</code>
+     *  AP_XXX   constants defined in the  Agent
      * class.
      *
      * @param v The numeric value for this state.
@@ -148,7 +148,7 @@ public class AgentState {
      * @param o The right-hand side of the equality.
      * @return If the current object and the parameter are equal
      * (according to the criterion above), this method returns
-     * <code>true</code>, otherwise it returns <code>false</code>.
+     *  true  , otherwise it returns  false  .
      */
     public boolean equals(Object o) {
 
@@ -178,11 +178,11 @@ public class AgentState {
      * comparison on state name is used.
      *
      * @param o The object to compare the current object to.
-     * @return An integer value, <code>-1</code>, <code>0</code> or
-     * <code>1</code> depending upon whether the current object is
+     * @return An integer value,  -1  ,  0   or
+     *  1   depending upon whether the current object is
      * lesser, equal or greater than the given parameter.
      * @throws ClassCastException If the given parameter is
-     *                            not an instance of <code>AgentState</code>.
+     *                            not an instance of  AgentState  .
      */
     public int compareTo(Object o) {
         AgentState as = (AgentState) o;
@@ -193,7 +193,7 @@ public class AgentState {
      * Calculate an hash code for this agent state.
      *
      * @return An integer value, complying with the defined equality
-     * operation on <code>AgentState</code> instances.
+     * operation on  AgentState   instances.
      */
     public int hashCode() {
         return name.toLowerCase().hashCode();

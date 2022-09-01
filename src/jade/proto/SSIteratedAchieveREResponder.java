@@ -144,16 +144,16 @@ public class SSIteratedAchieveREResponder extends SSResponder {
      * @return the reply message to be sent back to the initiator. Returning
      * a message defferent from INFORM (or returning null) terminates the protocol.
      * An optional AGREE message can be sent back to the initiator by
-     * calling the <code>sendAgree()</code> method.
+     * calling the  sendAgree()   method.
      * @throws RefuseException        if the REQUEST is refused. Throwing a
      *                                RefuseException has the same effect as returning a REFUSE message,
-     *                                but automatically manages the <code>:content</code> slot.
+     *                                but automatically manages the  :content   slot.
      * @throws FailureException       if there is an error serving the REQUEST.
      *                                Throwing a FailureException has the same effect as returning a FAILURE
-     *                                message, but automatically manages the <code>:content</code> slot.
+     *                                message, but automatically manages the  :content   slot.
      * @throws NotUnderstoodException if the REQUEST content is not undrerstood.
      *                                Throwing a NotUnderstoodException has the same effect as returning a NOT_UNDERSTOOD
-     *                                message, but automatically manages the <code>:content</code> slot.
+     *                                message, but automatically manages the  :content   slot.
      */
     protected ACLMessage handleRequest(ACLMessage request) throws RefuseException, FailureException, NotUnderstoodException {
         return null;
@@ -167,28 +167,28 @@ public class SSIteratedAchieveREResponder extends SSResponder {
      *
      * @param cancel the received CANCEL message or null if no
      *               further REQUEST message is received from the initiator within the timeout
-     *               specified in the <code>:reply-by</code> slot of the last INFORM message.
+     *               specified in the  :reply-by   slot of the last INFORM message.
      */
     protected void handleCancel(ACLMessage cancel) {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_REQUEST state.
      * This behaviour would override the homonymous method.
      * This method also sets the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * <br>
-     * The registered behaviour can retrieve the received <code>REQUEST</code>
-     * message from the HashMap at the <code>REQUEST_KEY</code> key.
+     * The registered behaviour can retrieve the received  REQUEST
+     * message from the HashMap at the  REQUEST_KEY   key.
      * <br>
      * It is responsibility of the registered behaviour to put the
      * reply to be sent back to the initiator into the HashMap at the
-     * <code>REPLY_KEY</code> key. Putting a message defferent from INFORM
+     *  REPLY_KEY   key. Putting a message defferent from INFORM
      * (or null) terminates the protocol.
      * An optional AGREE message can be sent back to the initiator by
-     * calling the <code>sendAgree()</code> method.
+     * calling the  sendAgree()   method.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -198,15 +198,15 @@ public class SSIteratedAchieveREResponder extends SSResponder {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_CANCEL state.
      * This behaviour would override the homonymous method.
      * This method also sets the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * <br>
-     * The registered behaviour can retrieve the <code>CANCEL</code>
-     * message received from the HashMap at the <code>CANCEL_KEY</code> key.
+     * The registered behaviour can retrieve the  CANCEL
+     * message received from the HashMap at the  CANCEL_KEY   key.
      * <br>
      *
      * @param b the Behaviour that will handle this state
@@ -230,8 +230,8 @@ public class SSIteratedAchieveREResponder extends SSResponder {
      * be sent back to the initiator without the need for an explicit
      * CANCEL message. The initiator will be able to detect that the
      * session has been closed by calling the
-     * <code>isSessionTerminated()</code> method of the
-     * <code>SSIteratedAchieveREInitiator</code> class.
+     *  isSessionTerminated()   method of the
+     *  SSIteratedAchieveREInitiator   class.
      */
     public void closeSessionOnNextReply() {
         sessionClosed = true;

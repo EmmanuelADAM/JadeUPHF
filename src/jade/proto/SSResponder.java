@@ -177,15 +177,15 @@ abstract class SSResponder extends FSMBehaviour {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the HANDLE_OUT_OF_SEQ state.
      * This behaviour would override the homonymous method.
      * This method also sets the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>out of sequence</code> ACLMessage object received
-     * from the HashMap at the <code>RECEIVED_KEY</code>
+     * the  out of sequence   ACLMessage object received
+     * from the HashMap at the  RECEIVED_KEY  
      * key.
      *
      * @param b the Behaviour that will handle this state

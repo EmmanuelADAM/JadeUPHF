@@ -33,8 +33,8 @@ import jade.core.ServiceHelper;
  * When activated, the SAM service is used internally by the JADE runtime to monitor entities related to
  * JADE specific activities such as the average message delivery time or the number of
  * posted messages, but can be used by application agents as well to monitor entities related to application
- * specific activities. In order to do that an agent must retrieve the <code>SAMHelper</code> by means of
- * the <code>getHelper()</code> method of the <code>Agent</code> class and register providers
+ * specific activities. In order to do that an agent must retrieve the  SAMHelper   by means of
+ * the  getHelper()   method of the  Agent   class and register providers
  * of measures for the entities that have to be monitored. The underlying SAM Service periodically
  * invokes such providers and collects all retrieved information in the Main Container aggregating them
  * properly. Many providers can be registered (possibly in different containers)

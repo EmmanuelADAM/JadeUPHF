@@ -30,11 +30,11 @@ import jade.mtp.MTPException;
 /**
  * This class is a Proxy class, allowing access to a JADE agent
  * container. Invoking methods on instances of this class, it is
- * possible to request services from <it>in-process</it> agent
+ * possible to request services from <i>in-process</i> agent
  * containers.
  * This class must not be instantiated by applications. Instead, use
- * the <code>createContainer()</code> method in class
- * <code>Runtime</code>.
+ * the  createContainer()   method in class
+ *  Runtime  .
  * <br>
  * <b>NOT available in MIDP</b>
  * <br>
@@ -56,7 +56,7 @@ public class ContainerController {
      * instantiated by applications, so it cannot be meaningfully called
      * from application code. The proper way to create an agent
      * container from an application is to call the
-     * <code>Runtime.createContainer()</code> method.
+     *  Runtime.createContainer()   method.
      * see jade.core.Runtime#createAgentContainer(Profile)
      *
      * @param impl         A concrete implementation of a JADE agent container.
@@ -83,8 +83,8 @@ public class ContainerController {
      * Get a controller (i.e. a proxy) to a local agent given its local-name or GUID.
      *
      * @param name   The local name or the GUID of the desired agent.
-     * @param isGuid A flag indicating whether <code>name</code> represents the local-name (<code>AID.ISLOCALNAME</code>)
-     *               or the GUID (<code>AID.ISGUID</code>) of the desired agent.
+     * @param isGuid A flag indicating whether  name   represents the local-name ( AID.ISLOCALNAME  )
+     *               or the GUID ( AID.ISGUID  ) of the desired agent.
      * @throws ControllerException If any problems occur obtaining this proxy or if no such agent exists in the local container.
      */
     public AgentController getAgent(String name, boolean isGuid) throws ControllerException {
@@ -261,11 +261,11 @@ public class ContainerController {
      * wrapped by this ContainerController belongs to  and acts
      * as the Main Container.
      *
-     * @return a <code>PlatfromController</code> for the platform
-     * the container wrapped by this <code>ContainerController</code>
+     * @return a  PlatfromController   for the platform
+     * the container wrapped by this  ContainerController
      * belongs to.
      * @throws ControllerException If the container wrapped by this
-     *                             <code>ContainerController</code> is not valid or is not the
+     *                              ContainerController   is not valid or is not the
      *                             platform Main Container.
      */
     public PlatformController getPlatformController() throws ControllerException {

@@ -71,7 +71,7 @@ public interface SL0Vocabulary {
     String RESULT_ACTION = "action";
     String RESULT_VALUE = "value";
     /**
-     * @deprecated Use <code>RESULT_VALUE</code> instead
+     * @deprecated Use  RESULT_VALUE   instead
      */
     String RESULT_ITEMS = RESULT_VALUE;
 

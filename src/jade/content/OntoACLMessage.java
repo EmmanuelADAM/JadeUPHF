@@ -30,7 +30,7 @@ import jade.lang.acl.ACLMessage;
 import java.util.Iterator;
 
 /**
- * Utility class that allow using an <code>ACLMessage</code> object
+ * Utility class that allow using an  ACLMessage   object
  * as an ontological agent action.
  *
  * @author Giovanni Caire - TILAB
@@ -58,12 +58,12 @@ public class OntoACLMessage extends ACLMessage implements AgentAction {
 
     /**
      * Create an ontological ACL message that wraps an existing
-     * <code>ACLMessage</code>.
+     *  ACLMessage  .
      *
-     * @param msg the <code>ACLMessage</code>to be wrapped. If
-     *            <code>msg</code>
+     * @param msg the  ACLMessage  to be wrapped. If
+     *             msg
      *            is already an ontological ACL message no new object is
-     *            created and <code>msg</code> is returned with the sender
+     *            created and  msg   is returned with the sender
      *            and receivers properly wrapped if necessary.
      */
     public static OntoACLMessage wrap(ACLMessage msg) {

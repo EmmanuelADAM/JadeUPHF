@@ -65,19 +65,19 @@ public class DeadAgent implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>where</code> slot of this
+     * Retrieve the value of the  where   slot of this
      * event, containing the container identifier of the container
      * where the newly dead agent was deployed.
      *
-     * @return The value of the <code>where</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  where   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getWhere() {
         return where;
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
+     * Set the  where   slot of this event.
      *
      * @param id The container identifier of the container where the
      *           newly dead agent was deployed.
@@ -87,18 +87,18 @@ public class DeadAgent implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>agent</code> slot of this
+     * Retrieve the value of the  agent   slot of this
      * event, containing the agent identifier of the newly dead agent.
      *
-     * @return The value of the <code>agent</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  agent   slot, or
+     *  null   if no value was set.
      */
     public AID getAgent() {
         return agent;
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
+     * Set the  agent   slot of this event.
      *
      * @param id The agent identifier of the newly dead agent.
      */

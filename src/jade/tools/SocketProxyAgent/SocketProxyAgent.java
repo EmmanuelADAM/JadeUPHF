@@ -39,7 +39,7 @@ import java.util.Vector;
  * <ol>
  * <li>as the two String arguments to the agent, or</li>
  * <li>if no agent argument, then in a configuration file
- * <i>agentname</i><code>.inf</code>, or if no configuration file, then</li>
+ * <i>agentname</i> .inf  , or if no configuration file, then</li>
  * <li>default to {@link #DEFAULT_PORT} and all agents</li>
  * </ol>
  * The format for the arguments is:
@@ -47,7 +47,7 @@ import java.util.Vector;
  * <li>agent arguments: argument 0 is port number, argument 1 legal addressee agents</li>
  * <li>configuration file: line 0 is port number, line 1 legal addressee agents</li>
  * </ol>
- * Specifying an asterisk (<code>*</code>) for the agents
+ * Specifying an asterisk ( *  ) for the agents
  * will permit all agents to be legal addressees.
  *
  * @author Fabio Bellifemine - CSELT S.p.A

@@ -201,7 +201,7 @@ PARSER_END(ExtendedSLParser)
 * This production rule represents the more general expression that can
 * serve as content for an ACL message. Since different communicative
 * acts have different content (action expressions for
-* <code>request</code>, predicate for <code>inform</code>, etc.), any
+*  request  , predicate for  inform  , etc.), any
 * allowed SL content expression can be parsed from here.
 */
 AbsContentElementList Content():
@@ -577,7 +577,7 @@ AbsPrimitive Number():
 
 
 /**
-* <p> <code> String = WORD | STRING_LITERAL  </code>
+* <p>   String = WORD | STRING_LITERAL
 */
 String String() :
 { Token t;}

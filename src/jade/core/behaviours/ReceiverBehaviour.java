@@ -28,15 +28,27 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 import java.io.Serializable;
+import java.util.function.BiConsumer;
 
 /**
  * Behaviour for receiving an ACL message. This class encapsulates a
- * <code>receive()</code> as an atomic operation. This behaviour
+ *  receive()   as an atomic operation. This behaviour
  * terminates when an ACL message is received.
- * The method <code>getMessage()</code> allows to get the received message.
+ * The method  getMessage()   allows to get the received message.
+ * <p>Otherwise;
+ * if provided in the constructor, the {@code BiConsumer<Agent, ACLMessage> fActionMessage}
+ * is activated when a message is received : <br/>
+ *  <i>add a behaviour that wait intinitely for the next msg, without template</i>
  *
- * @author Giovanni Rimassa - Universita' di Parma
- * @version $Date: 2003-11-25 09:24:45 +0100 (mar, 25 nov 2003) $ $Revision: 4601 $
+ *     addBehaviour(new ReceiverBehaviour(this, -1, null, (a, m)->{
+ *             println(getLocalName() + ", I received " + m.getContent() + " from " + m.getSender());}));
+ *
+ * </p>
+ *
+ * @author Giovanni Rimassa - Universita' di Parma $Date: 2003-11-25 09:24:45 +0100 (mar, 25 nov 2003) $ $Revision:
+ * 4601 $
+ * @author Emmanuel Adam
+ * @version 2022/07/13
  * @see SenderBehaviour
  * @see Agent#receive()
  * @see ACLMessage
@@ -64,6 +76,14 @@ public final class ReceiverBehaviour extends Behaviour {
      */
     private long blockingTime = 0;
 
+    /**message to launch when a message corresponding to a template is received*/
+    private BiConsumer<Agent, ACLMessage> fActionMessage;
+
+    /**continuous = true means a cyclic behaviour, each message that corresponds to the template are managed.
+     * continuous = false to stop after the first message or a delay
+     */
+    boolean continuous = false;
+
 
     // The pattern to match incoming messages against
     /**
@@ -74,14 +94,14 @@ public final class ReceiverBehaviour extends Behaviour {
     // A future for the ACL message, used when a timeout was specified
     /**
      * This constructor creates a
-     * <code>ReceiverBehaviour</code> object that ends as soon as an ACL
-     * message matching a given <code>MessageTemplate</code> arrives or
-     * the passed <code>millis<code> timeout expires.
+     *  ReceiverBehaviour   object that ends as soon as an ACL
+     * message matching a given  MessageTemplate   arrives or
+     * the passed  millis  timeout expires.
      * The received message can then be got via the method
-     * <code>getMessage</code>.
+     *  getMessage  .
      *
      * @param a      The agent this behaviour belongs to, and that will
-     *               <code>receive()</code> the message.
+     *                receive()   the message.
      * @param millis The timeout expressed in milliseconds, an infinite timeout
      *               can be expressed by a value < 0.
      * @param mt     A Message template to match incoming messages against, null to
@@ -93,15 +113,15 @@ public final class ReceiverBehaviour extends Behaviour {
 
     // A time out value, when present
     /**
-     * Receive any ACL message, waiting at most <code>millis</code>
-     * milliseconds (infinite time if <code>millis < 1</code>).
-     * When calling this constructor, a suitable <code>Handle</code>
+     * Receive any ACL message, waiting at most  millis
+     * milliseconds (infinite time if  millis < 1  ).
+     * When calling this constructor, a suitable  Handle
      * must be created and passed to it. When this behaviour ends, some
      * other behaviour will try to get the ACL message out of the
      * handle, and an exception will be thrown in case of a time out.
      * The following example code explains this:
      *
-     * <code><pre>
+     *  <pre>
      * // ReceiverBehaviour creation, e.g. in agent setup() method
      * h = ReceiverBehaviour.newHandle(); // h is an agent instance variable
      * addBehaviour(new ReceiverBehaviour(this, h, 10000); // Wait 10 seconds
@@ -120,12 +140,12 @@ public final class ReceiverBehaviour extends Behaviour {
      * catch(ReceiverBehaviour.NotYetReady rbnyr) {
      * // Message not yet ready, but timeout still active
      * }
-     * </pre></code>
+     * </pre>
      *
      * @param a      The agent this behaviour belongs to.
      * @param h      An <em>Handle</em> representing the message to receive.
-     * @param millis The maximum amount of time to wait for the message,
-     *               in milliseconds.
+     * @param millis The timeout expressed in milliseconds, an infinite timeout
+     *               can be expressed by a value < 0.
      * @see Handle
      * @see ReceiverBehaviour#newHandle()
      */
@@ -133,17 +153,74 @@ public final class ReceiverBehaviour extends Behaviour {
         this(a, h, millis, null);
     }
 
+    /**
+     * This constructor creates a
+     *  ReceiverBehaviour   object that ends as soon as an ACL
+     * message matching a given  MessageTemplate   arrives or
+     * the passed  millis  timeout expires.
+     * The received message can then be got via the method
+     *  getMessage  .
+     *
+     * @param a      The agent this behaviour belongs to, and that will
+     *                receive()   the message.
+     * @param millis The timeout expressed in milliseconds, an infinite timeout
+     *               can be expressed by a value < 0.
+     * @param mt     A Message template to match incoming messages against, null to
+     *               indicate no template and receive any message that arrives.
+     * @param fActionMessage bi consumer that takes an agent and a message, launch when a message corresponding to the
+     *                      template is received
+     */
+    public ReceiverBehaviour(Agent a, long millis, MessageTemplate mt,
+                             BiConsumer<Agent, ACLMessage> fActionMessage) {
+        this(a, newHandle(), millis, mt);
+        this.fActionMessage = fActionMessage;
+    }
+
+    /**
+     * This constructor creates a
+     *  ReceiverBehaviour   object that ends as soon as an ACL
+     * message matching a given  MessageTemplate   arrives or
+     * the passed  millis  timeout expires.
+     * The received message can then be got via the method
+     *  getMessage  .
+     *
+     * @param a      The agent this behaviour belongs to, and that will
+     *                receive()   the message.
+     * @param millis The timeout expressed in milliseconds, an infinite timeout
+     *               can be expressed by a value < 0.
+     * @param mt     A Message template to match incoming messages against, null to
+     *               indicate no template and receive any message that arrives.
+     * @param continuous false to stop after the first message, true to stay and deal each message corresponding to
+     *                   the template
+     * @param fActionMessage bi consumer that takes an agent and a message, launch when a message corresponding to the
+     *                      template is received
+     *  <pre>
+     * // ReceiverBehaviour creation with lambda expression
+     * // exemple : cyclic reception from  a topic
+     * var topic = AgentServicesTools.generateTopicAID(this, "InfoRadio");
+     * final MessageTemplate mt = MessageTemplate.MatchTopic(topic);
+     * addBehaviour(new ReceiverBehaviour(this, -1, mt, true, (a,msg)-> {
+     * println("received " + msg.getContent() + " from " + topic.getLocalName() + ", sent by " + msg.getSender().getLocalName());}));
+     * </pre>
+     */
+    public ReceiverBehaviour(Agent a, long millis, MessageTemplate mt, boolean continuous,
+                             BiConsumer<Agent, ACLMessage> fActionMessage) {
+        this(a, millis, mt,fActionMessage);
+        this.continuous = continuous;
+    }
+
+
     // A running counter for calling block(millis) until 'timeOut' milliseconds pass.
     /**
      * Receive any ACL message matching the given template, witing at
-     * most <code>millis</code> milliseconds (infinite time if
-     * <code>millis < 1</code>. When calling this constructor, a
-     * suitable <code>Handle</code> must be created and passed to it.
+     * most  millis   milliseconds (infinite time if
+     *  millis < 1  . When calling this constructor, a
+     * suitable  Handle   must be created and passed to it.
      *
      * @param a      The agent this behaviour belongs to.
      * @param h      An <em>Handle</em> representing the message to receive.
      * @param millis The maximum amount of time to wait for the message,
-     *               in milliseconds.
+     *               in milliseconds (infinite if <0).
      * @param mt     A Message template to match incoming messages against, null to
      *               indicate no template and receive any message that arrives.
      * @see ReceiverBehaviour#ReceiverBehaviour(Agent a, Handle h, long millis)
@@ -160,10 +237,10 @@ public final class ReceiverBehaviour extends Behaviour {
 
     /**
      * Factory method for message handles. This method returns a new
-     * <code>Handle</code> object, which can be used to retrieve an ACL
-     * message out of a <code>ReceiverBehaviour</code> object.
+     *  Handle   object, which can be used to retrieve an ACL
+     * message out of a  ReceiverBehaviour   object.
      *
-     * @return A new <code>Handle</code> object.
+     * @return A new  Handle   object.
      * @see Handle
      */
     public static Handle newHandle() {
@@ -203,6 +280,7 @@ public final class ReceiverBehaviour extends Behaviour {
             }
         } else {
             future.setMessage(msg);
+            if(fActionMessage!=null) fActionMessage.accept(myAgent, msg);
             finished = true;
         }
     }
@@ -210,16 +288,16 @@ public final class ReceiverBehaviour extends Behaviour {
     /**
      * Checks whether this behaviour ended.
      *
-     * @return <code>true</code> when an ACL message has been received.
+     * @return  true   when an ACL message has been received.
      */
     public boolean done() {
-        return finished;
+        return finished && !continuous;
     }
 
     /**
      * Resets this behaviour. This method allows to receive another
-     * <code>ACLMessage</code> with the same
-     * <code>ReceiverBehaviour</code> without creating a new object.
+     *  ACLMessage   with the same
+     *  ReceiverBehaviour   without creating a new object.
      */
     public void reset() {
         finished = false;
@@ -246,7 +324,7 @@ public final class ReceiverBehaviour extends Behaviour {
     /**
      * An interface representing ACL messages due to arrive within a time
      * limit. This interface is used to create a
-     * <code>ReceiverBehaviour</code> object to receive an ACL message
+     *  ReceiverBehaviour   object to receive an ACL message
      * within a user specified time limit. When the user tries to read the
      * message represented by the handle, either gets it or gets an
      * exception.
@@ -258,16 +336,16 @@ public final class ReceiverBehaviour extends Behaviour {
     public interface Handle {
 
         /**
-         * Tries to retrieve the <code>ACLMessage</code> object represented
+         * Tries to retrieve the  ACLMessage   object represented
          * by this handle.
          *
          * @return The ACL message, received by the associated
-         * <code>ReceiverBehaviour</code>, if any.
+         *  ReceiverBehaviour  , if any.
          * @throws TimedOut    If the associated
-         *                     <code>ReceiverBehaviour</code> did not receive a suitable ACL
+         *                      ReceiverBehaviour   did not receive a suitable ACL
          *                     message within the time limit.
          * @throws NotYetReady If the associated
-         *                     <code>ReceiverBehaviour</code> is still waiting for a suitable
+         *                      ReceiverBehaviour   is still waiting for a suitable
          *                     ACL message to arrive.
          * @see ReceiverBehaviour#ReceiverBehaviour(Agent
          * a, Handle h, long millis)
@@ -278,8 +356,8 @@ public final class ReceiverBehaviour extends Behaviour {
 
     /**
      * Exception class for timeouts. This exception is thrown when trying
-     * to obtain an <code>ACLMessage</code> object from an
-     * <code>Handle</code>, but no message was received within a specified
+     * to obtain an  ACLMessage   object from an
+     *  Handle  , but no message was received within a specified
      * timeout.
      *
      * @see Handle#getMessage()
@@ -292,7 +370,7 @@ public final class ReceiverBehaviour extends Behaviour {
 
     /**
      * Exception class for timeouts. This exception is thrown when trying
-     * to obtain an <code>ACLMessage</code> from an <code>Handle</code>
+     * to obtain an  ACLMessage   from an  Handle
      * and no message was received so far, but the time limit is not yet
      * reached.
      *

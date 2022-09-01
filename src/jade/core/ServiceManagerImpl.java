@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Vector;
 
 /**
- * The <code>ServiceManagerImpl</code> class is the actual
+ * The  ServiceManagerImpl   class is the actual
  * implementation of JADE platform <i>Service Manager</i> and
  * <i>Service Finder</i> components. It holds a set of services and
  * manages them.

@@ -25,15 +25,21 @@ package jade.core.behaviours;
 
 import jade.core.Agent;
 
+import java.util.function.Consumer;
+
 /**
- * Atomic behaviour that executes just once. This abstract class can
+ * Atomic behaviour that executes just once. This class can
  * be extended by application programmers to create behaviours for
- * operations that need to be done just one time.
- *
- * @author Giovanni Rimassa - Universita` di Parma
- * @version $Date: 2000-09-12 15:24:08 +0200 (mar, 12 set 2000) $ $Revision: 1857 $
+ * operations that need to be done just one time.<br/>
+ * Otherwise, the Agent Consumer fAction will be executed.
+ *  
+ *     addBehaviour(new OneShotBehaviour(this, 300, a->System.out.println("Just one hello from " + a.getLocalName()));
+ *   
+ * @author Giovanni Rimassa - Universita` di Parma $Date: 2000-09-12 15:24:08 +0200 (mar, 12 set 2000) $ $Revision: 1857 $
+ * @author Emmanuel Adam
+ * @version Date: 2022-07-13
  */
-public abstract class OneShotBehaviour extends SimpleBehaviour {
+public  class OneShotBehaviour extends SimpleBehaviour {
 
     /**
      * Default constructor. It does not set the owner agent.
@@ -44,7 +50,7 @@ public abstract class OneShotBehaviour extends SimpleBehaviour {
 
     /**
      * This constructor sets the owner agent for this
-     * <code>OneShotBehaviour</code>.
+     *  OneShotBehaviour  .
      *
      * @param a The agent this behaviour belongs to.
      */
@@ -52,11 +58,15 @@ public abstract class OneShotBehaviour extends SimpleBehaviour {
         super(a);
     }
 
+    public OneShotBehaviour(Agent a, Consumer<Agent> fAction) {
+        super(a, fAction);
+    }
+
     /**
-     * This is the method that makes <code>OneShotBehaviour</code>
-     * one-shot, because it always returns <code>true</code>.
+     * This is the method that makes  OneShotBehaviour  
+     * one-shot, because it always returns  true  .
      *
-     * @return Always <code>true</code>.
+     * @return Always  true  .
      */
     public final boolean done() {
         return true;

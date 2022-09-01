@@ -29,15 +29,12 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.schema.Facet;
 
-public class JavaTypeFacet implements Facet {
-    private final String javaType;
-
+public record JavaTypeFacet(String javaType) implements Facet {
     /**
-     * Construct a <code>JavaTypeFacet</code> that
+     * Construct a  JavaTypeFacet   that
      * set the java type
      */
-    public JavaTypeFacet(String javaType) {
-        this.javaType = javaType;
+    public JavaTypeFacet {
     }
 
     /**

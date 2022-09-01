@@ -28,7 +28,7 @@ package jade.domain.mobility;
 import jade.content.Concept;
 
 /**
- * This concept represents a parameter to be passed to a <code>Behaviour</code>
+ * This concept represents a parameter to be passed to a  Behaviour
  * in the dynamic loading procedure.
  *
  * @author Giovanni Caire - TILAB
@@ -68,7 +68,7 @@ public class Parameter implements Concept {
 
     /**
      * Sets the name of this parameter. This will be used as
-     * the key in the dinamically loaded behaviour <code>HashMap</code>
+     * the key in the dinamically loaded behaviour  HashMap
      * for the parameter value
      */
     public void setName(String name) {
@@ -85,7 +85,7 @@ public class Parameter implements Concept {
     /**
      * Sets the value of this parameter. The BehaviourLoading
      * ontology extends the SerializableOntology and therefore
-     * whatever <code>Serializable</code> object can be used.
+     * whatever  Serializable   object can be used.
      */
     public void setValue(Object value) {
         this.value = value;
@@ -100,8 +100,8 @@ public class Parameter implements Concept {
 
     /**
      * Sets the IO mode of this parameter.
-     * This must be one of <code>IN_MODE</code>, <code>OUT_MODE</code>,
-     * <code>INOUT_MODE</code>.
+     * This must be one of  IN_MODE  ,  OUT_MODE  ,
+     *  INOUT_MODE  .
      */
     public void setMode(int mode) {
         this.mode = mode;

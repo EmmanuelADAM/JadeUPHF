@@ -44,7 +44,7 @@ import java.util.List;
  * (i.e. it performs a single communicative act) within the scope
  * of an interaction protocol in order to verify if the RE (Rational
  * Effect) of the communicative act has been achieved or not.
- * Note that this is a simple implementation of the <code>AchieveREResponder</code>.
+ * Note that this is a simple implementation of the  AchieveREResponder  .
  * that does not  allow to register Behaviour for the Prepare Response
  * and Prepare Result Notification states of the protocol
  *
@@ -228,7 +228,7 @@ public class SimpleAchieveREResponder extends SimpleBehaviour implements FIPANam
      *
      * @param request the received message
      * @return the ACLMessage to be sent as a response (i.e. one of
-     * <code>agree, refuse, not-understood, inform</code>. <b>Remind</b> to
+     *  agree, refuse, not-understood, inform  . <b>Remind</b> to
      * use the method createReply of the class ACLMessage in order
      * to create a good reply message
      * @see ACLMessage#createReply()
@@ -241,7 +241,7 @@ public class SimpleAchieveREResponder extends SimpleBehaviour implements FIPANam
     /**
      * This method is called after the response has been sent
      * and only when one of the folliwing two cases arise:
-     * the response was an <code>agree</code> message OR no response
+     * the response was an  agree   message OR no response
      * message was sent.
      * This default implementation return null which has
      * the effect of sending no result notification. Programmers should
@@ -250,7 +250,7 @@ public class SimpleAchieveREResponder extends SimpleBehaviour implements FIPANam
      * @param request  the received message
      * @param response the previously sent response message
      * @return the ACLMessage to be sent as a result notification (i.e. one of
-     * <code>inform, failure</code>. <b>Remind</b> to
+     *  inform, failure  . <b>Remind</b> to
      * use the method createReply of the class ACLMessage in order
      * to create a good reply message
      * @see ACLMessage#createReply()
@@ -275,7 +275,7 @@ public class SimpleAchieveREResponder extends SimpleBehaviour implements FIPANam
     }
 
     /**
-     * This method allows to change the <code>MessageTemplate</code>
+     * This method allows to change the  MessageTemplate
      * that defines what messages this FIPARequestResponder will react to and reset the protocol.
      */
     public void reset(MessageTemplate mt) {
@@ -286,8 +286,8 @@ public class SimpleAchieveREResponder extends SimpleBehaviour implements FIPANam
     /**
      * This method checks whether this behaviour has finished or not.
      *
-     * @return <code>true</code> if this behaviour has completed its
-     * task, <code>false</code> otherwise.
+     * @return  true   if this behaviour has completed its
+     * task,  false   otherwise.
      */
     public boolean done() {
         return finished;

@@ -45,7 +45,7 @@ public class TypedAggregateFacet implements Facet {
     private final ObjectSchema type;
 
     /**
-     * Construct a <code>TypedAggregateFacet</code> that forces
+     * Construct a  TypedAggregateFacet   that forces
      * the elements in an AbsAggregate to be instances of a given
      * schema
      */

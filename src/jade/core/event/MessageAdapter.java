@@ -1,7 +1,7 @@
 package jade.core.event;
 
 /**
- * Adapter class for the <code>MessageListener</code> interface
+ * Adapter class for the  MessageListener   interface
  */
 public class MessageAdapter implements MessageListener {
 

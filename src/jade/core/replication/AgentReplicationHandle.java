@@ -40,13 +40,13 @@ public class AgentReplicationHandle {
     /**
      * Utility method to be called at the beginning of each replicated method as
      * exemplified below<br>
-     * <code>
+     *
      * public void aReplicatedMethod(T1 a, T2 b) {
      * AgentReplicationHandle.replicate(this, "aReplicatedMethod", new Object[]{a, b});
      * <p>
      * ...
      * }
-     * </code>
+     *
      *
      * @param a          The agent providing the replicated method
      * @param methodName The name of the replicated method

@@ -52,18 +52,18 @@ import java.util.List;
  * The structure of these protocols is always the same.
  * The initiator sends a "subscription" message (in general it performs a communicative act).
  * <p>
- * The responder can then reply by sending a <code>not-understood</code>, a
- * <code>refuse</code> or
- * an <code>agree</code> message to communicate that the subscription has been
+ * The responder can then reply by sending a  not-understood  , a
+ *  refuse   or
+ * an  agree   message to communicate that the subscription has been
  * agreed. This first category
  * of reply messages has been here identified as a "response". Sending
- * no response is allowed and is equivalent to sending an <code>agree</code>.
+ * no response is allowed and is equivalent to sending an  agree  .
  * <p>
  * Each time the condition indicated within the subscription message becomes true,
  * the responder sends proper "notification" messages to the initiator.
  * <p>
  * This behaviour terminates if a) neither a response nor a notification has been
- * received before the timeout set by the <code>reply-by</code> of the
+ * received before the timeout set by the  reply-by   of the
  * subscription message has expired or b) all responders replied with REFUSE
  * or NOT_UNDERSTOOD. Otherwise the behaviour will run forever.
  * <p>
@@ -71,12 +71,8 @@ import java.util.List;
  * possibly change in next versions also taking into account that the FIPA
  * specifications related to subscribe-like protocols are not yet stable.
  * <p>
- * Read carefully the section of the
- * <a href="..\..\..\programmersguide.pdf"> JADE programmer's guide </a>
- * that describes
- * the usage of this class.
  * <br> One message for every receiver is sent instead of a single
- * message for all the receivers. </i>
+ * message for all the receivers.
  *
  * @author Giovanni Caire - TILab
  **/
@@ -119,18 +115,18 @@ public class SubscriptionInitiator extends Initiator {
     private String[] toBeReset = null;
 
     /**
-     * Construct a <code>SubscriptionInitiator</code> with a given HashMap
+     * Construct a  SubscriptionInitiator   with a given HashMap
      *
      * @param a               The agent performing the protocol
      * @param msg             The message that must be used to initiate the protocol.
      *                        Notice that the default implementation of the
-     *                        <code>prepareSubscription()</code>
+     *                         prepareSubscription()
      *                        method returns
      *                        an array composed of only this message.
      *                        The values of the slot
-     *                        <code>reply-with</code> is ignored and a different value is assigned
+     *                         reply-with   is ignored and a different value is assigned
      *                        automatically by this class for each receiver.
-     * @param mapMessagesList The <code>HashMap</code>  of messages list that will be used by this <code>SubscriptionInitiator</code>
+     * @param mapMessagesList The  HashMap    of messages list that will be used by this  SubscriptionInitiator
      * deprecated
     public SubscriptionInitiator(Agent a, ACLMessage msg, HashMap<String, List<ACLMessage>> mapMessagesList) {
     super(a, msg, mapMessagesList);
@@ -208,7 +204,7 @@ public class SubscriptionInitiator extends Initiator {
      */
 
     /**
-     * Construct a <code>SubscriptionInitiator</code> with an empty HashMap
+     * Construct a  SubscriptionInitiator   with an empty HashMap
      *
      * @see #SubscriptionInitiator(Agent, ACLMessage, HashMap, HashMap)
      **/
@@ -219,19 +215,19 @@ public class SubscriptionInitiator extends Initiator {
     //#APIDOC_EXCLUDE_BEGIN
 
     /**
-     * Construct a <code>SubscriptionInitiator</code> with a given HashMap
+     * Construct a  SubscriptionInitiator   with a given HashMap
      *
      * @param a               The agent performing the protocol
      * @param msg             The message that must be used to initiate the protocol.
      *                        Notice that the default implementation of the
-     *                        <code>prepareSubscription()</code>
+     *                         prepareSubscription()
      *                        method returns
      *                        an array composed of only this message.
      *                        The values of the slot
-     *                        <code>reply-with</code> is ignored and a different value is assigned
+     *                         reply-with   is ignored and a different value is assigned
      *                        automatically by this class for each receiver.
-     * @param mapMessagesList The <code>HashMap</code>  of messages list that will be used by this <code>SubscriptionInitiator</code>
-     * @param mapMessages     The <code>HashMap</code>  of messages  that will be used by this <code>SubscriptionInitiator</code>
+     * @param mapMessagesList The  HashMap    of messages list that will be used by this  SubscriptionInitiator
+     * @param mapMessages     The  HashMap    of messages  that will be used by this  SubscriptionInitiator
      */
     public SubscriptionInitiator(Agent a, ACLMessage msg, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a, msg, mapMessagesList, mapMessages);
@@ -439,7 +435,7 @@ public class SubscriptionInitiator extends Initiator {
      * @param subscription the ACLMessage object passed in the constructor
      * @return a Vector of ACLMessage objects.
      * The values of the slot
-     * <code>reply-with</code> is ignored and a different value is assigned
+     *  reply-with   is ignored and a different value is assigned
      * automatically by this class for each receiver.
      **/
     protected List<ACLMessage> prepareSubscriptions(ACLMessage subscription) {
@@ -449,7 +445,7 @@ public class SubscriptionInitiator extends Initiator {
     }
 
     /**
-     * This method is called every time an <code>agree</code>
+     * This method is called every time an  agree
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -461,7 +457,7 @@ public class SubscriptionInitiator extends Initiator {
     }
 
     /**
-     * This method is called every time a <code>refuse</code>
+     * This method is called every time a  refuse
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -473,7 +469,7 @@ public class SubscriptionInitiator extends Initiator {
     }
 
     /**
-     * This method is called every time a <code>inform</code>
+     * This method is called every time a  inform
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -487,10 +483,10 @@ public class SubscriptionInitiator extends Initiator {
     /**
      * This method is called when all the responses have been
      * collected or when the timeout is expired.
-     * The used timeout is the minimum value of the slot <code>replyBy</code>
+     * The used timeout is the minimum value of the slot  replyBy
      * of all the sent messages.
-     * By response message we intend here all the <code>agree, not-understood,
-     * refuse, failure</code> received messages, which are
+     * By response message we intend here all the  agree, not-understood,
+     * refuse, failure   received messages, which are
      * not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -503,18 +499,18 @@ public class SubscriptionInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the PREPARE_SUBSCRIPTIONS state.
      * This behaviour would override the homonymous method.
      * This method also sets the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * It is responsibility of the registered behaviour to put the
      * Vector of ACLMessage objects to be sent
-     * into the HashMap at the <code>ALL_SUBSCRIPTIONS_KEY</code>
+     * into the HashMap at the  ALL_SUBSCRIPTIONS_KEY
      * key.
      * The values of the slot
-     * <code>reply-with</code> is ignored and a different value is assigned
+     *  reply-with   is ignored and a different value is assigned
      * automatically by this class for each receiver.
      *
      * @param b the Behaviour that will handle this state
@@ -524,15 +520,15 @@ public class SubscriptionInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_AGREE state.
      * This behaviour would override the homonymous method.
      * This method also sets the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>agree</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
+     * the  agree   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -543,15 +539,15 @@ public class SubscriptionInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_INFORM state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>inform</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
+     * the  inform   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -562,15 +558,15 @@ public class SubscriptionInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_REFUSE state.
      * This behaviour would override the homonymous method.
      * This method also set the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
-     * the <code>refuse</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code>
+     * the  refuse   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -581,15 +577,15 @@ public class SubscriptionInitiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_ALL_RESPONSES state.
      * This behaviour would override the homonymous method.
      * This method also sets the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * The registered behaviour can retrieve
      * the vector of ACLMessage objects, received as a response,
-     * from the HashMap at the <code>ALL_RESPONSES_KEY</code>
+     * from the HashMap at the  ALL_RESPONSES_KEY
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -600,12 +596,12 @@ public class SubscriptionInitiator extends Initiator {
     }
 
     /**
-     * Cancel the subscription to agent <code>receiver</code>.
+     * Cancel the subscription to agent  receiver  .
      * This method retrieves the subscription message sent to
-     * <code>receiver</code> and sends a suitable CANCEL message with
+     *  receiver   and sends a suitable CANCEL message with
      * the conversationID and all other protocol fields appropriately set.
-     * The <code>:content</code> slot of this CANCEL message is filled
-     * in by means of the <code>fillCancelContent()</code>
+     * The  :content   slot of this CANCEL message is filled
+     * in by means of the  fillCancelContent()
      * method. The way the CANCEL content is set in fact is application
      * specific.
      *
@@ -613,16 +609,16 @@ public class SubscriptionInitiator extends Initiator {
      * @param ignoreResponse When receiving a CANCEL, the responder may
      *                       send back a response to notify that the subscription has been
      *                       cancelled (INFORM) or not (FAILURE). If this parameter is set to
-     *                       <code>true</code> this response is ignored and the session with
-     *                       agent <code>receiver</code> is immediately terminated. When
-     *                       <code>ignoreResponse</code> is set to <code>false</code>, on the
-     *                       other hand, the session with agent <code>receiver</code> remains
+     *                        true   this response is ignored and the session with
+     *                       agent  receiver   is immediately terminated. When
+     *                        ignoreResponse   is set to  false  , on the
+     *                       other hand, the session with agent  receiver   remains
      *                       active and the INFORM or FAILURE massage (if any) will be handled by the
-     *                       <code>HANDLE_INFORM</code> and <code>HANDLE_FAILURE</code> states
+     *                        HANDLE_INFORM   and  HANDLE_FAILURE   states
      *                       as if they were normal notifications. It is responsibility of
      *                       the programmer to distinguish them and actually terminate the
-     *                       session with agent <code>receiver</code> by calling the
-     *                       <code>cancellationCompleted()</code> method.
+     *                       session with agent  receiver   by calling the
+     *                        cancellationCompleted()   method.
      * @see #fillCancelContent(ACLMessage, ACLMessage)
      * @see #cancellationCompleted(AID)
      */
@@ -654,11 +650,11 @@ public class SubscriptionInitiator extends Initiator {
     }
 
     /**
-     * This method is used to fill the <code>:content</code> slot
+     * This method is used to fill the  :content   slot
      * of the CANCEL message that is being sent to an agent to cancel
      * the subscription previously activated by means of the
-     * <code>subscription</code> message. Note that all other relevant
-     * fields of the <code>cancel</code> message have already been
+     *  subscription   message. Note that all other relevant
+     * fields of the  cancel   message have already been
      * set appropriately and the programmer should not modify them.
      * The default implementation just sets a null content (the responder
      * should be able to identify the subscription that has to be
@@ -666,7 +662,7 @@ public class SubscriptionInitiator extends Initiator {
      * of the CANCEL message). Programmers may override this method to
      * create an appropriate content as exemplified in the code below.
      *
-     * <pr><hr><blockquote><pre>
+     * <hr><blockquote><pre>
      * try {
      * AID receiver = (AID) cancel.getAllReceiver().next();
      * Action a = new Action(receiver, OntoACLMessage.wrap(subscription));
@@ -686,10 +682,10 @@ public class SubscriptionInitiator extends Initiator {
     /**
      * This method should be called when the notification of a
      * successful subscription cancellation is received from agent
-     * <code>receiver</code> to terminate the session with him.
+     *  receiver   to terminate the session with him.
      * This method has some effect only if a cancellation for
-     * agent <code>receiver</code> was previously activated by
-     * means of the <code>cancel()</code> method.
+     * agent  receiver   was previously activated by
+     * means of the  cancel()   method.
      *
      * @see #cancel(AID, boolean)
      */

@@ -86,7 +86,7 @@ public class LogManagementOntology extends Ontology implements LogManagementVoca
      * This method returns the unique instance (according to the singleton
      * pattern) of the Log-Management-ontology.
      *
-     * @return The singleton <code>Ontology</code> object, containing the
+     * @return The singleton  Ontology   object, containing the
      * schemas for the elements of the Log-Management-ontology.
      */
     public static Ontology getInstance() {

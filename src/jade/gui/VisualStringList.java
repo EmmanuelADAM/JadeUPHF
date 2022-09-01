@@ -36,7 +36,7 @@ import java.util.Iterator;
 /**
  * This class extends JPanel in order to provide a panel to show a list of string.
  * Clicking the right button of the mouse a popUp menu with the allowed operations is showed.
- * The method <code>setEnabled</code> permits to set the operation allowed.
+ * The method  setEnabled   permits to set the operation allowed.
  * If enabled, three are the operation allowed: Add new item, Edit an existing item, Remove a selected item;
  * otherwise only the view operation is allowed.
  * Double clicking on a selected item permits the view/edit on it

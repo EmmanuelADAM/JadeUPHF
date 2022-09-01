@@ -27,7 +27,7 @@ package jade.tools.logging.ontology;
 
 /**
  * This interface contains all the string constants for frame and slot
- * names of the <code>jLog-Management-Ontology</code> ontology.
+ * names of the  jLog-Management-Ontology   ontology.
  */
 public interface LogManagementVocabulary {
     /**

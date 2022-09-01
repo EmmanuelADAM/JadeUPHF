@@ -36,9 +36,9 @@ import jade.domain.FIPAAgentManagement.NotRegistered;
  * concepts, actions and predicates that relates to the JADE specific
  * actions that can be requested to the JADE AMS and DF.
  * <p>
- * The actual <code>Ontology</code> object representing the
+ * The actual  Ontology   object representing the
  * JADE-Agent-Management-ontology is a singleton and is accessible through
- * the static method <code>getInstance()</code>
+ * the static method  getInstance()
  *
  * @author Giovanni Caire -  TILAB
  */
@@ -191,7 +191,7 @@ public class JADEManagementOntology extends Ontology implements JADEManagementVo
      * This method returns the unique instance (according to the singleton
      * pattern) of the JADE-Agent-Management-ontology.
      *
-     * @return The singleton <code>Ontology</code> object, containing the
+     * @return The singleton  Ontology   object, containing the
      * schemas for the elements of the JADE-Agent-Management-ontology.
      */
     public static Ontology getInstance() {

@@ -73,7 +73,7 @@ public class AbsAggregate extends AbsConcept {
     }
 
     /**
-     * Retrieves the <code>i</code>-th element in this aggregate.
+     * Retrieves the  i  -th element in this aggregate.
      *
      * @param i The index of the element to retrieve.
      * @return The element.
@@ -83,7 +83,7 @@ public class AbsAggregate extends AbsConcept {
     }
 
     /**
-     * @return An <code>Iterator</code> over the elements of this
+     * @return An  Iterator   over the elements of this
      * aggregate.
      */
     public Iterator<AbsTerm> iterator() {
@@ -100,7 +100,7 @@ public class AbsAggregate extends AbsConcept {
     /**
      * Test if a given term is contained in this aggregate.
      *
-     * @return <code>true</code> if the given term is contained
+     * @return  true   if the given term is contained
      * in this aggregate.
      */
     public boolean contains(AbsTerm element) {
@@ -137,7 +137,7 @@ public class AbsAggregate extends AbsConcept {
     /**
      * Test if the aggregate is empty.
      *
-     * @return <code>true</code> if this aggregate does not contain
+     * @return  true   if this aggregate does not contain
      * any element.
      */
     public boolean isEmpty() {
@@ -209,7 +209,7 @@ public class AbsAggregate extends AbsConcept {
      * Tests if this AbsAggregate is grounded, i.e., if no one of its elements
      * is associated with a variable
      *
-     * @return <code>true</code> if the object is grounded.
+     * @return  true   if the object is grounded.
      */
     public boolean isGrounded() {
         for (AbsTerm abs : elements) {

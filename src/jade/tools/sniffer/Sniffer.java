@@ -116,7 +116,7 @@ import java.util.*;
  * </ol>
  *
  * @author <a href="mailto:alessandro.beneventi@re.nettuno.it"> Alessandro Beneventi </a>(Developement)
- * @author Gianluca Tanca (Concept & Early Version)
+ * @author Gianluca Tanca (Concept and Early Version)
  * @author Robert Kessler University of Utah (preload configuration, don't scroll agent boxes)
  * @author Martin Griss HP Labs (display additional message information)
  * @author Dick Cowan HP Labs (property handling, display full agent name when mouse over)

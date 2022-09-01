@@ -37,7 +37,7 @@ import jade.core.Agent;
 public abstract class SerialBehaviour extends CompositeBehaviour {
 
     /**
-     * Create a new <code>SerialBehaviour</code> object, without
+     * Create a new  SerialBehaviour   object, without
      * setting the owner agent.
      */
     protected SerialBehaviour() {
@@ -45,7 +45,7 @@ public abstract class SerialBehaviour extends CompositeBehaviour {
     }
 
     /**
-     * Create a new <code>SerialBehaviour</code> object and set the
+     * Create a new  SerialBehaviour   object and set the
      * owner agent.
      *
      * @param a The agent owning this behaviour.
@@ -59,7 +59,7 @@ public abstract class SerialBehaviour extends CompositeBehaviour {
 
     /**
      * Handle block/restart notifications. A
-     * <code>SerialBehaviour</code> is blocked <em>only</em> when
+     *  SerialBehaviour   is blocked <em>only</em> when
      * its currently active child is blocked, and becomes ready again
      * when its current child is ready. This method takes care of the
      * various possibilities.

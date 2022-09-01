@@ -63,7 +63,7 @@ public class ContentElementList implements ContentElement {
     }
 
     /**
-     * Retrieves the <code>i</code>-th element in this content element list.
+     * Retrieves the  i  -th element in this content element list.
      *
      * @param i The index of the element to retrieve.
      * @return The element.
@@ -73,7 +73,7 @@ public class ContentElementList implements ContentElement {
     }
 
     /**
-     * @return An <code>Iterator</code> over the elements of this
+     * @return An  Iterator   over the elements of this
      * content element list.
      */
     public Iterator<ContentElement> iterator() {
@@ -91,7 +91,7 @@ public class ContentElementList implements ContentElement {
      * Test if a given content element is contained in this
      * content element list.
      *
-     * @return <code>true</code> if the given content element is contained
+     * @return  true   if the given content element is contained
      * in this content element list.
      */
     public boolean contains(ContentElement element) {
@@ -122,7 +122,7 @@ public class ContentElementList implements ContentElement {
     /**
      * Test if the content element list is empty.
      *
-     * @return <code>true</code> if this content element list does
+     * @return  true   if this content element list does
      * not contain any element.
      */
     public boolean isEmpty() {

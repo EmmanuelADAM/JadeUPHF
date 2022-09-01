@@ -232,7 +232,7 @@ class SLParser implements SLParserConstants {
      * This production rule represents the more general expression that can
      * serve as content for an ACL message. Since different communicative
      * acts have different content (action expressions for
-     * <code>request</code>, predicate for <code>inform</code>, etc.), any
+     *  request  , predicate for  inform  , etc.), any
      * allowed SL content expression can be parsed from here.
      */
     final public AbsContentElementList Content() throws ParseException {
@@ -928,7 +928,7 @@ class SLParser implements SLParserConstants {
     }
 
     /**
-     * <p> <code> String = WORD | STRING_LITERAL  </code>
+     * <p>   String = WORD | STRING_LITERAL
      */
     final public String String() throws ParseException {
         Token t;

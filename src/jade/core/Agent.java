@@ -33,7 +33,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.security.JADESecurityException;
 import jade.util.Event;
 import jade.util.Logger;
-
+import static java.lang.System.out;
 import java.io.*;
 import java.util.*;
 
@@ -44,11 +44,11 @@ import java.util.*;
  #MIDP_INCLUDE_END*/
 
 /**
- * The <code>Agent</code> class is the common superclass for user
+ * The  Agent   class is the common superclass for user
  * defined software agents. It provides methods to perform basic agent
  * tasks, such as:
  * <ul>
- * <li> <b> Message passing using <code>ACLMessage</code> objects,
+ * <li> <b> Message passing using  ACLMessage   objects,
  * both unicast and multicast with optional pattern matching. </b></li>
  * <li> <b> Complete Agent Platform life cycle support, including
  * starting, suspending and killing an agent. </b></li>
@@ -56,8 +56,8 @@ import java.util.*;
  * </ul>
  * <p>
  * Application programmers must write their own agents as
- * <code>Agent</code> subclasses, adding specific behaviours as needed
- * and exploiting <code>Agent</code> class capabilities.
+ *  Agent   subclasses, adding specific behaviours as needed
+ * and exploiting  Agent   class capabilities.
  *
  * @author Giovanni Rimassa - Universita' di Parma
  * @author Giovanni Caire - TILAB
@@ -174,8 +174,8 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * This flag is used to distinguish the normal AP_ACTIVE state from
      * the particular case in which the agent state is set to AP_ACTIVE
      * during agent termination (takeDown()) to allow it to clean-up properly.
-     * In this case in fact a call to <code>doDelete()</code>,
-     * <code>doMove()</code>, <code>doClone()</code> and <code>doSuspend()</code>
+     * In this case in fact a call to  doDelete()  ,
+     *  doMove()  ,  doClone()   and  doSuspend()
      * should have no effect.
      */
     private boolean terminating = false;
@@ -247,7 +247,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      *
      * @param b      The behaviour to restart later.
      * @param millis The amount of time to wait before restarting
-     *               <code>b</code>.
+     *                b  .
      * @see Behaviour#block(long millis)
      */
     public void restartLater(Behaviour b, long millis) {
@@ -263,7 +263,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * Restarts the behaviour associated with t.
      * This method runs within the time-critical Timer Dispatcher thread and
      * is not intended to be called by users. It is defined public only because
-     * is part of the <code>TimerListener</code> interface.
+     * is part of the  TimerListener   interface.
      */
     public void doTimeOut(Timer t) {
         Behaviour b;
@@ -289,9 +289,9 @@ public class Agent implements Runnable, Serializable, TimerListener {
     /**
      * Notifies this agent that one of its behaviours has been restarted
      * for some reason. This method clears any timer associated with
-     * behaviour object <code>b</code>, and it is unneeded by
+     * behaviour object  b  , and it is unneeded by
      * application level code. To explicitly schedule behaviours, use
-     * <code>block()</code> and <code>restart()</code> methods.
+     *  block()   and  restart()   methods.
      *
      * @param b The behaviour object which was restarted.
      * @see Behaviour#restart()
@@ -427,11 +427,11 @@ public class Agent implements Runnable, Serializable, TimerListener {
     }
 
     /**
-     * This method returns <code>true</code> when this agent is restarting after a crash.
-     * The restarting indication is automatically reset as soon as the <code>setup()</code> method of
+     * This method returns  true   when this agent is restarting after a crash.
+     * The restarting indication is automatically reset as soon as the  setup()   method of
      * this agent terminates.
      *
-     * @return <code>true</code> when this agent is restarting after a crash. <code>false</code> otherwise.
+     * @return  true   when this agent is restarting after a crash.  false   otherwise.
      */
     public final boolean isRestarting() {
         return restarting;
@@ -444,7 +444,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
     /**
      * Get the Agent ID for the platform AMS.
      *
-     * @return An <code>AID</code> object, that can be used to contact
+     * @return An  AID   object, that can be used to contact
      * the AMS of this platform.
      */
     public final AID getAMS() {
@@ -454,7 +454,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
     /**
      * Get the Agent ID for the platform default DF.
      *
-     * @return An <code>AID</code> object, that can be used to contact
+     * @return An  AID   object, that can be used to contact
      * the default DF of this platform.
      */
     public AID getDefaultDF() {
@@ -465,7 +465,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
     /**
      * Method to query the agent local name.
      *
-     * @return A <code>String</code> containing the local agent name
+     * @return A  String   containing the local agent name
      * (e.g. <em>peter</em>).
      */
     public final String getLocalName() {
@@ -475,7 +475,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
     /**
      * Method to query the agent complete name (<em><b>GUID</b></em>).
      *
-     * @return A <code>String</code> containing the complete agent name
+     * @return A  String   containing the complete agent name
      * (e.g. <em>peter@fipa.org:50</em>).
      */
     public final String getName() {
@@ -494,7 +494,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * concatenation (using '@') of the agent local name and the Home
      * Agent Platform name
      *
-     * @return A <code>String</code> containing the name of the home agent platform
+     * @return A  String   containing the name of the home agent platform
      * (e.g. <em>myComputerName:1099/JADE</em>).
      */
     public final String getHap() {
@@ -506,7 +506,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * <b>different</b> from the one that is registered with the
      * platform AMS.
      *
-     * @return An <code>Agent ID</code> object, containing the complete
+     * @return An  Agent ID   object, containing the complete
      * agent GUID, addresses and resolvers.
      */
     public final AID getAID() {
@@ -523,7 +523,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * Method to build a complete agent GUID belonging to the same platform of the current agent
      *
      * @param name Agent local name.
-     * @return An <code>Agent ID</code> object, containing the complete
+     * @return An  Agent ID   object, containing the complete
      * agent GUID, addresses and resolvers.
      */
     public final AID getAID(String name) {
@@ -590,7 +590,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
     /**
      * Method to retrieve the location this agent is currently at.
      *
-     * @return A <code>Location</code> object, describing the location
+     * @return A  Location   object, describing the location
      * where this agent is currently running.
      */
     public Location here() {
@@ -691,7 +691,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      *                buffered
      *                messages exceeds this value, older messages are discarded
      *                according to a <b><em>FIFO</em></b> replacement policy.
-     * @throws IllegalArgumentException If <code>newSize</code> is negative.
+     * @throws IllegalArgumentException If  newSize   is negative.
      * @see Agent#getQueueSize()
      */
     public void setQueueSize(int newSize) throws IllegalArgumentException {
@@ -809,13 +809,13 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * is intended to support agent mobility and is called either by the
      * Agent Platform or by the agent itself to start a migration process.
      * It should be noted that this method just changes the agent
-     * state to <code>AP_TRANSIT</code>. The actual migration takes
+     * state to  AP_TRANSIT  . The actual migration takes
      * place asynchronously.
      * <br>
      * <b>NOT available in MIDP</b>
      * <br>
      *
-     * @param destination The <code>Location</code> to migrate to.
+     * @param destination The  Location   to migrate to.
      */
     public void doMove(Location destination) {
         // Do nothing if the mobility service is not installed
@@ -832,13 +832,13 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * is intended to support agent mobility and is called either by the
      * Agent Platform or by the agent itself to start a clonation process.
      * It should be noted that this method just changes the agent
-     * state to <code>AP_COPY</code>. The actual clonation takes
+     * state to  AP_COPY  . The actual clonation takes
      * place asynchronously.
      * <br>
      * <b>NOT available in MIDP</b>
      * <br>
      *
-     * @param destination The <code>Location</code> where the copy agent will start.
+     * @param destination The  Location   where the copy agent will start.
      * @param newName     The name that will be given to the copy agent.
      */
     public void doClone(Location destination, String newName) {
@@ -855,11 +855,11 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * Make a state transition from <em>active</em> or <em>waiting</em>
      * to <em>suspended</em> within Agent Platform Life Cycle; the
      * original agent state is saved and will be restored by a
-     * <code>doActivate()</code> call. This method can be called from
+     *  doActivate()   call. This method can be called from
      * the Agent Platform or from the agent itself and stops all agent
      * activities. Incoming messages for a suspended agent are buffered
      * by the Agent Platform and are delivered as soon as the agent
-     * resumes. Calling <code>doSuspend()</code> on a suspended agent
+     * resumes. Calling  doSuspend()   on a suspended agent
      * has no effect.
      * <br>
      * <b>NOT available in MIDP</b>
@@ -880,10 +880,10 @@ public class Agent implements Runnable, Serializable, TimerListener {
     /**
      * Make a state transition from <em>suspended</em> to
      * <em>active</em> or <em>waiting</em> (whichever state the agent
-     * was in when <code>doSuspend()</code> was called) within Agent
+     * was in when  doSuspend()   was called) within Agent
      * Platform Life Cycle. This method is called from the Agent
      * Platform and resumes agent execution. Calling
-     * <code>doActivate()</code> when the agent is not suspended has no
+     *  doActivate()   when the agent is not suspended has no
      * effect.
      * <br>
      * <b>NOT available in MIDP</b>
@@ -904,7 +904,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * when called by the agent thread and causes the agent to
      * block, stopping all its activities until
      * a message arrives or 	the
-     * <code>doWake()</code> method is called.
+     *  doWake()   method is called.
      *
      * @see Agent#doWake()
      */
@@ -915,7 +915,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
     /**
      * Make a state transition from <em>active</em> to <em>waiting</em>
      * within Agent Platform Life Cycle. This method adds a timeout to
-     * the other <code>doWait()</code> version.
+     * the other  doWait()   version.
      *
      * @param millis The timeout value, in milliseconds.
      * @see Agent#doWait()
@@ -946,7 +946,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * Make a state transition from <em>waiting</em> to <em>active</em>
      * within Agent Platform Life Cycle. This method is called from
      * Agent Platform and resumes agent execution. Calling
-     * <code>doWake()</code> when an agent is not waiting has no effect.
+     *  doWake()   when an agent is not waiting has no effect.
      *
      * @see Agent#doWait()
      */
@@ -970,7 +970,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * or <em>waiting</em> to <em>deleted</em> state within Agent
      * Platform Life Cycle, thereby destroying the agent. This method
      * can be called either from the Agent Platform or from the agent
-     * itself. Calling <code>doDelete()</code> on an already deleted
+     * itself. Calling  doDelete()   on an already deleted
      * agent has no effect.
      */
     public void doDelete() {
@@ -1088,7 +1088,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
 
     /**
      * This method should not be used by application code. Use the
-     * same-named method of <code>jade.wrapper.Agent</code> instead.
+     * same-named method of  jade.wrapper.Agent   instead.
      * <br>
      * <b>NOT available in MIDP</b>
      * <br>
@@ -1138,7 +1138,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * work, the agent must have declared its will to accept objects
      * from other software components running within its JVM. This can
      * be achieved by calling the
-     * <code>jade.core.Agent.setEnabledO2ACommunication()</code> method.
+     *  jade.core.Agent.setEnabledO2ACommunication()   method.
      * If the retrieved object was originally inserted by an external
      * component using a blocking call, that call will return during the
      * execution of this method.
@@ -1146,7 +1146,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * <b>NOT available in MIDP</b>
      * <br>
      *
-     * @return the first object in the queue, or <code>null</code> if
+     * @return the first object in the queue, or  null   if
      * the queue is empty.
      * @see jade.wrapper.AgentController#putO2AObject(Event o, boolean blocking)
      * @see Agent#setEnabledO2ACommunication(boolean enabled, int queueSize)
@@ -1189,7 +1189,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * <br>
      *
      * @param enabled   Tells whether Java objects inserted with
-     *                  <code>putO2AObject()</code> will be accepted.
+     *                   putO2AObject()   will be accepted.
      * @param queueSize If the object-to-agent communication is enabled,
      *                  this parameter specifiies the maximum number of Java objects that
      *                  will be queued. If the passed value is 0, no maximum limit is set
@@ -1221,13 +1221,13 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * Sets the behaviour responsible for managing objects passed to the agent by
      * means of the Object-To-Agent (O2A) communication mechanism.
      * If the O2A manager behaviour is set, whenever an object is inserted in the
-     * O2A queue by means of the <code>putO2AObject()</code> method, only the manager
+     * O2A queue by means of the  putO2AObject()   method, only the manager
      * is waken up. This improves the efficiency since all behaviours not interested in
      * O2A communication remain sleeping. <br>
      * NOTE that this method only declares a behaviour as being responsible for managing
      * objects received by the agent by means of the O2A communication channel; in order to
      * correctly run, the behaviour must be added to the agent by means of the
-     * <code>addBehaviour()<code> method as usual.
+     *  addBehaviour()  method as usual.
      * <br>
      * <b>NOT available in MIDP</b>
      * <br>
@@ -1329,7 +1329,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * <p>
      * This method can be used for ordinary startup tasks such as
      * <b>DF</b> registration, but is essential to add at least a
-     * <code>Behaviour</code> object to the agent, in order for it to be
+     *  Behaviour   object to the agent, in order for it to be
      * able to do anything.
      *
      * @see Agent#addBehaviour(Behaviour b)
@@ -1355,6 +1355,12 @@ public class Agent implements Runnable, Serializable, TimerListener {
     protected void takeDown() {
     }
 
+    /**print a text on the console*/
+    protected void println(String text) {out.println(text);}
+
+    /**print a formatted text with values on the console*/
+    protected void printf(String format, Object[] tabO) {out.printf(format, tabO);}
+
     //#MIDP_EXCLUDE_BEGIN
 
     /**
@@ -1367,7 +1373,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * destination container
      * Therefore setting the value of a class field in this method will have
      * no impact on the moved agent instance. Such parameters must indeed be
-     * set <b>before</b> the <code>doMove()</code> method is called.
+     * set <b>before</b> the  doMove()   method is called.
      * <br>
      * <b>NOT available in MIDP</b>
      * <br>
@@ -1498,7 +1504,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * This method adds a new behaviour to the agent. This behaviour
      * will be executed concurrently with all the others, using a
      * cooperative round robin scheduling.  This method is typically
-     * called from an agent <code>setup()</code> to fire off some
+     * called from an agent  setup()   to fire off some
      * initial behaviour, but can also be used to spawn new behaviours
      * dynamically.
      *
@@ -1510,6 +1516,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
         b.setAgent(this);
         myScheduler.add(b);
     }
+
 
     /**
      * This method removes a given behaviour from the agent. This method
@@ -1528,7 +1535,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
 
     /**
      * Send an <b>ACL</b> message to another agent. This methods sends
-     * a message to the agent specified in <code>:receiver</code>
+     * a message to the agent specified in  :receiver
      * message field (more than one agent can be specified as message
      * receiver).
      *
@@ -1554,7 +1561,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * in the queue, if any. Therefore, polling and busy waiting is
      * required to wait for the next message sent using this method.
      *
-     * @return A new ACL message, or <code>null</code> if no message is
+     * @return A new ACL message, or  null   if no message is
      * present.
      * @see ACLMessage
      */
@@ -1572,7 +1579,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * @param pattern A message template to match received messages
      *                against.
      * @return A new ACL message matching the given template, or
-     * <code>null</code> if no such message is present.
+     *  null   if no such message is present.
      * @see ACLMessage
      * @see MessageTemplate
      */
@@ -1608,7 +1615,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * waiting at most a specified amount of time.
      *
      * @param millis The maximum amount of time to wait for the message.
-     * @return A new ACL message, or <code>null</code> if the specified
+     * @return A new ACL message, or  null   if the specified
      * amount of time passes without any message reception.
      */
     public final ACLMessage blockingReceive(long millis) {
@@ -1641,8 +1648,8 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * @param millis  The amount of time to wait for the message, in
      *                milliseconds.
      * @return A new ACL message matching the given template, or
-     * <code>null</code> if no suitable message was received within
-     * <code>millis</code> milliseconds.
+     *  null   if no suitable message was received within
+     *  millis   milliseconds.
      * @see Agent#blockingReceive()
      */
     public final ACLMessage blockingReceive(MessageTemplate pattern, long millis) {
@@ -1677,7 +1684,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * queue. This method can be used from an agent behaviour when it
      * realizes it read a message of interest for some other
      * behaviour. The message is put in front of the message queue, so
-     * it will be the first returned by a <code>receive()</code> call.
+     * it will be the first returned by a  receive()   call.
      *
      * @see Agent#receive()
      */
@@ -1851,13 +1858,13 @@ public class Agent implements Runnable, Serializable, TimerListener {
     }
 
     /**
-     * Retrieve a configuration property set in the <code>Profile</code>
+     * Retrieve a configuration property set in the  Profile
      * of the local container (first) or as a System property.
      *
      * @param key      the key that maps to the property that has to be
      *                 retrieved.
      * @param aDefault a default value to be returned if there is no mapping
-     *                 for <code>key</code>
+     *                 for  key
      */
     public String getProperty(String key, String aDefault) {
         String val = myToolkit.getProperty(key, aDefault);

@@ -97,10 +97,10 @@ public class StringACLCodec implements ACLCodec {
      * constructor for the codec.
      *
      * @parameter r is the input stream for the ACL Parser (pass
-     * <code>new InputStreamReader(System.in)</code>
+     *  new InputStreamReader(System.in)
      * if you want to use the standard input)
      * @parameter w is the writer to write encoded ACL messages (pass
-     * <code>new OutputStreamWriter(System.out)</code> if you want to
+     *  new OutputStreamWriter(System.out)   if you want to
      * use the standard output)
      */
     public StringACLCodec(Reader r, Writer w) {
@@ -329,7 +329,7 @@ public class StringACLCodec implements ACLCodec {
     /**
      * encodes the message and writes it into the Writer passed in the
      * constructor.
-     * Notice that this method does not call <code>flush</code> on the writer.
+     * Notice that this method does not call  flush   on the writer.
      *
      * @ param msg is the ACLMessage to encode and write into
      */

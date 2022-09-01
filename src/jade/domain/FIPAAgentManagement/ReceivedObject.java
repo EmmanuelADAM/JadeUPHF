@@ -29,7 +29,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * This class implements the <code>received-object</code> object from
+ * This class implements the  received-object   object from
  * the FIPA Agent Management ontology.
  *
  * @author Fabio Bellifemine - CSELT S.p.A.
@@ -58,19 +58,19 @@ public class ReceivedObject implements Concept, Serializable {
     }
 
     /**
-     * Retrieve the <code>by</code> slot of this object. This slot
+     * Retrieve the  by   slot of this object. This slot
      * identifies the ACC that received the envelope containing this
      * object.
      *
-     * @return The value of the <code>by</code> slot of this object,
-     * or <code>null</code> if no value was set.
+     * @return The value of the  by   slot of this object,
+     * or  null   if no value was set.
      */
     public String getBy() {
         return by;
     }
 
     /**
-     * Set the <code>by</code> slot of this object.
+     * Set the  by   slot of this object.
      *
      * @param b The identifier for the ACC that received the envelope
      *          containing this object.
@@ -80,19 +80,19 @@ public class ReceivedObject implements Concept, Serializable {
     }
 
     /**
-     * Retrieve the <code>from</code> slot of this object. This slot
+     * Retrieve the  from   slot of this object. This slot
      * identifies the ACC that sent the envelope containing this
      * object.
      *
-     * @return The value of the <code>from</code> slot of this object,
-     * or <code>null</code> if no value was set.
+     * @return The value of the  from   slot of this object,
+     * or  null   if no value was set.
      */
     public String getFrom() {
         return from;
     }
 
     /**
-     * Set the <code>from</code> slot of this object.
+     * Set the  from   slot of this object.
      *
      * @param f The identifier for the ACC that sent the envelope
      *          containing this object.
@@ -102,19 +102,19 @@ public class ReceivedObject implements Concept, Serializable {
     }
 
     /**
-     * Retrieve the <code>date</code> slot of this object. This slot
+     * Retrieve the  date   slot of this object. This slot
      * identifies the date when the envelope containing this object
      * was sent.
      *
-     * @return The value of the <code>date</code> slot of this object,
-     * or <code>null</code> if no value was set.
+     * @return The value of the  date   slot of this object,
+     * or  null   if no value was set.
      */
     public Date getDate() {
         return date;
     }
 
     /**
-     * Set the <code>date</code> slot of this object.
+     * Set the  date   slot of this object.
      *
      * @param d The date when the envelope containing this object was
      *          sent.
@@ -124,18 +124,18 @@ public class ReceivedObject implements Concept, Serializable {
     }
 
     /**
-     * Retrieve the <code>id</code> slot of this object. This slot
+     * Retrieve the  id   slot of this object. This slot
      * uniquely identifies the envelope containing this object.
      *
-     * @return The value of the <code>id</code> slot of this object,
-     * or <code>null</code> if no value was set.
+     * @return The value of the  id   slot of this object,
+     * or  null   if no value was set.
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Set the <code>id</code> slot of this object.
+     * Set the  id   slot of this object.
      *
      * @param i A unique id for the envelope containing this object.
      */
@@ -144,19 +144,19 @@ public class ReceivedObject implements Concept, Serializable {
     }
 
     /**
-     * Retrieve the <code>via</code> slot of this object. This slot
+     * Retrieve the  via   slot of this object. This slot
      * describes the MTP over which the envelope containing this
      * object was sent.
      *
-     * @return The value of the <code>via</code> slot of this
-     * envelope, or <code>null</code> if no value was set.
+     * @return The value of the  via   slot of this
+     * envelope, or  null   if no value was set.
      */
     public String getVia() {
         return via;
     }
 
     /**
-     * Set the <code>via</code> slot of this object.
+     * Set the  via   slot of this object.
      *
      * @param v The name of the MTP over which the envelope containing
      *          this object was sent.

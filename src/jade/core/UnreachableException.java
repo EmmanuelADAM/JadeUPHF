@@ -39,7 +39,7 @@ import jade.util.WrapperException;
 public class UnreachableException extends WrapperException {
 
     /**
-     * Construct an <code>UnreachableException</code> with the given message.
+     * Construct an  UnreachableException   with the given message.
      *
      * @param msg The exception message.
      */
@@ -48,11 +48,11 @@ public class UnreachableException extends WrapperException {
     }
 
     /**
-     * Construct an <code>UnreachableException</code> with the given
+     * Construct an  UnreachableException   with the given
      * message and exception cause.
      *
      * @param msg The exception message.
-     * @param t   The <code>Throwable</code> tht caused this exception.
+     * @param t   The  Throwable   tht caused this exception.
      */
     public UnreachableException(String msg, Throwable t) {
         super(msg, t);

@@ -52,17 +52,17 @@ public class APDescription implements Concept {
     }
 
     /**
-     * Retrieve the <code>name</code> slot of this object.
+     * Retrieve the  name   slot of this object.
      *
-     * @return The value of the <code>name</code> slot of this
-     * platform description, or <code>null</code> if no value was set.
+     * @return The value of the  name   slot of this
+     * platform description, or  null   if no value was set.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Set the <code>name</code> slot of this object.
+     * Set the  name   slot of this object.
      *
      * @param n The string for the platform name.
      */
@@ -71,7 +71,7 @@ public class APDescription implements Concept {
     }
 
     /**
-     * Add a service to the <code>ap-services</code> slot collection
+     * Add a service to the  ap-services   slot collection
      * of this object.
      *
      * @param a The platform service to add to the collection.
@@ -81,7 +81,7 @@ public class APDescription implements Concept {
     }
 
     /**
-     * Remove a service from the <code>ap-services</code> slot
+     * Remove a service from the  ap-services   slot
      * collection of this object.
      *
      * @param a The platform service to remove from the collection.
@@ -93,7 +93,7 @@ public class APDescription implements Concept {
     }
 
     /**
-     * Remove all services from the <code>ap-services</code> slot
+     * Remove all services from the  ap-services   slot
      * collection of this object.
      */
     public void clearAllAPServices() {
@@ -101,7 +101,7 @@ public class APDescription implements Concept {
     }
 
     /**
-     * Access all services from the <code>ap-services</code> slot
+     * Access all services from the  ap-services   slot
      * collection of this object.
      *
      * @return An iterator over the services collection.

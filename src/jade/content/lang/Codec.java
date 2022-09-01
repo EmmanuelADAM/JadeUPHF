@@ -83,7 +83,7 @@ public abstract class Codec implements Serializable {
         }
 
         /**
-         * Construct a new <code>CodecException</code>
+         * Construct a new  CodecException  
          *
          * @param msg The message for this exception.
          * @param t   The exception wrapped by this object.

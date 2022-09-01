@@ -55,32 +55,34 @@ import java.util.Iterator;
  * with which this
  * DF is federated, while the Children table shows the list of DF's
  * that are registered with this DF.</ul>
- * According to the tab selected, the actions allowed have a proper meaning:
- * <ol><b>Registrations with this df</b>.
+ * According to the tab selected, the actions allowed have a proper meaning:<br/>
+ * <b>Registrations with this df</b>.
  * <ul>
- * <li><b>View</b> the description of the selected  agent from the table.
- * <li><b>Modify</b> the description of the selected agent.
+ *     <li><b>View</b> the description of the selected  agent from the table.
+ *      <li><b>Modify</b> the description of the selected agent.
  * <li><b>Register</b> an agent with the DF. The user is then requested to fill in
  * an agent description, notice that
  * some values are mandatory for registration,
  * <li><b>Deregister</b> an agent selected in the table.
  * <li><b>Search</b> for agent descriptions with this DF. The user must first insert the
- * search constraint: <code> maximum depth</code> the depth of propagation of the search
- * operation to the federate DF's (children);<code> maximum number of results </code>.
+ * search constraint:   maximum depth   the depth of propagation of the search
+ * operation to the federate DF's (children);  maximum number of results   .
  * If no values are inserted then the default one are used :local search on this df
  * and all agents found returned.The the user must provide an agent description.
  * If no value is inserted in the agent description, the search action returns
  * all the active agents currently registered with this DF.
  * <li><b>Federate</b> allow to federate this DF with another DF. First of all,
  * the user must provide the full name of the DF with which to federate and then the
- * description of this DF that must be registered with the specified DF. </ul>
+ * description of this DF that must be registered with the specified DF.
+ * </ul>
  * <b>Search Result</b>
  * <ul>
  * <li><b>View</b> the description of a selected agent on the table of the results.
  * <li><b>Register</b> a new agent with last DF used for the search operation (indicated in the tab).
  * <li><b>Modify</b> the agent description of the agent selected in the table (with the appropriate df).
  * <li><b>Search</b> for agent descriptions with the DF involved in the last search operation. (see above)
- * <li><b>Federation</b> (see above)</ul>
+ * <li><b>Federation</b> (see above)
+ * </ul>
  * <b>DF Federation</b>
  * <ul>
  * <li><b>View</b> the description of an agent selected in one of the two tables.
@@ -92,7 +94,7 @@ import java.util.Iterator;
  * from this DF.
  * <li><b>Search</b> permits to make a search operation with the DF selected in one of the tables.
  * <li><b>Federate</b> (see above).
- * </ol>
+ * </ul>
  *
  * @author Giovanni Caire - Tiziana Trucco - CSELT S.p.A.
  * @version $Date: 2008-10-09 14:04:02 +0200 (gio, 09 ott 2008) $ $Revision: 6051 $
@@ -807,7 +809,7 @@ public class DFGUI extends JFrame implements DFGUIInterface {
 
     /**
      * Removes an agent descr from registeredModel and if it was found in a search operation
-     * calls <code>removeSearchResult</code>.
+     * calls  removeSearchResult  .
      * //@see jade.tools.dfgui#removeSearchResult(AID name)
      */
     public void removeAgentDesc(AID name, AID df) {
@@ -881,7 +883,7 @@ public class DFGUI extends JFrame implements DFGUIInterface {
     }
 
     /**
-     * This method returns the <code>DFAgentDescription</code> of an agent found in a search operation.
+     * This method returns the  DFAgentDescription   of an agent found in a search operation.
      *
      * @param name The AID of the agent.
      * @see DFAgentDescription

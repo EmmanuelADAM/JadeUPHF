@@ -26,8 +26,8 @@ package jade.domain.JADEAgentManagement;
 import jade.content.AgentAction;
 
 /**
- * This class represents the <code>query-platform-locations</code> action of
- * the <code>JADE-agent-management ontology</code>.
+ * This class represents the  query-platform-locations   action of
+ * the  JADE-agent-management ontology  .
  * This action can be requested to the JADE AMS to retrieve the
  * list of containers in the platform.
  *

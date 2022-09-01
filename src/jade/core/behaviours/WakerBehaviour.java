@@ -26,30 +26,26 @@ package jade.core.behaviours;
 import jade.core.Agent;
 
 import java.util.Date;
+import java.util.function.Consumer;
 
 /**
- * This abstract class implements a OneShot task that must be executed
+ * This class implements a OneShot task that must be executed
  * only one just after a given timeout is elapsed.
  * <p> The task is simply the call to the method
- * <code>handleElapsedTimeout()</code> that must be implemented by
- * all subclasses. Notice that the best practice in JADE is when
+ *  onWake()  .
+ * This method can be overrided; otherwise it apply the  Agent Consumer fAction.<br/>
+ *  *  
+ *  *     addBehaviour(new WakerBehaviour(this, 300, a->System.out.println("Hello, my name is " + a.getLocalName()));
+ *  *   
+ *  </p>
+ * Notice that the best practice in JADE is when
  * this method just adds a behaviour to the agent class.
- * <p> All subclasses have available the protected variable
- * <code>myAgent</code> that points to the agent class.
- * <p> The programmer must use this abstract class in this simple way:
- * <ul>
- * <li> implements a subclass that extends WakerBehaviour. This subclass
- * must implement the method <code>handleElapsedTimeout</code>.
- * <li> add the subclass to the list of behaviour of this agent by using
- * <code>addBehaviour()</code> method.
- * <li> the method  <code>handleElapsedTimeout</code> must implement the
- * task that will be executed after the timeout is elapsed.
- * </ul>
  *
- * @author Fabio Bellifemine - CSELT S.p.A.
- * @version $Date: 2009-04-20 11:58:28 +0200 (lun, 20 apr 2009) $ $Revision: 6114 $
+ * @author Fabio Bellifemine - CSELT S.p.A. $Date: 2009-04-20 11:58:28 +0200 (lun, 20 apr 2009) $ $Revision: 6114 $
+ * @author Emmanuel Adam
+ * @version Date: 2022-07-13
  */
-public abstract class WakerBehaviour extends SimpleBehaviour {
+public  class WakerBehaviour extends SimpleBehaviour {
 
     //private static final long MINIMUM_TIMEOUT = 10000; // 1 second
 
@@ -78,6 +74,21 @@ public abstract class WakerBehaviour extends SimpleBehaviour {
         wakeupTime = wakeupDate.getTime();
         state = 0;
         finished = false;
+    }
+
+    /**
+     * Construct a  TickerBehaviour   that call its
+     *  onWake()   method every  period   ms.
+     *
+     * @param a      is the pointer to the agent
+     * @param period the tick period in ms
+     * @param fAction consumer that take the Agent; automatically launch by tick()
+     * @author E.ADAM
+     * @since 22.07
+     */
+    public WakerBehaviour(Agent a, long period, Consumer<Agent> fAction) {
+        this(a, period);
+        this.fAction = fAction;
     }
 
     /**
@@ -134,10 +145,14 @@ public abstract class WakerBehaviour extends SimpleBehaviour {
      * constructor is reached (or when the timeout specified in the
      * constructor expires).
      * Subclasses are expected to define this method specifying the action
-     * that must be performed at that time.
+     * that must be performed at that time.<br>
+     * If not overrided, launch fAction
+     * @author E. ADAM
+     * @since 22.07
      */
     protected void onWake() {
-        handleElapsedTimeout();
+        if (fAction!=null) fAction.accept(myAgent);
+        else handleElapsedTimeout();
     }
 
     /**

@@ -26,7 +26,7 @@ package jade.util;
 /**
  * This class acts as a base class for all the exceptions that wrap
  * another (nested) exception. The typical usage for descendents of
- * this class is to throw them within the <code>catch</code> block for
+ * this class is to throw them within the  catch   block for
  * their nested exception.
  *
  * @author Giovanni Rimassa - Universita' di Parma
@@ -103,7 +103,7 @@ public abstract class WrapperException extends Exception {
     /**
      * Reads the exception wrapped by this object.
      *
-     * @return the <code>Throwable</code> object that is the exception
+     * @return the  Throwable   object that is the exception
      * that was originally thrown.
      */
     public Throwable getNested() {

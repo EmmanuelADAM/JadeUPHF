@@ -60,18 +60,18 @@ public class RemovedMTP implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>address</code> slot of this
+     * Retrieve the value of the  address   slot of this
      * event, containing the address URL of the newly removed MTP.
      *
-     * @return The value of the <code>address</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  address   slot, or
+     *  null   if no value was set.
      */
     public String getAddress() {
         return address;
     }
 
     /**
-     * Set the <code>address</code> slot of this event.
+     * Set the  address   slot of this event.
      *
      * @param s The address URL of the newly removed MTP.
      */
@@ -80,18 +80,18 @@ public class RemovedMTP implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>proto</code> slot of this
+     * Retrieve the value of the  proto   slot of this
      * event, containing the protocol name for the newly removed MTP.
      *
-     * @return The value of the <code>proto</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  proto   slot, or
+     *  null   if no value was set.
      */
     public String getProto() {
         return proto;
     }
 
     /**
-     * Set the <code>proto</code> slot of this event.
+     * Set the  proto   slot of this event.
      *
      * @param p The protocol name for the newly removed MTP.
      */
@@ -100,19 +100,19 @@ public class RemovedMTP implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>where</code> slot of this
+     * Retrieve the value of the  where   slot of this
      * event, containing the container identifier of the container
      * where the newly removed MTP was deployed.
      *
-     * @return The value of the <code>where</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  where   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getWhere() {
         return where;
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
+     * Set the  where   slot of this event.
      *
      * @param id The container identifier of the container where the
      *           newly removed MTP was deployed.

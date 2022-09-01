@@ -36,10 +36,10 @@ public interface MTP extends InChannel, OutChannel {
 
     /**
      * Converts a string representing a valid address in this MTP to a
-     * <code>TransportAddress</code> object.
+     *  TransportAddress   object.
      *
      * @param rep The string representation of the address.
-     * @return A <code>TransportAddress</code> object, created from the
+     * @return A  TransportAddress   object, created from the
      * given string.
      * @throws MTPException If the given string is not a valid
      *                      address according to this MTP.
@@ -47,13 +47,13 @@ public interface MTP extends InChannel, OutChannel {
     TransportAddress strToAddr(String rep) throws MTPException;
 
     /**
-     * Converts a <code>TransportAddress</code> object into a string
+     * Converts a  TransportAddress   object into a string
      * representation.
      *
-     * @param ta The <code>TransportAddress</code> object.
+     * @param ta The  TransportAddress   object.
      * @return A string representing the given address.
      * @throws MTPException If the given
-     *                      <code>TransportAddress</code> is not a valid address for this
+     *                       TransportAddress   is not a valid address for this
      *                      MTP.
      */
     String addrToStr(TransportAddress ta) throws MTPException;
@@ -61,7 +61,7 @@ public interface MTP extends InChannel, OutChannel {
     /**
      * Reads the name of the message transport protocol managed by this
      * MTP. The FIPA standard message transport protocols have a name
-     * starting with <code><b>"fipa.mts.mtp"</b></code>.
+     * starting with  <b>"fipa.mts.mtp"</b>  .
      *
      * @return A string, that is the name of this MTP.
      */

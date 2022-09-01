@@ -33,13 +33,13 @@ import jade.content.schema.ConceptSlotFunctionSchema;
 
 /**
  * The ConceptSlotFunction class allows treating the slots of an ontological concept as functions.
- * For instance, if an ontology defines a concept <code>Person</code> with a slot <code>name</code> and a slot <code>age</code>,
+ * For instance, if an ontology defines a concept  Person   with a slot  name   and a slot  age  ,
  * it is possible to create expressions such as<br>
  * (= (age (Person :name John)) 41) <br>
  * (> (age (Person :name John)) (age (Person :name Bill)))<br>
  * (iota ?x (= (age (Person :name John)) ?x))
  * In order to exploit this feature it is necessary to instruct an ontology to use concept slots as functions by means of the
- * <code>useConceptSlotsAsFunctions</code> method of the <code>Ontology</code> class.
+ *  useConceptSlotsAsFunctions   method of the  Ontology   class.
  *
  * @since JADE 3.7
  */

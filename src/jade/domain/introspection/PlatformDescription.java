@@ -27,7 +27,7 @@ package jade.domain.introspection;
 import jade.domain.FIPAAgentManagement.APDescription;
 
 /**
- * This class represents the <code>platform-description</code>
+ * This class represents the  platform-description
  * predicate, whose argument is a platform description object from the
  * FIPA Agent Management ontology.
  *
@@ -60,21 +60,21 @@ public class PlatformDescription implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>platform</code> slot of this
-     * event, containing the <code>ap-description</code> this
+     * Retrieve the value of the  platform   slot of this
+     * event, containing the  ap-description   this
      * notification refers to.
      *
-     * @return The value of the <code>platform</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  platform   slot, or
+     *  null   if no value was set.
      */
     public APDescription getPlatform() {
         return platform;
     }
 
     /**
-     * Set the <code>platform</code> slot of this event.
+     * Set the  platform   slot of this event.
      *
-     * @param p The <code>ap-description</code> this notification
+     * @param p The  ap-description   this notification
      *          refers to.
      */
     public void setPlatform(APDescription p) {

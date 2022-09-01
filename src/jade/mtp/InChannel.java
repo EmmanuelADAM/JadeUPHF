@@ -35,7 +35,7 @@ public interface InChannel {
      * Activates an MTP handler for incoming messages on a default
      * address.
      *
-     * @return A <code>TransportAddress</code>, corresponding to the
+     * @return A  TransportAddress  , corresponding to the
      * chosen default address.
      * @throws MTPException Thrown if some MTP initialization error
      *                      occurs.
@@ -48,7 +48,7 @@ public interface InChannel {
      * Activates an MTP handler for incoming messages on a specific
      * address.
      *
-     * @param ta A <code>TransportAddress</code> object, representing
+     * @param ta A  TransportAddress   object, representing
      *           the transport address to listen to.
      * @throws MTPException Thrown if some MTP initialization error
      *                      occurs.
@@ -61,7 +61,7 @@ public interface InChannel {
      * Deactivates the MTP handler listening at a given transport
      * address.
      *
-     * @param ta The <code>TransportAddress</code> object the handle to
+     * @param ta The  TransportAddress   object the handle to
      *           close is listening to.
      * @throws MTPException Thrown if some MTP cleanup error occurs.
      */

@@ -33,10 +33,10 @@ import java.util.Map;
 
 /**
  * This class implements a selector of handler
- * (i.e. <code>jade.core.behaviours.Behaviour</code>)
+ * (i.e.  jade.core.behaviours.Behaviour  )
  * A number of handlers can be registered with
- * this <code>HandlerSelector</code>, each handler bound to a different key.
- * The abstract method <code>getSelectionKey<code> is then called that
+ * this  HandlerSelector  , each handler bound to a different key.
+ * The abstract method  getSelectionKey   is then called that
  * must return the key to select one of the registered handlers.
  * The selected handler is finally scheduled for execution.
  *
@@ -45,12 +45,12 @@ import java.util.Map;
  **/
 public abstract class HandlerSelector extends FSMBehaviour {
     /**
-     * Value returned by <code>onEnd</code> method if
+     * Value returned by  onEnd   method if
      * an handler was found mapped to the key
      **/
     public static final int SELECTION_OK = 1;
     /**
-     * Value returned by <code>onEnd</code> method if
+     * Value returned by  onEnd   method if
      * no handler was found mapped to the key
      **/
     public static final int SELECTION_NOK = 0;
@@ -71,7 +71,7 @@ public abstract class HandlerSelector extends FSMBehaviour {
      * @param s         is the HashMap where the object can be retrieved from
      * @param accessKey is the key to get the proper object from the HashMap,
      *                  this is the object that will be later passed as argument to the
-     *                  method <code>getSelectionKey</code>
+     *                  method  getSelectionKey
      * @see #getSelectionKey(Object)
      **/
     public HandlerSelector(Agent a, HashMap s, Object accessKey) {
@@ -123,7 +123,7 @@ public abstract class HandlerSelector extends FSMBehaviour {
      * It must return the key to which the handler was bound.
      *
      * @param selectionVar the object retrieved from the HashMap at
-     *                     the <code>accessKey</code> passed in the constructor
+     *                     the  accessKey   passed in the constructor
      * @return the key to which the handler was bound
      **/
     protected abstract Object getSelectionKey(Object selectionVar);
@@ -132,7 +132,7 @@ public abstract class HandlerSelector extends FSMBehaviour {
      * Register the bounding between an handler and a key.
      *
      * @param key this is the key that must be later returned by
-     *            the method <code>getSelectionKey</code> when the passed
+     *            the method  getSelectionKey   when the passed
      *            Behaviour must be selected
      * @param h   the handler for this key
      **/

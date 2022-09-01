@@ -36,7 +36,7 @@ import java.awt.*;
  * subsystem. The original file is written by Slava Pestov (www.gjt.org) and
  * altered to fit ACL/SL.
  *
- * @author Chris van Aart - Acklin B.V., the Netherlands & Slava Pestov
+ * @author Chris van Aart - Acklin B.V., the Netherlands and Slava Pestov
  * @since June 14, 2002
  */
 public class ACLSyntaxUtilities {
@@ -47,8 +47,8 @@ public class ACLSyntaxUtilities {
 
 
     /**
-     * Returns the default style table. This can be passed to the <code>setStyles()</code>
-     * method of <code>SyntaxDocument</code> to use the default syntax styles.
+     * Returns the default style table. This can be passed to the  setStyles()
+     * method of  SyntaxDocument   to use the default syntax styles.
      *
      * @param theComp Description of Parameter
      * @return The DefaultSyntaxStyles value
@@ -72,7 +72,7 @@ public class ACLSyntaxUtilities {
 
 
     /**
-     * Checks if a subregion of a <code>Segment</code> is equal to a string.
+     * Checks if a subregion of a  Segment   is equal to a string.
      *
      * @param ignoreCase True if case should be ignored, false otherwise
      * @param text       The segment
@@ -103,7 +103,7 @@ public class ACLSyntaxUtilities {
 
 
     /**
-     * Checks if a subregion of a <code>Segment</code> is equal to a character
+     * Checks if a subregion of a  Segment   is equal to a character
      * array.
      *
      * @param ignoreCase True if case should be ignored, false otherwise

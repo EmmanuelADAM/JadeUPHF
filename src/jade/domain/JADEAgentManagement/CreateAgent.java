@@ -34,8 +34,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * This class represents the <code>create-agent</code> action of
- * the <code>JADE-agent-management ontology</code>.
+ * This class represents the  create-agent   action of
+ * the  JADE-agent-management ontology  .
  * This action can be requested to the JADE AMS to create a new agent
  * on a given container.
  *
@@ -61,19 +61,19 @@ public class CreateAgent implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>agent-name</code> slot of this
+     * Retrieve the value of the  agent-name   slot of this
      * event, containing the local name (i.e. without the platform ID)
      * of the agent to create.
      *
-     * @return The value of the <code>agent-name</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  agent-name   slot, or
+     *  null   if no value was set.
      */
     public String getAgentName() {
         return agentName;
     }
 
     /**
-     * Set the <code>agent-name</code> slot of this action.
+     * Set the  agent-name   slot of this action.
      *
      * @param an The local name (i.e. without the platform ID) of the
      *           agent to create.
@@ -83,19 +83,19 @@ public class CreateAgent implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>class-name</code> slot of this
+     * Retrieve the value of the  class-name   slot of this
      * event, containing the name of the Java class implementing the
      * agentto create.
      *
-     * @return The value of the <code>class-name</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  class-name   slot, or
+     *  null   if no value was set.
      */
     public String getClassName() {
         return className;
     }
 
     /**
-     * Set the <code>class-name</code> slot of this action.
+     * Set the  class-name   slot of this action.
      *
      * @param cn The name of the Java class implementing the agent to
      *           create.
@@ -105,19 +105,19 @@ public class CreateAgent implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>container</code> slot of this
+     * Retrieve the value of the  container   slot of this
      * event, containing the container identifier of the container
      * where the agent is to be created.
      *
-     * @return The value of the <code>container</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  container   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getContainer() {
         return container;
     }
 
     /**
-     * Set the <code>container</code> slot of this action.
+     * Set the  container   slot of this action.
      *
      * @param cid The container identifier of the container where the
      *            agent is to be created.
@@ -162,7 +162,7 @@ public class CreateAgent implements AgentAction {
     //#MIDP_EXCLUDE_END
 
     /**
-     * Add an object to the <code>arguments</code> slot collection of
+     * Add an object to the  arguments   slot collection of
      * this object.
      *
      * @param a The object to add to the collection.
@@ -172,7 +172,7 @@ public class CreateAgent implements AgentAction {
     }
 
     /**
-     * Remove all objects from the <code>arguments</code> slot
+     * Remove all objects from the  arguments   slot
      * collection of this object.
      *
      * @return

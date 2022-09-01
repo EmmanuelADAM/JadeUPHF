@@ -33,8 +33,8 @@ import jade.util.Event;
  * Invoking methods on instances of this class, it is possible to
  * trigger state transition of the agent life cycle.  This class must
  * not be instantiated by applications. Instead, use the
- * <code>createAgent()</code> method in class
- * <code>AgentContainer</code>.
+ *  createAgent()   method in class
+ *  AgentContainer  .
  * <br>
  * <b>NOT available in MIDP</b>
  * <br>
@@ -50,7 +50,7 @@ class AgentControllerImpl implements AgentController {
 
     /**
      * This constructor should not be called by applications.
-     * The method <code>AgentContainer.createAgent()</code> should
+     * The method  AgentContainer.createAgent()   should
      * be used instead.
      */
     public AgentControllerImpl(AID id, ContainerProxy cp, jade.core.AgentContainer ac) {

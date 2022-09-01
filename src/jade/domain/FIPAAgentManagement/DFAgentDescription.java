@@ -80,8 +80,8 @@ public class DFAgentDescription implements Concept {
      * knowledge base).
      *
      * @return The lease time for the registration of this
-     * <code>DFAgentDescription</code> as an absolute time. A
-     * <code>null</code> value indicates an infinite time.
+     *  DFAgentDescription   as an absolute time. A
+     *  null   value indicates an infinite time.
      */
     public Date getLeaseTime() {
         return leaseTime;
@@ -92,7 +92,7 @@ public class DFAgentDescription implements Concept {
      * as an absolute time.
      *
      * @param absoluteTime The lease time for the registration of this
-     *                     DFAgentDescription as an absolute time. Use <code>null</code>
+     *                     DFAgentDescription as an absolute time. Use  null
      *                     (default) to indicate an infinite lease time
      */
     public void setLeaseTime(Date absoluteTime) {
@@ -101,7 +101,7 @@ public class DFAgentDescription implements Concept {
 
     /**
      * Set the lease time for the registration of this
-     * <code>DFAgentDescription</code> as a relative time.
+     *  DFAgentDescription   as a relative time.
      *
      * @param relativeTime The lease time for the registration of this
      *                     DFAgentDescription as a relative time.
@@ -112,10 +112,10 @@ public class DFAgentDescription implements Concept {
 
     /**
      * Indicates whether the lease time for the registration of this
-     * <code>DFAgentDescription</code> expired.
+     *  DFAgentDescription   expired.
      *
-     * @return If the lease time expired, <code>true</code> is
-     * returned, and <code>false</code> otherwise.
+     * @return If the lease time expired,  true   is
+     * returned, and  false   otherwise.
      */
     public boolean checkLeaseTimeExpired() {
         if (leaseTime == null) {
@@ -126,7 +126,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Add a service description to the <code>service</code> slot
+     * Add a service description to the  service   slot
      * collection of this object.
      *
      * @param a The service description to add to the collection.
@@ -136,7 +136,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Remove a service description from the <code>services</code>
+     * Remove a service description from the  services
      * slot collection of this object.
      *
      * @param a The service description to remove from the collection.
@@ -148,7 +148,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Remove all service descriptions from the <code>services</code>
+     * Remove all service descriptions from the  services
      * slot collection of this object.
      */
     public void clearAllServices() {
@@ -156,7 +156,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Access all service descriptions from the <code>services</code>
+     * Access all service descriptions from the  services
      * slot collection of this object.
      *
      * @return An iterator over the service descriptions collection.
@@ -166,7 +166,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Add a protocol name to the <code>protocols</code> slot
+     * Add a protocol name to the  protocols   slot
      * collection of this object.
      *
      * @param ip The protocol name to add to the collection.
@@ -176,7 +176,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Remove a protocol name from the <code>protocols</code> slot
+     * Remove a protocol name from the  protocols   slot
      * collection of this object.
      *
      * @param ip The protocol name to remove from the collection.
@@ -188,7 +188,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Remove all protocol names from the <code>protocols</code> slot
+     * Remove all protocol names from the  protocols   slot
      * collection of this object.
      */
     public void clearAllProtocols() {
@@ -196,7 +196,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Access all protocol names from the <code>protocols</code> slot
+     * Access all protocol names from the  protocols   slot
      * collection of this object.
      *
      * @return An iterator over the protocol names collection.
@@ -206,7 +206,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Add an ontology name to the <code>ontologies</code> slot
+     * Add an ontology name to the  ontologies   slot
      * collection of this object.
      *
      * @param o The ontology name to add to the collection.
@@ -216,7 +216,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Remove an ontology name from the <code>ontologies</code> slot
+     * Remove an ontology name from the  ontologies   slot
      * collection of this object.
      *
      * @param o The ontology name to remove from the collection.
@@ -228,7 +228,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Remove all ontology names from the <code>ontologies</code> slot
+     * Remove all ontology names from the  ontologies   slot
      * collection of this object.
      */
     public void clearAllOntologies() {
@@ -236,7 +236,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Access all ontology names from the <code>ontologies</code> slot
+     * Access all ontology names from the  ontologies   slot
      * collection of this object.
      *
      * @return An iterator over the ontology names collection.
@@ -246,7 +246,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Add a content language name to the <code>languages</code> slot
+     * Add a content language name to the  languages   slot
      * collection of this object.
      *
      * @param l The content language name to add to the collection.
@@ -256,7 +256,7 @@ public class DFAgentDescription implements Concept {
     }
 
     /**
-     * Remove a content language name from the <code>languages</code>
+     * Remove a content language name from the  languages
      * slot collection of this object.
      *
      * @param l The content language name to remove from the
@@ -270,7 +270,7 @@ public class DFAgentDescription implements Concept {
 
     /**
      * Remove all content language names from the
-     * <code>languages</code> slot collection of this object.
+     *  languages   slot collection of this object.
      */
     public void clearAllLanguages() {
         language.clear();
@@ -278,7 +278,7 @@ public class DFAgentDescription implements Concept {
 
     /**
      * Access all content language names from the
-     * <code>languages</code> slot collection of this object.
+     *  languages   slot collection of this object.
      *
      * @return An iterator over the content language names collection.
      */

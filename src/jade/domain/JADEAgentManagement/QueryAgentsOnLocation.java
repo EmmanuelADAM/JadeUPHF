@@ -27,8 +27,8 @@ import jade.content.AgentAction;
 import jade.core.Location;
 
 /**
- * This class represents the <code>query-agents-on-location</code> action of
- * the <code>JADE-agent-management ontology</code>.
+ * This class represents the  query-agents-on-location   action of
+ * the  JADE-agent-management ontology  .
  * This action can be requested to the JADE AMS to retrieve the list
  * of agents running on a given container.
  *
@@ -48,19 +48,19 @@ public class QueryAgentsOnLocation implements AgentAction {
     }
 
     /**
-     * Retrieve the value of the <code>location</code> slot of this
+     * Retrieve the value of the  location   slot of this
      * event, containing the location for which the agent list is
      * requested.
      *
-     * @return The value of the <code>location</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  location   slot, or
+     *  null   if no value was set.
      */
     public Location getLocation() {
         return location;
     }
 
     /**
-     * Set the <code>location</code> slot of this action.
+     * Set the  location   slot of this action.
      *
      * @param loc The location for which the agent list is requested.
      */

@@ -66,19 +66,19 @@ public class BornAgent implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>where</code> slot of this
+     * Retrieve the value of the  where   slot of this
      * event, containing the container identifier of the container
      * where the newly added agent was born.
      *
-     * @return The value of the <code>where</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  where   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getWhere() {
         return where;
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
+     * Set the  where   slot of this event.
      *
      * @param id The container identifier of the container where the
      *           newly added agent was born.
@@ -88,18 +88,18 @@ public class BornAgent implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>agent</code> slot of this
+     * Retrieve the value of the  agent   slot of this
      * event, containing the agent identifier of the newly born agent.
      *
-     * @return The value of the <code>agent</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  agent   slot, or
+     *  null   if no value was set.
      */
     public AID getAgent() {
         return agent;
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
+     * Set the  agent   slot of this event.
      *
      * @param id The agent identifier of the newly born agent.
      */
@@ -108,18 +108,18 @@ public class BornAgent implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>state</code> slot of this
+     * Retrieve the value of the  state   slot of this
      * event, containing the initial state of the newly born agent.
      *
-     * @return The value of the <code>state</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  state   slot, or
+     *  null   if no value was set.
      */
     public String getState() {
         return state;
     }
 
     /**
-     * Set the <code>state</code> slot of this event.
+     * Set the  state   slot of this event.
      *
      * @param as The name of the initial state of the newly born
      *           agent.
@@ -129,7 +129,7 @@ public class BornAgent implements Event {
     }
 
     /**
-     * @return the value of the <code>ownership</code> slot of this
+     * @return the value of the  ownership   slot of this
      * event, containing the name of the entity owning the newly born
      * agent.
      */
@@ -138,7 +138,7 @@ public class BornAgent implements Event {
     }
 
     /**
-     * Set the <code>ownership</code> slot of this event.
+     * Set the  ownership   slot of this event.
      *
      * @param o The name of the entity owning the newly born agent.
      */
@@ -147,7 +147,7 @@ public class BornAgent implements Event {
     }
 
     /**
-     * @return the value of the <code>className</code> slot of this
+     * @return the value of the  className   slot of this
      * event, containing the class name of the newly born
      * agent.
      */
@@ -156,7 +156,7 @@ public class BornAgent implements Event {
     }
 
     /**
-     * Set the <code>className</code> slot of this event.
+     * Set the  className   slot of this event.
      *
      * @param c The class name of the newly born agent.
      */

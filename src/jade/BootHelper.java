@@ -52,7 +52,7 @@ public class BootHelper {
      * Reads the passed String and decompose it into a vector of Strings.
      * Each String is a token of type agentName: or className( or argument
      * This method is declared public because it is currently used by
-     * <code>jade.tools.rma.StartNewAgentAction</code>
+     *  jade.tools.rma.StartNewAgentAction  
      *
      * @param s1        The source string.
      * @param keepquote when true no char is removed,
@@ -162,13 +162,13 @@ public class BootHelper {
 
     /**
      * parse an array of Strings and return an Iterator of
-     * <code>Specifier</code>
+     *  Specifier  
      * This method is declared public because it is currently used by
-     * <code>jade.tools.rma.StartNewAgentAction</code>
+     *  jade.tools.rma.StartNewAgentAction  
      *
      * @param args is an array of string of agent specifiers of the
      *             type "name:class(arguments)"
-     * @return an Iterator over a List of <code>Specifier</code>
+     * @return an Iterator over a List of  Specifier  
      */
     public Enumeration<Specifier> getCommandLineAgentSpecifiers(Vector<String> args) {
         Vector<Specifier> all = new Vector<>();

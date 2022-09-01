@@ -30,6 +30,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Abstract base class for <b><em>JADE</em></b> behaviours.  Extending
@@ -81,11 +83,11 @@ public abstract class Behaviour implements Serializable {
      * <p>
      * This is an instance variable that holds a reference to the Agent
      * object and allows the usage of its methods within the body of the
-     * behaviour. As the class <code>Behaviour</code> is the superclass
+     * behaviour. As the class  Behaviour   is the superclass
      * of all the other behaviour classes, this variable is always
      * available. Of course, remind to use the appropriate constructor,
      * i.e. the one that accepts an agent object as argument; otherwise,
-     * this variable is set to <code>null</code>.
+     * this variable is set to  null  .
      */
     protected Agent myAgent;
 
@@ -122,6 +124,9 @@ public abstract class Behaviour implements Serializable {
     private HashMap<String, ACLMessage> mapMessages;
     private CompositeBehaviour wrappedParent;
 
+    /**  an agent consumer called in action() by default*/
+    Consumer<Agent> fAction;
+
     /**
      * Default constructor. It does not set the agent owning this
      * behaviour object.
@@ -150,6 +155,20 @@ public abstract class Behaviour implements Serializable {
         myAgent = a;
     }
 
+
+    /**
+     * Constructor with owner agent.
+     *
+     * @param a The agent owning this behaviour.
+     * @param fAction The action launch by default by the agent.
+     * @author E. ADAM
+     * @since 22.07     */
+    public Behaviour(Agent a, Consumer<Agent> fAction) {
+        this();
+        myAgent = a;
+        this.fAction = fAction;
+    }
+
     void setWrappedParent(CompositeBehaviour cb) {
         wrappedParent = cb;
     }
@@ -157,7 +176,7 @@ public abstract class Behaviour implements Serializable {
 
     /**
      * Retrieve the enclosing CompositeBehaviour (if present). In order to access the parent behaviour
-     * it is strongly suggested to use this method rather than the <core>parent</code> member variable
+     * it is strongly suggested to use this method rather than the <core>parent   member variable
      * directly. In case of threaded or wrapped behaviour in facts the latter may have unexpected values.
      *
      * @return The enclosing CompositeBehaviour (if present).
@@ -202,9 +221,9 @@ public abstract class Behaviour implements Serializable {
 
     /**
      * Runs the behaviour. This abstract method must be implemented by
-     * <code>Behaviour</code>subclasses to perform ordinary behaviour
+     *  Behaviour  subclasses to perform ordinary behaviour
      * duty. An agent schedules its behaviours calling their
-     * <code>action()</code> method; since all the behaviours belonging
+     *  action()   method; since all the behaviours belonging
      * to the same agent are scheduled cooperatively, this method
      * <b>must not</b> enter in an endless loop and should return as
      * soon as possible to preserve agent responsiveness. To split a
@@ -212,17 +231,20 @@ public abstract class Behaviour implements Serializable {
      * aggregation may be used.
      * see CompositeBehaviour
      */
-    public abstract void action();
+    public  void action()
+    {
+        if (fAction!=null) fAction.accept(myAgent);
+    }
 
     /**
      * Check if this behaviour is done. The agent scheduler calls this
-     * method to see whether a <code>Behaviour</code> still need to be
+     * method to see whether a  Behaviour   still need to be
      * run or it has completed its task. Concrete behaviours must
      * implement this method to return their completion state. Finished
      * behaviours are removed from the scheduling queue, while others
      * are kept within to be run again when their turn comes again.
      *
-     * @return <code>true</code> if the behaviour has completely executed.
+     * @return  true   if the behaviour has completely executed.
      */
     public abstract boolean done();
 
@@ -230,17 +252,17 @@ public abstract class Behaviour implements Serializable {
      * This method is just an empty placeholder for subclasses. It is
      * invoked just once after this behaviour has ended. Therefore,
      * it acts as an epilog for the task represented by this
-     * <code>Behaviour</code>.
+     *  Behaviour  .
      * <br>
-     * Note that <code>onEnd</code> is called after the behaviour has been
+     * Note that  onEnd   is called after the behaviour has been
      * removed from the pool of behaviours to be executed by an agent.
      * Therefore calling
-     * <code>reset()</code> is not sufficient to cyclically repeat the task
-     * represented by this <code>Behaviour</code>. In order to achieve that,
-     * this <code>Behaviour</code> must be added again to the agent
-     * (using <code>myAgent.addBehaviour(this)</code>). The same applies to
-     * in the case of a <code>Behaviour</code> that is a child of a
-     * <code>ParallelBehaviour</code>.
+     *  reset()   is not sufficient to cyclically repeat the task
+     * represented by this  Behaviour  . In order to achieve that,
+     * this  Behaviour   must be added again to the agent
+     * (using  myAgent.addBehaviour(this)  ). The same applies to
+     * in the case of a  Behaviour   that is a child of a
+     *  ParallelBehaviour  .
      *
      * @return an integer code representing the termination value of
      * the behaviour.
@@ -253,7 +275,7 @@ public abstract class Behaviour implements Serializable {
      * This method is just an empty placeholders for subclasses. It is
      * executed just once before starting behaviour execution.
      * Therefore, it acts as a prolog to the task
-     * represented by this <code>Behaviour</code>.
+     * represented by this  Behaviour  .
      */
     public void onStart() {
     }
@@ -295,7 +317,7 @@ public abstract class Behaviour implements Serializable {
     /**
      * Restores behaviour initial state. This method must be implemented
      * by concrete subclasses in such a way that calling
-     * <code>reset()</code> on a behaviour object is equivalent to
+     *  reset()   on a behaviour object is equivalent to
      * destroying it and recreating it back. The main purpose for this
      * method is to realize multistep cyclic behaviours without needing
      * expensive constructions an deletion of objects at each loop
@@ -332,14 +354,14 @@ public abstract class Behaviour implements Serializable {
     //#APIDOC_EXCLUDE_BEGIN
 
     /**
-     * Returns the root for this <code>Behaviour</code> object. That is,
+     * Returns the root for this  Behaviour   object. That is,
      * the top-level behaviour this one is a part of. Agents apply
      * scheduling only to top-level behaviour objects, so they just call
-     * <code>restart()</code> on root behaviours.
+     *  restart()   on root behaviours.
      *
      * @return The top-level behaviour this behaviour is a part of. If
      * this one is a top level behaviour itself, then simply
-     * <code>this</code> is returned.
+     *  this   is returned.
      * @see Behaviour#restart()
      */
     public Behaviour root() {
@@ -354,11 +376,11 @@ public abstract class Behaviour implements Serializable {
     //#APIDOC_EXCLUDE_END
 
     /**
-     * Returns whether this <code>Behaviour</code> object is blocked or
+     * Returns whether this  Behaviour   object is blocked or
      * not.
      *
-     * @return <code>true</code> when this behaviour is not blocked,
-     * <code>false</code> when it is.
+     * @return  true   when this behaviour is not blocked,
+     *  false   when it is.
      */
     public boolean isRunnable() {
         return runnableState;
@@ -384,13 +406,13 @@ public abstract class Behaviour implements Serializable {
     /**
      * Blocks this behaviour. It should be noticed that this method is NOT a
      * blocking call: when it is invoked, the internal behaviour
-     * state is set to <em>Blocked</em> so that, as soon as the <code>action()</code>
+     * state is set to <em>Blocked</em> so that, as soon as the  action()
      * method returns, the behaviour is put into a blocked behaviours queue so that it will
      * not be scheduled anymore.<br>
      * The behaviour is moved back in the pool of active behaviours when either
      * a message is received or the behaviour is explicitly restarted by means of its
-     * <code>restart()</code> method.<br>
-     * If this behaviour is a child of a <code>CompositeBehaviour</code> a suitable event is fired to
+     *  restart()   method.<br>
+     * If this behaviour is a child of a  CompositeBehaviour   a suitable event is fired to
      * notify its parent behaviour up to the behaviour composition hierarchy root.
      *
      * @see Behaviour#restart()
@@ -415,18 +437,18 @@ public abstract class Behaviour implements Serializable {
      * behaviour will be restarted when among the three following
      * events happens.
      * <ul>
-     * <li> <em>A time of <code>millis</code> milliseconds has passed
-     * since the call to <code>block()</code>.</em>
+     * <li> <em>A time of  millis   milliseconds has passed
+     * since the call to  block()  .</em>
      * <li> <em>An ACL message is received by the agent this behaviour
      * belongs to.</em>
-     * <li> <em>Method <code>restart()</code> is called explicitly on
+     * <li> <em>Method  restart()   is called explicitly on
      * this behaviour object.</em>
      * </ul>
      *
      * @param millis The amount of time to block, in
      *               milliseconds. <em><b>Notice:</b> a value of 0 for
-     *               <code>millis</code> is equivalent to a call to
-     *               <code>block()</code> without arguments.</em>
+     *                millis   is equivalent to a call to
+     *                block()   without arguments.</em>
      * @see Behaviour#block()
      */
     public void block(long millis) {
@@ -483,7 +505,7 @@ public abstract class Behaviour implements Serializable {
     /**
      * Associates this behaviour with the agent it belongs to. There is
      * no need to call this method explicitly, since the
-     * <code>addBehaviour()</code> call takes care of the association
+     *  addBehaviour()   call takes care of the association
      * transparently.
      *
      * @param a The agent this behaviour belongs to.
@@ -494,10 +516,10 @@ public abstract class Behaviour implements Serializable {
     }
 
     /**
-     * Return the private map of list of messages  of this <code>Behaviour</code>.
+     * Return the private map of list of messages  of this  Behaviour  .
      * If it was null, a new HashMap is created and returned.
      *
-     * @return The private map of list of messages of this <code>Behaviour</code>
+     * @return The private map of list of messages of this  Behaviour
      */
     public HashMap<String, List<ACLMessage>> getMapMessagesList() {
         if (mapMessagesList == null) {
@@ -510,9 +532,9 @@ public abstract class Behaviour implements Serializable {
     //#CUSTOM_EXCLUDE_BEGIN
 
     /**
-     * Set the private map of list of messages of this <code>Behaviour</code>
+     * Set the private map of list of messages of this  Behaviour
      *
-     * @param map the <code>HashMap</code> that this <code>Behaviour</code>
+     * @param map the  HashMap   that this  Behaviour
      *            will use as its private map of list of messages
      */
     public void setMapMessagesList(HashMap<String, List<ACLMessage>> map) {
@@ -520,10 +542,10 @@ public abstract class Behaviour implements Serializable {
     }
 
     /**
-     * Return the private map of messages  of this <code>Behaviour</code>.
+     * Return the private map of messages  of this  Behaviour  .
      * If it was null, a new HashMap is created and returned.
      *
-     * @return The private map of  messages of this <code>Behaviour</code>
+     * @return The private map of  messages of this  Behaviour
      */
     public HashMap<String, ACLMessage> getMapMessages() {
         if (mapMessages == null) {
@@ -533,9 +555,9 @@ public abstract class Behaviour implements Serializable {
     }
 
     /**
-     * Set the private map of  messages of this <code>Behaviour</code>
+     * Set the private map of  messages of this  Behaviour
      *
-     * @param map the <code>HashMap</code> that this <code>Behaviour</code>
+     * @param map the  HashMap   that this  Behaviour
      *            will use as its private map of  messages
      */
     public void setMapMessages(HashMap<String, ACLMessage> map) {
@@ -567,15 +589,15 @@ public abstract class Behaviour implements Serializable {
          * existing event with new data (much cheaper than making a new
          * object).
          *
-         * @param b A <code>boolean</code> flag; when <code>false</code>
+         * @param b A  boolean   flag; when  false
          *          it means that a behaviour passed from <em>Ready</em> to
-         *          <em>Blocked</em> state. When <code>true</code> it means that a
+         *          <em>Blocked</em> state. When  true   it means that a
          *          behaviour passed from <em>Blocked</em> to <em>Ready</em> (this
          *          flag is the truth value of the predicate <em><b>'The behaviour
          *          has now become runnable'</b></em>.
          * @param d A notification direction: when direction is
-         *          <code>NOTIFY_UP</code>, the event travels upwards the behaviour
-         *          containment hierarchy; when it is <code>NOTIFY_DOWN</code>, the
+         *           NOTIFY_UP  , the event travels upwards the behaviour
+         *          containment hierarchy; when it is  NOTIFY_DOWN  , the
          *          event travels downwards.
          */
         public void init(boolean b, int d) {
@@ -587,7 +609,7 @@ public abstract class Behaviour implements Serializable {
         /**
          * Read event source.
          *
-         * @return The <code>Behaviour</code> object which generated this event.
+         * @return The  Behaviour   object which generated this event.
          */
         public Behaviour getSource() {
             return Behaviour.this;
@@ -596,8 +618,8 @@ public abstract class Behaviour implements Serializable {
         /**
          * Check whether the event is runnable.
          *
-         * @return <code>true</code> when the behaviour generating this
-         * event has become <em>Ready</em>, <code>false</code> when it has
+         * @return  true   when the behaviour generating this
+         * event has become <em>Ready</em>,  false   when it has
          * become <em>Blocked</em>.
          */
         public boolean isRunnable() {
@@ -607,8 +629,8 @@ public abstract class Behaviour implements Serializable {
         /**
          * Check which direction this event is travelling.
          *
-         * @return <code>true</code> when the event is a notification
-         * going from a child behaviour to its parent; <code>false</code>
+         * @return  true   when the event is a notification
+         * going from a child behaviour to its parent;  false
          * otherwise.
          */
         public boolean isUpwards() {

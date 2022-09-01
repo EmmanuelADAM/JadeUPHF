@@ -36,7 +36,7 @@ import java.util.*;
 /**
  * The class ACLMessage implements an ACL message compliant to the <b>FIPA 2000</b> "FIPA ACL Message Structure Specification" (fipa000061) specifications.
  * All parameters are couples <em>keyword: value</em>.
- * All keywords are <code>private final String</code>.
+ * All keywords are  private final String  .
  * All values can be set by using the methods <em>set</em> and can be read by using
  * the methods <em>get</em>.
  * <p> <b>Warning: </b> since JADE 3.1  an exception might be thrown
@@ -44,13 +44,13 @@ import java.util.*;
  * exception of the content of the ACLMessage) because of a limitation
  * to 65535 in the total number of bytes needed to represent all the
  * characters of a String (see also java.io.DataOutput#writeUTF(String)).
- * <p> The methods <code> setByteSequenceContent() </code> and
- * <code> getByteSequenceContent() </code> allow to send arbitrary
+ * <p> The methods   setByteSequenceContent()    and
+ *   getByteSequenceContent()    allow to send arbitrary
  * sequence of bytes
  * over the content of an ACLMessage.
  * <p> The couple of methods
- * <code> setContentObject() </code> and
- * <code> getContentObject() </code> allow to send
+ *   setContentObject()    and
+ *   getContentObject()    allow to send
  * serialized Java objects over the content of an ACLMessage.
  * These method are not strictly
  * FIPA compliant so their usage is not encouraged.
@@ -328,7 +328,7 @@ public class ACLMessage implements Serializable {
      * @deprecated Since every ACL Message must have a message type, you
      * should use the new constructor which gets a message type as a
      * parameter.  To avoid problems, now this constructor silently sets
-     * the message type to <code>not-understood</code>.
+     * the message type to  not-understood  .
      */
     public ACLMessage() { // Used by persistence service: do not remove it, but make it private
         performative = NOT_UNDERSTOOD;
@@ -339,14 +339,14 @@ public class ACLMessage implements Serializable {
      * This constructor creates an ACL message object with the specified
      * performative. If the passed integer does not correspond to any of
      * the known performatives, it silently initializes the message to
-     * <code>not-understood</code>.
+     *  not-understood  .
      **/
     public ACLMessage(int perf) {
         performative = perf;
     }
 
     /**
-     * Returns the list of the communicative acts as an array of <code>String</code>.
+     * Returns the list of the communicative acts as an array of  String  .
      */
     public static String[] getAllPerformativeNames() {
         return performatives;
@@ -380,7 +380,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Adds a value to <code>:receiver</code> slot. <em><b>Warning:</b>
+     * Adds a value to  :receiver   slot. <em><b>Warning:</b>
      * no checks are made to validate the slot value.</em>
      *
      * @param r The value to add to the slot value set.
@@ -431,7 +431,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Removes a value from <code>:receiver</code>
+     * Removes a value from  :receiver
      * slot. <em><b>Warning:</b> no checks are made to validate the slot
      * value.</em>
      *
@@ -452,7 +452,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Removes all values from <code>:receiver</code>
+     * Removes all values from  :receiver
      * slot. <em><b>Warning:</b> no checks are made to validate the slot
      * value.</em>
      */
@@ -466,7 +466,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Adds a value to <code>:reply-to</code> slot. <em><b>Warning:</b>
+     * Adds a value to  :reply-to   slot. <em><b>Warning:</b>
      * no checks are made to validate the slot value.</em>
      *
      * @param dest The value to add to the slot value set.
@@ -485,7 +485,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Removes a value from <code>:reply_to</code>
+     * Removes a value from  :reply_to
      * slot. <em><b>Warning:</b> no checks are made to validate the slot
      * value.</em>
      *
@@ -506,7 +506,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Removes all values from <code>:reply_to</code>
+     * Removes all values from  :reply_to
      * slot. <em><b>Warning:</b> no checks are made to validate the slot
      * value.</em>
      */
@@ -523,7 +523,7 @@ public class ACLMessage implements Serializable {
 
     /**
      * This method returns the content of this ACLMessage when they have
-     * been written via the method <code>setContentObject</code>.
+     * been written via the method  setContentObject  .
      * It is not FIPA compliant so its usage is not encouraged.
      * For example to read Java objects from the content
      * <PRE>
@@ -577,9 +577,9 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Reads <code>:receiver</code> slot.
+     * Reads  :receiver   slot.
      *
-     * @return An <code>Iterator</code> containing the Agent IDs of the
+     * @return An  Iterator   containing the Agent IDs of the
      * receiver agents for this message.
      */
     public Iterator<AID> getAllReceiver() {
@@ -593,9 +593,9 @@ public class ACLMessage implements Serializable {
     //#MIDP_EXCLUDE_END
 
     /**
-     * Reads <code>:reply_to</code> slot.
+     * Reads  :reply_to   slot.
      *
-     * @return An <code>Iterator</code> containing the Agent IDs of the
+     * @return An  Iterator   containing the Agent IDs of the
      * reply_to agents for this message.
      */
     public Iterator<AID> getAllReplyTo() {
@@ -622,9 +622,9 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Reads <code>:sender</code> slot.
+     * Reads  :sender   slot.
      *
-     * @return The value of <code>:sender</code>slot.
+     * @return The value of  :sender  slot.
      * @see ACLMessage#setSender(AID).
      */
     public AID getSender() {
@@ -632,7 +632,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Writes the <code>:sender</code> slot. <em><b>Warning:</b> no
+     * Writes the  :sender   slot. <em><b>Warning:</b> no
      * checks are made to validate the slot value.</em>
      *
      * @param s The new value for the slot.
@@ -654,7 +654,7 @@ public class ACLMessage implements Serializable {
     /**
      * set the performative of this ACL message object to the passed constant.
      * Remind to
-     * use the set of constants (i.e. <code> INFORM, REQUEST, ... </code>)
+     * use the set of constants (i.e.   INFORM, REQUEST, ...   )
      * defined in this class
      */
     public void setPerformative(int perf) {
@@ -672,16 +672,16 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Reads <code>:content</code> slot. <p>
+     * Reads  :content   slot. <p>
      * <p>Notice that, in general, setting a String content and getting
      * back a byte sequence content - or viceversa - does not return
      * the same value, i.e. the following relation does not hold
-     * <code>
+     *
      * getByteSequenceContent(setByteSequenceContent(getContent().getBytes()))
      * is equal to getByteSequenceContent()
-     * </code>
      *
-     * @return The value of <code>:content</code> slot.
+     *
+     * @return The value of  :content   slot.
      * @see ACLMessage#setContent(String)
      * @see ACLMessage#getByteSequenceContent()
      * @see ACLMessage#getContentObject()
@@ -695,15 +695,15 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Writes the <code>:content</code> slot. <em><b>Warning:</b> no
+     * Writes the  :content   slot. <em><b>Warning:</b> no
      * checks are made to validate the slot value.</em> <p>
      * <p>Notice that, in general, setting a String content and getting
      * back a byte sequence content - or viceversa - does not return
      * the same value, i.e. the following relation does not hold
-     * <code>
+     *
      * getByteSequenceContent(setByteSequenceContent(getContent().getBytes()))
      * is equal to getByteSequenceContent()
-     * </code>
+     *
      *
      * @param content The new value for the slot.
      * @see ACLMessage#getContent()
@@ -719,16 +719,16 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Reads <code>:content</code> slot. <p>
+     * Reads  :content   slot. <p>
      * <p>Notice that, in general, setting a String content and getting
      * back a byte sequence content - or viceversa - does not return
      * the same value, i.e. the following relation does not hold
-     * <code>
+     *
      * getByteSequenceContent(setByteSequenceContent(getContent().getBytes()))
      * is equal to getByteSequenceContent()
-     * </code>
      *
-     * @return The value of <code>:content</code> slot.
+     *
+     * @return The value of  :content   slot.
      * @see ACLMessage#getContent()
      * @see ACLMessage#setByteSequenceContent(byte[])
      * @see ACLMessage#getContentObject()
@@ -742,15 +742,15 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Writes the <code>:content</code> slot. <em><b>Warning:</b> no
+     * Writes the  :content   slot. <em><b>Warning:</b> no
      * checks are made to validate the slot value.</em> <p>
      * <p>Notice that, in general, setting a String content and getting
      * back a byte sequence content - or viceversa - does not return
      * the same value, i.e. the following relation does not hold
-     * <code>
+     *
      * getByteSequenceContent(setByteSequenceContent(getContent().getBytes()))
      * is equal to getByteSequenceContent()
-     * </code>
+     *
      *
      * @param byteSequenceContent The new value for the slot.
      * @see ACLMessage#setContent(String s)
@@ -762,9 +762,9 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Reads <code>:reply-with</code> slot.
+     * Reads  :reply-with   slot.
      *
-     * @return The value of <code>:reply-with</code>slot.
+     * @return The value of  :reply-with  slot.
      * @see ACLMessage#setReplyWith(String).
      */
     public String getReplyWith() {
@@ -772,7 +772,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Writes the <code>:reply-with</code> slot. <em><b>Warning:</b> no
+     * Writes the  :reply-with   slot. <em><b>Warning:</b> no
      * checks are made to validate the slot value.</em>
      *
      * @param reply The new value for the slot.
@@ -783,9 +783,9 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Reads <code>:reply-to</code> slot.
+     * Reads  :reply-to   slot.
      *
-     * @return The value of <code>:reply-to</code>slot.
+     * @return The value of  :reply-to  slot.
      * @see ACLMessage#setInReplyTo(String).
      */
     public String getInReplyTo() {
@@ -793,7 +793,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Writes the <code>:in-reply-to</code> slot. <em><b>Warning:</b> no
+     * Writes the  :in-reply-to   slot. <em><b>Warning:</b> no
      * checks are made to validate the slot value.</em>
      *
      * @param reply The new value for the slot.
@@ -804,9 +804,9 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Reads <code>:encoding</code> slot.
+     * Reads  :encoding   slot.
      *
-     * @return The value of <code>:encoding</code>slot.
+     * @return The value of  :encoding  slot.
      * @see ACLMessage#setEncoding(String).
      */
     public String getEncoding() {
@@ -814,7 +814,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Writes the <code>:encoding</code> slot. <em><b>Warning:</b> no
+     * Writes the  :encoding   slot. <em><b>Warning:</b> no
      * checks are made to validate the slot value.</em>
      *
      * @param str The new value for the slot.
@@ -825,9 +825,9 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Reads <code>:language</code> slot.
+     * Reads  :language   slot.
      *
-     * @return The value of <code>:language</code>slot.
+     * @return The value of  :language  slot.
      * @see ACLMessage#setLanguage(String).
      */
     public String getLanguage() {
@@ -835,7 +835,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Writes the <code>:language</code> slot. <em><b>Warning:</b> no
+     * Writes the  :language   slot. <em><b>Warning:</b> no
      * checks are made to validate the slot value.</em>
      *
      * @param str The new value for the slot.
@@ -846,9 +846,9 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Reads <code>:ontology</code> slot.
+     * Reads  :ontology   slot.
      *
-     * @return The value of <code>:ontology</code>slot.
+     * @return The value of  :ontology  slot.
      * @see ACLMessage#setOntology(String).
      */
     public String getOntology() {
@@ -856,7 +856,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Writes the <code>:ontology</code> slot. <em><b>Warning:</b> no
+     * Writes the  :ontology   slot. <em><b>Warning:</b> no
      * checks are made to validate the slot value.</em>
      *
      * @param str The new value for the slot.
@@ -867,12 +867,12 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Reads <code>:reply-by</code> slot.
+     * Reads  :reply-by   slot.
      *
-     * @return The value of <code>:reply-by</code>slot, as a string.
+     * @return The value of  :reply-by  slot, as a string.
      * @see ACLMessage#getReplyByDate().
      * @deprecated Since the value of this slot is a Date by definition, then
-     * the <code>getReplyByDate</code> should be used that returns a Date
+     * the  getReplyByDate   should be used that returns a Date
      */
     public String getReplyBy() {
         if (reply_byInMillisec != 0)
@@ -882,10 +882,10 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Reads <code>:reply-by</code> slot.
+     * Reads  :reply-by   slot.
      *
-     * @return The value of <code>:reply-by</code>slot, as a
-     * <code>Date</code> object.
+     * @return The value of  :reply-by  slot, as a
+     *  Date   object.
      * @see ACLMessage#setReplyByDate(Date).
      */
     public Date getReplyByDate() {
@@ -898,7 +898,7 @@ public class ACLMessage implements Serializable {
     //#MIDP_EXCLUDE_BEGIN
 
     /**
-     * Writes the <code>:reply-by</code> slot. <em><b>Warning:</b> no
+     * Writes the  :reply-by   slot. <em><b>Warning:</b> no
      * checks are made to validate the slot value.</em>
      *
      * @param date The new value for the slot.
@@ -910,9 +910,9 @@ public class ACLMessage implements Serializable {
     //#MIDP_EXCLUDE_END
 
     /**
-     * Reads <code>:protocol</code> slot.
+     * Reads  :protocol   slot.
      *
-     * @return The value of <code>:protocol</code>slot.
+     * @return The value of  :protocol  slot.
      * @see ACLMessage#setProtocol(String).
      */
     public String getProtocol() {
@@ -920,7 +920,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Writes the <code>:protocol</code> slot. <em><b>Warning:</b> no
+     * Writes the  :protocol   slot. <em><b>Warning:</b> no
      * checks are made to validate the slot value.</em>
      *
      * @param str The new value for the slot.
@@ -931,9 +931,9 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Reads <code>:conversation-id</code> slot.
+     * Reads  :conversation-id   slot.
      *
-     * @return The value of <code>:conversation-id</code>slot.
+     * @return The value of  :conversation-id  slot.
      * @see ACLMessage#setConversationId(String).
      */
     public String getConversationId() {
@@ -941,7 +941,7 @@ public class ACLMessage implements Serializable {
     }
 
     /**
-     * Writes the <code>:conversation-id</code> slot. <em><b>Warning:</b> no
+     * Writes the  :conversation-id   slot. <em><b>Warning:</b> no
      * checks are made to validate the slot value.</em>
      *
      * @param str The new value for the slot.
@@ -969,7 +969,7 @@ public class ACLMessage implements Serializable {
     /**
      * Searches for the user defined parameter with the specified key.
      * The method returns
-     * <code>null</code> if the parameter is not found.
+     *  null   if the parameter is not found.
      *
      * @param key the parameter key.
      * @return the value in this ACLMessage with the specified key value.
@@ -1033,7 +1033,7 @@ public class ACLMessage implements Serializable {
 
     /**
      * Writes the message envelope for this message, using the
-     * <code>:sender</code> and <code>:receiver</code> message slots to
+     *  :sender   and  :receiver   message slots to
      * fill in the envelope.
      */
     public void setDefaultEnvelope() {
@@ -1067,7 +1067,7 @@ public class ACLMessage implements Serializable {
      * Attaches an envelope to this message. The envelope is used by the
      * <b><it>ACC</it></b> for inter-platform messaging.
      *
-     * @param e The <code>Envelope</code> object to attach to this
+     * @param e The  Envelope   object to attach to this
      *          message.
      */
     public void setEnvelope(Envelope e) {
@@ -1077,12 +1077,12 @@ public class ACLMessage implements Serializable {
 
     /**
      * Convert an ACL message to its string representation. This method
-     * writes a representation of this <code>ACLMessage</code> into a
+     * writes a representation of this  ACLMessage   into a
      * character string.
      * If the content is a bytesequence, then it is automatically converted
      * into Base64 encoding.
      *
-     * @return A <code>String</code> representing this message.
+     * @return A  String   representing this message.
      */
     public String toString() {
         return StringACLCodec.toString(this);
@@ -1122,10 +1122,10 @@ public class ACLMessage implements Serializable {
 	   #MIDP_INCLUDE_END*/
 
     /**
-     * Clone an <code>ACLMessage</code> object.
+     * Clone an  ACLMessage   object.
      *
-     * @return A copy of this <code>ACLMessage</code> object. The copy
-     * must be casted back to <code>ACLMessage</code> type before being
+     * @return A copy of this  ACLMessage   object. The copy
+     * must be casted back to  ACLMessage   type before being
      * used.
      */
     //#MIDP_EXCLUDE_BEGIN

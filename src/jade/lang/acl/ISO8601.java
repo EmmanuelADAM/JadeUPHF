@@ -31,10 +31,10 @@ import java.util.TimeZone;
  * This class contains a set of static methods that convert
  * to/from the Date Time format adopted by FIPA.
  * The FIPA format is based on ISO8601, with the addition of milliseconds.
- * Using the <code>java.text.SimpleDateFormat</code> notation, it is:
- * <code>yyyyMMdd'T'HHmmssSSS'Z'</code>
- * , where the <code>'T'</code> serves to separate the Day from the Time,
- * and the <code>'Z'</code> indicates that the time is in UTC.
+ * Using the  java.text.SimpleDateFormat   notation, it is:
+ *  yyyyMMdd'T'HHmmssSSS'Z'
+ * , where the  'T'   serves to separate the Day from the Time,
+ * and the  'Z'   indicates that the time is in UTC.
  * <p>
  * The FIPA specs permit either local or UTC time, however, they do
  * express a preference for UTC time (this is particularly helpful when
@@ -49,7 +49,7 @@ import java.util.TimeZone;
  * <UL>
  * <LI> read DateTime in both local time and UTC time
  * <LI> write DateTime as UTC time by default (can generate local time
- * if <code>toString(false)</code> is called).
+ * if  toString(false)   is called).
  * </UL>
  * </UL>
  *
@@ -128,7 +128,7 @@ public class ISO8601 {
     private static String subFormatDate(Calendar cal) {
         // Format time
 
-        String formatedDate = zeroPaddingNumber(cal.get(Calendar.YEAR), 4) +
+        return zeroPaddingNumber(cal.get(Calendar.YEAR), 4) +
                 zeroPaddingNumber(cal.get(Calendar.MONTH) + 1, 2) +
                 zeroPaddingNumber(cal.get(Calendar.DATE), 2) +
                 t +
@@ -136,11 +136,10 @@ public class ISO8601 {
                 zeroPaddingNumber(cal.get(Calendar.MINUTE), 2) +
                 zeroPaddingNumber(cal.get(Calendar.SECOND), 2) +
                 zeroPaddingNumber(cal.get(Calendar.MILLISECOND), 3);
-        return formatedDate;
     }
 
     /**
-     * This method converts a FIPA DateTime token to a <code>java.util.Date</code>.
+     * This method converts a FIPA DateTime token to a  java.util.Date  .
      * It will accept both local and UTC time formats.
      *
      * @return an absolute value of DateTime
@@ -173,15 +172,15 @@ public class ISO8601 {
     }
 
     /**
-     * This method converts a <code>java.util.Date</code> into a FIPA DateTime token.
+     * This method converts a  java.util.Date   into a FIPA DateTime token.
      * <p>
      * Note: the current default behaviour is to generate dates in UTC time.
-     * see <code>ISO8601.useUTCtime</code> for details.
+     * see  ISO8601.useUTCtime   for details.
      *
-     * @param useUTCtime controls the style used by <code>toString</code>,
+     * @param useUTCtime controls the style used by  toString  ,
      *                   'true' generates tokens using UTC time, 'false' using local time.
      *                   If you need to send messages to agents compiled with older versions
-     *                   of Jade, then set this to <code>false</code>.
+     *                   of Jade, then set this to  false  .
      * @return a String, e.g. "19640625T073000000Z" to represent 7:30AM on the
      * 25th of June of 1964, UTC time.
      */
@@ -197,7 +196,7 @@ public class ISO8601 {
 
 
     /**
-     * This method converts a <code>java.util.Date</code> into a FIPA DateTime
+     * This method converts a  java.util.Date   into a FIPA DateTime
      * token by using the UTC time.
      *
      * @return a String, e.g. "19640625T073000000Z" to represent 7:30AM on the
@@ -278,7 +277,7 @@ public class ISO8601 {
      * The main is here only for debugging.
      * You can test your conversion by executing the following command:
      * <p>
-     * <code> java jade.lang.acl.ISO8601 <yourtoken> </code>
+     *   java jade.lang.acl.ISO8601 <yourtoken>
      */
     public static void main(String[] argv) {
 

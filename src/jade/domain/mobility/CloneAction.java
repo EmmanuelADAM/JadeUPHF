@@ -24,7 +24,7 @@ Boston, MA  02111-1307, USA.
 package jade.domain.mobility;
 
 /**
- * This class represents the <code>clone-agent</code> action,
+ * This class represents the  clone-agent   action,
  * requesting to clone an agent within the platform.
  *
  * @author Giovanni Rimassa -  Universita' di Parma
@@ -43,19 +43,19 @@ public class CloneAction extends MoveAction {
     }
 
     /**
-     * Retrieve the value of the <code>new-name</code> slot of this
+     * Retrieve the value of the  new-name   slot of this
      * event, containing the new local name (i.e. without the platform ID)
      * for the new, cloned agent.
      *
-     * @return The value of the <code>new-name</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  new-name   slot, or
+     *  null   if no value was set.
      */
     public String getNewName() {
         return newName;
     }
 
     /**
-     * Set the <code>new-name</code> slot of this action.
+     * Set the  new-name   slot of this action.
      *
      * @param nn The new local name (i.e. without the platform ID) for the
      *           new, cloned agent.

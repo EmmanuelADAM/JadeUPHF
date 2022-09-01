@@ -65,19 +65,19 @@ public class FrozenAgent implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>agent</code> slot of this
+     * Retrieve the value of the  agent   slot of this
      * event, containing the agent identifier of the newly suspended
      * agent.
      *
-     * @return The value of the <code>agent</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  agent   slot, or
+     *  null   if no value was set.
      */
     public AID getAgent() {
         return agent;
     }
 
     /**
-     * Set the <code>agent</code> slot of this event.
+     * Set the  agent   slot of this event.
      *
      * @param id The agent identifier of the newly suspended agent.
      */
@@ -86,19 +86,19 @@ public class FrozenAgent implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>where</code> slot of this
+     * Retrieve the value of the  where   slot of this
      * event, containing the container identifier of the container
      * where the newly frozen agent was deployed.
      *
-     * @return The value of the <code>where</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  where   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getWhere() {
         return where;
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
+     * Set the  where   slot of this event.
      *
      * @param id The container identifier of the container where the
      *           newly frozen agent was deployed.
@@ -108,21 +108,21 @@ public class FrozenAgent implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>buffer-container</code> slot of
+     * Retrieve the value of the  buffer-container   slot of
      * this event, containing the container identifier of the
      * container where the frozen agent will appear to reside (and
      * where ACL messages for that agent will be redirected and
      * buffered).
      *
-     * @return The value of the <code>buffer-container</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  buffer-container   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getBufferContainer() {
         return bufferContainer;
     }
 
     /**
-     * Set the <code>buffer-container</code> slot of this event.
+     * Set the  buffer-container   slot of this event.
      *
      * @param id The container identifier of the container where the
      *           frozen agent will appear to reside (and where ACL messages for

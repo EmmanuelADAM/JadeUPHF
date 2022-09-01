@@ -320,7 +320,7 @@ public class ACLAIDList extends JPanel {
         contentScrollPane.getViewport().add(contentList, null);
     }
 
-    public class AIDListCellRenderer extends JLabel implements ListCellRenderer<Object> {
+    public static class AIDListCellRenderer extends JLabel implements ListCellRenderer<Object> {
         /**
          * Constructor for the AIDListCellRenderer object
          */
@@ -355,10 +355,10 @@ public class ACLAIDList extends JPanel {
      * This class listenes to the AIDList
      *
      * @author Chris van Aart - Acklin B.V., the Netherlands
-     * @created April 26, 2002
+     * @since April 26, 2002
      */
 
-    public class AIDListListener implements ListDataListener {
+    public static class AIDListListener implements ListDataListener {
         String fieldName = "";
         private AID theRemovedAID, theChangedAID;
         private Object itsObj;

@@ -46,8 +46,8 @@ import java.util.Map;
  * and ontologies "known" by a given agent and to fill and extract the
  * content of an ACL message according to a given content language and
  * ontology.
- * Each agent has a <code>ContentManager</code> object accessible through
- * the <code>getContentManager()</code> method of the <code>Agent</code>
+ * Each agent has a  ContentManager   object accessible through
+ * the  getContentManager()   method of the  Agent  
  * class.
  *
  * @author Federico Bergenti
@@ -68,14 +68,14 @@ public class ContentManager implements Serializable {
     //#MIDP_EXCLUDE_END
 
     /**
-     * Registers a <code>Codec</code> for a given content language
+     * Registers a  Codec   for a given content language
      * with its default name (i.e.
-     * the name returned by its <code>getName()</code> method.
+     * the name returned by its  getName()   method.
      * Since this operation is performed the agent that owns this
-     * <code>ContentManager</code> is able to "speak" the language
-     * corresponding to the registered <code>Codec</code>.
+     *  ContentManager   is able to "speak" the language
+     * corresponding to the registered  Codec  .
      *
-     * @param c the <code>Codec</code> to be registered.
+     * @param c the  Codec   to be registered.
      */
     public void registerLanguage(Codec c) {
         if (c == null) {
@@ -85,10 +85,10 @@ public class ContentManager implements Serializable {
     }
 
     /**
-     * Registers a <code>Codec</code> for a given content language
+     * Registers a  Codec   for a given content language
      * with a given name.
      *
-     * @param c    the <code>Codec</code> to be registered.
+     * @param c    the  Codec   to be registered.
      * @param name the name associated to the registered codec.
      */
     public void registerLanguage(Codec c, String name) {
@@ -99,13 +99,13 @@ public class ContentManager implements Serializable {
     }
 
     /**
-     * Registers an <code>Ontology</code> with its default name (i.e.
-     * the name returned by its <code>getName()</code> method.
+     * Registers an  Ontology   with its default name (i.e.
+     * the name returned by its  getName()   method.
      * Since this operation is performed the agent that owns this
-     * <code>ContentManager</code> "knows" the registered
-     * <code>Ontology</code>.
+     *  ContentManager   "knows" the registered
+     *  Ontology  .
      *
-     * @param o the <code>Ontology</code> to be registered.
+     * @param o the  Ontology   to be registered.
      */
     public void registerOntology(Ontology o) {
         if (o == null) {
@@ -115,9 +115,9 @@ public class ContentManager implements Serializable {
     }
 
     /**
-     * Registers an <code>Ontology</code> with a given name.
+     * Registers an  Ontology   with a given name.
      *
-     * @param o    the <code>Ontology</code> to be registered.
+     * @param o    the  Ontology   to be registered.
      * @param name the name associated to the registered Ontology.
      */
     public void registerOntology(Ontology o, String name) {
@@ -128,13 +128,13 @@ public class ContentManager implements Serializable {
     }
 
     /**
-     * Retrieves a previously registered <code>Codec</code>
-     * giving its <code>name</code>.
+     * Retrieves a previously registered  Codec  
+     * giving its  name  .
      *
-     * @param name the name associated to the <code>Codec</code>
+     * @param name the name associated to the  Codec  
      *             to be retrieved.
-     * @return the <code>Codec</code> associated to
-     * <code>name</code> or <code>null</code> if no Codec was registered
+     * @return the  Codec   associated to
+     *  name   or  null   if no Codec was registered
      * with the given name.
      */
     public Codec lookupLanguage(String name) {
@@ -142,13 +142,13 @@ public class ContentManager implements Serializable {
     }
 
     /**
-     * Retrieves a previously registered <code>Ontology</code>
-     * giving its <code>name</code>.
+     * Retrieves a previously registered  Ontology  
+     * giving its  name  .
      *
-     * @param name the name associated to the <code>Ontology</code>
+     * @param name the name associated to the  Ontology  
      *             to be retrieved.
-     * @return the <code>Ontology</code> associated to
-     * <code>name</code> or <code>null</code> if no Ontology was registered
+     * @return the  Ontology   associated to
+     *  name   or  null   if no Ontology was registered
      * with the given name.
      */
     public Ontology lookupOntology(String name) {
@@ -156,17 +156,17 @@ public class ContentManager implements Serializable {
     }
 
     /**
-     * Fills the <code>:content</code> slot of an
-     * <code>ACLMessage msg</code> using the content language
-     * and ontology indicated in the <code>:language</code> and
-     * <code>:ontology</code> fields of <code>msg</code>.
+     * Fills the  :content   slot of an
+     *  ACLMessage msg   using the content language
+     * and ontology indicated in the  :language   and
+     *  :ontology   fields of  msg  .
      *
      * @param msg     the message whose content has to be filled.
      * @param content the content of the message represented as an
-     *                <code>AbsContentElement</code>.
-     * @throws CodecException    if <code>content</code> is not compliant
+     *                 AbsContentElement  .
+     * @throws CodecException    if  content   is not compliant
      *                           to the content language used for this operation.
-     * @throws OntologyException if <code>content</code> is not compliant
+     * @throws OntologyException if  content   is not compliant
      *                           to the ontology used for this operation.
      */
     public void fillContent(ACLMessage msg, AbsContentElement content) throws CodecException, OntologyException {
@@ -190,17 +190,17 @@ public class ContentManager implements Serializable {
     }
 
     /**
-     * Fills the <code>:content</code> slot of an
-     * <code>ACLMessage msg</code> using the content language
-     * and ontology indicated in the <code>:language</code> and
-     * <code>:ontology</code> fields of <code>msg</code>.
+     * Fills the  :content   slot of an
+     *  ACLMessage msg   using the content language
+     * and ontology indicated in the  :language   and
+     *  :ontology   fields of  msg  .
      *
      * @param msg     the message whose content has to be filled.
      * @param content the content of the message represented as a
-     *                <code>ContentElement</code>.
-     * @throws CodecException    if <code>content</code> is not compliant
+     *                 ContentElement  .
+     * @throws CodecException    if  content   is not compliant
      *                           to the content language used for this operation.
-     * @throws OntologyException if <code>content</code> is not compliant
+     * @throws OntologyException if  content   is not compliant
      *                           to the ontology used for this operation.
      */
     public void fillContent(ACLMessage msg, ContentElement content) throws CodecException, OntologyException {
@@ -226,14 +226,14 @@ public class ContentManager implements Serializable {
     }
 
     /**
-     * Translates the <code>:content</code> slot of an
-     * <code>ACLMessage msg</code> into an <code>AbsContentElement</code>
+     * Translates the  :content   slot of an
+     *  ACLMessage msg   into an  AbsContentElement  
      * using the content language and ontology indicated in the
-     * <code>:language</code> and <code>:ontology</code> fields of <code>msg</code>.
+     *  :language   and  :ontology   fields of  msg  .
      *
      * @param msg the message whose content has to be extracted.
      * @return the content of the message represented as an
-     * <code>AbsContentElement</code>.
+     *  AbsContentElement  .
      * @throws CodecException    if the content of the message is not compliant
      *                           to the content language used for this operation.
      * @throws OntologyException if the content of the message is not compliant
@@ -262,14 +262,14 @@ public class ContentManager implements Serializable {
     }
 
     /**
-     * Translates the <code>:content</code> slot of an
-     * <code>ACLMessage msg</code> into a <code>ContentElement</code>
+     * Translates the  :content   slot of an
+     *  ACLMessage msg   into a  ContentElement  
      * using the content language and ontology indicated in the
-     * <code>:language</code> and <code>:ontology</code> fields of <code>msg</code>.
+     *  :language   and  :ontology   fields of  msg  .
      *
      * @param msg the message whose content has to be extracted.
      * @return the content of the message represented as a
-     * <code>ContentElement</code>.
+     *  ContentElement  .
      * @throws CodecException    if the content of the message is not compliant
      *                           to the content language used for this operation.
      * @throws OntologyException if the content of the message is not compliant
@@ -301,7 +301,7 @@ public class ContentManager implements Serializable {
      * Return the currently set validation mode i.e. whether
      * contents that are managed by this content manager should
      * be validated during message content filling/extraction.
-     * Default value is <code>true</code>
+     * Default value is  true  
      *
      * @return the currently set validation mode
      */
@@ -313,7 +313,7 @@ public class ContentManager implements Serializable {
      * Set the validation mode i.e. whether contents that are managed
      * by this content manager should be validated during
      * message content filling/extraction.
-     * Default value is <code>true</code>
+     * Default value is  true  
      *
      * @param mode the new validation mode
      */
@@ -378,11 +378,10 @@ public class ContentManager implements Serializable {
     }
 
     public String toString() {
-        String sb = "(ContentManager:\n  - registered-ontologies = " + ontologies +
+        return "(ContentManager:\n  - registered-ontologies = " + ontologies +
                 "\n  - registered-languages = " +
                 languages +
                 ")";
-        return sb;
     }
 
     public String[] getLanguageNames() {

@@ -72,7 +72,7 @@ public class LightMessagingService extends BaseService
      * Service implementations should not use the Service Manager and
      * Service Finder facilities from within this method. A
      * distributed initialization protocol, if needed, should be
-     * exectuted within the <code>boot()</code> method.
+     * exectuted within the  boot()   method.
      *
      * @param ac The agent container this service is activated on.
      * @param p  The configuration profile for this service.
@@ -109,7 +109,7 @@ public class LightMessagingService extends BaseService
      * slices will communicate, that is, the service <i>Horizontal
      * Interface</i>.
      *
-     * @return A <code>Class</code> object, representing the interface
+     * @return A  Class   object, representing the interface
      * that is implemented by the slices of this service.
      */
     public Class<MessagingSlice> getHorizontalInterface() {
@@ -133,10 +133,10 @@ public class LightMessagingService extends BaseService
      * processing engine.
      *
      * @param direction One of the two constants
-     *                  <code>Filter.INCOMING</code> and <code>Filter.OUTGOING</code>,
+     *                   Filter.INCOMING   and  Filter.OUTGOING  ,
      *                  distinguishing between the two filter chains managed by the
      *                  command processor.
-     * @return A <code>Filter</code> object, used by this service to
+     * @return A  Filter   object, used by this service to
      * intercept and process kernel-level commands.
      * see jade.core.CommandProcessor
      */
@@ -345,10 +345,10 @@ public class LightMessagingService extends BaseService
 
     /**
      * Inner mix-in class for this service: this class receives
-     * commands through its <code>Filter</code> interface and serves
+     * commands through its  Filter   interface and serves
      * them, coordinating with remote parts of this service through
-     * the <code>Slice</code> interface (that extends the
-     * <code>Service.Slice</code> interface).
+     * the  Slice   interface (that extends the
+     *  Service.Slice   interface).
      */
     private class ServiceComponent extends Filter implements Slice {
         private final String myHelperName;
@@ -598,8 +598,8 @@ public class LightMessagingService extends BaseService
     } // End of ServiceComponent class
       /*
        Activates the ACL codecs and MTPs as specified in the given
-       <code>Profile</code> instance.
-       @param myProfile The <code>Profile</code> instance containing
+        Profile   instance.
+       @param myProfile The  Profile   instance containing
        the list of ACL codecs and MTPs to activate on this node.
     */
 }

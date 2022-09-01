@@ -28,7 +28,7 @@ import jade.domain.FIPAAgentManagement.ExceptionVocabulary;
 /**
  * This interface contains all the string constants for concepts and slot
  * names defined in the
- * <code>Behaviour-Loading</code> ontology.
+ *  Behaviour-Loading   ontology.
  */
 public interface BehaviourLoadingVocabulary extends ExceptionVocabulary {
 

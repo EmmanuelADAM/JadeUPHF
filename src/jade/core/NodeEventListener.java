@@ -60,7 +60,7 @@ public interface NodeEventListener {
      * platform node is not reachable anymore. The discovery is due to
      * some IMTP-specific network mechanism, and <em>does not</em>
      * mean that the remote node has failed. A subsequent
-     * <code>nodeReachable()</code> call might be issued when the IMTP
+     *  nodeReachable()   call might be issued when the IMTP
      * connection becomes working again.
      *
      * @param n The node that has become unreachable.

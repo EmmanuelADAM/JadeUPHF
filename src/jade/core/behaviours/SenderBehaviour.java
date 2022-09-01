@@ -31,7 +31,7 @@ import jade.lang.acl.ACLMessage;
 
 /**
  * Behaviour for sending an ACL message. This class encapsulates a
- * <code>send()</code> as an atomic operation. This behaviour sends a
+ *  send()   as an atomic operation. This behaviour sends a
  * given ACL message and terminates.
  *
  * @author Giovanni Rimassa - Universita` di Parma
@@ -51,10 +51,10 @@ public final class SenderBehaviour extends OneShotBehaviour {
 
     /**
      * Send a given ACL message. This constructor creates a
-     * <code>SenderBehaviour</code> which sends an ACL message.
+     *  SenderBehaviour   which sends an ACL message.
      *
      * @param a   The agent this behaviour belongs to, and that will
-     *            <code>send()</code> the message.
+     *             send()   the message.
      * @param msg An ACL message to send.
      */
     public SenderBehaviour(Agent a, ACLMessage msg) {
@@ -66,8 +66,8 @@ public final class SenderBehaviour extends OneShotBehaviour {
 
     /**
      * Actual behaviour implementation. This method sends an ACL
-     * message, using either the given <code>AgentGroup</code> or the
-     * <code>:receiver</code> message slot to get the message recipient
+     * message, using either the given  AgentGroup   or the
+     *  :receiver   message slot to get the message recipient
      * names.
      */
     public void action() {

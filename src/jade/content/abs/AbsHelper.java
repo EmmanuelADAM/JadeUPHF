@@ -46,10 +46,10 @@ import java.util.*;
  */
 public class AbsHelper {
     /**
-     * Converts a <code>List</code> into a <code>AbsAggregate</code> using
+     * Converts a  List   into a  AbsAggregate   using
      * the specified ontology.
      *
-     * @param obj  the <code>List</code>
+     * @param obj  the  List
      * @param onto the ontology.
      * @return the abstract descriptor.
      * //* @throws OntologyException
@@ -69,10 +69,10 @@ public class AbsHelper {
     }
 
     /**
-     * Converts a <code>Set</code> into a <code>AbsAggregate</code> using
+     * Converts a  Set   into a  AbsAggregate   using
      * the specified ontology.
      *
-     * @param obj  the <code>Set</code>
+     * @param obj  the  Set
      * @param onto the ontology.
      * @return the abstract descriptor.
      * //* @throws OntologyException
@@ -92,10 +92,10 @@ public class AbsHelper {
     }
 
     /**
-     * Converts an <code>Iterator</code> into a <code>AbsAggregate</code> using
+     * Converts an  Iterator   into a  AbsAggregate   using
      * the specified ontology.
      *
-     * @param obj  the <code>Iterator</code>
+     * @param obj  the  Iterator
      * @param onto the ontology.
      * @return the abstract descriptor.
      * //* @throws OntologyException
@@ -118,10 +118,10 @@ public class AbsHelper {
     }
 
     /**
-     * Converts an <code>AID</code> into an <code>AbsConcept</code>
+     * Converts an  AID   into an  AbsConcept
      * representing an AID
      *
-     * @param obj the <code>AID</code>
+     * @param obj the  AID
      * @return the abstract descriptor.
      */
     public static AbsConcept externaliseAID(AID obj) {
@@ -154,11 +154,11 @@ public class AbsHelper {
     }
 
     /**
-     * Converts a <code>ContentElementList</code> into an
-     * <code>AbsContentElementList</code> using
+     * Converts a  ContentElementList   into an
+     *  AbsContentElementList   using
      * the specified ontology.
      *
-     * @param obj  the <code>ContentElementList</code>
+     * @param obj  the  ContentElementList
      * @param onto the ontology.
      * @return the abstract descriptor.
      * //* @throws OntologyException
@@ -178,11 +178,11 @@ public class AbsHelper {
     }
 
     /**
-     * Converts an <code>ACLMessage</code> into an
-     * <code>AbsAgentAction</code> using
+     * Converts an  ACLMessage   into an
+     *  AbsAgentAction   using
      * the specified ontology.
      *
-     * @param obj  the <code>ACLMessage</code>
+     * @param obj  the  ACLMessage
      * @param onto the ontology.
      * @return the abstract descriptor.
      * //* @throws OntologyException
@@ -234,7 +234,7 @@ public class AbsHelper {
 
 
     /**
-     * Converts an <code>AbsAggregate</code> into a List using the
+     * Converts an  AbsAggregate   into a List using the
      * specified ontology.
      *
      * @param onto the ontology
@@ -255,7 +255,7 @@ public class AbsHelper {
     }
 
     /**
-     * Converts an <code>AbsAggregate</code> into a Set using the
+     * Converts an  AbsAggregate   into a Set using the
      * specified ontology.
      *
      * @param onto the ontology
@@ -278,7 +278,7 @@ public class AbsHelper {
     //#MIDP_EXCLUDE_BEGIN
 
     /**
-     * Converts an <code>AbsAggregate</code> into a List using the
+     * Converts an  AbsAggregate   into a List using the
      * specified ontology.
      *
      * @param onto the ontology
@@ -305,11 +305,11 @@ public class AbsHelper {
     //#MIDP_EXCLUDE_END
 
     /**
-     * Converts an <code>AbsConcept</code> representing an AID
+     * Converts an  AbsConcept   representing an AID
      * into an OntoAID
      *
      * @return the OntoAID
-     * @throws OntologyException if <code>aid</code> does not
+     * @throws OntologyException if  aid   does not
      *                           represent a valid AID
      */
     public static OntoAID internaliseAID(AbsConcept aid) throws OntologyException {
@@ -342,7 +342,7 @@ public class AbsHelper {
     }
 
     /**
-     * Converts to an <code>AbsContentElementList</code> into a
+     * Converts to an  AbsContentElementList   into a
      * ContentElementList using the
      * specified ontology.
      *
@@ -366,7 +366,7 @@ public class AbsHelper {
     }
 
     /**
-     * Converts to an <code>AbsAgentAction</code> representing an ACLMessage
+     * Converts to an  AbsAgentAction   representing an ACLMessage
      * into an OntoACLMessage using the specified ontology.
      *
      * @param onto the ontology

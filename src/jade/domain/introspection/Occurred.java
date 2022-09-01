@@ -28,7 +28,7 @@ package jade.domain.introspection;
 import jade.content.Predicate;
 
 /**
- * This class represents the <code>occurred</code> predicate, whose
+ * This class represents the  occurred   predicate, whose
  * argument is a JADE introspection event.
  *
  * @author Giovanni Rimassa - Universita' di Parma
@@ -46,19 +46,19 @@ public class Occurred implements Predicate {
     }
 
     /**
-     * Retrieve the value of the <code>what</code> slot of this event,
+     * Retrieve the value of the  what   slot of this event,
      * containing the record of the occurred event, along with
      * location and timestamp information.
      *
-     * @return The value of the <code>what</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  what   slot, or
+     *  null   if no value was set.
      */
     public EventRecord getWhat() {
         return arg;
     }
 
     /**
-     * Set the <code>what</code> slot of this event.
+     * Set the  what   slot of this event.
      *
      * @param er The record of the occurred event, along with location
      *           and timestamp information.

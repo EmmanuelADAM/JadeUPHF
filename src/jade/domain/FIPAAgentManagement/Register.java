@@ -27,8 +27,8 @@ package jade.domain.FIPAAgentManagement;
 import jade.content.AgentAction;
 
 /**
- * This class implements the <code>register</code> action of the
- * <code>fipa-agent-management ontology</code>.
+ * This class implements the  register   action of the
+ *  fipa-agent-management ontology  .
  * This action is supported by (and can be requested to) both the AMS and
  * the DF.
  *
@@ -39,7 +39,7 @@ import jade.content.AgentAction;
 public class Register implements AgentAction {
 
     /**
-     * A string constant for the <code>description</code> slot name.
+     * A string constant for the  description   slot name.
      */
     public static final String REGISTER_DESCRIPTION = "description";
 
@@ -52,17 +52,17 @@ public class Register implements AgentAction {
     }
 
     /**
-     * Retrieve the <code>description</code> slot of this object.
+     * Retrieve the  description   slot of this object.
      *
-     * @return The value of the <code>description</code> slot of
-     * this action, or <code>null</code> if no value was set.
+     * @return The value of the  description   slot of
+     * this action, or  null   if no value was set.
      */
     public Object getDescription() {
         return description;
     }
 
     /**
-     * Set the <code>description</code> slot of this object.
+     * Set the  description   slot of this object.
      *
      * @param desc An AMS or DF description for this action.
      */

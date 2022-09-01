@@ -129,7 +129,7 @@ public class GenericMessage implements Serializable {
     }
 
     /**
-     * Allow setting the value of the <code>modifiable</code> flag. If this flag is true (default)
+     * Allow setting the value of the  modifiable   flag. If this flag is true (default)
      * the MessageManager, when receiving a GenericMessage with the payload already set, nullifies the content slot
      * of the embedded ACLMessage to save space.
      */

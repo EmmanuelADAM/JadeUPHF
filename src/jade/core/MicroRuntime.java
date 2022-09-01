@@ -83,7 +83,7 @@ public class MicroRuntime {
 
     /**
      * The configuration property key that maps to the protocol that must be used to connect to
-     * the JADE mediator. Possible values are: <code>socket, ssl, http, https</code>
+     * the JADE mediator. Possible values are:  socket, ssl, http, https
      */
     public static final String PROTO_KEY = "proto";
 
@@ -139,8 +139,8 @@ public class MicroRuntime {
      *
      * @param p A property bag, containing name-value pairs used
      *          to configure the container during boot.
-     * @param r A <code>Runnable</code> object, whose
-     *          <code>run()</code> method will be executed just after
+     * @param r A  Runnable   object, whose
+     *           run()   method will be executed just after
      *          container termination.
      */
     public static void startJADE(Properties p, Runnable r) {
@@ -177,8 +177,8 @@ public class MicroRuntime {
      * running within this JVM.
      *
      * @return If the JADE runtime is currently running,
-     * <code>true</code> is returned. Otherwise, the method
-     * returns <code>false</code>.
+     *  true   is returned. Otherwise, the method
+     * returns  false  .
      */
     public static boolean isRunning() {
         return myFrontEnd != null;

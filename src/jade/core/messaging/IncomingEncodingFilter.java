@@ -58,7 +58,7 @@ public class IncomingEncodingFilter extends Filter {
     /**
      * Receive a command object for processing.
      *
-     * @param cmd A <code>VerticalCommand</code> describing what operation has
+     * @param cmd A  VerticalCommand   describing what operation has
      *            been requested from previous layers (that can be the actual
      *            prime source of the command or previous filters in the chain).
      */
@@ -181,7 +181,7 @@ public class IncomingEncodingFilter extends Filter {
      *
      * @param env     the Envelope of the message
      * @param payload the encoded message
-     * @return the decoded <code>ACLMessage</code>
+     * @return the decoded  ACLMessage
      */
     public ACLMessage decodeMessage(Envelope env, byte[] payload) throws MessagingService.UnknownACLEncodingException, ACLCodec.CodecException {
         String enc;

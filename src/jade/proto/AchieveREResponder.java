@@ -185,7 +185,7 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
     }
 
     /**
-     * This method allows to change the <code>MessageTemplate</code>
+     * This method allows to change the  MessageTemplate  
      * that defines what messages this FIPARequestResponder will react to and reset the protocol.
      */
     public void reset(MessageTemplate mt) {
@@ -255,7 +255,7 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
      *
      * @param request the received message
      * @return the ACLMessage to be sent as a response (i.e. one of
-     * <code>AGREE, REFUSE, NOT_UNDERSTOOD, INFORM</code>.
+     *  AGREE, REFUSE, NOT_UNDERSTOOD, INFORM  .
      **/
     protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
         // Call prepareResponse() for backward compatibility
@@ -272,7 +272,7 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
 
     /**
      * This method is called after the execution of the handleRequest() method if
-     * no response was sent or the response was an <code>AGREE</code> message.
+     * no response was sent or the response was an  AGREE   message.
      * This default implementation returns null which has
      * the effect of sending no result notification. Programmers should
      * override the method in case they need to react to this event.
@@ -280,7 +280,7 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
      * @param request  the received message
      * @param response the previously sent response message
      * @return the ACLMessage to be sent as a result notification (i.e. one of
-     * <code>INFORM, FAILURE</code>.
+     *  INFORM, FAILURE  .
      * @see #handleRequest(ACLMessage)
      **/
     protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) throws FailureException {
@@ -289,13 +289,13 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the HANDLE_REQUEST state.
      * This behaviour would override the homonymous method.
-     * This method also set the HashMap of the registered <code>Behaviour</code> to the
+     * This method also set the HashMap of the registered  Behaviour   to the
      * HashMap of this AchieveREResponder.
      * It is responsibility of the registered behaviour to put the
-     * response to be sent into the HashMap at the <code>RESPONSE_KEY</code>
+     * response to be sent into the HashMap at the  RESPONSE_KEY  
      * key.
      *
      * @param b the Behaviour that will handle this state
@@ -314,14 +314,14 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour  
      * in the PREPARE_RESULT_NOTIFICATION state.
      * This behaviour would override the homonymous method.
-     * This method also set the HashMap of the registered <code>Behaviour</code> to the
+     * This method also set the HashMap of the registered  Behaviour   to the
      * HashMap of this AchieveREResponder.
      * It is responsibility of the registered behaviour to put the
      * result notification message to be sent into the HashMap at the
-     * <code>RESULT_NOTIFICATION_KEY</code>
+     *  RESULT_NOTIFICATION_KEY  
      * key.
      *
      * @param b the Behaviour that will handle this state

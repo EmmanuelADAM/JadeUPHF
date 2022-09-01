@@ -743,7 +743,7 @@ public class BackEndContainer extends AgentContainerImpl implements BackEnd {
     /**
      * Inner class MessageSenderPair
      */
-    protected class MessageSenderPair {
+    protected static class MessageSenderPair {
         private final ACLMessage msg;
         private final String sender;
 

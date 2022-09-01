@@ -163,7 +163,7 @@ public class JICPProtocol extends TransportProtocol {
     public static final String SERVER_TIME_OFFSET_KEY = "server-time-offset";
 
     /**
-     * @deprecated Use <code>MicroRuntime.OWNER_KEY</code>
+     * @deprecated Use  MicroRuntime.OWNER_KEY
      */
     public static final String OWNER_KEY = MicroRuntime.OWNER_KEY;
 

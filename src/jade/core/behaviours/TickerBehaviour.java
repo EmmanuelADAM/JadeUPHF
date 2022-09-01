@@ -25,16 +25,27 @@ package jade.core.behaviours;
 
 import jade.core.Agent;
 
+import java.util.function.Consumer;
+
 /**
- * This abstract class implements a <code>Behaviour</code> that
+ * This abstract class implements a  Behaviour   that
  * periodically executes a user-defined piece of code.
- * The user is expected to extend this class re-defining the method
- * <code>onTick()</code> and including the piece of code that
- * must be periodically executed into it.
- *
+ * <p>
+ *     <ul>
+ * <li>The user can extend this class re-defining the method
+ *  onTick()   and including the piece of code that
+ * must be periodically executed into it.</li>
+ * <li>or pass in the constructor a Consumer Agent that will be activated at each tick. <br/>
+ *  
+ *     addBehaviour(new TickerBehaviour(this, 300, a->System.out.println("Hello, my name is " + a.getLocalName()));
+ *   
+ * </li>
+ * </ul>
  * @author Giovanni Caire - TILAB
+ * @author emmanuel adam - 22.07
+ * @version $Date: 2022-07-13  $
  */
-public abstract class TickerBehaviour extends SimpleBehaviour {
+public  class TickerBehaviour extends SimpleBehaviour {
     private long wakeupTime, period;
     private boolean finished;
     private int tickCount = 0;
@@ -43,8 +54,8 @@ public abstract class TickerBehaviour extends SimpleBehaviour {
     private long startTime;
 
     /**
-     * Construct a <code>TickerBehaviour</code> that call its
-     * <code>onTick()</code> method every <code>period</code> ms.
+     * Construct a  TickerBehaviour   that call its
+     *  onTick()   method every  period   ms.
      *
      * @param a      is the pointer to the agent
      * @param period the tick period in ms
@@ -55,6 +66,21 @@ public abstract class TickerBehaviour extends SimpleBehaviour {
             throw new IllegalArgumentException("Period must be greater than 0");
         }
         this.period = period;
+    }
+
+    /**
+     * Construct a  TickerBehaviour   that call its
+     *  onTick()   method every  period   ms.
+     *
+     * @param a      is the pointer to the agent
+     * @param period the tick period in ms
+     * @param fAction consumer that take the Agent; automatically launch by tick()
+     * @author E.ADAM
+     * @since 22.07
+     */
+    public TickerBehaviour(Agent a, long period, Consumer<Agent> fAction) {
+        this(a, period);
+        this.fAction = fAction;
     }
 
     public void onStart() {
@@ -96,8 +122,14 @@ public abstract class TickerBehaviour extends SimpleBehaviour {
      * constructor.
      * Subclasses are expected to define this method specifying the action
      * that must be performed at every tick.
+     * if not overrided, execute fAction
+     * @author E.ADAM
+     * @since 22.07
      */
-    protected abstract void onTick();
+    protected void onTick()
+    {
+        if (fAction!=null) fAction.accept(myAgent);
+    }
 
     /**
      * Turn on/off the "fixed period" mode. Given a period P, when fixed period mode is off (default),
@@ -134,7 +166,7 @@ public abstract class TickerBehaviour extends SimpleBehaviour {
     }
 
     /**
-     * Make this <code>TickerBehaviour</code> terminate.
+     * Make this  TickerBehaviour   terminate.
      * Calling stop() has the same effect as removing this TickerBehaviour, but is Thread safe
      */
     public void stop() {

@@ -74,7 +74,7 @@ public class ContainerID implements Location {
     /**
      * Retrieve the name of the described container.
      *
-     * @return The container name if one is set, or <code>null</code>
+     * @return The container name if one is set, or  null
      * otherwise.
      */
     public String getName() {
@@ -158,16 +158,16 @@ public class ContainerID implements Location {
 
     /**
      * Equality operation over container IDs. Two
-     * <code>ContainerID</code> objects are considered equal if and
+     *  ContainerID   objects are considered equal if and
      * only if their name is the same (a case insensitive string
      * comparison is used.
      *
      * @param obj The right hand side of the equality operation, the
      *            left hand side being the current object.
-     * @return If the <code>obj</code> parameter is an instance of
-     * <code>ContainerID</code> class and has the same name (case
-     * insensitively) as the current object, then <code>true</code> is
-     * returned. Otherwise, this method returns <code>false</code>.
+     * @return If the  obj   parameter is an instance of
+     *  ContainerID   class and has the same name (case
+     * insensitively) as the current object, then  true   is
+     * returned. Otherwise, this method returns  false  .
      */
     public boolean equals(Object obj) {
         try {

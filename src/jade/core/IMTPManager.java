@@ -47,7 +47,7 @@ public interface IMTPManager {
     /**
      * Access the node that represents the local JVM.
      *
-     * @return A <code>Node</code> object, representing the local node
+     * @return A  Node   object, representing the local node
      * of this platform.
      * @throws IMTPException If something goes wrong in the underlying
      *                       network transport.
@@ -60,7 +60,7 @@ public interface IMTPManager {
      * Makes the platform <i>Service Manager</i> available through
      * this IMTP.
      *
-     * @param mgr The <code>ServiceManager</code> implementation that
+     * @param mgr The  ServiceManager   implementation that
      *            is to be made available across the network.
      * @throws IMTPException If something goes wrong in the underlying
      *                       network transport.
@@ -107,9 +107,9 @@ public interface IMTPManager {
      * @param itf The array of all the interfaces that have to be
      *            implemented by the returned proxy. The first element of the
      *            array must be an interface derived from
-     *            <code>Service.Slice</code>.
+     *             Service.Slice  .
      * @return A proxy object that can be safely casted to any of the
-     * interfaces in the <code>itfs</code> array.
+     * interfaces in the  itfs   array.
      * @throws IMTPException If something goes wrong in the underlying
      *                       network transport.
      * @see Service

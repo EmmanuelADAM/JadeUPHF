@@ -29,7 +29,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Allows to specify in the ontological schema the <code>mandatory</code> and <code>name</code> attributes of the slot.<br>
+ * Allows to specify in the ontological schema the  mandatory   and  name   attributes of the slot.<br>
  * The annotation is to be applied to the getter method.
  *
  * @author Paolo Cancedda

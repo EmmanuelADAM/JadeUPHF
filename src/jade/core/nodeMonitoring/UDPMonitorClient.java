@@ -39,7 +39,7 @@ import java.nio.channels.DatagramChannel;
  #DOTNET_INCLUDE_END*/
 
 /**
- * The <code>UDPMonitorClient</code> sends UDP ping messages
+ * The  UDPMonitorClient   sends UDP ping messages
  * in a specified interval to the main container.
  *
  * @author Roland Mungenast - Profactor

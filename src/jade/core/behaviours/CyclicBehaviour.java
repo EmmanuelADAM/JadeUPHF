@@ -33,7 +33,7 @@ import jade.core.Agent;
  * @author Giovanni Rimassa - Universita' di Parma
  * @version $Date: 2003-11-18 14:24:25 +0100 (mar, 18 nov 2003) $ $Revision: 4550 $
  */
-public abstract class CyclicBehaviour extends SimpleBehaviour {
+public  class CyclicBehaviour extends SimpleBehaviour {
 
     /**
      * Default constructor. It does not set the owner agent.
@@ -44,7 +44,7 @@ public abstract class CyclicBehaviour extends SimpleBehaviour {
 
     /**
      * This constructor sets the owner agent for this
-     * <code>CyclicBehaviour</code>.
+     *  CyclicBehaviour  .
      *
      * @param a The agent this behaviour must belong to.
      */
@@ -53,10 +53,10 @@ public abstract class CyclicBehaviour extends SimpleBehaviour {
     }
 
     /**
-     * This is the method that makes <code>CyclicBehaviour</code>
-     * cyclic, because it always returns <code>false</code>.
+     * This is the method that makes  CyclicBehaviour  
+     * cyclic, because it always returns  false  .
      *
-     * @return Always <code>false</code>.
+     * @return Always  false  .
      */
     public final boolean done() {
         return false;

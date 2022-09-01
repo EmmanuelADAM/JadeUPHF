@@ -54,17 +54,17 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Retrieve the <code>name</code> slot of this object.
+     * Retrieve the  name   slot of this object.
      *
-     * @return The value of the <code>name</code> slot of this service
-     * description, or <code>null</code> if no value was set.
+     * @return The value of the  name   slot of this service
+     * description, or  null   if no value was set.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Set the <code>name</code> slot of this object.
+     * Set the  name   slot of this object.
      *
      * @param n The name of the described service.
      */
@@ -73,17 +73,17 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Retrieve the <code>type</code> slot of this object.
+     * Retrieve the  type   slot of this object.
      *
-     * @return The value of the <code>type</code> slot of this service
-     * description, or <code>null</code> if no value was set.
+     * @return The value of the  type   slot of this service
+     * description, or  null   if no value was set.
      */
     public String getType() {
         return type;
     }
 
     /**
-     * Set the <code>type</code> slot of this object.
+     * Set the  type   slot of this object.
      *
      * @param t The type of the described service.
      */
@@ -92,7 +92,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Add a protocol name to the <code>protocols</code> slot
+     * Add a protocol name to the  protocols   slot
      * collection of this object.
      *
      * @param ip The protocol name to add to the collection.
@@ -102,7 +102,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Remove a protocol name from the <code>protocols</code> slot
+     * Remove a protocol name from the  protocols   slot
      * collection of this object.
      *
      * @param ip The protocol name to remove from the collection.
@@ -114,7 +114,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Remove all protocol names from the <code>protocols</code> slot
+     * Remove all protocol names from the  protocols   slot
      * collection of this object.
      */
     public void clearAllProtocols() {
@@ -122,7 +122,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Access all protocol names from the <code>protocols</code> slot
+     * Access all protocol names from the  protocols   slot
      * collection of this object.
      *
      * @return An iterator over the protocol names collection.
@@ -132,7 +132,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Add an ontology name to the <code>ontologies</code> slot
+     * Add an ontology name to the  ontologies   slot
      * collection of this object.
      *
      * @param o The ontology name to add to the collection.
@@ -142,7 +142,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Remove an ontology name from the <code>ontologies</code> slot
+     * Remove an ontology name from the  ontologies   slot
      * collection of this object.
      *
      * @param o The ontology name to remove from the collection.
@@ -154,7 +154,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Remove all ontology names from the <code>ontologies</code> slot
+     * Remove all ontology names from the  ontologies   slot
      * collection of this object.
      */
     public void clearAllOntologies() {
@@ -162,7 +162,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Access all ontology names from the <code>ontologies</code> slot
+     * Access all ontology names from the  ontologies   slot
      * collection of this object.
      *
      * @return An iterator over the ontology names collection.
@@ -172,7 +172,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Add a content language name to the <code>languages</code> slot
+     * Add a content language name to the  languages   slot
      * collection of this object.
      *
      * @param l The content language name to add to the collection.
@@ -182,7 +182,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Remove a content language name from the <code>languages</code>
+     * Remove a content language name from the  languages
      * slot collection of this object.
      *
      * @param l The content language name to remove from the
@@ -196,7 +196,7 @@ public class ServiceDescription implements Concept {
 
     /**
      * Remove all content language names from the
-     * <code>languages</code> slot collection of this object.
+     *  languages   slot collection of this object.
      */
     public void clearAllLanguages() {
         language.clear();
@@ -204,7 +204,7 @@ public class ServiceDescription implements Concept {
 
     /**
      * Access all content language names from the
-     * <code>languages</code> slot collection of this object.
+     *  languages   slot collection of this object.
      *
      * @return An iterator over the content language names collection.
      */
@@ -213,17 +213,17 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Retrieve the <code>ownership</code> slot of this object.
+     * Retrieve the  ownership   slot of this object.
      *
-     * @return The value of the <code>ownership</code> slot of this
-     * service description, or <code>null</code> if no value was set.
+     * @return The value of the  ownership   slot of this
+     * service description, or  null   if no value was set.
      */
     public String getOwnership() {
         return ownership;
     }
 
     /**
-     * Set the <code>ownership</code> slot of this object.
+     * Set the  ownership   slot of this object.
      *
      * @param o The name of the entity owning the described service.
      */
@@ -232,7 +232,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Add a property to the <code>properties</code> slot collection
+     * Add a property to the  properties   slot collection
      * of this object.
      *
      * @param p The property to add to the collection.
@@ -242,7 +242,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Remove a property from the <code>properties</code> slot
+     * Remove a property from the  properties   slot
      * collection of this object.
      *
      * @param p The property to remove from the collection.
@@ -254,7 +254,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Remove all properties from the <code>properties</code> slot
+     * Remove all properties from the  properties   slot
      * collection of this object.
      */
     public void clearAllProperties() {
@@ -262,7 +262,7 @@ public class ServiceDescription implements Concept {
     }
 
     /**
-     * Access all properties from the <code>properties</code> slot
+     * Access all properties from the  properties   slot
      * collection of this object.
      *
      * @return An iterator over the properties collection.

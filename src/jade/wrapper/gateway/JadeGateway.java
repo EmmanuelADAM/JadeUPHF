@@ -11,7 +11,7 @@ import java.util.Properties;
 /**
  * This class provides a simple yet powerful gateway between some non-JADE code and a JADE based
  * multi agent system. It is particularly suited to be used inside a Servlet or a JSP.
- * The class maintains an internal JADE agent (of class <code>GatewayAgent</code>
+ * The class maintains an internal JADE agent (of class  GatewayAgent  
  * that acts as entry point in the JADE based system.
  * The activation/termination of this agent (and its underlying container) are completely managed
  * by the JadeGateway class and developers do not need to care about them.
@@ -20,24 +20,24 @@ import java.util.Properties;
  * method. When the execute() method returns the internal agent of the JadeGateway as completely executed
  * the behaviour and outputs (if any) can be retrieved from the behaviour object using ad hoc methods
  * as exemplified below.<br>
- * <code>
+ *  
  * DoSomeActionBehaviour b = new DoSomeActionBehaviour(....);<br>
  * JadeGateway.execute(b); // At this point b has been completely executed --> we can get results<br>
  * result = b.getResult();<br>
- * </code>
+ *   
  * <br>
- * When using the JadeGateway class as described above <code>null</code> should be
- * passed as first parameter to the <code>init()</code> method.
+ * When using the JadeGateway class as described above  null   should be
+ * passed as first parameter to the  init()   method.
  * <p> Alternatively programmers can
  * <ul>
- * <li> create an application-specific class that extends <code>GatewayAgent</code>, that redefine its method <code>processCommand</code>
+ * <li> create an application-specific class that extends  GatewayAgent  , that redefine its method  processCommand  
  * and that is the agent responsible for processing all command-requests
- * <li> initialize this JadeGateway by calling its method <code>init</code> with the
+ * <li> initialize this JadeGateway by calling its method  init   with the
  * name of the class of the application-specific agent
- * <li> finally, in order to request the processing of a Command, you must call the method <code>JadeGateway.execute(Object command)<code>.
+ * <li> finally, in order to request the processing of a Command, you must call the method  JadeGateway.execute(Object command) .
  * This method will cause the callback of
- * the method <code>processCommand</code> of the application-specific agent.
- * The method <code>execute</code> will return only after the method <code>GatewayAgent.releaseCommand(command)</code> has been called
+ * the method  processCommand   of the application-specific agent.
+ * The method  execute   will return only after the method  GatewayAgent.releaseCommand(command)   has been called
  * by your application-specific agent.
  * </ul>
  * <b>NOT available in MIDP</b>
@@ -92,7 +92,7 @@ public class JadeGateway {
      * This method first check if the executor Agent is alive (if not it
      * creates container and agent), then it forwards the execution
      * request to the agent, finally it blocks waiting until the command
-     * has been executed (i.e. the method <code>releaseCommand</code>
+     * has been executed (i.e. the method  releaseCommand  
      * is called by the executor agent)
      *
      * @throws StaleProxyException if the method was not able to execute the Command

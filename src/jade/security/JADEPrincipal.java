@@ -25,7 +25,7 @@ package jade.security;
 
 
 /**
- * The <code>JADEPrincipal</code> interface represents all principals
+ * The  JADEPrincipal   interface represents all principals
  * acting on the platform. They will be held responsible for their
  * own agents and containers.
  *
@@ -61,11 +61,11 @@ public interface JADEPrincipal
 
     /**
      * Checks the hierarchical relationship between two principals, i.e.
-     * tells if this principal belongs to group <code>p</code>.
-     * If this holds, all permissions granted to <code>p</code> will be
+     * tells if this principal belongs to group  p  .
+     * If this holds, all permissions granted to  p   will be
      * automatically granted to this principal, too.
      * param p The principal to check.
-     * return True if this principal is a member of group <code>p</code>.
+     * return True if this principal is a member of group  p  .
      */
     //public boolean implies(JADEPrincipal p);
 

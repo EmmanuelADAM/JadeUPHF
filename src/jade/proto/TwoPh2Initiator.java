@@ -85,11 +85,11 @@ public class TwoPh2Initiator extends Initiator {
     private String[] toBeReset = null;
 
     /**
-     * Constructs a <code>TwoPh2Initiator</code> behaviour.
+     * Constructs a  TwoPh2Initiator   behaviour.
      *
      * @param a               The agent performing the protocol.
      * @param acceptance      msg
-     * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPh2Initiator</code>.
+     * @param mapMessagesList  HashMap   of messages list that will be used by this  TwoPh2Initiator  .
      * deprecated
 
     public TwoPh2Initiator(Agent a, ACLMessage acceptance, HashMap<String, List<ACLMessage>> mapMessagesList) {
@@ -175,7 +175,7 @@ public class TwoPh2Initiator extends Initiator {
      */
 
     /**
-     * Constructs a <code>TwoPh2Initiator</code> behaviour.
+     * Constructs a  TwoPh2Initiator   behaviour.
      *
      * @param a          The agent performing the protocol.
      * @param acceptance msg
@@ -187,12 +187,12 @@ public class TwoPh2Initiator extends Initiator {
     /* User can override these methods */
 
     /**
-     * Constructs a <code>TwoPh2Initiator</code> behaviour.
+     * Constructs a  TwoPh2Initiator   behaviour.
      *
      * @param a               The agent performing the protocol.
      * @param acceptance      msg
-     * @param mapMessagesList <code>HashMap</code> of messages list that will be used by this <code>TwoPh2Initiator</code>.
-     * @param mapMessages     <code>HashMap</code> of messages  that will be used by this <code>TwoPh2Initiator</code>.
+     * @param mapMessagesList  HashMap   of messages list that will be used by this  TwoPh2Initiator  .
+     * @param mapMessages      HashMap   of messages  that will be used by this  TwoPh2Initiator  .
      */
     public TwoPh2Initiator(Agent a, ACLMessage acceptance, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a, acceptance, mapMessagesList, mapMessages);
@@ -288,9 +288,9 @@ public class TwoPh2Initiator extends Initiator {
      * conversations.
      *
      * @param acceptance the ACLMessage object passed in the constructor
-     * @return a Vector of ACLMessage objects. The value of the <code>reply-with</code>
+     * @return a Vector of ACLMessage objects. The value of the  reply-with
      * slot is ignored and regenerated automatically by this
-     * class. Instead user can specify the <code>reply-by</code> slot representing phase2
+     * class. Instead user can specify the  reply-by   slot representing phase2
      * timeout.
      */
     protected List<ACLMessage> prepareAcceptances(ACLMessage acceptance) {
@@ -300,7 +300,7 @@ public class TwoPh2Initiator extends Initiator {
     }
 
     /**
-     * This method is called every time a <code>inform</code> message is received,
+     * This method is called every time a  inform   message is received,
      * which is not out-of-sequence according to the protocol rules. This default
      * implementation does nothing; programmers might wish to override the method
      * in case they need to react to this event.
@@ -311,8 +311,8 @@ public class TwoPh2Initiator extends Initiator {
     }
 
     /**
-     * This method is called every time a <code>failure</code>, a <code>disconfirm</code>
-     * or an <code>inform</code> message is received, which is not out-of-sequence
+     * This method is called every time a  failure  , a  disconfirm
+     * or an  inform   message is received, which is not out-of-sequence
      * according to the protocol rules. This default implementation does nothing;
      * programmers might wish to override the method in case they need to react
      * to this event.
@@ -324,8 +324,8 @@ public class TwoPh2Initiator extends Initiator {
 
     /**
      * This method is called when all the responses have been collected. By response
-     * message we intend here all the <code>inform</code> (phase 2), <code>failure</code>
-     * (phase 0), <code>disconfirm</code> (phase 1) and <code>inform</code> (phase 1)
+     * message we intend here all the  inform   (phase 2),  failure
+     * (phase 0),  disconfirm   (phase 1) and  inform   (phase 1)
      * received messages, which are not out-of-sequence according to the protocol rules.
      * This default implementation does nothing; programmers might wish to override the
      * method in case they need to react to this event by analysing all the messages in
@@ -337,12 +337,12 @@ public class TwoPh2Initiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user-defined <code>Behaviour</code> in the
+     * This method allows to register a user-defined  Behaviour   in the
      * PREPARE_ACCEPTANCES state. This behaviour would override the homonymous method.
-     * This method also set the data store of the registered <code>Behaviour</code> to the
+     * This method also set the data store of the registered  Behaviour   to the
      * HashMap of this current behaviour. It is responsibility of the registered
-     * behaviour to put the <code>Vector</code> of ACLMessage objects to be sent into
-     * the HashMap at the <code>ALL_ACCEPTANCES_KEY</code> key.
+     * behaviour to put the  Vector   of ACLMessage objects to be sent into
+     * the HashMap at the  ALL_ACCEPTANCES_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -351,12 +351,12 @@ public class TwoPh2Initiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code> in the
+     * This method allows to register a user defined  Behaviour   in the
      * HANDLE_INFORM state. This behaviour would override the homonymous method.
-     * This method also set the data store of the registered <code>Behaviour</code>
+     * This method also set the data store of the registered  Behaviour
      * to the HashMap of this current behaviour. The registered behaviour can retrieve
-     * the <code>inform</code> ACLMessage object received from the HashMap at the
-     * <code>REPLY_KEY</code> key.
+     * the  inform   ACLMessage object received from the HashMap at the
+     *  REPLY_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -366,12 +366,12 @@ public class TwoPh2Initiator extends Initiator {
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code> in the
+     * This method allows to register a user defined  Behaviour   in the
      * HANDLE_OLD_RESPONSE state. This behaviour would override the homonymous method.
-     * This method also set the data store of the registered <code>Behaviour</code>
+     * This method also set the data store of the registered  Behaviour
      * to the HashMap of this current behaviour. The registered behaviour can retrieve
-     * the <code>failure, disconfirm or inform</code> ACLMessage object received
-     * from the HashMap at the <code>REPLY_KEY</code> key.
+     * the  failure, disconfirm or inform   ACLMessage object received
+     * from the HashMap at the  REPLY_KEY   key.
      *
      * @param b the Behaviour that will handle this state
      */
@@ -384,12 +384,12 @@ public class TwoPh2Initiator extends Initiator {
     //#APIDOC_EXCLUDE_BEGIN
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code> in the
+     * This method allows to register a user defined  Behaviour   in the
      * HANDLE_ALL_RESPONSES state. This behaviour would override the homonymous method.
-     * This method also set the data store of the registered <code>Behaviour</code> to
+     * This method also set the data store of the registered  Behaviour   to
      * the HashMap of this current behaviour. The registered behaviour can retrieve
      * the vector of ACLMessage received from the HashMap at
-     * <code>ALL_RESPONSES_RECEIVED_KEY</code>.
+     *  ALL_RESPONSES_RECEIVED_KEY  .
      *
      * @param b the Behaviour that will handle this state
      */
@@ -416,7 +416,7 @@ public class TwoPh2Initiator extends Initiator {
 
     /**
      * Returns vector of accept/reject-proposal stored in the data store at
-     * key <code>inputKey</code> from previouse phase.
+     * key  inputKey   from previouse phase.
      *
      * @param initiation ignored
      * @return Vector of accept/reject-proposal
@@ -427,8 +427,8 @@ public class TwoPh2Initiator extends Initiator {
 
     /**
      * This method sets for all prepared accept/reject-proposal
-     * <code>conversation-id</code> slot (with value passed in the constructor),
-     * <code>protocol</code> slot and <code>reply-with</code> slot with a unique
+     *  conversation-id   slot (with value passed in the constructor),
+     *  protocol   slot and  reply-with   slot with a unique
      * value constructed by concatenating receiver's agent name and phase number
      * (i.e. 2). After that it sends all accept/reject-proposal.
      *

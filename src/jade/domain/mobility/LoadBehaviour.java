@@ -28,7 +28,7 @@ import jade.content.AgentAction;
 import java.util.List;
 
 /**
- * This action represents a request to load a <code>Behaviour</code> whose
+ * This action represents a request to load a  Behaviour   whose
  * code is not included in the classpath of the JVM where the agent that is
  * going to execute the behaviour lives.
  *
@@ -67,9 +67,9 @@ public class LoadBehaviour implements AgentAction {
 
     /**
      * Sets the code of the class of the behaviour to load.
-     * <code>code</code> must be filled with the content of the class
+     *  code   must be filled with the content of the class
      * file of the behaviour to load.
-     * If the behaviour requires other classes, the <code>setZip()</code>
+     * If the behaviour requires other classes, the  setZip()
      * method must be used instead.
      */
     public void setCode(byte[] code) {
@@ -102,7 +102,7 @@ public class LoadBehaviour implements AgentAction {
     /**
      * Set the list of parameters to be passed to the behaviour.
      * These parameters will be inserted into the behaviour
-     * <code>HashMap</code>
+     *  HashMap
      */
     public void setParameters(List<Parameter> parameters) {
         this.parameters = parameters;

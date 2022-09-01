@@ -8,10 +8,10 @@ import java.util.HashMap;
 
 /**
  * This is a cyclic behaviour that processes the commands received via JadeGateway.
- * <code>JadeGateway</code> enables two alternative ways to implement a gateway
+ *  JadeGateway   enables two alternative ways to implement a gateway
  * that allows non-JADE code to communicate with JADE agents.
- * <br> The first one is to extend the <code>GatewayAgent</code> (see its javadoc for reference).
- * <br> The second one is to extend this <code>GatewayBehaviour</code> and add an instance
+ * <br> The first one is to extend the  GatewayAgent   (see its javadoc for reference).
+ * <br> The second one is to extend this  GatewayBehaviour   and add an instance
  * of this Behaviour to your own agent that will have to function as a gateway.
  *
  * @author Fabio Bellifemine, Telecom Italia Lab
@@ -47,18 +47,18 @@ public abstract class GatewayBehaviour extends CyclicBehaviour {
      * The method is called each time a request to process a command
      * is received from the JSP Gateway.
      * <p> The recommended pattern is the following implementation:
-     * <code>
+     *  
      * if (c instanceof Command1)
      * execCommand1(c);
      * else if (c instanceof Command2)
      * execCommand2(c);
-     * </code>
+     *   
      * </p>
      * <b> REMIND THAT WHEN THE COMMAND HAS BEEN PROCESSED,
-     * YOU MUST CALL THE METHOD <code>releaseCommand</code>.
+     * YOU MUST CALL THE METHOD  releaseCommand  .
      * Sometimes, you might prefer launching a new Behaviour that asynchronously processes
      * this command and release the command just when the Behaviour terminates,
-     * i.e. in its <code>onEnd()</code> method.
+     * i.e. in its  onEnd()   method.
      **/
     abstract protected void processCommand(Object command);
 

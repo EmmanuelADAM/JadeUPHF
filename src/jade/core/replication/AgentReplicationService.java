@@ -975,7 +975,7 @@ public class AgentReplicationService extends BaseService {
     /**
      * Inner class ReplicaInfo
      */
-    private class ReplicaInfo {
+    private static class ReplicaInfo {
         private final AID replicaAid;
         private Location where;
 

@@ -38,7 +38,7 @@ import jade.proto.SimpleAchieveREInitiator;
 import java.util.*;
 
 /**
- * This class extends the <code>FipaRequestIntiatorBehaviour</code> in order to request an agent, e.g. <em>DF or AMS</em>
+ * This class extends the  FipaRequestIntiatorBehaviour   in order to request an agent, e.g. <em>DF or AMS</em>
  * to perform a specific action. <br>
  * This class implements all the abstract method of the super classes, therefore the behaviour can be immediately added to an agent.  <br>
  * In some cases, it might be usefull to extend this class to override
@@ -150,10 +150,10 @@ public class RequestFIPAServiceBehaviour extends SimpleAchieveREInitiator {
     }
 
     /**
-     * Method to handle <code>not-understood</code> replies.
+     * Method to handle  not-understood   replies.
      *
      * @param reply The actual ACL message received. It is of
-     *              <code>not-understood</code> type and matches the conversation
+     *               not-understood   type and matches the conversation
      *              template.
      */
     protected void handleNotUnderstood(ACLMessage reply) {
@@ -162,10 +162,10 @@ public class RequestFIPAServiceBehaviour extends SimpleAchieveREInitiator {
     }
 
     /**
-     * Method to handle <code>refuse</code> replies.
+     * Method to handle  refuse   replies.
      *
      * @param reply The actual ACL message received. It is of
-     *              <code>refuse</code> type and matches the conversation
+     *               refuse   type and matches the conversation
      *              template.
      */
     protected void handleRefuse(ACLMessage reply) {
@@ -174,20 +174,20 @@ public class RequestFIPAServiceBehaviour extends SimpleAchieveREInitiator {
     }
 
     /**
-     * Method to handle <code>agree</code> replies.
+     * Method to handle  agree   replies.
      *
      * @param reply The actual ACL message received. It is of
-     *              <code>agree</code> type and matches the conversation
+     *               agree   type and matches the conversation
      *              template.
      */
     protected void handleAgree(ACLMessage reply) {
     }
 
     /**
-     * Method to handle <code>failure</code> replies.
+     * Method to handle  failure   replies.
      *
      * @param reply The actual ACL message received. It is of
-     *              <code>failure</code> type and matches the conversation
+     *               failure   type and matches the conversation
      *              template.
      */
     protected void handleFailure(ACLMessage reply) {
@@ -196,10 +196,10 @@ public class RequestFIPAServiceBehaviour extends SimpleAchieveREInitiator {
     }
 
     /**
-     * Method to handle <code>inform</code> replies.
+     * Method to handle  inform   replies.
      *
      * @param reply The actual ACL message received. It is of
-     *              <code>inform</code> type and matches the conversation
+     *               inform   type and matches the conversation
      *              template.
      */
     protected void handleInform(ACLMessage reply) {
@@ -300,7 +300,7 @@ public class RequestFIPAServiceBehaviour extends SimpleAchieveREInitiator {
 
     /**
      * Exception class for timeouts. This exception is thrown when trying
-     * to obtain an <code>ACLMessage</code> from an <code>Handle</code>
+     * to obtain an  ACLMessage   from an  Handle
      * and no message has been yet received and the timeout limit is not yet
      * elapsed.
      *

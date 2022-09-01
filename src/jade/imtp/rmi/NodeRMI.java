@@ -50,12 +50,12 @@ interface NodeRMI extends Remote {
     /**
      * Check whether this node is reachable.
      *
-     * @param hang A boolean flag. When <code>false</code>, the method
-     *             returns immediately; when <code>true</code>, the method blocks
+     * @param hang A boolean flag. When  false  , the method
+     *             returns immediately; when  true  , the method blocks
      *             and will return only when unblocked from the remote end
      *             (through regular return or exception.
-     * @return If the node is exiting, <code>true</code> is returned,
-     * and <code>false</code> otherwise.
+     * @return If the node is exiting,  true   is returned,
+     * and  false   otherwise.
      * @throws RemoteException If a network problem occurs.
      */
     boolean ping(boolean hang) throws RemoteException;

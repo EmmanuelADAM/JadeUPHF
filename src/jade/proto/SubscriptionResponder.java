@@ -87,8 +87,8 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
     private final List<ACLMessage[]> notifications = new ArrayList<>();
     private final Logger myLogger = Logger.getJADELogger(getClass().getName());
     /**
-     * The <code>SubscriptionManager</code> used by this
-     * <code>SubscriptionResponder</code> to register subscriptions
+     * The  SubscriptionManager   used by this
+     *  SubscriptionResponder   to register subscriptions
      */
     protected SubscriptionManager mySubscriptionManager;
 
@@ -119,7 +119,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
      * @param mt              is the MessageTemplate that must be used to match
      *                        subscription messages sent by the initiators. Take care that
      *                        if mt is null every message is consumed by this protocol.
-     * @param sm              The <code>SubscriptionManager</code> object that is notified about subscription/un-subscription events
+     * @param sm              The  SubscriptionManager   object that is notified about subscription/un-subscription events
      * @param mapMessagesList the HashMap of messages list that will be used by protocol
      * @param mapMessages     the HashMap of messages that will be used by protocol
      **/
@@ -208,7 +208,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
      * @param mt              is the MessageTemplate that must be used to match
      *                        subscription messages sent by the initiators. Take care that
      *                        if mt is null every message is consumed by this protocol.
-     * @param sm              The <code>SubscriptionManager</code> object that is notified about subscription/un-subscription events
+     * @param sm              The  SubscriptionManager   object that is notified about subscription/un-subscription events
      * @param mapMessagesList the HashMap that will be used by protocol
      * @deprecated public SubscriptionResponder(Agent a, MessageTemplate mt, SubscriptionManager sm, HashMap<String, List<ACLMessage>> mapMessagesList) {
     super(a);
@@ -310,7 +310,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
 
     /**
      * This method resets the protocol and allows to change the
-     * <code>MessageTemplate</code>
+     *  MessageTemplate
      * that defines what messages this SubscriptionResponder
      * will react to.
      */
@@ -323,18 +323,18 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
      * This method is called when a subscription
      * message is received that matches the message template
      * specified in the constructor.
-     * The default implementation creates an new <code>Subscription</code>
-     * object, stores it internally and notify the <code>SubscriptionManager</code>
+     * The default implementation creates an new  Subscription
+     * object, stores it internally and notify the  SubscriptionManager
      * used by this responder if any. Then it returns null which has
      * the effect of sending no response. Programmers in general do not need
      * to override this method. In case they need to manage Subscription objects in an application specific
-     * way they should rather use a <code>SubscriptionManager</code> with the <code>register()</code> method properly implemented.
+     * way they should rather use a  SubscriptionManager   with the  register()   method properly implemented.
      * However they could override it in case they need to react to the reception of a
      * subscription message in a different way, e.g. by sending back an AGREE message.
      *
      * @param subscription the received message
      * @return the ACLMessage to be sent as a response: typically one of
-     * <code>agree, refuse, not-understood</code> or null if no response must be sent back.
+     *  agree, refuse, not-understood   or null if no response must be sent back.
      */
     protected ACLMessage handleSubscription(ACLMessage subscription) throws NotUnderstoodException, RefuseException {
         // Call prepareResponse() for backward compatibility
@@ -354,19 +354,19 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
 
     /**
      * This method is called when a CANCEL message is received for a previous subscription.
-     * The default implementation retrieves the <code>Subscription</code>
+     * The default implementation retrieves the  Subscription
      * object the received cancel message refers to, notifies the
-     * <code>SubscriptionManager</code> used by this responder if any and remove the Subscription from its internal structures.
+     *  SubscriptionManager   used by this responder if any and remove the Subscription from its internal structures.
      * Then it returns null which has the effect of sending no response.
      * Programmers in general do not need
      * to override this method. In case they need to manage Subscription objects in an application specific
-     * way they should rather use a <code>SubscriptionManager</code> with the <code>deregister()</code> method properly implemented.
+     * way they should rather use a  SubscriptionManager   with the  deregister()   method properly implemented.
      * However they could override it in case they need to react to the reception of a
      * cancel message in a different way, e.g. by sending back an INFORM.
      *
      * @param cancel the received CANCEL message
      * @return the ACLMessage to be sent as a response to the
-     * cancel operation: typically one of <code>inform</code> and <code>failure</code> or null if no response must be sent back.
+     * cancel operation: typically one of  inform   and  failure   or null if no response must be sent back.
      */
     protected ACLMessage handleCancel(ACLMessage cancel) throws FailureException {
         Subscription s = getSubscription(cancel);
@@ -380,17 +380,17 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_SUBSCRIPTION state.
      * This behaviour overrides the homonymous method.
      * This method also sets the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * It is responsibility of the registered behaviour to put the
      * response (if any) to be sent back into the HashMap at the
-     * <code>RESPONSE_KEY</code> key.
+     *  RESPONSE_KEY   key.
      * The incoming subscription message can be retrieved from the
-     * HashMap at the <code>SUBSCRIPTION_KEY</code> key
+     * HashMap at the  SUBSCRIPTION_KEY   key
      *
      * @param b the Behaviour that will handle this state
      */
@@ -407,17 +407,17 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
     }
 
     /**
-     * This method allows to register a user defined <code>Behaviour</code>
+     * This method allows to register a user defined  Behaviour
      * in the HANDLE_CANCEL state.
      * This behaviour overrides the homonymous method.
      * This method also sets the
-     * data store of the registered <code>Behaviour</code> to the
+     * data store of the registered  Behaviour   to the
      * HashMap of this current behaviour.
      * It is responsibility of the registered behaviour to put the
      * response (if any) to be sent back into the HashMap at the
-     * <code>RESPONSE_KEY</code> key.
+     *  RESPONSE_KEY   key.
      * The incoming CANCEL message can be retrieved from the
-     * HashMap at the <code>CANCEL_KEY</code> key
+     * HashMap at the  CANCEL_KEY   key
      *
      * @param b the Behaviour that will handle this state
      */
@@ -428,8 +428,8 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
     }
 
     /**
-     * Utility method to correctly create a new <code>Subscription</code> object
-     * managed by this <code>SubscriptionResponder</code>
+     * Utility method to correctly create a new  Subscription   object
+     * managed by this  SubscriptionResponder
      */
     public Subscription createSubscription(ACLMessage subsMsg) {
         Subscription s = new Subscription(this, subsMsg);
@@ -445,11 +445,11 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
 
     /**
      * Utility method to correctly retrieve the
-     * <code>Subscription</code> object that is related to the conversation
-     * message <code>msg</code> belongs to.
+     *  Subscription   object that is related to the conversation
+     * message  msg   belongs to.
      *
-     * @param msg The message whose <code>conversation-id</code> indicates the conversation
-     * @return the <code>Subscription</code> object related to the conversation the given message belongs to
+     * @param msg The message whose  conversation-id   indicates the conversation
+     * @return the  Subscription   object related to the conversation the given message belongs to
      */
     public Subscription getSubscription(ACLMessage msg) {
         String convId = msg.getConversationId();
@@ -458,10 +458,10 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
 
     /**
      * Utility method to correctly retrieve the
-     * <code>Subscription</code> object that is related a given conversation.
+     *  Subscription   object that is related a given conversation.
      *
      * @param convId The id of the conversation
-     * @return the <code>Subscription</code> object related to the given conversation
+     * @return the  Subscription   object related to the given conversation
      */
     public Subscription getSubscription(String convId) {
         Subscription s = null;
@@ -475,7 +475,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
      * Utility method that retrieves all Subscription-s done by a given agent
      *
      * @param subscriber The AID of the agent whose subscriptions must be retrieved
-     * @return A <code>Vector</code> including all <code>Subscription</code>-s made by the given agent
+     * @return A  Vector   including all  Subscription  -s made by the given agent
      */
     public List<Subscription> getSubscriptions(AID subscriber) {
         // Synchronization is needed to avoid concurrent modification exception in case this method is
@@ -494,9 +494,9 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
     }
 
     /**
-     * Utility method that retrieves all Subscription-s managed by this <code>SubscriptionResponder</code>
+     * Utility method that retrieves all Subscription-s managed by this  SubscriptionResponder
      *
-     * @return A <code>Vector</code> including all <code>Subscription</code>-s managed by this <code>SubscriptionResponder</code>
+     * @return A  Vector   including all  Subscription  -s managed by this  SubscriptionResponder
      */
     public List<Subscription> getSubscriptions() {
         // Synchronization is needed to avoid concurrent modification exception in case this method is
@@ -557,7 +557,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
     /**
      * Inner interface SubscriptionManager.
      * <p>
-     * A <code>SubscriptionResponder</code>, besides enforcing and
+     * A  SubscriptionResponder  , besides enforcing and
      * controlling the sequence of messages in a subscription conversation, also stores current subscriptions
      * into an internal table. In many cases however it is desirable to manage Subscription objects in an application specific way
      * (e.g. storing them to a persistent support such as a DB). To enable that, it is possible to pass a
@@ -571,10 +571,10 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
          *
          * @param s The Subscription object to be registered
          * @return The boolean value returned by this method provides an
-         * indication to the <code>SubscriptionResponder</code> about whether
+         * indication to the  SubscriptionResponder   about whether
          * or not an AGREE message should be sent back to the initiator. The
-         * default implementation of the <code>handleSubscription()</code> method
-         * of the <code>SubscriptionResponder</code> ignores this indication,
+         * default implementation of the  handleSubscription()   method
+         * of the  SubscriptionResponder   ignores this indication,
          * but programmers can override it.
          */
         boolean register(Subscription s) throws RefuseException, NotUnderstoodException;
@@ -583,10 +583,10 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
          * Deregister a Subscription object
          *
          * @return The boolean value returned by this method provides an
-         * indication to the <code>SubscriptionResponder</code> about whether
+         * indication to the  SubscriptionResponder   about whether
          * or not an INFORM message should be sent back to the initiator. The
-         * default implementation of the <code>handleCancel()</code> method
-         * of the <code>SubscriptionResponder</code> ignores this indication,
+         * default implementation of the  handleCancel()   method
+         * of the  SubscriptionResponder   ignores this indication,
          * but programmers can override it.
          */
         boolean deregister(Subscription s) throws FailureException;
@@ -599,11 +599,11 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
      * This class represents a subscription. When a notification has to
      * be sent to a subscribed agent the notification message should not
      * be directly sent to the subscribed agent, but should be passed to the
-     * <code>Subscription</code> object representing the subscription of that
-     * agent by means of its <code>notify()</code> method. This automatically
+     *  Subscription   object representing the subscription of that
+     * agent by means of its  notify()   method. This automatically
      * handles sequencing and protocol fields appropriately.
-     * <code>Subscription</code> objects must be created by means of the
-     * <code>createSubscription()</code> method.
+     *  Subscription   objects must be created by means of the
+     *  createSubscription()   method.
      */
     public static class Subscription {
 
@@ -611,14 +611,14 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
         private final SubscriptionResponder myResponder;
 
         /**
-         * Private constructor. The <code>createSubscription()</code>
+         * Private constructor. The  createSubscription()
          * must be used instead.
          *
-         * @param r The <code>SubscriptionResponder</code> that received
+         * @param r The  SubscriptionResponder   that received
          *          the subscription message corresponding to this
-         *          <code>Subscription</code>
+         *           Subscription
          * @param s The subscription message corresponding to this
-         *          <code>Subscription</code>
+         *           Subscription
          */
         private Subscription(SubscriptionResponder r, ACLMessage s) {
             myResponder = r;
@@ -630,7 +630,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
          * subscription object was created.
          *
          * @return the subscription message corresponding to this
-         * <code>Subscription</code>
+         *  Subscription
          */
         public ACLMessage getMessage() {
             return subscription;
@@ -638,9 +638,9 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
 
         /**
          * This method allows sending back a notification message to the subscribed
-         * agent associated to this <code>Subscription</code> object. The user
-         * should call this method, instead of directly using the <code>send()</code>
-         * method of the <code>Agent</code> class, as it automatically
+         * agent associated to this  Subscription   object. The user
+         * should call this method, instead of directly using the  send()
+         * method of the  Agent   class, as it automatically
          * handles sequencing and protocol fields appropriately.
          */
         public void notify(ACLMessage notification) {

@@ -84,9 +84,9 @@ public class RoundList implements Serializable {
     }
 
     /**
-     * Inserts the <code>element</code> before the current element.
+     * Inserts the  element   before the current element.
      * If the list was empty, the inserted element becomes also the current element.
-     * <b> Note that this implementation uses a <code>LinkedList</code>
+     * <b> Note that this implementation uses a  LinkedList  
      * and therefore it is not synchronized.
      *
      * @param element the element to insert
@@ -106,13 +106,13 @@ public class RoundList implements Serializable {
     }
 
     /**
-     * Returns the current <code>element</code> in the list and updates the pointer
+     * Returns the current  element   in the list and updates the pointer
      * such that the current becomes the
      * next element in the list.
      * <br> Notice that if the list contains just 1 element each call to this method will return
      * the same element.
      * <br> Take care in avoiding infinite loops in calling this method. It
-     * must be called no more than <code>size()</code> times
+     * must be called no more than  size()   times
      *
      * @throws NoSuchElementException if the list is empty
      **/
@@ -131,7 +131,7 @@ public class RoundList implements Serializable {
      * and updates the pointer to the current element.
      * If the list does not contain the element, it is unchanged.
      * More formally, removes the element with the lowest index i such that
-     * <code>(element==null ? get(i)==null : element.equals(get(i))) </code>
+     *  (element==null ? get(i)==null : element.equals(get(i)))   
      * (if such an element exists).
      *
      * @param element the element to be removed from this list, if present.
@@ -159,7 +159,7 @@ public class RoundList implements Serializable {
     /**
      * Returns true if this list contains the specified element.
      * More formally, returns true if and only if this list contains at least
-     * one element e such that <code>(element==null ? e==null : element.equals(e)).</code>
+     * one element e such that  (element==null ? e==null : element.equals(e)).  
      *
      * @param element whose presence in this list is to be tested.
      * @return true if this list contains the specified element.
@@ -199,7 +199,7 @@ public class RoundList implements Serializable {
      * in the order they are returned by its get() method,
      * enclosed in square brackets ("[]").
      * Adjacent elements are separated by the characters ", " (comma and space).
-     * Elements are converted to strings as by <code>String.valueOf(Object).</code>
+     * Elements are converted to strings as by  String.valueOf(Object).  
      *
      * @return a String representation of this list
      **/

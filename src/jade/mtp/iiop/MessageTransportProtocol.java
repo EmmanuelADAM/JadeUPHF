@@ -50,7 +50,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
- * Implementation of <code><b>fipa.mts.mtp.iiop.std</b></code>
+ * Implementation of  <b>fipa.mts.mtp.iiop.std</b>
  * specification for delivering ACL messages over the OMG IIOP
  * transport protocol.
  *
@@ -429,11 +429,11 @@ public class MessageTransportProtocol implements MTP {
 /**
  * This class represents an IIOP address.
  * Three syntaxes are allowed for an IIOP address (all case-insensitive):
- * <code>
+ *
  * IIOPAddress ::= "ior:" (HexDigit HexDigit+)
  * | "corbaname://" NSHost ":" NSPort "/" NSObjectID "#" objectName
  * | "corbaloc:" HostName ":" portNumber "/" objectID
- * </code>
+ *
  * Notice that, in the third case, BIG_ENDIAN is assumed by default. In the first and second case, instead, the endianess information is contained within the IOR definition.
  **/
 class IIOPAddress implements TransportAddress {

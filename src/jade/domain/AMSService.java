@@ -42,9 +42,9 @@ import java.util.List;
  * This class provides a set of static methods to communicate with
  * a AMS Service that complies with FIPA specifications.
  * Notice that JADE calls automatically the register and deregister methods
- * with the default AMS respectively before calling <code>Agent.setup()</code>
+ * with the default AMS respectively before calling  Agent.setup()
  * method and just
- * after <code>Agent.takeDown()</code> method returns; so there is no need for a normal
+ * after  Agent.takeDown()   method returns; so there is no need for a normal
  * programmer to call them.
  * However, under certain circumstances, a programmer might need to call its
  * methods. To give some examples: when an agent wishes to register with the
@@ -64,10 +64,10 @@ import java.util.List;
  * non-blocking way. The method getNonBlockingBehaviour() returns a
  * non-blocking behaviour of type RequestFIPAServiceBehaviour that can be
  * added to the queue of the agent behaviours, as usual, by using
- * <code>Agent.addBehaviour()</code>.
+ *  Agent.addBehaviour()  .
  * <br>
  * <b>The MIDP version of this class only includes the
- * <code>getFailedReceiver()</code> method.</b>
+ *  getFailedReceiver()   method.</b>
  * <br>
  *
  * @author Fabio Bellifemine - CSELT S.p.A.
@@ -92,7 +92,7 @@ public class AMSService extends FIPAService {
     }
 
     /**
-     * check that the <code>AMSAgentDescription</code> contains the mandatory
+     * check that the  AMSAgentDescription   contains the mandatory
      * slots, i.e. the agent name and the agent state.
      *
      * @throws MissingParameter exception is it is not valid
@@ -114,12 +114,12 @@ public class AMSService extends FIPAService {
      *
      * @param a       is the Agent performing the registration
      * @param AMSName The AID of the <b>AMS</b> agent to register with.
-     * @param amsd    A <code>AMSAgentDescriptor</code> object containing all
+     * @param amsd    A  AMSAgentDescriptor   object containing all
      *                data necessary to the registration. If the Agent name is empty, than
-     *                it is set according to the <code>a</code> parameter. If the Agent state is
+     *                it is set according to the  a   parameter. If the Agent state is
      *                empty, than it is set to ACTIVE.
      * @throws FIPAException A suitable exception can be thrown when
-     *                       a <code>refuse</code> or <code>failure</code> messages are
+     *                       a  refuse   or  failure   messages are
      *                       received from the AMS to indicate some error condition or when
      *                       the method locally discovers that the amsdescription is not valid.
      */
@@ -154,7 +154,7 @@ public class AMSService extends FIPAService {
     }
 
     /**
-     * registers a <code>AMSAgentDescription</code> with the default AMS
+     * registers a  AMSAgentDescription   with the default AMS
      *
      * @see #register(Agent, AID, AMSAgentDescription)
      **/
@@ -168,10 +168,10 @@ public class AMSService extends FIPAService {
      * used by application programmers to deregister with the default AMS.
      *
      * @param AMSName The AID of the <b>AMS</b> agent to deregister from.
-     * @param amsd    A <code>AMSAgentDescription</code> object containing all
+     * @param amsd    A  AMSAgentDescription   object containing all
      *                data necessary to the deregistration.
      * @throws FIPAException A suitable exception can be thrown when
-     *                       a <code>refuse</code> or <code>failure</code> messages are
+     *                       a  refuse   or  failure   messages are
      *                       received from the AMS to indicate some error condition or when
      *                       the method locally discovers that the amsdescription is not valid.
      */
@@ -243,10 +243,10 @@ public class AMSService extends FIPAService {
      *
      * @param AMSName The GUID of the <b>AMS</b> agent holding the data
      *                to be changed.
-     * @param amsd    The new <code>AMSAgentDescriptor</code> object
+     * @param amsd    The new  AMSAgentDescriptor   object
      *                that should modify the existing one.
      * @throws FIPAException A suitable exception can be thrown when
-     *                       a <code>refuse</code> or <code>failure</code> messages are
+     *                       a  refuse   or  failure   messages are
      *                       received from the AMS to indicate some error condition or when
      *                       the method locally discovers that the amsdescription is not valid.
      */
@@ -290,17 +290,17 @@ public class AMSService extends FIPAService {
      *
      * @param a           is the Agent performing the search
      * @param AMSName     The GUID of the <b>AMS</b> agent to start search from.
-     * @param amsd        A <code>AMSAgentDescriptor</code> object containing
+     * @param amsd        A  AMSAgentDescriptor   object containing
      *                    data to search for; this parameter is used as a template to match
      *                    data against.
      * @param constraints of the search
-     * @return An array of <code>AMSAgentDescription</code>
+     * @return An array of  AMSAgentDescription
      * containing all found
      * items matching the given
      * descriptor, subject to given search constraints for search depth
      * and result size.
      * @throws FIPAException A suitable exception can be thrown when
-     *                       a <code>refuse</code> or <code>failure</code> messages are
+     *                       a  refuse   or  failure   messages are
      *                       received from the AMS to indicate some error condition.
      */
     public static AMSAgentDescription[] search(Agent a, AID AMSName, AMSAgentDescription amsd, SearchConstraints constraints) throws FIPAException {
@@ -385,7 +385,7 @@ public class AMSService extends FIPAService {
 
     /**
      * In some cases it is more convenient to execute this tasks in a non-blocking way.
-     * This method returns a non-blocking behaviour that can be added to the queue of the agent behaviours, as usual, by using <code>Agent.addBehaviour()</code>.
+     * This method returns a non-blocking behaviour that can be added to the queue of the agent behaviours, as usual, by using  Agent.addBehaviour()  .
      * <p>
      * Several ways are available to get the result of this behaviour and the programmer can select one according to his preferred programming style:
      * <ul>

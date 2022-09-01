@@ -57,7 +57,7 @@ public class ConstraintDlg extends JDialog {
     /**
      * Create a dialog with the given parent.
      *
-     * @param parent The <code>Frame</code> that is the parent window
+     * @param parent The  Frame   that is the parent window
      *               of this dialog.
      */
     public ConstraintDlg(Frame parent) {
@@ -70,7 +70,7 @@ public class ConstraintDlg extends JDialog {
     /**
      * Create a dialog with the given parent.
      *
-     * @param parent The <code>Dialog</code> that is the parent window
+     * @param parent The  Dialog   that is the parent window
      *               of this dialog.
      */
     public ConstraintDlg(Dialog parent) {
@@ -82,7 +82,7 @@ public class ConstraintDlg extends JDialog {
 
     /**
      * This method display a gui to insert the search
-     * constraints. Return a <code>SearchConstraints </code> if the
+     * constraints. Return a  SearchConstraints    if the
      * OK button is pressed null otherwise.
      */
     public SearchConstraints setConstraint() {

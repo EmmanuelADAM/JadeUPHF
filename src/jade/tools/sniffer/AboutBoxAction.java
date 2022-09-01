@@ -164,7 +164,7 @@ public class AboutBoxAction extends AbstractAction {
     }
 
 
-    private class AboutFrame extends JDialog {
+    private static class AboutFrame extends JDialog {
 
         public AboutFrame(JFrame owner, String name) {
             super(owner, name);

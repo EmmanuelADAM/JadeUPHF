@@ -618,7 +618,7 @@ public class BootGUI extends JDialog {
     /**
      * A JPanel for a single property.
      */
-    class singlePanel extends JPanel {
+    static class singlePanel extends JPanel {
         singlePanel() {
             super();
         }
@@ -676,7 +676,7 @@ public class BootGUI extends JDialog {
     /**
      * Extends FileFilter in order to show only files with extension ".conf".
      */
-    class myFileFilter extends FileFilter {
+    static class myFileFilter extends FileFilter {
 
         public boolean accept(File f) {
             if (f.isDirectory()) {

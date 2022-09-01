@@ -72,8 +72,8 @@ public abstract class ObjectSchema implements Serializable {
      *
      * @param name        The name of the slot.
      * @param slotSchema  The schema defining the type of the slot.
-     * @param optionality The optionality, i.e., <code>OPTIONAL</code>
-     *                    or <code>MANDATORY</code>
+     * @param optionality The optionality, i.e.,  OPTIONAL
+     *                    or  MANDATORY
      */
     protected abstract void add(String name, ObjectSchema slotSchema, int optionality);
 
@@ -86,35 +86,35 @@ public abstract class ObjectSchema implements Serializable {
     protected abstract void add(String name, ObjectSchema slotSchema);
 
     /**
-     * Add a slot with cardinality between <code>cardMin</code>
-     * and <code>cardMax</code> to this schema.
+     * Add a slot with cardinality between  cardMin
+     * and  cardMax   to this schema.
      * Adding such a slot corresponds to add a slot
      * of type Aggregate and then to add proper facets (constraints)
      * to check that the type of the elements in the aggregate are
-     * compatible with <code>elementsSchema</code> and that the
-     * aggregate contains at least <code>cardMin</code> elements and
-     * at most <code>cardMax</code> elements. By default the Aggregate
-     * is of type <code>BasicOntology.SEQUENCE</code>.
+     * compatible with  elementsSchema   and that the
+     * aggregate contains at least  cardMin   elements and
+     * at most  cardMax   elements. By default the Aggregate
+     * is of type  BasicOntology.SEQUENCE  .
      *
      * @param name           The name of the slot.
      * @param elementsSchema The schema for the elements of this slot.
-     * @param cardMin        This slot must get at least <code>cardMin</code>
+     * @param cardMin        This slot must get at least  cardMin
      *                       values
-     * @param cardMax        This slot can get at most <code>cardMax</code>
+     * @param cardMax        This slot can get at most  cardMax
      *                       values
      */
     protected abstract void add(String name, ObjectSchema elementsSchema, int cardMin, int cardMax);
 
     /**
-     * Add a slot with cardinality between <code>cardMin</code>
-     * and <code>cardMax</code> to this schema and allow specifying the type
+     * Add a slot with cardinality between  cardMin
+     * and  cardMax   to this schema and allow specifying the type
      * of Aggregate to be used for this slot.
      *
      * @param name           The name of the slot.
      * @param elementsSchema The schema for the elements of this slot.
-     * @param cardMin        This slot must get at least <code>cardMin</code>
+     * @param cardMin        This slot must get at least  cardMin
      *                       values
-     * @param cardMax        This slot can get at most <code>cardMax</code>
+     * @param cardMax        This slot can get at most  cardMax
      *                       values
      * @param aggType        The type of Aggregate to be used
      * @see #add(String, ObjectSchema, int, int)
@@ -130,11 +130,11 @@ public abstract class ObjectSchema implements Serializable {
     protected abstract void addSuperSchema(ObjectSchema superSchema);
 
     /**
-     * Add a <code>Facet</code> on a slot of this schema
+     * Add a  Facet   on a slot of this schema
      *
-     * @param slotName the name of the slot the <code>Facet</code>
+     * @param slotName the name of the slot the  Facet
      *                 must be added to.
-     * @param f        the <code>Facet</code> to be added.
+     * @param f        the  Facet   to be added.
      * @throws OntologyException if slotName does not identify
      *                           a valid slot in this schema
      */
@@ -167,7 +167,7 @@ public abstract class ObjectSchema implements Serializable {
     public abstract String getTypeName();
 
     /**
-     * Returns the names of all the slots in this <code>Schema</code>
+     * Returns the names of all the slots in this  Schema
      * (including slots defined in super schemas).
      *
      * @return the names of all slots.
@@ -175,40 +175,40 @@ public abstract class ObjectSchema implements Serializable {
     public abstract String[] getNames();
 
     /**
-     * Returns the names of the slots defined in this <code>Schema</code>
+     * Returns the names of the slots defined in this  Schema
      * (excluding slots defined in super schemas).
      *
-     * @return the names of the slots defined in this <code>Schema</code>.
+     * @return the names of the slots defined in this  Schema  .
      */
     public abstract String[] getOwnNames();
 
     /**
-     * Retrieves the schema of a slot of this <code>Schema</code>.
+     * Retrieves the schema of a slot of this  Schema  .
      *
      * @param name The name of the slot.
-     * @return the <code>Schema</code> of slot <code>name</code>
+     * @return the  Schema   of slot  name
      * @throws OntologyException If no slot with this name is present
      *                           in this schema.
      */
     public abstract ObjectSchema getSchema(String name) throws OntologyException;
 
     /**
-     * Indicate whether a given <code>String</code> is the name of a
-     * slot defined in this <code>Schema</code> including super-schemas
+     * Indicate whether a given  String   is the name of a
+     * slot defined in this  Schema   including super-schemas
      *
-     * @param name The <code>String</code> to test.
-     * @return <code>true</code> if <code>name</code> is the name of a
-     * slot defined in this <code>Schema</code> including super-schemas.
+     * @param name The  String   to test.
+     * @return  true   if  name   is the name of a
+     * slot defined in this  Schema   including super-schemas.
      */
     public abstract boolean containsSlot(String name);
 
     /**
-     * Indicate whether a given <code>String</code> is the name of a
-     * slot actually defined in this <code>Schema</code> (excluding super-schemas)
+     * Indicate whether a given  String   is the name of a
+     * slot actually defined in this  Schema   (excluding super-schemas)
      *
-     * @param name The <code>String</code> to test.
-     * @return <code>true</code> if <code>name</code> is the name of a
-     * slot actually defined in this <code>Schema</code> (excluding super-schemas).
+     * @param name The  String   to test.
+     * @return  true   if  name   is the name of a
+     * slot actually defined in this  Schema   (excluding super-schemas).
      */
     public abstract boolean isOwnSlot(String name);
 
@@ -216,7 +216,7 @@ public abstract class ObjectSchema implements Serializable {
      * Indicate whether a slot of this schema is mandatory
      *
      * @param name The name of the slot.
-     * @return <code>true</code> if the slot is mandatory.
+     * @return  true   if the slot is mandatory.
      * @throws OntologyException If no slot with this name is present
      *                           in this schema.
      */
@@ -224,7 +224,7 @@ public abstract class ObjectSchema implements Serializable {
 
     /**
      * Creates an Abstract descriptor to hold an object compliant to
-     * this <code>Schema</code>.
+     * this  Schema  .
      */
     public abstract AbsObject newInstance() throws OntologyException;
 

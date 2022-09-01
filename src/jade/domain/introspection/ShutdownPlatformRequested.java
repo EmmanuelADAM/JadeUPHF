@@ -24,8 +24,8 @@ Boston, MA  02111-1307, USA.
 package jade.domain.introspection;
 
 /**
- * This class represents the <code>shutdown-platform-requested</code> concept in the
- * <code>jade-introspection</code> ontology.
+ * This class represents the  shutdown-platform-requested   concept in the
+ *  jade-introspection   ontology.
  *
  * @author Giovanni Caire - TILAB
  * @since JADE 3.5

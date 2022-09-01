@@ -36,7 +36,7 @@ import java.util.TreeMap;
 
 /**
  * This behaviour subscribes to the AMS to receive notifications
- * about platform-wide events. The <code>installHandlers</code>
+ * about platform-wide events. The  installHandlers
  * method must be redefined to define the handlers for events the
  * agent executing this behaviour is interested in.
  *
@@ -127,9 +127,9 @@ public abstract class AMSSubscriber extends SimpleBehaviour {
 
     /**
      * This method has to be implemented by concrete subclasses,
-     * filling the <code>Map</code> passed as parameter with
-     * implementations of the <code>EventHandler</code> interface,
-     * using the name of the event as key (see the <code>Event</code>
+     * filling the  Map   passed as parameter with
+     * implementations of the  EventHandler   interface,
+     * using the name of the event as key (see the  Event
      * interface.
      *
      * @param handlersTable The table that associates each event name
@@ -171,7 +171,7 @@ public abstract class AMSSubscriber extends SimpleBehaviour {
     }
 
     /**
-     * Retrieve the <code>subscribe</code> ACL message used to subscribe
+     * Retrieve the  subscribe   ACL message used to subscribe
      * to the AMS.
      * This message is automatically sent when this behaviour is added to an
      * Agent.
@@ -183,10 +183,10 @@ public abstract class AMSSubscriber extends SimpleBehaviour {
     }
 
     /**
-     * Retrieve the <code>cancel</code> ACL message
+     * Retrieve the  cancel   ACL message
      * used to cancel the subscription to the AMS.
      * Since this behaviour is cyclic (never ends) it is the responsibility
-     * of the agent executing this behaviour to send the <code>cancel</code>
+     * of the agent executing this behaviour to send the  cancel
      * message to the AMS when notifications are no longer required.
      *
      * @return The cancellation ACL message.

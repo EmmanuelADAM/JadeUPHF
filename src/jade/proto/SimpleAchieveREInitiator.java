@@ -53,15 +53,15 @@ import java.util.*;
  * The structure of these protocols is equal.
  * The initiator sends a message (in general it performs a communicative act).
  * <p>
- * The responder can then reply by sending a <code>not-understood</code>, or a
- * <code>refuse</code> to
+ * The responder can then reply by sending a  not-understood  , or a
+ *  refuse   to
  * achieve the rational effect of the communicative act, or also
- * an <code>agree</code> message to communicate the agreement to perform
+ * an  agree   message to communicate the agreement to perform
  * (possibly in the future) the communicative act.  This first category
  * of reply messages has been here identified as a response.
  * <p> The responder performs the action and, finally, must respond with an
- * <code>inform</code> of the result of the action (eventually just that the
- * action has been done) or with a <code>failure</code> if anything went wrong.
+ *  inform   of the result of the action (eventually just that the
+ * action has been done) or with a  failure   if anything went wrong.
  * This second category of reply messages has been here identified as a
  * result notification.
  * <p> Notice that we have extended the protocol to make optional the
@@ -71,14 +71,10 @@ import java.util.*;
  * communicative act is subsumed by the reception of the following message in
  * the protocol.
  * <p>
- * Read carefully the section of the
- * <a href="..\..\..\programmersguide.pdf"> JADE programmer's guide </a>
- * that describes
- * the usage of this class.
  * <p> <b>Known bugs:</b>
- * <i> The handler <code>handleAllResponses</code> is not called if the <code>
- * agree</code> message is skipped and the <code>inform</code> message
- * is received instead.
+ * <i> The handler  handleAllResponses   is not called if the
+ * agree   message is skipped and the  inform   message
+ * is received instead.</i>
  * <p>
  * see SimpleAchieveREResponder
  *
@@ -141,15 +137,15 @@ public class SimpleAchieveREInitiator extends SimpleBehaviour {
     }
 
     /**
-     * Constructs a <code>SimpleAchieveREInitiator</code> behaviour
+     * Constructs a  SimpleAchieveREInitiator   behaviour
      *
      * @param a     The agent performing the protocol
      * @param msg   The message that must be used to initiate the protocol.
      *              Notice that in this simple implementation, the
-     *              <code>prepareMessage</code>
+     *               prepareMessage
      *              method returns a single message.
-     * @param store The <code>HashMap</code> that will be used by this
-     *              <code>SimpleAchieveREInitiator</code>
+     * @param store The  HashMap   that will be used by this
+     *               SimpleAchieveREInitiator
      * @deprecated cf. constructor with 2 maps
      */
 
@@ -163,15 +159,15 @@ public class SimpleAchieveREInitiator extends SimpleBehaviour {
     }
 
     /**
-     * Constructs a <code>SimpleAchieveREInitiator</code> behaviour
+     * Constructs a  SimpleAchieveREInitiator   behaviour
      *
      * @param a               The agent performing the protocol
      * @param msg             The message that must be used to initiate the protocol.
      *                        Notice that in this simple implementation, the
-     *                        <code>prepareMessage</code>
+     *                         prepareMessage
      *                        method returns a single message.
-     * @param mapMessagesList The <code>HashMap</code> that will be used by this <code>SimpleAchieveREInitiator</code>
-     * @param mapMessages     The <code>HashMap</code> that will be used by this <code>SimpleAchieveREInitiator</code>
+     * @param mapMessagesList The  HashMap   that will be used by this  SimpleAchieveREInitiator
+     * @param mapMessages     The  HashMap   that will be used by this  SimpleAchieveREInitiator
      * @deprecated cf. constructor with 2 maps
      */
 
@@ -362,7 +358,7 @@ public class SimpleAchieveREInitiator extends SimpleBehaviour {
     }
 
     /**
-     * This method is called every time an <code>agree</code>
+     * This method is called every time an  agree
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -377,7 +373,7 @@ public class SimpleAchieveREInitiator extends SimpleBehaviour {
     }
 
     /**
-     * This method is called every time a <code>refuse</code>
+     * This method is called every time a  refuse
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -391,7 +387,7 @@ public class SimpleAchieveREInitiator extends SimpleBehaviour {
     }
 
     /**
-     * This method is called every time a <code>not-understood</code>
+     * This method is called every time a  not-understood
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -405,7 +401,7 @@ public class SimpleAchieveREInitiator extends SimpleBehaviour {
     }
 
     /**
-     * This method is called every time a <code>inform</code>
+     * This method is called every time a  inform
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -419,7 +415,7 @@ public class SimpleAchieveREInitiator extends SimpleBehaviour {
     }
 
     /**
-     * This method is called every time a <code>failure</code>
+     * This method is called every time a  failure
      * message is received, which is not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -449,8 +445,8 @@ public class SimpleAchieveREInitiator extends SimpleBehaviour {
     /**
      * This method is called when all the responses have been
      * collected or when the timeout is expired.
-     * By response message we intend here all the <code>agree, not-understood,
-     * refuse</code> received messages, which are not
+     * By response message we intend here all the  agree, not-understood,
+     * refuse   received messages, which are not
      * not out-of-sequence according
      * to the protocol rules.
      * This default implementation does nothing; programmers might
@@ -467,8 +463,8 @@ public class SimpleAchieveREInitiator extends SimpleBehaviour {
     /**
      * This method is called when all the result notification messages
      * have been collected.
-     * By result notification message we intend here all the <code>inform,
-     * failure</code> received messages, which are not
+     * By result notification message we intend here all the  inform,
+     * failure   received messages, which are not
      * not out-of-sequence according to the protocol rules.
      * This default implementation does nothing; programmers might
      * wish to override the method in case they need to react to this event

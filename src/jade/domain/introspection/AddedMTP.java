@@ -26,8 +26,8 @@ package jade.domain.introspection;
 import jade.core.ContainerID;
 
 /**
- * This class represents the <code>added-mtp</code> concept in the
- * <code>jade-introspection</code> ontology.
+ * This class represents the  added-mtp   concept in the
+ *  jade-introspection   ontology.
  *
  * @author Giovanni Rimassa - Universita' di Parma
  * @version $Date: 2003-11-19 17:04:37 +0100 (mer, 19 nov 2003) $ $Revision: 4567 $
@@ -60,18 +60,18 @@ public class AddedMTP implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>address</code> slot of this
+     * Retrieve the value of the  address   slot of this
      * event, containing the address URL of the newly added MTP.
      *
-     * @return The value of the <code>address</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  address   slot, or
+     *  null   if no value was set.
      */
     public String getAddress() {
         return address;
     }
 
     /**
-     * Set the <code>address</code> of this event.
+     * Set the  address   of this event.
      *
      * @param s The address URL exported by the newly added MTP.
      */
@@ -80,18 +80,18 @@ public class AddedMTP implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>proto</code> slot of this
+     * Retrieve the value of the  proto   slot of this
      * event, containing the protocol name for the newly added MTP.
      *
-     * @return The value of the <code>proto</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  proto   slot, or
+     *  null   if no value was set.
      */
     public String getProto() {
         return proto;
     }
 
     /**
-     * Set the <code>proto</code> slot of this event.
+     * Set the  proto   slot of this event.
      *
      * @param p The protocol name for the newly added MTP.
      */
@@ -100,19 +100,19 @@ public class AddedMTP implements Event {
     }
 
     /**
-     * Retrieve the value of the <code>where</code> slot of this
+     * Retrieve the value of the  where   slot of this
      * event, containing the container identifier of the container
      * where the newly added MTP was deployed.
      *
-     * @return The value of the <code>where</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  where   slot, or
+     *  null   if no value was set.
      */
     public ContainerID getWhere() {
         return where;
     }
 
     /**
-     * Set the <code>where</code> slot of this event.
+     * Set the  where   slot of this event.
      *
      * @param id The container identifier of the container where the
      *           newly added MTP was deployed.

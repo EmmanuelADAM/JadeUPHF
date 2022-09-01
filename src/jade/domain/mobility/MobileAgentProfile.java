@@ -26,7 +26,7 @@ package jade.domain.mobility;
 import jade.content.Concept;
 
 /**
- * This class represents the <code>mobile-agent-profile</code> concept.
+ * This class represents the  mobile-agent-profile   concept.
  *
  * @author Giovanni Rimassa -  Universita' di Parma
  * @version $Date: 2003-11-19 17:04:37 +0100 (mer, 19 nov 2003) $ $Revision: 4567 $
@@ -46,18 +46,18 @@ public class MobileAgentProfile implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>system</code> slot of this
+     * Retrieve the value of the  system   slot of this
      * action, containing the runtime system of the described agent.
      *
-     * @return The value of the <code>system</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  system   slot, or
+     *  null   if no value was set.
      */
     public MobileAgentSystem getSystem() {
         return system;
     }
 
     /**
-     * Set the <code>system</code> slot of this action.
+     * Set the  system   slot of this action.
      *
      * @param s The runtime system of the described agent.
      */
@@ -66,18 +66,18 @@ public class MobileAgentProfile implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>language</code> slot of this
+     * Retrieve the value of the  language   slot of this
      * action, containing the language of the described agent.
      *
-     * @return The value of the <code>language</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  language   slot, or
+     *  null   if no value was set.
      */
     public MobileAgentLanguage getLanguage() {
         return language;
     }
 
     /**
-     * Set the <code>language</code> slot of this action.
+     * Set the  language   slot of this action.
      *
      * @param l The language of the described agent.
      */
@@ -86,18 +86,18 @@ public class MobileAgentProfile implements Concept {
     }
 
     /**
-     * Retrieve the value of the <code>os</code> slot of this action,
+     * Retrieve the value of the  os   slot of this action,
      * containing the OS of the described agent.
      *
-     * @return The value of the <code>os</code> slot, or
-     * <code>null</code> if no value was set.
+     * @return The value of the  os   slot, or
+     *  null   if no value was set.
      */
     public MobileAgentOS getOS() {
         return os;
     }
 
     /**
-     * Set the <code>os</code> slot of this action.
+     * Set the  os   slot of this action.
      *
      * @param o The OS of the described agent.
      */
