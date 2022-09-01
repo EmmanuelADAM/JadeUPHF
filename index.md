@@ -1,6 +1,6 @@
 # Jade version UPHF
 
-Ce projet présente la mise à niveau de Jade par Emmnanuel ADAM (LAMIH/INSA HdF/UPHF), en bénéficiant d'aides d'étudiants de l'UPHF (Constant ABRAHAM & Théo BONHOMME).
+Ce projet présente la mise à niveau de Jade par Emmnanueld ADAM (LAMIH/INSA HdF/UPHF), en bénéficiant d'aides d'étudiants de l'UPHF (Constant ABRAHAM & Théo BONHOMME).
 
 Ce projet reprend donc la célèbre plateforme [Jade v4.5](https://jade.tilab.com/), stoppée en 2017, en la rendant compatible avec les versions récentes de Java (17).
 Un très grand merci à ces développeurs pour leur important travail de qualité qui a permis à de très nombreuses personnes de développer des projets basés sur des SMA.
@@ -67,3 +67,4 @@ However, you can simplify them. Thus :
 Feel free to have a look to the  [samples](https://emmanueladam.github.io/jade/).
 
 *(JADE is(was?) a free software and distributed by [Telecom Italia](https://www.gruppotim.it/it.html), the copyright holder, in open source under the terms and conditions of the LGPL ( Lesser General Public License Version 2) license.*
+](https://github.com/EmmanuelADAM/JadeUPHF/edit/gh-pages/index.md)
