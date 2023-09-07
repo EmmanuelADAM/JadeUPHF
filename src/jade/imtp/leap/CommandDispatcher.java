@@ -156,7 +156,7 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
     public synchronized static CommandDispatcher getDispatcher(String name) throws IMTPException {
         if (enableMultiplePlatforms) {
             if (name != null) {
-                CommandDispatcher cd = (CommandDispatcher) dispatchers.get(name);
+                CommandDispatcher cd = dispatchers.get(name);
                 if (cd == null) {
                     cd = new CommandDispatcher();
                     cd.setPlatformName(name);
@@ -880,7 +880,7 @@ class CommandDispatcher implements StubHelper, ICP.Listener {
                 // If this is a normal Command, let the proper Skeleton
                 // process it.
                 Integer id = command.getObjectID();
-                Skeleton s = (Skeleton) skeletons.get(id);
+                Skeleton s = skeletons.get(id);
                 if (s != null) {
                     response = s.processCommand(command);
                 } else {

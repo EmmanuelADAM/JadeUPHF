@@ -363,13 +363,6 @@ public class HTTPFEDispatcher implements FEConnectionManager, Dispatcher, TimerL
         } catch (IOException ioe) {
             // Re-throw the exception adding the status
             throw new IOException(ioe.getMessage() + '[' + status + ']');
-        } finally {
-			/*#MIDP_INCLUDE_BEGIN
-			if (type != JICPProtocol.RESPONSE_TYPE) {
-				// If we delivered a RESPONSE unlock() is already called by the TimerDispatcher
-				unlock();
-			}
-			#MIDP_INCLUDE_END*/
         }
     }
 

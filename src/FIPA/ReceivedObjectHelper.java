@@ -15,21 +15,20 @@ public class ReceivedObjectHelper {
     }
 
     public static void write(org.omg.CORBA.portable.OutputStream out, ReceivedObject that) {
-        out.write_string(that.by);
-        out.write_string(that.from);
-        DateTimeHelper.write(out, that.date);
-        out.write_string(that.id);
-        out.write_string(that.via);
+        out.write_string(that.by());
+        out.write_string(that.from());
+        DateTimeHelper.write(out, that.date());
+        out.write_string(that.id());
+        out.write_string(that.via());
     }
 
     public static ReceivedObject read(org.omg.CORBA.portable.InputStream in) {
-        ReceivedObject that = new ReceivedObject();
-        that.by = in.read_string();
-        that.from = in.read_string();
-        that.date = DateTimeHelper.read(in);
-        that.id = in.read_string();
-        that.via = in.read_string();
-        return that;
+        String by = in.read_string();
+        String from = in.read_string();
+        DateTime date = DateTimeHelper.read(in);
+        String id = in.read_string();
+        String via = in.read_string();
+        return new ReceivedObject(by, from, date, id, via);
     }
 
     public static ReceivedObject extract(org.omg.CORBA.Any a) {

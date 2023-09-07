@@ -508,7 +508,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 ReInitRounds();
             if (curChar < 64) {
                 long l = 1L << curChar;
-                MatchLoop:
                 do {
                     switch (jjstateSet[--i]) {
                         case 0:
@@ -532,7 +531,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 } while (i != startsAt);
             } else if (curChar < 128) {
                 long l = 1L << (curChar & 077);
-                MatchLoop:
                 do {
                     switch (jjstateSet[--i]) {
                         case 1:
@@ -554,7 +552,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 long l1 = 1L << (hiByte & 077);
                 int i2 = (curChar & 0xff) >> 6;
                 long l2 = 1L << (curChar & 077);
-                MatchLoop:
                 do {
                     if (jjstateSet[--i] == 3) {
                         if (!jjCanMove_0(hiByte, i1, i2, l1, l2))
@@ -627,7 +624,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 ReInitRounds();
             if (curChar < 64) {
                 long l = 1L << curChar;
-                MatchLoop:
                 do {
                     switch (jjstateSet[--i]) {
                         case 0:
@@ -861,7 +857,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 } while (i != startsAt);
             } else if (curChar < 128) {
                 long l = 1L << (curChar & 077);
-                MatchLoop:
                 do {
                     switch (jjstateSet[--i]) {
                         case 0:
@@ -909,7 +904,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 long l1 = 1L << (hiByte & 077);
                 int i2 = (curChar & 0xff) >> 6;
                 long l2 = 1L << (curChar & 077);
-                MatchLoop:
                 do {
                     if (jjstateSet[--i] == 3) {
                         if (jjCanMove_0(hiByte, i1, i2, l1, l2))
@@ -1442,7 +1436,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 ReInitRounds();
             if (curChar < 64) {
                 long l = 1L << curChar;
-                MatchLoop:
                 do {
                     switch (jjstateSet[--i]) {
                         case 0:
@@ -1466,7 +1459,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 } while (i != startsAt);
             } else if (curChar < 128) {
                 long l = 1L << (curChar & 077);
-                MatchLoop:
                 do {
                     switch (jjstateSet[--i]) {
                         case 1:
@@ -1488,7 +1480,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 long l1 = 1L << (hiByte & 077);
                 int i2 = (curChar & 0xff) >> 6;
                 long l2 = 1L << (curChar & 077);
-                MatchLoop:
                 do {
                     if (jjstateSet[--i] == 3) {
                         if (!jjCanMove_0(hiByte, i1, i2, l1, l2))
@@ -1550,7 +1541,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 ReInitRounds();
             if (curChar < 64) {
                 long l = 1L << curChar;
-                MatchLoop:
                 do {
                     switch (jjstateSet[--i]) {
                         case 27:
@@ -1595,7 +1585,6 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 } while (i != startsAt);
             } else if (curChar < 128) {
                 long l = 1L << (curChar & 077);
-                MatchLoop:
                 do {
                     switch (jjstateSet[--i]) {
                         case 9:
@@ -2256,12 +2245,7 @@ public class ACLParserTokenManager implements ACLParserConstants {
                 long l1 = 1L << (hiByte & 077);
                 int i2 = (curChar & 0xff) >> 6;
                 long l2 = 1L << (curChar & 077);
-                MatchLoop:
                 do {
-                    switch (jjstateSet[--i]) {
-                        default -> {
-                        }
-                    }
                 } while (i != startsAt);
             }
             if (kind != 0x7fffffff) {

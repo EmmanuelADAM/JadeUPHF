@@ -242,7 +242,6 @@ public class AgentTree extends JPanel {
             model.insertNodeInto(rpn, root, root.getChildCount());
         }
 
-        return;
     }
 
     public void addAgentNode(String agentName, String agentAddress, String containerName) {

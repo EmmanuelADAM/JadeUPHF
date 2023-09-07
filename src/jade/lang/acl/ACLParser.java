@@ -191,7 +191,7 @@ public class ACLParser implements ACLParserConstants {
                     if (((jj_ntk == -1) ? jj_ntk() : jj_ntk) == LBRACE2) {
                     } else {
                         jj_la1[1] = jj_gen;
-                        break label_2;
+                        break;
                     }
                     aid = AgentIdentifier();
                     msg.addReceiver(aid);
@@ -236,7 +236,7 @@ public class ACLParser implements ACLParserConstants {
                     if (((jj_ntk == -1) ? jj_ntk() : jj_ntk) == LBRACE2) {
                     } else {
                         jj_la1[2] = jj_gen;
-                        break label_3;
+                        break;
                     }
                     aid = AgentIdentifier();
                     msg.addReplyTo(aid);
@@ -338,7 +338,7 @@ public class ACLParser implements ACLParserConstants {
                         if (((jj_ntk == -1) ? jj_ntk() : jj_ntk) == WORD) {
                         } else {
                             jj_la1[5] = jj_gen;
-                            break label_5;
+                            break;
                         }
                         s = Word();
                         cur.addAddresses(s);
@@ -355,7 +355,7 @@ public class ACLParser implements ACLParserConstants {
                         if (((jj_ntk == -1) ? jj_ntk() : jj_ntk) == LBRACE2) {
                         } else {
                             jj_la1[6] = jj_gen;
-                            break label_6;
+                            break;
                         }
                         aid = AgentIdentifier();
                         cur.addResolvers(aid);

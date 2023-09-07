@@ -7,6 +7,8 @@
 
 package FIPA;
 
+public record ReceivedObject(String by, String from, DateTime date, String id, String via) {}
+/*
 public final class ReceivedObject {
     //	instance variables
     public String by;
@@ -27,3 +29,4 @@ public final class ReceivedObject {
         via = __via;
     }
 }
+*/

@@ -204,7 +204,6 @@ class LADT {
                     owner = me;
                     ++depth;
                 } catch (InterruptedException ie) {
-                    return;
                 }
             }
         }

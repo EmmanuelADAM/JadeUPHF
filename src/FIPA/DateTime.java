@@ -7,7 +7,9 @@
 
 package FIPA;
 
-public final class DateTime {
+public  record DateTime(short year, short month, short day, short hour, short minutes, short seconds,
+                             short milliseconds, char typeDesignator){}
+/*public final class DateTime {
     //	instance variables
     public short year;
     public short month;
@@ -33,3 +35,4 @@ public final class DateTime {
         typeDesignator = __typeDesignator;
     }
 }
+*/

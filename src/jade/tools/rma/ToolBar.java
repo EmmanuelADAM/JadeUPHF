@@ -37,9 +37,9 @@ import java.awt.event.ActionListener;
 final class ToolBar extends JToolBar implements ActionListener {
 
     //protected JComboBox ShowChoice = new JComboBox ();
-    protected MainPanel tree;
-    protected Frame mainWnd;
-    protected ActionProcessor actPro;
+    private MainPanel tree;
+    private Frame mainWnd;
+    private ActionProcessor actPro;
     private RMAAction obj;
 
     public ToolBar(MainPanel treeP, Frame mainWnd, ActionProcessor actPro) { // RMAAction[] actions come arg 3

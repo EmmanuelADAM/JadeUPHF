@@ -27,6 +27,7 @@ package jade.mtp.iiop;
 
 
 import FIPA.AgentID;
+import FIPA.DateTime;
 import FIPA.FipaMessage;
 import jade.core.AID;
 import jade.core.Profile;
@@ -293,13 +294,13 @@ public class MessageTransportProtocol implements MTP {
     }
 
     private FIPA.ReceivedObject marshalReceivedObj(ReceivedObject ro) {
-        FIPA.ReceivedObject result = new FIPA.ReceivedObject();
+/*        FIPA.ReceivedObject result = new FIPA.ReceivedObject();
         result.by = ro.getBy();
         result.from = ro.getFrom();
         result.date = marshalDateTime(ro.getDate());
         result.id = ro.getId();
-        result.via = ro.getVia();
-        return result;
+        result.via = ro.getVia();*/
+        return new FIPA.ReceivedObject(ro.getBy(), ro.getFrom(), marshalDateTime(ro.getDate()), ro.getId(), ro.getVia());
     }
 
     private static class MTSImpl extends FIPA._MTSImplBase {
@@ -402,16 +403,16 @@ public class MessageTransportProtocol implements MTP {
         }
 
         private Property unmarshalProperty(FIPA.Property p) {
-            return new Property(p.keyword, p.value.extract_Value());
+            return new Property(p.keyword(), p.value().extract_Value());
         }
 
         private ReceivedObject unmarshalReceivedObj(FIPA.ReceivedObject ro) {
             ReceivedObject result = new ReceivedObject();
-            result.setBy(ro.by);
-            result.setFrom(ro.from);
-            result.setDate(unmarshalDateTime(ro.date));
-            result.setId(ro.id);
-            result.setVia(ro.via);
+            result.setBy(ro.by());
+            result.setFrom(ro.from());
+            result.setDate(unmarshalDateTime(ro.date()));
+            result.setId(ro.id());
+            result.setVia(ro.via());
             return result;
         }
 
@@ -646,7 +647,7 @@ class IIOPAddress implements TransportAddress {
                         }
                     }
 
-                    objectKey = buf.toString(StandardCharsets.US_ASCII.toString());
+                    objectKey = buf.toString(StandardCharsets.US_ASCII);
                     codecStrategy = null;
 
                 }

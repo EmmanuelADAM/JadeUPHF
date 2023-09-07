@@ -47,7 +47,8 @@ public class ReplySender extends OneShotBehaviour {
 
     public static final int NO_REPLY_SENT = -1;
     private int ret;
-    private String replyKey, msgKey;
+    private String replyKey;
+    private String msgKey;
 
     /**
      * Constructor.
@@ -56,7 +57,7 @@ public class ReplySender extends OneShotBehaviour {
      * @param replyKey        HashMap's key where to read the reply message
      * @param msgKey          HashMap's key where to read the message to reply to.
      * @param mapMessagesList the HashMap of messages list for this bheaviour
-     * @deprecated public ReplySender(Agent a, String replyKey, String msgKey, HashMap<String, List<ACLMessage>> mapMessagesList) {
+     * deprecated public ReplySender(Agent a, String replyKey, String msgKey, HashMap<String, List<ACLMessage>> mapMessagesList) {
     this(a, replyKey, msgKey);
     setMapMessagesList(mapMessagesList);
     }
@@ -109,7 +110,7 @@ public class ReplySender extends OneShotBehaviour {
         // Set the Protocol.
         reply.setProtocol(msg.getProtocol());
         // Set ReplyWith if not yet set
-        if (reply.getReplyWith() == null)
+        if (null == reply.getReplyWith())
             reply.setReplyWith(myAgent.getName() + System.currentTimeMillis());
 
         // Set the receivers if not yet set
@@ -126,15 +127,16 @@ public class ReplySender extends OneShotBehaviour {
         }
     }
 
+    @Override
     public void action() {
         ret = NO_REPLY_SENT;
         //TODO: VERIFIER ICI LA map a utiliser selon la clef
         //CAR LA MAP EST VIDE !!!!!!!
         var ds = getMapMessages();
         ACLMessage reply = ds.get(replyKey);
-        if (reply != null) {
+        if (null != reply) {
             ACLMessage msg = ds.get(msgKey);
-            if (msg != null) {
+            if (null != msg) {
                 adjustReply(myAgent, reply, msg);
                 myAgent.send(reply);
                 ret = reply.getPerformative();

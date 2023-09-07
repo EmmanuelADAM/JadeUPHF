@@ -7,7 +7,8 @@
 
 package FIPA;
 
-public final class Property {
+public record  Property (String keyword, org.omg.CORBA.Any value) {}
+/*public final class Property {
     //	instance variables
     public String keyword;
     public org.omg.CORBA.Any value;
@@ -20,4 +21,4 @@ public final class Property {
         keyword = __keyword;
         value = __value;
     }
-}
+}*/

@@ -44,7 +44,6 @@ public abstract class SimpleBehaviour extends Behaviour {
      * behaviour.
      */
     public SimpleBehaviour() {
-        super();
     }
 
     /**

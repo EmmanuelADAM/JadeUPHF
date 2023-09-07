@@ -1864,7 +1864,6 @@ public class ACLTextArea extends JComponent {
                         evt.consume();
                     }
                     currentBindings = bindings;
-                    return;
                 } else if (o instanceof ActionListener) {
                     ((ActionListener) o).actionPerformed(
                             new ActionEvent(evt.getSource(),
@@ -1872,16 +1871,13 @@ public class ACLTextArea extends JComponent {
                                     null, modifiers));
                     currentBindings = bindings;
                     evt.consume();
-                    return;
                 } else if (o instanceof Hashtable) {
                     currentBindings = (Hashtable<KeyStroke, Object>) o;
                     evt.consume();
-                    return;
                 } else if (keyCode != KeyEvent.VK_ALT
                         && keyCode != KeyEvent.VK_CONTROL
                         && keyCode != KeyEvent.VK_SHIFT
                         && keyCode != KeyEvent.VK_META) {
-                    return;
                 }
             }
         }

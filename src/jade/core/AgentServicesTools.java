@@ -8,6 +8,7 @@ import jade.domain.FIPAException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * tools to help the use of the Directory Facilitator (registration to a
@@ -28,7 +29,7 @@ public final class AgentServicesTools {
         var model = new DFAgentDescription();
         var service = new ServiceDescription();
         service.setType(typeService);
-        service.setName(nameService);
+        if(Objects.nonNull(nameService)) service.setName(nameService);
         model.addServices(service);
         return model;
     }

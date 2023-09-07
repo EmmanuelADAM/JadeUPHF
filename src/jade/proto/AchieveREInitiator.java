@@ -277,62 +277,31 @@ public class AchieveREInitiator extends Initiator {
         // Create and register the states specific to the Achieve-RE protocol
         Behaviour b;
         // HANDLE_AGREE
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895818003L;
-
-            public void action() {
-                handleAgree(getMapMessages().get(REPLY_K));
-            }
-        };
+        b = new OneShotBehaviour(myAgent, agent->handleAgree(getMapMessages().get(REPLY_K)));
         b.setMapMessagesList(getMapMessagesList());
         b.setMapMessages(getMapMessages());
         registerState(b, HANDLE_AGREE);
 
         // HANDLE_REFUSE
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895818004L;
-
-            public void action() {
-                handleRefuse(getMapMessages().get(REPLY_K));
-            }
-        };
+        b = new OneShotBehaviour(myAgent, agent->handleRefuse(getMapMessages().get(REPLY_K)));
         b.setMapMessagesList(getMapMessagesList());
         b.setMapMessages(getMapMessages());
         registerState(b, HANDLE_REFUSE);
 
         // HANDLE_INFORM
-        b = new OneShotBehaviour(myAgent) {
-            @Serial
-            private static final long serialVersionUID = 3487495895818006L;
-
-            public void action() {
-                handleInform(getMapMessages().get(REPLY_K));
-            }
-        };
+        b = new OneShotBehaviour(myAgent, agent->handleInform(getMapMessages().get(REPLY_K)));
         b.setMapMessagesList(getMapMessagesList());
         b.setMapMessages(getMapMessages());
         registerState(b, HANDLE_INFORM);
 
         // HANDLE_ALL_RESPONSES
-        b = new OneShotBehaviour(myAgent) {
-
-            public void action() {
-                handleAllResponses(getMapMessagesList().get(ALL_RESPONSES_KEY));
-            }
-        };
+        b = new OneShotBehaviour(myAgent, agent->handleAllResponses(getMapMessagesList().get(ALL_RESPONSES_KEY)));
         b.setMapMessagesList(getMapMessagesList());
         b.setMapMessages(getMapMessages());
         registerState(b, HANDLE_ALL_RESPONSES);
 
         // HANDLE_ALL_RESULT_NOTIFICATIONS
-        b = new OneShotBehaviour(myAgent) {
-
-            public void action() {
-                handleAllResultNotifications(getMapMessagesList().get(ALL_RESULT_NOTIFICATIONS_KEY));
-            }
-        };
+        b = new OneShotBehaviour(myAgent, agent->handleAllResultNotifications(getMapMessagesList().get(ALL_RESULT_NOTIFICATIONS_KEY)));
         b.setMapMessagesList(getMapMessagesList());
         b.setMapMessages(getMapMessages());
         registerLastState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
@@ -400,14 +369,14 @@ public class AchieveREInitiator extends Initiator {
      */
     protected int checkSessions(ACLMessage reply) {
         int ret = -1;
-        if (getLastExitValue() == MsgReceiver.TIMEOUT_EXPIRED && !allResponsesReceived) {
+        if (MsgReceiver.TIMEOUT_EXPIRED == getLastExitValue() && !allResponsesReceived) {
             // Special case 1: Timeout has expired
             // Remove all the sessions for which no response has been received yet
             var keysToRemove = new ArrayList<String>();
-            mapSessions.forEach((k, v) -> {
-                if (v.getState() == Session.INIT) keysToRemove.add(k);
+            mapSessions.forEach((sessionName, session) -> {
+                if (session.getState() == Session.INIT) keysToRemove.add(sessionName);
             });
-            keysToRemove.forEach(k -> mapSessions.remove(k));
+            keysToRemove.forEach(sessionName -> mapSessions.remove(sessionName));
         } else if (reply == null) {
             // Special case 2: We were interrupted (or an additional timeout expired)
             // Remove all sessions

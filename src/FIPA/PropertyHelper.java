@@ -15,15 +15,14 @@ public class PropertyHelper {
     }
 
     public static void write(org.omg.CORBA.portable.OutputStream out, Property that) {
-        out.write_string(that.keyword);
-        out.write_any(that.value);
+        out.write_string(that.keyword());
+        out.write_any(that.value());
     }
 
     public static Property read(org.omg.CORBA.portable.InputStream in) {
-        Property that = new Property();
-        that.keyword = in.read_string();
-        that.value = in.read_any();
-        return that;
+        String keyword = in.read_string();
+        org.omg.CORBA.Any value = in.read_any();
+        return new Property(keyword, value);
     }
 
     public static Property extract(org.omg.CORBA.Any a) {

@@ -15,27 +15,26 @@ public class DateTimeHelper {
     }
 
     public static void write(org.omg.CORBA.portable.OutputStream out, DateTime that) {
-        out.write_short(that.year);
-        out.write_short(that.month);
-        out.write_short(that.day);
-        out.write_short(that.hour);
-        out.write_short(that.minutes);
-        out.write_short(that.seconds);
-        out.write_short(that.milliseconds);
-        out.write_char(that.typeDesignator);
+        out.write_short(that.year());
+        out.write_short(that.month());
+        out.write_short(that.day());
+        out.write_short(that.hour());
+        out.write_short(that.minutes());
+        out.write_short(that.seconds());
+        out.write_short(that.milliseconds());
+        out.write_char(that.typeDesignator());
     }
 
     public static DateTime read(org.omg.CORBA.portable.InputStream in) {
-        DateTime that = new DateTime();
-        that.year = in.read_short();
-        that.month = in.read_short();
-        that.day = in.read_short();
-        that.hour = in.read_short();
-        that.minutes = in.read_short();
-        that.seconds = in.read_short();
-        that.milliseconds = in.read_short();
-        that.typeDesignator = in.read_char();
-        return that;
+        short year = in.read_short();
+        short month = in.read_short();
+        short day = in.read_short();
+        short hour = in.read_short();
+        short minutes = in.read_short();
+        short seconds = in.read_short();
+        short milliseconds = in.read_short();
+        char typeDesignator = in.read_char();
+        return new DateTime(year, month, day, hour, minutes, seconds, milliseconds,  typeDesignator);
     }
 
     public static DateTime extract(org.omg.CORBA.Any a) {

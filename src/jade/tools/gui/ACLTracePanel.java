@@ -595,7 +595,6 @@ public class ACLTracePanel extends JPanel {
      */
     void systemMenuItem_actionPerformed(ActionEvent e) {
         if (currentACL == null) {
-            return;
         }
     }
 

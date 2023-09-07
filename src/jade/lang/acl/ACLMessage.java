@@ -1143,9 +1143,7 @@ public class ACLMessage implements Serializable {
             // Deep clone receivers
             if (dests != null) {
                 result.dests = new ArrayList<>(dests.size());
-                for (AID id : dests) {
-                    result.dests.add((AID) id.clone());
-                }
+                dests.forEach(id->result.dests.add((AID) id.clone()));
             }
 
             // Deep clone reply_to

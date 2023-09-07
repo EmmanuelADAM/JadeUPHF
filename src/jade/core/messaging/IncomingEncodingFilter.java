@@ -141,7 +141,6 @@ public class IncomingEncodingFilter extends Filter {
         byte[] payload = gmsg.getPayload();
         if (payload == null) {
             // If a real ACLMessage is present, just do nothing!
-            return;
         } else {
             Envelope env = gmsg.getEnvelope();
             ACLMessage msg = decodeMessage(env, payload);

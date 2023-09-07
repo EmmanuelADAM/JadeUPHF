@@ -154,7 +154,6 @@ class GADT {
                 owner = me;
                 ++depth;
             } catch (InterruptedException ie) {
-                return;
             }
 
         }

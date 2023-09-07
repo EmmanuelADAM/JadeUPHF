@@ -63,7 +63,7 @@ public abstract class MemKB extends KB {
         String templateName = template.getName();
         if (templateName != null) {
             String factName = fact.getName();
-            if ((factName == null) || (!templateName.equalsIgnoreCase(factName)))
+            if ((!templateName.equalsIgnoreCase(factName)))
                 return false;
         }
 

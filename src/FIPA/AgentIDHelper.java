@@ -16,50 +16,38 @@ public class AgentIDHelper {
 
     public static void write(org.omg.CORBA.portable.OutputStream out, AgentID that) {
         out.write_string(that.name);
-        {
-            out.write_long(that.addresses.length);
-            for (int __index = 0; __index < that.addresses.length; __index += 1) {
-                out.write_string(that.addresses[__index]);
+        out.write_long(that.addresses.length);
+        for(String address:that.addresses) out.write_string(address);
+        out.write_long(that.resolvers.length);
+        for(AgentID resolver:that.resolvers) AgentIDHelper.write(out, resolver);
+        out.write_long(that.userDefinedProperties.length);
+        for(Property userDefinedProperty:that.userDefinedProperties) PropertyHelper.write(out, userDefinedProperty);
+/*            for (int i = 0; i < nb; i ++) {
+                out.write_string(that.addresses[i]);
             }
-        }
-        {
+
             out.write_long(that.resolvers.length);
-            for (int __index = 0; __index < that.resolvers.length; __index += 1) {
-                AgentIDHelper.write(out, that.resolvers[__index]);
+            for (int i = 0; i < that.resolvers.length; i += 1) {
+                AgentIDHelper.write(out, that.resolvers[i]);
             }
-        }
-        {
             out.write_long(that.userDefinedProperties.length);
-            for (int __index = 0; __index < that.userDefinedProperties.length; __index += 1) {
-                PropertyHelper.write(out, that.userDefinedProperties[__index]);
-            }
-        }
+            for (int i = 0; i < that.userDefinedProperties.length; i += 1) {
+                PropertyHelper.write(out, that.userDefinedProperties[i]);
+            }*/
     }
 
     public static AgentID read(org.omg.CORBA.portable.InputStream in) {
         AgentID that = new AgentID();
         that.name = in.read_string();
-        {
-            int __length = in.read_long();
-            that.addresses = new String[__length];
-            for (int __index = 0; __index < that.addresses.length; __index += 1) {
-                that.addresses[__index] = in.read_string();
-            }
-        }
-        {
-            int __length = in.read_long();
-            that.resolvers = new AgentID[__length];
-            for (int __index = 0; __index < that.resolvers.length; __index += 1) {
-                that.resolvers[__index] = AgentIDHelper.read(in);
-            }
-        }
-        {
-            int __length = in.read_long();
-            that.userDefinedProperties = new Property[__length];
-            for (int __index = 0; __index < that.userDefinedProperties.length; __index += 1) {
-                that.userDefinedProperties[__index] = PropertyHelper.read(in);
-            }
-        }
+        int length = in.read_long();
+        that.addresses = new String[length];
+        for (int i = 0; i < length; i ++) that.addresses[i] = in.read_string();
+        length = in.read_long();
+        that.resolvers = new AgentID[length];
+        for (int i = 0; i < length; i++)  that.resolvers[i] = AgentIDHelper.read(in);
+        length = in.read_long();
+        that.userDefinedProperties = new Property[length];
+        for (int i = 0; i < length; i++)  that.userDefinedProperties[i] = PropertyHelper.read(in);
         return that;
     }
 
@@ -105,6 +93,6 @@ public class AgentIDHelper {
     }
 
     public static String id() {
-        return "IDL:FIPA/AgentID:1.0";
+        return "IDL:FIPA/AgentID:2.0";
     }
 }

@@ -668,9 +668,7 @@ public class SLParserTokenManager implements SLParserConstants {
     }
 
     private int jjStopStringLiteralDfa_0(int pos, long active0) {
-        return switch (pos) {
-            default -> -1;
-        };
+        return -1;
     }
 
     private int jjStartNfa_0(int pos, long active0) {

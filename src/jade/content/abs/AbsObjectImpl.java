@@ -28,6 +28,7 @@ import jade.core.CaseInsensitiveString;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Base class for all non-primitive abstract descriptor classes.
@@ -41,7 +42,7 @@ public class AbsObjectImpl implements AbsObject {
     /**
      * This list keeps the keys in the same order as they were added
      **/
-    private final ArrayList<String> orderedKeys = new ArrayList<>();
+    private final List<String> orderedKeys = new ArrayList<>();
     private String typeName;
     /**
      * true if this object is changed and its hash must be recomputed

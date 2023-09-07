@@ -178,7 +178,7 @@ public class AboutBoxAction extends AbstractAction {
 
     }
 
-    private class MouseClick implements MouseListener {
+    private static class MouseClick implements MouseListener {
         public void mouseClicked(MouseEvent event) {
             ((AboutFrame) (event.getSource())).disposeAsync();
 

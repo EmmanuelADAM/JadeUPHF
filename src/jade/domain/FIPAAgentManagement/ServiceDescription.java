@@ -278,9 +278,11 @@ public class ServiceDescription implements Concept {
 
         ServiceDescription that = (ServiceDescription) o;
 
-        if (!Objects.equals(name, that.name)) return false;
-        return Objects.equals(type, that.type);
+        if (!Objects.equals(type, that.type)) return false;
+        if (name==null || that.name==null) return true;
+        return Objects.equals(name, that.name);
     }
+
 
     @Override
     public String toString() {

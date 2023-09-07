@@ -45,7 +45,6 @@ public  class OneShotBehaviour extends SimpleBehaviour {
      * Default constructor. It does not set the owner agent.
      */
     public OneShotBehaviour() {
-        super();
     }
 
     /**
@@ -68,6 +67,7 @@ public  class OneShotBehaviour extends SimpleBehaviour {
      *
      * @return Always  true  .
      */
+    @Override
     public final boolean done() {
         return true;
     }

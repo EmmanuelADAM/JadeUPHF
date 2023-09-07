@@ -25,6 +25,7 @@ package jade.core;
 
 //#APIDOC_EXCLUDE_FILE
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -116,6 +117,7 @@ public class ServiceDescriptor implements Serializable {
         myIsMandatory = isMandatory;
     }
 
+    @Serial
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
         if (myService != null) {
             serviceClass = myService.getClass().getName();
@@ -123,11 +125,12 @@ public class ServiceDescriptor implements Serializable {
         out.defaultWriteObject();
     }
 
+    @Serial
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
         in.defaultReadObject();
         if (serviceClass != null) {
             try {
-                myService = (Service) Class.forName(serviceClass).newInstance();
+                myService = (Service) Class.forName(serviceClass).getConstructor().newInstance();
             } catch (ClassNotFoundException cnfe) {
                 throw cnfe;
             } catch (Throwable t) {

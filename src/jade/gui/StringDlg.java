@@ -106,7 +106,6 @@ public class StringDlg extends JDialog {
                 String insertedValue = (txtString.getText()).trim();
                 if (insertedValue.length() == 0) {
                     JOptionPane.showMessageDialog(null, "Must have non-empty fields !", "Error Message", JOptionPane.ERROR_MESSAGE);
-                    return;
                 } else {
                     out = insertedValue;
                     dispose();

@@ -648,7 +648,6 @@ public class FrontEndDispatcher implements FEConnectionManager, Dispatcher, Time
                 // Try to recreate the BE
                 c = createBackEnd();
                 handleReconnection(c);
-                return;
             } else {
                 // There was a JICP error. Abort
                 throw new ICPException(errorMsg);
@@ -658,7 +657,6 @@ public class FrontEndDispatcher implements FEConnectionManager, Dispatcher, Time
             myProperties.setProperty(JICPProtocol.LOCAL_HOST_KEY, new String(pkt.getData()));
             myLogger.log(Logger.INFO, myMediatorID + " - Connect OK");
             handleReconnection(c);
-            return;
         }
     }
 

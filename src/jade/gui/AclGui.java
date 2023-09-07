@@ -720,7 +720,7 @@ public class AclGui extends JPanel {
         //#DOTNET_EXCLUDE_END
 
         Enumeration<?> e = msg.getAllUserDefinedParameters().propertyNames();
-        ArrayList<Object> list = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
         while (e.hasMoreElements())
             list.add(e.nextElement());
         propertiesListPanel.resetContent(list.iterator());

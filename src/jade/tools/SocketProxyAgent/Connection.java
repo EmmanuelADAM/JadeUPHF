@@ -234,7 +234,6 @@ class Connection extends Thread {
                 out.flush();
             }
             close();
-            return;
         }
     }
 

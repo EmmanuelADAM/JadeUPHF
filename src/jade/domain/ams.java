@@ -134,14 +134,10 @@ public class ams extends Agent /*implements AgentManager.Listener*/ {
 
         String sLogDelay = getProperty(PERIODIC_LOG_DELAY, String.valueOf(DEFAULT_PERIODIC_LOG_DELAY));
         try {
-            int logDelay = Integer.parseInt(sLogDelay);
+            long logDelay = Long.parseLong(sLogDelay);
             if (logDelay > 0) {
                 // Activate periodic log
-                addBehaviour(new TickerBehaviour(this, logDelay) {
-                    public void onTick() {
-                        logger.log(Logger.INFO, "JADE AMS active...");
-                    }
-                });
+                addBehaviour(new TickerBehaviour(this, logDelay, a->logger.log(Logger.INFO, "JADE AMS active...")));
             }
         } catch (Exception e) {
             logger.log(Logger.WARNING, "Wrong periodic log delay value " + sLogDelay + ". It must be an integer value.");
@@ -185,11 +181,8 @@ public class ams extends Agent /*implements AgentManager.Listener*/ {
 
         // Temporary patch:
         SequentialBehaviour sb = new SequentialBehaviour();
-        sb.addSubBehaviour(new WakerBehaviour(this, 1000) {
-            public void onWake() {
-                // Just do nothing
-            }
-        });
+        // first, just do nothing in 1 sec
+        sb.addSubBehaviour(new WakerBehaviour(this, 1000L, a->{}));
         sb.addSubBehaviour(registerTool);
         addBehaviour(sb);
 

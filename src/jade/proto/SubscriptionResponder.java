@@ -210,7 +210,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
      *                        if mt is null every message is consumed by this protocol.
      * @param sm              The  SubscriptionManager   object that is notified about subscription/un-subscription events
      * @param mapMessagesList the HashMap that will be used by protocol
-     * @deprecated public SubscriptionResponder(Agent a, MessageTemplate mt, SubscriptionManager sm, HashMap<String, List<ACLMessage>> mapMessagesList) {
+     * deprecated public SubscriptionResponder(Agent a, MessageTemplate mt, SubscriptionManager sm, HashMap<String, List<ACLMessage>> mapMessagesList) {
     super(a);
     setMapMessagesList(mapMessagesList);
     mySubscriptionManager = sm;

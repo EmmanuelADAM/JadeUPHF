@@ -241,8 +241,7 @@ public class ACLPanel extends JPanel {
         for (Object obj : editsVector) {
             try {
                 Method sn = obj.getClass().getMethod(methodName, Boolean.TYPE);
-                Object os = editable;
-                sn.invoke(obj, os);
+                sn.invoke(obj, editable);
             } catch (Exception ex) {
                 if (logger.isLoggable(Logger.WARNING))
                     logger.log(Logger.WARNING, "Obj: " + obj.getClass().toString() + " " + ex.getMessage());

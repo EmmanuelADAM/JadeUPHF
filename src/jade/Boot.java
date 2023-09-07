@@ -47,6 +47,9 @@ public class Boot {
     public static final String DEFAULT_FILENAME = "leap.properties";
     private static final Logger logger = Logger.getMyLogger("jade.Boot");
 
+    /**profile manager*/
+    static ProfileImpl p;
+
     /**
      * Default constructor.
      */
@@ -61,26 +64,8 @@ public class Boot {
      */
     public static void main(String[] args) {
         try {
-            // Create the Profile
-            ProfileImpl p;
-            if (args.length > 0) {
-                if (args[0].startsWith("-")) {
-                    // Settings specified as command line arguments
-                    Properties pp = parseCmdLineArgs(args);
-                    if (pp != null) {
-                        p = new ProfileImpl(pp);
-                    } else {
-                        // One of the "exit-immediately" options was specified!
-                        return;
-                    }
-                } else {
-                    // Settings specified in a property file
-                    p = new ProfileImpl(args[0]);
-                }
-            } else {
-                // Settings specified in the default property file
-                p = new ProfileImpl(DEFAULT_FILENAME);
-            }
+            createProfile(args);
+            if (p == null) return;
 
             // Start a new JADE runtime system
             Runtime.instance().setCloseVM(true);
@@ -96,18 +81,33 @@ public class Boot {
 			// Starts the container in SINGLE_MODE (Only one per JVM)
 			Runtime.instance().startUp(p);
 			#PJAVA_INCLUDE_END*/
-        } catch (ProfileException pe) {
-            System.err.println("Error creating the Profile [" + pe.getMessage() + "]");
-            pe.printStackTrace();
-            printUsage();
+        } catch (ProfileException  |IllegalArgumentException e) {
+            String errMsg = "Error creating the Profile : ";
+            if(e.getClass() == IllegalArgumentException.class) errMsg = "Command line arguments format error : ";
+            System.err.println(errMsg + e.getMessage());
+            e.printStackTrace();
+            Boot.printUsage();
             //System.err.println("Usage: java jade.Boot <filename>");
             System.exit(-1);
-        } catch (IllegalArgumentException iae) {
-            System.err.println("Command line arguments format error. " + iae.getMessage());
-            iae.printStackTrace();
-            printUsage();
-            //System.err.println("Usage: java jade.Boot <filename>");
-            System.exit(-1);
+        }
+    }
+
+    private static void createProfile(String[] args) throws ProfileException {
+        // Create the Profile
+        if (args.length > 0) {
+            if (args[0].startsWith("-")) {
+                // Settings specified as command line arguments
+                Properties pp = parseCmdLineArgs(args);
+                if (pp != null) {
+                    p = new ProfileImpl(pp);
+                }
+            } else {
+                // Settings specified in a property file
+                p = new ProfileImpl(args[0]);
+            }
+        } else {
+            // Settings specified in the default property file
+            p = new ProfileImpl(Boot.DEFAULT_FILENAME);
         }
     }
 
@@ -212,25 +212,26 @@ public class Boot {
     }
 
     public static void printUsage() {
-        System.out.println("Usage:");
-        System.out.println("java -cp <classpath> jade.Boot [options] [agents]");
-        System.out.println("Main options:");
-        System.out.println("    -container");
-        System.out.println("    -gui");
-        System.out.println("    -name <platform name>");
-        System.out.println("    -host <main container host>");
-        System.out.println("    -port <main container port>");
-        System.out.println("    -local-host <host where to bind the local server socket on>");
-        System.out.println("    -local-port <port where to bind the local server socket on>");
-        System.out.println("    -conf <property file to load configuration properties from>");
-        System.out.println("    -services <semicolon separated list of service classes>");
-        System.out.println("    -mtps <semicolon separated list of mtp-specifiers>");
-        System.out.println("     where mtp-specifier = [in-address:]<mtp-class>[(comma-separated args)]");
-        System.out.println("    -<property-name> <property-value>");
-        System.out.println("Agents: [-agents] <semicolon separated list of agent-specifiers>");
-        System.out.println("     where agent-specifier = <agent-name>:<agent-class>[(comma separated args)]");
-        System.out.println();
-        System.out.println("Look at the JADE Administrator's Guide for more details");
+        System.out.println("""
+        Usage:
+            java -cp <classpath> jade.Boot [options] [age@nts]
+            Main options:
+                -container
+                -gui
+                -name <platform name>
+                -host <main container host>
+                -port <main container port>
+                -local-host <host where to bind the local server socket on>
+                -local-port <port where to bind the local server socket on>
+                -conf <property file to load configuration properties from>
+                -services <semicolon separated list of service classes>
+                -mtps <semicolon separated list of mtp-specifiers>
+                       where mtp-specifier = [in-address:]<mtp-class>[(comma-separated args)]
+                -<property-name> <property-value>
+                Agents: [-agents] <semicolon separated list of agent-specifiers>
+                       where agent-specifier = <agent-name>:<agent-class>[(comma separated args)]
+                       
+            Look at the JADE Administrator's Guide for more details""");
     }
 }
 

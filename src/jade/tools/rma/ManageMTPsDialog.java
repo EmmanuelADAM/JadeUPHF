@@ -163,7 +163,6 @@ public class ManageMTPsDialog extends JDialog {
                 removeMTP.setEnabled(false);
                 if (sel == null) {
                     addresses.setListData(EMPTY_LIST);
-                    return;
                 } else {
                     List<String> addrs = data.get(sel);
                     if (addrs != null)

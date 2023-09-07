@@ -425,8 +425,8 @@ public class AbsHelper {
      * @throws OntologyException if a type mismatch is detected
      */
     public static void setAttribute(AbsObject abs, String attrName, AbsObject attrValue) throws OntologyException {
-        if (abs.getAbsType() == AbsObject.ABS_AGENT_ACTION) {
-            if (attrValue instanceof AbsTerm || attrValue == null) {
+        if (AbsObject.ABS_AGENT_ACTION == abs.getAbsType()) {
+            if (attrValue instanceof AbsTerm || null == attrValue) {
                 ((AbsAgentAction) abs).set(attrName, (AbsTerm) attrValue);
                 return;
             }
@@ -435,15 +435,15 @@ public class AbsHelper {
                 return;
             }
         }
-        if (abs.getAbsType() == AbsObject.ABS_CONCEPT) {
-            if (attrValue instanceof AbsTerm || attrValue == null) {
+        if (AbsObject.ABS_CONCEPT == abs.getAbsType()) {
+            if (attrValue instanceof AbsTerm || null == attrValue) {
                 ((AbsConcept) abs).set(attrName, (AbsTerm) attrValue);
                 return;
             }
-        } else if (abs.getAbsType() == AbsObject.ABS_PREDICATE) {
+        } else if (AbsObject.ABS_PREDICATE == abs.getAbsType()) {
             ((AbsPredicate) abs).set(attrName, attrValue);
             return;
-        } else if (abs.getAbsType() == AbsObject.ABS_IRE) {
+        } else if (AbsObject.ABS_IRE == abs.getAbsType()) {
             if (attrValue instanceof AbsVariable && CaseInsensitiveString.equalsIgnoreCase(attrName, IRESchema.VARIABLE)) {
                 ((AbsIRE) abs).setVariable((AbsVariable) attrValue);
                 return;
@@ -451,7 +451,7 @@ public class AbsHelper {
                 ((AbsIRE) abs).setProposition((AbsPredicate) attrValue);
                 return;
             }
-        } else if (abs.getAbsType() == AbsObject.ABS_VARIABLE) {
+        } else if (AbsObject.ABS_VARIABLE == abs.getAbsType()) {
             if (attrValue instanceof AbsPrimitive && CaseInsensitiveString.equalsIgnoreCase(attrName, VariableSchema.NAME)) {
                 ((AbsVariable) abs).setName(((AbsPrimitive) attrValue).getString());
                 return;
@@ -597,7 +597,7 @@ public class AbsHelper {
         if (abs instanceof AbsAggregate) {
             Iterator<AbsTerm> it = ((AbsAggregate) abs).iterator();
             while (it.hasNext()) {
-                if (!isAbsTemplate(it.next())) {
+                if (!AbsHelper.isAbsTemplate(it.next())) {
                     return false;
                 }
             }

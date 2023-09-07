@@ -173,7 +173,6 @@ public class ConstraintDlg extends JDialog {
 
                 } catch (Exception e1) {
                     JOptionPane.showMessageDialog(null, "The inserted values must be numbers !!!.", "Error Message", JOptionPane.ERROR_MESSAGE);
-                    return;
                 }
             }
         });

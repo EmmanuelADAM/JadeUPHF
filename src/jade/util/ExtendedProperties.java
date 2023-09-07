@@ -22,6 +22,7 @@
 package jade.util;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -90,7 +91,7 @@ public class ExtendedProperties extends Properties {
      * @throws IOException if anything goes wrong.
      */
     public synchronized void load(InputStream inStream) throws IOException {
-        addFromReader(new InputStreamReader(inStream, "8859_1"));
+        addFromReader(new InputStreamReader(inStream, StandardCharsets.ISO_8859_1));
     }
 
     /**
@@ -103,7 +104,7 @@ public class ExtendedProperties extends Properties {
      */
     public synchronized void store(OutputStream out, String header) throws IOException {
         String lineSeparator = System.getProperty("line.separator");
-        Writer writer = new OutputStreamWriter(out, "8859_1");
+        Writer writer = new OutputStreamWriter(out, StandardCharsets.ISO_8859_1);
         if (header != null) {
             writer.write("#" + header);
             writer.write(lineSeparator);
