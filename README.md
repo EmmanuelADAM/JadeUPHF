@@ -52,6 +52,12 @@ Cependant, vous pouvez simplifier ces codes. Ainsi :
         - un Agent possède la fonction `println("texte")` qui affiche un texte sur la console
         - une classe `AgentWindowed` associe à un agent une petite fenêtre, utile pour la visualisation et le débogage, une fonction `void println(String text)` permet d'afficher une ligne sur celle-ci.
       Un bouton activable permet aussi une interaction simple avec l'utilisateur.
+  - **Outils de supervision modernisés**
+      - le paquet [`monitoring`](src/monitoring) fournit des remplaçants modernes (Swing) du `DummyAgent` et
+        du `Sniffer` historiques : `monitoring.agents.ModernDummyAgent` (composeur ACL complet, historique,
+        Reply/Edit, sauvegarde fichier) et `monitoring.agents.ModernSnifferAgent` (table + diagramme de
+        séquence en direct, avec surveillance d'un agent **sans aucune modification de son code** via le
+        vrai mécanisme `SniffOn`/`SniffOff` de l'AMS). Voir [`src/monitoring/README.md`](src/monitoring/README.md).
 
 N'hésitez pas à vous référer aux [exemples](https://emmanueladam.github.io/jade/).
 
@@ -110,6 +116,12 @@ However, you can simplify them. Thus :
       - a class, `AgentWindowed`, link a small window to an agent, useful for the control and the debug, a function 
         `void println(String text)` add a text line on it. 
       - An activable button allows a simple interaction with the user.
+  - **Modernized monitoring tools**
+      - the [`monitoring`](src/monitoring) package provides modern (Swing) replacements for the historical
+        `DummyAgent` and `Sniffer`: `monitoring.agents.ModernDummyAgent` (full ACL composer, history,
+        Reply/Edit, file save) and `monitoring.agents.ModernSnifferAgent` (live table + sequence diagram,
+        able to watch an agent with **zero code change** through the real AMS `SniffOn`/`SniffOff`
+        mechanism). See [`src/monitoring/README.md`](src/monitoring/README.md).
 
 Feel free to have a look to the (french)  [samples](https://emmanueladam.github.io/jade/).
 
