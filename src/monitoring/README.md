@@ -39,11 +39,16 @@ receives. **No change to that agent's code is needed**, and it works even
 for agents you did not write, or agents running on a remote container.
 Click the agent's chip (`name  ×`) to stop watching it (sends `SniffOff`).
 
+> **This only works for agents whose class extends `jade.core.Agent` directly.**
+> It does **not** work for agents extending `jade.gui.GuiAgent`/
+> `jade.gui.AgentWindowed` - see "Known limitations" for details and use
+> `Monitor.send`/`Monitor.received` below for those instead.
+
 ## Plugging the Sniffer into your own agent (in-process alternative)
 
-If you would rather not depend on the platform's AMS forwarding (or want to
-watch an agent whose container the AMS cannot reach), an agent can report
-its own messages directly: replace `send(msg)` with `Monitor.send(this, msg)`,
+If you would rather not depend on the platform's AMS forwarding, or you are
+watching a `GuiAgent`/`AgentWindowed`-based agent (see above), an agent can
+report its own messages directly: replace `send(msg)` with `Monitor.send(this, msg)`,
 and report every message you `receive()`/`blockingReceive()` with
 `Monitor.received(this, msg)`.
 
@@ -63,6 +68,16 @@ if (msg != null) {
 
 ## Known limitations
 
+- **"Watch an agent" (zero instrumentation) does not work for agents whose
+  class extends `jade.gui.GuiAgent` or `jade.gui.AgentWindowed`.** In this
+  build, the platform's own `SniffOn`/`ToolNotifier` mechanism never
+  delivers a `SentMessage`/`PostedMessage` event for these agents, even
+  though their messages are actually sent/received correctly - confirmed
+  experimentally (a plain `jade.core.Agent` sending a `ContractNetInitiator`-based
+  CFP is sniffed correctly; a `GuiAgent`-based one sending the identical CFP
+  is not, no matter how long you wait after confirming the watch). Use
+  `Monitor.send`/`Monitor.received` for any `GuiAgent`/`AgentWindowed`-based
+  agent instead - it does not depend on this platform mechanism.
 - The "Watch an agent" field resolves a local name on the sniffer's own
   platform; it does not (yet) offer a live tree of every agent/container
   currently running, unlike the original Sniffer's agent tree.
