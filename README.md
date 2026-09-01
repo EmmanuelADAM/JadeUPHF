@@ -52,10 +52,6 @@ Cependant, vous pouvez simplifier ces codes. Ainsi :
         - un Agent possède la fonction `println("texte")` qui affiche un texte sur la console
         - une classe `AgentWindowed` associe à un agent une petite fenêtre, utile pour la visualisation et le débogage, une fonction `void println(String text)` permet d'afficher une ligne sur celle-ci.
       Un bouton activable permet aussi une interaction simple avec l'utilisateur.
-  - **Outils de supervision modernisés**
-      - le paquet [`monitoring`](src/monitoring) fournit des remplaçants modernes du `DummyAgent` et du `Sniffer`
-        historiques : `monitoring.ModernDummyAgent` et `monitoring.ModernSnifferAgent` (mêmes fonctionnalités,
-        présentation modernisée).
 
 N'hésitez pas à vous référer aux [exemples](https://emmanueladam.github.io/jade/).
 
@@ -114,10 +110,6 @@ However, you can simplify them. Thus :
       - a class, `AgentWindowed`, link a small window to an agent, useful for the control and the debug, a function 
         `void println(String text)` add a text line on it. 
       - An activable button allows a simple interaction with the user.
-  - **Modernized monitoring tools**
-      - the [`monitoring`](src/monitoring) package provides modern-looking replacements for the historical
-        `DummyAgent` and `Sniffer`: `monitoring.ModernDummyAgent` and `monitoring.ModernSnifferAgent` (same
-        features, restyled).
 
 Feel free to have a look to the (french)  [samples](https://emmanueladam.github.io/jade/).
 
