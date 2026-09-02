@@ -103,7 +103,7 @@ public final class ReceiverBehaviour extends Behaviour {
      * @param a      The agent this behaviour belongs to, and that will
      *                receive()   the message.
      * @param millis The timeout expressed in milliseconds, an infinite timeout
-     *               can be expressed by a value < 0.
+     *               can be expressed by a value &lt; 0.
      * @param mt     A Message template to match incoming messages against, null to
      *               indicate no template and receive any message that arrives.
      */
@@ -114,7 +114,7 @@ public final class ReceiverBehaviour extends Behaviour {
     // A time out value, when present
     /**
      * Receive any ACL message, waiting at most  millis
-     * milliseconds (infinite time if  millis < 1  ).
+     * milliseconds (infinite time if  millis &lt; 1  ).
      * When calling this constructor, a suitable  Handle
      * must be created and passed to it. When this behaviour ends, some
      * other behaviour will try to get the ACL message out of the
@@ -145,7 +145,7 @@ public final class ReceiverBehaviour extends Behaviour {
      * @param a      The agent this behaviour belongs to.
      * @param h      An <em>Handle</em> representing the message to receive.
      * @param millis The timeout expressed in milliseconds, an infinite timeout
-     *               can be expressed by a value < 0.
+     *               can be expressed by a value &lt; 0.
      * @see Handle
      * @see ReceiverBehaviour#newHandle()
      */
@@ -164,7 +164,7 @@ public final class ReceiverBehaviour extends Behaviour {
      * @param a      The agent this behaviour belongs to, and that will
      *                receive()   the message.
      * @param millis The timeout expressed in milliseconds, an infinite timeout
-     *               can be expressed by a value < 0.
+     *               can be expressed by a value &lt; 0.
      * @param mt     A Message template to match incoming messages against, null to
      *               indicate no template and receive any message that arrives.
      * @param fActionMessage bi consumer that takes an agent and a message, launch when a message corresponding to the
@@ -187,7 +187,7 @@ public final class ReceiverBehaviour extends Behaviour {
      * @param a      The agent this behaviour belongs to, and that will
      *                receive()   the message.
      * @param millis The timeout expressed in milliseconds, an infinite timeout
-     *               can be expressed by a value < 0.
+     *               can be expressed by a value &lt; 0.
      * @param mt     A Message template to match incoming messages against, null to
      *               indicate no template and receive any message that arrives.
      * @param continuous false to stop after the first message, true to stay and deal each message corresponding to
@@ -214,13 +214,13 @@ public final class ReceiverBehaviour extends Behaviour {
     /**
      * Receive any ACL message matching the given template, witing at
      * most  millis   milliseconds (infinite time if
-     *  millis < 1  . When calling this constructor, a
+     *  millis &lt; 1  . When calling this constructor, a
      * suitable  Handle   must be created and passed to it.
      *
      * @param a      The agent this behaviour belongs to.
      * @param h      An <em>Handle</em> representing the message to receive.
      * @param millis The maximum amount of time to wait for the message,
-     *               in milliseconds (infinite if <0).
+     *               in milliseconds (infinite if &lt;0).
      * @param mt     A Message template to match incoming messages against, null to
      *               indicate no template and receive any message that arrives.
      * @see ReceiverBehaviour#ReceiverBehaviour(Agent a, Handle h, long millis)

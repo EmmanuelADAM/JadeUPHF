@@ -176,7 +176,7 @@ public abstract class Behaviour implements Serializable {
 
     /**
      * Retrieve the enclosing CompositeBehaviour (if present). In order to access the parent behaviour
-     * it is strongly suggested to use this method rather than the <core>parent   member variable
+     * it is strongly suggested to use this method rather than the  parent   member variable
      * directly. In case of threaded or wrapped behaviour in facts the latter may have unexpected values.
      *
      * @return The enclosing CompositeBehaviour (if present).

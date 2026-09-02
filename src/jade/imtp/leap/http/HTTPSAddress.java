@@ -23,7 +23,6 @@ public class HTTPSAddress extends HTTPAddress {
      * Method declaration
      *
      * @return
-     * @see
      */
     public String getProto() {
         return HTTPSProtocol.NAME;

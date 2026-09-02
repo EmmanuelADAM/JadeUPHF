@@ -66,7 +66,6 @@ public class RMIAddress implements TransportAddress {
      * Method declaration
      *
      * @return
-     * @see
      */
     public String getProto() {
         return "rmi";
@@ -76,7 +75,6 @@ public class RMIAddress implements TransportAddress {
      * Method declaration
      *
      * @return
-     * @see
      */
     public String getHost() {
         return host;
@@ -86,7 +84,6 @@ public class RMIAddress implements TransportAddress {
      * Method declaration
      *
      * @return
-     * @see
      */
     public String getPort() {
         return port;
@@ -96,7 +93,6 @@ public class RMIAddress implements TransportAddress {
      * Method declaration
      *
      * @return
-     * @see
      */
     public String getFile() {
         return file;
@@ -106,7 +102,6 @@ public class RMIAddress implements TransportAddress {
      * Method declaration
      *
      * @return
-     * @see
      */
     public String getAnchor() {
         return anchor;

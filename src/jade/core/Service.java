@@ -315,9 +315,9 @@ public interface Service {
         /**
          * Access the node where this slice resides.
          *
-         * @returns The node where this service slice is actually
+         * @return The node where this service slice is actually
          * running.
-         * throws ServiceException If some problems occur in
+         * @throws ServiceException If some problems occur in
          * retrieving the local node.
          */
         Node getNode() throws ServiceException;

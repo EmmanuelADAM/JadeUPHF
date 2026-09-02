@@ -265,7 +265,6 @@ public class DFDBKB extends DBKB {
      *
      * @param name    name of the table
      * @param entries array of column and constraint specifications
-     * @throws SQLException If the table cannot be created
      */
     protected void createTable(String name, String[] entries) {
         if (!tableExists(name)) {
@@ -1522,7 +1521,7 @@ public class DFDBKB extends DBKB {
      * Return all known subscriptions at the DF
      *
      * @return  Enumeration   with instances of the class
-     *   jade.proto.SubscriptionResponder&Subscription
+     *   jade.proto.SubscriptionResponder&amp;Subscription
      */
     @Override
     public Enumeration<SubscriptionResponder.Subscription> getSubscriptions() {

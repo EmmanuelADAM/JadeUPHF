@@ -116,7 +116,6 @@ public class HTTPPacket {
     /**
      * Method declaration
      *
-     * @see
      */
     protected void readFrom(InputStream is) throws IOException {
         // Read bytes until the payload marker (13-10-13-10) into a temporary buffer
@@ -185,7 +184,6 @@ public class HTTPPacket {
     /**
      * Method declaration
      *
-     * @see
      */
     protected void writeTo(OutputStream os) throws IOException {
         // Write the Header into a temporary buffer
@@ -215,7 +213,6 @@ public class HTTPPacket {
     /**
      * Method declaration
      *
-     * @see
      */
     public String toString() {
         StringBuilder sb = new StringBuilder();

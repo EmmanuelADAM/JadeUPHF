@@ -625,7 +625,7 @@ public class ACLMessage implements Serializable {
      * Reads  :sender   slot.
      *
      * @return The value of  :sender  slot.
-     * @see ACLMessage#setSender(AID).
+     * @see ACLMessage#setSender(AID)
      */
     public AID getSender() {
         return source;
@@ -765,7 +765,7 @@ public class ACLMessage implements Serializable {
      * Reads  :reply-with   slot.
      *
      * @return The value of  :reply-with  slot.
-     * @see ACLMessage#setReplyWith(String).
+     * @see ACLMessage#setReplyWith(String)
      */
     public String getReplyWith() {
         return reply_with;
@@ -786,7 +786,7 @@ public class ACLMessage implements Serializable {
      * Reads  :reply-to   slot.
      *
      * @return The value of  :reply-to  slot.
-     * @see ACLMessage#setInReplyTo(String).
+     * @see ACLMessage#setInReplyTo(String)
      */
     public String getInReplyTo() {
         return in_reply_to;
@@ -807,7 +807,7 @@ public class ACLMessage implements Serializable {
      * Reads  :encoding   slot.
      *
      * @return The value of  :encoding  slot.
-     * @see ACLMessage#setEncoding(String).
+     * @see ACLMessage#setEncoding(String)
      */
     public String getEncoding() {
         return encoding;
@@ -828,7 +828,7 @@ public class ACLMessage implements Serializable {
      * Reads  :language   slot.
      *
      * @return The value of  :language  slot.
-     * @see ACLMessage#setLanguage(String).
+     * @see ACLMessage#setLanguage(String)
      */
     public String getLanguage() {
         return language;
@@ -849,7 +849,7 @@ public class ACLMessage implements Serializable {
      * Reads  :ontology   slot.
      *
      * @return The value of  :ontology  slot.
-     * @see ACLMessage#setOntology(String).
+     * @see ACLMessage#setOntology(String)
      */
     public String getOntology() {
         return ontology;
@@ -870,7 +870,7 @@ public class ACLMessage implements Serializable {
      * Reads  :reply-by   slot.
      *
      * @return The value of  :reply-by  slot, as a string.
-     * @see ACLMessage#getReplyByDate().
+     * @see ACLMessage#getReplyByDate()
      * @deprecated Since the value of this slot is a Date by definition, then
      * the  getReplyByDate   should be used that returns a Date
      */
@@ -886,7 +886,7 @@ public class ACLMessage implements Serializable {
      *
      * @return The value of  :reply-by  slot, as a
      *  Date   object.
-     * @see ACLMessage#setReplyByDate(Date).
+     * @see ACLMessage#setReplyByDate(Date)
      */
     public Date getReplyByDate() {
         if (reply_byInMillisec != 0)
@@ -913,7 +913,7 @@ public class ACLMessage implements Serializable {
      * Reads  :protocol   slot.
      *
      * @return The value of  :protocol  slot.
-     * @see ACLMessage#setProtocol(String).
+     * @see ACLMessage#setProtocol(String)
      */
     public String getProtocol() {
         return protocol;
@@ -934,7 +934,7 @@ public class ACLMessage implements Serializable {
      * Reads  :conversation-id   slot.
      *
      * @return The value of  :conversation-id  slot.
-     * @see ACLMessage#setConversationId(String).
+     * @see ACLMessage#setConversationId(String)
      */
     public String getConversationId() {
         return conversation_id;
@@ -1065,7 +1065,7 @@ public class ACLMessage implements Serializable {
 
     /**
      * Attaches an envelope to this message. The envelope is used by the
-     * <b><it>ACC</it></b> for inter-platform messaging.
+     * <b><i>ACC</i></b> for inter-platform messaging.
      *
      * @param e The  Envelope   object to attach to this
      *          message.

@@ -277,7 +277,7 @@ public class ISO8601 {
      * The main is here only for debugging.
      * You can test your conversion by executing the following command:
      * <p>
-     *   java jade.lang.acl.ISO8601 <yourtoken>
+     *   java jade.lang.acl.ISO8601 {@code yourtoken}
      */
     public static void main(String[] argv) {
 

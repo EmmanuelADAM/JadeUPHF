@@ -90,10 +90,10 @@ import java.util.*;
  * file to be used by this server.
  * </li>
  * <li>
- * <ode>serverid_poolsize  : Specifies the number of threads used by
+ *  serverid_poolsize  : Specifies the number of threads used by
  * this server to manage IO events.
  * </li>
- * <ul>
+ * </ul>
  *
  * @author Giovanni Caire - TILAB
  */

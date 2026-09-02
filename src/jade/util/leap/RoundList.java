@@ -86,8 +86,8 @@ public class RoundList implements Serializable {
     /**
      * Inserts the  element   before the current element.
      * If the list was empty, the inserted element becomes also the current element.
-     * <b> Note that this implementation uses a  LinkedList  
-     * and therefore it is not synchronized.
+     * <b> Note that this implementation uses a  LinkedList
+     * and therefore it is not synchronized. </b>
      *
      * @param element the element to insert
      * @return true (as per the general contract of Collection.add).

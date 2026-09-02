@@ -41,11 +41,11 @@ import java.util.List;
  * a "threaded behaviour" as returned by the  wrap()   method
  * of this class (see the example below).
  *
- * <pr><hr><blockquote><pre>
+ * <pre>
  * ThreadedBehaviourFactory tbf = new ThreadedBehaviourFactory();
  * Behaviour b = // create a JADE behaviour
  * addBehaviour(tbf.wrap(b));
- * </pre></blockquote><hr>
+ * </pre>
  * <p>
  * This class also provides methods to control the termination of
  * the threads dedicated to the execution of wrapped behaviours

@@ -181,7 +181,7 @@ public class FIPAService {
 
     /**
      * The parser content has the form:
-     * agent-identifier ......) <possibly something else>
+     * agent-identifier ......) {@code possibly something else}
      */
     public static AID parseAID(SimpleSLTokenizer parser) throws Exception {
         AID id = new AID("", AID.ISGUID); // Dummy temporary name
@@ -214,9 +214,9 @@ public class FIPAService {
 
     /**
      * The parser content has the form:
-     * (sequence <val> <val> ......) <possibly something else>
+     * (sequence {@code val} {@code val} ......) {@code possibly something else}
      * or
-     * (set <val> <val> ......) <possibly something else>
+     * (set {@code val} {@code val} ......) {@code possibly something else}
      */
     private static List<Comparable<?>> parseAggregate(SimpleSLTokenizer parser) throws Exception {
         ArrayList<Comparable<?>> l = new ArrayList<>();

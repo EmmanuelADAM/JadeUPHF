@@ -79,7 +79,8 @@ import java.util.*;
  * either as command line options or within a properties file (to be passed to
  * the DF as an argument).
  * </p>
- * <table border="1" borderpacing="0">
+ * <table border="1">
+ * <caption>DF configuration parameters</caption>
  * <tr>
  * <th>Parameter</th>
  * <th>Description</th>
@@ -199,7 +200,6 @@ import java.util.*;
  * </tr>
  * </table>
  * <p>
- * p>
  * For instance the following command line will launch a JADE main container
  * with a DF that will store its catalogue into a database accessible at
  * URL jdbc:odbc:dfdb and that will keep agent registrations for 1 hour at most.

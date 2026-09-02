@@ -46,7 +46,7 @@ public class GatewayAgent extends Agent {
      *
      * </p>
      * <b> REMIND THAT WHEN THE COMMAND HAS BEEN PROCESSED,
-     * YOU MUST CALL THE METHOD  releaseCommand  .
+     * YOU MUST CALL THE METHOD  releaseCommand  .</b>
      * <br>Sometimes, you might prefer launching a new Behaviour that processes
      * this command and release the command just when the Behaviour terminates,
      * i.e. in its  onEnd()   method.

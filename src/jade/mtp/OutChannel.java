@@ -41,8 +41,8 @@ public interface OutChannel {
      *             must be a valid address for this MTP.
      * @param env  The message envelope, containing various fields
      *             related to message recipients, encoding, and timestamping.
+     * @param payload The byte sequence that contains the encoded ACL message.
      * @throws MTPException Thrown if some MTP delivery error occurs.
-     * @payload The byte sequence that contains the encoded ACL message.
      */
     void deliver(String addr, Envelope env, byte[] payload) throws MTPException;
 

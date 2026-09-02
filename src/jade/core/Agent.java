@@ -2023,7 +2023,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
     }
 
     /**
-     * @return the agent description
+     * @param servicesList the agent description
      * @author Emmanuel Adam
      * @since 2022
      */

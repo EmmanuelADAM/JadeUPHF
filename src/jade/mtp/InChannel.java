@@ -39,7 +39,7 @@ public interface InChannel {
      * chosen default address.
      * @throws MTPException Thrown if some MTP initialization error
      *                      occurs.
-     * @parameter p is the Profile from which the configuration parameters
+     * @param p is the Profile from which the configuration parameters
      * for this instance of JADE container can be retrieved
      */
     TransportAddress activate(Dispatcher disp, Profile p) throws MTPException;
@@ -52,7 +52,7 @@ public interface InChannel {
      *           the transport address to listen to.
      * @throws MTPException Thrown if some MTP initialization error
      *                      occurs.
-     * @parameter p is the Profile from which the configuration parameters
+     * @param p is the Profile from which the configuration parameters
      * for this instance of JADE container can be retrieved
      */
     void activate(Dispatcher disp, TransportAddress ta, Profile p) throws MTPException;

@@ -76,7 +76,7 @@ public abstract class FEService {
      * <p>
      * In case the back-end side service helper method requires parameters different than those passed in the
      * methodParams argument, a suitable "BackEnd Codec" class must be provided to perform the necessary conversions.
-     * Such class must implement the  BECodec   interface and must be called "<service-name>BECodec"
+     * Such class must implement the  BECodec   interface and must be called "{@code service-name}BECodec"
      *
      * @param actor        The name of the agent invoking the service helper method
      * @param methodName   The name of the invoked method

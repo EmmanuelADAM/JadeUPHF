@@ -60,7 +60,7 @@ import java.util.List;
  * to/from the DF. The following piece of code exemplifies that in the case
  * of an agent subscribing to the default DF.
  *
- * <pre><hr><blockquote><pre>
+ * <pre>
  * DFAgentDescription template = // fill the template
  * Behaviour b = new SubscriptionInitiator(
  * this,
@@ -77,7 +77,7 @@ import java.util.List;
  * }
  * };
  * addBehaviour(b);
- * </pre></blockquote><hr>
+ * </pre>
  *
  * @author Fabio Bellifemine (CSELT S.p.A.)
  * @author Elisabetta Cortese (TiLab S.p.A.)
@@ -312,7 +312,7 @@ public class DFService extends FIPAService {
      * that grants limited lease time for agent registrations.
      * The following piece of code exemplifies how to use it.
      *
-     * <pr><hr><blockquote><pre>
+     * <pre>
      * DFAgentDescription dfd = // fill DF-Description
      * try {
      * DFAgentDescription actualDfd = DFService.register(this, dfd);
@@ -321,7 +321,7 @@ public class DFService extends FIPAService {
      * catch (FIPAException fe) {
      * fe.printStackTarce();
      * }
-     * </pre></blockquote><hr>
+     * </pre>
      *
      * @param a        The agent that is registerd with the DF.
      * @param df       The DF agent
@@ -648,7 +648,7 @@ public class DFService extends FIPAService {
 
     /**
      * The parser content has the form:
-     * df-agent-description ......) <possibly something else>
+     * df-agent-description ......) {@code possibly something else}
      */
     private static DFAgentDescription parseDfd(SimpleSLTokenizer parser) throws Exception {
         DFAgentDescription dfd = new DFAgentDescription();
@@ -700,7 +700,7 @@ public class DFService extends FIPAService {
 
     /**
      * The parser content has the form:
-     * service-description ......) <possibly something else>
+     * service-description ......) {@code possibly something else}
      */
     private static ServiceDescription parseServiceDescription(SimpleSLTokenizer parser) throws Exception {
         ServiceDescription sd = new ServiceDescription();
@@ -753,7 +753,7 @@ public class DFService extends FIPAService {
 
     /**
      * The parser content has the form:
-     * property ......) <possibly something else>
+     * property ......) {@code possibly something else}
      */
     private static Property parseProperty(SimpleSLTokenizer parser) throws Exception {
         Property p = new Property();
@@ -776,7 +776,7 @@ public class DFService extends FIPAService {
 
     /**
      * The parser content has the form:
-     * multi-value-property ......) <possibly something else>
+     * multi-value-property ......) {@code possibly something else}
      */
     private static Property parseMultiValueProperty(SimpleSLTokenizer parser) throws Exception {
         MultiValueProperty mvp = new MultiValueProperty();
@@ -799,7 +799,7 @@ public class DFService extends FIPAService {
 
     /**
      * The parser content has the form:
-     * agent-identifier ......) <possibly something else>
+     * agent-identifier ......) {@code possibly something else}
      */
     public static AID parseAID(SimpleSLTokenizer parser) throws Exception {
         AID id = new AID("", AID.ISGUID); // Dummy temporary name
@@ -832,9 +832,9 @@ public class DFService extends FIPAService {
 
     /**
      * The parser content has the form:
-     * (sequence <val> <val> ......) <possibly something else>
+     * (sequence {@code val} {@code val} ......) {@code possibly something else}
      * or
-     * (set <val> <val> ......) <possibly something else>
+     * (set {@code val} {@code val} ......) {@code possibly something else}
      */
     private static List<Object> parseAggregate(SimpleSLTokenizer parser) throws Exception {
         List<Object> l = new ArrayList<>();
@@ -865,7 +865,7 @@ public class DFService extends FIPAService {
 
     /**
      * S has the form:
-     * (sequence (DFD...) (DFD...)) <possibly something else>
+     * (sequence (DFD...) (DFD...)) {@code possibly something else}
      */
     private static DFAgentDescription[] decodeDfdSequence(String s) throws Exception {
         List<Object> l = parseAggregate(new SimpleSLTokenizer(s));

@@ -283,7 +283,7 @@ public class MessageTemplate implements Serializable {
      *                          be considered as a part of the template (i.e. the message
      *                          template will match only ACL messages with the same performativa
      *                          as  msg  ).
-     *                          When <false>, the performative of  msg   is ignored and
+     *                          When {@code false}, the performative of  msg   is ignored and
      *                          the resulting message template will not consider it when matching
      *                          messages.
      * @return A new  MessageTemplate  , matching the given
@@ -297,7 +297,7 @@ public class MessageTemplate implements Serializable {
     /**
      * Logical <b>and</b> between two  MessageTemplate  
      * objects. This method creates a new message template that is
-     * matched by those ACL messages matching <b><em>both</b></em>
+     * matched by those ACL messages matching <b><em>both</em></b>
      * message templates given as operands.
      *
      * @param op1 The first <em>and</em> operand.
@@ -313,7 +313,7 @@ public class MessageTemplate implements Serializable {
     /**
      * Logical <b>or</b> between two  MessageTemplate  
      * objects. This method creates a new message template that is
-     * matched by those ACL messages matching <b><em>any</b></em> of the
+     * matched by those ACL messages matching <b><em>any</em></b> of the
      * two message templates given as operands.
      *
      * @param op1 The first <em>or</em> operand.

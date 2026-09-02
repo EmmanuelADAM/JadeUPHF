@@ -53,6 +53,7 @@ import java.util.Map;
  *
  * <p>
  * <table style="border:1; cellspacing:0;">
+ *  <caption>Node failure monitoring parameters</caption>
  *  <tr>
  *    <th>Parameter</th>
  *    <th>Description</th>

@@ -410,7 +410,7 @@ public class MainWindow
     }
 
     /**
-     * enables Motif L&F
+     * enables Motif L&amp;F
      */
 
     public void setUI2Motif() {
@@ -418,7 +418,7 @@ public class MainWindow
     }
 
     /**
-     * enables Windows L&F
+     * enables Windows L&amp;F
      */
 
     public void setUI2Windows() {
@@ -426,7 +426,7 @@ public class MainWindow
     }
 
     /**
-     * enables Multi L&F
+     * enables Multi L&amp;F
      */
 
     public void setUI2Multi() {
@@ -434,7 +434,7 @@ public class MainWindow
     }
 
     /**
-     * enables Metal L&F
+     * enables Metal L&amp;F
      */
     public void setUI2Metal() {
         setUI("metal.MetalLookAndFeel");

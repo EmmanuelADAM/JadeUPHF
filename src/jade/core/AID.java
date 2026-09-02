@@ -89,7 +89,7 @@ public class AID implements Comparable<Object>, Serializable {
      *
      * @param guid is the Globally Unique identifer for the agent. The slot name
      *             assumes that value in the constructed object.
-     * @see AID#AID(String boolean)
+     * @see AID#AID(String, boolean)
      * @deprecated This constructor might generate a wrong AID, if
      * the passed parameter is not a guid (globally unique identifier), but
      * the local name of an agent (e.g. "da0").
@@ -536,7 +536,7 @@ public class AID implements Comparable<Object>, Serializable {
 
     /**
      * Returns the HAP of the agent or null if the GUID of this
-     *  AID   is not of the form <local-name>@<platform-name>
+     *  AID   is not of the form {@code local-name@platform-name}
      */
     public String getHap() {
         int atPos = name.lastIndexOf('@');

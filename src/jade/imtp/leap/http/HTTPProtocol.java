@@ -108,7 +108,6 @@ public class HTTPProtocol extends TransportProtocol {
      * Method declaration
      *
      * @return
-     * @see
      */
     public String getName() {
         return NAME;

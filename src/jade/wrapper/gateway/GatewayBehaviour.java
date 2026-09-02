@@ -55,7 +55,7 @@ public abstract class GatewayBehaviour extends CyclicBehaviour {
      *   
      * </p>
      * <b> REMIND THAT WHEN THE COMMAND HAS BEEN PROCESSED,
-     * YOU MUST CALL THE METHOD  releaseCommand  .
+     * YOU MUST CALL THE METHOD  releaseCommand  .</b>
      * Sometimes, you might prefer launching a new Behaviour that asynchronously processes
      * this command and release the command just when the Behaviour terminates,
      * i.e. in its  onEnd()   method.

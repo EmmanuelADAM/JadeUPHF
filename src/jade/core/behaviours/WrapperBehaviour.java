@@ -12,7 +12,7 @@ import java.util.List;
  * method of an existing behaviour object to print on the standard output a proper message when the behaviour
  * is completing.
  *
- * <pr><hr><blockquote><pre>
+ * <pre>
  * Behaviour b = // get the behaviour object
  * addBehaviour(new WrapperBehaviour(b) {
  * public boolean done() {
@@ -23,7 +23,7 @@ import java.util.List;
  * return ret;
  * }
  * });
- * </pre></blockquote><hr>
+ * </pre>
  */
 public class WrapperBehaviour extends Behaviour {
     private final Behaviour wrappedBehaviour;

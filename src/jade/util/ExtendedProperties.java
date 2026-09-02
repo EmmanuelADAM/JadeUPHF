@@ -65,7 +65,7 @@ public class ExtendedProperties extends Properties {
 
     /**
      * Construct a ExtendedProperties object from an array of stringified properties of the form
-     * <key>=<value>.
+     * {@code key=value}.
      *
      * @param propesStr The applications original arguments.
      */
@@ -308,7 +308,7 @@ public class ExtendedProperties extends Properties {
      * Set property value to specified object.
      *
      * @param aKey   The key used to store the data. The key may contain strings of
-     *               the form <b><pre>${key}</pre></b> which will be evaluated first.
+     *               the form {@code ${key}} which will be evaluated first.
      * @param aValue The object to be stored.
      * @return The previous value of the specified key, or null if it did not have one.
      */
@@ -348,7 +348,7 @@ public class ExtendedProperties extends Properties {
 
     /**
      * Override getProperty in base class so all occurances of
-     * the form <b><pre>${key}</pre></b> are replaced by their
+     * the form {@code ${key}} are replaced by their
      * associated value.
      *
      * @param aKey Key for desired property.
@@ -380,7 +380,7 @@ public class ExtendedProperties extends Properties {
     /**
      * Set property value. If value is null the property (key and value) will be removed.
      * @param aKey The key used to store the data. The key may contain strings of
-     * the form <b><pre>${key}</pre></b> which will be evaluated first.
+     * the form {@code ${key}} which will be evaluated first.
      * @param aValue The value to be stored, if null they property will be removed.
      * @return The previous value of the specified key, or null if it did not have one.
      */
@@ -403,7 +403,7 @@ public class ExtendedProperties extends Properties {
      * Set property value only if its not set already.
      *
      * @param aKey  The key used to store the data. The key may contain strings of
-     *              the form <b><pre>${key}</pre></b> which will be evaluated first.
+     *              the form {@code ${key}} which will be evaluated first.
      * @param value The value to be stored.
      * @return Null if store was done, non-null indicates store not done and the
      * returned value in the current properties value.
@@ -418,7 +418,7 @@ public class ExtendedProperties extends Properties {
 
     /**
      * Fetch property value for key which may contain strings
-     * of the form <b><pre>${key}</pre></b>.
+     * of the form {@code ${key}}.
      *
      * @param aKey Key for desired property.
      * @return The keys value with no substitutions done.
@@ -644,7 +644,7 @@ public class ExtendedProperties extends Properties {
 
     /**
      * Add properties from Reader. Explicitly handled so as to enable
-     * handling of import=<file> directive. Blank lines as well as
+     * handling of an {@code import=file} directive. Blank lines as well as
      * those beginning with a '#' character (comments) are ignored.
      *
      * @param reader The buffered reader to read from.

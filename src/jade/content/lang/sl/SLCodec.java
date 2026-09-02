@@ -86,7 +86,7 @@ public class SLCodec extends StringCodec {
     /**
      * Create an SLCodec for the full SL-language (FIPA-SL) specifying whether or not java primitive types
      * (long, int, float, double) must be preserved.
-     * This is achieved by encoding long values as <numeric-value>L and float values as <numeric-valueF.
+     * This is achieved by encoding long values as {@code numeric-value}L and float values as {@code numeric-value}F.
      * It should be noticed that this encoding is NOT FIPA SL standard
      *
      * @param preserveJavaTypes Indicates whether or not java primitive types must be preserved

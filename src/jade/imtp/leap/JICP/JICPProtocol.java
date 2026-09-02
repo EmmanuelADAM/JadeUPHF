@@ -210,7 +210,6 @@ public class JICPProtocol extends TransportProtocol {
      * @param s
      * @return
      * @throws ICPException
-     * @see
      */
     public TransportAddress stringToAddr(String s) throws ICPException {
         Vector addressFields = parseURL(s);
@@ -239,7 +238,6 @@ public class JICPProtocol extends TransportProtocol {
      * Method declaration
      *
      * @return
-     * @see
      */
     public String getName() {
         return NAME;

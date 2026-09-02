@@ -209,7 +209,7 @@ public abstract class StateBase implements State, Comparable<Object>, Serializab
      * <li> the state code held by the receiver (this object) is
      * less than
      * the code of the passed object</li>
-     * <ul>
+     * </ul>
      */
     public int compareTo(Object object) {
         int result = 0;

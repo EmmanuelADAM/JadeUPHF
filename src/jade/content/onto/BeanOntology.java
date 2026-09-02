@@ -37,7 +37,7 @@ import java.io.Serial;
  *  BeanIntrospector  . A typical pattern to create an ontology
  * extending the  BeanOntology   is the following:
  *
- * <p><blockquote><pre>
+ * <blockquote><pre>
  * public class MyOntology extends BeanOntology {<br>
  *     private static Ontology theInstance = new MyOntology(ONTOLOGY_NAME);
  *
@@ -57,14 +57,14 @@ import java.io.Serial;
  *         }
  *     }
  * }
- * </pre></blockquote></p>
+ * </pre></blockquote>
  * <p>
  * The ontology  MyOntology   will be built creating the hierarchy
  * of ontological items defined by the beans in package  com.acme.rocket.ontology  
  * plus the two beans  C1   and  C2  .
  * An ontological bean is a class implementing either  Concept   or  Predicate  
  * Example:
- * <p><blockquote><pre>
+ * <blockquote><pre>
  * public class CD extends Item {
  *
  *     private String title;
@@ -78,7 +78,7 @@ import java.io.Serial;
  *         title = t;
  *     }
  *
- *      @  AggregateSlot(cardMin = 1)
+ *      &#64;AggregateSlot(cardMin = 1)
  *     public List getTracks() {
  *         return tracks;
  *     }
@@ -88,7 +88,7 @@ import java.io.Serial;
  *     }
  * }
  *
- * </pre></blockquote></p>
+ * </pre></blockquote>
  * A set of annotatons allow to customize the ontological properties of the slots.
  *
  * @author Paolo Cancedda

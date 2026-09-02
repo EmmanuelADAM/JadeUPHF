@@ -85,7 +85,6 @@ public class HTTPResponse extends HTTPPacket {
     /**
      * Method declaration
      *
-     * @see
      */
     public void writeTo(OutputStream os) throws IOException {
         firstLine = httpType + " " + code + " " + msg;
@@ -95,7 +94,6 @@ public class HTTPResponse extends HTTPPacket {
     /**
      * Method declaration
      *
-     * @see
      */
     public String toString() {
         return httpType + " " + code + " " + msg +
