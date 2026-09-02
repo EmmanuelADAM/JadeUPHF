@@ -1,17 +1,22 @@
 # Jade version UPHF
 
-Ce projet présente la mise à niveau de Jade par Emmnanuel ADAM (LAMIH/INSA HdF/UPHF), en bénéficiant d'aides d'étudiants de l'UPHF (Constant ABRAHAM & Théo BONHOMME).
+Ce projet présente la mise à niveau de Jade par Emmnanuel ADAM (LAMIH/INSA HdF/UPHF). 
+*Un grand merci à Constant ABRAHAM & Théo BONHOMME, qui ont contribué pendant leur projet d'étude de master informatique à l'UPHF.*
 
-Ce projet reprend donc la célèbre plateforme [Jade v4.5](https://jade.tilab.com/), stoppée en 2017, en la rendant compatible avec les versions récentes de Java (17).
+Ce projet reprend donc la célèbre plateforme [Jade v4.5](https://jade.tilab.com/) (stoppée de 2017, puis redémarrée brièvement en 2022), en la rendant compatible avec les versions récentes de Java (25).
 Un très grand merci à ces développeurs pour leur important travail de qualité qui a permis à de très nombreuses personnes de développer des projets basés sur des SMA.
 
-En plus de bénéficier d'un traitement plus sain et plus rapide grâce à l'utilisation des dernières classes de Java 
-pour la gestion de listes, etc., des classes et fonctionnalités ont été ajoutées afin de simplifier la création 
-d'agents et leurs communications.
+Toute trace de CORBA, RMI, etc. a été supprimée, ainsi que les classes et méthodes obsolètes.
+
+En plus de bénéficier d'un traitement plus sain et plus rapide grâce à l'utilisation des dernières classes de Java pour la gestion de listes, etc.,
+des classes et fonctionnalités ont été ajoutées afin de simplifier la création d'agents et leurs communications.  
+Ainsi, l'accent est mis sur l'utilisation de lambda expressions pour la création de comportements.
+
+**L'utilisation de thread virtuels (Virtual Threads) permet de créer maintenant des milliers d'agents (>5000) !!.**
 
 *Des exemples utilisant cette nouvelle version de Jade se trouvent [ici](https://emmanueladam.github.io/jade/).*
 
-**Adapter un code précédent.** Cette nouvelle version ne nécessite pas de modification de code, sauf pour la gestion des protocoles impliquant la réception/l'envoie de plusieurs messages (CFP, ...).
+**Adapter un code précédent.** Cette nouvelle version ne nécessite que peu de modification de code,principalement pour la gestion des protocoles impliquant la réception/l'envoie de plusieurs messages (CFP, ...).
 Alors, il suffit de remplacer les notions de `Vector` par des `List<ACLMessage>`.  
 - Exemple, pour un `ContractNetInitiator`
     - `protected void handleAllResponses(Vector responses, Vector acceptances)`
@@ -61,12 +66,19 @@ N'hésitez pas à vous référer aux [exemples](https://emmanueladam.github.io/j
 ---
 # Java Agent Development Framework, UPHF Version.
 
-This project is an update of Jade platform by Emmnanuel ADAM (LAMIH/INSA HdF/UPHF), with the help of two students from UPHF (Constant ABRAHAM & Théo BONHOMME).
+This project is an update of Jade platform by Emmnanuel ADAM (LAMIH/INSA HdF/UPHF).
+A great thanks to Constant ABRAHAM & Théo BONHOMME, who contributed during their master computer science project at UPHF
 
 
-This project is a fork of the [Jade framework v4.5](https://jade.tilab.com/), stopped in 2017, motivated by the fact that the team that successfully developed it cannot continue to support the project.
+This project is a fork of the [Jade framework v4.5](https://jade.tilab.com/) (stopped in 2017, then briefly restarted in 2022), and updated to be compatible with recent versions of Java (>=17).
 
 A great thanks to the team that built Jade, and that have made a very nice and helpful work that allows a lot of people to develop multiagent systems.
+
+All traces of CORBA, RMI, etc. have been removed, as well as deprecated classes and methods.  
+In addition to benefit from a more healthy and faster treatment thanks to the use of the latest Java classes for the management of lists, etc., classes and functionalities have been added to simplify the creation of agents and their communications.  
+Thus, the focus is on the use of lambda expressions for the creation of behaviors.
+
+**The use of virtual threads allows now to create thousands of agents (>5000) !!.**
 
 *Examples using this new version of Jade can be found [here](https://emmanueladam.github.io/jade/).*
 
