@@ -36,6 +36,7 @@ import jade.util.Logger;
 import static java.lang.System.out;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 //#MIDP_EXCLUDE_END
 
@@ -198,7 +199,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
     //#CUSTOM_EXCLUDE_BEGIN
     private jade.content.ContentManager theContentManager = null;
     // All the agent's service helper
-    private transient Hashtable<String, ServiceHelper> helpersTable;
+    private transient Map<String, ServiceHelper> helpersTable;
     // For persistence service -- Hibernate needs java.util collections
     private transient Set<TBPair> persistentPendingTimers = new HashSet<>();
 
@@ -220,7 +221,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
         myScheduler = new Scheduler(this);
         theDispatcher = TimerDispatcher.getTimerDispatcher();
         //#J2ME_EXCLUDE_BEGIN
-        o2aInterfaces = new Hashtable<>();
+        o2aInterfaces = new ConcurrentHashMap<>();
         //#J2ME_EXCLUDE_END
     }
 
@@ -646,11 +647,11 @@ public class Agent implements Runnable, Serializable, TimerListener {
 		 try {
 		 myThread.join();
 		 return true;
-		 } 
+		 }
 		 catch (InterruptedException ie) {
 		 ie.printStackTrace();
-		 } 
-		 } 
+		 }
+		 }
 		 #MIDP_INCLUDE_END*/
         return false;
     }
@@ -1839,7 +1840,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
     public ServiceHelper getHelper(String serviceName) throws ServiceException {
         ServiceHelper se = null;
         if (helpersTable == null) {
-            helpersTable = new Hashtable<>();
+            helpersTable = new ConcurrentHashMap<>();
         }
 
         se = helpersTable.get(serviceName);
@@ -2008,8 +2009,6 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * @since 2022
      */
     public List<ServiceDescription> getServices() {
-//        var l = new ArrayList<ServiceDescription>();
-//        servicesList.getAllServices().forEachRemaining(l::add);
         return servicesList.getAllServices();
     }
 
@@ -2145,14 +2144,12 @@ public class Agent implements Runnable, Serializable, TimerListener {
      * pendingTimers of this agent.
      */
     private class AssociationTB {
-        private final Hashtable<Behaviour, TBPair> BtoT = new Hashtable<>();
-        private final Hashtable<Timer, TBPair> TtoB = new Hashtable<>();
+        private final Map<Behaviour, TBPair> BtoT = new ConcurrentHashMap<>();
+        private final Map<Timer, TBPair> TtoB = new ConcurrentHashMap<>();
 
         public void clear() {
             synchronized (theDispatcher) {
-                Enumeration<?> e = timers();
-                while (e.hasMoreElements()) {
-                    Timer t = (Timer) e.nextElement();
+                for (Timer t : timers()) {
                     theDispatcher.remove(t);
                 }
 
@@ -2217,7 +2214,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
 
 
         public Timer getPeer(Behaviour b) {
-            // this is not synchronized because BtoT is an Hashtable (that is already synch!)
+            // this is not synchronized because BtoT is a ConcurrentHashMap (that is already thread-safe!)
             TBPair pair = BtoT.get(b);
             if (pair != null) {
                 return pair.getTimer();
@@ -2227,7 +2224,7 @@ public class Agent implements Runnable, Serializable, TimerListener {
         }
 
         public Behaviour getPeer(Timer t) {
-            // this is not synchronized because BtoT is an Hashtable (that is already synch!)
+            // this is not synchronized because BtoT is a ConcurrentHashMap (that is already thread-safe!)
             TBPair pair = TtoB.get(t);
             if (pair != null) {
                 return pair.getBehaviour();
@@ -2236,8 +2233,8 @@ public class Agent implements Runnable, Serializable, TimerListener {
             }
         }
 
-        private Enumeration<Timer> timers() {
-            return TtoB.keys();
+        private Set<Timer> timers() {
+            return TtoB.keySet();
         }
 
 

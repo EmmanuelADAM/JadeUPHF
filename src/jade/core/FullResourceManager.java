@@ -23,6 +23,9 @@ Boston, MA  02111-1307, USA.
 
 package jade.core;
 
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 //#J2ME_EXCLUDE_FILE
 
 class FullResourceManager implements ResourceManager {
@@ -47,6 +50,11 @@ class FullResourceManager implements ResourceManager {
     private boolean disableThreadGroupInterrupt;
     private int threadGroupInterruptTimeout;
 
+    // Ordinary agents (USER_AGENTS) run on virtual threads (JEP 491, JDK 24+, no longer pinned
+    // by the synchronized/wait blocks in Agent/Scheduler). Virtual threads cannot join a
+    // ThreadGroup, so they are tracked here instead, to still be reachable from releaseResources().
+    private final Set<Thread> virtualAgentThreads = ConcurrentHashMap.newKeySet();
+
 
     public FullResourceManager() {
         parent = new ThreadGroup("JADE") {
@@ -69,10 +77,7 @@ class FullResourceManager implements ResourceManager {
     public Thread getThread(int type, String name, Runnable r) {
         Thread t = null;
         switch (type) {
-            case USER_AGENTS -> {
-                t = new Thread(agentThreads, r);
-                t.setPriority(agentThreads.getMaxPriority());
-            }
+            case USER_AGENTS -> t = Thread.ofVirtual().unstarted(trackedVirtualAgent(r));
             case SYSTEM_AGENTS -> {
                 t = new Thread(systemAgentThreads, r);
                 t.setPriority(systemAgentThreads.getMaxPriority());
@@ -89,6 +94,20 @@ class FullResourceManager implements ResourceManager {
         return t;
     }
 
+    // Wraps r so the virtual thread that will run it registers itself in virtualAgentThreads
+    // on entry and unregisters on exit, keeping the tracking set limited to currently-alive agents.
+    private Runnable trackedVirtualAgent(Runnable r) {
+        return () -> {
+            Thread self = Thread.currentThread();
+            virtualAgentThreads.add(self);
+            try {
+                r.run();
+            } finally {
+                virtualAgentThreads.remove(self);
+            }
+        };
+    }
+
     public void releaseResources() {
         terminating = true;
 
@@ -103,6 +122,8 @@ class FullResourceManager implements ResourceManager {
                 if (parent != null) {
                     parent.interrupt();
                 }
+                virtualAgentThreads.forEach(Thread::interrupt);
+                virtualAgentThreads.clear();
 
                 agentThreads = null;
                 systemAgentThreads = null;
@@ -132,7 +153,6 @@ class FullResourceManager implements ResourceManager {
         }
     }
 }
-
 
 
 

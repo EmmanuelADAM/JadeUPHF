@@ -46,9 +46,14 @@ final public class ToolBar extends JToolBar {
     private SnifferAction obj;
 
     public ToolBar(ActionProcessor actPro) {
-        setBorderPainted(true);
+        setFloatable(false);
+        setRollover(true);
+        setBorderPainted(false);
+        setBackground(SnifferTheme.WINDOW_BACKGROUND);
+        setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 0, 1, 0, SnifferTheme.BORDER),
+                BorderFactory.createEmptyBorder(4, 6, 4, 6)));
         this.actPro = actPro;
-        addSeparator();
         addAction();
         add(Box.createHorizontalGlue());
         JadeLogoButton logo = new JadeLogoButton();
@@ -59,7 +64,10 @@ final public class ToolBar extends JToolBar {
         b.setToolTipText(obj.getActionName());
         b.setText("");
         b.setRequestFocusEnabled(false);
-        b.setMargin(new Insets(1, 1, 1, 1));
+        b.setMargin(new Insets(4, 4, 4, 4));
+        b.setBorderPainted(false);
+        b.setContentAreaFilled(false);
+        b.setOpaque(false);
     }
 
     private void addAction() {

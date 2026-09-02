@@ -63,6 +63,7 @@ import java.util.Vector;
  * @author Giovanni Rimassa - Universita' di Parma
  * @author Dick Cowan - HP Labs
  * @version $Date: 2011-06-28 08:34:54 +0200 (mar, 28 giu 2011) $ $Revision: 6419 $
+ * @version $Date: 2026-09-02$ $Revision: 2, E.Adam $
  */
 public class Boot3 {
 
@@ -85,7 +86,7 @@ public class Boot3 {
         }
 
         if (profile.getParameter(Profile.IMTP, null) == null) {
-            profile.setParameter(Profile.IMTP, "jade.imtp.rmi.RMIIMTPManager");
+            profile.setParameter(Profile.IMTP, "jade.imtp.socket.SocketIMTPManager");
         }
         if (profile.getParameter(Profile.STYLE_3_X, null) == null) {
             profile.setParameter(Profile.STYLE_3_X, "true");
@@ -484,4 +485,4 @@ public class Boot3 {
             throw new BootException("Error: Not possible to launch JADE a remote host (" + properties.getProperty(Profile.LOCAL_HOST) + "). Check the -host and -local-host options.");
         }
     }
-} 
+}

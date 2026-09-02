@@ -36,6 +36,7 @@ import java.util.Properties;
  * @author Federico Bergenti
  * @author Giovanni Caire - TILAB
  * @version 1.0, 22/11/00
+ * {@code @revised} 2.0, 02/09/26, E. Adam
  */
 public abstract class Profile {
 
@@ -270,7 +271,7 @@ public abstract class Profile {
     public static final String LOOPBACK_ADDRESS_CONSTANT = "127.0.0.1";
 
     public static final String LEAP_IMTP = "LEAP";
-    public static final String RMI_IMTP = "RMI";
+    public static final String SOCKET_IMTP = "SOCKET";
 
     //#APIDOC_EXCLUDE_BEGIN
     /**
@@ -603,4 +604,3 @@ public abstract class Profile {
     //#MIDP_EXCLUDE_END
 
 }
-

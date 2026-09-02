@@ -28,6 +28,9 @@ import jade.lang.acl.ACLMessage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -71,11 +74,11 @@ public class MMCanvas
     private final boolean typeCanv;
     private final List<Agent> noSniffAgents = new ArrayList<>();
     //#DOTNET_EXCLUDE_BEGIN
-    private final Font font1 = new Font("Helvetica", Font.ITALIC, 12);
-    private final Font font2 = new Font("SanSerif", Font.BOLD, 12);
+    private final Font font1 = new Font(Font.SANS_SERIF, Font.ITALIC, 12);
+    private final Font font2 = SnifferTheme.FONT_STATUS_BAR.deriveFont(Font.BOLD);
     // font3 is used to display the name of the performative above the messages.
     // Needed something a bit smaller than 1 or 2 above so it isn't too obtrusive.
-    private final Font font3 = new Font("SanSerif", Font.PLAIN, 10);
+    private final Font font3 = SnifferTheme.FONT_PERFORMATIVE;
     //#DOTNET_EXCLUDE_END
   /*#DOTNET_INCLUDE_BEGIN
   private Font font1 = new Font("Helvetica", 12, FontStyle.Italic);
@@ -92,9 +95,8 @@ public class MMCanvas
     private final HashMap<Object, Integer> mapToColor = new HashMap<>();
     // Removed green, orange, and pink.  They were too hard to see.
     //#DOTNET_EXCLUDE_BEGIN
-    private final Color[] colorTable = {new Color(200, 0, 150), Color.blue, new Color(230, 230, 0), Color.red, Color.black, Color.magenta, Color.cyan,
-            Color.pink, new Color(0, 200, 150), Color.green};
-    private final Color noConversationColor = Color.gray;
+    private final Color[] colorTable = SnifferTheme.CONVERSATION_COLORS;
+    private final Color noConversationColor = SnifferTheme.NO_CONVERSATION;
     public AgentList al;
     public MessageList ml;
     private int positionAgent = 0;
@@ -122,6 +124,7 @@ public class MMCanvas
         this.panCan = panCan;
         //#DOTNET_EXCLUDE_BEGIN
         setDoubleBuffered(false);
+        setBackground(SnifferTheme.CANVAS_BACKGROUND);
         addMouseListener(this);
         addMouseMotionListener(this);
         //#DOTNET_EXCLUDE_END
@@ -159,6 +162,9 @@ public class MMCanvas
   #DOTNET_INCLUDE_END*/ {
         //#DOTNET_EXCLUDE_BEGIN
         super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         //#DOTNET_EXCLUDE_END
 
         int yDim = 0;
@@ -182,14 +188,16 @@ public class MMCanvas
                     int x = Agent.yRet + (xCanvDim++) * 80;
 
                     //#DOTNET_EXCLUDE_BEGIN
-                    if (!agent.onCanv) g.setColor(Color.gray);
-                    else g.setColor(Color.red);
+                    Color boxColor = agent.onCanv ? SnifferTheme.AGENT_ACTIVE : SnifferTheme.AGENT_INACTIVE;
+                    if (checkNoSniffedVector(agent)) boxColor = SnifferTheme.AGENT_EXCLUDED;
 
-                    if (checkNoSniffedVector(agent)) g.setColor(Color.yellow);
-
-                    g.draw3DRect(x, Agent.yRet, Agent.bRet, Agent.hRet, true);
-                    g.fill3DRect(x, Agent.yRet, Agent.bRet, Agent.hRet, true);
-                    g.setColor(Color.black);
+                    RoundRectangle2D box = new RoundRectangle2D.Float(x, Agent.yRet, Agent.bRet, Agent.hRet, 10, 10);
+                    g2.setColor(boxColor);
+                    g2.fill(box);
+                    g2.setColor(boxColor.darker());
+                    g2.draw(box);
+                    g2.setFont(SnifferTheme.FONT_AGENT_LABEL);
+                    g2.setColor(SnifferTheme.TEXT_LIGHT);
                     FontMetrics fm = g.getFontMetrics();
                     //#DOTNET_EXCLUDE_END
 
@@ -430,13 +438,13 @@ public class MMCanvas
 
 
                     //#DOTNET_EXCLUDE_BEGIN
-                    g.setColor(messageColor);
-                    g.drawRect(x1 - 3, y - 4, 4, 8);
-                    g.fillRect(x1 - 3, y - 4, 4, 8);
+                    g2.setColor(messageColor);
+                    g2.fill(new Ellipse2D.Float(x1 - 4, y - 4, 8, 8));
 
                     // This code displays the name of the performative centered above the
                     // arrow.  At some point, might want to make this optional.
-                    g.setFont(font3);
+                    g2.setFont(font3);
+                    g2.setColor(SnifferTheme.TEXT_MUTED);
                     FontMetrics fmPerf = g.getFontMetrics();
 
                     String perf = ACLMessage.getPerformative(mess.getPerformative());
@@ -493,6 +501,9 @@ public class MMCanvas
 		   #DOTNET_INCLUDE_END*/
 
                     // disegno segmento messaggio
+                    //#DOTNET_EXCLUDE_BEGIN
+                    g2.setColor(messageColor);
+                    //#DOTNET_EXCLUDE_END
                     for (int k = -1; k <= 1; k++) {
                         if (x2 > x1) {
                             //#DOTNET_EXCLUDE_BEGIN
@@ -538,7 +549,8 @@ public class MMCanvas
                     // Here we update the green lines of the timeline
                     //#DOTNET_EXCLUDE_BEGIN
                     int x = Agent.yRet / 2 + num * 80;
-                    g.setColor(new Color(0, 100, 50));
+                    g2.setColor(SnifferTheme.TIMELINE);
+                    g2.setStroke(new BasicStroke(1f));
                     //#DOTNET_EXCLUDE_END
 	     /*#DOTNET_INCLUDE_BEGIN
 		 int x = (int) jade.tools.sniffer.Agent.yRet/2+num*80;
@@ -567,7 +579,8 @@ public class MMCanvas
                 }
 
                 //#DOTNET_EXCLUDE_BEGIN
-                g.setColor(new Color(150, 50, 50));
+                g2.setFont(SnifferTheme.FONT_TIMELINE_INDEX);
+                g2.setColor(SnifferTheme.TIMELINE_INDEX);
                 //#DOTNET_EXCLUDE_END
 	   /*#DOTNET_INCLUDE_BEGIN
 	   color = Color.FromArgb(150, 50, 50);
@@ -711,6 +724,8 @@ public class MMCanvas
 
     public void mouseMoved(MouseEvent evt) {
         Agent selectedAgent = selAgent(evt);
+        boolean overClickable = (selectedAgent != null && typeCanv) || (!typeCanv && selMessage(evt) != null);
+        setCursor(Cursor.getPredefinedCursor(overClickable ? Cursor.HAND_CURSOR : Cursor.DEFAULT_CURSOR));
         if ((selectedAgent != null) && (typeCanv)) {
             if (!nameShown) {
                 nameShown = true;

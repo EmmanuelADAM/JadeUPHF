@@ -82,7 +82,7 @@ public class AID implements Comparable<Object>, Serializable {
     /**
      * Constructor for an Agent-identifier
      * This constructor (which is deprecated), examines the name
-     * to see if the "@" chararcter is present.  If so, it calls
+     * to see if the "@" character is present.  If so, it calls
      *   this(name, ISGUID)
      * otherwise it calls  this(name, ISLOCALNAME)
      * This ensures better compatibility with JADE2.2 code.

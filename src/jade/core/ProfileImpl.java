@@ -43,6 +43,7 @@ import java.util.*;
  * @author Giovanni Rimassa - Universita' di Parma
  * @author Giovanni Caire - TILAB
  * @version 1.0, 22/11/00
+ * {@code @revised} 2.0, 02/09/26, E. Adam
  */
 public class ProfileImpl extends Profile {
 
@@ -522,8 +523,8 @@ public class ProfileImpl extends Profile {
         String imtpClass = imtp;
         if (imtp.equals(LEAP_IMTP)) {
             imtpClass = "jade.imtp.leap.LEAPIMTPManager";
-        } else if (imtp.equals(RMI_IMTP)) {
-            imtpClass = "jade.imtp.rmi.RMIIMTPManager";
+        } else if (imtp.equals(SOCKET_IMTP)) {
+            imtpClass = "jade.imtp.socket.SocketIMTPManager";
         }
         try {
             myIMTPManager = (IMTPManager) Class.forName(imtpClass).getDeclaredConstructor().newInstance();
@@ -557,4 +558,3 @@ public class ProfileImpl extends Profile {
         props.setProperty(aKey, Integer.toString(aValue));
     }
 }
-

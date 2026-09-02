@@ -365,10 +365,10 @@ public class BootProfileImpl extends ProfileImpl {
      * each delimited by a  ;   and no space in between.
      * <p>
      * For instance
-     *  jade.mtp.iiop(50);http.mtp.http(8080)   is a valid
-     * string, while   jade.mtp.iiop(50 80);http.mtp.http(8080)  
+     *  jade.mtp.http(50);http.mtp.http(8080)   is a valid
+     * string, while   jade.mtp.http(50 80);http.mtp.http(8080)
      * is not valid
-     * For each object specifier, a new java object  Specifier  
+     * For each object specifier, a new java object  Specifier
      * is added to the passed  out   List parameter.
      */
     public List<Specifier> parseSpecifiers(String str) throws PropertiesException {
@@ -422,4 +422,3 @@ public class BootProfileImpl extends ProfileImpl {
         return result;
     }
 }
-

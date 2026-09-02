@@ -114,8 +114,9 @@ public class MainWindow
         //#DOTNET_EXCLUDE_BEGIN
         setJMenuBar(new MainMenu(this, actPro));
         popA = new PopupMenuAgent(actPro);
-        setForeground(Color.black);
-        setBackground(Color.lightGray);
+        setForeground(SnifferTheme.TEXT_DARK);
+        setBackground(SnifferTheme.WINDOW_BACKGROUND);
+        getContentPane().setBackground(SnifferTheme.WINDOW_BACKGROUND);
         Image image = getToolkit().getImage(getClass().getResource(snifferLogo));
         setIconImage(image);
 
@@ -151,7 +152,7 @@ public class MainWindow
     public void ShowCorrect() {
         //#DOTNET_EXCLUDE_BEGIN
         pack();
-        setSize(new Dimension(700, 500));
+        setSize(new Dimension(820, 560));
         mainPanel.adjustDividerLocation();
         this.setVisible(true);
         toFront();
@@ -395,7 +396,7 @@ public class MainWindow
 
     //#DOTNET_EXCLUDE_BEGIN
     public Dimension getPreferredSize() {
-        return new Dimension(700, 500);
+        return new Dimension(820, 560);
     }
 
     private void setUI(String ui) {

@@ -45,9 +45,9 @@ import java.io.Serializable;
 
 public class Agent implements Serializable {
 
-    public static final int hRet = 30;
-    public static final int bRet = 50;
-    public static final int yRet = 20;
+    public static final int hRet = 34;
+    public static final int bRet = 64;
+    public static final int yRet = 24;
     public static int i = 0;
     private final AID myAID;
     private final int pos = 0;

@@ -99,20 +99,16 @@ public class SimpleWindow4Agent extends JFrame implements ActionListener {
      * add a string to the text area
      */
     public void println(String chaine) {
-        String texte = jTextArea.getText();
-        texte = texte + chaine + "\n";
-        jTextArea.setText(texte);
-        jTextArea.setCaretPosition(texte.length());
+        jTextArea.append(chaine + "\n");
+        jTextArea.setCaretPosition(jTextArea.getDocument().getLength());
     }
 
     /**
      * add a formatted string to the text area
      */
     public void printf(String format, Object[] tabO) {
-        String texte = jTextArea.getText();
-        texte = texte + format.formatted(tabO) + "\n";
-        jTextArea.setText(texte);
-        jTextArea.setCaretPosition(texte.length());
+        jTextArea.append(format.formatted(tabO) + "\n");
+        jTextArea.setCaretPosition(jTextArea.getDocument().getLength());
     }
 
     /**

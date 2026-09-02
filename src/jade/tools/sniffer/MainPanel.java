@@ -78,6 +78,7 @@ public class MainPanel
         f = new Font("SanSerif", Font.PLAIN, 14);
         setFont(f);
         setLayout(new BorderLayout(10, 10));
+        setBackground(SnifferTheme.WINDOW_BACKGROUND);
         //#DOTNET_EXCLUDE_END
 
     /*#DOTNET_INCLUDE_BEGIN
@@ -99,12 +100,17 @@ public class MainPanel
         pc.setViewportView(panelcan);
         pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(treeAgent.tree), pc);
         pane.setContinuousLayout(true);
+        pane.setDividerSize(6);
+        pane.setBorder(BorderFactory.createEmptyBorder());
         add(pane);
         textArea = new JTextArea();
-        textArea.setBackground(Color.lightGray);
-        textArea.setFont(font);
+        textArea.setBackground(SnifferTheme.WINDOW_BACKGROUND);
+        textArea.setForeground(SnifferTheme.TEXT_DARK);
+        textArea.setFont(SnifferTheme.FONT_STATUS_BAR);
+        textArea.setMargin(new Insets(6, 10, 6, 10));
+        textArea.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, SnifferTheme.BORDER));
         textArea.setRows(1);
-        textArea.setText("                                                                 No Message");
+        textArea.setText("No message");
         textArea.setEditable(false);
         add(textArea, "South");
         //popM=new PopupMouser(treeAgent.tree,treeAgent);

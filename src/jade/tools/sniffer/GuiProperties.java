@@ -47,14 +47,14 @@ public class GuiProperties {
 
     static {
         Object[] icons = {
-                "SnifferAction.ClearCanvasActionIcon", LookAndFeel.makeIcon(foo.getClass(), "images/litter2.gif"),
-                "SnifferAction.DisplayLogFileActionIcon", LookAndFeel.makeIcon(foo.getClass(), "images/open.gif"),
-                "SnifferAction.WriteLogFileActionIcon", LookAndFeel.makeIcon(foo.getClass(), "images/save1.gif"),
-                "SnifferAction.MessageFileActionIcon", LookAndFeel.makeIcon(foo.getClass(), "images/textfile.gif"),
-                "SnifferAction.DoSnifferActionIcon", LookAndFeel.makeIcon(foo.getClass(), "images/bullet1.gif"),
-                "SnifferAction.DoNotSnifferActionIcon", LookAndFeel.makeIcon(foo.getClass(), "images/bullet2.gif"),
-                "SnifferAction.ShowOnlyActionIcon", LookAndFeel.makeIcon(foo.getClass(), "images/bullet4.gif"),
-                "SnifferAction.ExitActionIcon", LookAndFeel.makeIcon(foo.getClass(), "images/exit.gif"),
+                "SnifferAction.ClearCanvasActionIcon", FlatIcon.broom(),
+                "SnifferAction.DisplayLogFileActionIcon", FlatIcon.folderOpen(),
+                "SnifferAction.WriteLogFileActionIcon", FlatIcon.save(),
+                "SnifferAction.MessageFileActionIcon", FlatIcon.saveList(),
+                "SnifferAction.DoSnifferActionIcon", FlatIcon.dot(SnifferTheme.AGENT_ACTIVE),
+                "SnifferAction.DoNotSnifferActionIcon", FlatIcon.dot(SnifferTheme.AGENT_EXCLUDED),
+                "SnifferAction.ShowOnlyActionIcon", FlatIcon.ring(SnifferTheme.AGENT_ACTIVE),
+                "SnifferAction.ExitActionIcon", FlatIcon.exit(),
         };
         MyDefaults = new UIDefaults(icons);
     }

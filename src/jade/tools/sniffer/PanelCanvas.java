@@ -70,6 +70,7 @@ public class PanelCanvas
    #DOTNET_INCLUDE_END*/
         this.mySniffer = mySniffer;
         //#DOTNET_EXCLUDE_BEGIN
+        setBackground(SnifferTheme.CANVAS_BACKGROUND);
         GridBagConstraints gbc;
         setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();

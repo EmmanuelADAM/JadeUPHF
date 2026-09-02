@@ -195,12 +195,6 @@ public interface FIPANames {
      **/
     interface MTP {
         /**
-         * IIOP-based MTP
-         *
-         * @see <a href=http://www.fipa.org/specs/fipa00075/XC00075e.html>FIPA Spec</a>
-         **/
-        String IIOP = "fipa.mts.mtp.iiop.std";
-        /**
          * WAP-based MTP
          *
          * @see <a href=http://www.fipa.org/specs/fipa00076/XC00076c.html>FIPA Spec</a>
