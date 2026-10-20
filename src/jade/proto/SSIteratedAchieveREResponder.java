@@ -23,6 +23,8 @@
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 //#CUSTOM_EXCLUDE_FILE
 
 import jade.core.Agent;
@@ -94,7 +96,7 @@ public class SSIteratedAchieveREResponder extends SSResponder {
     // HANDLE_REQUEST
     b = new RequestHandler(myAgent);
     registerFirstState(b, HANDLE_REQUEST);
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
 
     // HANDLE_CANCEL
     b = new CancelHandler(myAgent);
@@ -126,8 +128,7 @@ public class SSIteratedAchieveREResponder extends SSResponder {
         // HANDLE_REQUEST
         b = new RequestHandler(myAgent);
         registerFirstState(b, HANDLE_REQUEST);
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
 
         // HANDLE_CANCEL
         b = new CancelHandler(myAgent);
@@ -194,7 +195,7 @@ public class SSIteratedAchieveREResponder extends SSResponder {
      */
     public void registerHandleRequest(Behaviour b) {
         registerFirstState(b, HANDLE_REQUEST);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**

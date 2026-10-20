@@ -115,13 +115,10 @@ public abstract class Behaviour implements Serializable {
 
     //#CUSTOM_EXCLUDE_BEGIN
     /**
-     * map key - list of messages
+     * the two maps (key - list of messages, key - message) used to exchange messages
+     * with the other behaviours of a protocol ; shared as ONE object (see MessageMaps)
      */
-    private HashMap<String, List<ACLMessage>> mapMessagesList;
-    /**
-     * map key - message
-     */
-    private HashMap<String, ACLMessage> mapMessages;
+    private MessageMaps messageMaps;
     private CompositeBehaviour wrappedParent;
 
     /**  an agent consumer called in action() by default*/
@@ -516,29 +513,52 @@ public abstract class Behaviour implements Serializable {
     }
 
     /**
+     * Return the maps (list of messages, messages) of this  Behaviour.
+     * If they were not set, a new (empty) MessageMaps object is created and returned.
+     *
+     * @return the MessageMaps of this  Behaviour
+     */
+    public MessageMaps getMessageMaps() {
+        if (messageMaps == null) {
+            messageMaps = new MessageMaps();
+        }
+        return messageMaps;
+    }
+
+    /**
+     * Set the maps (list of messages, messages) of this  Behaviour.
+     * To share the maps of a behaviour with another one, use
+     * {@code other.setMessageMaps(getMessageMaps())} : BOTH maps are then shared.
+     * Composite behaviours (protocols, wrappers) override this method to propagate the setting to their children.
+     *
+     * @param maps the maps that this  Behaviour  will use
+     */
+    public void setMessageMaps(MessageMaps maps) {
+        messageMaps = maps;
+    }
+
+    /**
      * Return the private map of list of messages  of this  Behaviour  .
      * If it was null, a new HashMap is created and returned.
      *
      * @return The private map of list of messages of this  Behaviour
      */
     public HashMap<String, List<ACLMessage>> getMapMessagesList() {
-        if (mapMessagesList == null) {
-            mapMessagesList = new HashMap<>();
-        }
-        return mapMessagesList;
+        return getMessageMaps().lists();
     }
 
 
     //#CUSTOM_EXCLUDE_BEGIN
 
     /**
-     * Set the private map of list of messages of this  Behaviour
+     * Set the private map of list of messages of this  Behaviour (the map of messages is kept).
+     * To share the maps with another behaviour, prefer {@link #setMessageMaps(MessageMaps)}.
      *
      * @param map the  HashMap   that this  Behaviour
      *            will use as its private map of list of messages
      */
     public void setMapMessagesList(HashMap<String, List<ACLMessage>> map) {
-        mapMessagesList = map;
+        setMessageMaps(getMessageMaps().withLists(map));
     }
 
     /**
@@ -548,20 +568,18 @@ public abstract class Behaviour implements Serializable {
      * @return The private map of  messages of this  Behaviour
      */
     public HashMap<String, ACLMessage> getMapMessages() {
-        if (mapMessages == null) {
-            mapMessages = new HashMap<>();
-        }
-        return mapMessages;
+        return getMessageMaps().messages();
     }
 
     /**
-     * Set the private map of  messages of this  Behaviour
+     * Set the private map of  messages of this  Behaviour (the map of list of messages is kept).
+     * To share the maps with another behaviour, prefer {@link #setMessageMaps(MessageMaps)}.
      *
      * @param map the  HashMap   that this  Behaviour
      *            will use as its private map of  messages
      */
     public void setMapMessages(HashMap<String, ACLMessage> map) {
-        mapMessages = map;
+        setMessageMaps(getMessageMaps().withMessages(map));
     }
 
     /**

@@ -23,6 +23,8 @@
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 //#CUSTOM_EXCLUDE_FILE
 
 import jade.core.Agent;
@@ -106,8 +108,7 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
      **/
     public AchieveREResponder(Agent a, MessageTemplate mt, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
 
-        setMapMessagesList(mapMessagesList);
-        setMapMessages(mapMessages);
+        setMessageMaps(new MessageMaps(mapMessagesList, mapMessages));
 
         // Register the FSM transitions
         registerDefaultTransition(RECEIVE_REQUEST, HANDLE_REQUEST);
@@ -127,26 +128,22 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
 
         // HANDLE_REQUEST
         b = new HandleRequest(myAgent);
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_REQUEST);
 
         // SEND_RESPONSE
         b = new SendResponse(myAgent, RESPONSE_KEY, REQUEST_KEY, mapMessagesList, mapMessages);
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, SEND_RESPONSE);
 
         // PREPARE_RESULT_NOTIFICATION
         b = new PrepareResult(myAgent);
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, PREPARE_RESULT_NOTIFICATION);
 
         // SEND_RESULT_NOTIFICATION
         b = new SendResult(myAgent, RESULT_NOTIFICATION_KEY, REQUEST_KEY, mapMessagesList, mapMessages);
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, SEND_RESULT_NOTIFICATION);
     }
 
@@ -226,22 +223,22 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
 
     // HANDLE_REQUEST
     b = new HandleRequest(myAgent);
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_REQUEST);
 
     // SEND_RESPONSE
     b = new SendResponse(myAgent, RESPONSE_KEY, REQUEST_KEY);
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, SEND_RESPONSE);
 
     // PREPARE_RESULT_NOTIFICATION
     b = new PrepareResult(myAgent);
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, PREPARE_RESULT_NOTIFICATION);
 
     // SEND_RESULT_NOTIFICATION
     b = new SendResult(myAgent, RESULT_NOTIFICATION_KEY, REQUEST_KEY);
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, SEND_RESULT_NOTIFICATION);
     }
      */
@@ -302,8 +299,7 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
      */
     public void registerHandleRequest(Behaviour b) {
         registerState(b, HANDLE_REQUEST);
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -328,8 +324,7 @@ public class AchieveREResponder extends FSMBehaviour implements FIPANames.Intera
      */
     public void registerPrepareResultNotification(Behaviour b) {
         registerState(b, PREPARE_RESULT_NOTIFICATION);
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
     }
 
     private static class HandleRequest extends OneShotBehaviour {

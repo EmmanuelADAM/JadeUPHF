@@ -23,6 +23,8 @@ Boston, MA  02111-1307, USA.
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 //#J2ME_EXCLUDE_FILE
 
 import jade.core.Agent;
@@ -106,7 +108,7 @@ public class TwoPhResponder extends Responder {
                 getMapMessages().put(REPLY_KEY, reply);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_CFP);
 
         // HANDLE_QUERY_IF
@@ -119,7 +121,7 @@ public class TwoPhResponder extends Responder {
                 getMapMessages().put(REPLY_KEY, reply);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_QUERY_IF);
 
         // HANDLE_ACCEPT_PROPOSAL
@@ -132,7 +134,7 @@ public class TwoPhResponder extends Responder {
                 getMapMessages().put(REPLY_KEY, reply);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ACCEPT_PROPOSAL);
 
         // HANDLE_REJECT_PROPOSAL
@@ -145,7 +147,7 @@ public class TwoPhResponder extends Responder {
                 getMapMessages().put(REPLY_KEY, reply);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_REJECT_PROPOSAL);
     }
 
@@ -195,8 +197,7 @@ public class TwoPhResponder extends Responder {
                 getMapMessages().put(REPLY_KEY, reply);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_CFP);
 
         // HANDLE_QUERY_IF
@@ -209,8 +210,7 @@ public class TwoPhResponder extends Responder {
                 getMapMessages().put(REPLY_KEY, reply);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_QUERY_IF);
 
         // HANDLE_ACCEPT_PROPOSAL
@@ -223,8 +223,7 @@ public class TwoPhResponder extends Responder {
                 getMapMessages().put(REPLY_KEY, reply);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ACCEPT_PROPOSAL);
 
         // HANDLE_REJECT_PROPOSAL
@@ -237,8 +236,7 @@ public class TwoPhResponder extends Responder {
                 getMapMessages().put(REPLY_KEY, reply);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_REJECT_PROPOSAL);
     }
 

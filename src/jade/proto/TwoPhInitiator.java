@@ -23,6 +23,8 @@ Boston, MA  02111-1307, USA.
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.FSMBehaviour;
@@ -205,7 +207,7 @@ public class TwoPhInitiator extends FSMBehaviour {
     public void action() {
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerLastState(b, DUMMY_FINAL);
     }
      */
@@ -221,8 +223,7 @@ public class TwoPhInitiator extends FSMBehaviour {
      */
     public TwoPhInitiator(Agent a, ACLMessage cfp, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a);
-        setMapMessagesList(mapMessagesList);
-        setMapMessages(mapMessages);
+        setMessageMaps(new MessageMaps(mapMessagesList, mapMessages));
         // Register the FSM transitions specific to the Two-Phase-Commit protocol
         registerTransition(PH0_STATE, PH1_STATE, ACLMessage.QUERY_IF);
         registerTransition(PH0_STATE, PH2_STATE, ACLMessage.REJECT_PROPOSAL);
@@ -353,8 +354,7 @@ public class TwoPhInitiator extends FSMBehaviour {
             public void action() {
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerLastState(b, DUMMY_FINAL);
     }
 

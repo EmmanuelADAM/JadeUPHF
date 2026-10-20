@@ -23,6 +23,8 @@
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 //#CUSTOM_EXCLUDE_FILE
 
 import jade.core.AID;
@@ -125,8 +127,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
      **/
     public SubscriptionResponder(Agent a, MessageTemplate mt, SubscriptionManager sm, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a);
-        setMapMessagesList(mapMessagesList);
-        setMapMessages(mapMessages);
+        setMessageMaps(new MessageMaps(mapMessagesList, mapMessages));
         mySubscriptionManager = sm;
 
         // Register the FSM transitions
@@ -162,8 +163,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
                 ds.put(RESPONSE_KEY, response);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_SUBSCRIPTION);
 
         // HANDLE_CANCEL
@@ -180,8 +180,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
                 ds.put(RESPONSE_KEY, response);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_CANCEL);
 
         // SEND_RESPONSE
@@ -194,8 +193,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
                 sendNotifications();
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, SEND_NOTIFICATIONS);
 
     } // End of Constructor
@@ -248,7 +246,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
     ds.put(RESPONSE_KEY, response);
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_SUBSCRIPTION);
 
     // HANDLE_CANCEL
@@ -265,7 +263,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
     ds.put(RESPONSE_KEY, response);
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_CANCEL);
 
     // SEND_RESPONSE
@@ -278,7 +276,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
     sendNotifications();
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, SEND_NOTIFICATIONS);
 
     } // End of Constructor
@@ -396,7 +394,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
      */
     public void registerHandleSubscription(Behaviour b) {
         registerState(b, HANDLE_SUBSCRIPTION);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -423,8 +421,7 @@ public class SubscriptionResponder extends FSMBehaviour implements FIPANames.Int
      */
     public void registerHandleCancel(Behaviour b) {
         registerState(b, HANDLE_CANCEL);
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**

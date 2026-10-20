@@ -24,6 +24,8 @@
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 //#CUSTOM_EXCLUDE_FILE
 
 import jade.core.Agent;
@@ -144,8 +146,7 @@ public class ContractNetResponder extends SSContractNetResponder {
 
         // The DUMMY_FINAL state must no longer be final
         b = deregisterState(DUMMY_FINAL);
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerDSState(b, DUMMY_FINAL);
 
         registerDefaultTransition(RECEIVE_CFP, HANDLE_CFP);

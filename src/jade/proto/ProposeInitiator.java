@@ -23,6 +23,8 @@
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -224,7 +226,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 getMapMessagesList().put(ALL_INITIATIONS_K, allInitiations);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerFirstState(b, PREPARE_INITIATIONS);
 
         // SEND_INITIATIONS
@@ -243,7 +245,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 return sessions.size();
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, SEND_INITIATIONS);
 
         // RECEIVE_REPLY
@@ -269,7 +271,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 return ret;
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, CHECK_IN_SEQ);
 
         // HANDLE_ALL_RESPONSES
@@ -278,7 +280,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 handleAllResponses(getMapMessagesList().get(ALL_RESPONSES_KEY));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ALL_RESPONSES);
 
         // HANDLE_ACCEPT_PROPOSAL
@@ -287,7 +289,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 handleAcceptProposal(getMapMessages().get(REPLY_KEY));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ACCEPT_PROPOSAL);
 
         // HANDLE_REJECT_PROPOSAL
@@ -296,7 +298,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 handleRejectProposal(getMapMessages().get(REPLY_KEY));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_REJECT_PROPOSAL);
 
         // HANDLE_NOT_UNDERSTOOD
@@ -308,7 +310,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 handleNotUnderstood(getMapMessages().get(REPLY_KEY));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_NOT_UNDERSTOOD);
 
         // HANDLE_OUT_OF_SEQ
@@ -320,7 +322,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 handleOutOfSequence(getMapMessages().get(REPLY_KEY));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_OUT_OF_SEQ);
 
         // CHECK_SESSIONS
@@ -338,7 +340,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 return ret;
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, CHECK_SESSIONS);
 
         // CHECK_AGAIN
@@ -351,7 +353,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 return sessions.size();
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, CHECK_AGAIN);
 
         // DUMMY_FINAL
@@ -383,8 +385,7 @@ public class ProposeInitiator extends FSMBehaviour {
     public ProposeInitiator(Agent a, ACLMessage initiation, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a);
 
-        setMapMessagesList(mapMessagesList);
-        setMapMessages(mapMessages);
+        setMessageMaps(new MessageMaps(mapMessagesList, mapMessages));
         this.initiation = initiation;
 
         // Register the FSM transitions
@@ -421,7 +422,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 getMapMessagesList().put(ALL_INITIATIONS_K, allInitiations);
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerFirstState(b, PREPARE_INITIATIONS);
 
         // SEND_INITIATIONS
@@ -440,7 +441,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 return sessions.size();
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, SEND_INITIATIONS);
 
         // RECEIVE_REPLY
@@ -466,7 +467,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 return ret;
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, CHECK_IN_SEQ);
 
         // HANDLE_ALL_RESPONSES
@@ -475,7 +476,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 handleAllResponses(getMapMessagesList().get(ALL_RESPONSES_KEY));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ALL_RESPONSES);
 
         // HANDLE_ACCEPT_PROPOSAL
@@ -484,7 +485,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 handleAcceptProposal(getMapMessages().get(REPLY_KEY));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ACCEPT_PROPOSAL);
 
         // HANDLE_REJECT_PROPOSAL
@@ -493,7 +494,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 handleRejectProposal(getMapMessages().get(REPLY_KEY));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_REJECT_PROPOSAL);
 
         // HANDLE_NOT_UNDERSTOOD
@@ -505,7 +506,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 handleNotUnderstood(getMapMessages().get(REPLY_KEY));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_NOT_UNDERSTOOD);
 
         // HANDLE_OUT_OF_SEQ
@@ -517,7 +518,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 handleOutOfSequence(getMapMessages().get(REPLY_KEY));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_OUT_OF_SEQ);
 
         // CHECK_SESSIONS
@@ -535,7 +536,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 return ret;
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, CHECK_SESSIONS);
 
         // CHECK_AGAIN
@@ -548,7 +549,7 @@ public class ProposeInitiator extends FSMBehaviour {
                 return sessions.size();
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, CHECK_AGAIN);
 
         // DUMMY_FINAL
@@ -788,7 +789,7 @@ public class ProposeInitiator extends FSMBehaviour {
      */
     public void registerHandleAllResponses(Behaviour b) {
         registerState(b, HANDLE_ALL_RESPONSES);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -806,7 +807,7 @@ public class ProposeInitiator extends FSMBehaviour {
      */
     public void registerHandleAcceptProposal(Behaviour b) {
         registerState(b, HANDLE_ACCEPT_PROPOSAL);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -824,7 +825,7 @@ public class ProposeInitiator extends FSMBehaviour {
      */
     public void registerHandleRejectProposal(Behaviour b) {
         registerState(b, HANDLE_REJECT_PROPOSAL);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
 
@@ -844,7 +845,7 @@ public class ProposeInitiator extends FSMBehaviour {
      */
     public void registerHandleNotUnderstood(Behaviour b) {
         registerState(b, HANDLE_NOT_UNDERSTOOD);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -863,7 +864,7 @@ public class ProposeInitiator extends FSMBehaviour {
      */
     public void registerHandleOutOfSequence(Behaviour b) {
         registerState(b, HANDLE_OUT_OF_SEQ);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -916,10 +917,11 @@ public class ProposeInitiator extends FSMBehaviour {
      * Override the setHashMap() method to initialize propagate this
      * setting to all children.
      */
-    public void setMapMessagesList(HashMap<String, List<ACLMessage>> ds) {
-        super.setMapMessagesList(ds);
+    @Override
+    public void setMessageMaps(MessageMaps maps) {
+        super.setMessageMaps(maps);
         for (Behaviour o : getChildren()) {
-            o.setMapMessagesList(ds);
+            o.setMessageMaps(maps);
         }
     }
 

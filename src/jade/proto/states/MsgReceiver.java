@@ -23,6 +23,8 @@ Boston, MA  02111-1307, USA.
 
 package jade.proto.states;
 
+import jade.core.behaviours.MessageMaps;
+
 //#CUSTOM_EXCLUDE_FILE
 
 import jade.core.Agent;
@@ -238,8 +240,7 @@ public class MsgReceiver extends SimpleBehaviour {
         interrupted = false;
         setTemplate(mt);
         setDeadline(deadline);
-        setMapMessagesList(mapMessagesList);
-        setMapMessages(mapMessages);
+        setMessageMaps(new MessageMaps(mapMessagesList, mapMessages));
         setReceivedKey(msgKey);
     }
 

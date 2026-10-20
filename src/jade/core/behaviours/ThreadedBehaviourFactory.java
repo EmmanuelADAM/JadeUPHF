@@ -285,11 +285,15 @@ public class ThreadedBehaviourFactory {
             myBehaviour.setWrappedParent(parent);
         }
 
-        public HashMap<String, List<ACLMessage>> getMapMessagesList() {
-            return myBehaviour.getMapMessagesList();}
+        /** the maps (BOTH : lists and messages) are those of the threaded behaviour */
+        @Override
+        public MessageMaps getMessageMaps() {
+            return myBehaviour.getMessageMaps();
+        }
 
-        public void setMapMessagesList(HashMap<String, List<ACLMessage>> ds) {
-            myBehaviour.setMapMessagesList(ds);
+        @Override
+        public void setMessageMaps(MessageMaps maps) {
+            myBehaviour.setMessageMaps(maps);
         }
 
         public void reset() {

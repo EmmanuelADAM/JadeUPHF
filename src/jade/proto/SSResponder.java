@@ -23,6 +23,8 @@
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.FSMBehaviour;
@@ -109,7 +111,7 @@ abstract class SSResponder extends FSMBehaviour {
         // DUMMY_FINAL
         b = new DummyFinal(myAgent);
         registerLastState(b, DUMMY_FINAL);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
      */
 
@@ -118,8 +120,7 @@ abstract class SSResponder extends FSMBehaviour {
      */
     public SSResponder(Agent a, ACLMessage initiation, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages, boolean useInitiationKey) {
         super(a);
-        setMapMessagesList(mapMessagesList);
-        setMapMessages(mapMessages);
+        setMessageMaps(new MessageMaps(mapMessagesList, mapMessages));
         this.initiation = initiation;
         initiationKey = (useInitiationKey ? INITIATION_KEY : RECEIVED_KEY);
 
@@ -137,14 +138,12 @@ abstract class SSResponder extends FSMBehaviour {
 
         // CHECK_IN_SEQ
         b = new SeqChecker(myAgent);
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerDSState(b, CHECK_IN_SEQ);
 
         // HANDLE_OUT_OF_SEQUENCE
         b = new OutOfSeqHandler(myAgent);
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerDSState(b, HANDLE_OUT_OF_SEQUENCE);
 
         // SEND_REPLY
@@ -154,8 +153,7 @@ abstract class SSResponder extends FSMBehaviour {
         // DUMMY_FINAL
         b = new DummyFinal(myAgent);
         registerLastState(b, DUMMY_FINAL);
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
     }
 
     public void onStart() {
@@ -251,7 +249,7 @@ abstract class SSResponder extends FSMBehaviour {
      * protocol and set the HashMap appropriately
      */
     protected void registerDSState(Behaviour b, String name) {
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, name);
     }
     //#APIDOC_EXCLUDE_END

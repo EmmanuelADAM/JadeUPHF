@@ -23,6 +23,8 @@
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -82,7 +84,7 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
 
     // The HANDLE_ALL_RESULT_NOTIFICATIONS state must no longer be final
     Behaviour b = deregisterState(HANDLE_ALL_RESULT_NOTIFICATIONS);
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
 
     // REINIT
@@ -91,7 +93,7 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
     prepareForNextRound();
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, REINIT);
 
     // Register the FSM transitions specific to the Iterated-Achieve-RE protocol
@@ -117,8 +119,7 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
 
         // The HANDLE_ALL_RESULT_NOTIFICATIONS state must no longer be final
         Behaviour b = deregisterState(HANDLE_ALL_RESULT_NOTIFICATIONS);
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
 
         // REINIT
@@ -127,8 +128,7 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
                 prepareForNextRound();
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, REINIT);
 
         // Register the FSM transitions specific to the Iterated-Achieve-RE protocol
@@ -255,7 +255,7 @@ public class IteratedAchieveREInitiator extends AchieveREInitiator {
         // Method redefined since HANDLE_ALL_RESULT_NOTIFICATION must not be
         // registered as a final state
         registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 }
 

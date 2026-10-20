@@ -23,6 +23,8 @@ Boston, MA  02111-1307, USA.
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -137,7 +139,7 @@ public class TwoPh1Initiator extends Initiator {
     handleConfirm(confirm);
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_CONFIRM);
 
     // HANDLE_DISCONFIRM state activated if arrived a disconfirm message
@@ -149,7 +151,7 @@ public class TwoPh1Initiator extends Initiator {
     handleDisconfirm(disconfirm);
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_DISCONFIRM);
 
     // HANDLE_INFORM state activated if arrived an inform message
@@ -161,7 +163,7 @@ public class TwoPh1Initiator extends Initiator {
     handleInform(inform);
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_INFORM);
 
     // HANDLE_ALL_RESPONSES state activated when timeout is expired or
@@ -178,7 +180,7 @@ public class TwoPh1Initiator extends Initiator {
     pendings, nextPhMsgs);
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_ALL_RESPONSES);
     }
      */
@@ -238,8 +240,7 @@ public class TwoPh1Initiator extends Initiator {
                 handleConfirm(confirm);
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_CONFIRM);
 
         /* HANDLE_DISCONFIRM state activated if arrived a disconfirm message
@@ -251,8 +252,7 @@ public class TwoPh1Initiator extends Initiator {
                 handleDisconfirm(disconfirm);
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_DISCONFIRM);
 
         /* HANDLE_INFORM state activated if arrived an inform message
@@ -264,8 +264,7 @@ public class TwoPh1Initiator extends Initiator {
                 handleInform(inform);
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_INFORM);
 
         /* HANDLE_ALL_RESPONSES state activated when timeout is expired or
@@ -282,8 +281,7 @@ public class TwoPh1Initiator extends Initiator {
                         pendings, nextPhMsgs);
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ALL_RESPONSES);
     }
 
@@ -397,7 +395,7 @@ public class TwoPh1Initiator extends Initiator {
      */
     public void registerHandleConfirm(Behaviour b) {
         registerState(b, HANDLE_CONFIRM);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -412,7 +410,7 @@ public class TwoPh1Initiator extends Initiator {
      */
     public void registerHandleDisconfirm(Behaviour b) {
         registerState(b, HANDLE_DISCONFIRM);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -427,7 +425,7 @@ public class TwoPh1Initiator extends Initiator {
      */
     public void registerHandleInform(Behaviour b) {
         registerState(b, HANDLE_INFORM);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -444,7 +442,7 @@ public class TwoPh1Initiator extends Initiator {
      */
     public void registerHandleAllResponses(Behaviour b) {
         registerState(b, HANDLE_ALL_RESPONSES);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /* User CAN'T override these methods */

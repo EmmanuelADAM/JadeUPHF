@@ -22,6 +22,8 @@
  *****************************************************************/
 package jade.proto.states;
 
+import jade.core.behaviours.MessageMaps;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
@@ -76,8 +78,7 @@ public class ReplySender extends OneShotBehaviour {
         super(a);
         this.replyKey = replyKey;
         this.msgKey = msgKey;
-        setMapMessagesList(mapMessagesList);
-        setMapMessages(mapMessages);
+        setMessageMaps(new MessageMaps(mapMessagesList, mapMessages));
     }
 
     /*

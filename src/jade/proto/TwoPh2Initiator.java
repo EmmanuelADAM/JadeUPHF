@@ -23,6 +23,8 @@ Boston, MA  02111-1307, USA.
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -133,7 +135,7 @@ public class TwoPh2Initiator extends Initiator {
     return ret;
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, CHECK_IN_SEQ);
 
     // HANDLE_INFORM state activated if arrived an inform message compliant with
@@ -146,7 +148,7 @@ public class TwoPh2Initiator extends Initiator {
     handleInform(inform);
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_INFORM);
 
     // HANDLE_OLD_RESPONSE state activate if arrived a failure message coming
@@ -158,7 +160,7 @@ public class TwoPh2Initiator extends Initiator {
     handleOldResponse(old);
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_OLD_RESPONSE);
 
     // HANDLE_ALL_RESPONSES state activated when all the answers have been received.
@@ -168,7 +170,7 @@ public class TwoPh2Initiator extends Initiator {
     handleAllResponses(responses);
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_ALL_RESPONSES);
 
     }
@@ -235,8 +237,7 @@ public class TwoPh2Initiator extends Initiator {
                 return ret;
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, CHECK_IN_SEQ);
 
         /* HANDLE_INFORM state activated if arrived an inform message compliant with
@@ -249,8 +250,7 @@ public class TwoPh2Initiator extends Initiator {
                 handleInform(inform);
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_INFORM);
 
         /* HANDLE_OLD_RESPONSE state activate if arrived a failure message coming
@@ -262,8 +262,7 @@ public class TwoPh2Initiator extends Initiator {
                 handleOldResponse(old);
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_OLD_RESPONSE);
 
         /* HANDLE_ALL_RESPONSES state activated when all the answers have been received. */
@@ -273,8 +272,7 @@ public class TwoPh2Initiator extends Initiator {
                 handleAllResponses(responses);
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ALL_RESPONSES);
 
     }
@@ -362,7 +360,7 @@ public class TwoPh2Initiator extends Initiator {
      */
     public void registerHandleInform(Behaviour b) {
         registerState(b, HANDLE_INFORM);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -377,7 +375,7 @@ public class TwoPh2Initiator extends Initiator {
      */
     public void registerHandleOldResponse(Behaviour b) {
         registerState(b, HANDLE_OLD_RESPONSE);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /* User CAN'T override these methods */
@@ -395,7 +393,7 @@ public class TwoPh2Initiator extends Initiator {
      */
     public void registerHandleAllResponses(Behaviour b) {
         registerState(b, HANDLE_ALL_RESPONSES);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**

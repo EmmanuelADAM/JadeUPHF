@@ -23,6 +23,8 @@
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 //#CUSTOM_EXCLUDE_FILE
 
 import jade.core.Agent;
@@ -102,7 +104,7 @@ public class SSContractNetResponder extends SSResponder {
         // HANDLE_CFP
         b = new CfpHandler(myAgent);
         registerFirstState(b, HANDLE_CFP);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
 
         // HANDLE_ACCEPT_PROPOSAL
         b = new AcceptHandler(myAgent);
@@ -135,19 +137,16 @@ public class SSContractNetResponder extends SSResponder {
         // HANDLE_CFP
         b = new CfpHandler(myAgent);
         registerFirstState(b, HANDLE_CFP);
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
 
         // HANDLE_ACCEPT_PROPOSAL
         b = new AcceptHandler(myAgent);
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerDSState(b, HANDLE_ACCEPT_PROPOSAL);
 
         // HANDLE_REJECT_PROPOSAL
         b = new RejectHandler(myAgent);
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerDSState(b, HANDLE_REJECT_PROPOSAL);
     }
 
@@ -242,7 +241,7 @@ public class SSContractNetResponder extends SSResponder {
      */
     public void registerHandleCfp(Behaviour b) {
         registerFirstState(b, HANDLE_CFP);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**

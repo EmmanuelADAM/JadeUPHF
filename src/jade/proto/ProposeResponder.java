@@ -23,6 +23,8 @@ Boston, MA  02111-1307, USA.
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 //#CUSTOM_EXCLUDE_FILE
 
 import jade.core.Agent;
@@ -120,8 +122,7 @@ public class ProposeResponder extends FSMBehaviour implements FIPANames.Interact
     public ProposeResponder(Agent a, MessageTemplate mt, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a);
 
-        setMapMessagesList(mapMessagesList);
-        setMapMessages(mapMessages);
+        setMessageMaps(new MessageMaps(mapMessagesList, mapMessages));
 
         // Register the FSM transitions
         registerDefaultTransition(RECEIVE_PROPOSE, PREPARE_RESPONSE);
@@ -137,13 +138,12 @@ public class ProposeResponder extends FSMBehaviour implements FIPANames.Interact
 
         // PREPARE_RESPONSE
         b = new PrepareResponse(myAgent);
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, PREPARE_RESPONSE);
 
         // SEND_RESPONSE
         b = new ReplySender(myAgent, RESPONSE_KEY, PROPOSE_KEY, mapMessagesList, mapMessages);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, SEND_RESPONSE);
     }
 
@@ -178,12 +178,12 @@ public class ProposeResponder extends FSMBehaviour implements FIPANames.Interact
 
     // PREPARE_RESPONSE
     b = new PrepareResponse(myAgent);
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, PREPARE_RESPONSE);
 
     // SEND_RESPONSE
     b = new ReplySender(myAgent, RESPONSE_KEY, PROPOSE_KEY);
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, SEND_RESPONSE);
     }
      */
@@ -259,7 +259,7 @@ public class ProposeResponder extends FSMBehaviour implements FIPANames.Interact
      */
     public void registerPrepareResponse(Behaviour b) {
         registerState(b, PREPARE_RESPONSE);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     //#MIDP_EXCLUDE_BEGIN

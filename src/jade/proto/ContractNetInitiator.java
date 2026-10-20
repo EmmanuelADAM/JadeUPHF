@@ -23,6 +23,8 @@ Boston, MA  02111-1307, USA.
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -221,8 +223,7 @@ public class ContractNetInitiator extends Initiator {
     handlePropose(propose, acceptances);
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
-    b.setMapMessages(getMapMessages());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_PROPOSE);
 
     // HANDLE_REFUSE
@@ -233,8 +234,7 @@ public class ContractNetInitiator extends Initiator {
     handleRefuse(getMapMessages().get(REPLY_K));
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
-    b.setMapMessages(getMapMessages());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_REFUSE);
 
     // HANDLE_INFORM
@@ -245,8 +245,7 @@ public class ContractNetInitiator extends Initiator {
     handleInform(getMapMessages().get(REPLY_K));
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
-    b.setMapMessages(getMapMessages());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_INFORM);
 
     // HANDLE_ALL_RESPONSES
@@ -258,8 +257,7 @@ public class ContractNetInitiator extends Initiator {
     handleAllResponses(responses, acceptances);
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
-    b.setMapMessages(getMapMessages());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_ALL_RESPONSES);
 
     // HANDLE_ALL_RESULT_NOTIFICATIONS
@@ -273,8 +271,7 @@ public class ContractNetInitiator extends Initiator {
     return moreAcceptancesToSend ? MORE_ACCEPTANCES : super.onEnd();
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
-    b.setMapMessages(getMapMessages());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
     }
      */
@@ -331,8 +328,7 @@ public class ContractNetInitiator extends Initiator {
                 handlePropose(propose, acceptances);
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_PROPOSE);
 
         // HANDLE_REFUSE
@@ -344,8 +340,7 @@ public class ContractNetInitiator extends Initiator {
                 handleRefuse(getMapMessages().get(REPLY_K));
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_REFUSE);
 
         // HANDLE_INFORM
@@ -357,8 +352,7 @@ public class ContractNetInitiator extends Initiator {
                 handleInform(getMapMessages().get(REPLY_K));
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_INFORM);
 
         // HANDLE_ALL_RESPONSES
@@ -370,8 +364,7 @@ public class ContractNetInitiator extends Initiator {
                 handleAllResponses(responses, acceptances);
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ALL_RESPONSES);
 
         // HANDLE_ALL_RESULT_NOTIFICATIONS
@@ -385,8 +378,7 @@ public class ContractNetInitiator extends Initiator {
                 return moreAcceptancesToSend ? MORE_ACCEPTANCES : super.onEnd();
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
     }
 
@@ -613,8 +605,8 @@ public class ContractNetInitiator extends Initiator {
      */
     public void registerHandlePropose(Behaviour b) {
         registerState(b, HANDLE_PROPOSE);
-        b.setMapMessages(getMapMessages());
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -633,8 +625,8 @@ public class ContractNetInitiator extends Initiator {
      */
     public void registerHandleRefuse(Behaviour b) {
         registerState(b, HANDLE_REFUSE);
-        b.setMapMessages(getMapMessages());
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -653,8 +645,8 @@ public class ContractNetInitiator extends Initiator {
      */
     public void registerHandleInform(Behaviour b) {
         registerState(b, HANDLE_INFORM);
-        b.setMapMessages(getMapMessages());
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -674,8 +666,8 @@ public class ContractNetInitiator extends Initiator {
      */
     public void registerHandleAllResponses(Behaviour b) {
         registerState(b, HANDLE_ALL_RESPONSES);
-        b.setMapMessages(getMapMessages());
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -694,8 +686,8 @@ public class ContractNetInitiator extends Initiator {
      */
     public void registerHandleAllResultNotifications(Behaviour b) {
         registerLastState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
-        b.setMapMessages(getMapMessages());
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**

@@ -23,6 +23,8 @@ Boston, MA  02111-1307, USA.
 
 package jade.proto.states;
 
+import jade.core.behaviours.MessageMaps;
+
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.FSMBehaviour;
@@ -103,7 +105,7 @@ public abstract class HandlerSelector extends FSMBehaviour {
                 return ret;
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerFirstState(b, SELECT);
 
         // DUMMY

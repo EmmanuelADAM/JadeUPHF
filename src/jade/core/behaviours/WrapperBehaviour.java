@@ -110,12 +110,15 @@ public class WrapperBehaviour extends Behaviour {
         wrappedBehaviour.setWrappedParent(parent);
     }
 
-    public HashMap<String, List<ACLMessage>> getMapMessagesList() {
-        return wrappedBehaviour.getMapMessagesList();
+    /** the maps (BOTH : lists and messages) are those of the wrapped behaviour */
+    @Override
+    public MessageMaps getMessageMaps() {
+        return wrappedBehaviour.getMessageMaps();
     }
 
-    public void setMapMessagesList(HashMap<String, List<ACLMessage>> ds) {
-        wrappedBehaviour.setMapMessagesList(ds);
+    @Override
+    public void setMessageMaps(MessageMaps maps) {
+        wrappedBehaviour.setMessageMaps(maps);
     }
 
     public void reset() {

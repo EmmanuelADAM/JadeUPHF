@@ -23,6 +23,8 @@
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -176,8 +178,7 @@ public class AchieveREInitiator extends Initiator {
     handleAgree(getMapMessages().get(REPLY_K));
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
-    b.setMapMessages(getMapMessages());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_AGREE);
 
     // HANDLE_REFUSE
@@ -188,8 +189,7 @@ public class AchieveREInitiator extends Initiator {
     handleRefuse(getMapMessages().get(REPLY_K));
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
-    b.setMapMessages(getMapMessages());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_REFUSE);
 
     // HANDLE_INFORM
@@ -200,8 +200,7 @@ public class AchieveREInitiator extends Initiator {
     handleInform(getMapMessages().get(REPLY_K));
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
-    b.setMapMessages(getMapMessages());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_INFORM);
 
     // HANDLE_ALL_RESPONSES
@@ -211,8 +210,7 @@ public class AchieveREInitiator extends Initiator {
     handleAllResponses(getMapMessagesList().get(ALL_RESPONSES_KEY));
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
-    b.setMapMessages(getMapMessages());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_ALL_RESPONSES);
 
     // HANDLE_ALL_RESULT_NOTIFICATIONS
@@ -222,8 +220,7 @@ public class AchieveREInitiator extends Initiator {
     handleAllResultNotifications(getMapMessagesList().get(ALL_RESULT_NOTIFICATIONS_KEY));
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
-    b.setMapMessages(getMapMessages());
+    b.setMessageMaps(getMessageMaps());
     registerLastState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
 
     // CHECK_AGAIN
@@ -235,8 +232,7 @@ public class AchieveREInitiator extends Initiator {
     return mapSessions.size();
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
-    b.setMapMessages(getMapMessages());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, CHECK_AGAIN);
     }
      */
@@ -278,32 +274,27 @@ public class AchieveREInitiator extends Initiator {
         Behaviour b;
         // HANDLE_AGREE
         b = new OneShotBehaviour(myAgent, agent->handleAgree(getMapMessages().get(REPLY_K)));
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_AGREE);
 
         // HANDLE_REFUSE
         b = new OneShotBehaviour(myAgent, agent->handleRefuse(getMapMessages().get(REPLY_K)));
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_REFUSE);
 
         // HANDLE_INFORM
         b = new OneShotBehaviour(myAgent, agent->handleInform(getMapMessages().get(REPLY_K)));
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_INFORM);
 
         // HANDLE_ALL_RESPONSES
         b = new OneShotBehaviour(myAgent, agent->handleAllResponses(getMapMessagesList().get(ALL_RESPONSES_KEY)));
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ALL_RESPONSES);
 
         // HANDLE_ALL_RESULT_NOTIFICATIONS
         b = new OneShotBehaviour(myAgent, agent->handleAllResultNotifications(getMapMessagesList().get(ALL_RESULT_NOTIFICATIONS_KEY)));
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerLastState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
 
         // CHECK_AGAIN
@@ -315,8 +306,7 @@ public class AchieveREInitiator extends Initiator {
                 return mapSessions.size();
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, CHECK_AGAIN);
     }
 
@@ -551,8 +541,8 @@ public class AchieveREInitiator extends Initiator {
      */
     public void registerHandleAgree(Behaviour b) {
         registerState(b, HANDLE_AGREE);
-        b.setMapMessages(getMapMessages());
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -571,8 +561,8 @@ public class AchieveREInitiator extends Initiator {
      */
     public void registerHandleInform(Behaviour b) {
         registerState(b, HANDLE_INFORM);
-        b.setMapMessages(getMapMessages());
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -591,8 +581,8 @@ public class AchieveREInitiator extends Initiator {
      */
     public void registerHandleRefuse(Behaviour b) {
         registerState(b, HANDLE_REFUSE);
-        b.setMapMessages(getMapMessages());
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -611,8 +601,8 @@ public class AchieveREInitiator extends Initiator {
      */
     public void registerHandleAllResponses(Behaviour b) {
         registerState(b, HANDLE_ALL_RESPONSES);
-        b.setMapMessages(getMapMessages());
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -631,8 +621,8 @@ public class AchieveREInitiator extends Initiator {
      */
     public void registerHandleAllResultNotifications(Behaviour b) {
         registerLastState(b, HANDLE_ALL_RESULT_NOTIFICATIONS);
-        b.setMapMessages(getMapMessages());
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**

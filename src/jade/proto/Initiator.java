@@ -23,6 +23,8 @@
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 //import java.util.Iterator;
 //import java.util.Map;
 //import java.util.HashMap;
@@ -116,7 +118,7 @@ abstract class Initiator extends FSMBehaviour {
     }
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerFirstState(b, PREPARE_INITIATIONS);
 
     // SEND_INITIATIONS
@@ -134,7 +136,7 @@ abstract class Initiator extends FSMBehaviour {
     return mapSessions.size();
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, SEND_INITIATIONS);
 
     // RECEIVE_REPLY
@@ -160,7 +162,7 @@ abstract class Initiator extends FSMBehaviour {
      return ret;
      }
      };
-     b.setMapMessagesList(getMapMessagesList());
+     b.setMessageMaps(getMessageMaps());
      registerState(b, CHECK_IN_SEQ);
 
      // HANDLE_NOT_UNDERSTOOD
@@ -171,7 +173,7 @@ abstract class Initiator extends FSMBehaviour {
      handleNotUnderstood(getMapMessages().get(REPLY_K));
      }
      };
-     b.setMapMessagesList(getMapMessagesList());
+     b.setMessageMaps(getMessageMaps());
      registerState(b, HANDLE_NOT_UNDERSTOOD);
 
      // HANDLE_FAILURE
@@ -182,7 +184,7 @@ abstract class Initiator extends FSMBehaviour {
      handleFailure(getMapMessages().get(REPLY_K));
      }
      };
-     b.setMapMessagesList(getMapMessagesList());
+     b.setMessageMaps(getMessageMaps());
      registerState(b, HANDLE_FAILURE);
 
      // HANDLE_OUT_OF_SEQ
@@ -193,7 +195,7 @@ abstract class Initiator extends FSMBehaviour {
      handleOutOfSequence(getMapMessages().get(REPLY_K));
      }
      };
-     b.setMapMessagesList(getMapMessagesList());
+     b.setMessageMaps(getMessageMaps());
      registerState(b, HANDLE_OUT_OF_SEQ);
 
      // CHECK_SESSIONS
@@ -210,7 +212,7 @@ abstract class Initiator extends FSMBehaviour {
      return ret;
      }
      };
-     b.setMapMessagesList(getMapMessagesList());
+     b.setMessageMaps(getMessageMaps());
      registerState(b, CHECK_SESSIONS);
 
      // DUMMY_FINAL
@@ -243,8 +245,7 @@ abstract class Initiator extends FSMBehaviour {
     protected Initiator(Agent a, ACLMessage initiation, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a);
 
-        setMapMessagesList(mapMessagesList);
-        setMapMessages(mapMessages);
+        setMessageMaps(new MessageMaps(mapMessagesList, mapMessages));
         this.initiation = initiation;
 
         // Register the FSM transitions
@@ -278,8 +279,7 @@ abstract class Initiator extends FSMBehaviour {
                 }
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerFirstState(b, PREPARE_INITIATIONS);
 
         // SEND_INITIATIONS
@@ -298,8 +298,7 @@ abstract class Initiator extends FSMBehaviour {
                 return mapSessions.size();
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, SEND_INITIATIONS);
 
         // RECEIVE_REPLY
@@ -325,8 +324,7 @@ abstract class Initiator extends FSMBehaviour {
                 return ret;
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, CHECK_IN_SEQ);
 
         // HANDLE_NOT_UNDERSTOOD
@@ -338,8 +336,7 @@ abstract class Initiator extends FSMBehaviour {
                 handleNotUnderstood(getMapMessages().get(REPLY_K));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_NOT_UNDERSTOOD);
 
         // HANDLE_FAILURE
@@ -351,8 +348,7 @@ abstract class Initiator extends FSMBehaviour {
                 handleFailure(getMapMessages().get(REPLY_K));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_FAILURE);
 
         // HANDLE_OUT_OF_SEQ
@@ -364,8 +360,7 @@ abstract class Initiator extends FSMBehaviour {
                 handleOutOfSequence(getMapMessages().get(REPLY_K));
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_OUT_OF_SEQ);
 
         // CHECK_SESSIONS
@@ -383,8 +378,7 @@ abstract class Initiator extends FSMBehaviour {
                 return ret;
             }
         };
-        b.setMapMessagesList(getMapMessagesList());
-        b.setMapMessages(getMapMessages());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, CHECK_SESSIONS);
 
         // DUMMY_FINAL
@@ -544,7 +538,7 @@ abstract class Initiator extends FSMBehaviour {
      */
     protected void registerPrepareInitiations(Behaviour b) {
         registerState(b, PREPARE_INITIATIONS);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -563,7 +557,7 @@ abstract class Initiator extends FSMBehaviour {
      */
     public void registerHandleNotUnderstood(Behaviour b) {
         registerState(b, HANDLE_NOT_UNDERSTOOD);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -582,7 +576,7 @@ abstract class Initiator extends FSMBehaviour {
      */
     public void registerHandleFailure(Behaviour b) {
         registerState(b, HANDLE_FAILURE);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -601,7 +595,7 @@ abstract class Initiator extends FSMBehaviour {
      */
     public void registerHandleOutOfSequence(Behaviour b) {
         registerState(b, HANDLE_OUT_OF_SEQ);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -648,12 +642,14 @@ abstract class Initiator extends FSMBehaviour {
     //#APIDOC_EXCLUDE_END
 
     /**
-     * Override the setHashMap() method to propagate this
-     * setting to all children.
+     * Override the setMessageMaps() method to propagate this
+     * setting (BOTH maps) to all children.
+     * The old setters setMapMessagesList() / setMapMessages() go through this method too.
      */
-    public void setMapMessagesList(HashMap<String, List<ACLMessage>> ds) {
-        super.setMapMessagesList(ds);
-        getChildren().forEach(child -> child.setMapMessagesList(ds));
+    @Override
+    public void setMessageMaps(MessageMaps maps) {
+        super.setMessageMaps(maps);
+        getChildren().forEach(child -> child.setMessageMaps(maps));
     }
 
     /**

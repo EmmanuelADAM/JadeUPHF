@@ -23,6 +23,8 @@ Boston, MA  02111-1307, USA.
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -117,7 +119,7 @@ public class TwoPh0Initiator extends Initiator {
     handlePropose(propose);
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_PROPOSE);
 
     // HANDLE_ALL_RESPONSES
@@ -132,7 +134,7 @@ public class TwoPh0Initiator extends Initiator {
     handleAllResponses(responses, proposes, pendings, nextPhMsgs);
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_ALL_RESPONSES);
     }*/
 
@@ -183,8 +185,7 @@ public class TwoPh0Initiator extends Initiator {
                 handlePropose(propose);
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_PROPOSE);
 
         // HANDLE_ALL_RESPONSES
@@ -199,8 +200,7 @@ public class TwoPh0Initiator extends Initiator {
                 handleAllResponses(responses, proposes, pendings, nextPhMsgs);
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ALL_RESPONSES);
     }
 
@@ -300,7 +300,7 @@ public class TwoPh0Initiator extends Initiator {
      */
     public void registerHandlePropose(Behaviour b) {
         registerState(b, HANDLE_PROPOSE);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -316,7 +316,7 @@ public class TwoPh0Initiator extends Initiator {
      */
     public void registerHandleAllResponses(Behaviour b) {
         registerState(b, HANDLE_ALL_RESPONSES);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /* User CAN'T override these methods */

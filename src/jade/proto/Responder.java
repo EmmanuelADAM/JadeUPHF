@@ -23,6 +23,8 @@ Boston, MA  02111-1307, USA.
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.FSMBehaviour;
@@ -135,8 +137,7 @@ abstract class Responder extends FSMBehaviour {
      **/
     public Responder(Agent a, MessageTemplate mt, HashMap<String, List<ACLMessage>> mapMessagesList, HashMap<String, ACLMessage> mapMessages) {
         super(a);
-        setMapMessagesList(mapMessagesList);
-        setMapMessages(mapMessages);
+        setMessageMaps(new MessageMaps(mapMessagesList, mapMessages));
 
         registerDefaultTransition(RECEIVE_INITIATION, CHECK_IN_SEQ);
         registerDefaultTransition(RECEIVE_NEXT, CHECK_IN_SEQ);
@@ -230,7 +231,7 @@ abstract class Responder extends FSMBehaviour {
      * protocol and set the HashMap appropriately
      */
     protected void registerDSState(Behaviour b, String name) {
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
         registerState(b, name);
     }
 

@@ -23,6 +23,8 @@
 
 package jade.proto;
 
+import jade.core.behaviours.MessageMaps;
+
 //#CUSTOM_EXCLUDE_FILE
 
 import jade.core.AID;
@@ -154,7 +156,7 @@ public class SubscriptionInitiator extends Initiator {
     handleAgree(getMapMessages().get(REPLY_K));
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_AGREE);
 
     // HANDLE_REFUSE
@@ -165,7 +167,7 @@ public class SubscriptionInitiator extends Initiator {
     handleRefuse(getMapMessages().get(REPLY_K));
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_REFUSE);
 
     // HANDLE_INFORM
@@ -176,7 +178,7 @@ public class SubscriptionInitiator extends Initiator {
     handleInform(getMapMessages().get(REPLY_K));
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_INFORM);
 
     // HANDLE_ALL_RESPONSES
@@ -186,7 +188,7 @@ public class SubscriptionInitiator extends Initiator {
     handleAllResponses(getMapMessagesList().get(ALL_RESPONSES_KEY));
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, HANDLE_ALL_RESPONSES);
 
     // CHECK_AGAIN
@@ -198,7 +200,7 @@ public class SubscriptionInitiator extends Initiator {
     return mapSessions.size();
     }
     };
-    b.setMapMessagesList(getMapMessagesList());
+    b.setMessageMaps(getMessageMaps());
     registerState(b, CHECK_AGAIN);
     }
      */
@@ -256,8 +258,7 @@ public class SubscriptionInitiator extends Initiator {
                 handleAgree(getMapMessages().get(REPLY_K));
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_AGREE);
 
         // HANDLE_REFUSE
@@ -269,8 +270,7 @@ public class SubscriptionInitiator extends Initiator {
                 handleRefuse(getMapMessages().get(REPLY_K));
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_REFUSE);
 
         // HANDLE_INFORM
@@ -282,8 +282,7 @@ public class SubscriptionInitiator extends Initiator {
                 handleInform(getMapMessages().get(REPLY_K));
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_INFORM);
 
         // HANDLE_ALL_RESPONSES
@@ -293,8 +292,7 @@ public class SubscriptionInitiator extends Initiator {
                 handleAllResponses(getMapMessagesList().get(ALL_RESPONSES_KEY));
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, HANDLE_ALL_RESPONSES);
 
         // CHECK_AGAIN
@@ -306,8 +304,7 @@ public class SubscriptionInitiator extends Initiator {
                 return mapSessions.size();
             }
         };
-        b.setMapMessagesList(mapMessagesList);
-        b.setMapMessages(mapMessages);
+        b.setMessageMaps(getMessageMaps());
         registerState(b, CHECK_AGAIN);
     }
 
@@ -535,7 +532,7 @@ public class SubscriptionInitiator extends Initiator {
      */
     public void registerHandleAgree(Behaviour b) {
         registerState(b, HANDLE_AGREE);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -554,7 +551,7 @@ public class SubscriptionInitiator extends Initiator {
      */
     public void registerHandleInform(Behaviour b) {
         registerState(b, HANDLE_INFORM);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -573,7 +570,7 @@ public class SubscriptionInitiator extends Initiator {
      */
     public void registerHandleRefuse(Behaviour b) {
         registerState(b, HANDLE_REFUSE);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
@@ -592,7 +589,7 @@ public class SubscriptionInitiator extends Initiator {
      */
     public void registerHandleAllResponses(Behaviour b) {
         registerState(b, HANDLE_ALL_RESPONSES);
-        b.setMapMessagesList(getMapMessagesList());
+        b.setMessageMaps(getMessageMaps());
     }
 
     /**
